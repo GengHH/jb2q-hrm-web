@@ -8,6 +8,12 @@ import { Button } from 'element-ui';
 Vue.config.productionTip = false;
 Vue.use(Button);
 
+// mock配置引入
+import config from '@/config'
+if (config.mock) {
+  require('@/mock/index/index.js')
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

@@ -38,8 +38,8 @@ module.exports = function () {
     console.log('')
     console.log(chalk.yellow('To use this template, you must update following to modules:'))
     console.log()
-    for (var i = 0; i < warnings.length; i++) {
-      var warning = warnings[i]
+    for (var k = 0; k < warnings.length; k++) {
+      var warning = warnings[k]
       console.log('  ' + warning)
     }
     console.log()
