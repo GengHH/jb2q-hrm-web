@@ -1,10 +1,11 @@
 <template>
-  <div id="app">
-    <img src="../../assets/logo.png" />
+  <div id="indexApp">
+    <!-- <img src="../../assets/logo.png" /> -->
     <img :src="path" />
     <router-view></router-view>
     <el-button @click.native="test()"> 默认按钮</el-button>
     <span class="test">gdfgdfg </span>
+    <a href="#/test">test</a>
   </div>
 </template>
 
@@ -25,7 +26,7 @@ export default {
 </script>
 
 <style>
-#app {
+#indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

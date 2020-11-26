@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <cell></cell>
+  <div id="cellApp">
+    <router-view></router-view>
+    <!-- <cells></cells> -->
   </div>
 </template>
 
 <script>
-import cell from "components/cell.vue";
+//import cells from "@/components/cell.vue";
 export default {
-  name: "app",
-  components: { cell },
+  name: "Cell",
+  //components: { cells },
+  data: () => {
+    return {
+      path: "",
+    };
+  },
 };
 </script>
 
 <style>
-#app {
+#cellApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
