@@ -3,13 +3,15 @@
 import Vue from "vue";
 import App from "./index.vue";
 import router from "./router";
+import { VueAxios } from "@/utils/service";
 import { Button } from 'element-ui';
-//import "element-ui/lib/theme-chalk/index.css";
-Vue.config.productionTip = false;
-Vue.use(Button);
+import config from '@/config';
 
+Vue.config.productionTip = false;
+
+Vue.use(VueAxios, router);
+Vue.use(Button);
 // mock配置引入
-import config from '@/config'
 if (config.mock) {
   require('@/mock/index/index.js')
 }
