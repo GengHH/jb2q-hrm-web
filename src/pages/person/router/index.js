@@ -15,6 +15,10 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
+    }, {
+      path: '/person',
+      name: 'Hello',
+      component: Hello
     },
     {
       path: '/test',

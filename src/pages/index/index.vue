@@ -6,6 +6,7 @@
     <el-button @click.native="test()"> 默认按钮</el-button>
     <span class="test">gdfgdfg </span>
     <a href="#/test">test</a>
+    <a href="/cell.html">cell 页面</a>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ export default {
   },
   methods: {
     test: () => {
+      console.log(this.$route);
       alert(123);
     },
   },

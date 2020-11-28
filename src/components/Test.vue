@@ -9,7 +9,7 @@ export default {
   name: "cell",
   data() {
     return {
-      msg: "欢迎来到cell",
+      msg: "Test",
     };
   },
   // data: () => {
