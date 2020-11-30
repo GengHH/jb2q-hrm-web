@@ -2,7 +2,6 @@
   <div id="indexApp">
     <img :src="path" />
     <router-view></router-view>
-    <div>hahahhahhah</div>
   </div>
 </template>
 
