@@ -7,16 +7,25 @@
     <span class="test">gdfgdfg </span>
     <a href="#/test">test</a>
     <a href="/cell.html">cell 页面</a>
+    <router-link to="/person.html">Go to Person</router-link>
+    <div class="listTest">
+      <ul>
+        <li v-for="i in list" :key="i.id">{{ i.text }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-
+import { testData } from '@pub/mockTestData';
+import axios from 'axios';
 export default {
   name: "app",
   data: () => {
     return {
       path: require("@/assets/logo.png"),
+      list: testData.list,
+      obj: {}
     };
   },
   methods: {
@@ -25,6 +34,18 @@ export default {
       alert(123);
     },
   },
+  created(){
+    console.log("index begin creating");
+    console.log(this);
+    console.log(this.$data);
+    axios.post('/admin/index').then(res =>{
+      this.$set(this.list,'siet',res.data)
+      console.log(this);
+      // console.log(this.$data);
+    }).catch(err=>
+      {console.log(err)
+    });
+  }
 };
 </script>
 

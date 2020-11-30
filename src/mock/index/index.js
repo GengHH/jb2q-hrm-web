@@ -1,9 +1,11 @@
 /**
  * Created by GengHH on 2020/11/25.
+ * 定义Mock.mock()的
  */
 import Mock from 'mockjs'
 
 const getSiteInfo = () => {
+  console.log("++++++++++++++++")
   return {
     code: 200,
     msg: '请求成功',

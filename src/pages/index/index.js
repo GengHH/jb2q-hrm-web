@@ -16,7 +16,9 @@ Vue.use(VueAxios, router);
 Vue.use(Button);
 // mock配置引入
 if (config.mock) {
-  //require('@/mock/index/index.js')
+  require('@/mock/index/index.js')
+  const aaa = require('@/mock/index/index.js');
+  console.log(aaa);
 }
 
 /* eslint-disable no-new */
