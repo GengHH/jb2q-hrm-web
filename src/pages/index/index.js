@@ -1,11 +1,14 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import '@babel/polyfill';
 import Vue from "vue";
 import App from "./index.vue";
 import router from "./router";
 import { VueAxios } from "@/utils/service";
 import { Button } from 'element-ui';
 import config from '@/config';
+import 'assets/css/reset.css';
+import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
 
@@ -13,7 +16,7 @@ Vue.use(VueAxios, router);
 Vue.use(Button);
 // mock配置引入
 if (config.mock) {
-  require('@/mock/index/index.js')
+  //require('@/mock/index/index.js')
 }
 
 /* eslint-disable no-new */

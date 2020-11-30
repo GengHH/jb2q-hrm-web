@@ -11,6 +11,7 @@
 </template>
 
 <script>
+
 export default {
   name: "app",
   data: () => {
@@ -20,14 +21,17 @@ export default {
   },
   methods: {
     test: () => {
-      console.log(this.$route);
+      //console.log(this.$route);
       alert(123);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+img{
+  display: inline-block;
+}
 #indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
