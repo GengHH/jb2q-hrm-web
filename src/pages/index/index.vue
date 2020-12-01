@@ -10,7 +10,10 @@
     <router-link to="/person.html">Go to Person</router-link>
     <div class="listTest">
       <ul>
-        <li v-for="i in list" :key="i.id">{{ i.text }}</li>
+        <li v-for="i in list" :key="i.id">
+          {{ i.text }}
+          <h4></h4>
+        </li>
       </ul>
     </div>
   </div>
@@ -18,7 +21,7 @@
 
 <script>
 import { testData } from '@pub/mockTestData';
-import axios from 'axios';
+//import { axios } from '@/utils/httpService';
 export default {
   name: "app",
   data: () => {
@@ -29,21 +32,23 @@ export default {
     };
   },
   methods: {
-    test: () => {
-      //console.log(this.$route);
-      alert(123);
+    test() {
+      this.axios.get('/admin/index').then(res=>{
+        this.$set(this.obj,'siet',res.data);
+        console.log(this.$data);
+      }).catch(err=>{
+        throw new Error("调用API失败"+err);
+      })
     },
   },
   created(){
     console.log("index begin creating");
     console.log(this);
     console.log(this.$data);
-    axios.post('/admin/index').then(res =>{
-      this.$set(this.list,'siet',res.data)
-      console.log(this);
-      // console.log(this.$data);
-    }).catch(err=>
-      {console.log(err)
+    this.$http.get('/admin/index').then(res =>{
+      this.$set(this.obj,'siet',res.data)
+    }).catch( err=>{
+      console.log(err)
     });
   }
 };

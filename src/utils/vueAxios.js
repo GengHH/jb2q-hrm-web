@@ -1,11 +1,12 @@
 /**
  * Created by GengHH on 2020/11/29
- * 定制axios的安装器，将axios绑定到vue的属性上
+ * 定制axios的安装器(vue插件)，将axios绑定到vue的属性上
  */
 const VueAxios = {
   vm: {},
   // eslint-disable-next-line no-unused-vars
   install(Vue, router = {}, instance) {
+    console.log("--------------------------begin install--------------------");
     if (this.installed) {
       return;
     }
@@ -16,8 +17,6 @@ const VueAxios = {
       console.error('You have to install axios');
       return;
     }
-
-    Vue.axios = instance;
 
     Object.defineProperties(Vue.prototype, {
       axios: {
@@ -31,6 +30,9 @@ const VueAxios = {
         }
       }
     });
+    
+    Vue.axios = instance;
+    Vue.$http = instance;
   }
 };
 

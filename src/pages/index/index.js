@@ -4,18 +4,20 @@ import '@babel/polyfill';
 import Vue from "vue";
 import App from "./index.vue";
 import router from "./router";
-import { VueAxios } from "@/utils/service";
+import { VueAxios } from "@/utils/httpService";
 import { Button } from 'element-ui';
 import config from '@/config';
 import 'assets/css/reset.css';
 import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
-
-Vue.use(VueAxios, router);
+// 安装vue-axios插件
+Vue.use(VueAxios,router);
+// 使用Element组件
 Vue.use(Button);
-// mock配置引入
+// 引入mock配置
 if (config.mock) {
+  //TODO:
   require('@/mock/index/index.js')
   const aaa = require('@/mock/index/index.js');
   console.log(aaa);

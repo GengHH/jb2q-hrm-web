@@ -28,6 +28,6 @@ const getSiteInfo = () => {
   }
 }
 
-Mock.mock('/admin/index', 'get', getSiteInfo())
+Mock.mock('/admin/index', 'get', getSiteInfo());
 
 export default Mock
