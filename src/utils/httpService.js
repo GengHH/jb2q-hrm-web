@@ -91,6 +91,7 @@ const err = error => {
   // request interceptor
   service.interceptors.request.use(
     config => {
+      console.log("------------------begin request interceptor----------")
       var token = null;
       let data = sessionStorage.vuex;
       if (data && data != 'null' && data != '' && data.length > 0) {
@@ -103,6 +104,12 @@ const err = error => {
       if (token) {
         config.headers['Access-Token'] = token; // 让每个请求携带自定义 token 请根据实际情况自行修改
       }
+
+      // 容许跨域请求
+      //config.headers['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8"
+      config.headers['Access-Control-Allow-Origin'] = '*';
+      //config.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,Content-Type';
+      //config.headers['Access-Control-Allow-Methods'] = 'PUT,POST,GET,DELETE,OPTIONS';
       return config;
     },
     error => {
@@ -120,7 +127,7 @@ const err = error => {
 const installer = {
     vm: {},
     install(Vue, router = {}) {
-        Vue.use(VueAxios,router, axios);
+        Vue.use(VueAxios,router, service);
     }
 };
 

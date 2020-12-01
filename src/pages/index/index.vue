@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     test() {
-      this.axios.get('/admin/index').then(res=>{
+      this.axios.get('http://api.wpbom.com/api/neran.php').then(res=>{
         this.$set(this.obj,'siet',res.data);
         console.log(this.$data);
       }).catch(err=>{
