@@ -6,8 +6,11 @@ import App from "./index.vue";
 import router from "./router";
 import store from '@/store';
 import { VueAxios } from "@/utils/httpService";
-import { Button } from 'element-ui';
 import config from '@/config';
+// 按需引入Element组件
+import '@/config/eleComponents';
+//import { Button } from 'element-ui';
+// 引入自定义全局样式
 import 'assets/css/reset.css';
 import 'assets/sass/index.scss';
 
@@ -15,7 +18,7 @@ Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios,router);
 // 使用Element组件
-Vue.use(Button);
+//Vue.use(Button);
 // 引入mock配置
 if (config.mock) {
   require('@/mock/index/index.js')

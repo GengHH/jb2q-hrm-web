@@ -1,10 +1,15 @@
 <template>
   <div id="indexApp">
     <!-- <img src="../../assets/logo.png" /> -->
-    <img :src="path" />
+    <!-- <img :src="path" /> -->
+    <el-carousel class="el-carousel">
+      <el-carousel-item v-for="item in 4" :key="item">
+        <h3 class="small">{{ item }}</h3>
+      </el-carousel-item>
+    </el-carousel>
     <router-view></router-view>
-    <el-button @click.native="test()"> 默认按钮</el-button>
-    <span class="test">gdfgdfg </span>
+    <el-button @click.native="test()">默认按钮</el-button>
+    <span class="test">gdfgdfg</span>
     <a href="#/test">test</a>
     <a href="/cell.html">cell 页面</a>
     <router-link to="/person.html">Go to Person</router-link>
@@ -55,7 +60,7 @@ export default {
 </script>
 
 <style scoped>
-img{
+img {
   display: inline-block;
 }
 #indexApp {
@@ -69,4 +74,24 @@ img{
 .test {
   color: #000000;
 }
+
+.el-carousel{
+  height: 150px;
+}
+
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
 </style>
