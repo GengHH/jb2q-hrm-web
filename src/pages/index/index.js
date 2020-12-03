@@ -12,7 +12,7 @@ import '@/config/eleComponents';
 //import { Button } from 'element-ui';
 // 引入自定义全局样式
 import 'assets/css/reset.css';
-import 'assets/sass/index.scss';
+//import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
 // 安装vue-axios插件

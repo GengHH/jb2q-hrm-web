@@ -40,6 +40,20 @@ exports.cssLoaders = function (options) {
             });
         }
 
+        //使用sass-loader的时候，使用sass-resources-loader来配置(样式参数)全局变量
+        if(loader === "sass"){
+            loaders.push({
+                loader: "sass-resources-loader",
+                options: {
+                    sourceMap: options.sourceMap,
+                    //hoistUseStatements: true,
+                    resources: [
+                        path.resolve(__dirname, '../src/assets/sass/variables.scss')
+                    ]
+                }
+            });
+        }
+
         // Extract CSS when that option is specified
         // (which is the case during production build)
         if (options.extract) {
