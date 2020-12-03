@@ -63,10 +63,11 @@ export default {
 };
 </script>
 
-<style scoped>
-img {
-  display: inline-block;
+<style lang='scss'>
+body {
+ color: $g-body-back-color;
 }
+
 #indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -81,26 +82,25 @@ img {
 .el-carousel{
   height: 300px;
   width: 70%;
-}
+  div {
+    height: 300px;
+    width: 100%;
+  }
 
-.el-carousel > div{
-  height: 150px !important;
-  width: 200px;
-}
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
 
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 150px;
-  margin: 0;
-}
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #1b579c;
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #1b579c;
+  }
 }
 </style>

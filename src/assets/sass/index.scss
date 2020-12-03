@@ -1,6 +1,15 @@
-$back-color: rgb(135, 208, 250);
-$header-back-color: rgb(243, 154, 38);
+/**
+  * Create By GengHH On 2020/12/03
+  * 定义全局的sass变量(可以使用@import引入其他sass文件,更多功能请参照sass官网)
+  */
+// 采用函数的方式动态为其他scss文件
+// @use './index.scss' with( 
+//   $body-back-color: rgb(131, 240, 131)
+// );
 
-body {
-  background-color: $back-color;
-}
+// 静态导入其他的scss文件
+@import './variables.scss';
+@import './indexPage.scss';
+@import './media.scss';
+@import './mixin.scss';
+@import './function.scss';

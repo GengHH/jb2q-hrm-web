@@ -1,0 +1,13 @@
+/**
+  * Created By GengHH On 2020/12/03
+  * 包含通用的一些sass function
+  */
+
+//计算$base的$exponent次方
+@function pow($base, $exponent) {
+  $result: 1;
+  @for $_ from 1 through $exponent {
+    $result: $result * $base;
+  }
+  @return $result;
+}

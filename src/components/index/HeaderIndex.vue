@@ -33,7 +33,7 @@ export default {
   position: relative;
   height: 60px;
   width: 100%;
-  background-color: $g-color;
+  background-color: $index-header-back-color;
 
   .el-row{
     width: 100%;

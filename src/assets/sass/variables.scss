@@ -1,8 +1,8 @@
-@import './index.scss';
 
-/**
-  * Create By GengHH On 2020/12/03
-  * 定义全局的sass变量(可以使用@import引入其他sass文件,更多功能请参照sass官网)
-  */
+// 定义全局变量
+$g-body-back-color: rgb(135, 208, 250) !default;
 $g-color:rgb(55, 158, 98);
 $g-main-color: red;
+
+$test-body-color1 : blue;
+$test-body-color2 : yellow;

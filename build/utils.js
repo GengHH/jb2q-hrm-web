@@ -46,9 +46,9 @@ exports.cssLoaders = function (options) {
                 loader: "sass-resources-loader",
                 options: {
                     sourceMap: options.sourceMap,
-                    //hoistUseStatements: true,
+                    hoistUseStatements: true,
                     resources: [
-                        path.resolve(__dirname, '../src/assets/sass/variables.scss')
+                        path.resolve(__dirname, '../src/assets/sass/index.scss')
                     ]
                 }
             });

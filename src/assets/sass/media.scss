@@ -1,0 +1,19 @@
+/**
+  * Created By GengHH On 2020/12/03
+  * 为适应各种种尺寸屏幕，设置通用的一些媒体查询
+  */
+
+@import './variables.scss';
+
+/* At the top level of your code */
+@media screen and (max-width: 1024px) {
+    body{
+      background-color: $test-body-color1;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    body{
+      background-color: $test-body-color2;
+    }
+}

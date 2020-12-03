@@ -1,0 +1,11 @@
+/**
+  * Create By GengHH On 2020/12/03
+  * 定义全局通用的sass mixin
+  */
+@mixin sassTest() {
+  body{
+    background-color: $test-body-color2;
+    //background-color: $body-back-color;
+   //margin-right: pow(4, 3) * 1px;
+  }
+}
