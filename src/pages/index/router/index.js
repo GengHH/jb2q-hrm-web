@@ -6,6 +6,12 @@ import Test from '@/components/Test'
 
 Vue.use(Router)
 
+//默认空白的局部组件
+const BlankComponent = {
+  template:'<div></div>'
+}
+
+
 export default new Router({
   mode: 'hash',
   //mode: 'history',
@@ -14,7 +20,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello
+      component: BlankComponent
     },
     {
       path: '/test',

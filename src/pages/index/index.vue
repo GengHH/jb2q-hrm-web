@@ -1,44 +1,58 @@
 <template>
   <div id="indexApp">
-    <HeaderIndex></HeaderIndex>
-    <!-- <img src="../../assets/logo.png" /> -->
-    <!-- <img :src="path" /> -->
-    <el-carousel>
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3 class="small">{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
-    <router-view></router-view>
+    <HeaderIndex :nav-list="navList"></HeaderIndex>
+    <div id="indexBody">
+      <BaseSearch></BaseSearch>
+      <!-- <img src="../../assets/logo.png" /> -->
+      <!-- <img :src="path" /> -->
+      <el-carousel>
+        
+        <el-carousel-item v-for="item in 4" :key="item">
+          <h3 class="small">{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
+      <router-view></router-view>
+    </div>
     <!-- <el-button @click.native="test()">默认按钮</el-button>
     <span class="test">gdfgdfg</span>
     <a href="#/test">test</a>
     <a href="/cell.html">cell 页面</a>
     <router-link to="/person.html">Go to Person</router-link> -->
-    <div class="listTest">
+    <!-- <div class="listTest">
       <ul>
         <li v-for="i in list" :key="i.id">
           {{ i.text }}
           <h4></h4>
         </li>
       </ul>
-    </div>
-  </div>
+    </div>-->
+    <FooterIndex></FooterIndex>
+  </div> 
 </template>
 
 <script>
 import HeaderIndex from '@/components/index/HeaderIndex.vue';
+import FooterIndex from '@/components/index/FooterIndex.vue';
+import BaseSearch from '@/components/common/BaseSearch.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: "app",
   components:{
-    HeaderIndex
+    HeaderIndex,
+    FooterIndex,
+    BaseSearch,
   },
   data: () => {
     return {
       path: require("@/assets/logo.png"),
       list: testData.list,
-      obj: {}
-    };
+      obj: {},
+      navList:[
+        {id:'2',path:'',nvaText:'活动管理'},
+        {id:'1',path:'/',nvaText:'首页'},
+        {id:'3',path:'',nvaText:'活动列表'},
+      ]
+    }
   },
   methods: {
     test() {
@@ -64,16 +78,20 @@ export default {
 </script>
 
 <style lang='scss'>
-body {
- color: $g-body-back-color;
-}
-
 #indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  #indexBody{
+    width:90%;
+    min-height: 100%;
+    max-height:1000px;
+    margin:0 auto;
+    //background-color: $g-gray1-color;
+  }
 }
 .test {
   color: #000000;

@@ -1,8 +1,16 @@
 
 // 定义全局变量
+$g-success-color:#378E81;
+$g-general-color:#3B62AF;
+$g-error-color:#D9534F;
+$g-prompt-color:#B2B2B2;
+
+$g-white-color: #ffffff;
+$g-gray1-color: #f6f6f6;
+$g-gray2-color: #f1f1f1;
+
+$g-mian-color:#fc6f3d;
 $g-body-back-color: rgb(135, 208, 250) !default;
-$g-color:rgb(55, 158, 98);
-$g-main-color: red;
 
 $test-body-color1 : blue;
-$test-body-color2 : yellow;
+$test-body-color2 : rgb(243, 243, 234);
