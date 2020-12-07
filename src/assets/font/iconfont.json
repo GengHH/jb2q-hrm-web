@@ -1,0 +1,135 @@
+{
+  "id": "2230930",
+  "name": "上海公共招聘",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "18617581",
+      "name": "denglu",
+      "font_class": "denglu",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "18617582",
+      "name": "qiye1",
+      "font_class": "qiye1",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "18617583",
+      "name": "guanliyuan",
+      "font_class": "guanliyuan",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "18612505",
+      "name": "app",
+      "font_class": "app",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "18612506",
+      "name": "个人",
+      "font_class": "geren",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "18612507",
+      "name": "转移",
+      "font_class": "zhuanyi",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "18471682",
+      "name": "记事本",
+      "font_class": "jishiben",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "18467210",
+      "name": "时间",
+      "font_class": "shijian",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "18467211",
+      "name": "职位公文包",
+      "font_class": "zhiweigongwenbao",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "18467212",
+      "name": "电话",
+      "font_class": "dianhua",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "18467213",
+      "name": "女",
+      "font_class": "nv",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "18467214",
+      "name": "学历",
+      "font_class": "xueli",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "18467215",
+      "name": "行业",
+      "font_class": "hangye",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "18467216",
+      "name": "定位地址",
+      "font_class": "dingweidizhi",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "18467217",
+      "name": "工资(1)",
+      "font_class": "gongzi1",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "18467218",
+      "name": "yaoqing",
+      "font_class": "yaoqing",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "18467219",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "18467220",
+      "name": "mianshi",
+      "font_class": "mianshi",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    }
+  ]
+}

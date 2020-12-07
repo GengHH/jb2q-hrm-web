@@ -1,31 +1,33 @@
 <template>
   <div id="indexApp">
+    <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
     <div id="indexBody">
       <BaseSearch></BaseSearch>
-      <!-- <img src="../../assets/logo.png" /> -->
-      <!-- <img :src="path" /> -->
-      <el-carousel>
-        
-        <el-carousel-item v-for="item in 4" :key="item">
-          <h3 class="small">{{ item }}</h3>
-        </el-carousel-item>
-      </el-carousel>
-      <router-view></router-view>
+      <!-- <router-view></router-view> -->
+      <el-row id="carouselBox" :gutter="20">
+        <el-col :sm="24" :md="18" :lg="16" :xl="16">
+          <!-- 轮播图 -->
+          <BaseCarousel></BaseCarousel>  
+        </el-col>
+        <el-col :sm="24" :md="6" :lg="8" :xl="8">
+          <!-- 登录框 -->
+          <div class="logo-module">
+						<div class="module-logs or-font clearfix">
+							<span class="or-br-color"><i class="icon iconfont">&#xe64c;</i></span>
+							<span>个人登录</span>
+						</div>
+						<div class="module-logs co-font clearfix">
+							<span class="co-br-color"><i class="icon iconfont">&#xe64d;</i></span>
+							<span>单位登录</span>
+						</div>
+					</div>
+        </el-col>
+      </el-row>
+      <!-- 职位展示位 -->
+      <BaseInfoGloriette :info-list="navList" :col-num="4"></BaseInfoGloriette>
     </div>
-    <!-- <el-button @click.native="test()">默认按钮</el-button>
-    <span class="test">gdfgdfg</span>
-    <a href="#/test">test</a>
-    <a href="/cell.html">cell 页面</a>
-    <router-link to="/person.html">Go to Person</router-link> -->
-    <!-- <div class="listTest">
-      <ul>
-        <li v-for="i in list" :key="i.id">
-          {{ i.text }}
-          <h4></h4>
-        </li>
-      </ul>
-    </div>-->
+    <!-- Footer -->
     <FooterIndex></FooterIndex>
   </div> 
 </template>
@@ -34,6 +36,8 @@
 import HeaderIndex from '@/components/index/HeaderIndex.vue';
 import FooterIndex from '@/components/index/FooterIndex.vue';
 import BaseSearch from '@/components/common/BaseSearch.vue';
+import BaseCarousel from '@/components/common/BaseCarousel.vue';
+import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: "app",
@@ -41,6 +45,8 @@ export default {
     HeaderIndex,
     FooterIndex,
     BaseSearch,
+    BaseCarousel,
+    BaseInfoGloriette
   },
   data: () => {
     return {
@@ -48,9 +54,12 @@ export default {
       list: testData.list,
       obj: {},
       navList:[
+        {id:'6',path:'',nvaText:'活动列表'},
+        {id:'5',path:'',nvaText:'活动列表'},
+        {id:'4',path:'',nvaText:'活动列表'},
+        {id:'3',path:'',nvaText:'活动列表'},
         {id:'2',path:'',nvaText:'活动管理'},
         {id:'1',path:'/',nvaText:'首页'},
-        {id:'3',path:'',nvaText:'活动列表'},
       ]
     }
   },
@@ -77,7 +86,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 #indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -91,6 +100,7 @@ export default {
     max-height:1000px;
     margin:0 auto;
     //background-color: $g-gray1-color;
+
   }
 }
 .test {
@@ -99,7 +109,7 @@ export default {
 
 .el-carousel{
   height: 300px;
-  width: 70%;
+  width: 100%;
   div {
     height: 300px;
     width: 100%;
@@ -119,6 +129,71 @@ export default {
 
   .el-carousel__item:nth-child(2n+1) {
     background-color: #1b579c;
+  }
+}
+
+#carouselBox{
+  margin: 20px 0;
+  .el-col{
+    margin: 10px 0;
+  }
+}
+
+.logo-module {
+  width: 100%;
+  height: 300px;
+  background: #ff9954 linear-gradient(to right,#ff9954,#fc6f3d);
+  border-radius: 3px;
+  padding: 0 12px;
+  display: inline-block;
+
+  .module-logs {
+    color: #fda749;
+    background: #fff4ed;
+    font-size: 24px;
+    line-height: 120px;
+    height:120px;
+    border-radius: 3px;
+    margin: 20px 0;
+
+    & span:first-child {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 56px;
+      display: block;
+      background: #fff;
+      float: left;
+      margin:10px 20px;
+    }
+
+  }
+  .or-font {
+    .or-br-color i {
+      font-size: 60px;
+      margin: 20px 0;
+      display: block;
+    }
+  }
+  .co-font {
+    .co-br-color i {
+      font-size: 60px;
+      margin: 20px 0;
+      display: block;      
+    }
+  }
+}
+.clearfix {
+    zoom: 1;
+}
+
+#infoGlorietteBox {
+
+  ::v-deep .el-col{
+    color: red;
+    height: 100px;
+    
   }
 }
 </style>
