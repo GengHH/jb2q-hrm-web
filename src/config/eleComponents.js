@@ -5,6 +5,8 @@ import Vue from 'vue'
  */
 import {
   Message,
+  Tabs,
+  TabPane,
   Row, 
   Col, 
   Input,
@@ -17,6 +19,8 @@ import {
   BreadcrumbItem
 } from 'element-ui';
 
+Vue.use(Tabs);
+Vue.use(TabPane);
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Input);
