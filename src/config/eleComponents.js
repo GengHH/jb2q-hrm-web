@@ -16,7 +16,8 @@ import {
   Carousel,
   CarouselItem,
   Breadcrumb,
-  BreadcrumbItem
+  BreadcrumbItem,
+  Divider
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -31,4 +32,5 @@ Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
+Vue.use(Divider);
 Vue.prototype.$message = Message;

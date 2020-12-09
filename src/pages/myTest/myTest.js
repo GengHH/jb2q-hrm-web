@@ -53,6 +53,20 @@ const router = new VueRouter({
   ]
 })
 
+//ceshi slot
+const ChartsWrap = {
+  name:'charts-wrap',
+  template: `
+    <div>
+      <slot v-for="(item,index) in list" 
+              name="chart"
+              :data="item"
+              :index="index">
+      </slot>
+    </div>
+  `
+}
+
 new Vue({
   router,
   template: `

@@ -26,30 +26,30 @@
       <!-- 职位展示位 -->
       <el-tabs id="jobInfoGloriette" v-model="jobActiveName" @tab-click="jobHandleClick"> 
         <el-tab-pane label=推荐职位 name="jobRecommended">
-          <BaseInfoGloriette :info-list="showList" :col-num="2"></BaseInfoGloriette>
+          <BaseInfoGloriette :info-list="showList" :col-num="3" :template-name="'job'"></BaseInfoGloriette>
         </el-tab-pane>
         <el-tab-pane label="热招职位" name="jobHot">
-          <BaseInfoGloriette :info-list="showList" :col-num="3"></BaseInfoGloriette>
+          <BaseInfoGloriette :info-list="showList" :col-num="3" :template-name="'job'"><div>test2</div></BaseInfoGloriette>
         </el-tab-pane>
         <el-tab-pane label="急招职位" name="jobUrgent">
-          <BaseInfoGloriette :info-list="showList" :col-num="4"></BaseInfoGloriette>
+          <BaseInfoGloriette :info-list="showList" :col-num="4" :template-name="'job'"><div>test3</div></BaseInfoGloriette>
         </el-tab-pane>
       </el-tabs>
-      <el-button id="jobListMore" class="more-btn" @onclick="">查看更过</el-button>
+      <el-button id="jobListMore" class="more-btn" @click="showMore">查看更过</el-button>
 
       <!-- 单位展示位 -->
       <el-tabs id="corpInfoGloriette"  v-model="corpActiveName" @tab-click="corpHandleClick">
         <el-tab-pane label="推荐企业" name="corpRecommended">
-          <BaseInfoGloriette :info-list="showList" :col-num="3"></BaseInfoGloriette>
+          <BaseInfoGloriette :info-list="showList" :col-num="4" :template-name="'corp'"></BaseInfoGloriette>
         </el-tab-pane>
         <el-tab-pane label="人力资源机构" name="corpInstitution">
-          <BaseInfoGloriette :info-list="showList" :col-num="3"></BaseInfoGloriette>
+          <BaseInfoGloriette :info-list="showList" :col-num="4" :template-name="'corp'"></BaseInfoGloriette>
         </el-tab-pane>
       </el-tabs>
-      <el-button id="corpListMore" class="more-btn">查看更过</el-button>
+      <el-button id="corpListMore" class="more-btn" @click="showMore">查看更过</el-button>
 
       <!-- 首页-招聘会信息列表 -->
-      <BaseInfoGloriette :info-list="showList" :col-num="3"></BaseInfoGloriette>
+      <BaseInfoGloriette :info-list="jobFaieList" :col-num="3" :template-name="'jobFair'">3</BaseInfoGloriette>
     </div>
     <!-- Footer -->
     <FooterIndex></FooterIndex>
@@ -68,9 +68,9 @@ export default {
     FooterIndex,
     BaseSearch,
     BaseCarousel,
-    BaseInfoGloriette
+    BaseInfoGloriette,
   },
-  data: () => {
+  data(){
     return {
       path: require("@/assets/logo.png"),
       list: testData.list,
@@ -78,13 +78,18 @@ export default {
       jobActiveName :'jobRecommended',
       corpActiveName: 'corpRecommended',
       showList:[
-        {id:'6',path:'',nvaText:'活动列表'},
-        {id:'5',path:'',nvaText:'活动列表'},
-        {id:'4',path:'',nvaText:'活动列表'},
-        {id:'3',path:'',nvaText:'活动列表'},
-        {id:'2',path:'',nvaText:'活动管理'},
-        {id:'1',path:'/',nvaText:'首页'},
+        {id:'6',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+        {id:'5',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+        {id:'4',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+        {id:'3',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+        {id:'2',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+        {id:'1',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
       ]
+    }
+  },
+  computed: {
+    jobFaieList: function(){
+      return this.showList ? this.showList.slice(0,3) : [];
     }
   },
   methods: {
@@ -101,6 +106,9 @@ export default {
     },
     corpHandleClick(){
       console.log(2);
+    },
+    showMore(){
+      this.$message("this is more");
     }
   },
   created(){
@@ -216,7 +224,7 @@ export default {
 #jobInfoGloriette {
   ::v-deep .el-col{
     color: blue;
-    height: 100px;
+    //height: 100px;
     
   }
 }
@@ -224,7 +232,7 @@ export default {
 #corpInfoGloriette {
   ::v-deep .el-col{
     color: red;
-    height: 100px;
+    //height: 100px;
     
   }
 }

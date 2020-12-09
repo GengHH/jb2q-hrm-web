@@ -7,7 +7,9 @@
 </template>
 
 <script>
-//import { testData } from '@pub/mockTestData';
+/**
+ * 轮播图组件
+ */
 export default {
   name: "BaseCarousel",
   data: () => {

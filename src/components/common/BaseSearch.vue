@@ -20,6 +20,9 @@
 </template>
 
 <script>
+/**
+ * 通用的查询框组件
+ */
 export default {
   name: "BaseSearch",
   component:{},
