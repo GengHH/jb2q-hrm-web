@@ -49,7 +49,7 @@
       <el-button id="corpListMore" class="more-btn" @click="showMore">查看更过</el-button>
 
       <!-- 首页-招聘会信息列表 -->
-      <BaseInfoGloriette :info-list="jobFaieList" :col-num="3" :template-name="'jobFair'">3</BaseInfoGloriette>
+      <BaseInfoGloriette :info-list="jobFaieList" :col-num="3" :template-name="'jobFair'" :col-row-gutter="colRowGutter">3</BaseInfoGloriette>
     </div>
     <!-- Footer -->
     <FooterIndex></FooterIndex>
@@ -75,6 +75,7 @@ export default {
       path: require("@/assets/logo.png"),
       list: testData.list,
       obj: {},
+      colRowGutter: 40,
       jobActiveName :'jobRecommended',
       corpActiveName: 'corpRecommended',
       showList:[

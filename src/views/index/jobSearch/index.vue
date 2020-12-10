@@ -2,7 +2,7 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch></BaseSearch>
+      <BaseSearch :placeholder="searchPlaceHolder"></BaseSearch>
       <!-- 职位展示位 -->
       <el-tabs id="jobInfoGloriette" v-model="jobActiveName" @tab-click="jobHandleClick"> 
         <el-tab-pane label=推荐职位 name="jobRecommended">
@@ -39,7 +39,6 @@
 <script>
 import FooterIndex from '@/components/index/FooterIndex.vue';
 import BaseSearch from '@/components/common/BaseSearch.vue';
-import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
@@ -47,7 +46,6 @@ export default {
   components:{
     FooterIndex,
     BaseSearch,
-    BaseCarousel,
     BaseInfoGloriette,
   },
   data(){
@@ -55,6 +53,7 @@ export default {
       path: require("@/assets/logo.png"),
       list: testData.list,
       obj: {},
+      searchPlaceHolder:'搜索职位、公司',
       jobActiveName :'jobRecommended',
       corpActiveName: 'corpRecommended',
       showList:[

@@ -90,3 +90,28 @@ body {
 .hidden{
   visibility: hidden;
 }
+
+.el-pager li.active {
+  color: #fff !important;
+  border-radius: 5px;
+  border: 1px solid #ff9954;
+  background: #ff9954;
+}
+
+.el-pager li:hover {
+  color: #ff9954 !important;
+}
+
+.el-pagination{
+  margin: 20px 0 0 10px !important;
+}
+
+/* .el-input.is-active .el-input__inner, .el-input__inner:focus {
+  border-color: #ff9954 !important;
+  outline: 0;
+} */
+
+.el-select-dropdown__item.selected {
+  color: #ff9954 !important;
+  font-weight: 700;
+}

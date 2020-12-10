@@ -1,21 +1,21 @@
 <template>
-  <div class="seek-box">
-    <el-input class="input-with-select" v-model="input" placeholder="请输入内容">
+  <div id="seek-box">
+    <el-input id="seek-box-input" class="input-with-select" v-model="input" :placeholder="placeholder">
       <el-select v-model="select" slot="prepend" placeholder="请选择">
         <el-option label="餐厅名" value="1"></el-option>
         <el-option label="订单号" value="2"></el-option>
         <el-option label="用户电话" value="3"></el-option>
       </el-select>
-      <div>|</div>
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
         <el-option label="餐厅名" value="1"></el-option>
         <el-option label="订单号" value="2"></el-option>
         <el-option label="用户电话" value="3"></el-option>
-      </el-select>
+      </el-select> -->
       <el-button slot="append" icon="el-icon-search">搜索</el-button>
       <!-- <el-button slot="append" class="seek-btn"><img src="@/assets/images/seek.png" alt="">搜索</el-button> -->
     </el-input>
     <!-- <div class="seek-btn"><img src="@/assets/images/seek.png" alt="">搜索</div> -->
+    <!-- <el-button @click="test">test</el-button> -->
   </div>
 </template>
 
@@ -25,6 +25,12 @@
  */
 export default {
   name: "BaseSearch",
+  props:{
+    placeholder:{
+      type:String,
+      default:'请输入'
+    }
+  },
   component:{},
   data(){
     return {
@@ -32,12 +38,17 @@ export default {
       select: '',
       selectOne: false
     };
+  },
+  methods:{
+    test : function(){
+      this.placeholder = 'hahahhahahhahahhah';
+    }
   }
 }
 </script>
 
 <style lang='scss'>
-.seek-box{
+#seek-box{
 	text-align: right;
 	position: relative;
 	margin-top: 14px;
@@ -48,14 +59,26 @@ export default {
 
     .el-input-group__prepend{
         padding-left: 0px;        
-        padding-right: 0px;        
+        padding-right: 0px;    
+        border: 0;
+        background-color: #fff;    
     }
     
-    .el-input-group__prepend + .el-input__inner{
-      height: 42px;
+    #seek-box-input{
+      height: 50px;
+      border: 0;
       //padding-right: 86px;
       &:hover,&:focus{
-        border-color: #fc7a43 !important;
+        //border:1px solid #fc7a43 !important;
+      }
+    }
+    .el-input-group__append {
+      width:175px;
+      border:0;
+      .el-button{
+        display: block;
+        margin: 0 auto;
+        font-size: 16px;
       }
     }
 
@@ -65,7 +88,7 @@ export default {
     }
 
     .el-select:first-child{
-      border-right: 1px solid #dcdfe6;
+      //border-right: 1px solid #dcdfe6;
     }
 
     .el-select:last-child{

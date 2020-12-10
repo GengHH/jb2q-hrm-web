@@ -3,11 +3,9 @@
     <!-- <router-view></router-view> -->
     <div id="indexBody">
       <BaseSearch :placeholder="searchPlaceHolder"></BaseSearch>
-      <div @click="activityBoxClick">12331</div>
       <!-- 职位展示位 -->
       <div id="activityBox">
-        <ActivityBoxShow v-for="activityInfo in showList" :key="activityInfo.id" :activity-info="activityInfo"
-                  @click.native="activityBoxClick(activityInfo)"></ActivityBoxShow>
+        <ActivityBoxShow v-for="activityInfo in showList" :key="activityInfo.id" :activity-info="activityInfo"></ActivityBoxShow>
       </div>
       <!-- 分页组件 -->
       <BasePagination></BasePagination>
@@ -21,7 +19,7 @@ import BasePagination from '@/components/common/BasePagination.vue';
 import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "app",
+  name: "ActivityInfoDetails",
   components:{
     BaseSearch,
     BasePagination,
@@ -51,26 +49,26 @@ export default {
     }
   },
   methods: {
-    activityBoxClick(e){
-      this.$router.push({
-        path:'/activityDetails',
-        query:{activityId:e.id},
-        params:{data:this.showList}
-      });
+    test() {
+      this.axios.get('http://api.wpbom.com/api/neran.php').then(res=>{
+        this.$set(this.obj,'siet',res.data);
+        console.log(this.$data);
+      }).catch(err=>{
+        throw new Error("调用API失败"+err);
+      })
+    },
+    jobHandleClick(){
+      console.log(1);
+    },
+    corpHandleClick(){
+      console.log(2);
     },
     showMore(){
       this.$message("this is more");
     }
   },
   created(){
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+    console.log(this.$route.params);
   }
 };
 </script>

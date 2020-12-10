@@ -17,7 +17,10 @@ import {
   CarouselItem,
   Breadcrumb,
   BreadcrumbItem,
-  Divider
+  Divider,
+  Table,
+  TableColumn,
+  Pagination
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -33,4 +36,7 @@ Vue.use(CarouselItem);
 Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
 Vue.use(Divider);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Pagination);
 Vue.prototype.$message = Message;

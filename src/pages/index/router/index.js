@@ -58,6 +58,11 @@ export default new Router({
       component: () => import('@/views/index/activity')
     },
     {
+      path: '/activityDetails',
+      name: '特色活动详情',
+      component: () => import('@/views/index/activity/ActivityInfoDetails')
+    },
+    {
       path: '/about',
       name: '关于我们',
       component: () => import('@/views/index/about')

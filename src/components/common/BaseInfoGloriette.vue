@@ -23,7 +23,7 @@
     </el-row> -->
     
     <!-- 默认显示的是两列 -->
-    <el-row :gutter="20">
+    <el-row :gutter="colRowGutter">
       <el-col :sm="colNumProperty.smStr" :md="colNumProperty.mdStr" :lg="colNumProperty.lgStr" :xl="colNumProperty.xlStr" 
         v-for="infoIndex in infoList" :key="infoIndex.id">
           <div class="infoContent infoIndex.styleCalssName">
@@ -47,6 +47,10 @@ import BaseJobFairBoxShow from '@/components/common/BaseJobFairBoxShow.vue';
 export default {
   name: 'BaseInfoGloriette',
   props:{
+    colRowGutter:{
+      type:Number,
+      default:20
+    },
     colNum:Number,
     templateName: String,
     infoList:Array

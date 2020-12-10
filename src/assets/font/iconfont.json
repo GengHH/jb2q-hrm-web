@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "18710738",
+      "name": "d定位",
+      "font_class": "ddingwei",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "18686558",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "18686559",
+      "name": "时间",
+      "font_class": "shijian1",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "18686560",
+      "name": "展位",
+      "font_class": "zhanwei",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "18686561",
+      "name": "b报名",
+      "font_class": "bbaoming",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "18670514",
+      "name": "remen",
+      "font_class": "remen",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
       "icon_id": "18617581",
       "name": "denglu",
       "font_class": "denglu",
