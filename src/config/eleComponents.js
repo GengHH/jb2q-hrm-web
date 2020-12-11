@@ -20,7 +20,8 @@ import {
   Divider,
   Table,
   TableColumn,
-  Pagination
+  Pagination,
+  Link
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -39,4 +40,5 @@ Vue.use(Divider);
 Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Pagination);
+Vue.use(Link);
 Vue.prototype.$message = Message;

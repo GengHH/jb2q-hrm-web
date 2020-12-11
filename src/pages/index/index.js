@@ -9,6 +9,7 @@ import App from "./index.vue";
 import router from "./router";
 import store from '@/store';
 import { VueAxios } from "@/utils/httpService";
+import '@/auth/permission'
 import config from '@/config';
 // 按需引入Element组件
 import '@/config/eleComponents';

@@ -133,11 +133,12 @@ export default {
   margin:0 auto 150px;
   //background-color: $g-gray1-color;
   .more-btn{
-    margin:20px 0;
+    margin:20px auto;
     padding-left:50px;
     padding-right:50px;
     color:#fc6f3d;
     border:1px solid #fc6f3d;
+    display:block;
   }
 }
 

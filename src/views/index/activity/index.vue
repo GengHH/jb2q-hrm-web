@@ -3,7 +3,6 @@
     <!-- <router-view></router-view> -->
     <div id="indexBody">
       <BaseSearch :placeholder="searchPlaceHolder"></BaseSearch>
-      <div @click="activityBoxClick">12331</div>
       <!-- 职位展示位 -->
       <div id="activityBox">
         <ActivityBoxShow v-for="activityInfo in showList" :key="activityInfo.id" :activity-info="activityInfo"

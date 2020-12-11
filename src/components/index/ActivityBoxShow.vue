@@ -54,7 +54,11 @@ export default {
   .activity-box-module {
     border-bottom: 1px solid #ededed;
     padding: 30px 0;
+    .el-row{
+      width: 100%;
+    }
     img{
+      height: 100%;
       width: 100%;
     }
     .black-font {
