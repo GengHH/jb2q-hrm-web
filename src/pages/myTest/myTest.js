@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const Home = { template: '<router-view></router-view>' }
+const Home = { template: '<div>home<router-view></router-view></div>' }
 const Default = { template: '<div>default</div>' }
 const Foo = { template: '<div>foo</div>' }
 const Bar = { template: '<div>bar</div>' }
@@ -16,7 +16,7 @@ const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
-    { path: '/', component: Home,
+    { path: '/home', component: Home,
       children: [
         { path: '', component: Default },
         { path: 'foo', component: Foo },
@@ -59,7 +59,7 @@ const router = new VueRouter({
     { path: '/FooBar', component: FooBar, pathToRegexpOptions: { sensitive: true }},
 
     // catch all redirect
-    { path: '*', redirect: '/' }
+    { path: '*', redirect: '/home' }
   ]
 })
 

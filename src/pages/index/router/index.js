@@ -12,8 +12,8 @@ Vue.use(Router)
 
 
 export default new Router({
-  mode: 'hash',
-  //mode: 'history',
+  //mode: 'hash',
+  mode: 'history',
   //base: 'recruitment',
   routes: [
     {

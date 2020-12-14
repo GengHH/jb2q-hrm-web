@@ -4,14 +4,14 @@ import NotFoundPage from '@/views/404';
 import Test from '@/components/Test'
 
 
-try {
-  const originalPush = Router.prototype.push;
-  Router.prototype.push = function push(location) {
-    return originalPush.call(this, location).catch(err => err);
-  };
-} catch (e) {
-  console.log(e);
-}
+// try {
+//   const originalPush = Router.prototype.push;
+//   Router.prototype.push = function push(location) {
+//     return originalPush.call(this, location).catch(err => err);
+//   };
+// } catch (e) {
+//   console.log(e);
+// }
 
 Vue.use(Router)
 
@@ -29,8 +29,9 @@ export default new Router({
     {
       path: '/',
       name: '单位首页',
-      redirect:'/home',
-      component: () => import('@/views/corporation/index'),
+      //redirect:'/home',
+      //component: () => import('@/views/corporation/index'),
+      component: Test,
       children: [
         {
           path: '/homes',
@@ -39,8 +40,9 @@ export default new Router({
             notNeedUser: true
           },
           component: {
-            coprNavMenu : () => import('@/components/corporation/CorpNavMenu'),
-            default: Test
+            //coprNavMenu : () => import('@/components/corporation/CorpNavMenu'),
+            coprNavMenu : Test,
+            //default: Test
           }
         }
       ]

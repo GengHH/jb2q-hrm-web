@@ -1,9 +1,10 @@
 <template>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
+      <div>corpBody</div>
       <el-row>
         <el-col :span="4">
-          <router-view name="corpNavMenu"></router-view>
+          <!-- <router-view name="corpNavMenu"></router-view> -->
         </el-col>
         <el-col :span="20">
         <transition name="fade">
@@ -52,14 +53,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      this.axios.get('http://api.wpbom.com/api/neran.php').then(res=>{
-        this.$set(this.obj,'siet',res.data);
-        console.log(this.$data);
-      }).catch(err=>{
-        throw new Error("调用API失败"+err);
-      })
-    },
     jobHandleClick(){
       console.log(1);
     },

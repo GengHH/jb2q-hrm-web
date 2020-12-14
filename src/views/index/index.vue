@@ -3,7 +3,7 @@
     <!-- <router-view></router-view> -->
     <div id="indexBody">
       <BaseSearch></BaseSearch>
-      <router-view></router-view>
+      <!-- <router-view></router-view> -->
       <el-row id="carouselBox" :gutter="20">
         <el-col :sm="24" :md="18" :lg="16" :xl="16">
           <!-- 轮播图 -->
