@@ -1,5 +1,5 @@
 <template>
-  <!-- <el-menu
+  <el-menu
     default-active="2"
     class="el-menu-vertical-demo"
     @open="handleOpen"
@@ -34,8 +34,7 @@
       <i class="el-icon-setting"></i>
       <span slot="title">导航四</span>
     </el-menu-item>
-  </el-menu> -->
-  <div>nnnnnnnnnnnnnnn</div>
+  </el-menu>
 </template>
 
 <script>
@@ -44,7 +43,7 @@
  */
 export default {
   name:'CorpNavMenu',
-  dat(){
+  data(){
     return{
       
     }

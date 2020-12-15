@@ -1,12 +1,12 @@
 <template>
   <div id="indexHeader">
     <el-row>
-      <el-col :sm="24" :md="4" :lg="8" :xl="8" class="bg-purple">
+      <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
         <img src="@/assets/img/logo.png" alt="">
         <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
         <img class="logo3" src="@/assets/img/logo3.png" alt="">
       </el-col>
-      <el-col :sm="24" :md="20" :lg="16" :xl="16" class="bg-purple">
+      <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
         <el-breadcrumb separator="">
           <el-breadcrumb-item v-for="nvaIndex in navList" :key="nvaIndex.id" :to="{ path: nvaIndex.path }">
             {{ nvaIndex.nvaText }}

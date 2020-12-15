@@ -21,7 +21,11 @@ import {
   Table,
   TableColumn,
   Pagination,
-  Link
+  Link,
+  Menu,
+  MenuItem,
+  MenuItemGroup,
+  Submenu
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -41,4 +45,8 @@ Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Pagination);
 Vue.use(Link);
+Vue.use(Menu);
+Vue.use(MenuItem);
+Vue.use(MenuItemGroup);
+Vue.use(Submenu);
 Vue.prototype.$message = Message;

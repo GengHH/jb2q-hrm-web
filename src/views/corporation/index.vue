@@ -1,14 +1,13 @@
 <template>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <div>corpBody</div>
-      <el-row>
-        <el-col :span="4">
-          <!-- <router-view name="corpNavMenu"></router-view> -->
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <router-view name="corpNavMenu" />
         </el-col>
-        <el-col :span="20">
+        <el-col :span="18">
         <transition name="fade">
-          <router-view></router-view>
+          <router-view name="default" />
         </transition> 
       </el-col>
     </el-row>

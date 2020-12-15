@@ -2,7 +2,6 @@
   <div id="indexApp">
     <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
-    <el-button @click="testRoute">点击</el-button>
     <transition name="fade">
       <router-view></router-view>
     </transition> 
@@ -28,13 +27,11 @@ export default {
       jobActiveName :'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList:[
-        {id:'7',path:'/about',nvaText:'关于我们'},
-        {id:'6',path:'/activity',nvaText:'特色活动'},
-        {id:'5',path:'/employmentTrainee',nvaText:'就业见习'},
-        {id:'4',path:'/jobFair',nvaText:'招聘会'},
-        {id:'3',path:'/recruitment',nvaText:'我要招聘'},
-        {id:'2',path:'/jobSearch',nvaText:'我要求职'},
-        {id:'1',path:'/',nvaText:'首页'},
+        {id:'5',path:'/employmentTrainee',nvaText:'招聘会'},
+        {id:'4',path:'/jobFair',nvaText:'应聘管理'},
+        {id:'3',path:'/recruitment',nvaText:'简历搜索'},
+        {id:'2',path:'/jobSearch',nvaText:'职位管理'},
+        {id:'1',path:'/',nvaText:'单位信息维护'},
       ]
     }
   },
