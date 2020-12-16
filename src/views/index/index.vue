@@ -63,7 +63,7 @@ import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "app",
+  name: "indexApp",
   components:{
     FooterIndex,
     BaseSearch,

@@ -1,6 +1,6 @@
 <template>
   <div id="noRouter">
-    <h1>不好意思，你迷路啦!</h1>
+    <h1 class="abs-ct">不好意思，你迷路啦!</h1>
   </div>
 </template>
 
@@ -12,11 +12,13 @@ export default {
 
 <style lang="scss" scoped>
 #noRouter{
-  position: absolute;
+  height: 100%;
   width: 100%;
-  top:40%;
-  h1{
-    font-size: 30px;
-  }
+  // position: absolute;
+  // width: 100%;
+  // top:40%;
+  // h1{
+  //   font-size: 30px;
+  // }
 }
 </style>

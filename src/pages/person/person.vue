@@ -27,11 +27,11 @@ export default {
       jobActiveName :'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList:[
-        {id:'5',path:'/employmentTrainee',nvaText:'招聘会'},
-        {id:'4',path:'/jobFair',nvaText:'应聘管理'},
-        {id:'3',path:'/recruitment',nvaText:'简历搜索'},
-        {id:'2',path:'/jobSearch',nvaText:'职位管理'},
-        {id:'1',path:'/',nvaText:'单位信息维护'},
+        {id:'5',path:'/employmentTrainee',nvaText:'求职反馈'},
+        {id:'4',path:'/jobFair',nvaText:'个人中心'},
+        {id:'3',path:'/recruitment',nvaText:'职位搜索'},
+        {id:'2',path:'/jobSearch',nvaText:'简历管理'},
+        {id:'1',path:'/',nvaText:'个人信息维护'},
       ]
     }
   },
@@ -67,7 +67,7 @@ export default {
   //-webkit-font-smoothing: antialiased;
   //-moz-osx-font-smoothing: grayscale;
   // text-align: center;
-  color: #2c3e50;
+  //color: #2c3e50;
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;

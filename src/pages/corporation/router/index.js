@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import NotFoundPage from '@/views/404';
 import Test from '@/components/Test'
 
+//解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
+//使用时：this.$router.push(...).catch(err => err)要有后面的catch
 try {
   const originalPush = Router.prototype.push;
   Router.prototype.push = function push(location) {
@@ -19,7 +21,6 @@ Vue.use(Router)
 //   template:'<div>暂时空白</div>'
 // }
 
-
 export default new Router({
   mode: 'hash',
   //mode: 'history',
@@ -27,13 +28,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: '单位首页',
+      //name: '单位首页',
       //redirect:'/home',
       component: () => import('@/views/corporation/index'),
       children: [
         {
           path: '',
-          name: '单位首页-单位管理',
+          name: '单位信息管理',
           meta: {
             notNeedUser: true
           },
@@ -84,17 +85,17 @@ export default new Router({
     // {
     //   path: '/resumeSearch',
     //   name: '简历搜索',
-    //   component: () => import('@/views/index/employmentTrainee')
+    //   component: () => import('@/views/corporation/employmentTrainee')
     // },
     // {
     //   path: '/JobFindMgr',
     //   name: '应聘管理',
-    //   component: () => import('@/views/index/recruitment')
+    //   component: () => import('@/views/corporation/recruitment')
     // },            
     // {
     //   path: '/jobFair',
     //   name: '招聘会',
-    //   component: () => import('@/views/index/jobFair')
+    //   component: () => import('@/views/corporation/jobFair')
     // }, 
     {
       path: '*',

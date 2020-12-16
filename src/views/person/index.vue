@@ -21,7 +21,7 @@
 // import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "corporationApp",
+  name: "personApp",
   components:{
     // FooterIndex,
     // BaseSearch,

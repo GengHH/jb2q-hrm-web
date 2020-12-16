@@ -55,7 +55,7 @@ export default {
         path:'/activityDetails',
         query:{activityId:e.id},
         params:{data:this.showList}
-      });
+      }).catch(err => err);
     },
     showMore(){
       this.$message("this is more");

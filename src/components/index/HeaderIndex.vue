@@ -37,8 +37,8 @@ export default {
   height: 60px;
   width: 100%;
   padding: 0 5%;
-  background-color: $g-white-color;
-
+  background-color: $g-mian-color;
+  color: $g-white-color !important;
   .el-row{
     width: 100%;
     height: 100%;

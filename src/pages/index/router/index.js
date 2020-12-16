@@ -3,6 +3,17 @@ import Router from 'vue-router'
 import NotFoundPage from '@/views/404';
 import Test from '@/components/Test'
 
+//解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
+//使用时：this.$router.push(...).catch(err => err)要有后面的catch
+try {
+  const originalPush = Router.prototype.push;
+  Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err);
+  };
+} catch (e) {
+  console.log(e);
+}
+
 Vue.use(Router)
 
 //默认空白的局部组件
