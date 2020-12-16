@@ -130,6 +130,9 @@ xmp {
 	margin: 0;
 	padding: 0;
 }
+html,body{
+	height: 100%;
+}
 body {
 	font: 14px/1 "PingFang SC", "Microsoft YaHei", sans-serif;
 	-webkit-font-smoothing: antialiased;
@@ -279,47 +282,4 @@ a:active {
 }
 .round {
 	border-radius: 100%;
-}
-
-/* 字体 */
-.font-eighteen{
-	font-size: 18px;
-	color: #000000;
-}
-.font-sixteen{
-	font-size: 16px;
-	color: #000000;
-}
-.sixteen-opacity{
-	font-size: 16px;
-	color: rgba(0,0,0,0.7);
-}
-.font-fourteen{
-	font-size: 14px;
-	color: #000000;
-}
-.fourteen-opacity{
-	font-size: 14px;
-	color: rgba(0,0,0,0.7);
-}
-.four-opacity{
-	font-size: 14px;
-	color: rgba(0,0,0,0.4);
-}
-.font-twoteen{
-	font-size: 12px;
-	color: #000000;
-}
-.font-or{
-	color: #fc6f3d;
-}
-.font-hui{
-	color: #a28171;
-}
-.font-bold{
-	font-weight: bold;
-}
-.font14-or{
-	font-size: 14px;
-	color: rgba(252,111,61,0.8);
 }
