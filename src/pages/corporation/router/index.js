@@ -39,7 +39,7 @@ export default new Router({
             notNeedUser: true
           },
           components: {
-            default : Test,
+            default : () => import('@/views/corporation/jobMgr/JobAdd'),
             corpNavMenu : () => import('@/components/corporation/CorpNavMenu'),
           }
         }

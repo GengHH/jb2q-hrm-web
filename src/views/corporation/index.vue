@@ -2,7 +2,7 @@
     <!-- <router-view></router-view> -->
     <div id="indexBody">
       <el-row :gutter="20">
-        <el-col :span="6">
+        <el-col :span="6" id="leftNav">
           <router-view name="corpNavMenu" />
         </el-col>
         <el-col :span="18">
@@ -89,6 +89,9 @@ export default {
     color:#fc6f3d;
     border:1px solid #fc6f3d;
     display:block;
+  }
+  #leftNav{
+    margin-top: 10px;
   }
 }
 

@@ -25,7 +25,11 @@ import {
   Menu,
   MenuItem,
   MenuItemGroup,
-  Submenu
+  Submenu,
+  Form,
+  FormItem,
+  RadioButton,
+  RadioGroup
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -49,4 +53,8 @@ Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Submenu);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(RadioButton);
+Vue.use(RadioGroup);
 Vue.prototype.$message = Message;
