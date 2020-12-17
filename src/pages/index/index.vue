@@ -1,56 +1,36 @@
 <template>
   <div id="indexApp">
+    <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
-    <div id="indexBody">
-      <BaseSearch></BaseSearch>
-      <!-- <img src="../../assets/logo.png" /> -->
-      <!-- <img :src="path" /> -->
-      <el-carousel>
-        
-        <el-carousel-item v-for="item in 4" :key="item">
-          <h3 class="small">{{ item }}</h3>
-        </el-carousel-item>
-      </el-carousel>
+    <transition name="fade">
       <router-view></router-view>
-    </div>
-    <!-- <el-button @click.native="test()">默认按钮</el-button>
-    <span class="test">gdfgdfg</span>
-    <a href="#/test">test</a>
-    <a href="/cell.html">cell 页面</a>
-    <router-link to="/person.html">Go to Person</router-link> -->
-    <!-- <div class="listTest">
-      <ul>
-        <li v-for="i in list" :key="i.id">
-          {{ i.text }}
-          <h4></h4>
-        </li>
-      </ul>
-    </div>-->
-    <FooterIndex></FooterIndex>
+    </transition> 
   </div> 
 </template>
 
 <script>
 import HeaderIndex from '@/components/index/HeaderIndex.vue';
-import FooterIndex from '@/components/index/FooterIndex.vue';
-import BaseSearch from '@/components/common/BaseSearch.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: "app",
   components:{
     HeaderIndex,
-    FooterIndex,
-    BaseSearch,
   },
   data: () => {
     return {
       path: require("@/assets/logo.png"),
       list: testData.list,
       obj: {},
+      jobActiveName :'jobRecommended',
+      corpActiveName: 'corpRecommended',
       navList:[
-        {id:'2',path:'',nvaText:'活动管理'},
+        {id:'7',path:'/about',nvaText:'关于我们'},
+        {id:'6',path:'/activity',nvaText:'特色活动'},
+        {id:'5',path:'/employmentTrainee',nvaText:'就业见习'},
+        {id:'4',path:'/jobFair',nvaText:'招聘会'},
+        {id:'3',path:'/recruitment',nvaText:'我要招聘'},
+        {id:'2',path:'/jobSearch',nvaText:'我要求职'},
         {id:'1',path:'/',nvaText:'首页'},
-        {id:'3',path:'',nvaText:'活动列表'},
       ]
     }
   },
@@ -63,6 +43,9 @@ export default {
         throw new Error("调用API失败"+err);
       })
     },
+    jobHandleClick(){
+      
+    }
   },
   created(){
     // console.log("index begin creating");
@@ -77,48 +60,19 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 #indexApp {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #2c3e50;
 
-  #indexBody{
-    width:90%;
-    min-height: 100%;
-    max-height:1000px;
-    margin:0 auto;
-    //background-color: $g-gray1-color;
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
   }
-}
-.test {
-  color: #000000;
-}
-
-.el-carousel{
-  height: 300px;
-  width: 70%;
-  div {
-    height: 300px;
-    width: 100%;
-  }
-
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
-
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #1b579c;
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 }
 </style>

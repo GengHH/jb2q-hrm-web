@@ -1,10 +1,12 @@
 <template>
   <div id="indexHeader">
-
     <el-row>
-      <el-col :span="8" class="bg-purple"></el-col>
-      <el-col :span="8" class="bg-purple-light"></el-col>
-      <el-col :span="8" class="bg-purple">
+      <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
+        <img src="@/assets/img/logo.png" alt="">
+        <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
+        <img class="logo3" src="@/assets/img/logo3.png" alt="">
+      </el-col>
+      <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
         <el-breadcrumb separator="">
           <el-breadcrumb-item v-for="nvaIndex in navList" :key="nvaIndex.id" :to="{ path: nvaIndex.path }">
             {{ nvaIndex.nvaText }}
@@ -24,11 +26,6 @@ export default {
   data(){
     return {
       inco:true,
-      navList2:[
-        {id:'2',path:'',nvaText:'活动管理'},
-        {id:'3',path:'',nvaText:'活动列表'},
-        {id:'1',path:'/',nvaText:'首页'},
-      ],
     }
   }
 }
@@ -40,18 +37,30 @@ export default {
   height: 60px;
   width: 100%;
   padding: 0 5%;
-  background-color: $index-header-back-color;
-
+  background-color: $g-mian-color;
+  color: $g-white-color !important;
   .el-row{
     width: 100%;
     height: 100%;
+    img {
+      float: left;
+      width: 30px;
+      height: 32px;
+      position: relative;
+      top: 14px;
+      display: block;
+    }
+    img:last-child {
+      width: 194px;
+      height: 32px;
+    }
   }
 
   .bg-purple {
-    background: #d3dce6;
+    //background: #d3dce6;
   }
   .bg-purple-light {
-    background: #e5e9f2;
+    //background: #e5e9f2;
   }
   .el-col{
     height: 100%;

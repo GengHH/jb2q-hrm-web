@@ -6,6 +6,9 @@
 </template>
 
 <script>
+/**
+ * 首页热门搜素显示组件
+ */
 export default {
   name: "BaseSearch",
   component:{},
