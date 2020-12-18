@@ -9,8 +9,8 @@
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "dev": "webpack --progress --config build/webpack.dev.conf.js",
-    "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "lint:fix": "eslint --fix --ext .js --ext .vue src test/unit/specs",
+    "lint": "eslint --ext .js,.vue src build test/unit/specs",
+    "lint:fix": "eslint --fix --ext .js --ext .vue src build test/unit/specs",
     "unit": "jest --config test/unit/jest.conf.js",
     "unit:coverage": "jest --config test/unit/jest.conf.js --coverage"
   },

@@ -1,26 +1,26 @@
-var utils = require("./utils");
-var webpack = require("webpack");
-var config = require("../config");
-var merge = require("webpack-merge");
-var baseWebpackConfig = require("./webpack.base.conf");
+var utils = require('./utils');
+var webpack = require('webpack');
+var config = require('../config');
+var merge = require('webpack-merge');
+var baseWebpackConfig = require('./webpack.base.conf');
 //var HtmlWebpackPlugin = require('html-webpack-plugin')
-var FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-var VueLoaderPlugin = require("vue-loader/lib/plugin");
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+var VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 // add hot-reload related code to entry chunks
-Object.keys(baseWebpackConfig.entry).forEach(function (name) {
-  baseWebpackConfig.entry[name] = ["./build/dev-client"].concat(
+Object.keys(baseWebpackConfig.entry).forEach(function(name) {
+  baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(
     baseWebpackConfig.entry[name]
   );
 });
 
 module.exports = merge(baseWebpackConfig, {
-  mode: "development",
+  mode: 'development',
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap }),
+    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
   // cheap-module-eval-source-map is faster for development
-  devtool: "#cheap-module-eval-source-map",
+  devtool: '#cheap-module-eval-source-map',
   output: {
     path: config.dev.assetsRoot,
     publicPath: config.dev.assetsPublicPath,
@@ -41,6 +41,6 @@ module.exports = merge(baseWebpackConfig, {
     //   inject: true
     // }),
     new FriendlyErrorsPlugin(),
-    new VueLoaderPlugin(),
-  ].concat(utils.htmlPlugin()),
+    new VueLoaderPlugin()
+  ].concat(utils.htmlPlugin())
 });
