@@ -10,4 +10,4 @@ const queryTable = params => postAction('recruitment/person/queryTable', params)
 
 //TODO 根据业务自行添加
 
-export { queryTable }
+export { queryTable };

@@ -8,10 +8,10 @@
 
 <script>
 export default {
-  name: "app",
+  name: 'app',
   data: () => {
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
     };
   },
   methods: {

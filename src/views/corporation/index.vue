@@ -21,7 +21,7 @@
 // import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "corporationApp",
+  name: 'corporationApp',
   components:{
     // FooterIndex,
     // BaseSearch,
@@ -30,7 +30,7 @@ export default {
   },
   data(){
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
       colRowGutter: 40,
@@ -44,7 +44,7 @@ export default {
         {id:'2',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
         {id:'1',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
       ]
-    }
+    };
   },
   computed: {
     jobFaieList: function(){
@@ -59,7 +59,7 @@ export default {
       console.log(2);
     },
     showMore(){
-      this.$message("this is more");
+      this.$message('this is more');
     }
   },
   created(){

@@ -59,14 +59,14 @@
 <script>
 //import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
 export default {
-  name: "ActivityInfoDetails",
+  name: 'ActivityInfoDetails',
   components:{
     //ActivityBoxShow
   },
   data(){
     return {
       obj: {},
-    }
+    };
   },
   methods: {
     jobHandleClick(){

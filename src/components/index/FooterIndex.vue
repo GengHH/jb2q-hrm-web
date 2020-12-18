@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name:"FooterIndex",
+  name:'FooterIndex',
   data(){
     return {
       inco:true,
@@ -40,9 +40,9 @@ export default {
         {id:'2',path:'',nvaText:'活动管理'},
         {id:'3',path:'',nvaText:'活动列表'}
       ],
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang='scss'>

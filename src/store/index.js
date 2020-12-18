@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import getters from './getters'
+import getters from './getters';
 /**
  * Create By GengHH On 2020/12/02
  * 初始化数据管理对象
@@ -14,6 +14,6 @@ const store = new Vuex.Store({
 
   },
   getters,
-})
+});
 
-export default store
+export default store;

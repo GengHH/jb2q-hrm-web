@@ -19,16 +19,16 @@
 
 <script>
 export default {
-  name:"HeaderIndex",
+  name:'HeaderIndex',
   props:{
     navList: Array
   },
   data(){
     return {
       inco:true,
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang='scss'>

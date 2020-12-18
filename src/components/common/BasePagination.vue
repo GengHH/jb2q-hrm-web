@@ -38,7 +38,7 @@ export default {
   data(){
     return{
       currentPage : 1
-    }
+    };
   },
   methods:{
     handleSizeChange(val) {
@@ -49,7 +49,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
   }
-}
+};
 </script>
 
 <style lang='scss' scoped></style>

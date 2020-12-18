@@ -13,7 +13,7 @@ export function postAction(url, parameter) {
         url: url,
         method: 'post',
         data: parameter
-    })
+    });
 }
 
 //get
@@ -22,7 +22,7 @@ export function getAction(url, parameter) {
         url: url,
         method: 'get',
         data: parameter
-    })
+    });
 }
 
 //put
@@ -31,7 +31,7 @@ export function putAction(url, parameter) {
         url: url,
         method: 'put',
         data: parameter
-    })
+    });
 }
 
 //delete
@@ -40,6 +40,6 @@ export function deleteAction(url, parameter) {
         url: url,
         method: 'delete',
         data: parameter
-    })
+    });
 }
 

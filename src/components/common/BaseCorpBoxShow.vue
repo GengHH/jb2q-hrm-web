@@ -19,7 +19,7 @@
  */
 export default {
   name:'BaseCorpBoxShow'
-}
+};
 </script>
 
 <style lang='scss' scoped>

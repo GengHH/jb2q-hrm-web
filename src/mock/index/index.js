@@ -2,7 +2,7 @@
  * Created by GengHH on 2020/11/25.
  * 定义Mock.mock()的请求拦截
  */
-import Mock from 'mockjs'
+import Mock from 'mockjs';
 
 const getSiteInfo = () => {
   return {
@@ -24,9 +24,9 @@ const getSiteInfo = () => {
       title: 'vue个人网站',
       logo: '/static/logo.png'
     }
-  }
-}
+  };
+};
 
 Mock.mock('/admin/index', 'get', getSiteInfo());
 
-export default Mock
+export default Mock;

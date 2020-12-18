@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-const Home = { template: '<div>home<router-view></router-view></div>' }
-const Default = { template: '<div>default</div>' }
-const Foo = { template: '<div>foo</div>' }
-const Bar = { template: '<div>bar</div>' }
-const Baz = { template: '<div>baz</div>' }
-const WithParams = { template: '<div>{{ $route.params.id }}</div>' }
-const Foobar = { template: '<div>foobar</div>' }
-const FooBar = { template: '<div>FooBar</div>' }
+const Home = { template: '<div>home<router-view></router-view></div>' };
+const Default = { template: '<div>default</div>' };
+const Foo = { template: '<div>foo</div>' };
+const Bar = { template: '<div>bar</div>' };
+const Baz = { template: '<div>baz</div>' };
+const WithParams = { template: '<div>{{ $route.params.id }}</div>' };
+const Foobar = { template: '<div>foobar</div>' };
+const FooBar = { template: '<div>FooBar</div>' };
 
 const router = new VueRouter({
   mode: 'history',
@@ -32,17 +32,17 @@ const router = new VueRouter({
     // dynamic redirect, note that the target route `to` is available for the redirect function
     { path: '/dynamic-redirect/:id?',
       redirect: to => {
-        const { hash, params, query } = to
+        const { hash, params, query } = to;
         if (query.to === 'foo') {
-          return { path: '/foo', query: null }
+          return { path: '/foo', query: null };
         }
         if (hash === '#baz') {
-          return { name: 'baz', hash: '' }
+          return { name: 'baz', hash: '' };
         }
         if (params.id) {
-          return '/with-params/:id'
+          return '/with-params/:id';
         } else {
-          return '/bar'
+          return '/bar';
         }
       }
     },
@@ -61,7 +61,7 @@ const router = new VueRouter({
     // catch all redirect
     { path: '*', redirect: '/home' }
   ]
-})
+});
 
 new Vue({
   router,
@@ -109,4 +109,4 @@ new Vue({
       <router-view class="view"></router-view>
     </div>
   `
-}).$mount('#app')
+}).$mount('#app');

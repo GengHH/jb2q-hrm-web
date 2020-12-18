@@ -42,7 +42,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "app",
+  name: 'app',
   components:{
     FooterIndex,
     BaseSearch,
@@ -50,7 +50,7 @@ export default {
   },
   data(){
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
       searchPlaceHolder:'搜索职位、公司',
@@ -64,7 +64,7 @@ export default {
         {id:'2',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
         {id:'1',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
       ]
-    }
+    };
   },
   computed: {
     jobFaieList: function(){
@@ -77,8 +77,8 @@ export default {
         this.$set(this.obj,'siet',res.data);
         console.log(this.$data);
       }).catch(err=>{
-        throw new Error("调用API失败"+err);
-      })
+        throw new Error('调用API失败'+err);
+      });
     },
     jobHandleClick(){
       console.log(1);
@@ -87,7 +87,7 @@ export default {
       console.log(2);
     },
     showMore(){
-      this.$message("this is more");
+      this.$message('this is more');
     }
   },
   created(){

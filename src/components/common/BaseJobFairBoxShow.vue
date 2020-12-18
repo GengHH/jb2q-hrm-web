@@ -31,7 +31,7 @@ export default {
   props:{
     jobFairBoxInfoObj: Object
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>

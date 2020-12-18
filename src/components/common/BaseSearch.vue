@@ -24,7 +24,7 @@
  * 通用的查询框组件
  */
 export default {
-  name: "BaseSearch",
+  name: 'BaseSearch',
   props:{
     placeholder:{
       type:String,
@@ -44,7 +44,7 @@ export default {
       this.placeholder = 'hahahhahahhahahhah';
     }
   }
-}
+};
 </script>
 
 <style lang='scss'>

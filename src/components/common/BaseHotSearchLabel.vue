@@ -10,14 +10,14 @@
  * 首页热门搜素显示组件
  */
 export default {
-  name: "BaseSearch",
+  name: 'BaseSearch',
   component:{},
   data(){
     return {
       input:'',
     };
   }
-}
+};
 </script>
 
 <style lang='scss'>

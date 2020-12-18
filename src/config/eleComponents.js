@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 /**
  * Create By GengHH On 2020/12/02

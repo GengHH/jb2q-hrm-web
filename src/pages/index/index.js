@@ -4,12 +4,12 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
-import Vue from "vue";
-import App from "./index.vue";
-import router from "./router";
+import Vue from 'vue';
+import App from './index.vue';
+import router from './router';
 import store from '@/store';
-import { VueAxios } from "@/utils/httpService";
-import '@/auth/permission'
+import { VueAxios } from '@/utils/httpService';
+import '@/auth/permission';
 import config from '@/config';
 // 按需引入Element组件
 import '@/config/eleComponents';
@@ -23,14 +23,14 @@ Vue.use(VueAxios,router);
 //Vue.use(Button);
 // 引入mock配置
 if (config.mock) {
-  require('@/mock/index/index.js')
+  require('@/mock/index/index.js');
 }
 
 /* eslint-disable no-new */
 new Vue({
-  el: "#app",
+  el: '#app',
   store,
   router,
-  template: "<App/>",
+  template: '<App/>',
   components: { App },
 });

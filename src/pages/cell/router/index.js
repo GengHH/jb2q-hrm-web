@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
-import Cell from '@/components/Cell'
-import Test from '@/components/Test'
+import Cell from '@/components/Cell';
+import Test from '@/components/Test';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'hash',
@@ -25,4 +25,4 @@ export default new Router({
       component: NotFoundPage
     }
   ]
-})
+});

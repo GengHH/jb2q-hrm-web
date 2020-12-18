@@ -9,5 +9,5 @@ const config = {
   uploadUrl: '//localhost:8085',
   socketUrl: '//localhost:9099',
   defaultImgUrl: '//localhost:8085/static/default.jpg'
-}
-export default config
+};
+export default config;

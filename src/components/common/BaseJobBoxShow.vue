@@ -40,7 +40,7 @@ export default {
   props:{
     jobBoxInfoObj: Object
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>
