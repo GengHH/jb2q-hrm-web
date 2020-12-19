@@ -29,7 +29,7 @@
  * 轮播图组件对应的详情信息
  */
 export default {
-  name: "BaseCarousel",
+  name: 'BaseCarousel',
   data: () => {
     return {
       navList:[
@@ -40,7 +40,7 @@ export default {
         {id:'2',path:'',nvaText:'2'},
         {id:'1',path:'/',nvaText:'1'},
       ]
-    }
+    };
   },
   methods: {
     goPage() {

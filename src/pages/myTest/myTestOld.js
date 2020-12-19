@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const Home = {
   template: `
@@ -10,19 +10,19 @@ const Home = {
       <p>hello</p>
     </div>
   `
-}
+};
 
 const Parent = {
-  data () {
+  data() {
     return {
       transitionName: 'slide-left'
-    }
+    };
   },
-  beforeRouteUpdate (to, from, next) {
-    const toDepth = to.path.split('/').length
-    const fromDepth = from.path.split('/').length
-    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-    next()
+  beforeRouteUpdate(to, from, next) {
+    const toDepth = to.path.split('/').length;
+    const fromDepth = from.path.split('/').length;
+    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
+    next();
   },
   template: `
     <div class="parent">
@@ -32,18 +32,20 @@ const Parent = {
       </transition>
     </div>
   `
-}
+};
 
-const Default = { template: '<div class="default">default</div>' }
-const Foo = { template: '<div class="foo">foo</div>' }
-const Bar = { template: '<div class="bar">bar</div>' }
+const Default = { template: '<div class="default">default</div>' };
+const Foo = { template: '<div class="foo">foo</div>' };
+const Bar = { template: '<div class="bar">bar</div>' };
 
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
     { path: '/', component: Home },
-    { path: '/parent', component: Parent,
+    {
+      path: '/parent',
+      component: Parent,
       children: [
         { path: '', component: Default },
         { path: 'foo', component: Foo },
@@ -51,21 +53,22 @@ const router = new VueRouter({
       ]
     }
   ]
-})
+});
 
 //ceshi slot
+// eslint-disable-next-line no-unused-vars
 const ChartsWrap = {
-  name:'charts-wrap',
+  name: 'charts-wrap',
   template: `
     <div>
-      <slot v-for="(item,index) in list" 
+      <slot v-for="(item,index) in list"
               name="chart"
               :data="item"
               :index="index">
       </slot>
     </div>
   `
-}
+};
 
 new Vue({
   router,
@@ -83,4 +86,4 @@ new Vue({
       </transition>
     </div>
   `
-}).$mount('#app')
+}).$mount('#app');

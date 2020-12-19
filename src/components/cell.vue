@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: "cell",
+  name: 'cell',
   data() {
     return {
-      msg: "欢迎来到cell",
+      msg: '欢迎来到cell',
     };
   },
   // data: () => {

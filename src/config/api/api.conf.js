@@ -11,5 +11,5 @@ const api = {
   modules: '/admin/modules',
   upload: '/admin/upload',
   files: '/admin/files'
-}
-export default api
+};
+export default api;

@@ -7,5 +7,5 @@ const config = {
   uploadUrl: '',
   socketUrl: '',
   defaultImgUrl: '/static/default.jpg'
-}
-export default config
+};
+export default config;

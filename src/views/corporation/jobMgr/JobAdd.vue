@@ -195,7 +195,7 @@ export default {
         delivery: false,
         type: [],
       },
-    }
+    };
   },
   methods:{
     //ruleForm(){},
@@ -205,7 +205,7 @@ export default {
     //radio2(){},
     elForm(){}
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>

@@ -18,13 +18,13 @@ export default{
   data(){
     return {
       count: 0
-    }
+    };
   },
   props: ['msg'],
   methods: {
     handleCount(){
-      this.count += 1
+      this.count += 1;
     }
   }
-}
+};
 </script>

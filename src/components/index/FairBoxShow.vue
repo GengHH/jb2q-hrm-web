@@ -43,9 +43,9 @@ export default {
     return{
       online:true,
       offline:false
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>

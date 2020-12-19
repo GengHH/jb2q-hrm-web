@@ -11,7 +11,7 @@ import { VueAxios } from './vueAxios';
  * 3.导出原生的Axios 
  */
 
-let apiBaseUrl = "";
+let apiBaseUrl = '';
 
 // 创建 axios 实例
 const service = axios.create({
@@ -68,7 +68,7 @@ const err = error => {
           });
           if (token) {
             //TODO:
-            console.log("this token is:"+token);
+            console.log('this token is:'+token);
             // store.dispatch('user/logout').then(() => {
             //   setTimeout(() => {
             //     window.location.reload();
@@ -91,7 +91,7 @@ const err = error => {
   // request interceptor
   service.interceptors.request.use(
     config => {
-      console.log("------------------begin request interceptor----------")
+      console.log('------------------begin request interceptor----------');
       var token = null;
       let data = sessionStorage.vuex;
       if (data && data != 'null' && data != '' && data.length > 0) {
@@ -131,4 +131,4 @@ const installer = {
     }
 };
 
-export { installer as VueAxios, service as axios }
+export { installer as VueAxios, service as axios };

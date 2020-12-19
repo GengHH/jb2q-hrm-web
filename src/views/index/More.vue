@@ -6,12 +6,12 @@
 
 <script>
 export default {
-  name: "cell",
+  name: 'cell',
   data() {
     return {
-      msg: "More",
+      msg: 'More'
     };
-  },
+  }
   // data: () => {
   //   msg : '箭头函数的使用'
   // }

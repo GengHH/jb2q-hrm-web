@@ -46,7 +46,7 @@ export default {
   data(){
     return{
       
-    }
+    };
   },
   methods:{
     handleOpen(){
@@ -56,7 +56,7 @@ export default {
       console.log(2);
     }
   }
-}
+};
 </script>
 
 <style lang='scss' scoped></style>

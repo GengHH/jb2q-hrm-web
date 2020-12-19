@@ -20,7 +20,7 @@ import BasePagination from '@/components/common/BasePagination.vue';
 import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "app",
+  name: 'app',
   components:{
     BaseSearch,
     BasePagination,
@@ -28,7 +28,7 @@ export default {
   },
   data(){
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
       searchPlaceHolder:'请输入特色活动名称',
@@ -42,7 +42,7 @@ export default {
         {id:'2',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
         {id:'1',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
       ]
-    }
+    };
   },
   computed: {
     jobFaieList: function(){
@@ -58,7 +58,7 @@ export default {
       }).catch(err => err);
     },
     showMore(){
-      this.$message("this is more");
+      this.$message('this is more');
     }
   },
   created(){

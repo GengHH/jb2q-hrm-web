@@ -11,7 +11,7 @@
  * 轮播图组件
  */
 export default {
-  name: "BaseCarousel",
+  name: 'BaseCarousel',
   data: () => {
     return {
       navList:[
@@ -22,7 +22,7 @@ export default {
         {id:'2',path:'',nvaText:'2'},
         {id:'1',path:'/',nvaText:'1'},
       ]
-    }
+    };
   },
   methods: {
     goPage() {

@@ -70,7 +70,7 @@ export default {
         lgStr:12,
         xlStr:12
       }
-    }
+    };
   },
   computed: {},
   created(){
@@ -89,7 +89,7 @@ export default {
       this.colNumProperty.xlStr = 6;
     }
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>

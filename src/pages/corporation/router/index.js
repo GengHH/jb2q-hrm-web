@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
-import Test from '@/components/Test'
+//import Test from '@/components/Test';
 
 //解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
 //使用时：this.$router.push(...).catch(err => err)要有后面的catch
@@ -14,7 +14,7 @@ try {
   console.log(e);
 }
 
-Vue.use(Router)
+Vue.use(Router);
 
 //默认空白的局部组件
 // const BlankComponent = {
@@ -39,8 +39,8 @@ export default new Router({
             notNeedUser: true
           },
           components: {
-            default : () => import('@/views/corporation/jobMgr/JobAdd'),
-            corpNavMenu : () => import('@/components/corporation/CorpNavMenu'),
+            default: () => import('@/views/corporation/jobMgr/JobAdd'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
           }
         }
       ]
@@ -58,12 +58,14 @@ export default new Router({
         {
           path: '/jobMgr/unpublishJobQuery',
           name: '未发布职位',
-          component: () => import('@/views/corporation/jobMgr/JobQueryUnpublished')
+          component: () =>
+            import('@/views/corporation/jobMgr/JobQueryUnpublished')
         },
         {
           path: '/jobMgr/publishJobQuery',
           name: '已发布职位',
-          component: () => import('@/views/corporation/jobMgr/JobQueryPublished')
+          component: () =>
+            import('@/views/corporation/jobMgr/JobQueryPublished')
         },
         {
           path: '/jobMgr/overdueJobQuery',
@@ -74,7 +76,7 @@ export default new Router({
           path: '/jobMgr/offJobQuery',
           name: '已下架职位',
           component: () => import('@/views/corporation/jobMgr/JobQueryOffline')
-        },
+        }
         // {
         //   path: '/jobMgr/jobRecycle',
         //   name: '回收站',
@@ -91,15 +93,15 @@ export default new Router({
     //   path: '/JobFindMgr',
     //   name: '应聘管理',
     //   component: () => import('@/views/corporation/recruitment')
-    // },            
+    // },
     // {
     //   path: '/jobFair',
     //   name: '招聘会',
     //   component: () => import('@/views/corporation/jobFair')
-    // }, 
+    // },
     {
       path: '*',
       component: NotFoundPage
     }
   ]
-})
+});

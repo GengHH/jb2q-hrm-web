@@ -1,17 +1,17 @@
 <template>
-    <!-- <router-view></router-view> -->
-    <div id="indexBody">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <router-view name="corpNavMenu" />
-        </el-col>
-        <el-col :span="18">
+  <!-- <router-view></router-view> -->
+  <div id="indexBody">
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <router-view name="corpNavMenu" />
+      </el-col>
+      <el-col :span="18">
         <transition name="fade">
           <router-view name="default" />
-        </transition> 
+        </transition>
       </el-col>
     </el-row>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -21,48 +21,102 @@
 // import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "personApp",
-  components:{
+  name: 'personApp',
+  components: {
     // FooterIndex,
     // BaseSearch,
     // BaseCarousel,
     // BaseInfoGloriette,
   },
-  data(){
+  data() {
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
       colRowGutter: 40,
-      jobActiveName :'jobRecommended',
+      jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
-      showList:[
-        {id:'6',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
-        {id:'5',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
-        {id:'4',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
-        {id:'3',jobName:'HTML5移动开发工程师',districtName:'活动列表',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
-        {id:'2',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
-        {id:'1',jobName:'HTML5移动开发工程师',districtName:'活动管理',timeInterval:'3-5年',educationName:'本科',minSalary:'10000',maxSalary:'15000',paymentUnit:'元/月'},
+      showList: [
+        {
+          id: '6',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动列表',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        },
+        {
+          id: '5',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动列表',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        },
+        {
+          id: '4',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动列表',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        },
+        {
+          id: '3',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动列表',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        },
+        {
+          id: '2',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动管理',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        },
+        {
+          id: '1',
+          jobName: 'HTML5移动开发工程师',
+          districtName: '活动管理',
+          timeInterval: '3-5年',
+          educationName: '本科',
+          minSalary: '10000',
+          maxSalary: '15000',
+          paymentUnit: '元/月'
+        }
       ]
-    }
+    };
   },
   computed: {
-    jobFaieList: function(){
-      return this.showList ? this.showList.slice(0,3) : [];
+    jobFaieList: function() {
+      return this.showList ? this.showList.slice(0, 3) : [];
     }
   },
   methods: {
-    jobHandleClick(){
+    jobHandleClick() {
       console.log(1);
     },
-    corpHandleClick(){
+    corpHandleClick() {
       console.log(2);
     },
-    showMore(){
-      this.$message("this is more");
+    showMore() {
+      this.$message('this is more');
     }
   },
-  created(){
+  created() {
     // console.log("index begin creating");
     // console.log(this);
     // console.log(this.$data);
@@ -75,24 +129,24 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
-#indexBody{
-  width:90%;
+<style lang="scss" scoped>
+#indexBody {
+  width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin:0 auto 150px;
+  margin: 0 auto 150px;
   //background-color: $g-gray1-color;
-  .more-btn{
-    margin:20px auto;
-    padding-left:50px;
-    padding-right:50px;
-    color:#fc6f3d;
-    border:1px solid #fc6f3d;
-    display:block;
+  .more-btn {
+    margin: 20px auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: #fc6f3d;
+    border: 1px solid #fc6f3d;
+    display: block;
   }
 }
 
-.el-carousel{
+.el-carousel {
   height: 300px;
   width: 100%;
   div {
@@ -112,14 +166,14 @@ export default {
     background-color: #99a9bf;
   }
 
-  .el-carousel__item:nth-child(2n+1) {
+  .el-carousel__item:nth-child(2n + 1) {
     background-color: #1b579c;
   }
 }
 
-#carouselBox{
+#carouselBox {
   margin: 20px 0;
-  .el-col{
+  .el-col {
     margin: 10px 0;
   }
 }
@@ -127,7 +181,7 @@ export default {
 .logo-module {
   width: 100%;
   height: 300px;
-  background: #ff9954 linear-gradient(to right,#ff9954,#fc6f3d);
+  background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
   border-radius: 3px;
   padding: 0 12px;
   display: inline-block;
@@ -137,7 +191,7 @@ export default {
     background: #fff4ed;
     font-size: 24px;
     line-height: 120px;
-    height:120px;
+    height: 120px;
     border-radius: 3px;
     margin: 20px 0;
 
@@ -150,9 +204,8 @@ export default {
       display: block;
       background: #fff;
       float: left;
-      margin:10px 20px;
+      margin: 10px 20px;
     }
-
   }
   .or-font {
     .or-br-color i {
@@ -165,27 +218,25 @@ export default {
     .co-br-color i {
       font-size: 60px;
       margin: 20px 0;
-      display: block;      
+      display: block;
     }
   }
 }
 .clearfix {
-    zoom: 1;
+  zoom: 1;
 }
 // 职位信息列表类型
 #jobInfoGloriette {
-  ::v-deep .el-col{
+  ::v-deep .el-col {
     color: blue;
     //height: 100px;
-    
   }
 }
 // 单位信息列表类型
 #corpInfoGloriette {
-  ::v-deep .el-col{
+  ::v-deep .el-col {
     color: red;
     //height: 100px;
-    
   }
 }
 </style>

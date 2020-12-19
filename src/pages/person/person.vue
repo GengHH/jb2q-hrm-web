@@ -15,13 +15,13 @@
 import HeaderIndex from '@/components/index/HeaderIndex.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: "app",
+  name: 'app',
   components:{
     HeaderIndex,
   },
   data: () => {
     return {
-      path: require("@/assets/logo.png"),
+      path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
       jobActiveName :'jobRecommended',
@@ -33,7 +33,7 @@ export default {
         {id:'2',path:'/jobSearch',nvaText:'简历管理'},
         {id:'1',path:'/',nvaText:'个人信息维护'},
       ]
-    }
+    };
   },
   methods: {
     test() {
@@ -41,8 +41,8 @@ export default {
         this.$set(this.obj,'siet',res.data);
         console.log(this.$data);
       }).catch(err=>{
-        throw new Error("调用API失败"+err);
-      })
+        throw new Error('调用API失败'+err);
+      });
     },
     testRoute(){
       
