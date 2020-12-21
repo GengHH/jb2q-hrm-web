@@ -3,7 +3,8 @@
     default-active="2"
     class="el-menu-vertical-demo"
     @open="handleOpen"
-    @close="handleClose">
+    @close="handleClose"
+  >
     <el-submenu index="1">
       <template slot="title">
         <i class="el-icon-location"></i>
@@ -42,21 +43,19 @@
  * 公司界面-子菜单显示组件
  */
 export default {
-  name:'CorpNavMenu',
-  data(){
-    return{
-      
-    };
+  name: 'PerNavMenu',
+  data() {
+    return {};
   },
-  methods:{
-    handleOpen(){
+  methods: {
+    handleOpen() {
       console.log(1);
     },
-    handleClose(){
+    handleClose() {
       console.log(2);
     }
   }
 };
 </script>
 
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>

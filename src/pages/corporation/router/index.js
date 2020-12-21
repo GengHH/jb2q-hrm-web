@@ -29,31 +29,31 @@ export default new Router({
     {
       path: '/',
       //name: '单位首页',
-      //redirect:'/home',
+      redirect: '/corpInfo',
       component: () => import('@/views/corporation/index'),
       children: [
         {
-          path: '',
+          path: 'corpInfo',
           name: '单位信息管理',
           meta: {
             notNeedUser: true
           },
-          components: {
-            default: () => import('@/views/corporation/jobMgr/JobAdd'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
-          }
+          component: () => import('@/views/corporation/')
         }
       ]
     },
     {
       path: '/jobMgr',
-      name: '位置管理',
+      name: '职位管理',
       component: () => import('@/views/corporation/jobMgr/JobSearch'),
       children: [
         {
           path: '/jobMgr/jobAdd',
           name: '发布职位',
-          component: () => import('@/views/corporation/jobMgr/JobAdd')
+          components: {
+            default: () => import('@/views/corporation/jobMgr/JobAdd'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+          }
         },
         {
           path: '/jobMgr/unpublishJobQuery',

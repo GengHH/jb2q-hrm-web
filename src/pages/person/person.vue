@@ -2,10 +2,10 @@
   <div id="indexApp">
     <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
-    <transition name="fade">
-      <router-view></router-view>
-    </transition> 
-  </div> 
+    <!-- <transition name="fade"> -->
+    <router-view></router-view>
+    <!-- </transition> -->
+  </div>
 </template>
 
 <script>
@@ -16,39 +16,40 @@ import HeaderIndex from '@/components/index/HeaderIndex.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
-  components:{
-    HeaderIndex,
+  components: {
+    HeaderIndex
   },
   data: () => {
     return {
       path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
-      jobActiveName :'jobRecommended',
+      jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
-      navList:[
-        {id:'5',path:'/employmentTrainee',nvaText:'求职反馈'},
-        {id:'4',path:'/jobFair',nvaText:'个人中心'},
-        {id:'3',path:'/recruitment',nvaText:'职位搜索'},
-        {id:'2',path:'/jobSearch',nvaText:'简历管理'},
-        {id:'1',path:'/',nvaText:'个人信息维护'},
+      navList: [
+        { id: '5', path: '/findJobFeedback', nvaText: '求职反馈' },
+        { id: '4', path: '/personalCenter', nvaText: '个人中心' },
+        { id: '3', path: '/jobSearch', nvaText: '职位搜索' },
+        { id: '2', path: '/resumeMgr', nvaText: '简历管理' },
+        { id: '1', path: '/', nvaText: '个人信息维护' }
       ]
     };
   },
   methods: {
     test() {
-      this.axios.get('http://api.wpbom.com/api/neran.php').then(res=>{
-        this.$set(this.obj,'siet',res.data);
-        console.log(this.$data);
-      }).catch(err=>{
-        throw new Error('调用API失败'+err);
-      });
+      this.axios
+        .get('http://api.wpbom.com/api/neran.php')
+        .then(res => {
+          this.$set(this.obj, 'siet', res.data);
+          console.log(this.$data);
+        })
+        .catch(err => {
+          throw new Error('调用API失败' + err);
+        });
     },
-    testRoute(){
-      
-    }
+    testRoute() {}
   },
-  created(){
+  created() {
     // console.log("index begin creating");
     // console.log(this);
     // console.log(this.$data);
@@ -61,16 +62,17 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 #indexApp {
   //font-family: "Avenir", Helvetica, Arial, sans-serif;
   //-webkit-font-smoothing: antialiased;
   //-moz-osx-font-smoothing: grayscale;
   // text-align: center;
   //color: #2c3e50;
-
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+  height: 100%;
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;

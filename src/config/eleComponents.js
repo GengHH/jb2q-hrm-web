@@ -7,8 +7,8 @@ import {
   Message,
   Tabs,
   TabPane,
-  Row, 
-  Col, 
+  Row,
+  Col,
   Input,
   Button,
   Select,
@@ -29,7 +29,8 @@ import {
   Form,
   FormItem,
   RadioButton,
-  RadioGroup
+  RadioGroup,
+  Tag
 } from 'element-ui';
 
 Vue.use(Tabs);
@@ -57,4 +58,5 @@ Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(RadioButton);
 Vue.use(RadioGroup);
+Vue.use(Tag);
 Vue.prototype.$message = Message;
