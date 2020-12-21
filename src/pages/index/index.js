@@ -11,6 +11,7 @@ import store from '@/store';
 import { VueAxios } from '@/utils/httpService';
 import '@/auth/permission';
 import config from '@/config';
+import _ from 'lodash';
 // 按需引入Element组件
 import '@/config/eleComponents';
 //import { Button } from 'element-ui';
@@ -18,7 +19,9 @@ import '@/config/eleComponents';
 
 Vue.config.productionTip = false;
 // 安装vue-axios插件
-Vue.use(VueAxios,router);
+Vue.use(VueAxios, router);
+// 直接绑定原型来按安装lodash插件
+Vue.prototype._ = _;
 // 使用Element组件
 //Vue.use(Button);
 // 引入mock配置
