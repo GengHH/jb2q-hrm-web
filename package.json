@@ -12,7 +12,8 @@
     "lint": "eslint --ext .js,.vue src build test/unit/specs",
     "lint:fix": "eslint --fix --ext .js --ext .vue src build test/unit/specs",
     "unit": "jest --config test/unit/jest.conf.js",
-    "unit:coverage": "jest --config test/unit/jest.conf.js --coverage"
+    "unit:coverage": "jest --config test/unit/jest.conf.js --coverage",
+    "theme": "node theme.js"
   },
   "dependencies": {
     "axios": "^0.21.0",
@@ -50,6 +51,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^2.1.1",
     "cssnano": "^3.10.0",
+    "element-theme": "^2.0.1",
+    "element-theme-chalk": "^2.14.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^3.0.0",
@@ -68,7 +71,7 @@
     "jest-serializer-vue": "^2.0.2",
     "launch-editor-middleware": "^2.2.1",
     "mini-css-extract-plugin": "^1.0.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "4.10.0",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
     "ora": "^1.2.0",

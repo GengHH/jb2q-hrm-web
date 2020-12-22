@@ -13,13 +13,14 @@ import '@/auth/permission';
 import config from '@/config';
 import _ from 'lodash';
 // 按需引入Element组件
-import '@/config/eleComponents';
-//import { Button } from 'element-ui';
+import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
+// 使用Element组件
+Vue.use(ElementUI);
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
 // 使用Element组件
@@ -35,5 +36,5 @@ new Vue({
   store,
   router,
   template: '<App/>',
-  components: { App },
+  components: { App }
 });

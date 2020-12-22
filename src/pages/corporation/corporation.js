@@ -12,7 +12,7 @@ import { VueAxios } from '@/utils/httpService';
 import '@/auth/permission';
 import config from '@/config';
 // 按需引入Element组件
-import '@/config/eleComponents';
+import ElementUI from '@/config/eleComponents';
 //import { Button } from 'element-ui';
 //import 'assets/sass/index.scss';
 
@@ -20,7 +20,7 @@ Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
 // 使用Element组件
-//Vue.use(Button);
+Vue.use(ElementUI);
 // 引入mock配置
 if (config.mock) {
   require('@/mock/index/index.js');

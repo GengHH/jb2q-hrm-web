@@ -1,4 +1,4 @@
-import Vue from 'vue';
+//import V from 'V';
 
 /**
  * Create By GengHH On 2020/12/02
@@ -33,30 +33,35 @@ import {
   Tag
 } from 'element-ui';
 
-Vue.use(Tabs);
-Vue.use(TabPane);
-Vue.use(Row);
-Vue.use(Col);
-Vue.use(Input);
-Vue.use(Button);
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(Carousel);
-Vue.use(CarouselItem);
-Vue.use(Breadcrumb);
-Vue.use(BreadcrumbItem);
-Vue.use(Divider);
-Vue.use(Table);
-Vue.use(TableColumn);
-Vue.use(Pagination);
-Vue.use(Link);
-Vue.use(Menu);
-Vue.use(MenuItem);
-Vue.use(MenuItemGroup);
-Vue.use(Submenu);
-Vue.use(Form);
-Vue.use(FormItem);
-Vue.use(RadioButton);
-Vue.use(RadioGroup);
-Vue.use(Tag);
-Vue.prototype.$message = Message;
+//将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
+export default {
+  install(V) {
+    V.use(Tabs);
+    V.use(TabPane);
+    V.use(Row);
+    V.use(Col);
+    V.use(Input);
+    V.use(Button);
+    V.use(Select);
+    V.use(Option);
+    V.use(Carousel);
+    V.use(CarouselItem);
+    V.use(Breadcrumb);
+    V.use(BreadcrumbItem);
+    V.use(Divider);
+    V.use(Table);
+    V.use(TableColumn);
+    V.use(Pagination);
+    V.use(Link);
+    V.use(Menu);
+    V.use(MenuItem);
+    V.use(MenuItemGroup);
+    V.use(Submenu);
+    V.use(Form);
+    V.use(FormItem);
+    V.use(RadioButton);
+    V.use(RadioGroup);
+    V.use(Tag);
+    V.prototype.$message = Message;
+  }
+};
