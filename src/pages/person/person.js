@@ -9,16 +9,18 @@ import App from './person.vue';
 import router from './router';
 import store from '@/store';
 import { VueAxios } from '@/utils/httpService';
+import Print from '@/utils/print';
 import '@/auth/permission';
 import config from '@/config';
-// 按需引入Element组件
 import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
-// 安装vue-axios插件
+//安装vue-axios插件
 Vue.use(VueAxios, router);
-// 使用Element组件
+//安装print插件
+Vue.use(Print);
+//按需使用Element组件
 Vue.use(ElementUI);
 // 引入mock配置
 if (config.mock) {

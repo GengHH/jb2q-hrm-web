@@ -1,5 +1,6 @@
 <template>
-  <div id="baseResumeInfo">
+  <div id="baseResumeInfo" ref="print">
+    <!-- <el-button @click="print">打印</el-button> -->
     <div class="title-style font-or font-bold">
       基本信息
     </div>
@@ -144,6 +145,11 @@ export default {
   name: 'BaseResumeInfo',
   data() {
     return {};
+  },
+  methods: {
+    print() {
+      this.$print(this.$refs.print);
+    }
   }
 };
 </script>
