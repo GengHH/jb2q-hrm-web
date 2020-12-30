@@ -1,7 +1,7 @@
 <template>
   <div id="indexBody">
     <div class="title-style">
-      单位信息维护
+      个人信息维护
     </div>
     <el-form
       :model="ruleForm"

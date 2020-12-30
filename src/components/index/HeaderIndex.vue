@@ -1,14 +1,26 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-12-03 10:04:12
+ * @LastEditTime: 2020-12-30 13:47:20
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
+-->
 <template>
   <div id="indexHeader">
     <el-row>
       <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
-        <img src="@/assets/img/logo.png" alt="">
+        <img src="@/assets/img/logo.png" alt="" />
         <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
-        <img class="logo3" src="@/assets/img/logo3.png" alt="">
+        <img class="logo3" src="@/assets/img/logo3.png" alt="" />
       </el-col>
       <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
         <el-breadcrumb separator="">
-          <el-breadcrumb-item v-for="nvaIndex in navList" :key="nvaIndex.id" :to="{ path: nvaIndex.path }">
+          <el-breadcrumb-item
+            v-for="nvaIndex in navList"
+            :key="nvaIndex.id"
+            :to="{ path: nvaIndex.path }"
+          >
             {{ nvaIndex.nvaText }}
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -19,19 +31,19 @@
 
 <script>
 export default {
-  name:'HeaderIndex',
-  props:{
+  name: 'HeaderIndex',
+  props: {
     navList: Array
   },
-  data(){
+  data() {
     return {
-      inco:true,
+      inco: true
     };
   }
 };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 #indexHeader {
   position: relative;
   height: 60px;
@@ -39,7 +51,7 @@ export default {
   padding: 0 5%;
   background-color: $g-mian-color;
   color: $g-white-color !important;
-  .el-row{
+  .el-row {
     width: 100%;
     height: 100%;
     img {
@@ -62,25 +74,24 @@ export default {
   .bg-purple-light {
     //background: #e5e9f2;
   }
-  .el-col{
+  .el-col {
     height: 100%;
-    .el-breadcrumb{
+    .el-breadcrumb {
       line-height: 60px;
       height: 100%;
     }
-    
 
-    .el-breadcrumb__item{
+    .el-breadcrumb__item {
       font {
         color: #333;
         size: 16px;
       }
-      height:60px;
-      padding:0 10px;
+      height: 60px;
+      padding: 0 10px;
       float: right;
       text-align: right;
     }
-    .el-breadcrumb__item:hover{
+    .el-breadcrumb__item:hover {
       border-bottom: 2px solid red;
     }
   }

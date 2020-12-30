@@ -38,7 +38,7 @@ export default new Router({
           meta: {
             notNeedUser: true
           }
-          //component: () => import('@/components/person/PerNavMenu')
+          //component: () => import('@/components/person/PerResumeNavMenu')
         }
       ]
     },
@@ -52,7 +52,7 @@ export default new Router({
           path: '/resumeMgr/baseInfo',
           name: '基本信息',
           components: {
-            corpNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/components/common/BaseResumeInfo')
           }
         },
@@ -60,7 +60,7 @@ export default new Router({
           path: '/resumeMgr/jobIntention',
           name: '求职意向',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/views/person/resumeMgr/JobIntention')
           }
         },
@@ -68,7 +68,7 @@ export default new Router({
           path: '/resumeMgr/workExperience',
           name: '工作经历',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/views/person/resumeMgr/WorkExperience')
           }
         },
@@ -76,7 +76,7 @@ export default new Router({
           path: '/resumeMgr/educationExperience',
           name: '教育经历',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () =>
               import('@/views/person/resumeMgr/EducationExperience')
           }
@@ -85,7 +85,7 @@ export default new Router({
           path: '/resumeMgr/languageSkills',
           name: '外语能力',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/views/person/resumeMgr/LanguageSkills')
           }
         },
@@ -93,7 +93,7 @@ export default new Router({
           path: '/resumeMgr/skillsCertificate',
           name: '技能证书',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/views/person/resumeMgr/SkillsCertificate')
           }
         },
@@ -101,7 +101,7 @@ export default new Router({
           path: '/resumeMgr/selfEvaluation',
           name: '自我评价',
           components: {
-            corpNavMenu: () => import('@/components/person/PerNavMenu'),
+            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/views/person/resumeMgr/SelfEvaluation')
           }
         }
@@ -115,7 +115,37 @@ export default new Router({
     {
       path: '/personalCenter',
       name: '个人中心',
-      component: () => import('@/views/person/personalCenter')
+      redirect: '/personalCenter/updatePhoneNum',
+      component: () => import('@/views/person/PersonLayout'),
+      children: [
+        {
+          path: '/personalCenter/updatePhoneNum',
+          name: '修改手机号',
+          components: {
+            personNavMenu: () => import('@/components/person/PerCenterNavMenu'),
+            default: () =>
+              import('@/views/person/personalCenter/updatePhoneNumber')
+          }
+        },
+        {
+          path: '/personalCenter/shieldCorporation',
+          name: '屏蔽特定企业',
+          components: {
+            personNavMenu: () => import('@/components/person/PerCenterNavMenu'),
+            default: () =>
+              import('@/views/person/personalCenter/shieldCorporation')
+          }
+        },
+        {
+          path: '/personalCenter/permissionSettings',
+          name: '权限设置',
+          components: {
+            personNavMenu: () => import('@/components/person/PerCenterNavMenu'),
+            default: () =>
+              import('@/views/person/personalCenter/permissionSettings')
+          }
+        }
+      ]
     },
     {
       path: '/findJobFeedback',

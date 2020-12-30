@@ -3,7 +3,7 @@
   <div id="indexBody">
     <el-row class="person-layout" :gutter="20">
       <el-col :span="6">
-        <router-view name="corpNavMenu" />
+        <router-view name="personNavMenu" />
       </el-col>
       <el-col :span="18">
         <transition name="fade">

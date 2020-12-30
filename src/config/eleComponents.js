@@ -1,3 +1,11 @@
+/*
+ * @Author: GegnHH
+ * @Date: 2020-12-02 18:23:36
+ * @LastEditTime: 2020-12-30 16:53:07
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
+ */
 //import V from 'V';
 
 /**
@@ -30,7 +38,9 @@ import {
   FormItem,
   RadioButton,
   RadioGroup,
-  Tag
+  Tag,
+  Dialog,
+  Rate
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -62,6 +72,8 @@ export default {
     V.use(RadioButton);
     V.use(RadioGroup);
     V.use(Tag);
+    V.use(Dialog);
+    V.use(Rate);
     V.prototype.$message = Message;
   }
 };

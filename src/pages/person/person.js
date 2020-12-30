@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-11-30 11:50:54
+ * @LastEditTime: 2020-12-30 18:14:06
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
+ */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // 引入自定义全局样式
