@@ -10,6 +10,7 @@ import router from './router';
 import store from '@/store';
 import { VueAxios } from '@/utils/httpService';
 import Print from '@/utils/print';
+import htmlToPdf from '@/utils/htmlToPdf';
 import '@/auth/permission';
 import config from '@/config';
 import ElementUI from '@/config/eleComponents';
@@ -20,6 +21,8 @@ Vue.config.productionTip = false;
 Vue.use(VueAxios, router);
 //安装print插件
 Vue.use(Print);
+//安装htmlToPdf插件
+Vue.use(htmlToPdf);
 //按需使用Element组件
 Vue.use(ElementUI);
 // 引入mock配置

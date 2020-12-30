@@ -67,7 +67,7 @@ const err = error => {
           duration: 4
         });
         if (token) {
-          //TODO:
+          //TODO
           console.log('this token is:' + token);
           // store.dispatch('user/logout').then(() => {
           //   setTimeout(() => {

@@ -1,6 +1,7 @@
 <template>
   <div id="baseResumeInfo" ref="print">
-    <!-- <el-button @click="print">打印</el-button> -->
+    <!-- <el-button @click="print()">打印</el-button>
+    <el-button @click="exportPdf()">导出PDF</el-button> -->
     <div class="title-style font-or font-bold">
       基本信息
     </div>
@@ -149,6 +150,13 @@ export default {
   methods: {
     print() {
       this.$print(this.$refs.print);
+    },
+    exportPdf() {
+      // 下载
+      window.scrollTo(0, 0);
+      let htmlTitle = '简历';
+      let elements = document.getElementById('baseResumeInfo');
+      this.getPdf(htmlTitle, elements);
     }
   }
 };
