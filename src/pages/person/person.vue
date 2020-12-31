@@ -1,3 +1,11 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-11-30 11:50:54
+ * @LastEditors: GengHH
+ * @LastEditTime: 2020-12-31 17:18:01
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
+-->
 <template>
   <div id="indexApp">
     <!-- Header -->
@@ -27,7 +35,7 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList: [
-        { id: '5', path: '/findJobFeedback', nvaText: '求职反馈' },
+        { id: '5', path: '/jobFindFeedback', nvaText: '求职反馈' },
         { id: '4', path: '/personalCenter', nvaText: '个人中心' },
         { id: '3', path: '/jobSearch', nvaText: '职位搜索' },
         { id: '2', path: '/resumeMgr', nvaText: '简历管理' },

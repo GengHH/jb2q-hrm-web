@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-12-16 11:32:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2020-12-31 14:03:17
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
+ */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // 引入自定义全局样式

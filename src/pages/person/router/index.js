@@ -147,10 +147,58 @@ export default new Router({
         }
       ]
     },
+    // {
+    //   path: '/findJobFeedback',
+    //   name: '求职反馈',
+    //   component: () => import('@/views/person/jobFindFeedback')
+    // },
     {
-      path: '/findJobFeedback',
+      path: '/jobFindFeedback',
       name: '求职反馈',
-      component: () => import('@/views/person/jobFindFeedback')
+      redirect: '/jobFindFeedback/jobFindRecord',
+      component: () => import('@/views/person/PersonLayout'),
+      children: [
+        {
+          path: '/jobFindFeedback/jobFindRecord',
+          name: '求职记录',
+          components: {
+            personNavMenu: () =>
+              import('@/components/person/PerFindJobBackNavMenu'),
+            default: () =>
+              import('@/views/person/jobFindFeedback/jobFindRecord')
+          }
+        },
+        {
+          path: '/jobFindFeedback/corporationAttention',
+          name: '单位关注',
+          components: {
+            personNavMenu: () =>
+              import('@/components/person/PerFindJobBackNavMenu'),
+            default: () =>
+              import('@/views/person/jobFindFeedback/corporationAttention')
+          }
+        },
+
+        {
+          path: '/jobFindFeedback/jobStarList',
+          name: '职位收藏列表',
+          components: {
+            personNavMenu: () =>
+              import('@/components/person/PerFindJobBackNavMenu'),
+            default: () => import('@/views/person/jobFindFeedback/jobStarList')
+          }
+        },
+        {
+          path: '/jobFindFeedback/jobEvaluation',
+          name: '职位评价',
+          components: {
+            personNavMenu: () =>
+              import('@/components/person/PerFindJobBackNavMenu'),
+            default: () =>
+              import('@/views/person/jobFindFeedback/jobEvaluation')
+          }
+        }
+      ]
     },
     {
       path: '*',

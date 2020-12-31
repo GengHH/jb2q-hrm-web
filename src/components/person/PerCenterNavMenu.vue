@@ -1,8 +1,8 @@
 <!--
- * @Author: your name
+ * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
  * @LastEditTime: 2020-12-30 14:23:02
- * @LastEditors: Please set LastEditors
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerCenterNavMenu.vue
 -->

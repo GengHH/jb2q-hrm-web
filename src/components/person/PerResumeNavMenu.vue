@@ -1,8 +1,8 @@
 <!--
- * @Author: your name
+ * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2020-12-30 18:18:34
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-12-31 17:17:26
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerResumeNavMenu.vue
 -->
@@ -125,7 +125,10 @@ export default {
       console.log(2);
     },
     anchorPoint() {
-      $('html, body').animate({ scrollTop: $('#point').offset().top }, 1000);
+      $('html, body').animate(
+        { scrollTop: $('#point').offset().top - 60 },
+        1000
+      );
     }
   }
 };

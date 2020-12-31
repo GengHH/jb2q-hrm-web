@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2020-12-30 13:47:20
- * @LastEditors: your name
+ * @LastEditTime: 2020-12-31 13:45:50
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
 -->
@@ -45,10 +45,11 @@ export default {
 
 <style lang="scss">
 #indexHeader {
-  position: relative;
+  position: fixed;
   height: 60px;
   width: 100%;
   padding: 0 5%;
+  z-index: 999;
   background-color: $g-mian-color;
   color: $g-white-color !important;
   .el-row {

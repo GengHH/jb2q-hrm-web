@@ -2,13 +2,17 @@
   <!-- <router-view></router-view> -->
   <div id="indexBody">
     <el-row class="person-layout" :gutter="20">
-      <el-col :span="6">
+      <el-col id="personNavMenuFixed" :span="6">
         <router-view name="personNavMenu" />
       </el-col>
+      <el-col :span="18"> </el-col>
+    </el-row>
+    <el-row class="person-layout" :gutter="20">
+      <el-col class="col-place-holder" :span="6"> </el-col>
       <el-col :span="18">
-        <transition name="fade">
-          <router-view name="default" />
-        </transition>
+        <!-- <transition name="fade"> -->
+        <router-view name="default" />
+        <!-- </transition> -->
       </el-col>
     </el-row>
   </div>
@@ -55,6 +59,7 @@ export default {
   min-height: calc(100% - 60px);
   margin: 0 auto;
   background-color: #ffffff;
+  padding-top: 60px;
   // position: absolute;
   // bottom: 0;
   // top: 60px;
@@ -62,6 +67,14 @@ export default {
   .person-layout {
     margin: 0 !important;
     height: 100%;
+    .col-place-holder {
+      height: 1px;
+    }
+    #personNavMenuFixed {
+      width: 22.5% !important;
+      position: fixed;
+      z-index: 999;
+    }
   }
   .more-btn {
     margin: 20px auto;
