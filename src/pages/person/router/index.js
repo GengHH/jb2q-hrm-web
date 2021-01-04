@@ -55,56 +55,56 @@ export default new Router({
             personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
             default: () => import('@/components/common/BaseResumeInfo')
           }
-        },
-        {
-          path: '/resumeMgr/jobIntention',
-          name: '求职意向',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () => import('@/views/person/resumeMgr/JobIntention')
-          }
-        },
-        {
-          path: '/resumeMgr/workExperience',
-          name: '工作经历',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () => import('@/views/person/resumeMgr/WorkExperience')
-          }
-        },
-        {
-          path: '/resumeMgr/educationExperience',
-          name: '教育经历',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () =>
-              import('@/views/person/resumeMgr/EducationExperience')
-          }
-        },
-        {
-          path: '/resumeMgr/languageSkills',
-          name: '外语能力',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () => import('@/views/person/resumeMgr/LanguageSkills')
-          }
-        },
-        {
-          path: '/resumeMgr/skillsCertificate',
-          name: '技能证书',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () => import('@/views/person/resumeMgr/SkillsCertificate')
-          }
-        },
-        {
-          path: '/resumeMgr/selfEvaluation',
-          name: '自我评价',
-          components: {
-            personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
-            default: () => import('@/views/person/resumeMgr/SelfEvaluation')
-          }
         }
+        // {
+        //   path: '/resumeMgr/jobIntention',
+        //   name: '求职意向',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () => import('@/views/person/resumeMgr/JobIntention')
+        //   }
+        // },
+        // {
+        //   path: '/resumeMgr/workExperience',
+        //   name: '工作经历',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () => import('@/views/person/resumeMgr/WorkExperience')
+        //   }
+        // },
+        // {
+        //   path: '/resumeMgr/educationExperience',
+        //   name: '教育经历',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () =>
+        //       import('@/views/person/resumeMgr/EducationExperience')
+        //   }
+        // },
+        // {
+        //   path: '/resumeMgr/languageSkills',
+        //   name: '外语能力',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () => import('@/views/person/resumeMgr/LanguageSkills')
+        //   }
+        // },
+        // {
+        //   path: '/resumeMgr/skillsCertificate',
+        //   name: '技能证书',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () => import('@/views/person/resumeMgr/SkillsCertificate')
+        //   }
+        // },
+        // {
+        //   path: '/resumeMgr/selfEvaluation',
+        //   name: '自我评价',
+        //   components: {
+        //     personNavMenu: () => import('@/components/person/PerResumeNavMenu'),
+        //     default: () => import('@/views/person/resumeMgr/SelfEvaluation')
+        //   }
+        // }
       ]
     },
     {

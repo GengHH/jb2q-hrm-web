@@ -1,8 +1,8 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2020-12-30 16:53:07
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-01-04 13:49:40
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
  */
@@ -40,7 +40,8 @@ import {
   RadioGroup,
   Tag,
   Dialog,
-  Rate
+  Rate,
+  DatePicker
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -74,6 +75,7 @@ export default {
     V.use(Tag);
     V.use(Dialog);
     V.use(Rate);
+    V.use(DatePicker);
     V.prototype.$message = Message;
   }
 };
