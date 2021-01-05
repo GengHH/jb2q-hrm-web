@@ -1,6 +1,11 @@
 //POST https://example.com/comments
 
-GET   http://localhost/corp-api/corp/position/find-position/released/agency
+//GET   http://localhost/corp-api/corp/position/find-position/released/agency
+
+//GET   http://localhost/new-corp-api/corp/position/find-position/released/agency
 
 
-POST  http://10.5.102.171:8080/ggzp-zzjb-shrs/corp/info/saveCorpInfo?cid=201002025628331&corpName=上海新移力自动化科技有限公司&establishDate=20171130&businessRange=自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】&unitResidence=上海市普陀区中江路889号804室&specific=1&recruitChargeName=test&recruitChargePhone=13322114512&recruitStaffName1=刘德坡&recruitStaffPhone1=13764565977&corpNature=02&contactPhone=13764565977&recruitStaffName2=刘德坡&recruitStaffPhone2=13764565977&statusId=1&industryType=02&contactAddress=中江路889号804室&tranBaseSymbol=0&introduce=自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】&humanResourceReg=0&frozen=0&keypointCorp=0&specialCorp=0&entrustStatus=0&entrustValid=2020-12-08 15:57:25&_sid=2e06ee3d508b6c526f3400e71d256870e39890255c9130c4b6476d435f03adc6&tyshxym=91310107667812584X
+//GET   http://localhost/new-pers-api/person/info/loadPersonInfo?pid=201906186258910
+
+GET   http://localhost/new-pers-api/person/resume/loadPsnlResume?pid=201906186258910
+//POST  http://10.5.102.171:8080/ggzp-zzjb-shrs/corp/info/saveCorpInfo?cid=201002025628331&corpName=上海新移力自动化科技有限公司&establishDate=20171130&businessRange=自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】&unitResidence=上海市普陀区中江路889号804室&specific=1&recruitChargeName=test&recruitChargePhone=13322114512&recruitStaffName1=刘德坡&recruitStaffPhone1=13764565977&corpNature=02&contactPhone=13764565977&recruitStaffName2=刘德坡&recruitStaffPhone2=13764565977&statusId=1&industryType=02&contactAddress=中江路889号804室&tranBaseSymbol=0&introduce=自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】&humanResourceReg=0&frozen=0&keypointCorp=0&specialCorp=0&entrustStatus=0&entrustValid=2020-12-08 15:57:25&_sid=2e06ee3d508b6c526f3400e71d256870e39890255c9130c4b6476d435f03adc6&tyshxym=91310107667812584X

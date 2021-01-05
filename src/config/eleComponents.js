@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-01-04 13:49:40
+ * @LastEditTime: 2021-01-05 16:22:01
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -41,7 +41,8 @@ import {
   Tag,
   Dialog,
   Rate,
-  DatePicker
+  DatePicker,
+  Notification
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -76,6 +77,7 @@ export default {
     V.use(Dialog);
     V.use(Rate);
     V.use(DatePicker);
+    V.prototype.$notify = Notification;
     V.prototype.$message = Message;
   }
 };

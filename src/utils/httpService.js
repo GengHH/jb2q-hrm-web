@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import { VueAxios } from './vueAxios';
-
+import { Notification } from 'element-ui';
 /**
  * Created by GengHH on 2020/11/29
  * 创建一些常用的vue服务插件，如:Axios
@@ -11,6 +11,15 @@ import { VueAxios } from './vueAxios';
  * 3.导出原生的Axios
  */
 
+//let apiBaseUrl = 'localhost/pers-api'; //  指向---->'http://10.5.102.171:8080/ggzp-sjapp-shrs';
+//let apiBaseUrl = 'localhost/corp-api'; //  指向---->'http://10.5.102.171:8080/ggzp-zzjb-shrs';
+//let apiBaseUrl = 'localhost/admin-api'; //  指向---->'http://10.5.102.171:8080/ggzp-ywjb-shrs';
+
+//let apiBaseUrl = 'localhost/new-pers-api'; //  指向---->'http://10.5.102.158:8080/ggzp-sjapp-shrs';
+//let apiBaseUrl = 'localhost/new-corp-api'; //  指向---->'http://10.5.102.158:8080/ggzp-zzjb-shrs';
+//let apiBaseUrl = 'localhost/new-admin-api'; //  指向---->'http://10.5.102.158:8080/ggzp-ywjb-shrs';
+
+//默认指向本地Mock数据服务
 let apiBaseUrl = '';
 
 // 创建 axios 实例
@@ -23,6 +32,7 @@ const service = axios.create({
 // common error function
 const err = error => {
   if (error.response) {
+    ('');
     // let data = error.response.data;
     // const data = JSON.parse(sessionStorage.vuex);
     var token = null;
@@ -38,33 +48,36 @@ const err = error => {
     switch (error.response.status) {
       //   case 403:
       //     notification.error({
-      //       message: '系统提示',
-      //       description: '拒绝访问',
-      //       duration: 4
+      //       title: '系统提示',
+      //       message: '拒绝访问',
+      //       duration: 4500
       //     });
       //     break;
       case 500:
-        this.$notify.error({
-          message: '系统提示',
-          description: '系统繁忙，请稍后再试!',
-          duration: 4
+        Notification({
+          title: '系统提示',
+          message: '系统繁忙，请稍后再试!',
+          //duration: 4500,
+          type: 'error'
         });
         break;
       case 404:
-        this.$notify.error({
-          message: '系统提示',
-          description: '很抱歉，资源未找到!',
-          duration: 4
+        Notification({
+          title: '系统提示',
+          message: '很抱歉，资源未找到!',
+          //duration: 4500,
+          type: 'error'
         });
         break;
       //   case 504:
-      //     notification.error({ message: '系统提示', description: '网络超时' });
+      //     notification.error({ message: '系统提示', message: '网络超时' });
       //     break;
       case 401:
-        this.$notify.error({
-          message: '系统提示',
-          description: '未授权，请重新登录',
-          duration: 4
+        Notification({
+          title: '系统提示',
+          message: '未授权，请重新登录',
+          //duration: 4500,
+          type: 'error'
         });
         if (token) {
           //TODO
@@ -77,10 +90,11 @@ const err = error => {
         }
         break;
       default:
-        this.$notify.error({
-          message: '系统提示',
-          description: data.message,
-          duration: 4
+        Notification({
+          title: '系统提示',
+          message: data.message,
+          //duration: 4500,
+          type: 'error'
         });
         break;
     }

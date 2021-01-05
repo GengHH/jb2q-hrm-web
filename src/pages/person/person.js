@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2020-12-30 18:14:06
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-01-05 16:23:31
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
  */
@@ -16,26 +16,26 @@ import Vue from 'vue';
 import App from './person.vue';
 import router from './router';
 import store from '@/store';
+import ElementUI from '@/config/eleComponents';
 import { VueAxios } from '@/utils/httpService';
 import Print from '@/utils/print';
 import htmlToPdf from '@/utils/htmlToPdf';
 import '@/auth/permission';
 import config from '@/config';
-import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
 
 Vue.config.productionTip = false;
+//按需使用Element组件
+Vue.use(ElementUI);
 //安装vue-axios插件
 Vue.use(VueAxios, router);
 //安装print插件
 Vue.use(Print);
 //安装htmlToPdf插件
 Vue.use(htmlToPdf);
-//按需使用Element组件
-Vue.use(ElementUI);
 // 引入mock配置
 if (config.mock) {
-  require('@/mock/index/index.js');
+  require('@/mock/person/index.js');
 }
 
 /* eslint-disable no-new */

@@ -1,5 +1,13 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-25 10:46:16
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-01-05 13:40:47
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\config\index.js
+ */
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path')
+var path = require('path');
 
 module.exports = {
   build: {
@@ -36,4 +44,4 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
   }
-}
+};

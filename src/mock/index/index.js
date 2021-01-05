@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-25 17:49:29
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-01-05 14:00:10
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
+ */
 /**
  * Created by GengHH on 2020/11/25.
  * 定义Mock.mock()的请求拦截
