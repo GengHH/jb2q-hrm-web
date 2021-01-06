@@ -83,7 +83,7 @@ export default new Router({
         //   component: () => import('@/views/corporation/jobMgr/JobRecycle')
         // }
       ]
-    },
+    }
     // {
     //   path: '/resumeSearch',
     //   name: '简历搜索',
@@ -99,9 +99,9 @@ export default new Router({
     //   name: '招聘会',
     //   component: () => import('@/views/corporation/jobFair')
     // },
-    {
-      path: '*',
-      component: NotFoundPage
-    }
+    // {
+    //   path: '*',
+    //   component: NotFoundPage
+    // }
   ]
 });

@@ -142,7 +142,7 @@ export default {
   },
   created() {
     this.axios
-      .get('/person/info/loadPersonInfo')
+      .get('/api/person/info/loadPersonInfo')
       .then(res => {
         console.log(res);
         this.$set(this, 'personInfo', res.result.data);
@@ -154,6 +154,22 @@ export default {
           message: err,
           type: 'error'
         });
+      });
+
+    this.axios({
+      method: 'GET',
+      withCredentials: false,
+      url: '/p-api/person/info/loadPersonInfo',
+      data: {
+        name: '1511328705UZVQ',
+        psd: '123456'
+      }
+    })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(err) {
+        console.log(err);
       });
   }
 };

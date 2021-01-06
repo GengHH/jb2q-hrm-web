@@ -61,6 +61,12 @@ Object.keys(proxyTable).forEach(function(context) {
   app.use(proxyMiddleware(options.filter || context, options));
 });
 
+// app.use(
+//   proxyMiddleware('/api/', {
+//     target: 'http://10.5.102.158:8080/ggzp-sjapp-shrs/'
+//   })
+// );
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')());
 

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-05 13:40:47
+ * @LastEditTime: 2021-01-06 18:42:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\config\index.js
  */
@@ -36,7 +36,29 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dev'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:8080/ggzp-sjapp-shrs',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      },
+      '/p-api': {
+        target: 'http://10.5.102.158:8080/ggzp-sjapp-shrs',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      },
+      '/c-api': {
+        target: 'http://10.5.102.158:8080/ggzp-zzjb-shrs',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

@@ -199,10 +199,10 @@ export default new Router({
           }
         }
       ]
-    },
-    {
-      path: '*',
-      component: NotFoundPage
     }
+    // {
+    //   path: '*',
+    //   component: NotFoundPage
+    // }
   ]
 });

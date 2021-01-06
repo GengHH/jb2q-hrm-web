@@ -121,9 +121,9 @@ service.interceptors.request.use(
 
     // 容许跨域请求
     //config.headers['Content-Type'] = "application/x-www-form-urlencoded;charset=utf-8"
-    config.headers['Access-Control-Allow-Origin'] = '*';
-    //config.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,Content-Type';
-    //config.headers['Access-Control-Allow-Methods'] = 'PUT,POST,GET,DELETE,OPTIONS';
+    //config.headers['Access-Control-Allow-Origin'] = '*';
+    //config.headers['Access-Control-Allow-Headers'] = '*';
+    //config.headers['Access-Control-Allow-Methods'] = 'PUT,POST,GET,DELETE';
     return config;
   },
   error => {

@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-25 10:46:16
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-01-06 13:52:26
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\pages\index\router\index.js
+ */
 import Vue from 'vue';
 import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
@@ -21,27 +29,26 @@ Vue.use(Router);
 //   template:'<div></div>'
 // }
 
-
 export default new Router({
   //mode: 'hash',
   mode: 'history',
-  //base: 'recruitment',
+  base: 'home',
   routes: [
     {
       path: '/',
       name: '首页',
-      //redirect:'home',
-      component: () => import('@/views/index/index'),
-      children: [
-        {
-          path: '/hhh',
-          name: '更多',
-          meta: {
-            notNeedUser: true
-          },
-          component: () => import('@/views/index/more')
-        }
-      ]
+      //redirect: '',
+      component: () => import('@/views/index/index')
+      // children: [
+      //   {
+      //     path: '/hhh',
+      //     name: '更多',
+      //     meta: {
+      //       notNeedUser: true
+      //     },
+      //     component: () => import('@/views/index/more')
+      //   }
+      // ]
     },
     {
       path: '/jobSearch',
@@ -77,12 +84,13 @@ export default new Router({
       path: '/about',
       name: '关于我们',
       component: () => import('@/views/index/about')
-    },                    
+    },
     {
       path: '/test',
       name: 'Test',
       component: Test
-    }, {
+    },
+    {
       path: '*',
       component: NotFoundPage
     }
