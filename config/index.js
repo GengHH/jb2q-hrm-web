@@ -2,8 +2,8 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-06 18:42:22
- * @Description: file content
+ * @LastEditTime: 2021-01-07 18:31:54
+ * @Description: 各个环境的相关配置
  * @FilePath: \jb2q-hrm-web\config\index.js
  */
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -37,6 +37,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      //本地开发机器（开发机器同时启动前后台项目）
       '/api': {
         target: 'http://localhost:8080/ggzp-sjapp-shrs',
         changeOrigin: true,
@@ -44,18 +45,21 @@ module.exports = {
           '^/api': ''
         }
       },
-      '/p-api': {
-        target: 'http://10.5.102.158:8080/ggzp-sjapp-shrs',
+      //本地开发的后台机器（nginx指向单独的一台测试机）
+      '/new-pers-api': {
+        target: 'http://localhost:8099/new-pers-api',
+        //target: '10.5.102.154:8080/new-pers-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/new-pers-api': ''
         }
       },
-      '/c-api': {
-        target: 'http://10.5.102.158:8080/ggzp-zzjb-shrs',
+      '/new-corp-api': {
+        target: 'http://localhost:8099/new-corp-api',
+        //target: process.env.VUE_APP_BASE_URL + '/new-corp-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/new-corp-api': ''
         }
       }
     },

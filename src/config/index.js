@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-25 17:45:12
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-01-07 18:32:07
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\config\index.js
+ */
 /**
  * Created by GengHH on 2020/11/25.
  */

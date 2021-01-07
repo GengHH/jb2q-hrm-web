@@ -93,13 +93,16 @@
     </el-form>
     <div class="form-btns">
       <el-button class="orange-btn btn-style">保存</el-button>
-      <el-button class="white-btn btn-style">取消</el-button>
+      <el-button class="white-btn btn-style" @click="getPersonInfo()"
+        >取消</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
 import { testData } from '@pub/mockTestData';
+import { getPersonBaseInfo } from '@/api/personApi';
 export default {
   name: 'personApp',
   data() {
@@ -130,6 +133,14 @@ export default {
     }
   },
   methods: {
+    async getPersonInfo() {
+      try {
+        let result = await getPersonBaseInfo({ pid: '201906186258910' });
+        console.log('result', result);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     jobHandleClick() {
       console.log(1);
     },
@@ -142,7 +153,7 @@ export default {
   },
   created() {
     this.axios
-      .get('/api/person/info/loadPersonInfo')
+      .get('/new-pers-api/person/info/loadPersonInfo')
       .then(res => {
         console.log(res);
         this.$set(this, 'personInfo', res.result.data);
@@ -154,22 +165,6 @@ export default {
           message: err,
           type: 'error'
         });
-      });
-
-    this.axios({
-      method: 'GET',
-      withCredentials: false,
-      url: '/p-api/person/info/loadPersonInfo',
-      data: {
-        name: '1511328705UZVQ',
-        psd: '123456'
-      }
-    })
-      .then(function(res) {
-        console.log(res);
-      })
-      .catch(function(err) {
-        console.log(err);
       });
   }
 };

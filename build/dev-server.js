@@ -52,6 +52,13 @@ compiler.plugin('compilation', function(compilation) {
   });
 });
 
+// serve webpack bundle output
+app.use(devMiddleware);
+
+// enable hot-reload and state-preserving
+// compilation error display
+app.use(hotMiddleware);
+
 // proxy api requests
 Object.keys(proxyTable).forEach(function(context) {
   var options = proxyTable[context];
@@ -61,21 +68,8 @@ Object.keys(proxyTable).forEach(function(context) {
   app.use(proxyMiddleware(options.filter || context, options));
 });
 
-// app.use(
-//   proxyMiddleware('/api/', {
-//     target: 'http://10.5.102.158:8080/ggzp-sjapp-shrs/'
-//   })
-// );
-
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')());
-
-// serve webpack bundle output
-app.use(devMiddleware);
-
-// enable hot-reload and state-preserving
-// compilation error display
-app.use(hotMiddleware);
 
 // serve pure static assets
 var staticPath = path.posix.join(
@@ -102,6 +96,9 @@ devMiddleware.waitUntilValid(() => {
 });
 
 var server = app.listen(port);
+// console.log('_________');
+// console.log(process.env.APP_BASE_URL);
+// console.log('__________');
 
 module.exports = {
   ready: readyPromise,
