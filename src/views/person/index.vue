@@ -67,6 +67,13 @@
           <el-select v-model="personInfo.livingArea" placeholder="请选择">
             <el-option label="浦东新区" value="15"></el-option>
             <el-option label="杨浦区" value="13"></el-option>
+            <el-option
+              v-for="item in dic1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -102,6 +109,7 @@
 
 <script>
 import { testData } from '@pub/mockTestData';
+import { getDic1 } from '@/api/common';
 import { getPersonBaseInfo } from '@/api/personApi';
 export default {
   name: 'personApp',
@@ -120,6 +128,7 @@ export default {
         zjhm: '',
         zjlxId: ''
       },
+      dic1: [],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -133,6 +142,15 @@ export default {
     }
   },
   methods: {
+    async getDic1() {
+      try {
+        let result = await getDic1();
+        console.log('dic', result);
+        this.$set(this, 'dic1', result.dicData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getPersonInfo() {
       try {
         let result = await getPersonBaseInfo({ pid: '201906186258910' });
@@ -154,6 +172,7 @@ export default {
     }
   },
   created() {
+    this.getDic1();
     this.getPersonInfo();
     // this.axios
     //   .get('/mock-pers-api/person/info/loadPersonInfo')

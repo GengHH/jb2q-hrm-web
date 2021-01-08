@@ -1,9 +1,9 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2020-12-31 17:17:26
+ * @LastEditTime: 2021-01-08 15:39:03
  * @LastEditors: GengHH
- * @Description: In User Settings Edit
+ * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerResumeNavMenu.vue
 -->
 <template>
@@ -13,7 +13,7 @@
     @open="handleOpen"
     @close="handleClose"
   >
-    <router-link
+    <!-- <router-link
       v-for="navIndex in navArray"
       :key="navIndex.id"
       :to="navIndex.path"
@@ -27,10 +27,23 @@
         <span slot="title">{{ navIndex.name }}</span>
       </el-menu-item>
     </router-link>
+
     <el-menu-item index="8">
       <i class="el-icon-document"></i>
-      <span slot="title" @click="anchorPoint()">锚点测试</span>
+      <span slot="title" @click="anchorPoint('point')">锚点测试</span>
+    </el-menu-item> -->
+
+    <el-menu-item
+      v-for="navIndex in navArray"
+      :key="navIndex.id"
+      :index="navIndex.id"
+    >
+      <i :class="navIndex.incoName"></i>
+      <span slot="title" @click="anchorPoint(navIndex.anchorPointId)">{{
+        navIndex.name
+      }}</span>
     </el-menu-item>
+
     <!-- <el-menu-item index="1">
       <i class="el-icon-user"></i>
       <span slot="title">基本信息</span>
@@ -76,43 +89,56 @@ export default {
           path: '/resumeMgr/baseInfo',
           name: '基本信息',
           incoName: 'el-icon-user',
-          disabled: false
+          disabled: false,
+          anchorPointId: 'baseInfo'
         },
         {
           id: '2',
           path: '/resumeMgr/jobIntention',
           name: '求职意向',
-          incoName: 'el-icon-menu'
+          incoName: 'el-icon-menu',
+          disabled: false,
+          anchorPointId: 'jobIntention'
         },
         {
           id: '3',
           path: '/resumeMgr/workExperience',
           name: '工作经历',
-          incoName: 'el-icon-document'
+          incoName: 'el-icon-document',
+          disabled: false,
+          anchorPointId: 'workExperience'
         },
         {
           id: '4',
           path: '/resumeMgr/educationExperience',
           name: '教育经历',
-          incoName: 'el-icon-school'
+          incoName: 'el-icon-school',
+          disabled: false,
+          anchorPointId: 'educationExperience'
         },
         {
           id: '5',
           path: '/resumeMgr/languageSkills',
           name: '外语能力',
-          incoName: 'el-icon-reading'
+          incoName: 'el-icon-reading',
+          disabled: false,
+          anchorPointId: 'languageSkills'
         },
         {
           id: '6',
           path: '/resumeMgr/skillsCertificate',
           name: '技能证书',
-          incoName: 'el-icon-files'
+          incoName: 'el-icon-files',
+          disabled: false,
+          anchorPointId: 'skillsCertificate'
         },
         {
           id: '7',
           path: '/resumeMgr/selfEvaluation',
           name: '自我评价',
-          incoName: 'el-icon-postcard'
+          incoName: 'el-icon-postcard',
+          disabled: false,
+          anchorPointId: 'selfEvaluation'
         }
       ]
     };
@@ -124,10 +150,10 @@ export default {
     handleClose() {
       console.log(2);
     },
-    anchorPoint() {
+    anchorPoint(id) {
       $('html, body').animate(
-        { scrollTop: $('#point').offset().top - 60 },
-        1000
+        { scrollTop: $('#' + id).offset().top - 60 },
+        500
       );
     }
   }

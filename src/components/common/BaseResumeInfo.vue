@@ -3,7 +3,7 @@
     <div id="baseResumeInfo" ref="print">
       <!-- <el-button @click="print()">打印</el-button>
       <el-button @click="exportPdf()">导出PDF</el-button> -->
-      <div class="title-style font-or font-bold">
+      <div id="baseInfo" class="title-style font-or font-bold">
         基本信息
         <el-button
           class="tab-btn"
@@ -31,7 +31,7 @@
           >
         </p>
       </div>
-      <div class="title-style font-or font-bold">
+      <div id="selfEvaluation" class="title-style font-or font-bold">
         求职意向
         <el-button
           class="tab-btn"
@@ -52,7 +52,7 @@
           <span><i class="icon iconfont">&#xe643;</i> 上海</span>
         </p>
       </div>
-      <div id="point" class="title-style font-or font-bold">
+      <div id="selfEvaluation" class="title-style font-or font-bold">
         工作经历
         <el-button
           class="tab-btn"
@@ -94,7 +94,7 @@
           5、根据开发过程中的体验对产品提出改进意见。
         </p>
       </div>
-      <div class="title-style font-or font-bold">
+      <div id="educationExperience" class="title-style font-or font-bold">
         教育经历
         <el-button
           class="tab-btn"
@@ -134,7 +134,7 @@
           </el-col>
         </el-row>
       </div>
-      <div class="title-style font-or font-bold">
+      <div id="languageSkills" class="title-style font-or font-bold">
         外语能力
         <el-button
           class="tab-btn"
@@ -149,7 +149,7 @@
         <el-tag size="medium" closable>俄语专业四级</el-tag>
         <el-tag size="medium" closable>TEF法语A1级</el-tag>
       </div>
-      <div class="title-style font-or font-bold">
+      <div id="skillsCertificate" class="title-style font-or font-bold">
         技能证书
         <el-button
           class="tab-btn"
@@ -170,7 +170,7 @@
         <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
         <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
       </div>
-      <div class="title-style font-or font-bold">
+      <div id="selfEvaluation" class="title-style font-or font-bold">
         自我评价
         <el-button
           class="tab-btn"
@@ -609,6 +609,7 @@ export default {
   },
   methods: {
     print() {
+      // 打印
       this.$print(this.$refs.print);
     },
     exportPdf() {
@@ -618,7 +619,6 @@ export default {
       let elements = document.getElementById('baseResumeInfo');
       this.getPdf(htmlTitle, elements);
     },
-    handleClick(tab, event) {},
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -631,8 +631,8 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleSizeChange(val) {},
-    handleCurrentChange(val) {},
+    //handleSizeChange(val) {},
+    //handleCurrentChange(val) {},
     handleClose(val) {
       this.$message(val);
     }
