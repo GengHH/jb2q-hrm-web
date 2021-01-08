@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-05 16:23:31
+ * @LastEditTime: 2021-01-08 14:12:43
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -36,6 +36,7 @@ Vue.use(htmlToPdf);
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');
+  console.log('++++++++++成功引入mock数据+++++++');
 }
 
 /* eslint-disable no-new */

@@ -137,6 +137,8 @@ export default {
       try {
         let result = await getPersonBaseInfo({ pid: '201906186258910' });
         console.log('result', result);
+        if (result.status === 200)
+          this.$set(this, 'personInfo', result.result.data);
       } catch (error) {
         console.log(error);
       }
@@ -152,20 +154,21 @@ export default {
     }
   },
   created() {
-    this.axios
-      .get('/new-pers-api/person/info/loadPersonInfo')
-      .then(res => {
-        console.log(res);
-        this.$set(this, 'personInfo', res.result.data);
-      })
-      .catch(err => {
-        console.log(err);
-        this.$message({
-          showClose: true,
-          message: err,
-          type: 'error'
-        });
-      });
+    this.getPersonInfo();
+    // this.axios
+    //   .get('/mock-pers-api/person/info/loadPersonInfo')
+    //   .then(res => {
+    //     console.log(res);
+    //     this.$set(this, 'personInfo', res.result.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.$message({
+    //       showClose: true,
+    //       message: err,
+    //       type: 'error'
+    //     });
+    //   });
   }
 };
 </script>

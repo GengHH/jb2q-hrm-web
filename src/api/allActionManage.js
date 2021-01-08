@@ -2,14 +2,14 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-07 16:38:05
+ * @LastEditTime: 2021-01-08 14:06:12
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
 // eslint-disable-next-line no-unused-vars
 import Vue from 'vue';
 import { axios } from '@/utils/httpService';
-
+import config from '@/config';
 /**
  * Created by GengHH on 2020/11/29
  * 利用axios来封装成所需的post,get,put,delete等通用请求
@@ -26,11 +26,19 @@ export function postAction(url, parameter) {
 
 //get
 export function getAction(url, parameter) {
-  return axios({
-    url: url,
-    method: 'get',
-    params: parameter
-  });
+  //? TODO 本地开发使用mock时，采用axios.get(),否则mockjs无法拦截到；问题原因尚未知晓
+  return axios.get(url);
+  // console.log(config);
+  // if (config.mock) {
+  //   console.log(config);
+  //   return axios.get(url, { params: parameter });
+  // } else {
+  //   return axios({
+  //     url: url,
+  //     method: 'get',
+  //     params: parameter
+  //   });
+  // }
 }
 
 //put

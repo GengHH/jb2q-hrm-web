@@ -3,16 +3,14 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-05 17:31:29
+ * @LastEditTime: 2021-01-08 14:16:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
 
 import Mock from 'mockjs';
-
-// eslint-disable-next-line no-unused-vars
-const BastPath = 'http://localhost/new-pers-api/';
-
+import config from '../../config/mock.conf';
+const basePath = config.personBasePath;
 /**
  * 查询个人的基本信息
  * @param {*} pid
@@ -27,7 +25,7 @@ const getPersonbaseInfo = pid => {
         pid: '201906186258910',
         zjlxId: '01',
         zjhm: '370283199506142214',
-        xm: '董晓鑫',
+        xm: 'genghonghui',
         sexId: '1',
         birthDate: '19960613',
         contactPhone: '13122272095',
@@ -45,7 +43,8 @@ const getPersonbaseInfo = pid => {
 //   return getPersonbaseInfo(options);
 // });
 
-Mock.mock('/person/info/loadPersonInfo', 'get', function(options) {
+Mock.mock(basePath + '/person/info/loadPersonInfo', 'get', function(options) {
   return getPersonbaseInfo(options);
 });
+
 export default Mock;
