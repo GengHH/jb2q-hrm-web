@@ -31,7 +31,7 @@
           >
         </p>
       </div>
-      <div id="selfEvaluation" class="title-style font-or font-bold">
+      <div id="jobIntention" class="title-style font-or font-bold">
         求职意向
         <el-button
           class="tab-btn"
@@ -52,7 +52,7 @@
           <span><i class="icon iconfont">&#xe643;</i> 上海</span>
         </p>
       </div>
-      <div id="selfEvaluation" class="title-style font-or font-bold">
+      <div id="workExperience" class="title-style font-or font-bold">
         工作经历
         <el-button
           class="tab-btn"
@@ -199,49 +199,71 @@
       </div>
       <el-form
         class="width70"
-        :model="form"
+        :model="jobIntentionForm"
+        ref="jobIntentionForm"
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item label="单位名称" :label-width="formLabelWidth">
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder="万达信息股份有限公司"
-            :disabled="true"
-          ></el-input>
+        <el-form-item label="意向职位分类" :label-width="formLabelWidth">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="职业名称" :label-width="formLabelWidth">
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder="IOS开发工程师"
-            :disabled="true"
-          ></el-input>
+        <el-form-item label="意向行业" :label-width="formLabelWidth">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="评价星级" :label-width="formLabelWidth">
-          <el-rate v-model="value"></el-rate>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="薪酬上线" :label-width="formLabelWidth">
+              <el-input
+                v-model="jobIntentionForm.name"
+                autocomplete="off"
+              ></el-input> </el-form-item
+          ></el-col>
+          <el-col :span="12"
+            ><el-form-item label="薪酬下线" :label-width="formLabelWidth">
+              <el-input
+                v-model="jobIntentionForm.name"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="意向工作区域" :label-width="formLabelWidth">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in dicOptions.option1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="评价内容" :label-width="formLabelWidth">
-          <el-input
-            type="textarea"
-            placeholder="请输入（1000字符）"
-            v-model="ruleForm.desc"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="评价人" :label-width="formLabelWidth">
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder=""
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="评价时间" :label-width="formLabelWidth">
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder=""
-          ></el-input>
+        <el-form-item label="意向工作性质" :label-width="formLabelWidth">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <p class="fourteen-opacity font-or tac line20">
@@ -273,41 +295,51 @@
       </div>
       <el-form
         class="width70"
-        :model="form"
+        :model="workExperienceForm"
+        ref="workExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="曾任职公司名称" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model="workExperienceForm.name"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          class="input-one"
-          label="起始时间"
-          :label-width="formLabelWidth"
-          prop="date1"
-        >
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="ruleForm.date1"
-            style="width: 70%;"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item class="input-two" label="结束时间" prop="date2">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="ruleForm.date2"
-            style="width: 70%;"
-          ></el-date-picker>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item
+              class="input-one"
+              label="起始时间"
+              :label-width="formLabelWidth"
+              prop="date1"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="workExperienceForm.date1"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              class="input-two"
+              label="结束时间"
+              :label-width="formLabelWidth"
+              prop="date2"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="workExperienceForm.date2"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="所任职位" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model="workExperienceForm.name"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -316,7 +348,7 @@
           <el-input
             type="textarea"
             placeholder="请输入（1000字符）"
-            v-model="ruleForm.desc"
+            v-model="workExperienceForm.desc"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -344,13 +376,14 @@
       </div>
       <el-form
         class="width70"
-        :model="form"
+        :model="educationExperienceForm"
+        ref="educationExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="毕业院校" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model="educationExperienceForm.name"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -378,6 +411,36 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item
+              class="input-one"
+              label="入学时间"
+              :label-width="formLabelWidth"
+              prop="date1"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="educationExperienceForm.date1"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              class="input-two"
+              label="毕业时间"
+              :label-width="formLabelWidth"
+              prop="date2"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="educationExperienceForm.date2"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
@@ -403,14 +466,15 @@
       </div>
       <el-form
         class="width70"
-        :model="form"
+        :model="languageSkillsForm"
+        ref="languageSkillsForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="语种" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option2"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -422,7 +486,7 @@
         <el-form-item label="等级" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option3"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -455,20 +519,21 @@
       </div>
       <el-form
         class="width70"
-        :model="form"
+        :model="skillsCertificateForm"
+        ref="skillsCertificateForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="证书名称" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model="skillsCertificateForm.name"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="技能等级" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model="skillsCertificateForm.name"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -482,7 +547,7 @@
           <el-date-picker
             type="date"
             placeholder="请选择"
-            v-model="ruleForm.date1"
+            v-model="skillsCertificateForm.date1"
             style="width: 70%;"
           ></el-date-picker>
         </el-form-item>
@@ -510,9 +575,9 @@
         </p>
       </div>
       <el-form
-        id="selfEvaluationArea"
         class="width70"
-        :model="form"
+        :model="selfEvaluationForm"
+        ref="selfEvaluationForm"
         :label-position="labelPosition"
         :rules="rules"
       >
@@ -549,9 +614,8 @@ export default {
   name: 'BaseResumeInfo',
   data() {
     return {
-      value: 0,
+      value: '选项1',
       labelPosition: 'right',
-      rules: {},
       ruleForm: {
         keyword: '',
         ages: '',
@@ -564,6 +628,14 @@ export default {
         delivery: false,
         type: []
       },
+      baseInfoForm: {},
+      jobIntentionForm: {},
+      workExperienceForm: {},
+      educationExperienceForm: {},
+      languageSkillsForm: {},
+      skillsCertificateForm: {},
+      selfEvaluationForm: {},
+      rules: {},
       baseInfoDialog: false,
       dialogFormVisible2: false,
       dialog1: false,
@@ -604,7 +676,12 @@ export default {
           value: '选项5',
           label: '北京烤鸭'
         }
-      ]
+      ],
+      dicOptions: {
+        option1: [],
+        option2: [],
+        option3: []
+      }
     };
   },
   methods: {
@@ -635,7 +712,39 @@ export default {
     //handleCurrentChange(val) {},
     handleClose(val) {
       this.$message(val);
+    },
+
+    getDicQx() {
+      return this.axios.get('/common/dic/getQx');
+    },
+
+    getDicLanguageType() {
+      return this.axios.get('/common/dic/getLanguageType');
+    },
+    getDicLanguageLevell() {
+      return this.axios.get('/common/dic/getLanguageLevel');
+    },
+
+    getDicData() {
+      let that = this;
+      console.log(that);
+      Promise.all([
+        this.getDicQx(),
+        this.getDicLanguageType(),
+        this.getDicLanguageLevell()
+      ]).then(function(results) {
+        // const qx = results[0];
+        // const languageType = results[1];
+        // const languageLevel = results[2];
+        // console.log(qx, languageType, languageLevel);
+        that.$set(that.dicOptions, 'option1', results[0].dicData);
+        that.$set(that.dicOptions, 'option2', results[1].dicData);
+        that.$set(that.dicOptions, 'option3', results[2].dicData);
+      });
     }
+  },
+  created() {
+    this.getDicData();
   }
 };
 </script>
@@ -716,12 +825,12 @@ export default {
   width: 100%;
   background: #f7f7f7;
   left: 0;
-  padding: 10px 0;
+  padding: 5px 0;
   z-index: 2;
   border-bottom: 1px solid #e6e6e6;
   .pup-tit {
     text-align: left;
-    font-size: 16px;
+    font-size: 14px;
     color: #fc6f3d;
     font-weight: bold;
     padding: 0 20px;

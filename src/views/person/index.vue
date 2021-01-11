@@ -55,15 +55,12 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="手机号" required>
-          <el-input
-            v-model="personInfo.contactPhone"
-            :disabled="true"
-          ></el-input>
+        <el-form-item label="手机号" prop="contactPhone">
+          <el-input v-model="personInfo.contactPhone"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="居住区域">
+        <el-form-item label="居住区域" required>
           <el-select v-model="personInfo.livingArea" placeholder="请选择">
             <el-option label="浦东新区" value="15"></el-option>
             <el-option label="杨浦区" value="13"></el-option>
@@ -90,7 +87,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="居住详细地址">
+        <el-form-item label="居住详细地址" required>
           <el-input
             v-model="personInfo.livingAddress"
             placeholder="请输入联系地址"
@@ -99,7 +96,9 @@
       </el-col>
     </el-form>
     <div class="form-btns">
-      <el-button class="orange-btn btn-style">保存</el-button>
+      <el-button class="orange-btn btn-style" @click="submitForm('personInfo')"
+        >保存</el-button
+      >
       <el-button class="white-btn btn-style" @click="getPersonInfo()"
         >取消</el-button
       >
@@ -111,6 +110,7 @@
 import { testData } from '@pub/mockTestData';
 import { getDic1 } from '@/api/common';
 import { getPersonBaseInfo } from '@/api/personApi';
+import { phonePattern } from '@/utils/regexp';
 export default {
   name: 'personApp',
   data() {
@@ -128,11 +128,23 @@ export default {
         zjhm: '',
         zjlxId: ''
       },
+      rules: {
+        contactPhone: [
+          { required: true, message: '请输手机号', trigger: 'blur' },
+          {
+            pattern: phonePattern,
+            message: '请输入正确格式的手机号',
+            trigger: ['blur', 'change']
+          }
+        ],
+        livingAddress: [
+          { required: true, message: '请输入联系地址', trigger: 'blur' }
+        ]
+      },
       dic1: [],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
-      rules: {},
       labelPosition: ''
     };
   },
@@ -167,8 +179,20 @@ export default {
     corpHandleClick() {
       console.log(2);
     },
-    showMore() {
-      this.$message('this is more');
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //! TODO
+          this.$message({
+            showClose: true,
+            message: 'submit!',
+            type: 'success'
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     }
   },
   created() {

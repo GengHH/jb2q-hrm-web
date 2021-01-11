@@ -2,11 +2,30 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-08 17:40:07
+ * @LastEditTime: 2021-01-11 15:55:30
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
 const dic = {
+  //区县
+  GGJBXX_QX: [
+    { value: '01', label: '黄浦' },
+    { value: '04', label: '徐汇' },
+    { value: '05', label: '长宁' },
+    { value: '06', label: '静安' },
+    { value: '07', label: '普陀' },
+    { value: '09', label: '虹口' },
+    { value: '10', label: '杨浦' },
+    { value: '12', label: '闵行' },
+    { value: '13', label: '宝山' },
+    { value: '14', label: '嘉定' },
+    { value: '15', label: '浦东' },
+    { value: '16', label: '金山' },
+    { value: '17', label: '松江' },
+    { value: '18', label: '青浦' },
+    { value: '26', label: '奉贤' },
+    { value: '30', label: '崇明' }
+  ],
   //单位性质
   RECRUIT_CORP_NATURE: [
     { value: '01', label: '外商投资企业' },
@@ -54,9 +73,26 @@ const dic = {
   //屏蔽类型
   RECRUIT_SHIELD_TYPE: '',
   //语种
-  RECRUIT_LANGUAGE_TYPE: '',
-  //语种
-  RECRUIT_LANGUAGE_LEVEL: '',
+  RECRUIT_LANGUAGE_TYPE: [
+    { value: '01', label: '英语' },
+    { value: '02', label: '日语' },
+    { value: '03', label: '法语' },
+    { value: '04', label: '德语' },
+    { value: '05', label: '俄语' },
+    { value: '06', label: '韩语' },
+    { value: '07', label: '西班牙语' },
+    { value: '08', label: '葡萄牙语' },
+    { value: '09', label: '阿拉伯语' },
+    { value: '10', label: '意大利语' },
+    { value: '11', label: '其他' }
+  ],
+  //语种等级
+  RECRUIT_LANGUAGE_LEVEL: [
+    { value: '1', label: '一般' },
+    { value: '2', label: '良好' },
+    { value: '3', label: '熟练' },
+    { value: '4', label: '精通' }
+  ],
   //职业一级分类
   RECRUIT_POSITION_F_TYPE: '',
   //职业二级分类
@@ -66,7 +102,17 @@ const dic = {
   //应聘反馈状态
   RECRUIT_FEEDBACK_STATUS: '',
   //学历
-  RECRUIT_EDU: '',
+  RECRUIT_EDU: [
+    { value: '01', label: '初中及以下' },
+    { value: '02', label: '高中' },
+    { value: '03', label: '职高' },
+    { value: '04', label: '技校' },
+    { value: '05', label: '中专' },
+    { value: '06', label: '大专' },
+    { value: '07', label: '本科' },
+    { value: '08', label: '硕士' },
+    { value: '09', label: '博士及以上' }
+  ],
   //应聘来源
   RECRUIT_APPLYFOR_SOURCE: '',
   //用户角色
