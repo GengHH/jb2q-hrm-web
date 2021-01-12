@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-11 15:59:38
+ * @LastEditTime: 2021-01-12 13:40:44
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -26,5 +26,8 @@ Mock.mock('/common/dic/getLanguageType', 'get', {
 Mock.mock('/common/dic/getLanguageLevel', 'get', {
   dicData: dic.RECRUIT_LANGUAGE_LEVEL
 });
-
+//学历
+Mock.mock('/common/dic/getRecruitEdu', 'get', {
+  dicData: dic.RECRUIT_EDU
+});
 export default Mock;

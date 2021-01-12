@@ -257,7 +257,7 @@
         <el-form-item label="意向工作性质" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option2"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -391,7 +391,7 @@
         <el-form-item label="专业" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option3"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -403,7 +403,7 @@
         <el-form-item label="学历" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option4"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -474,7 +474,7 @@
         <el-form-item label="语种" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in dicOptions.option2"
+              v-for="item in dicOptions.option5"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -486,7 +486,7 @@
         <el-form-item label="等级" :label-width="formLabelWidth">
           <el-select v-model="value" placeholder="请选择">
             <el-option
-              v-for="item in dicOptions.option3"
+              v-for="item in dicOptions.option6"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -680,7 +680,10 @@ export default {
       dicOptions: {
         option1: [],
         option2: [],
-        option3: []
+        option3: [],
+        option4: [],
+        option5: [],
+        option6: []
       }
     };
   },
@@ -717,30 +720,43 @@ export default {
     getDicQx() {
       return this.axios.get('/common/dic/getQx');
     },
-
+    getDicGzxx() {
+      return this.axios.get('/common/dic/getGzxz');
+    },
+    getDicRecruitEdu() {
+      return this.axios.get('/common/dic/getRecruitEdu');
+    },
     getDicLanguageType() {
       return this.axios.get('/common/dic/getLanguageType');
     },
-    getDicLanguageLevell() {
+    getDicLanguageLevel() {
       return this.axios.get('/common/dic/getLanguageLevel');
     },
 
     getDicData() {
       let that = this;
-      console.log(that);
       Promise.all([
         this.getDicQx(),
+        this.getDicGzxx(),
+        this.getDicRecruitEdu(),
         this.getDicLanguageType(),
-        this.getDicLanguageLevell()
-      ]).then(function(results) {
-        // const qx = results[0];
-        // const languageType = results[1];
-        // const languageLevel = results[2];
-        // console.log(qx, languageType, languageLevel);
-        that.$set(that.dicOptions, 'option1', results[0].dicData);
-        that.$set(that.dicOptions, 'option2', results[1].dicData);
-        that.$set(that.dicOptions, 'option3', results[2].dicData);
-      });
+        this.getDicLanguageLevel()
+      ])
+        .then(function(results) {
+          that.$set(that.dicOptions, 'option1', results[0].dicData);
+          that.$set(that.dicOptions, 'option2', results[1].dicData);
+          //that.$set(that.dicOptions, 'option3', results[2].dicData);
+          that.$set(that.dicOptions, 'option4', results[2].dicData);
+          that.$set(that.dicOptions, 'option5', results[3].dicData);
+          that.$set(that.dicOptions, 'option6', results[4].dicData);
+        })
+        .catch(function(err) {
+          console.log(err);
+          this.$message({
+            message: '缺失字典信息',
+            type: 'error'
+          });
+        });
     }
   },
   created() {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-06 13:52:26
+ * @LastEditTime: 2021-01-12 10:24:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\router\index.js
  */
@@ -30,9 +30,9 @@ Vue.use(Router);
 // }
 
 export default new Router({
-  //mode: 'hash',
-  mode: 'history',
-  base: 'home',
+  mode: 'hash',
+  //mode: 'history',
+  //base: 'home',
   routes: [
     {
       path: '/',

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-08 14:12:43
+ * @LastEditTime: 2021-01-12 10:14:56
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -19,7 +19,7 @@ import store from '@/store';
 import ElementUI from '@/config/eleComponents';
 import { VueAxios } from '@/utils/httpService';
 import Print from '@/utils/print';
-import htmlToPdf from '@/utils/htmlToPdf';
+//import htmlToPdf from '@/utils/htmlToPdf';
 import '@/auth/permission';
 import config from '@/config';
 //import 'assets/sass/index.scss';
@@ -32,7 +32,7 @@ Vue.use(VueAxios, router);
 //安装print插件
 Vue.use(Print);
 //安装htmlToPdf插件
-Vue.use(htmlToPdf);
+//Vue.use(htmlToPdf);
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');
