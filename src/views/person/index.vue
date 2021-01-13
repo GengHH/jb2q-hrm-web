@@ -99,6 +99,13 @@
       <el-button class="orange-btn btn-style" @click="submitForm('personInfo')"
         >保存</el-button
       >
+      <pl-button
+        class="orange-btn btn-style"
+        :auto-loading="true"
+        @click="submit"
+      >
+        自动loading按钮
+      </pl-button>
       <el-button class="white-btn btn-style" @click="getPersonInfo()"
         >取消</el-button
       >
@@ -111,8 +118,12 @@ import { testData } from '@pub/mockTestData';
 import { getDic1 } from '@/api/common';
 import { getPersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
+import plButton from '@/components/common/BaseLoadingButton';
 export default {
   name: 'personApp',
+  components: {
+    plButton
+  },
   data() {
     return {
       list: testData.list,
@@ -193,6 +204,11 @@ export default {
           return false;
         }
       });
+    },
+    submit(done) {
+      setTimeout(() => {
+        done();
+      }, 1000);
     }
   },
   created() {
