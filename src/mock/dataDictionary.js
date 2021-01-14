@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-11 15:55:30
+ * @LastEditTime: 2021-01-14 17:59:28
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -45,9 +45,9 @@ const dic = {
     { value: '15', label: '其他' }
   ],
   //行业分类
-  RECRUIT_INDUSTRY_TYPE: '',
+  RECRUIT_INDUSTRY_TYPE: [],
   //特定人群
-  RECRUIT_SPECIAL_PEOPLE: '',
+  RECRUIT_SPECIAL_PEOPLE: [],
   //工作性质
   RECRUIT_WORK_NATURE: [
     { value: '01', label: '全职' },
@@ -55,23 +55,55 @@ const dic = {
     { value: '03', label: '就业见习' }
   ],
   //工作班时
-  RECRUIT_WORK_HOUR: '',
+  RECRUIT_WORK_HOUR: [
+    { value: '005', label: '常日班' },
+    { value: '010', label: '常夜班' },
+    { value: '015', label: '常早班' },
+    { value: '020', label: '常中班' },
+    { value: '025', label: '三班制' },
+    { value: '030', label: '两头班' },
+    { value: '035', label: '两两制' },
+    { value: '040', label: '早中班' },
+    { value: '045', label: '中晚班' },
+    { value: '050', label: '隔天班' },
+    { value: '055', label: '轮班制' }
+  ],
   //工作年限
-  RECRUIT_WORK_YEAR: '',
+  RECRUIT_WORK_YEAR: [
+    { value: '01', label: '无要求' },
+    { value: '02', label: '1年以下' },
+    { value: '03', label: '1~2年' },
+    { value: '04', label: '3~5年' },
+    { value: '05', label: '6~9年' },
+    { value: '06', label: '10年及以上' }
+  ],
   //工资支付方式
-  RECRUIT_SALARY_PAY_TYPE: '',
+  RECRUIT_SALARY_PAY_TYPE: [
+    { value: '01', label: '小时' },
+    { value: '02', label: '天' },
+    { value: '03', label: '周' },
+    { value: '04', label: '月' },
+    { value: '05', label: '年' }
+  ],
   //招聘类型
-  RECRUIT_TYPE: '',
+  RECRUIT_TYPE: [],
   //审核状态
-  RECRUIT_VERIFY_STATUS: '',
+  RECRUIT_VERIFY_STATUS: [],
   //发布状态
-  RECRUIT_RELEASE_STATUS: '',
+  RECRUIT_RELEASE_STATUS: [
+    { value: '1', label: '待发布' },
+    { value: '2', label: '已发布' }
+  ],
   //通知类型
-  RECRUIT_NOTICE_TYPE: '',
+  RECRUIT_NOTICE_TYPE: [],
   //登录人类型
-  RECRUIT_LOGIN_TYPE: '',
+  RECRUIT_LOGIN_TYPE: [
+    { value: '1', label: '个人' },
+    { value: '2', label: '单位' },
+    { value: '3', label: '管理员' }
+  ],
   //屏蔽类型
-  RECRUIT_SHIELD_TYPE: '',
+  RECRUIT_SHIELD_TYPE: [],
   //语种
   RECRUIT_LANGUAGE_TYPE: [
     { value: '01', label: '英语' },
@@ -94,13 +126,13 @@ const dic = {
     { value: '4', label: '精通' }
   ],
   //职业一级分类
-  RECRUIT_POSITION_F_TYPE: '',
+  RECRUIT_POSITION_F_TYPE: [],
   //职业二级分类
-  RECRUIT_POSITION_S_TYPE: '',
+  RECRUIT_POSITION_S_TYPE: [],
   //反馈来源
-  RECRUIT_FEEDBACK_SOURCE: '',
+  RECRUIT_FEEDBACK_SOURCE: [],
   //应聘反馈状态
-  RECRUIT_FEEDBACK_STATUS: '',
+  RECRUIT_FEEDBACK_STATUS: [],
   //学历
   RECRUIT_EDU: [
     { value: '01', label: '初中及以下' },
@@ -114,43 +146,43 @@ const dic = {
     { value: '09', label: '博士及以上' }
   ],
   //应聘来源
-  RECRUIT_APPLYFOR_SOURCE: '',
+  RECRUIT_APPLYFOR_SOURCE: [],
   //用户角色
-  RECRUIT_USER_ROLE: '',
+  RECRUIT_USER_ROLE: [],
   //重点人员类型
-  RECRUIT_POINT_TYPE: '',
+  RECRUIT_POINT_TYPE: [],
   //专家状态
-  RECRUIT_EXPERT_STATUS: '',
+  RECRUIT_EXPERT_STATUS: [],
   //专家活动类型
-  RECRUIT_ACT_TYPE: '',
+  RECRUIT_ACT_TYPE: [],
   //专家活动日期类型
-  RECRUIT_ACT_DATE_TYPE: '',
+  RECRUIT_ACT_DATE_TYPE: [],
   //职业指导类型
-  RECRUIT_GUIDE_TYPE: '',
+  RECRUIT_GUIDE_TYPE: [],
   //特色活动类型
-  RECRUIT_SPECIAL_ACTIVITY_TYPE: '',
+  RECRUIT_SPECIAL_ACTIVITY_TYPE: [],
   //实施举措类型
-  RECRUIT_IMPLE_ACT_TYPE: '',
+  RECRUIT_IMPLE_ACT_TYPE: [],
   //就业类型
-  RECRUIT_EMPLOY_TYPE: '',
+  RECRUIT_EMPLOY_TYPE: [],
   //单位状态
-  RECRUIT_CORP_STATUS: '',
+  RECRUIT_CORP_STATUS: [],
   //招聘会类型
-  RECRUIT_MEET_TYPE: '',
+  RECRUIT_MEET_TYPE: [],
   //应聘类型
-  RECRUIT_APPLYFOR_TYPE: '',
+  RECRUIT_APPLYFOR_TYPE: [],
   //推荐类型
-  RECRUIT_REC_TYPE: '',
+  RECRUIT_REC_TYPE: [],
   //页面按钮所属类型
-  RECRUIT_BTN_TYPE: '',
+  RECRUIT_BTN_TYPE: [],
   //敏感词类型
-  RECRUIT_SEN_TYPE: '',
+  RECRUIT_SEN_TYPE: [],
   //敏感词匹配规则
-  RECRUIT_MATCH_RULE: '',
+  RECRUIT_MATCH_RULE: [],
   //敏感词替换规则
-  RECRUIT_REPLACE_RULE: '',
+  RECRUIT_REPLACE_RULE: [],
   //管理员发布内容详情类型
-  RECRUIT_RELEASE_DETAIL_TYPE: ''
+  RECRUIT_RELEASE_DETAIL_TYPE: []
 };
 
 export default dic;
