@@ -62,10 +62,8 @@
       <el-col :span="12">
         <el-form-item label="居住区域" required>
           <el-select v-model="personInfo.livingArea" placeholder="请选择">
-            <el-option label="浦东新区" value="15"></el-option>
-            <el-option label="杨浦区" value="13"></el-option>
             <el-option
-              v-for="item in dic1"
+              v-for="item in dicQx"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -87,7 +85,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="居住详细地址" required>
+        <el-form-item label="居住详细地址" prop="livingAddress">
           <el-input
             v-model="personInfo.livingAddress"
             placeholder="请输入联系地址"
@@ -96,15 +94,15 @@
       </el-col>
     </el-form>
     <div class="form-btns">
-      <el-button class="orange-btn btn-style" @click="submitForm('personInfo')"
+      <!-- <el-button class="orange-btn btn-style" @click="submitForm('personInfo')"
         >保存</el-button
-      >
+      > -->
       <pl-button
         class="orange-btn btn-style"
         :auto-loading="true"
-        @click="submit"
+        @click="submitForm($event, 'personInfo')"
       >
-        自动loading按钮
+        保存
       </pl-button>
       <el-button class="white-btn btn-style" @click="getPersonInfo()"
         >取消</el-button
@@ -115,8 +113,8 @@
 
 <script>
 import { testData } from '@pub/mockTestData';
-import { getDic1 } from '@/api/common';
-import { getPersonBaseInfo } from '@/api/personApi';
+import { getQx } from '@/api/common';
+import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
 import plButton from '@/components/common/BaseLoadingButton';
 export default {
@@ -150,9 +148,12 @@ export default {
         ],
         livingAddress: [
           { required: true, message: '请输入联系地址', trigger: 'blur' }
+        ],
+        livingAddressTest: [
+          { required: true, message: '请输入详细地址', trigger: 'blur' }
         ]
       },
-      dic1: [],
+      dicQx: [],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -165,11 +166,11 @@ export default {
     }
   },
   methods: {
-    async getDic1() {
+    async getQx() {
       try {
-        let result = await getDic1();
+        let result = await getQx();
         console.log('dic', result);
-        this.$set(this, 'dic1', result.dicData);
+        this.$set(this, 'dicQx', result.dicData);
       } catch (error) {
         console.log(error);
       }
@@ -190,16 +191,31 @@ export default {
     corpHandleClick() {
       console.log(2);
     },
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    submitForm(done, formName) {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          //! TODO
-          this.$message({
-            showClose: true,
-            message: 'submit!',
-            type: 'success'
+          let formData = JSON.parse(JSON.stringify(this.personInfo));
+          let reusult = await updatePersonBaseInfo({
+            data: formData
           });
+          console.log(reusult);
+          if (reusult && reusult.status === 200) {
+            done();
+            this.$message({
+              showClose: true,
+              message: 'submit successful!',
+              type: 'success'
+            });
+          } else {
+            done();
+            this.$message({
+              showClose: true,
+              message: 'error submit!',
+              type: 'error'
+            });
+          }
         } else {
+          done();
           console.log('error submit!!');
           return false;
         }
@@ -212,7 +228,7 @@ export default {
     }
   },
   created() {
-    this.getDic1();
+    this.getQx();
     this.getPersonInfo();
     // this.axios
     //   .get('/mock-pers-api/person/info/loadPersonInfo')

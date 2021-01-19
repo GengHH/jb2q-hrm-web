@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-08 14:06:12
+ * @LastEditTime: 2021-01-18 11:06:43
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
@@ -27,7 +27,7 @@ export function postAction(url, parameter) {
 //get
 export function getAction(url, parameter) {
   //? TODO 本地开发使用mock时，采用axios.get(),否则mockjs无法拦截到；问题原因尚未知晓
-  return axios.get(url);
+  return axios.get(url, { parameter: parameter });
   // console.log(config);
   // if (config.mock) {
   //   console.log(config);

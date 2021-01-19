@@ -15,7 +15,7 @@
       </div>
       <div class="column">
         <p class="font-size24">
-          李子七 <span class="sixteen-opacity">26岁</span>
+          {{ xm }} <span class="sixteen-opacity">{{ age }}岁</span>
           <i class="el-icon-male sixteen-opacity"></i>
         </p>
         <p class="fourteen-opacity mat-15">
@@ -23,7 +23,7 @@
           <el-divider direction="vertical"></el-divider>
           <span><i class="icon iconfont">&#xe641;</i> 本科学历</span>
           <el-divider direction="vertical"></el-divider>
-          <span><i class="icon iconfont">&#xe63f;</i> 13282189989</span>
+          <span><i class="icon iconfont">&#xe63f;</i> {{ contactPhone }}</span>
           <el-divider direction="vertical"></el-divider>
           <span
             ><i class="icon iconfont">&#xe643;</i>
@@ -43,13 +43,19 @@
       </div>
       <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
-          <span><i class="icon iconfont">&#xe63d;</i> UI设计师</span>
-          <span><i class="icon iconfont">&#xe641;</i> 8k-15k</span>
-          <span
+          <span class="intention-item"
+            ><i class="icon iconfont">&#xe63d;</i> UI设计师</span
+          >
+          <span class="intention-item"
+            ><i class="icon iconfont">&#xe641;</i> 8k-15k</span
+          >
+          <span class="intention-item"
             ><i class="icon iconfont">&#xe63f;</i>
             互联网-计算机软件-计算机多媒体服务-电子商务...
           </span>
-          <span><i class="icon iconfont">&#xe643;</i> 上海</span>
+          <span class="intention-item"
+            ><i class="icon iconfont">&#xe643;</i> 上海</span
+          >
         </p>
       </div>
       <div id="workExperience" class="title-style font-or font-bold">
@@ -145,9 +151,17 @@
         >
       </div>
       <div class="column">
-        <el-tag size="medium" closable>大学英语四级</el-tag>
+        <!-- <el-tag size="medium" closable>大学英语四级</el-tag>
         <el-tag size="medium" closable>俄语专业四级</el-tag>
-        <el-tag size="medium" closable>TEF法语A1级</el-tag>
+        <el-tag size="medium" closable>TEF法语A1级</el-tag> -->
+        <el-tag
+          size="medium"
+          closable
+          v-for="(languageItem, index) in psnlLanguageTags"
+          :key="index"
+          @close="languageTagClose(index)"
+          >{{ languageItem }}</el-tag
+        >
       </div>
       <div id="skillsCertificate" class="title-style font-or font-bold">
         技能证书
@@ -160,15 +174,17 @@
         >
       </div>
       <div class="column">
-        <el-tag size="medium" closable @close="handleClose('1234')"
+        <el-tag size="medium" closable @close="tagClose('1234')"
           >信息系统项目管理师证书</el-tag
         >
         <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
         <el-tag size="medium" closable>CISP注册信息安全专业人员</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
+        <el-tag size="medium" closable>信息系统项目管理师证书1234</el-tag>
+        <el-tag size="medium" closable>信息系统项目管理师证书123412341</el-tag>
+        <el-tag size="medium" closable>信息系统项目管理师证书1</el-tag>
+        <el-tag size="medium" closable
+          >信息系统项目管理师证书1234123412341234</el-tag
+        >
       </div>
       <div id="selfEvaluation" class="title-style font-or font-bold">
         自我评价
@@ -187,6 +203,9 @@
         <p class="font-fourteen line30 t-indent">
           本人是设计专业应届毕业生，熟练手绘，熟悉rhino.photoshop等设计软件，熟练办公软件。我虽还未毕业，但我年轻，意志坚强，有能力完成任何工作。尽管我还缺乏一定的经验，但我会用时间和汗水去弥补。请领导放心，我一定会保质保量完成各项工作任务。
         </p>
+        <p class="font-fourteen line30 t-indent">
+          {{ evaluate }}
+        </p>
       </div>
     </div>
     <!----------------------->
@@ -199,13 +218,12 @@
       </div>
       <el-form
         class="width70"
-        :model="jobIntentionForm"
         ref="jobIntentionForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="意向职位分类" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="workNature" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -216,7 +234,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="意向行业" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="positionName" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -230,21 +248,18 @@
           <el-col :span="12">
             <el-form-item label="薪酬上线" :label-width="formLabelWidth">
               <el-input
-                v-model="jobIntentionForm.name"
+                v-model="salaryScopeUp"
                 autocomplete="off"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
             ><el-form-item label="薪酬下线" :label-width="formLabelWidth">
-              <el-input
-                v-model="jobIntentionForm.name"
-                autocomplete="off"
-              ></el-input>
+              <el-input v-model="salaryScopeDown" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="意向工作区域" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="workArea" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option1"
               :key="item.value"
@@ -255,7 +270,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="意向工作性质" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="positionLike" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option2"
               :key="item.value"
@@ -273,7 +288,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('jobIntentionForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
@@ -295,14 +310,14 @@
       </div>
       <el-form
         class="width70"
-        :model="workExperienceForm"
+        :model="laborExp"
         ref="workExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="曾任职公司名称" :label-width="formLabelWidth">
           <el-input
-            v-model="workExperienceForm.name"
+            v-model="laborExp.corpName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -318,7 +333,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="workExperienceForm.date1"
+                v-model="laborExp.entryDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -332,14 +347,14 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="workExperienceForm.date2"
+                v-model="laborExp.quitDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="所任职位" :label-width="formLabelWidth">
           <el-input
-            v-model="workExperienceForm.name"
+            v-model="laborExp.positionName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -348,13 +363,13 @@
           <el-input
             type="textarea"
             placeholder="请输入（1000字符）"
-            v-model="workExperienceForm.desc"
+            v-model="laborExp.workDescribe"
           ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('workExperienceForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
@@ -376,20 +391,20 @@
       </div>
       <el-form
         class="width70"
-        :model="educationExperienceForm"
+        :model="eduExp"
         ref="educationExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="毕业院校" :label-width="formLabelWidth">
           <el-input
-            v-model="educationExperienceForm.name"
+            v-model="eduExp.collegesName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="专业" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="eduExp.majorName" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option3"
               :key="item.value"
@@ -401,7 +416,7 @@
         </el-form-item>
 
         <el-form-item label="学历" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="eduExp.eduLevel" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option4"
               :key="item.value"
@@ -422,7 +437,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="educationExperienceForm.date1"
+                v-model="eduExp.admissionDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -436,7 +451,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="educationExperienceForm.date2"
+                v-model="eduExp.graduateDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -444,7 +459,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('educationExperienceForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
@@ -466,13 +481,20 @@
       </div>
       <el-form
         class="width70"
-        :model="languageSkillsForm"
         ref="languageSkillsForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :model="languageSkillsForm"
+        :rules="rules.languageRules"
       >
-        <el-form-item label="语种" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+        <el-form-item
+          label="语种"
+          :label-width="formLabelWidth"
+          prop="languageType"
+        >
+          <el-select
+            v-model="languageSkillsForm.languageType"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option5"
               :key="item.value"
@@ -483,8 +505,15 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="等级" :label-width="formLabelWidth">
-          <el-select v-model="value" placeholder="请选择">
+        <el-form-item
+          label="等级"
+          :label-width="formLabelWidth"
+          prop="languageLevel"
+        >
+          <el-select
+            v-model="languageSkillsForm.languageLevel"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option6"
               :key="item.value"
@@ -497,13 +526,13 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('languageSkillsForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="dialogSubmit('languageSkillsForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -519,21 +548,21 @@
       </div>
       <el-form
         class="width70"
-        :model="skillsCertificateForm"
+        :model="psnlSkillcert"
         ref="skillsCertificateForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="证书名称" :label-width="formLabelWidth">
           <el-input
-            v-model="skillsCertificateForm.name"
+            v-model="psnlSkillcert.certName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="技能等级" :label-width="formLabelWidth">
           <el-input
-            v-model="skillsCertificateForm.name"
+            v-model="psnlSkillcert.certLevel"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -547,14 +576,14 @@
           <el-date-picker
             type="date"
             placeholder="请选择"
-            v-model="skillsCertificateForm.date1"
+            v-model="psnlSkillcert.receiveTime"
             style="width: 70%;"
           ></el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('skillsCertificateForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
@@ -568,7 +597,7 @@
     </el-dialog>
 
     <!-- 自我评价 弹窗部分 -->
-    <el-dialog :visible.sync="dialog6">
+    <el-dialog id="selfEvaluationArea" :visible.sync="dialog6">
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>自我评价
@@ -579,19 +608,20 @@
         :model="selfEvaluationForm"
         ref="selfEvaluationForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :rules="rules.selfEvaluationRules"
       >
-        <el-form-item label="" :label-width="formLabelWidth">
+        <el-form-item prop="evaluate">
           <el-input
             type="textarea"
             placeholder="请输入自我评价内容（1000字符）"
-            v-model="ruleForm.desc"
+            v-model="selfEvaluationForm.evaluate"
+            resize="none"
           ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          @click="dialogFormVisible = false"
+          @click="dialogClear('selfEvaluationForm')"
           class="white-btn btn-style"
           >清 空</el-button
         >
@@ -616,26 +646,77 @@ export default {
     return {
       value: '选项1',
       labelPosition: 'right',
-      ruleForm: {
-        keyword: '',
-        ages: '',
-        unit: '',
-        name: '',
-        life: '',
-        edu: '',
-        date1: '2020-01-01',
-        date2: '',
-        delivery: false,
-        type: []
+      formLabelWidth: '120px',
+      // baseInfoForm: {
+      //   applyForId: '',
+      //   resumeId: '1',
+      //   pid: '201906186258910',
+      //   xm: '董晓鑫',
+      //   age: 24,
+      //   sex: '男',
+      //   contactPhone: '13122272095',
+      //   livingAddress: '宝山淞南镇新梅松南苑11号楼1201'
+      // },
+      // jobIntentionForm: {
+      //   workNature: '01',
+      //   positionName: '1501',
+      //   salaryScope: '10000-50000',
+      //   workArea: '05',
+      //   positionLike: '01-04'
+      // },
+      workExperienceForm: {
+        expId: '2',
+        pid: '',
+        corpName: '万达信息股份有限公司',
+        positionName: '开发',
+        entryDate: '20190611',
+        quitDate: '至今',
+        workDescribe: '搬砖'
       },
-      baseInfoForm: {},
-      jobIntentionForm: {},
-      workExperienceForm: {},
-      educationExperienceForm: {},
-      languageSkillsForm: {},
-      skillsCertificateForm: {},
-      selfEvaluationForm: {},
-      rules: {},
+      educationExperienceForm: {
+        eduId: '3',
+        pid: '',
+        collegesName: '复旦大学',
+        majorName: '英语',
+        eduLevel: '大学本科',
+        admissionDate: '20140910',
+        graduateDate: '20180630',
+        sourceOuter: '1',
+        certNum: ''
+      },
+      languageSkillsForm: {
+        languageId: '',
+        pid: '',
+        languageType: '',
+        languageLevel: ''
+      },
+      skillsCertificateForm: {
+        certId: '2',
+        pid: '',
+        certName: '打铁',
+        certLevel: '6级',
+        receiveTime: ''
+      },
+      selfEvaluationForm: {
+        evaluate: ''
+      },
+      rules: {
+        languageRules: {
+          languageType: [
+            { required: true, message: '请选择语种', trigger: 'change' }
+          ],
+          languageLevel: [
+            { required: true, message: '请选择等级', trigger: 'change' }
+          ]
+        },
+        selfEvaluationRules: {
+          evaluate: [
+            { required: true, message: '个人评价不能为空', trigger: 'blur' },
+            { max: 1000, message: '长度不可超过1000个字符', trigger: 'blur' }
+          ]
+        }
+      },
+
       baseInfoDialog: false,
       dialogFormVisible2: false,
       dialog1: false,
@@ -644,17 +725,6 @@ export default {
       dialog4: false,
       dialog5: false,
       dialog6: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      formLabelWidth: '120px',
       options: [
         {
           value: '选项1',
@@ -663,18 +733,6 @@ export default {
         {
           value: '选项2',
           label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
         }
       ],
       dicOptions: {
@@ -684,8 +742,102 @@ export default {
         option4: [],
         option5: [],
         option6: []
-      }
+      },
+      applyForId: '',
+      resumeId: '1',
+      pid: '201906186258910',
+      xm: '董晓鑫',
+      age: 24,
+      sex: '男',
+      contactPhone: '13122272095',
+      livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
+      workNature: '01',
+      positionName: '1501',
+      salaryScopeUp: '10000',
+      salaryScopeDown: '50000',
+      workArea: '05',
+      positionLike: '01-04',
+      laborExp: [
+        {
+          expId: '2',
+          pid: '',
+          corpName: '万达信息股份有限公司',
+          positionName: '开发',
+          entryDate: '20190611',
+          quitDate: '至今',
+          workDescribe: '搬砖'
+        }
+      ],
+      eduExp: [
+        {
+          eduId: '3',
+          pid: '',
+          collegesName: '复旦大学',
+          majorName: '英语',
+          eduLevel: '大学本科',
+          admissionDate: '20140910',
+          graduateDate: '20180630',
+          sourceOuter: '1',
+          certNum: ''
+        }
+      ],
+      psnlLanguage: [
+        {
+          languageId: '1',
+          pid: '',
+          languageType: '01',
+          languageLevel: '1'
+        },
+        {
+          languageId: '2',
+          pid: '',
+          languageType: '02',
+          languageLevel: '2'
+        },
+        {
+          languageId: '3',
+          pid: '',
+          languageType: '03',
+          languageLevel: '3'
+        }
+      ],
+      psnlSkillcert: [
+        {
+          certId: '2',
+          pid: '',
+          certName: '打铁',
+          certLevel: '6级',
+          receiveTime: ''
+        }
+      ],
+      evaluate: '本人就是搬砖厉害！'
     };
+  },
+  computed: {
+    //薪资范围
+    salaryScope: function() {
+      return this.salaryScopeUp + '-' + this.salaryScopeDown;
+    },
+    //组合成语言技能tags
+    psnlLanguageTags: function() {
+      if (this.psnlLanguage && this.psnlLanguage.length) {
+        return this.psnlLanguage.map(obj => {
+          let newObj = [];
+          let _obj1 = this.dicOptions.option5.find(item => {
+            return item.value === obj.languageType;
+          });
+          let _obj2 = this.dicOptions.option6.find(item => {
+            return item.value === obj.languageLevel;
+          });
+          if (_obj1 || _obj2) {
+            newObj = _obj1.label + _obj2.label;
+          }
+          return newObj;
+        });
+      } else {
+        return [];
+      }
+    }
   },
   methods: {
     print() {
@@ -713,10 +865,15 @@ export default {
     },
     //handleSizeChange(val) {},
     //handleCurrentChange(val) {},
-    handleClose(val) {
+    //删除技能证书tag
+    tagClose(val) {
       this.$message(val);
     },
-
+    //删除外语能力tag
+    languageTagClose(index) {
+      // TODO 删除后台的数据
+      this.$delete(this.psnlLanguage, index);
+    },
     getDicQx() {
       return this.axios.get('/common/dic/getQx');
     },
@@ -757,6 +914,37 @@ export default {
             type: 'error'
           });
         });
+    },
+    dialogSubmit(formName) {
+      console.log(this.$refs[formName]);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // TODO 保存数据
+          if (
+            this.psnlLanguage.find(
+              element =>
+                element.languageType === this.languageSkillsForm.languageType
+            )
+          ) {
+            this.$message({
+              type: 'warning',
+              message: '此语种已经添加过！'
+            });
+            return;
+          }
+          this.psnlLanguage.push(this.$refs[formName].model);
+          // this.psnlLanguage.push({
+          //   languageId: '' + this.languageSkillsForm.length,
+          //   pid: '',
+          //   languageType: this.languageSkillsForm.languageType,
+          //   languageLevel: this.languageSkillsForm.languageLevel
+          // });
+        }
+      });
+    },
+    dialogClear(formName) {
+      this.$refs[formName].resetFields();
+      console.log(this.$refs[formName].resetFields);
     }
   },
   created() {
@@ -767,6 +955,9 @@ export default {
 
 <style lang="scss" scoped>
 #baseResumeInfo {
+  .intention-item {
+    margin-right: 20px;
+  }
   .el-button--edit {
     color: #fc7a43;
     border: 1px solid #fc7a43;
@@ -801,6 +992,7 @@ export default {
       background-color: #f6f6f6;
       border-color: #f6f6f6;
       color: rgba(0, 0, 0, 0.8);
+      margin: 5px;
     }
     .el-icon-close {
       margin: 0 10px 15px 0;
