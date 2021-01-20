@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-01-05 16:22:01
+ * @LastEditTime: 2021-01-20 17:25:03
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -13,6 +13,7 @@
  */
 import {
   Message,
+  MessageBox,
   Tabs,
   TabPane,
   Row,
@@ -42,7 +43,8 @@ import {
   Dialog,
   Rate,
   DatePicker,
-  Notification
+  Notification,
+  Card
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -77,7 +79,12 @@ export default {
     V.use(Dialog);
     V.use(Rate);
     V.use(DatePicker);
+    V.use(Card);
+
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;
+    V.prototype.$msgbox = MessageBox;
+    V.prototype.$alert = MessageBox.alert;
+    V.prototype.$confirm = MessageBox.confirm;
   }
 };

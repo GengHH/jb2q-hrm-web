@@ -69,36 +69,60 @@
         >
       </div>
       <div class="column">
-        <el-row>
-          <el-col :span="8">
-            <p class="sixteen-opacity font-bold line40">万达信息股份有限公司</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="four-opacity line40">2018年9月-2020年6月</p>
-          </el-col>
-          <el-col :span="8">
-            <p class="fourteen-opacity line40">社保事业部</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="fourteen-opacity line40">IOS开发工程师</p>
-          </el-col>
-        </el-row>
-        <p class="font14-or line40">工作内容：</p>
-        <p class="fourteen-opacity line30">
-          1、负责iOS平台下的APP应用开发、整体构架设计；
-        </p>
-        <p class="fourteen-opacity line30">
-          2、根据公司产品策略，开发iOS平台上的应用程序
-        </p>
-        <p class="fourteen-opacity line30">
-          3、负责iOS平台上的技术攻关，确保开发质量；
-        </p>
-        <p class="fourteen-opacity line30">
-          4、负责根据产品需求完成模块设计、编码、编码集成工作；
-        </p>
-        <p class="fourteen-opacity line30">
-          5、根据开发过程中的体验对产品提出改进意见。
-        </p>
+        <el-card class="box-card bg-gray" shadow="hover">
+          <div slot="header" class="clearfix">
+            <span class="font-bold sixteen-opacity">重庆大学城市科技学院</span>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              style="float: right;"
+              class="card-btn hidden"
+            ></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              style="float: right;"
+              class="card-btn hidden"
+            ></el-button>
+          </div>
+
+          <el-row>
+            <el-col :span="8">
+              <p class="fourteen-opacity line40">社保事业部</p>
+            </el-col>
+            <el-col :span="8">
+              <p class="fourteen-opacity line40">IOS开发工程师</p>
+            </el-col>
+            <el-col :span="8">
+              <p class="four-opacity line40">2018年9月-2020年6月</p>
+            </el-col>
+          </el-row>
+          <p class="font14-or line40">工作内容：</p>
+          <p class="fourteen-opacity line30">
+            1、负责iOS平台下的APP应用开发、整体构架设计；
+          </p>
+          <p class="fourteen-opacity line30">
+            2、根据公司产品策略，开发iOS平台上的应用程序
+          </p>
+          <p class="fourteen-opacity line30">
+            3、负责iOS平台上的技术攻关，确保开发质量；
+          </p>
+          <p class="fourteen-opacity line30">
+            4、负责根据产品需求完成模块设计、编码、编码集成工作；
+          </p>
+          <p class="fourteen-opacity line30">
+            5、根据开发过程中的体验对产品提出改进意见。
+          </p>
+          <p
+            class="fourteen-opacity line30"
+            v-for="(expItem, index) in workExpView"
+            :key="index"
+          >
+            {{ index + 1 }}、{{ expItem }}
+          </p>
+        </el-card>
       </div>
       <div id="educationExperience" class="title-style font-or font-bold">
         教育经历
@@ -111,34 +135,52 @@
         >
       </div>
       <div class="column">
-        <el-row class="bg-gray">
-          <el-col :span="8">
-            <p class="sixteen-opacity font-bold line40">重庆大学城市科技学院</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="four-opacity line40">2018年9月-2020年6月</p>
-          </el-col>
-          <el-col :span="8">
-            <p class="fourteen-opacity line40">互联网多媒体</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="fourteen-opacity line40">研究生</p>
-          </el-col>
-        </el-row>
-        <el-row class="bg-gray">
-          <el-col :span="8">
-            <p class="sixteen-opacity font-bold line40">重庆大学城市科技学院</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="four-opacity line40">2018年9月-2020年6月</p>
-          </el-col>
-          <el-col :span="8">
-            <p class="fourteen-opacity line40">计算机</p>
-          </el-col>
-          <el-col :span="16">
-            <p class="fourteen-opacity line40">本科</p>
-          </el-col>
-        </el-row>
+        <el-card
+          class="box-card bg-gray"
+          shadow="hover"
+          v-for="(eduCarditem, index) in eduExp"
+          :key="index"
+        >
+          <div slot="header" class="clearfix">
+            <span class="font-bold sixteen-opacity">{{
+              eduCarditem.collegesName
+            }}</span>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              style="float: right;"
+              class="card-btn hidden"
+              @click="deleteCard('dialog3', index)"
+            ></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              style="float: right;"
+              class="card-btn hidden"
+              @click="editCard('dialog3', index)"
+            ></el-button>
+          </div>
+
+          <el-row>
+            <el-col :span="8">
+              <p class="fourteen-opacity line40">
+                {{ eduCarditem.majorName }}
+              </p>
+            </el-col>
+            <el-col :span="8">
+              <p class="fourteen-opacity line40">
+                {{ eduCarditem.eduLevel }}
+              </p>
+            </el-col>
+            <el-col :span="8">
+              <p class="four-opacity line40">
+                {{ eduCarditem.admissionDate }}-{{ eduCarditem.graduateDate }}
+              </p>
+            </el-col>
+          </el-row>
+        </el-card>
       </div>
       <div id="languageSkills" class="title-style font-or font-bold">
         外语能力
@@ -151,17 +193,14 @@
         >
       </div>
       <div class="column">
-        <!-- <el-tag size="medium" closable>大学英语四级</el-tag>
-        <el-tag size="medium" closable>俄语专业四级</el-tag>
-        <el-tag size="medium" closable>TEF法语A1级</el-tag> -->
         <el-tag
           size="medium"
           closable
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
           @close="languageTagClose(index)"
-          >{{ languageItem }}</el-tag
-        >
+          >{{ languageItem }}
+        </el-tag>
       </div>
       <div id="skillsCertificate" class="title-style font-or font-bold">
         技能证书
@@ -174,17 +213,23 @@
         >
       </div>
       <div class="column">
-        <el-tag size="medium" closable @close="tagClose('1234')"
-          >信息系统项目管理师证书</el-tag
+        <span
+          class="tag-card"
+          v-for="(skillItem, index) in psnlSkillcert"
+          :key="index"
         >
-        <el-tag size="medium" closable>信息系统项目管理师证书</el-tag>
-        <el-tag size="medium" closable>CISP注册信息安全专业人员</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书1234</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书123412341</el-tag>
-        <el-tag size="medium" closable>信息系统项目管理师证书1</el-tag>
-        <el-tag size="medium" closable
-          >信息系统项目管理师证书1234123412341234</el-tag
-        >
+          <el-tag
+            class="tag-card-item"
+            size="medium"
+            closable
+            @close="skillTagClose(index)"
+            >{{ skillItem.certName }}
+            <p>
+              <span>{{ skillItem.certLevel }}</span>
+              <span>{{ skillItem.receiveTime }}</span>
+            </p>
+          </el-tag>
+        </span>
       </div>
       <div id="selfEvaluation" class="title-style font-or font-bold">
         自我评价
@@ -203,13 +248,18 @@
         <p class="font-fourteen line30 t-indent">
           本人是设计专业应届毕业生，熟练手绘，熟悉rhino.photoshop等设计软件，熟练办公软件。我虽还未毕业，但我年轻，意志坚强，有能力完成任何工作。尽管我还缺乏一定的经验，但我会用时间和汗水去弥补。请领导放心，我一定会保质保量完成各项工作任务。
         </p>
-        <p class="font-fourteen line30 t-indent">
-          {{ evaluate }}
+        <p
+          class="font-fourteen line30 t-indent"
+          v-for="(item, index) in evaluateView"
+          :key="index"
+        >
+          {{ item }}
         </p>
       </div>
     </div>
     <!----------------------->
     <!-- 求职意向 弹窗部分 -->
+    <!----------------------->
     <el-dialog class="width75" :visible.sync="dialog1">
       <div class="pup-btn">
         <p class="pup-tit">
@@ -310,14 +360,14 @@
       </div>
       <el-form
         class="width70"
-        :model="laborExp"
+        :model="workExperienceForm"
         ref="workExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="曾任职公司名称" :label-width="formLabelWidth">
           <el-input
-            v-model="laborExp.corpName"
+            v-model="workExperienceForm.corpName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -333,7 +383,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="laborExp.entryDate"
+                v-model="workExperienceForm.entryDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -347,14 +397,14 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="laborExp.quitDate"
+                v-model="workExperienceForm.quitDate"
               ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="所任职位" :label-width="formLabelWidth">
           <el-input
-            v-model="laborExp.positionName"
+            v-model="workExperienceForm.positionName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -363,7 +413,7 @@
           <el-input
             type="textarea"
             placeholder="请输入（1000字符）"
-            v-model="laborExp.workDescribe"
+            v-model="workExperienceForm.workDescribe"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -375,7 +425,7 @@
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="dialogSubmit('workExperienceForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -391,20 +441,23 @@
       </div>
       <el-form
         class="width70"
-        :model="eduExp"
+        :model="educationExperienceForm"
         ref="educationExperienceForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="毕业院校" :label-width="formLabelWidth">
           <el-input
-            v-model="eduExp.collegesName"
+            v-model="educationExperienceForm.collegesName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="专业" :label-width="formLabelWidth">
-          <el-select v-model="eduExp.majorName" placeholder="请选择">
+          <el-select
+            v-model="educationExperienceForm.majorName"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option3"
               :key="item.value"
@@ -416,7 +469,10 @@
         </el-form-item>
 
         <el-form-item label="学历" :label-width="formLabelWidth">
-          <el-select v-model="eduExp.eduLevel" placeholder="请选择">
+          <el-select
+            v-model="educationExperienceForm.eduLevel"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option4"
               :key="item.value"
@@ -437,7 +493,8 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="eduExp.admissionDate"
+                v-model="educationExperienceForm.admissionDate"
+                value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -451,7 +508,8 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="eduExp.graduateDate"
+                v-model="educationExperienceForm.graduateDate"
+                value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -465,7 +523,7 @@
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="dialogSubmit('educationExperienceForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -548,21 +606,21 @@
       </div>
       <el-form
         class="width70"
-        :model="psnlSkillcert"
+        :model="skillsCertificateForm"
         ref="skillsCertificateForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="证书名称" :label-width="formLabelWidth">
           <el-input
-            v-model="psnlSkillcert.certName"
+            v-model="skillsCertificateForm.certName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
         <el-form-item label="技能等级" :label-width="formLabelWidth">
           <el-input
-            v-model="psnlSkillcert.certLevel"
+            v-model="skillsCertificateForm.certLevel"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
@@ -576,8 +634,9 @@
           <el-date-picker
             type="date"
             placeholder="请选择"
-            v-model="psnlSkillcert.receiveTime"
+            v-model="skillsCertificateForm.receiveTime"
             style="width: 70%;"
+            value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -589,7 +648,7 @@
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="dialogSubmit('skillsCertificateForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -627,7 +686,7 @@
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="dialogSubmit('selfEvaluationForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -674,14 +733,14 @@ export default {
         workDescribe: '搬砖'
       },
       educationExperienceForm: {
-        eduId: '3',
+        eduId: '',
         pid: '',
-        collegesName: '复旦大学',
-        majorName: '英语',
-        eduLevel: '大学本科',
-        admissionDate: '20140910',
-        graduateDate: '20180630',
-        sourceOuter: '1',
+        collegesName: '',
+        majorName: '',
+        eduLevel: '',
+        admissionDate: '',
+        graduateDate: '',
+        sourceOuter: '',
         certNum: ''
       },
       languageSkillsForm: {
@@ -691,14 +750,14 @@ export default {
         languageLevel: ''
       },
       skillsCertificateForm: {
-        certId: '2',
+        certId: '3',
         pid: '',
         certName: '打铁',
-        certLevel: '6级',
+        certLevel: '六级',
         receiveTime: ''
       },
       selfEvaluationForm: {
-        evaluate: ''
+        evaluate: 'hahah！夏尔&#10;\n你好！&#13;再见！'
       },
       rules: {
         languageRules: {
@@ -803,14 +862,35 @@ export default {
       ],
       psnlSkillcert: [
         {
+          certId: '1',
+          pid: '',
+          certName: '信息系统项目管理师证书',
+          certLevel: '一级',
+          receiveTime: '2020-10-11'
+        },
+        {
           certId: '2',
           pid: '',
-          certName: '打铁',
-          certLevel: '6级',
-          receiveTime: ''
+          certName: '计算机二级国家证书',
+          certLevel: '二级',
+          receiveTime: '2019-05-09'
+        },
+        {
+          certId: '3',
+          pid: '',
+          certName: 'CISP注册信息安全专业人员',
+          certLevel: '三级',
+          receiveTime: '2020-01-01'
+        },
+        {
+          certId: '4',
+          pid: '',
+          certName: '英语专业等级证书',
+          certLevel: '六级',
+          receiveTime: '2018-09-19'
         }
       ],
-      evaluate: '本人就是搬砖厉害！'
+      evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
     };
   },
   computed: {
@@ -835,6 +915,20 @@ export default {
           return newObj;
         });
       } else {
+        return [];
+      }
+    },
+    evaluateView: function() {
+      if (this.selfEvaluationForm.evaluate)
+        return this.selfEvaluationForm.evaluate.split('\n');
+      else {
+        return [];
+      }
+    },
+    workExpView: function() {
+      if (this.workExperienceForm.workDescribe)
+        return this.workExperienceForm.workDescribe.split('\n');
+      else {
         return [];
       }
     }
@@ -873,6 +967,11 @@ export default {
     languageTagClose(index) {
       // TODO 删除后台的数据
       this.$delete(this.psnlLanguage, index);
+    },
+    //删除技能证书tag
+    skillTagClose(index) {
+      // TODO 删除后台的数据
+      this.$delete(this.psnlSkillcert, index);
     },
     getDicQx() {
       return this.axios.get('/common/dic/getQx');
@@ -916,35 +1015,122 @@ export default {
         });
     },
     dialogSubmit(formName) {
-      console.log(this.$refs[formName]);
+      if (formName === 'selfEvaluationForm') {
+        console.log(this.$refs[formName].model.evaluate.length);
+        return;
+      }
+
       this.$refs[formName].validate(valid => {
         if (valid) {
           // TODO 保存数据
-          if (
-            this.psnlLanguage.find(
-              element =>
-                element.languageType === this.languageSkillsForm.languageType
-            )
-          ) {
-            this.$message({
-              type: 'warning',
-              message: '此语种已经添加过！'
-            });
-            return;
+          switch (formName) {
+            case 'workExperienceForm':
+              if (
+                this.psnlLanguage.find(
+                  element =>
+                    element.corpName === this.workExperienceForm.corpName
+                )
+              ) {
+                this.$message({
+                  type: 'warning',
+                  message: '此工作经历已经添加过！'
+                });
+                return;
+              }
+              this.psnlLanguage.push(this.$refs[formName].model);
+              break;
+            case 'educationExperienceForm':
+              if (
+                this.eduExp.find(
+                  element =>
+                    element.collegesName ===
+                    this.educationExperienceForm.collegesName
+                )
+              ) {
+                this.$message({
+                  type: 'warning',
+                  message: '此教育经历已经添加过！'
+                });
+                return;
+              }
+              this.eduExp.push(this.$refs[formName].model);
+              break;
+            case 'languageSkillsForm':
+              if (
+                this.psnlLanguage.find(
+                  element =>
+                    element.languageType ===
+                    this.languageSkillsForm.languageType
+                )
+              ) {
+                this.$message({
+                  type: 'warning',
+                  message: '此语种已经添加过！'
+                });
+                return;
+              }
+              this.psnlLanguage.push(this.$refs[formName].model);
+              break;
+            case 'skillsCertificateForm':
+              if (
+                this.psnlSkillcert.find(
+                  element =>
+                    element.certName === this.skillsCertificateForm.certName
+                )
+              ) {
+                this.$message({
+                  type: 'warning',
+                  message: '此技能证书已经添加过！'
+                });
+                return;
+              }
+              this.psnlSkillcert.push(this.$refs[formName].model);
+              break;
           }
-          this.psnlLanguage.push(this.$refs[formName].model);
-          // this.psnlLanguage.push({
-          //   languageId: '' + this.languageSkillsForm.length,
-          //   pid: '',
-          //   languageType: this.languageSkillsForm.languageType,
-          //   languageLevel: this.languageSkillsForm.languageLevel
-          // });
         }
       });
     },
     dialogClear(formName) {
       this.$refs[formName].resetFields();
       console.log(this.$refs[formName].resetFields);
+    },
+    editCard(dialog, index) {
+      if (dialog) {
+        switch (dialog) {
+          case 'dialog3':
+            this.dialog3 = true;
+            this.educationExperienceForm = JSON.parse(
+              JSON.stringify(this.eduExp[index])
+            );
+            break;
+        }
+      }
+    },
+    deleteCard(dialog, index) {
+      if (dialog) {
+        switch (dialog) {
+          case 'dialog2':
+            this.$confirm('确认删除此项工作经历？')
+              .then(() => {
+                // TODO
+                this.$delete(this.eduExp, index);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            break;
+          case 'dialog3':
+            this.$confirm('确认删除此项教育经历？')
+              .then(() => {
+                // TODO
+                this.$delete(this.eduExp, index);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            break;
+        }
+      }
     }
   },
   created() {
@@ -986,7 +1172,7 @@ export default {
     top: 13px;
   }
   .column {
-    padding: 25px 120px 5px 20px;
+    padding: 20px 120px 40px 25px;
     box-sizing: border-box;
     .el-tag {
       background-color: #f6f6f6;
@@ -1025,6 +1211,62 @@ export default {
   .t-indent {
     text-indent: 2em;
   }
+  .box-card {
+    ::v-deep .el-card__header {
+      padding: 10px 20px;
+      span {
+        line-height: 32px;
+      }
+      button {
+        float: right;
+        padding: 8px;
+      }
+      button:last-child {
+        margin-right: 20px;
+      }
+    }
+    ::v-deep .el-card__body {
+      padding: 10px 20px;
+    }
+    &:hover {
+      background-color: #ffffff;
+      border: 1px solid #fc6f3d;
+      .card-btn {
+        visibility: visible;
+      }
+    }
+  }
+  .tag-card {
+    height: 70px;
+    position: relative;
+    background-color: #f6f6f6;
+    border-color: #f6f6f6;
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    .tag-card-item {
+      font-size: 14px;
+      p {
+        margin: 10px 0 0;
+        font-size: 12px;
+        color: #999;
+        span:first-child {
+          margin-right: 20px;
+        }
+        span:last-child {
+          float: right;
+        }
+      }
+      ::v-deep i {
+        position: absolute;
+        top: 2px;
+        right: 0;
+      }
+    }
+  }
+}
+.hidden {
+  visibility: hidden;
 }
 .pup-btn {
   text-align: center;
