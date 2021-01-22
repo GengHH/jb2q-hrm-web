@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-01-21 15:08:45
+ * @LastEditTime: 2021-01-22 17:24:42
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -9,18 +9,15 @@
 <template>
   <el-form ref="form" :model="formData" :rules="rules">
     <el-form-item required prop="newphoneNum">
-      <el-input
-        v-model="formData.newphoneNum"
-        placeholder="新手机号码"
-      ></el-input>
+      <pl-input v-model="formData.newphoneNum" label="新手机号码"></pl-input>
     </el-form-item>
     <el-form-item required prop="verificationCode">
       <el-row>
         <el-col :span="16">
-          <el-input
+          <pl-input
             v-model="formData.verificationCode"
-            placeholder="手机短信验证码"
-          ></el-input>
+            label="手机短信验证码"
+          ></pl-input>
         </el-col>
         <el-col :span="8">
           <el-button id="codeBtn" type="primary" @click="getCode" plain
@@ -38,8 +35,13 @@
 </template>
 
 <script>
+import plInput from '@/components/common/BaseLabelInput';
+import { phonePattern } from '@/utils/regexp';
 export default {
   name: 'updatePhoneNumber',
+  components: {
+    plInput
+  },
   data() {
     return {
       formData: {
@@ -48,7 +50,12 @@ export default {
       },
       rules: {
         newphoneNum: [
-          { required: true, message: '请输入新手机号', trigger: 'blur' }
+          { required: true, message: '请输入新手机号', trigger: 'blur' },
+          {
+            pattern: phonePattern,
+            message: '请输入正确格式的手机号',
+            trigger: ['blur', 'change']
+          }
         ],
         verificationCode: [
           { required: true, message: '请输入短息验证码', trigger: 'blur' }
@@ -76,6 +83,9 @@ form {
   max-width: 550px;
   margin: 0 auto;
   margin-top: 10%;
+  .el-form-item {
+    margin-bottom: 40px;
+  }
   #codeBtn {
     float: right;
   }
@@ -83,7 +93,7 @@ form {
     text-align: center;
     #submitBtn {
       width: 100%;
-      margin-top: 50px;
+      //margin-top: 50px;
       .el-form-item__content {
         margin: 0;
       }

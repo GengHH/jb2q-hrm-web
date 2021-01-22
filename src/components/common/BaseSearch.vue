@@ -6,7 +6,12 @@
       v-model="input"
       :placeholder="placeholder"
     >
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <el-select
+        v-model="select"
+        slot="prepend"
+        placeholder="请选择"
+        v-if="showSelect"
+      >
         <el-option label="餐厅名" value="1"></el-option>
         <el-option label="订单号" value="2"></el-option>
         <el-option label="用户电话" value="3"></el-option>
@@ -16,7 +21,9 @@
         <el-option label="订单号" value="2"></el-option>
         <el-option label="用户电话" value="3"></el-option>
       </el-select> -->
-      <el-button slot="append" icon="el-icon-search">搜索</el-button>
+      <el-button slot="append" icon="el-icon-search" @click="searchButtonClick"
+        >搜索</el-button
+      >
       <!-- <el-button slot="append" class="seek-btn"><img src="@/assets/images/seek.png" alt="">搜索</el-button> -->
     </el-input>
     <!-- <div class="seek-btn"><img src="@/assets/images/seek.png" alt="">搜索</div> -->
@@ -34,6 +41,10 @@ export default {
     placeholder: {
       type: String,
       default: '请输入'
+    },
+    showSelect: {
+      type: Boolean,
+      default: false
     }
   },
   component: {},
@@ -47,6 +58,9 @@ export default {
   methods: {
     test: function() {
       this.placeholder = 'hahahhahaahhhah';
+    },
+    searchButtonClick() {
+      this.$emit('clickButton', this.input);
     }
   }
 };
@@ -71,7 +85,7 @@ export default {
 
     #seek-box-input {
       height: 50px;
-      border: 0;
+      border: 1px solid #fc7a43;
       //padding-right: 86px;
       &:hover,
       &:focus {

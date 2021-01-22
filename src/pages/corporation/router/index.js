@@ -30,7 +30,7 @@ export default new Router({
       path: '/',
       //name: '单位首页',
       redirect: '/corpInfo',
-      component: () => import('@/views/corporation/index'),
+      component: () => import('@/views/corporation'),
       children: [
         {
           path: 'corpInfo',
@@ -38,7 +38,7 @@ export default new Router({
           meta: {
             notNeedUser: true
           },
-          component: () => import('@/views/corporation/')
+          component: () => import('@/views/corporation')
         }
       ]
     },
