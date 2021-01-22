@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-01-20 17:25:03
+ * @LastEditTime: 2021-01-21 17:30:06
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -44,7 +44,9 @@ import {
   Rate,
   DatePicker,
   Notification,
-  Card
+  Card,
+  Switch,
+  Loading
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -80,6 +82,8 @@ export default {
     V.use(Rate);
     V.use(DatePicker);
     V.use(Card);
+    V.use(Switch);
+    V.use(Loading);
 
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;

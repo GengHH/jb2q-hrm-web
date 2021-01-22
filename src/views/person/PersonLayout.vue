@@ -56,7 +56,8 @@ export default {
 <style lang="scss" scoped>
 #indexBody {
   width: 90%;
-  min-height: calc(100% - 60px);
+  //min-height: calc(100% - 60px);
+  min-height: 100%;
   margin: 0 auto;
   background-color: #ffffff;
   padding-top: 60px;
@@ -74,6 +75,10 @@ export default {
       width: 22.5% !important;
       position: fixed;
       z-index: 999;
+      height: 100%;
+      .el-menu {
+        height: 100%;
+      }
     }
   }
   .more-btn {

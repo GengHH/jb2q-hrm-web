@@ -26,12 +26,22 @@
           <el-col :span="20">
             <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持">居民服务和其他服务业</el-radio-button>
-              <el-radio-button label="会计/金融/银行/保险">水利、环境和公共设施管理业</el-radio-button>
-              <el-radio-button label="生产/营运/采购/物流">科学研究、技术服务和地质勘查业</el-radio-button>
-              <el-radio-button label="生物/制药/医疗/护理">租赁和商务服务业</el-radio-button>
+              <el-radio-button label="销售/客服/技术支持"
+                >居民服务和其他服务业</el-radio-button
+              >
+              <el-radio-button label="会计/金融/银行/保险"
+                >水利、环境和公共设施管理业</el-radio-button
+              >
+              <el-radio-button label="生产/营运/采购/物流"
+                >科学研究、技术服务和地质勘查业</el-radio-button
+              >
+              <el-radio-button label="生物/制药/医疗/护理"
+                >租赁和商务服务业</el-radio-button
+              >
               <el-radio-button label="广告/市场/媒体/艺术">不</el-radio-button>
-              <el-radio-button label="建筑/房地产">科学研究、技术服务和地质勘查业</el-radio-button>
+              <el-radio-button label="建筑/房地产"
+                >科学研究、技术服务和地质勘查业</el-radio-button
+              >
             </el-radio-group>
           </el-col>
           <el-col :span="2">
@@ -49,11 +59,21 @@
             <!-- <el-form-item label="" required> -->
             <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持">销售/客服/技术支持</el-radio-button>
-              <el-radio-button label="会计/金融/银行/保险">会计/金融/银行/保险</el-radio-button>
-              <el-radio-button label="生产/营运/采购/物流">生产/营运/采购/物流</el-radio-button>
-              <el-radio-button label="生物/制药/医疗/护理">生物/制药/医疗/护理</el-radio-button>
-              <el-radio-button label="广告/市场/媒体/艺术">广告/市场/媒体/艺术</el-radio-button>
+              <el-radio-button label="销售/客服/技术支持"
+                >销售/客服/技术支持</el-radio-button
+              >
+              <el-radio-button label="会计/金融/银行/保险"
+                >会计/金融/银行/保险</el-radio-button
+              >
+              <el-radio-button label="生产/营运/采购/物流"
+                >生产/营运/采购/物流</el-radio-button
+              >
+              <el-radio-button label="生物/制药/医疗/护理"
+                >生物/制药/医疗/护理</el-radio-button
+              >
+              <el-radio-button label="广告/市场/媒体/艺术"
+                >广告/市场/媒体/艺术</el-radio-button
+              >
               <el-radio-button label="建筑/房地产">建筑/房地产</el-radio-button>
             </el-radio-group>
             <!-- </el-form-item> -->
@@ -83,9 +103,15 @@
             <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持">国有</el-radio-button>
-              <el-radio-button label="会计/金融/银行/保险">私营</el-radio-button>
-              <el-radio-button label="生产/营运/采购/物流">民营</el-radio-button>
-              <el-radio-button label="生物/制药/医疗/护理">股份制</el-radio-button>
+              <el-radio-button label="会计/金融/银行/保险"
+                >私营</el-radio-button
+              >
+              <el-radio-button label="生产/营运/采购/物流"
+                >民营</el-radio-button
+              >
+              <el-radio-button label="生物/制药/医疗/护理"
+                >股份制</el-radio-button
+              >
             </el-radio-group>
           </el-col>
         </el-row>
@@ -156,20 +182,21 @@
 import BaseSearch from '@/components/common/BaseSearch.vue';
 export default {
   name: 'JobSearch',
-  components:{
+  components: {
     BaseSearch
   },
-  data(){
+  data() {
     return {
-      jobRadio : '不限',
-      value:'',
-      options:[{
-        label:'123',
-        value:'haha'
-      }]
+      jobRadio: '不限',
+      value: '',
+      options: [
+        {
+          label: '123',
+          value: 'haha'
+        }
+      ]
     };
   }
-
 };
 </script>
 
@@ -178,7 +205,7 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto;
   padding-top: 60px;
   background-color: $g-white-color;
   .more-btn {

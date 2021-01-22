@@ -69,15 +69,23 @@
         >
       </div>
       <div class="column">
-        <el-card class="box-card bg-gray" shadow="hover">
+        <el-card
+          class="box-card bg-gray"
+          shadow="hover"
+          v-for="(workCarditem, index) in laborExp"
+          :key="index"
+        >
           <div slot="header" class="clearfix">
-            <span class="font-bold sixteen-opacity">重庆大学城市科技学院</span>
+            <span class="font-bold sixteen-opacity">{{
+              workCarditem.corpName
+            }}</span>
             <el-button
               type="danger"
               icon="el-icon-delete"
               circle
               style="float: right;"
               class="card-btn hidden"
+              @click="deleteCard('dialog2', index)"
             ></el-button>
             <el-button
               type="primary"
@@ -85,18 +93,43 @@
               circle
               style="float: right;"
               class="card-btn hidden"
+              @click="editCard('dialog2', index)"
             ></el-button>
           </div>
 
           <el-row>
             <el-col :span="8">
-              <p class="fourteen-opacity line40">社保事业部</p>
+              <p class="fourteen-opacity line40">
+                {{ workCarditem.positionName }}
+              </p>
             </el-col>
             <el-col :span="8">
-              <p class="fourteen-opacity line40">IOS开发工程师</p>
+              <p class="fourteen-opacity line40">
+                {{ workCarditem.positionName }}
+              </p>
             </el-col>
             <el-col :span="8">
-              <p class="four-opacity line40">2018年9月-2020年6月</p>
+              <p class="four-opacity line40">
+                {{
+                  workCarditem.entryDate
+                    ? workCarditem.entryDate.substring(0, 4) +
+                      '年' +
+                      workCarditem.entryDate.substring(4, 6) +
+                      '月' +
+                      workCarditem.entryDate.substring(6, 8) +
+                      '日'
+                    : '无'
+                }}-{{
+                  workCarditem.quitDate
+                    ? workCarditem.quitDate.substring(0, 4) +
+                      '年' +
+                      workCarditem.quitDate.substring(4, 6) +
+                      '月' +
+                      workCarditem.quitDate.substring(6, 8) +
+                      '日'
+                    : '至今'
+                }}
+              </p>
             </el-col>
           </el-row>
           <p class="font14-or line40">工作内容：</p>
@@ -117,10 +150,10 @@
           </p>
           <p
             class="fourteen-opacity line30"
-            v-for="(expItem, index) in workExpView"
-            :key="index"
+            v-for="(expItem, expIndex) in workExpView[index]"
+            :key="expIndex"
           >
-            {{ index + 1 }}、{{ expItem }}
+            {{ expIndex + 1 }}、{{ expItem }}
           </p>
         </el-card>
       </div>
@@ -176,7 +209,25 @@
             </el-col>
             <el-col :span="8">
               <p class="four-opacity line40">
-                {{ eduCarditem.admissionDate }}-{{ eduCarditem.graduateDate }}
+                {{
+                  eduCarditem.admissionDate
+                    ? eduCarditem.admissionDate.substring(0, 4) +
+                      '年' +
+                      eduCarditem.admissionDate.substring(4, 6) +
+                      '月' +
+                      eduCarditem.admissionDate.substring(6, 8) +
+                      '日'
+                    : '无'
+                }}-{{
+                  eduCarditem.graduateDate
+                    ? eduCarditem.graduateDate.substring(0, 4) +
+                      '年' +
+                      eduCarditem.graduateDate.substring(4, 6) +
+                      '月' +
+                      eduCarditem.graduateDate.substring(6, 8) +
+                      '日'
+                    : '至今'
+                }}
               </p>
             </el-col>
           </el-row>
@@ -260,7 +311,11 @@
     <!----------------------->
     <!-- 求职意向 弹窗部分 -->
     <!----------------------->
-    <el-dialog class="width75" :visible.sync="dialog1">
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog1"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>求职意向
@@ -352,7 +407,11 @@
     </el-dialog>
 
     <!-- 工作经历 弹窗部分 -->
-    <el-dialog class="width75" :visible.sync="dialog2">
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog2"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>工作经历
@@ -384,6 +443,7 @@
                 type="date"
                 placeholder="选择日期"
                 v-model="workExperienceForm.entryDate"
+                value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -398,6 +458,7 @@
                 type="date"
                 placeholder="选择日期"
                 v-model="workExperienceForm.quitDate"
+                value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -433,7 +494,11 @@
     </el-dialog>
 
     <!-- 教育经历 弹窗部分 -->
-    <el-dialog class="width75" :visible.sync="dialog3">
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog3"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>教育经历
@@ -531,7 +596,11 @@
     </el-dialog>
 
     <!-- 外语能力 弹窗部分 -->
-    <el-dialog class="width75" :visible.sync="dialog4">
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog4"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>外语能力
@@ -598,7 +667,11 @@
     </el-dialog>
 
     <!-- 技能证书 弹窗部分 -->
-    <el-dialog class="width75" :visible.sync="dialog5">
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog5"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>技能证书
@@ -656,7 +729,11 @@
     </el-dialog>
 
     <!-- 自我评价 弹窗部分 -->
-    <el-dialog id="selfEvaluationArea" :visible.sync="dialog6">
+    <el-dialog
+      id="selfEvaluationArea"
+      :visible.sync="dialog6"
+      :before-close="handleClose"
+    >
       <div class="pup-btn">
         <p class="pup-tit">
           <i class="icon iconfont ico-no">&#xe648;</i>自我评价
@@ -703,6 +780,8 @@ export default {
   name: 'BaseResumeInfo',
   data() {
     return {
+      editStatus: false,
+      editItemIdex: 0,
       value: '选项1',
       labelPosition: 'right',
       formLabelWidth: '120px',
@@ -729,7 +808,7 @@ export default {
         corpName: '万达信息股份有限公司',
         positionName: '开发',
         entryDate: '20190611',
-        quitDate: '至今',
+        quitDate: '',
         workDescribe: '搬砖'
       },
       educationExperienceForm: {
@@ -818,13 +897,22 @@ export default {
       positionLike: '01-04',
       laborExp: [
         {
-          expId: '2',
+          expId: '1',
           pid: '',
           corpName: '万达信息股份有限公司',
           positionName: '开发',
           entryDate: '20190611',
-          quitDate: '至今',
+          quitDate: '',
           workDescribe: '搬砖'
+        },
+        {
+          expId: '2',
+          pid: '',
+          corpName: '北京电影学院',
+          positionName: '表演',
+          entryDate: '20110601',
+          quitDate: '20080101',
+          workDescribe: '表演\n唱歌\n跳舞'
         }
       ],
       eduExp: [
@@ -926,9 +1014,11 @@ export default {
       }
     },
     workExpView: function() {
-      if (this.workExperienceForm.workDescribe)
-        return this.workExperienceForm.workDescribe.split('\n');
-      else {
+      if (this.laborExp.length) {
+        return this.laborExp.map(function(itme) {
+          return itme.workDescribe.split('\n');
+        });
+      } else {
         return [];
       }
     }
@@ -1026,7 +1116,7 @@ export default {
           switch (formName) {
             case 'workExperienceForm':
               if (
-                this.psnlLanguage.find(
+                this.laborExp.find(
                   element =>
                     element.corpName === this.workExperienceForm.corpName
                 )
@@ -1037,24 +1127,32 @@ export default {
                 });
                 return;
               }
-              this.psnlLanguage.push(this.$refs[formName].model);
+              this.laborExp.push(this.$refs[formName].model);
               break;
+
             case 'educationExperienceForm':
+              this.dialog3 = false;
               if (
+                this.editStatus ||
                 this.eduExp.find(
                   element =>
                     element.collegesName ===
                     this.educationExperienceForm.collegesName
                 )
               ) {
-                this.$message({
-                  type: 'warning',
-                  message: '此教育经历已经添加过！'
-                });
+                this.editStatus
+                  ? (this.eduExp[this.editItemIdex] = JSON.parse(
+                      JSON.stringify(this.$refs[formName].model)
+                    ))
+                  : this.$message({
+                      type: 'warning',
+                      message: '此教育经历已经添加过！'
+                    });
                 return;
               }
               this.eduExp.push(this.$refs[formName].model);
               break;
+
             case 'languageSkillsForm':
               if (
                 this.psnlLanguage.find(
@@ -1071,6 +1169,7 @@ export default {
               }
               this.psnlLanguage.push(this.$refs[formName].model);
               break;
+
             case 'skillsCertificateForm':
               if (
                 this.psnlSkillcert.find(
@@ -1097,6 +1196,12 @@ export default {
     editCard(dialog, index) {
       if (dialog) {
         switch (dialog) {
+          case 'dialog2':
+            this.dialog2 = true;
+            this.workExperienceForm = JSON.parse(
+              JSON.stringify(this.laborExp[index])
+            );
+            break;
           case 'dialog3':
             this.dialog3 = true;
             this.educationExperienceForm = JSON.parse(
@@ -1104,6 +1209,9 @@ export default {
             );
             break;
         }
+        //标记成"编辑"状态
+        this.editStatus = true;
+        this.editItemIdex = index;
       }
     },
     deleteCard(dialog, index) {
@@ -1113,7 +1221,7 @@ export default {
             this.$confirm('确认删除此项工作经历？')
               .then(() => {
                 // TODO
-                this.$delete(this.eduExp, index);
+                this.$delete(this.laborExp, index);
               })
               .catch(err => {
                 console.log(err);
@@ -1131,6 +1239,11 @@ export default {
             break;
         }
       }
+    },
+    handleClose(done) {
+      done();
+      this.editStatus = false;
+      this.editItemIdex = 0;
     }
   },
   created() {

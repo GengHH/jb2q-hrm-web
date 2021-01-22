@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-12 10:14:56
+ * @LastEditTime: 2021-01-21 17:26:14
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -17,12 +17,15 @@ import App from './person.vue';
 import router from './router';
 import store from '@/store';
 import ElementUI from '@/config/eleComponents';
+//import ElementUI from 'element-ui';
+//import 'element-ui/lib/theme-chalk/index.css';
 import { VueAxios } from '@/utils/httpService';
 import Print from '@/utils/print';
 //import htmlToPdf from '@/utils/htmlToPdf';
 import '@/auth/permission';
 import config from '@/config';
 //import 'assets/sass/index.scss';
+import _ from 'lodash';
 
 Vue.config.productionTip = false;
 //按需使用Element组件
@@ -33,6 +36,9 @@ Vue.use(VueAxios, router);
 Vue.use(Print);
 //安装htmlToPdf插件
 //Vue.use(htmlToPdf);
+// 直接绑定原型来按安装lodash插件
+Vue.prototype._ = _;
+
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');
