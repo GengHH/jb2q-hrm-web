@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-25 10:06:19
+ * @LastEditTime: 2021-01-25 16:16:52
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -27,7 +27,8 @@ import config from '@/config';
 //import 'assets/sass/index.scss';
 import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
-
+import PlTable from '@/components/common/table/BaseTable.vue';
+import PlConfig from '@/config/plComponents';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -40,10 +41,34 @@ Vue.use(Print);
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
 
+//安装二次封装组件
+Vue.component(PlTable.name, PlTable);
+Vue.use(PlConfig, {
+  tableConfig: {
+    stripe: true,
+    border: true,
+    highlightCurrentRow: true
+  },
+  selectConfig: {
+    filterable: true,
+    clearable: true,
+    'default-first-option': true
+  },
+  inputConfig: {
+    clearable: true,
+    trim: true
+  },
+  pageConfig: {
+    background: true,
+    layout: 'total, sizes, prev, pager, next, jumper',
+    'page-sizes': [10, 50, 100, 400],
+    pageSize: 50
+  }
+});
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');
-  console.log('++++++++++成功引入mock数据+++++++');
+  //console.log('++++++++++成功引入mock数据+++++++');
 }
 
 /* eslint-disable no-new */

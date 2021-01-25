@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-22 18:21:34
+ * @LastEditTime: 2021-01-25 14:23:41
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporation.vue
@@ -22,6 +22,7 @@
         </el-col>
       </el-row>
     </div>
+    <el-button @click="turnOther">跳转</el-button>
   </div>
 </template>
 
@@ -68,6 +69,9 @@ export default {
     searchDw(val) {
       console.log(val);
       this.value = val;
+    },
+    turnOther() {
+      this.$router.push('/personalCenter/shieldCorporationList');
     }
   }
 };

@@ -137,6 +137,15 @@ export default new Router({
           }
         },
         {
+          path: '/personalCenter/shieldCorporationList',
+          name: '屏蔽特定企业列表',
+          components: {
+            personNavMenu: () => import('@/components/person/PerCenterNavMenu'),
+            default: () =>
+              import('@/views/person/personalCenter/shieldCorporationList')
+          }
+        },
+        {
           path: '/personalCenter/permissionSettings',
           name: '权限设置',
           components: {
