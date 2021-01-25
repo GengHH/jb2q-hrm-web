@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-21 17:26:14
+ * @LastEditTime: 2021-01-25 10:06:19
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -25,6 +25,7 @@ import Print from '@/utils/print';
 import '@/auth/permission';
 import config from '@/config';
 //import 'assets/sass/index.scss';
+import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
 
 Vue.config.productionTip = false;

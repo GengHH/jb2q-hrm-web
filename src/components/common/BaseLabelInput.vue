@@ -2,14 +2,15 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-22 16:49:55
+ * @LastEditTime: 2021-01-25 10:21:38
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelInput.vue
 -->
 
 <template>
   <div class="lable-input-block" ref="test">
-    <el-input v-bind="attrs" :value="value" v-on="eventList"> </el-input>
+    <el-input v-support v-bind="attrs" :value="value" v-on="eventList">
+    </el-input>
     <span class="float-label hidden">{{ label }} </span>
   </div>
 </template>
@@ -69,6 +70,11 @@ export default {
           .children('.float-label')
           .removeClass('hidden')
           .animate({ top: '-8px' }, 300);
+
+        $(this.$refs['test'])
+          .children('.el-input')
+          .children('.ie-placeholder')
+          .css({ display: 'none' });
       }
     },
     handleFocus(event) {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * 打印类属性、方法定义
  * 定义此插件，并绑定到Vue上
