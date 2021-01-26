@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-26 10:28:21
+ * @LastEditTime: 2021-01-26 18:28:55
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -70,6 +70,11 @@
       <template v-if="col.actions && col.actions.length">
         <template v-for="(item, index) in col.actions">
           <template v-if="!(item.hidden && item.hidden(scope, item))">
+            <el-divider
+              v-if="index > 0"
+              :key="index"
+              direction="vertical"
+            ></el-divider>
             <pl-button
               v-if="item.confirmType || item.confirm"
               :key="index"
@@ -85,12 +90,11 @@
             <pl-button
               v-else
               :key="index"
-              type="text"
+              v-bind="item.attrs"
               @click="item.onClick(scope)"
             >
               {{ item.text || item.actionText(scope) }}
             </pl-button>
-            <el-divider :key="index" direction="vertical"></el-divider>
           </template>
         </template>
       </template>
@@ -118,11 +122,13 @@
 <script>
 import { getRandomKey } from '@/utils';
 import { formatDate } from 'element-ui/lib/utils/date-util';
+import plButton from '@/components/common/BaseLoadingButton';
 import NP from 'number-precision';
 const Item2UIDMap = new WeakMap();
 export default {
   name: 'pl-table-column',
   components: {
+    plButton,
     VNodes: {
       functional: true,
       props: {

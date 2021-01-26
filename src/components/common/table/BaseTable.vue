@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-26 10:43:55
+ * @LastEditTime: 2021-01-26 19:17:47
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -15,6 +15,11 @@
       :height="autoHeight ? '500px' : $attrs.height"
       v-on="{ ...$listeners, ...events }"
       @cell-dblclick="copy"
+      @selection-change="handleSelectionChange"
+      @row-click="rowClick"
+      :row-style="rowStyle"
+      :header-cell-style="{ textAlign: 'center' }"
+      :cell-style="{ textAlign: 'center' }"
     >
       <pl-table-column
         v-for="col in columns"
@@ -125,6 +130,7 @@ export default {
       indeterminate: false,
       isIndeterminate: false,
       checkAll: false,
+      multipleSelection: [],
       currentPage: 1,
       pageSize: 10
     };
@@ -181,6 +187,7 @@ export default {
       return map[this.size];
     },
     pageTableData() {
+      //前端分页实现逻辑
       return this.showPager
         ? this.tableData.slice(
             (this.currentPage - 1) * this.pageSize,
@@ -401,6 +408,39 @@ export default {
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
+    },
+    handleSelectionChange(val) {
+      //绑定选取的数据
+      console.log('select Data', val);
+      this.multipleSelection = val;
+    },
+    rowStyle({ row, rowIndex }) {
+      //给每一行添加不可枚举属性rowIndex来标识当前行
+      Object.defineProperty(row, 'rowIndex', {
+        value: rowIndex,
+        writable: true,
+        enumerable: false
+      });
+      console.log(row);
+    },
+    rowClick(row, column, event) {
+      //监听row-click事件，实现选中
+      // 获取表格对象
+      let refsElTable = this.$refs.table;
+      let findRow = this.multipleSelection.find(c => {
+        console.log(c);
+        console.log(c.rowIndex);
+        console.log(row.rowIndex);
+        return c.rowIndex == row.rowIndex;
+      });
+      //找到选中的行
+      if (findRow) {
+        //如过重复选中，则取消选中
+        refsElTable.toggleRowSelection(row, false);
+        return;
+      }
+      // 实现选中行中选中事件
+      refsElTable.toggleRowSelection(row, true);
     }
   }
 };
