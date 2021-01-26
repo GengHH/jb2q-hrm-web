@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-25 18:46:18
+ * @LastEditTime: 2021-01-26 10:16:57
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -116,7 +116,7 @@ export default {
             [2, 4]
           ]
         },
-        { label: '日期', prop: 'date' },
+        { label: '日期', prop: 'date', formatter: 'date' },
         { label: '名称', prop: 'name', rowSpan: 'all' },
         {
           label: '地址',

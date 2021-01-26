@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-25 16:16:52
+ * @LastEditTime: 2021-01-26 10:37:18
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -43,28 +43,7 @@ Vue.prototype._ = _;
 
 //安装二次封装组件
 Vue.component(PlTable.name, PlTable);
-Vue.use(PlConfig, {
-  tableConfig: {
-    stripe: true,
-    border: true,
-    highlightCurrentRow: true
-  },
-  selectConfig: {
-    filterable: true,
-    clearable: true,
-    'default-first-option': true
-  },
-  inputConfig: {
-    clearable: true,
-    trim: true
-  },
-  pageConfig: {
-    background: true,
-    layout: 'total, sizes, prev, pager, next, jumper',
-    'page-sizes': [10, 50, 100, 400],
-    pageSize: 50
-  }
-});
+Vue.use(PlConfig, {});
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');

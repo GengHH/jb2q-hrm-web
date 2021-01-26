@@ -187,3 +187,13 @@ body {
   color: #ff9954 !important;
   font-weight: 700;
 }
+/* 分页器显示位置 */
+.peger-center{
+  text-align: center !important;
+}
+.peger-right{
+  text-align: right !important;
+}
+.peger-left{
+  text-align: left !important;
+}

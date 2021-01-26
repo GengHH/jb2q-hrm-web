@@ -2,15 +2,15 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-25 18:48:31
- * @Description: file content
+ * @LastEditTime: 2021-01-26 10:43:55
+ * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
 <template>
   <div class="pl-table-container">
     <el-table
       ref="table"
-      :data="tableData"
+      :data="pageTableData"
       v-bind="attrs"
       :height="autoHeight ? '500px' : $attrs.height"
       v-on="{ ...$listeners, ...events }"
@@ -31,6 +31,16 @@
         </template>
       </pl-table-column>
     </el-table>
+    <el-pagination
+      v-show="showPager"
+      v-bind="pageAttrs"
+      :class="pagerClass"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :total="tableData.length"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -102,6 +112,10 @@ export default {
     events: {
       type: Object,
       default: null
+    },
+    pagerClass: {
+      type: String,
+      default: 'peger-center'
     }
   },
   data() {
@@ -110,7 +124,9 @@ export default {
       selectedAllStatus: false,
       indeterminate: false,
       isIndeterminate: false,
-      checkAll: false
+      checkAll: false,
+      currentPage: 1,
+      pageSize: 10
     };
   },
   computed: {
@@ -119,6 +135,12 @@ export default {
         ...this.$PlElement?.tableConfig,
         ...this.tableConfig,
         size: this.size
+      };
+    },
+    pageAttrs() {
+      return {
+        ...this.$PlElement?.pageConfig,
+        ...this.pageConfig
       };
     },
     startIndex() {
@@ -157,6 +179,14 @@ export default {
         default: 48
       };
       return map[this.size];
+    },
+    pageTableData() {
+      return this.showPager
+        ? this.tableData.slice(
+            (this.currentPage - 1) * this.pageSize,
+            this.currentPage * this.pageSize
+          )
+        : this.tableData;
     }
   },
   watch: {
@@ -365,6 +395,12 @@ export default {
       if (tableRef[event] && typeof tableRef[event] === 'function') {
         return tableRef[event](...args);
       }
+    },
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
     }
   }
 };
