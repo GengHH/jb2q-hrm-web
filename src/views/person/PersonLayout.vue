@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'personApp',
+  name: 'personLayout',
   data() {
     return {};
   },

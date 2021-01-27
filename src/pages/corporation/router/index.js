@@ -33,19 +33,20 @@ export default new Router({
       component: () => import('@/views/corporation'),
       children: [
         {
-          path: 'corpInfo',
+          path: '/corpInfo',
           name: '单位信息管理',
           meta: {
             notNeedUser: true
-          },
-          component: () => import('@/views/corporation')
+          }
+          //component: () => import('@/views/corporation')
         }
       ]
     },
     {
       path: '/jobMgr',
       name: '职位管理',
-      component: () => import('@/views/corporation/jobMgr/JobSearch'),
+      redirect: '/jobMgr/jobAdd',
+      component: () => import('@/views/corporation/corporationLayout'),
       children: [
         {
           path: '/jobMgr/jobAdd',
@@ -58,24 +59,37 @@ export default new Router({
         {
           path: '/jobMgr/unpublishJobQuery',
           name: '未发布职位',
-          component: () =>
-            import('@/views/corporation/jobMgr/JobQueryUnpublished')
+          components: {
+            default: () =>
+              import('@/views/corporation/jobMgr/JobQueryUnpublished'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+          }
         },
         {
           path: '/jobMgr/publishJobQuery',
           name: '已发布职位',
-          component: () =>
-            import('@/views/corporation/jobMgr/JobQueryPublished')
+          components: {
+            default: () =>
+              import('@/views/corporation/jobMgr/JobQueryPublished'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+          }
         },
         {
           path: '/jobMgr/overdueJobQuery',
           name: '已过期职位',
-          component: () => import('@/views/corporation/jobMgr/JobQueryOverdued')
+          components: {
+            default: () =>
+              import('@/views/corporation/jobMgr/JobQueryOverdued'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+          }
         },
         {
           path: '/jobMgr/offJobQuery',
           name: '已下架职位',
-          component: () => import('@/views/corporation/jobMgr/JobQueryOffline')
+          components: {
+            default: () => import('@/views/corporation/jobMgr/JobQueryOffline'),
+            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+          }
         }
         // {
         //   path: '/jobMgr/jobRecycle',
@@ -83,22 +97,22 @@ export default new Router({
         //   component: () => import('@/views/corporation/jobMgr/JobRecycle')
         // }
       ]
+    },
+    {
+      path: '/resumeSearch',
+      name: '简历搜索',
+      component: () => import('@/views/corporation/employmentTrainee')
+    },
+    {
+      path: '/jobFindMgr',
+      name: '应聘管理',
+      component: () => import('@/views/corporation/recruitment')
+    },
+    {
+      path: '/jobFair',
+      name: '招聘会',
+      component: () => import('@/views/corporation/jobFair')
     }
-    // {
-    //   path: '/resumeSearch',
-    //   name: '简历搜索',
-    //   component: () => import('@/views/corporation/employmentTrainee')
-    // },
-    // {
-    //   path: '/JobFindMgr',
-    //   name: '应聘管理',
-    //   component: () => import('@/views/corporation/recruitment')
-    // },
-    // {
-    //   path: '/jobFair',
-    //   name: '招聘会',
-    //   component: () => import('@/views/corporation/jobFair')
-    // },
     // {
     //   path: '*',
     //   component: NotFoundPage

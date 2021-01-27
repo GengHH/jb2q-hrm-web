@@ -1,16 +1,7 @@
 <template>
   <!-- <router-view></router-view> -->
   <div id="indexBody">
-    <el-row :gutter="20">
-      <el-col :span="6" id="leftNav">
-        <router-view name="corpNavMenu" />
-      </el-col>
-      <el-col :span="18">
-        <transition name="fade">
-          <router-view name="default" />
-        </transition>
-      </el-col>
-    </el-row>
+    hello
   </div>
 </template>
 
@@ -18,12 +9,7 @@
 import { testData } from '@pub/mockTestData';
 export default {
   name: 'corporationApp',
-  components: {
-    // FooterIndex,
-    // BaseSearch,
-    // BaseCarousel,
-    // BaseInfoGloriette,
-  },
+  components: {},
   data() {
     return {
       path: require('@/assets/logo.png'),
@@ -131,7 +117,8 @@ export default {
   min-height: 100%;
   //max-height:1000px;
   margin: 0 auto 150px;
-  //background-color: $g-gray1-color;
+  padding-top: 60px;
+  background-color: $g-white-color;
   .more-btn {
     margin: 20px auto;
     padding-left: 50px;

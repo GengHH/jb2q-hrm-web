@@ -1,41 +1,35 @@
 <template>
-  <div>
-    <!-- <router-view></router-view> -->
-    <div id="indexBody">
-      <BaseSearch :placeholder="searchPlaceHolder"></BaseSearch>
-      <!-- 职位展示位 -->
-      <div id="activityBox">
-        <ActivityBoxShow
-          v-for="activityInfo in showList"
-          :key="activityInfo.id"
-          :activity-info="activityInfo"
-          @click.native="activityBoxClick(activityInfo)"
-        ></ActivityBoxShow>
-      </div>
-      <!-- 分页组件 -->
-      <BasePagination></BasePagination>
-    </div>
+  <!-- <router-view></router-view> -->
+  <div id="indexBody">
+    <el-row :gutter="20">
+      <el-col :span="6" id="leftNav">
+        <router-view name="corpNavMenu" />
+      </el-col>
+      <el-col :span="18">
+        <!-- <transition name="fade"> -->
+        <router-view name="default" />
+        <!-- </transition> -->
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import BaseSearch from '@/components/common/BaseSearch.vue';
-import BasePagination from '@/components/common/BasePagination.vue';
-import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: 'app',
+  name: 'corporationLayout',
   components: {
-    BaseSearch,
-    BasePagination,
-    ActivityBoxShow
+    // FooterIndex,
+    // BaseSearch,
+    // BaseCarousel,
+    // BaseInfoGloriette,
   },
   data() {
     return {
       path: require('@/assets/logo.png'),
       list: testData.list,
       obj: {},
-      searchPlaceHolder: '请输入特色活动名称',
+      colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       showList: [
@@ -108,14 +102,11 @@ export default {
     }
   },
   methods: {
-    activityBoxClick(e) {
-      this.$router
-        .push({
-          path: '/activityDetails',
-          query: { activityId: e.id },
-          params: { data: this.showList }
-        })
-        .catch(err => err);
+    jobHandleClick() {
+      console.log(1);
+    },
+    corpHandleClick() {
+      console.log(2);
     },
     showMore() {
       this.$message('this is more');
@@ -139,13 +130,113 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto;
   padding-top: 60px;
-  #activityBox {
-    background-color: #fff;
-    margin-top: 32px;
-    margin-bottom: 50px;
-    padding: 40px;
+  //background-color: $g-gray1-color;
+  .more-btn {
+    margin: 20px auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: #fc6f3d;
+    border: 1px solid #fc6f3d;
+    display: block;
+  }
+  #leftNav {
+    margin-top: 10px;
+  }
+}
+
+.el-carousel {
+  height: 300px;
+  width: 100%;
+  div {
+    height: 300px;
+    width: 100%;
+  }
+
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n + 1) {
+    background-color: #1b579c;
+  }
+}
+
+#carouselBox {
+  margin: 20px 0;
+  .el-col {
+    margin: 10px 0;
+  }
+}
+
+.logo-module {
+  width: 100%;
+  height: 300px;
+  background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
+  border-radius: 3px;
+  padding: 0 12px;
+  display: inline-block;
+
+  .module-logs {
+    color: #fda749;
+    background: #fff4ed;
+    font-size: 24px;
+    line-height: 120px;
+    height: 120px;
+    border-radius: 3px;
+    margin: 20px 0;
+
+    & span:first-child {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 56px;
+      display: block;
+      background: #fff;
+      float: left;
+      margin: 10px 20px;
+    }
+  }
+  .or-font {
+    .or-br-color i {
+      font-size: 60px;
+      margin: 20px 0;
+      display: block;
+    }
+  }
+  .co-font {
+    .co-br-color i {
+      font-size: 60px;
+      margin: 20px 0;
+      display: block;
+    }
+  }
+}
+.clearfix {
+  zoom: 1;
+}
+// 职位信息列表类型
+#jobInfoGloriette {
+  ::v-deep .el-col {
+    color: blue;
+    //height: 100px;
+  }
+}
+// 单位信息列表类型
+#corpInfoGloriette {
+  ::v-deep .el-col {
+    color: red;
+    //height: 100px;
   }
 }
 </style>

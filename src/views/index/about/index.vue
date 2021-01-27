@@ -153,6 +153,7 @@ export default {
   min-height: 100%;
   //max-height:1000px;
   margin: 0 auto 150px;
+  padding-top: 60px;
 
   .bout-us-box {
     background-color: #ffffff;

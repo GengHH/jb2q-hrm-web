@@ -1,3 +1,11 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-12-16 11:32:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-01-27 18:51:45
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
+-->
 <template>
   <!--S demo2职位管理右侧内容部分 -->
   <div class="shadow-left">
@@ -8,16 +16,29 @@
     <!--E 公共标题部分 -->
 
     <!--S 发布职位内容部分 -->
-    <el-form :model="ruleForm" :label-position="labelPosition" :rules="rules" ref="ruleForm"
-      label-width="200px" class="demo-ruleForm  inside-infor clearfix">
+    <el-form
+      :model="ruleForm"
+      :label-position="labelPosition"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="200px"
+      class="demo-ruleForm  inside-infor clearfix"
+    >
       <el-col :span="12">
         <el-form-item label="职位名称" required>
-          <el-input v-model="ruleForm.jiotitle" placeholder="请输入职位名称"></el-input>
+          <el-input
+            v-model="ruleForm.jiotitle"
+            placeholder="请输入职位名称"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="是否属于中介代招" required>
-          <el-select v-model="ruleForm.daizao" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.daizao"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="是" value="shanghai"></el-option>
             <el-option label="否" value="beijing"></el-option>
           </el-select>
@@ -30,7 +51,11 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="职位分类" required>
-          <el-select v-model="ruleForm.classify" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.classify"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="是" value="shanghai"></el-option>
             <el-option label="否" value="beijing"></el-option>
           </el-select>
@@ -47,25 +72,48 @@
       </el-col>
       <el-col :span="12">
         <el-col :span="15" class="row-input-one">
-          <el-form-item class="input-one" label="年龄下限" required label-width="200px">
-          <el-input v-model="ruleForm.age1" placeholder="请输入"></el-input>
-        </el-form-item>
+          <el-form-item
+            class="input-one"
+            label="年龄下限"
+            required
+            label-width="200px"
+          >
+            <el-input v-model="ruleForm.age1" placeholder="请输入"></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="9" class="row-input-two">
-          <el-form-item class="input-two" label="年龄上限" required label-width="80px">
-          <el-input v-model="ruleForm.age2" placeholder="请输入"></el-input>
-        </el-form-item>
+          <el-form-item
+            class="input-two"
+            label="年龄上限"
+            required
+            label-width="80px"
+          >
+            <el-input v-model="ruleForm.age2" placeholder="请输入"></el-input>
+          </el-form-item>
         </el-col>
       </el-col>
       <el-col :span="12" class="clearfix">
         <el-form-item label="工作区域" class="input-one" required>
-          <el-select v-model="ruleForm.region1" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.region1"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="是" value="shanghai"></el-option>
             <el-option label="否" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工作街镇" class="input-two" required label-width="200px">
-          <el-select v-model="ruleForm.region2" placeholder="请选择" class="w-select">
+        <el-form-item
+          label="工作街镇"
+          class="input-two"
+          required
+          label-width="200px"
+        >
+          <el-select
+            v-model="ruleForm.region2"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="是" value="shanghai"></el-option>
             <el-option label="否" value="beijing"></el-option>
           </el-select>
@@ -73,12 +121,19 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="工作详细地址" required>
-          <el-input v-model="ruleForm.site" placeholder="请输入详细地址"></el-input>
+          <el-input
+            v-model="ruleForm.site"
+            placeholder="请输入详细地址"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="工作班时" required>
-          <el-select v-model="ruleForm.jobtime" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.jobtime"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="8小时" value="shanghai"></el-option>
             <el-option label="12小时" value="beijing"></el-option>
           </el-select>
@@ -99,7 +154,11 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="学历要求" required>
-          <el-select v-model="ruleForm.education" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.education"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="大专" value="shanghai"></el-option>
             <el-option label="本科" value="beijing"></el-option>
           </el-select>
@@ -107,13 +166,29 @@
       </el-col>
       <el-col :span="12">
         <el-col :span="15" class="row-input-one">
-          <el-form-item class="input-one" label="薪酬下限" required label-width="200px">
-            <el-input v-model="ruleForm.emolument1" placeholder="请输入"></el-input>
+          <el-form-item
+            class="input-one"
+            label="薪酬下限"
+            required
+            label-width="200px"
+          >
+            <el-input
+              v-model="ruleForm.emolument1"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="9" class="row-input-two">
-          <el-form-item class="input-two" label="薪酬上限" required label-width="80px">
-            <el-input v-model="ruleForm.emolument2" placeholder="请输入"></el-input>
+          <el-form-item
+            class="input-two"
+            label="薪酬上限"
+            required
+            label-width="80px"
+          >
+            <el-input
+              v-model="ruleForm.emolument2"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -124,7 +199,11 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="招聘特定人群" required>
-          <el-select v-model="ruleForm.crowd" placeholder="请选择" class="w-select">
+          <el-select
+            v-model="ruleForm.crowd"
+            placeholder="请选择"
+            class="w-select"
+          >
             <el-option label="大专" value="shanghai"></el-option>
             <el-option label="本科" value="beijing"></el-option>
           </el-select>
@@ -132,7 +211,12 @@
       </el-col>
       <el-col :span="24">
         <el-form-item label="职位描述" required>
-          <el-input id="jobTextarea" type="textarea" placeholder="请输入职位描述（1000字符）" v-model="ruleForm.desc"></el-input>
+          <el-input
+            id="jobTextarea"
+            type="textarea"
+            placeholder="请输入职位描述（1000字符）"
+            v-model="ruleForm.desc"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -143,7 +227,6 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-
     </el-form>
 
     <!--E 发布职位内容部分 -->
@@ -154,8 +237,8 @@
       <el-button class="brown-btn btn-style">保存</el-button>
       <el-button class="orange-btn btn-style">发布</el-button>
     </div>
-  </div>  
-    <!-- E demo4按钮部分 -->
+  </div>
+  <!-- E demo4按钮部分 -->
 </template>
 
 <script>
@@ -163,9 +246,9 @@
  * 发布职位
  */
 export default {
-  name:'JobAdd',
-  data(){
-    return{
+  name: 'JobAdd',
+  data() {
+    return {
       visible: false,
       labelPosition: 'right',
       radio1: '全职',
@@ -193,33 +276,33 @@ export default {
         date1: '',
         date2: '',
         delivery: false,
-        type: [],
-      },
+        type: []
+      }
     };
   },
-  methods:{
+  methods: {
     //ruleForm(){},
     //labelPosition(){},
     //rules(){},
     //radio1(){},
     //radio2(){},
-    elForm(){}
+    elForm() {}
   }
 };
 </script>
 
-<style lang='scss' scoped>
-.shadow-left{
+<style lang="scss" scoped>
+.shadow-left {
   background-color: #ffffff;
 }
 .shadow-left {
-  box-shadow: rgba(0,0,0,0.1) -5px 0 5px -5px;
+  box-shadow: rgba(0, 0, 0, 0.1) -5px 0 5px -5px;
   padding-right: 50px;
   .title-style {
     font-size: 16px;
-    color: rgba(0,0,0,0.8);
+    color: rgba(0, 0, 0, 0.8);
     line-height: 40px;
-    border-bottom: 1px solid #E9EEF3;
+    border-bottom: 1px solid #e9eef3;
     text-align: left;
     padding: 0 30px;
     box-sizing: border-box;
@@ -227,7 +310,7 @@ export default {
     position: relative;
   }
   .title-style::before {
-    content: "";
+    content: '';
     width: 4px;
     height: 16px;
     background: #fc7a43;
@@ -238,24 +321,24 @@ export default {
   .inside-infor {
     margin-top: 20px;
   }
-  .el-select{
+  .el-select {
     width: 100%;
   }
-  .row-input-one{
+  .row-input-one {
     padding-left: 0 !important;
   }
-  .row-input-two{
+  .row-input-two {
     padding-right: 0 !important;
   }
-  .el-textarea{
+  .el-textarea {
     height: 100px;
   }
 }
-#jobTextarea{
+#jobTextarea {
   //min-height: 100px !important;
   height: 100% !important;
 }
-.form-btns{
+.form-btns {
   text-align: center;
   padding: 40px 0;
   .btn-style {
@@ -268,14 +351,14 @@ export default {
     border-color: #ff9954;
   }
   .brown-btn {
-    color: #FFF;
-    background: #ab8a76 linear-gradient(to right,#d1b29c,#86614f);
+    color: #fff;
+    background: #ab8a76 linear-gradient(to right, #d1b29c, #86614f);
     border-color: transparent;
     border: 0;
   }
   .orange-btn {
-    color: #FFF;
-    background: #ff9954 linear-gradient(to right,#ff9854,#fc703d);
+    color: #fff;
+    background: #ff9954 linear-gradient(to right, #ff9854, #fc703d);
     border-color: #ff9954;
   }
 }
