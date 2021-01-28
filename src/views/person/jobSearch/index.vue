@@ -175,15 +175,19 @@
       </div>
     </div>
     <!-- E demo2筛选部分 -->
+    <!-- 查询结果 -->
+    <base-info-notification-card></base-info-notification-card>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
+import BaseInfoNotificationCard from '@/components/common/BaseInfoNotificationCard.vue';
 export default {
   name: 'JobSearch',
   components: {
-    BaseSearch
+    BaseSearch,
+    BaseInfoNotificationCard
   },
   data() {
     return {
@@ -193,6 +197,12 @@ export default {
         {
           label: '123',
           value: 'haha'
+        }
+      ],
+      tableData: [
+        {
+          id: '1',
+          name: '123'
         }
       ]
     };

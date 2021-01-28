@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-26 19:08:31
+ * @LastEditTime: 2021-01-28 18:43:11
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -22,12 +22,16 @@
     </el-row>
     <pl-table :data="tableData" ref="serveTable" :columns="columns" show-pager>
     </pl-table>
+    <base-info-notification-card
+      :data="tableData"
+    ></base-info-notification-card>
   </div>
 </template>
 
 <script>
 import plButton from '@/components/common/BaseLoadingButton';
 import BaseSearch from '@/components/common/BaseSearch';
+import BaseInfoNotificationCard from '@/components/common/BaseInfoNotificationCard.vue';
 export default {
   name: 'shieldCorporationList',
   props: {
@@ -38,7 +42,8 @@ export default {
   },
   components: {
     plButton,
-    BaseSearch
+    BaseSearch,
+    BaseInfoNotificationCard
   },
   data() {
     return {

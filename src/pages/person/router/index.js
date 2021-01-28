@@ -110,7 +110,14 @@ export default new Router({
     {
       path: '/jobSearch',
       name: '职位搜索',
-      component: () => import('@/views/person/jobSearch')
+      component: () => import('@/views/person/jobSearch'),
+      children: [
+        {
+          path: '/jobSearch/jobDetails',
+          name: '职位详情',
+          component: () => import('@/views/person/jobSearch/jobDetails')
+        }
+      ]
     },
     {
       path: '/personalCenter',
