@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-28 18:43:11
+ * @LastEditTime: 2021-01-29 11:44:07
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -14,16 +14,24 @@
           >取消屏蔽</pl-button
         ><pl-button type="primary" icon="el-icon-plus" size="medium "
           >添加屏蔽企业</pl-button
-        ></el-col
-      >
+        >
+        <el-switch v-model="modeValue" inactive-text="切换"> </el-switch
+      ></el-col>
       <el-col :span="16"
         ><base-search @clickButton="clickButton($event)"></base-search
       ></el-col>
     </el-row>
-    <pl-table :data="tableData" ref="serveTable" :columns="columns" show-pager>
+    <pl-table
+      :data="tableData"
+      ref="serveTable"
+      :columns="columns"
+      show-pager
+      v-if="modeValue"
+    >
     </pl-table>
     <base-info-notification-card
       :data="tableData"
+      v-else
     ></base-info-notification-card>
   </div>
 </template>
@@ -47,6 +55,7 @@ export default {
   },
   data() {
     return {
+      modeValue: true,
       tableData: [
         {
           date: '2019-05-01',
@@ -145,7 +154,7 @@ export default {
               text: '测试',
               attrs: { type: 'warning', round: true, size: 'small' },
               onClick: ({ row }) => {
-                console.log(row);
+                //console.log(row);
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);
@@ -156,7 +165,7 @@ export default {
               text: '测试2',
               attrs: { type: 'warning', round: true, size: 'small' },
               onClick: ({ row }) => {
-                console.log(row);
+                //console.log(row);
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-26 19:17:47
+ * @LastEditTime: 2021-01-29 10:51:00
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -421,7 +421,6 @@ export default {
         writable: true,
         enumerable: false
       });
-      console.log(row);
     },
     rowClick(row, column, event) {
       //监听row-click事件，实现选中
