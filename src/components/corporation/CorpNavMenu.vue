@@ -3,7 +3,7 @@
  * @Date: 2020-12-30 11:28:50
  * @LastEditTime: 2021-01-27 18:43:46
  * @LastEditors: GengHH
- * @Description: In User Settings Edit
+ * @Description: 单位模块子菜单
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpNavMenu.vue
 -->
 <template>
