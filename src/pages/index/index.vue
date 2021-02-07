@@ -1,3 +1,11 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-11-25 10:46:16
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-02-07 16:52:34
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
+-->
 <template>
   <div id="indexApp">
     <!-- Header -->
@@ -76,5 +84,8 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+}
+::v-deep .el-breadcrumb__inner {
+  color: #fff !important;
 }
 </style>

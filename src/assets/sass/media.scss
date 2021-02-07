@@ -6,14 +6,16 @@
 @import './variables.scss';
 
 /* At the top level of your code */
-@media screen and (max-width: 1024px) {
-    body{
-      background-color: $test-body-color1;
-    }
+@media screen and (min-width: 1024px) {
+  body {
+    background-color: $test-body-color1;
+    //background-color: $test-body-color1;
+  }
 }
 
-@media screen and (min-width: 1024px) {
-    body{
-      background-color: $test-body-color2;
-    }
+@media screen and (max-width: 1024px) {
+  body {
+    background-color: $test-body-color2;
+    //background-color: $test-body-color2;
+  }
 }
