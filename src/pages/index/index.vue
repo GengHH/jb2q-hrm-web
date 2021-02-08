@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-07 16:52:34
+ * @LastEditTime: 2021-02-08 18:01:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
@@ -76,7 +76,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   // text-align: center;
   color: #2c3e50;
-
+  background-color: #f6f6f6;
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.5s;
