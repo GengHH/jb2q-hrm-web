@@ -2,25 +2,36 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-08 17:29:00
+ * @LastEditTime: 2021-02-08 17:28:25
  * @Description: 二次封装el-button成实现float label 的input
- * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelInput.vue
+ * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelSelect.vue
 -->
 
 <template>
-  <div class="lable-input-block" ref="input">
-    <el-input v-support v-bind="attrs" :value="value" v-on="eventList">
-    </el-input>
+  <div class="lable-input-block" ref="select">
+    <el-select v-support v-bind="attrs" :value="value" v-on="eventList">
+      <el-option
+        v-for="item in optionData"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
     <span class="float-label hidden">{{ label }} </span>
   </div>
 </template>
 <script>
 export default {
-  name: 'pl-input',
+  name: 'pl-select',
   props: {
     label: {
       type: String,
       default: ''
+    },
+    optionData: {
+      type: Array,
+      default: () => []
     },
     value: {
       value: String,
@@ -43,7 +54,7 @@ export default {
   computed: {
     attrs() {
       return {
-        placeholder: this.$attrs.placeholder || `请输入${this.label}`,
+        placeholder: this.$attrs.placeholder || `请选择${this.label}`,
         //...this.$PlElement?.inputConfig,
         ...this.$attrs
       };
@@ -66,12 +77,12 @@ export default {
   methods: {
     init() {
       if (this.value) {
-        $(this.$refs['input'])
+        $(this.$refs['select'])
           .children('.float-label')
           .removeClass('hidden')
           .animate({ top: '-8px' }, 300);
 
-        $(this.$refs['input'])
+        $(this.$refs['select'])
           .children('.el-input')
           .children('.ie-placeholder')
           .css({ display: 'none' });
@@ -126,5 +137,8 @@ export default {
   background-color: #fff;
   font-size: 14px;
   line-height: 14px;
+}
+.el-select {
+  width: 100%;
 }
 </style>

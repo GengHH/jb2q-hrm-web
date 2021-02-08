@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2020-12-31 13:45:50
+ * @LastEditTime: 2021-02-08 16:43:49
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -15,7 +15,7 @@
         <img class="logo3" src="@/assets/img/logo3.png" alt="" />
       </el-col>
       <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
-        <el-breadcrumb separator="">
+        <!-- <el-breadcrumb separator="">
           <el-breadcrumb-item
             v-for="nvaIndex in navList"
             :key="nvaIndex.id"
@@ -23,7 +23,28 @@
           >
             {{ nvaIndex.nvaText }}
           </el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          router
+          background-color="#fc6f3d"
+          text-color="#fff"
+        >
+          <el-menu-item
+            v-for="nvaIndex in navList"
+            :key="nvaIndex.id"
+            :index="nvaIndex.path"
+          >
+            <template v-if="nvaIndex.icon">
+              <i class="nva-icon" :class="nvaIndex.iconName"></i>
+            </template>
+            <template v-else>
+              {{ nvaIndex.nvaText }}
+            </template>
+          </el-menu-item>
+        </el-menu>
       </el-col>
     </el-row>
   </div>
@@ -37,13 +58,20 @@ export default {
   },
   data() {
     return {
+      activeIndex: '/',
       inco: true
     };
+  },
+  created() {
+    console.log(this.$route);
+    if (this.$route.path) {
+      this.activeIndex = this.$route.path;
+    }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #indexHeader {
   position: fixed;
   height: 60px;
@@ -77,23 +105,35 @@ export default {
   }
   .el-col {
     height: 100%;
-    .el-breadcrumb {
-      line-height: 60px;
-      height: 100%;
-    }
+    // .el-breadcrumb {
+    //   line-height: 60px;
+    //   height: 100%;
+    // }
 
-    .el-breadcrumb__item {
-      font {
-        color: #333;
-        size: 16px;
-      }
-      height: 60px;
-      padding: 0 10px;
-      float: right;
-      text-align: right;
+    // .el-breadcrumb__item {
+    //   font {
+    //     color: #333;
+    //     size: 16px;
+    //   }
+    //   height: 60px;
+    //   padding: 0 10px;
+    //   float: right;
+    //   text-align: right;
+    // }
+    // .el-breadcrumb__item:hover {
+    //   border-bottom: 2px solid red;
+    // }
+    .nva-icon {
+      color: #fff;
     }
-    .el-breadcrumb__item:hover {
-      border-bottom: 2px solid red;
+  }
+  ::v-deep .el-menu--horizontal {
+    .el-menu-item {
+      float: right;
+    }
+    .el-menu-item.is-active {
+      border-bottom: 2px solid #ffc107;
+      color: #ffc107;
     }
   }
 }

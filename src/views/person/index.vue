@@ -6,10 +6,10 @@
       :label-position="labelPosition"
       :rules="rules"
       ref="personInfo"
-      label-width="200px"
+      label-width="0px"
       class="demo-ruleForm clearfix"
     >
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-left">
         <el-form-item required>
           <pl-input
             v-model="personInfo.zjlxId"
@@ -18,7 +18,7 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-right">
         <el-form-item required>
           <pl-input
             v-model="personInfo.zjhm"
@@ -28,7 +28,7 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-left">
         <el-form-item required>
           <pl-input
             v-model="personInfo.xm"
@@ -37,7 +37,7 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-right">
         <el-form-item required>
           <pl-input
             v-model="personInfo.sexId"
@@ -46,7 +46,7 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-left">
         <el-form-item required>
           <pl-input
             v-model="personInfo.pid"
@@ -55,34 +55,39 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-right">
         <el-form-item prop="contactPhone">
           <pl-input v-model="personInfo.contactPhone" label="手机号"></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-left">
         <el-form-item required>
-          <el-select v-model="personInfo.livingArea" label="请选择">
-            <el-option
+          <pl-select
+            v-model="personInfo.livingArea"
+            :optionData="dicQx"
+            label="居住区域"
+          >
+            <!-- <el-option
               v-for="item in dicQx"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             >
-            </el-option>
-          </el-select>
+            </el-option> -->
+          </pl-select>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="form-item-right">
         <el-form-item required>
-          <el-select
+          <pl-select
             v-model="personInfo.livingStreet"
             label="居住街镇"
+            :optionData="dicStreet"
             class="w-select"
           >
-            <el-option label="区域一" value="1309"></el-option>
-            <el-option label="区域二" value="1310"></el-option>
-          </el-select>
+            <!-- <el-option label="区域一" value="1309"></el-option>
+            <el-option label="区域二" value="1310"></el-option> -->
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -119,10 +124,12 @@ import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
 import plButton from '@/components/common/BaseLoadingButton';
 import plInput from '@/components/common/BaseLabelInput';
+import plSelect from '@/components/common/BaseLabelSelect';
 export default {
   name: 'personApp',
   components: {
     plInput,
+    plSelect,
     plButton
   },
   data() {
@@ -157,6 +164,10 @@ export default {
         ]
       },
       dicQx: [],
+      dicStreet: [
+        { value: '1309', label: '区域一' },
+        { value: '1310', label: '区域二' }
+      ],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -254,6 +265,7 @@ export default {
 <style lang="scss" scoped>
 #indexBody {
   width: 90%;
+  //max-width: 1360px;
   /* min-height: 100%; */
   /* margin: 0 auto; */
   background-color: #ffffff;
@@ -262,7 +274,7 @@ export default {
   top: 60px;
   left: 5%;
   background-color: $g-white-color;
-  padding-right: 80px;
+  //padding-right: 80px;
   .title-style {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.8);
@@ -283,10 +295,23 @@ export default {
     left: 12px;
     top: 13px;
   }
-  form {
+  .el-form {
     margin-top: 20px;
+    .el-col {
+      min-height: 80px;
+    }
     .el-select {
       width: 100%;
+    }
+    .form-item-left {
+      .el-form-item {
+        padding-right: 15%;
+      }
+    }
+    .form-item-right {
+      .el-form-item {
+        padding-left: 15%;
+      }
     }
   }
   .form-btns {

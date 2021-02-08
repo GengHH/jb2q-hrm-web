@@ -112,10 +112,10 @@ export default new Router({
       path: '/jobFair',
       name: '招聘会',
       component: () => import('@/views/corporation/jobFair')
+    },
+    {
+      path: '/*',
+      component: NotFoundPage
     }
-    // {
-    //   path: '*',
-    //   component: NotFoundPage
-    // }
   ]
 });
