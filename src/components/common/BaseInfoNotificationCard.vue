@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-28 15:49:10
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-29 11:32:27
+ * @LastEditTime: 2021-02-09 16:46:23
  * @Description: 信息通知显示卡片
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseInfoNotificationCard.vue
 -->
@@ -120,7 +120,7 @@ export default {
 
 <style lang="scss" scoped>
 .card-list-row {
-  margin: 10px 0 !important;
+  margin-top: 10px !important;
   .card-list-item {
     margin: 20px 0;
   }
