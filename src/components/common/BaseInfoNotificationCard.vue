@@ -2,14 +2,15 @@
  * @Author: GengHH
  * @Date: 2021-01-28 15:49:10
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-09 16:46:23
+ * @LastEditTime: 2021-02-10 14:41:59
  * @Description: 信息通知显示卡片
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseInfoNotificationCard.vue
 -->
 <template>
   <el-row class="card-list-row" :gutter="40">
+    <!-- <transition-group name="list-complete"> -->
     <el-col
-      class="card-list-item"
+      class="card-list-item list-complete-item"
       :span="8"
       v-for="(item, index) in data"
       :key="index"
@@ -56,9 +57,8 @@
         </div>
         <div class="general">
           <h3>你好！</h3>
-          <p>
-            看了你的简历，我们发现你很适合我公司的一些职位，不知可否相互了解一下？
-          </p>
+          <p v-if="text.length <= 58">{{ index }} - {{ item.address }}</p>
+          <p class="long-text" v-else>{{ index }} - {{ item.address }}</p>
           <span class="notice-date">2021-01-11</span>
         </div>
         <div>
@@ -72,11 +72,17 @@
             <el-button type="info" icon="el-icon-message" circle></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="deleteMessage(index)"
+            ></el-button>
           </el-tooltip>
         </div>
       </div>
     </el-col>
+    <!-- </transition-group> -->
   </el-row>
 </template>
 
@@ -91,14 +97,14 @@ export default {
   props: {
     data: {
       type: Array,
-      default: () => {
-        [];
-      }
+      default: () => []
     }
   },
   data() {
     return {
-      checked: true
+      checked: true,
+      text:
+        '看了你的简历，我们发现你很适合我公司的一些职位，不知可否相互了解一下？看了你的简历，我们发现你很适合我公司的一些职'
     };
   },
   created() {
@@ -114,6 +120,22 @@ export default {
     //     });
     //     console.log(this.data);
     //   }
+  },
+  methods: {
+    deleteMessage(index) {
+      let that = this;
+      this.$emit('deleteMessage', index, () => {
+        console.log(that);
+        $($('list-complete-item')[0]).animate(
+          {
+            marginTop: '100px',
+            opacity: 0
+          },
+          1000
+        );
+      });
+      //this.data.splice(index, 1);
+    }
   }
 };
 </script>
@@ -211,6 +233,18 @@ export default {
       text-indent: 2em;
       max-height: 80px;
       overflow: hidden;
+      position: relative;
+    }
+    p.long-text::after {
+      content: '...';
+      position: absolute;
+      bottom: 0;
+      right: 0.5em;
+      padding-left: 20px;
+      background: -webkit-linear-gradient(left, transparent, #fff 75%);
+      background: -o-linear-gradient(right, transparent, #fff 75%);
+      background: -moz-linear-gradient(right, transparent, #fff 75%);
+      background: linear-gradient(to right, transparent, #fff 75%);
     }
     .notice-date {
       position: absolute;
@@ -248,5 +282,19 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
+}
+
+.list-complete-item {
+  transition: all 3s;
+  display: inline-block;
+  //margin-right: 10px;
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(100px);
+}
+.list-complete-leave-active {
+  position: absolute;
 }
 </style>

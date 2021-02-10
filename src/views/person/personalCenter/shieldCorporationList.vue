@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-29 11:44:07
+ * @LastEditTime: 2021-02-10 14:54:55
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -30,8 +30,9 @@
     >
     </pl-table>
     <base-info-notification-card
-      :data="tableData"
       v-else
+      :data="tableData"
+      @deleteMessage="deleteMessage(arguments)"
     ></base-info-notification-card>
   </div>
 </template>
@@ -55,7 +56,7 @@ export default {
   },
   data() {
     return {
-      modeValue: true,
+      modeValue: false,
       tableData: [
         {
           date: '2019-05-01',
@@ -118,6 +119,18 @@ export default {
   methods: {
     clickButton(val) {
       console.log(val);
+    },
+    deleteMessage(arg) {
+      console.log(arg[0], arg[1]);
+      //arg[1]();
+      //   this.$confirm('确认删除此项信息？')
+      //     .then(() => {
+      //       // TODO
+      //       this.$delete(this.tableData, index);
+      //     })
+      //     .catch(err => {
+      //       console.log(err);
+      //     });
     }
   },
   computed: {
