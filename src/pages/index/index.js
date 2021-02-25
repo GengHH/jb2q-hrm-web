@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-25 10:46:16
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-02-25 16:41:51
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
+ */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // 引入自定义全局样式

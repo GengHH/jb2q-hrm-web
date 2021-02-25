@@ -138,16 +138,20 @@ exports.htmlPlugin = function() {
       // 文件名称
       filename: filename + '.html',
       // 页面模板需要加对应的js脚本，如果不加这行则每个页面都会引入所有的js脚本
-      chunks: ['manifest', 'vendor', filename],
+      chunks:
+        filename === '50x' ? [] : ['manifest', 'vendor', 'styles', filename],
       inject: true
     };
     if (process.env.NODE_ENV === 'production') {
       conf = merge(conf, {
-        minify: {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true
-        },
+        minify:
+          filename === '50x'
+            ? {}
+            : {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+              },
         chunksSortMode: 'dependency'
       });
     }
