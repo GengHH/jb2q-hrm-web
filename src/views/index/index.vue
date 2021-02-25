@@ -12,13 +12,13 @@
         <el-col :sm="24" :md="6" :lg="8" :xl="8">
           <!-- 登录框 -->
           <div class="logo-module">
-            <div class="module-logs or-font clearfix">
+            <div class="module-logs or-font clearfix" @click="personSignIn">
               <span class="or-br-color"
                 ><i class="icon iconfont">&#xe64c;</i></span
               >
               <span>个人登录</span>
             </div>
-            <div class="module-logs co-font clearfix">
+            <div class="module-logs co-font clearfix" @click="corpSignIn">
               <span class="co-br-color"
                 ><i class="icon iconfont">&#xe64d;</i></span
               >
@@ -192,6 +192,13 @@ export default {
     }
   },
   methods: {
+    personSignIn() {
+      console.log(this.$store);
+      this.$alert('个人登录暂时未开放');
+    },
+    corpSignIn() {
+      this.$alert('单位登录暂时未开放');
+    },
     test() {
       this.axios
         .get('http://api.wpbom.com/api/neran.php')

@@ -1,3 +1,11 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-12-02 10:48:20
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-02-25 15:16:44
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\store\index.js
+ */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import getters from './getters';
@@ -8,12 +16,11 @@ import getters from './getters';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  state:{
-    user:{},
-    dataDictionary:{}
-
+  state: {
+    user: {},
+    dataDictionary: {}
   },
-  getters,
+  getters
 });
 
 export default store;
