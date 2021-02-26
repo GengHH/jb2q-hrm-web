@@ -2,26 +2,29 @@
   <!-- S demo8 首页底部内容 -->
   <div id="indexFooter" class="middle-box padding-tf">
     <el-row>
-      <el-col :span="12">
+      <el-col :span="12" class="ba-info">
         <p class="mat-15 white-font">上海市人力资源和社会保障局 ©️ 版权所有</p>
-        <p  class="mat-30 white-font">沪ICP备 11045457号     沪公网安备 31011502006427号     政府网站标识码:3100000115 </p>
+        <p class="mat-30 white-font">
+          沪ICP备 11045457号 沪公网安备 31011502006427号
+          政府网站标识码:3100000115
+        </p>
       </el-col>
       <el-col :span="5" class="tac">
-        <img class="help mat-15" src="@/assets/img/bangzhu.png" alt="">
+        <img class="help mat-15" src="@/assets/img/bangzhu.png" alt="" />
         <p class="white-font mat-5">使用帮助</p>
       </el-col>
       <el-col :span="7" class="tac">
         <div class="code-box">
-          <img src="@/assets/img/code.png" alt="">
-          <p class="white-font mat-5">微信公众号</p>
+          <img src="@/assets/img/code.png" alt="" />
+          <p class="white-font img-font mat-5">微信公众号</p>
         </div>
         <div class="code-box">
-          <img src="@/assets/img/code.png" alt="">
-          <p class="white-font mat-5">上海人社APP安卓</p>
+          <img src="@/assets/img/code.png" alt="" />
+          <p class="white-font img-font mat-5">上海人社APP安卓</p>
         </div>
         <div class="code-box">
-          <img src="@/assets/img/code.png" alt="">
-          <p class="white-font mat-5">上海人社APP IOS</p>
+          <img src="@/assets/img/code.png" alt="" />
+          <p class="white-font img-font mat-5">上海人社APP IOS</p>
         </div>
       </el-col>
     </el-row>
@@ -31,21 +34,21 @@
 
 <script>
 export default {
-  name:'FooterIndex',
-  data(){
+  name: 'FooterIndex',
+  data() {
     return {
-      inco:true,
-      navList:[
-        {id:'1',path:'/',nvaText:'首页'},
-        {id:'2',path:'',nvaText:'活动管理'},
-        {id:'3',path:'',nvaText:'活动列表'}
-      ],
+      inco: true,
+      navList: [
+        { id: '1', path: '/', nvaText: '首页' },
+        { id: '2', path: '', nvaText: '活动管理' },
+        { id: '3', path: '', nvaText: '活动列表' }
+      ]
     };
   }
 };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 #indexFooter {
   height: 130px;
   width: 100%;
@@ -55,8 +58,11 @@ export default {
   background-color: #fc7a43;
   z-index: 999;
   //position: relative;
-  .el-row{
+  .el-row {
     margin-top: 15px;
+    .ba-info {
+      text-align: center;
+    }
   }
   .or-bg {
     background: #fc7a43;
@@ -65,8 +71,8 @@ export default {
     margin-top: 50px;
   }
   .help {
-    width: 35px;
-    height: 30px;
+    width: 25px;
+    height: 20px;
     display: inline-block;
   }
   .mat-5 {
@@ -81,16 +87,18 @@ export default {
   .white-font {
     color: #fff;
   }
+  .img-font {
+    font-size: 12px;
+  }
   .code-box {
     width: 74px;
     margin: 0 15px;
     display: block;
     float: left;
     & img {
-      width: 100%;
+      width: 70%;
       display: inline-block;
     }
   }
 }
-
 </style>

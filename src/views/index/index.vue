@@ -106,6 +106,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
+import locale from 'element-ui/lib/locale';
 export default {
   name: 'indexApp',
   components: {
@@ -194,7 +195,17 @@ export default {
   methods: {
     personSignIn() {
       console.log(this.$store);
-      this.$alert('个人登录暂时未开放');
+      //this.$alert('个人登录暂时未开放');
+      // this.axios
+      //   .get('new-corp-api/loginController/ywtb-index')
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     throw new Error('调用API失败' + err);
+      //   });
+      window.location.href =
+        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://10.5.102.154:8080/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     corpSignIn() {
       this.$alert('单位登录暂时未开放');
