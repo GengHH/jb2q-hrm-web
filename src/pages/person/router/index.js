@@ -24,7 +24,7 @@ Vue.use(Router);
 export default new Router({
   mode: 'hash',
   //mode: 'history',
-  //base: 'recruitment',
+  base: '/ggzp-shrs',
   routes: [
     {
       path: '/',

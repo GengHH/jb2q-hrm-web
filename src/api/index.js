@@ -1,3 +1,12 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-11-30 11:50:54
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-01 15:10:02
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\api\index.js
+ */
+//import apiUrlConfig from '../config';
 import { postAction } from './allActionManage';
 
 /**
@@ -6,7 +15,7 @@ import { postAction } from './allActionManage';
  */
 
 //示例
-const queryTable = params => postAction('recruitment/person/queryTable', params);
+const queryTable = params => postAction('ggzp-shrs/person/queryTable', params);
 
 //TODO 根据业务自行添加
 

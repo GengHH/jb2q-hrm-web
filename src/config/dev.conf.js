@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-08 11:34:20
+ * @LastEditTime: 2021-03-01 15:21:05
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\dev.conf.js
  */
@@ -18,6 +18,7 @@ const config = {
   uploadUrl: '//localhost:8085',
   socketUrl: '//localhost:9099',
   defaultImgUrl: '//localhost:8085/static/default.jpg',
+  commonBasePath: '/new-common-api',
   personBasePath: '/new-pers-api',
   corpBasePath: '/new-corp-api',
   adminBasePath: '/new-admin-api'

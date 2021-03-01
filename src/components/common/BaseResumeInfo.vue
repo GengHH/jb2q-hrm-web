@@ -773,6 +773,13 @@
 </template>
 
 <script>
+import {
+  getGzxz,
+  getQx,
+  getLanguageType,
+  getLanguageLevel,
+  getRecruitEdu
+} from '@/api/common';
 /**
  * 简历信息的基本模板
  */
@@ -1063,30 +1070,30 @@ export default {
       // TODO 删除后台的数据
       this.$delete(this.psnlSkillcert, index);
     },
-    getDicQx() {
-      return this.axios.get('/common/dic/getQx');
-    },
-    getDicGzxx() {
-      return this.axios.get('/common/dic/getGzxz');
-    },
-    getDicRecruitEdu() {
-      return this.axios.get('/common/dic/getRecruitEdu');
-    },
-    getDicLanguageType() {
-      return this.axios.get('/common/dic/getLanguageType');
-    },
-    getDicLanguageLevel() {
-      return this.axios.get('/common/dic/getLanguageLevel');
-    },
+    // getDicQx() {
+    //   return this.axios.get('/common/dic/getQx');
+    // },
+    // getDicGzxx() {
+    //   return this.axios.get('/common/dic/getGzxz');
+    // },
+    // getDicRecruitEdu() {
+    //   return this.axios.get('/common/dic/getRecruitEdu');
+    // },
+    // getDicLanguageType() {
+    //   return this.axios.get('/common/dic/getLanguageType');
+    // },
+    // getDicLanguageLevel() {
+    //   return this.axios.get('/common/dic/getLanguageLevel');
+    // },
 
     getDicData() {
       let that = this;
       Promise.all([
-        this.getDicQx(),
-        this.getDicGzxx(),
-        this.getDicRecruitEdu(),
-        this.getDicLanguageType(),
-        this.getDicLanguageLevel()
+        getGzxz(),
+        getQx(),
+        getLanguageType(),
+        getLanguageLevel(),
+        getRecruitEdu()
       ])
         .then(function(results) {
           that.$set(that.dicOptions, 'option1', results[0].dicData);

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-26 11:07:41
+ * @LastEditTime: 2021-03-01 15:09:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\prod.conf.js
  */
@@ -16,6 +16,7 @@ const config = {
   uploadUrl: '//localhost:8085',
   socketUrl: 'https://socket.sndraw.com',
   defaultImgUrl: '//localhost:8085/static/default.jpg',
+  commonBasePath: '/common-api',
   personBasePath: '/pers-api',
   corpBasePath: '/corp-api'
 };

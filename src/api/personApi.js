@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-18 09:46:48
+ * @LastEditTime: 2021-03-01 13:31:17
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -22,5 +22,8 @@ const getPersonBaseInfo = params =>
 //修改个人基本信息
 const updatePersonBaseInfo = params =>
   postAction(basePath + '/person/info/savePersonInfo', params);
+//查询职位信息
+const queryJobs = params =>
+  postAction(basePath + '/person/info/queryJobs', params);
 
-export { getPersonBaseInfo, updatePersonBaseInfo };
+export { getPersonBaseInfo, updatePersonBaseInfo, queryJobs };

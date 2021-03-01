@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-07 18:31:54
+ * @LastEditTime: 2021-03-01 15:23:37
  * @Description: 各个环境的相关配置
  * @FilePath: \jb2q-hrm-web\config\index.js
  */
@@ -15,7 +15,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/ggzp-shrs/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -35,7 +35,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsRoot: path.resolve(__dirname, '../dev'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/ggzp-shrs',
     proxyTable: {
       //本地开发机器（开发机器同时启动前后台项目）
       '/api': {
@@ -46,6 +46,14 @@ module.exports = {
         }
       },
       //本地开发的后台机器（nginx指向单独的一台测试机）
+      '/new-common-api': {
+        target: 'http://localhost:8099/new-common-api',
+        //target: '10.5.102.154:8080/new-pers-api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/new-common-api': ''
+        }
+      },
       '/new-pers-api': {
         target: 'http://localhost:8099/new-pers-api',
         //target: '10.5.102.154:8080/new-pers-api',
