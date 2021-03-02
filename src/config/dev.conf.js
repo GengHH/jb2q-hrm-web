@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-01 15:21:05
+ * @LastEditTime: 2021-03-02 14:46:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\dev.conf.js
  */

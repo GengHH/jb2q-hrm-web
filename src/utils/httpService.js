@@ -32,7 +32,7 @@ const service = axios.create({
 // common error function
 const err = error => {
   if (error.response) {
-    ('');
+    // ('');
     // let data = error.response.data;
     // const data = JSON.parse(sessionStorage.vuex);
     var token = null;

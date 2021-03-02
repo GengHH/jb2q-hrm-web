@@ -1070,30 +1070,14 @@ export default {
       // TODO 删除后台的数据
       this.$delete(this.psnlSkillcert, index);
     },
-    // getDicQx() {
-    //   return this.axios.get('/common/dic/getQx');
-    // },
-    // getDicGzxx() {
-    //   return this.axios.get('/common/dic/getGzxz');
-    // },
-    // getDicRecruitEdu() {
-    //   return this.axios.get('/common/dic/getRecruitEdu');
-    // },
-    // getDicLanguageType() {
-    //   return this.axios.get('/common/dic/getLanguageType');
-    // },
-    // getDicLanguageLevel() {
-    //   return this.axios.get('/common/dic/getLanguageLevel');
-    // },
-
     getDicData() {
       let that = this;
       Promise.all([
-        getGzxz(),
         getQx(),
+        getGzxz(),
+        getRecruitEdu(),
         getLanguageType(),
-        getLanguageLevel(),
-        getRecruitEdu()
+        getLanguageLevel()
       ])
         .then(function(results) {
           that.$set(that.dicOptions, 'option1', results[0].dicData);

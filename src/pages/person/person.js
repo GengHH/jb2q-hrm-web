@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-26 10:37:18
+ * @LastEditTime: 2021-03-02 18:47:46
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -49,6 +49,21 @@ if (config.mock) {
   require('@/mock/person/index.js');
   //console.log('++++++++++成功引入mock数据+++++++');
 }
+//判断是不是已经登录
+var isEmpty = function(obj) {
+  if (obj === null || obj === undefined || obj.length === 0) {
+    return true;
+  }
+};
+
+if (isEmpty(store.getters.zjhm)) {
+  //获取个人登录信息
+  store.dispatch('person/get_personInfo');
+}
+
+window.setTimeout(function() {
+  console.log('定时器');
+}, 5000);
 
 /* eslint-disable no-new */
 new Vue({

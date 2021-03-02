@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-08 16:42:35
+ * @LastEditTime: 2021-03-02 18:46:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -27,7 +27,7 @@ export default {
   components: {
     HeaderIndex
   },
-  data: () => {
+  data() {
     return {
       path: require('@/assets/logo.png'),
       list: testData.list,
@@ -35,6 +35,11 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList: [
+        {
+          id: '8',
+          path: '',
+          nvaText: this.$store.getters.name || '临时工'
+        },
         {
           id: '7',
           path: '/blak1',
@@ -58,6 +63,15 @@ export default {
     };
   },
   methods: {
+    getUserName() {
+      console.log('++++++++++++++++');
+      console.log(this.$store.getters.name);
+      // this.$set(
+      //   this.navList[0],
+      //   'nvaText',
+      //   this.$store.getters['person/username']
+      // );
+    },
     test() {
       this.axios
         .get('http://api.wpbom.com/api/neran.php')
@@ -72,7 +86,8 @@ export default {
     testRoute() {}
   },
   created() {
-    console.log(this.$route.path);
+    //console.log(this.$route.path);
+    this.getUserName();
     // console.log(this.$data);
     // this.axios.get('/admin/index').then(res =>{
     //   this.$set(this.obj,'siet',res.data)

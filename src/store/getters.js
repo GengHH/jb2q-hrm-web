@@ -1,17 +1,27 @@
+/*
+ * @Author: GengHH
+ * @Date: 2020-12-02 16:57:19
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-02 18:42:51
+ * @Description: 获取登录人的基本信息
+ * @FilePath: \jb2q-hrm-web\src\store\getters.js
+ */
 const getters = {
   // sidebar: state => state.app.sidebar,
   // iframe: state => state.app.iframe,
-  token: state => state.user.token,
-  avatar: state => state.user.avatar,
-  name: state => state.user.name,
-  city: state => state.user.city,
-  region: state => state.user.region,
-  college_city: state => state.user.college_city,
-  college_region: state => state.user.college_region,
-  loginType: state => state.user.login_type,
-  center: state => state.user.center,
-  loginStatus: state => state.user.login_status,
-  loginTime: state => state.user.login_time,
+  token: state => state.person.token,
+  avatar: state => state.person.avatar,
+  zjhm: state => state.person.zjhm,
+  pid: state => state.person.pid,
+  name: state => state.person.name,
+  city: state => state.person.city,
+  region: state => state.person.region,
+  college_city: state => state.person.college_city,
+  college_region: state => state.person.college_region,
+  loginType: state => state.person.login_type,
+  center: state => state.person.center,
+  loginStatus: state => state.person.login_status,
+  loginTime: state => state.person.login_time,
   matterDictionary: state => index =>
     state.dataDictionary.matterDictionary.items[index],
   matterDictionary_init: state => {
