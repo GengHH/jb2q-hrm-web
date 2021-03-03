@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-25 10:46:16
- * @LastEditTime: 2020-12-30 18:09:12
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-03 10:38:22
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\build\webpack.dev.conf.js
  */
@@ -49,11 +49,11 @@ module.exports = merge(baseWebpackConfig, {
     //   inject: true
     // }),
     new FriendlyErrorsPlugin(),
-    new VueLoaderPlugin(),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    })
+    new VueLoaderPlugin()
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery',
+    //   'window.jQuery': 'jquery'
+    // })
   ].concat(utils.htmlPlugin())
 });
