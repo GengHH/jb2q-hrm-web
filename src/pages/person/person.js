@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-02 18:47:46
+ * @LastEditTime: 2021-03-03 18:10:08
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -60,17 +60,20 @@ if (isEmpty(store.getters.zjhm)) {
   //获取个人登录信息
   store.dispatch('person/get_personInfo');
 }
+//初始化字典表;
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
 
 window.setTimeout(function() {
-  console.log('定时器');
-}, 5000);
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  store,
-  router,
-  //render: h => h(App)
-  template: '<App/>',
-  components: { App }
-});
+  //console.log('定时器-模拟能获取人员的登录信息');
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    store,
+    router,
+    //render: h => h(App)
+    template: '<App/>',
+    components: { App }
+  });
+}, 1000);

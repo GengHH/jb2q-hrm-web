@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-05 14:00:10
+ * @LastEditTime: 2021-03-03 17:39:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -11,6 +11,7 @@
  * 定义Mock.mock()的请求拦截
  */
 import Mock from 'mockjs';
+import '../commonMock';
 
 const getSiteInfo = () => {
   return {

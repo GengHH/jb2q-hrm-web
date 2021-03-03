@@ -106,7 +106,6 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
-import locale from 'element-ui/lib/locale';
 export default {
   name: 'indexApp',
   components: {

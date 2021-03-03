@@ -2,11 +2,16 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-14 17:59:28
+ * @LastEditTime: 2021-03-03 16:22:46
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
 const dic = {
+  //是否
+  YESNO: [
+    { value: '0', label: '否' },
+    { value: '1', label: '是' }
+  ],
   //区县
   GGJBXX_QX: [
     { value: '01', label: '黄浦' },

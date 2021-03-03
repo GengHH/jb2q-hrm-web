@@ -11,11 +11,13 @@
     >
       <el-col :span="12" class="form-item-left">
         <el-form-item required>
-          <pl-input
+          <pl-select
             v-model="personInfo.zjlxId"
             label="证件类型"
+            :optionData="dicZjlx"
             :disabled="true"
-          ></pl-input>
+          >
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
@@ -39,11 +41,13 @@
       </el-col>
       <el-col :span="12" class="form-item-right">
         <el-form-item required>
-          <pl-input
+          <pl-select
             v-model="personInfo.sexId"
             label="性别"
+            :optionData="dicXb"
             :disabled="true"
-          ></pl-input>
+          >
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
@@ -67,13 +71,6 @@
             :optionData="dicQx"
             label="居住区域"
           >
-            <!-- <el-option
-              v-for="item in dicQx"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option> -->
           </pl-select>
         </el-form-item>
       </el-col>
@@ -85,8 +82,6 @@
             :optionData="dicStreet"
             class="w-select"
           >
-            <!-- <el-option label="区域一" value="1309"></el-option>
-            <el-option label="区域二" value="1310"></el-option> -->
           </pl-select>
         </el-form-item>
       </el-col>
@@ -164,10 +159,19 @@ export default {
         ]
       },
       dicQx: [],
+      dicXb: [
+        { value: '1', label: '男' },
+        { value: '2', label: '女' }
+      ],
+      dicZjlx: [
+        { value: '01', label: '身份证' },
+        { value: '02', label: '护照' }
+      ],
       dicStreet: [
         { value: '1309', label: '区域一' },
         { value: '1310', label: '区域二' }
       ],
+      //dicStreet: this.$store.getters['dictionary/yesno'],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
