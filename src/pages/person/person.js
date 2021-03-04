@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-03 18:10:08
+ * @LastEditTime: 2021-03-04 16:38:52
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -50,7 +50,7 @@ if (config.mock) {
   //console.log('++++++++++成功引入mock数据+++++++');
 }
 //判断是不是已经登录
-var isEmpty = function(obj) {
+let isEmpty = function(obj) {
   if (obj === null || obj === undefined || obj.length === 0) {
     return true;
   }

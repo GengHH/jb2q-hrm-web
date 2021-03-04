@@ -203,8 +203,10 @@ export default {
       //   .catch(err => {
       //     throw new Error('调用API失败' + err);
       //   });
+      //window.location.href =
+      //  'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://10.8.243.191:9083/ggzp-zzjb-shrs/loginController/ywtb-index';
       window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://10.8.243.191:9083/ggzp-zzjb-shrs/loginController/ywtb-index';
+        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     corpSignIn() {
       this.$alert('单位登录暂时未开放');
