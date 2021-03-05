@@ -5,13 +5,13 @@
       <el-button @click="exportPdf()">导出PDF</el-button> -->
       <div id="baseInfo" class="title-style font-or font-bold">
         基本信息
-        <el-button
+        <!-- <el-button
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
           @click="dialog1 = true"
           >编辑</el-button
-        >
+        > -->
       </div>
       <div class="column">
         <p class="font-size24">
@@ -38,11 +38,11 @@
           type="edit"
           icon="el-icon-edit"
           @click="dialog1 = true"
-          >编辑</el-button
+          >添加</el-button
         >
       </div>
       <div class="column">
-        <p class="fourteen-opacity mat-15 bg-gray line40">
+        <!-- <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item"
             ><i class="icon iconfont">&#xe63d;</i> UI设计师</span
           >
@@ -56,7 +56,7 @@
           <span class="intention-item"
             ><i class="icon iconfont">&#xe643;</i> 上海</span
           >
-        </p>
+        </p> -->
       </div>
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
@@ -72,7 +72,7 @@
         <el-card
           class="box-card bg-gray"
           shadow="hover"
-          v-for="(workCarditem, index) in laborExp"
+          v-for="(workCarditem, index) in resume.laborExp"
           :key="index"
         >
           <div slot="header" class="clearfix">
@@ -133,7 +133,7 @@
             </el-col>
           </el-row>
           <p class="font14-or line40">工作内容：</p>
-          <p class="fourteen-opacity line30">
+          <!-- <p class="fourteen-opacity line30">
             1、负责iOS平台下的APP应用开发、整体构架设计；
           </p>
           <p class="fourteen-opacity line30">
@@ -147,7 +147,7 @@
           </p>
           <p class="fourteen-opacity line30">
             5、根据开发过程中的体验对产品提出改进意见。
-          </p>
+          </p> -->
           <p
             class="fourteen-opacity line30"
             v-for="(expItem, expIndex) in workExpView[index]"
@@ -171,7 +171,7 @@
         <el-card
           class="box-card bg-gray"
           shadow="hover"
-          v-for="(eduCarditem, index) in eduExp"
+          v-for="(eduCarditem, index) in resume.eduExp"
           :key="index"
         >
           <div slot="header" class="clearfix">
@@ -266,7 +266,7 @@
       <div class="column">
         <span
           class="tag-card"
-          v-for="(skillItem, index) in psnlSkillcert"
+          v-for="(skillItem, index) in resume.psnlSkillcert"
           :key="index"
         >
           <el-tag
@@ -293,12 +293,12 @@
         >
       </div>
       <div class="column">
-        <p class="font-fourteen line30 t-indent">
+        <!-- <p class="font-fourteen line30 t-indent">
           本人性格内敛、稳重、有活力，待人真诚;工作认真负责，积极主动，能吃苦耐劳，勇于承受压力，勇于创新;有很强的组织能力和团队协作精神，具有较强的适应能力;纪律性强，工作积极配合;意志坚强，具有较强的无私奉献精神。
         </p>
         <p class="font-fourteen line30 t-indent">
           本人是设计专业应届毕业生，熟练手绘，熟悉rhino.photoshop等设计软件，熟练办公软件。我虽还未毕业，但我年轻，意志坚强，有能力完成任何工作。尽管我还缺乏一定的经验，但我会用时间和汗水去弥补。请领导放心，我一定会保质保量完成各项工作任务。
-        </p>
+        </p> -->
         <p
           class="font-fourteen line30 t-indent"
           v-for="(item, index) in evaluateView"
@@ -330,7 +330,7 @@
         <el-form-item label="意向职位分类" :label-width="formLabelWidth">
           <el-select v-model="workNature" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option7"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -341,7 +341,7 @@
         <el-form-item label="意向行业" :label-width="formLabelWidth">
           <el-select v-model="positionName" placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="item in dicOptions.option8"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -778,7 +778,8 @@ import {
   getQx,
   getLanguageType,
   getLanguageLevel,
-  getRecruitEdu
+  getRecruitEdu,
+  getPsnlResume
 } from '@/api/common';
 /**
  * 简历信息的基本模板
@@ -789,34 +790,30 @@ export default {
     return {
       editStatus: false,
       editItemIdex: 0,
-      value: '选项1',
       labelPosition: 'right',
       formLabelWidth: '120px',
-      // baseInfoForm: {
-      //   applyForId: '',
-      //   resumeId: '1',
-      //   pid: '201906186258910',
-      //   xm: '董晓鑫',
-      //   age: 24,
-      //   sex: '男',
-      //   contactPhone: '13122272095',
-      //   livingAddress: '宝山淞南镇新梅松南苑11号楼1201'
-      // },
-      // jobIntentionForm: {
-      //   workNature: '01',
-      //   positionName: '1501',
-      //   salaryScope: '10000-50000',
-      //   workArea: '05',
-      //   positionLike: '01-04'
-      // },
+      applyForId: '',
+      resumeId: '',
+      pid: '',
+      xm: '',
+      age: 0,
+      sex: '',
+      contactPhone: '',
+      livingAddress: '',
+      workNature: '',
+      positionName: '',
+      salaryScopeUp: '',
+      salaryScopeDown: '',
+      workArea: '',
+      positionLike: '',
       workExperienceForm: {
-        expId: '2',
+        expId: '',
         pid: '',
-        corpName: '万达信息股份有限公司',
-        positionName: '开发',
-        entryDate: '20190611',
+        corpName: '',
+        positionName: '',
+        entryDate: '',
         quitDate: '',
-        workDescribe: '搬砖'
+        workDescribe: ''
       },
       educationExperienceForm: {
         eduId: '',
@@ -836,14 +833,15 @@ export default {
         languageLevel: ''
       },
       skillsCertificateForm: {
-        certId: '3',
+        certId: '',
         pid: '',
-        certName: '打铁',
-        certLevel: '六级',
+        certName: '',
+        certLevel: '',
         receiveTime: ''
       },
       selfEvaluationForm: {
-        evaluate: 'hahah！夏尔&#10;\n你好！&#13;再见！'
+        //evaluate: 'hahah！夏尔&#10;\n你好！&#13;再见！'
+        evaluate: ''
       },
       rules: {
         languageRules: {
@@ -861,7 +859,6 @@ export default {
           ]
         }
       },
-
       baseInfoDialog: false,
       dialogFormVisible2: false,
       dialog1: false,
@@ -870,122 +867,46 @@ export default {
       dialog4: false,
       dialog5: false,
       dialog6: false,
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        }
-      ],
       dicOptions: {
+        //区县
         option1: [],
+        //工作性质
         option2: [],
+        //
         option3: [],
+        //
         option4: [],
+        //
         option5: [],
-        option6: []
+        //
+        option6: [],
+        //职位
+        option7: [],
+        //行业
+        option8: []
       },
-      applyForId: '',
-      resumeId: '1',
-      pid: '201906186258910',
-      xm: '董晓鑫',
-      age: 24,
-      sex: '男',
-      contactPhone: '13122272095',
-      livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
-      workNature: '01',
-      positionName: '1501',
-      salaryScopeUp: '10000',
-      salaryScopeDown: '50000',
-      workArea: '05',
-      positionLike: '01-04',
-      laborExp: [
-        {
-          expId: '1',
-          pid: '',
-          corpName: '万达信息股份有限公司',
-          positionName: '开发',
-          entryDate: '20190611',
-          quitDate: '',
-          workDescribe: '搬砖'
-        },
-        {
-          expId: '2',
-          pid: '',
-          corpName: '北京电影学院',
-          positionName: '表演',
-          entryDate: '20110601',
-          quitDate: '20080101',
-          workDescribe: '表演\n唱歌\n跳舞'
-        }
-      ],
-      eduExp: [
-        {
-          eduId: '3',
-          pid: '',
-          collegesName: '复旦大学',
-          majorName: '英语',
-          eduLevel: '大学本科',
-          admissionDate: '20140910',
-          graduateDate: '20180630',
-          sourceOuter: '1',
-          certNum: ''
-        }
-      ],
-      psnlLanguage: [
-        {
-          languageId: '1',
-          pid: '',
-          languageType: '01',
-          languageLevel: '1'
-        },
-        {
-          languageId: '2',
-          pid: '',
-          languageType: '02',
-          languageLevel: '2'
-        },
-        {
-          languageId: '3',
-          pid: '',
-          languageType: '03',
-          languageLevel: '3'
-        }
-      ],
-      psnlSkillcert: [
-        {
-          certId: '1',
-          pid: '',
-          certName: '信息系统项目管理师证书',
-          certLevel: '一级',
-          receiveTime: '2020-10-11'
-        },
-        {
-          certId: '2',
-          pid: '',
-          certName: '计算机二级国家证书',
-          certLevel: '二级',
-          receiveTime: '2019-05-09'
-        },
-        {
-          certId: '3',
-          pid: '',
-          certName: 'CISP注册信息安全专业人员',
-          certLevel: '三级',
-          receiveTime: '2020-01-01'
-        },
-        {
-          certId: '4',
-          pid: '',
-          certName: '英语专业等级证书',
-          certLevel: '六级',
-          receiveTime: '2018-09-19'
-        }
-      ],
-      evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
+      resume: {
+        applyForId: '',
+        resumeId: '1',
+        pid: '201906186258910',
+        xm: '董晓鑫',
+        age: 24,
+        sex: '男',
+        contactPhone: '13122272095',
+        livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
+        workNature: '01',
+        positionName: '1501',
+        salaryScopeUp: '10000',
+        salaryScopeDown: '50000',
+        workArea: '05',
+        positionLike: '01-04',
+        laborExp: [],
+        eduExp: [],
+        psnlLanguage: [],
+        psnlSkillcert: [],
+        //evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
+        evaluate: ''
+      }
     };
   },
   computed: {
@@ -995,8 +916,8 @@ export default {
     },
     //组合成语言技能tags
     psnlLanguageTags: function() {
-      if (this.psnlLanguage && this.psnlLanguage.length) {
-        return this.psnlLanguage.map(obj => {
+      if (this.resume.psnlLanguage && this.resume.psnlLanguage.length) {
+        return this.resume.psnlLanguage.map(obj => {
           let newObj = [];
           let _obj1 = this.dicOptions.option5.find(item => {
             return item.value === obj.languageType;
@@ -1021,8 +942,8 @@ export default {
       }
     },
     workExpView: function() {
-      if (this.laborExp.length) {
-        return this.laborExp.map(function(itme) {
+      if (this.resume.laborExp.length) {
+        return this.resume.laborExp.map(function(itme) {
           return itme.workDescribe.split('\n');
         });
       } else {
@@ -1063,14 +984,31 @@ export default {
     //删除外语能力tag
     languageTagClose(index) {
       // TODO 删除后台的数据
-      this.$delete(this.psnlLanguage, index);
+      this.$delete(this.resume.psnlLanguage, index);
     },
     //删除技能证书tag
     skillTagClose(index) {
       // TODO 删除后台的数据
-      this.$delete(this.psnlSkillcert, index);
+      this.$delete(this.resume.psnlSkillcert, index);
     },
-    getDicData() {
+    //初始化加载个人简历信息
+    loadPsnlResume() {
+      let that = this;
+      getPsnlResume()
+        .then(function(res) {
+          console.log('个人简历信息', res);
+          if (res.status == 200) {
+            that.$set(that, 'resume', res.result.data);
+          }
+        })
+        .catch(function(err) {
+          that.$message({
+            message: '缺失简历信息' + err,
+            type: 'error'
+          });
+        });
+    },
+    loadDicData() {
       let that = this;
       Promise.all([
         getQx(),
@@ -1088,9 +1026,8 @@ export default {
           that.$set(that.dicOptions, 'option6', results[4].dicData);
         })
         .catch(function(err) {
-          console.log(err);
           this.$message({
-            message: '缺失字典信息',
+            message: '缺失字典信息' + err,
             type: 'error'
           });
         });
@@ -1107,7 +1044,7 @@ export default {
           switch (formName) {
             case 'workExperienceForm':
               if (
-                this.laborExp.find(
+                this.resume.laborExp.find(
                   element =>
                     element.corpName === this.workExperienceForm.corpName
                 )
@@ -1118,21 +1055,21 @@ export default {
                 });
                 return;
               }
-              this.laborExp.push(this.$refs[formName].model);
+              this.resume.laborExp.push(this.$refs[formName].model);
               break;
 
             case 'educationExperienceForm':
               this.dialog3 = false;
               if (
                 this.editStatus ||
-                this.eduExp.find(
+                this.resume.eduExp.find(
                   element =>
                     element.collegesName ===
                     this.educationExperienceForm.collegesName
                 )
               ) {
                 this.editStatus
-                  ? (this.eduExp[this.editItemIdex] = JSON.parse(
+                  ? (this.resume.eduExp[this.editItemIdex] = JSON.parse(
                       JSON.stringify(this.$refs[formName].model)
                     ))
                   : this.$message({
@@ -1141,12 +1078,12 @@ export default {
                     });
                 return;
               }
-              this.eduExp.push(this.$refs[formName].model);
+              this.resume.eduExp.push(this.$refs[formName].model);
               break;
 
             case 'languageSkillsForm':
               if (
-                this.psnlLanguage.find(
+                this.resume.psnlLanguage.find(
                   element =>
                     element.languageType ===
                     this.languageSkillsForm.languageType
@@ -1158,12 +1095,12 @@ export default {
                 });
                 return;
               }
-              this.psnlLanguage.push(this.$refs[formName].model);
+              this.resume.psnlLanguage.push(this.$refs[formName].model);
               break;
 
             case 'skillsCertificateForm':
               if (
-                this.psnlSkillcert.find(
+                this.resume.psnlSkillcert.find(
                   element =>
                     element.certName === this.skillsCertificateForm.certName
                 )
@@ -1174,7 +1111,7 @@ export default {
                 });
                 return;
               }
-              this.psnlSkillcert.push(this.$refs[formName].model);
+              this.resume.psnlSkillcert.push(this.$refs[formName].model);
               break;
           }
         }
@@ -1190,13 +1127,13 @@ export default {
           case 'dialog2':
             this.dialog2 = true;
             this.workExperienceForm = JSON.parse(
-              JSON.stringify(this.laborExp[index])
+              JSON.stringify(this.resume.laborExp[index])
             );
             break;
           case 'dialog3':
             this.dialog3 = true;
             this.educationExperienceForm = JSON.parse(
-              JSON.stringify(this.eduExp[index])
+              JSON.stringify(this.resume.eduExp[index])
             );
             break;
         }
@@ -1212,7 +1149,7 @@ export default {
             this.$confirm('确认删除此项工作经历？')
               .then(() => {
                 // TODO
-                this.$delete(this.laborExp, index);
+                this.$delete(this.resume.laborExp, index);
               })
               .catch(err => {
                 console.log(err);
@@ -1222,7 +1159,7 @@ export default {
             this.$confirm('确认删除此项教育经历？')
               .then(() => {
                 // TODO
-                this.$delete(this.eduExp, index);
+                this.$delete(this.resume.eduExp, index);
               })
               .catch(err => {
                 console.log(err);
@@ -1238,7 +1175,8 @@ export default {
     }
   },
   created() {
-    this.getDicData();
+    this.loadDicData();
+    this.loadPsnlResume();
   }
 };
 </script>

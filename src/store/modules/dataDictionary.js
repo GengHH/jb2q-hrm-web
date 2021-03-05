@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-03 18:05:53
+ * @LastEditTime: 2021-03-05 18:16:33
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */

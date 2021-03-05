@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-02 18:46:31
+ * @LastEditTime: 2021-03-05 17:32:33
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -71,17 +71,6 @@ export default {
       //   'nvaText',
       //   this.$store.getters['person/username']
       // );
-    },
-    test() {
-      this.axios
-        .get('http://api.wpbom.com/api/neran.php')
-        .then(res => {
-          this.$set(this.obj, 'siet', res.data);
-          console.log(this.$data);
-        })
-        .catch(err => {
-          throw new Error('调用API失败' + err);
-        });
     },
     testRoute() {}
   },

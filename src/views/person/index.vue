@@ -53,8 +53,8 @@
       <el-col :span="12" class="form-item-left">
         <el-form-item required>
           <pl-input
-            v-model="personInfo.pid"
-            label="年龄"
+            v-model="personInfo.birthDate"
+            label="出生日期"
             :disabled="true"
           ></pl-input>
         </el-form-item>
@@ -167,11 +167,11 @@ export default {
         { value: '01', label: '身份证' },
         { value: '02', label: '护照' }
       ],
-      dicStreet: [
-        { value: '1309', label: '区域一' },
-        { value: '1310', label: '区域二' }
-      ],
-      //dicStreet: this.$store.getters['dictionary/yesno'],
+      // dicStreet: [
+      //   { value: '1309', label: '区域一' },
+      //   { value: '1310', label: '区域二' }
+      // ],
+      dicStreet: this.$store.getters['dictionary/yesno'],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',

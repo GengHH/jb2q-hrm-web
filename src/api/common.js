@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-03 15:58:05
+ * @LastEditTime: 2021-03-05 14:01:24
  * @Description: 各模块都可调用的功能接口，如：获取字典表
  * @FilePath: \jb2q-hrm-web\src\api\common.js
  */
@@ -33,11 +33,15 @@ const getRecruitEdu = () => getAction(basePath + '/common/dic/getRecruitEdu');
 //证件类型
 //const getRecruitEdu = () => getAction(basePath + '/common/dic/getRecruitEdu');
 
+const getPsnlResume = params =>
+  getAction(basePath + '/person/resume/loadPsnlResume', params);
+
 export {
   queryDicData,
   getGzxz,
   getQx,
   getLanguageType,
   getLanguageLevel,
-  getRecruitEdu
+  getRecruitEdu,
+  getPsnlResume
 };

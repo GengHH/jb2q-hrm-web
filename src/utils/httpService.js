@@ -11,9 +11,9 @@ import { Notification } from 'element-ui';
  * 3.导出原生的Axios
  */
 
-//let apiBaseUrl = 'localhost/pers-api'; //  指向---->'http://10.5.102.171:8080/ggzp-sjapp-shrs';
-//let apiBaseUrl = 'localhost/corp-api'; //  指向---->'http://10.5.102.171:8080/ggzp-zzjb-shrs';
-//let apiBaseUrl = 'localhost/admin-api'; //  指向---->'http://10.5.102.171:8080/ggzp-ywjb-shrs';
+//let apiBaseUrl = 'localhost/ggzp-sjapp-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-sjapp-shrs';
+//let apiBaseUrl = 'localhost/ggzp-zzjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-zzjb-shrs';
+//let apiBaseUrl = 'localhost/ggzp-ywjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-ywjb-shrs';
 
 //let apiBaseUrl = 'localhost/new-pers-api'; //  指向---->'http://10.5.102.154:8080/ggzp-sjapp-shrs';
 //let apiBaseUrl = 'localhost/new-corp-api'; //  指向---->'http://10.5.102.154:8080/ggzp-zzjb-shrs';
