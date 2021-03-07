@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-03 10:21:52
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-07 22:13:54
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -29,4 +29,26 @@ const updatePersonBaseInfo = params =>
 const queryJobs = params =>
   postAction(basePath + '/person/info/queryJobs', params);
 
-export { getLogonUser, getPersonBaseInfo, updatePersonBaseInfo, queryJobs };
+//加载个人权限信息
+const loadPsnlPermissionsInfo = params =>
+  postAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
+//新增或修改个人技能证书信息
+const saveSkillCert = params =>
+  postAction(basePath + '/person/info/saveSkillCert', params);
+//新增或修改个人语言能力信息
+const saveLanguageLevel = params =>
+  postAction(basePath + '/person/info/saveLanguageLevel', params);
+//新增或修改个人劳动经历信息
+const saveLaborExp = params =>
+  postAction(basePath + '/person/info/saveLaborExp', params);
+
+export {
+  getLogonUser,
+  getPersonBaseInfo,
+  updatePersonBaseInfo,
+  loadPsnlPermissionsInfo,
+  saveSkillCert,
+  saveLanguageLevel,
+  saveLaborExp,
+  queryJobs
+};
