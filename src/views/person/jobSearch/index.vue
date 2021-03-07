@@ -80,7 +80,7 @@
           </el-col>
           <el-col :span="2">
             <div class="grid-content bg-purple more-ico">
-              <span>更多</span> 
+              <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
             </div>
           </el-col>
