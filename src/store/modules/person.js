@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-03 09:58:08
+ * @LastEditTime: 2021-03-08 19:03:04
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -77,10 +77,11 @@ const mutations = {
   }
 };
 const getters = {
-  username(state) {
-    return state.name;
-  }
-  //username: state => state.name
+  // username(state) {
+  //   return state.name;
+  // }
+  username: state => state.name,
+  pid: state => state.pid
 };
 const actions = {
   //用户登录

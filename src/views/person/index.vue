@@ -171,7 +171,6 @@ export default {
       //   { value: '1309', label: '区域一' },
       //   { value: '1310', label: '区域二' }
       // ],
-      dicStreet: this.$store.getters['dictionary/yesno'],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -179,6 +178,15 @@ export default {
     };
   },
   computed: {
+    dicStreet: function() {
+      let that = this;
+      // if (this.$store.getters['dictionary/orgin']) {
+      //   return this.$store.getters['dictionary/orgin'].find(function(i) {
+      //     return i.level === that.personInfo.livingArea;
+      //   });
+      // }
+      return [];
+    },
     jobFaieList: function() {
       return this.showList ? this.showList.slice(0, 3) : [];
     }
@@ -195,7 +203,10 @@ export default {
     },
     async getPersonInfo() {
       try {
-        let result = await getPersonBaseInfo({ pid: '201906186258910' });
+        // TODO 更换pid this.$store.getters['person/pid']
+        let result = await getPersonBaseInfo({
+          pid: this.$store.getters['person/pid'] || '201906186258910'
+        });
         console.log('result', result);
         if (result.status === 200)
           this.$set(this, 'personInfo', result.result.data);
@@ -221,7 +232,7 @@ export default {
             done();
             this.$message({
               showClose: true,
-              message: 'submit successful!',
+              message: '保存成功!',
               type: 'success'
             });
           } else {

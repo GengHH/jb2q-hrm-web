@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-05 18:17:02
+ * @LastEditTime: 2021-03-08 20:27:47
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -19,15 +19,34 @@ const successData = {
   message: '',
   result: {}
 };
-//模拟字典表数据
-const dicMockData = function(req) {
-  //console.log(req.body);
+//模拟字典表数据(post)
+const dicMockDataPost = function(req) {
+  //console.log(req);
   const { code } = JSON.parse(req.body);
   //const code = req.body;
   console.log('mock 拦截 dic参数', code);
   if (code) {
     return {
       //dicData: dic[code]
+      status: 200,
+      message: '',
+      result: dic[code]
+    };
+  }
+  return {
+    status: 500,
+    message: '',
+    result: []
+  };
+};
+//模拟字典表数据(get)
+const dicMockData = function(options) {
+  let url = options.url;
+  let params = url.split('?').length > 1 ? url.split('?')[1] : '';
+  let code = params.split('=')[1];
+  console.log('mock 拦截 dic参数', code);
+  if (code) {
+    return {
       status: 200,
       message: '',
       result: dic[code]
@@ -171,7 +190,7 @@ Mock.mock(basePath + '/common/dic/getRecruitEdu', 'get', {
   dicData: dic.RECRUIT_EDU
 });
 //按需获取需要的字典表
-Mock.mock(basePath + '/dic/getDicJson', 'post', dicMockData);
+Mock.mock(RegExp(basePath + '/dic/getDicJson' + '.*'), 'get', dicMockData);
 
 //获取个人的基本简历信息
 Mock.mock(basePath + '/person/resume/loadPsnlResume', 'get', resumeMockData);

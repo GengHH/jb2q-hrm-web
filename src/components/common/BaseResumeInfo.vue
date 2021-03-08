@@ -15,19 +15,33 @@
       </div>
       <div class="column">
         <p class="font-size24">
-          {{ xm }} <span class="sixteen-opacity">{{ age }}岁</span>
-          <i class="el-icon-male sixteen-opacity"></i>
+          {{ resume.xm }}
+          <span class="sixteen-opacity">{{ resume.age }}岁</span>
+          <i
+            class="el-icon-male sixteen-opacity"
+            v-if="resume.sex === '男'"
+          ></i>
+          <i class="el-icon-female sixteen-opacity" v-else></i>
         </p>
         <p class="fourteen-opacity mat-15">
-          <span><i class="icon iconfont">&#xe63d;</i> 2018年毕业</span>
+          <span
+            ><i class="icon iconfont">&#xe63d;</i>
+            {{ resume.contactPhone }}年毕业</span
+          >
           <el-divider direction="vertical"></el-divider>
-          <span><i class="icon iconfont">&#xe641;</i> 本科学历</span>
+          <span
+            ><i class="icon iconfont">&#xe641;</i>
+            {{ resume.contactPhone }}</span
+          >
           <el-divider direction="vertical"></el-divider>
-          <span><i class="icon iconfont">&#xe63f;</i> {{ contactPhone }}</span>
+          <span
+            ><i class="icon iconfont">&#xe63f;</i>
+            {{ resume.contactPhone }}</span
+          >
           <el-divider direction="vertical"></el-divider>
           <span
             ><i class="icon iconfont">&#xe643;</i>
-            上海市静安区某某街道18号</span
+            {{ resume.livingAddress }}</span
           >
         </p>
       </div>
@@ -37,26 +51,26 @@
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
-          @click="dialog1 = true"
-          >添加</el-button
+          @click="editCard('dialog1', 1)"
+          >编辑</el-button
         >
       </div>
       <div class="column">
-        <!-- <p class="fourteen-opacity mat-15 bg-gray line40">
+        <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe63d;</i> UI设计师</span
+            ><i class="icon iconfont">&#xe63d;</i> {{ positionNameText }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe641;</i> 8k-15k</span
+            ><i class="icon iconfont">&#xe641;</i> {{ salaryScope }}</span
           >
           <span class="intention-item"
             ><i class="icon iconfont">&#xe63f;</i>
-            互联网-计算机软件-计算机多媒体服务-电子商务...
+            {{ salaryScope }}互联网-计算机软件-计算机多媒体服务-电子商务...
           </span>
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe643;</i> 上海</span
+            ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
           >
-        </p> -->
+        </p>
       </div>
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
@@ -323,12 +337,13 @@
       </div>
       <el-form
         class="width70"
+        :model="jobIntentionForm"
         ref="jobIntentionForm"
         :label-position="labelPosition"
         :rules="rules"
       >
         <el-form-item label="意向职位分类" :label-width="formLabelWidth">
-          <el-select v-model="workNature" placeholder="请选择">
+          <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option7"
               :key="item.value"
@@ -339,7 +354,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="意向行业" :label-width="formLabelWidth">
-          <el-select v-model="positionName" placeholder="请选择">
+          <el-select
+            v-model="jobIntentionForm.positionName"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option8"
               :key="item.value"
@@ -351,20 +369,23 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="薪酬上线" :label-width="formLabelWidth">
+            <el-form-item label="薪酬下线" :label-width="formLabelWidth">
               <el-input
-                v-model="salaryScopeUp"
+                v-model="jobIntentionForm.salaryScopeDown"
                 autocomplete="off"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
-            ><el-form-item label="薪酬下线" :label-width="formLabelWidth">
-              <el-input v-model="salaryScopeDown" autocomplete="off"></el-input>
+            ><el-form-item label="薪酬上线" :label-width="formLabelWidth">
+              <el-input
+                v-model="jobIntentionForm.salaryScopeUp"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="意向工作区域" :label-width="formLabelWidth">
-          <el-select v-model="workArea" placeholder="请选择">
+          <el-select v-model="jobIntentionForm.workArea" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option1"
               :key="item.value"
@@ -375,7 +396,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="意向工作性质" :label-width="formLabelWidth">
-          <el-select v-model="positionLike" placeholder="请选择">
+          <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option2"
               :key="item.value"
@@ -781,6 +802,8 @@ import {
   getRecruitEdu,
   getPsnlResume
 } from '@/api/common';
+import { getPersonBaseInfo } from '@/api/personApi';
+import { getDicText } from '@/utils/index';
 /**
  * 简历信息的基本模板
  */
@@ -802,10 +825,18 @@ export default {
       livingAddress: '',
       workNature: '',
       positionName: '',
-      salaryScopeUp: '',
-      salaryScopeDown: '',
+      //salaryScopeUp: '',
+      //salaryScopeDown: '',
       workArea: '',
       positionLike: '',
+      jobIntentionForm: {
+        workNature: '',
+        positionName: '',
+        workArea: '',
+        salaryScopeUp: '',
+        salaryScopeDown: '',
+        positionLike: ''
+      },
       workExperienceForm: {
         expId: '',
         pid: '',
@@ -886,33 +917,56 @@ export default {
         option8: []
       },
       resume: {
-        applyForId: '',
-        resumeId: '1',
-        pid: '201906186258910',
-        xm: '董晓鑫',
-        age: 24,
-        sex: '男',
-        contactPhone: '13122272095',
-        livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
-        workNature: '01',
-        positionName: '1501',
-        salaryScopeUp: '10000',
-        salaryScopeDown: '50000',
-        workArea: '05',
-        positionLike: '01-04',
-        laborExp: [],
-        eduExp: [],
-        psnlLanguage: [],
-        psnlSkillcert: [],
-        //evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
-        evaluate: ''
+        // applyForId: '',
+        // resumeId: '1',
+        // pid: '201906186258910',
+        // xm: '董晓鑫',
+        // age: 24,
+        // sex: '男',
+        // contactPhone: '13122272095',
+        // livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
+        // workNature: '01',
+        // positionName: '1506'
+        // salaryScopeUp: '10000',
+        // salaryScopeDown: '50000',
+        // workArea: '05',
+        // positionLike: '01-04',
+        // laborExp: [],
+        // eduExp: [],
+        // psnlLanguage: [],
+        // psnlSkillcert: [],
+        // //evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
+        // evaluate: ''
       }
     };
   },
   computed: {
+    workAreaText: function() {
+      if (this.$store.getters['dictionary/ggjbxx_qx'] && this.resume.workArea) {
+        return getDicText(
+          this.$store.getters['dictionary/ggjbxx_qx'],
+          'GGJBXX_QX',
+          this.resume.workArea
+        );
+      }
+      return this.resume.workArea;
+    },
     //薪资范围
     salaryScope: function() {
-      return this.salaryScopeUp + '-' + this.salaryScopeDown;
+      //return this.resume.salaryScopeUp + '-' + this.resume.salaryScopeDown;
+      return this.resume.salaryScope;
+    },
+    positionNameText: function() {
+      let that = this;
+      if (this.$store.getters['dictionary/recruit_position_s_type']) {
+        let _dic = this.$store.getters[
+          'dictionary/recruit_position_s_type'
+        ].find(function(i) {
+          return i.value === that.resume.positionName;
+        });
+        return _dic ? _dic.label : '';
+      }
+      return this.resume.positionName;
     },
     //组合成语言技能tags
     psnlLanguageTags: function() {
@@ -990,6 +1044,18 @@ export default {
     skillTagClose(index) {
       // TODO 删除后台的数据
       this.$delete(this.resume.psnlSkillcert, index);
+    },
+    //初始化加载个人基本信息
+    async getPersonInfo() {
+      try {
+        // TODO 更换pid
+        let result = await getPersonBaseInfo({ pid: '201906186258910' });
+        console.log('result', result);
+        if (result.status === 200)
+          this.$set(this, 'personInfo', result.result.data);
+      } catch (error) {
+        console.log(error);
+      }
     },
     //初始化加载个人简历信息
     loadPsnlResume() {
@@ -1119,11 +1185,22 @@ export default {
     },
     dialogClear(formName) {
       this.$refs[formName].resetFields();
-      console.log(this.$refs[formName].resetFields);
+      console.log(this.$refs[formName]);
     },
     editCard(dialog, index) {
       if (dialog) {
         switch (dialog) {
+          case 'dialog1':
+            this.dialog1 = true;
+            this.jobIntentionForm = {
+              contactPhone: this.resume.contactPhone,
+              livingAddress: this.resume.livingAddress,
+              positionName: this.resume.livingAddress,
+              workNature: this.resume.livingAddress,
+              salaryScopeDown: this.resume.salaryScope,
+              salaryScopeUp: this.resume.salaryScope
+            };
+            break;
           case 'dialog2':
             this.dialog2 = true;
             this.workExperienceForm = JSON.parse(

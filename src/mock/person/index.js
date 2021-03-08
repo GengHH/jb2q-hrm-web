@@ -3,8 +3,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-07 23:05:29
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-08 20:24:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -96,9 +96,13 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   };
 });
 
-Mock.mock(basePath + '/person/info/loadPersonInfo', 'get', function(options) {
-  return getPersonbaseInfo(options);
-});
+Mock.mock(
+  RegExp(basePath + '/person/info/loadPersonInfo' + '.*'),
+  'get',
+  function(options) {
+    return getPersonbaseInfo(options);
+  }
+);
 Mock.mock(basePath + '/person/info/loadPsnlPermissionsInfo', 'get', function(
   options
 ) {

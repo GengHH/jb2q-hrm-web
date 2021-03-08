@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-04 16:38:52
+ * @LastEditTime: 2021-03-08 19:15:15
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -63,6 +63,21 @@ if (isEmpty(store.getters.zjhm)) {
 //初始化字典表;
 if (isEmpty(store.getters['dictionary/yesno'])) {
   store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+if (isEmpty(store.getters['dictionary/orgin'])) {
+  store.dispatch('dictionary/init_Dictionary', 'ORGIN');
 }
 
 window.setTimeout(function() {
