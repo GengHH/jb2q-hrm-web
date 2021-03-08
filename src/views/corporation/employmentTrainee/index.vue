@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-09 07:45:15
+ * @LastEditTime: 2021-03-09 07:58:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\employmentTrainee\index.vue
 -->
@@ -62,7 +62,7 @@
           </el-col>
           <el-col :span="20">
             <!-- <el-form-item label="" required> -->
-            <el-radio-group v-model="workNature" size="medium">
+            <el-radio-group v-model="workIndustry" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持"
                 >销售/客服/技术支持</el-radio-button
@@ -122,7 +122,8 @@
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="place-holder">placeHolder</div>
+            <div class="grid-content bg-purple">其他选项:</div>
+            <!-- <div class="place-holder">其他选项</div> -->
           </el-col>
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
@@ -222,11 +223,12 @@ export default {
   data() {
     return {
       positionId: '4',
-      positionName: '销售/客服/技术支持',
+      positionName: '不限',
       salaryScope: '',
       workArea: '',
-      workNature: '',
-      eduRequire: '08',
+      workIndustry: '不限',
+      workNature: '不限',
+      eduRequire: '',
       recruitNum: '',
       corpName: '上海新移力自动化科技有限公司',
       cid: '201002025628331',
