@@ -180,11 +180,16 @@ export default {
   computed: {
     dicStreet: function() {
       let that = this;
-      // if (this.$store.getters['dictionary/orgin']) {
-      //   return this.$store.getters['dictionary/orgin'].find(function(i) {
-      //     return i.level === that.personInfo.livingArea;
-      //   });
-      // }
+      if (this.$store.getters['dictionary/orgin']) {
+        let array = this.$store.getters['dictionary/orgin'];
+        let newArray = []; //查找符合条件值并存入新数组
+        for (let i in array) {
+          if (array[i].level === that.personInfo.livingArea) {
+            newArray[newArray.length] = array[i];
+          }
+        }
+        return newArray;
+      }
       return [];
     },
     jobFaieList: function() {

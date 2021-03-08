@@ -90,7 +90,7 @@
             <div class="grid-content bg-purple">工作性质：</div>
           </el-col>
           <el-col :span="22">
-            <div class="grid-content bg-purple-light">
+            <!-- <div class="grid-content bg-purple-light">
               <div class="radio-span">
                 <span class="active-span">不限</span>
                 <span>国有</span>
@@ -98,7 +98,7 @@
                 <span>民营</span>
                 <span>股份制</span>
               </div>
-            </div>
+            </div> -->
 
             <el-radio-group v-model="workNature" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
@@ -122,23 +122,31 @@
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <el-select v-model="value" placeholder="意向薪酬">
+                <el-select
+                  v-model="salaryScope"
+                  clearable
+                  placeholder="意向薪酬"
+                >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in xcOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="workArea" placeholder="工作区域">
+                <el-select v-model="workArea" clearable placeholder="工作区域">
                   <el-option
-                    v-for="item in qx"
+                    v-for="item in qxOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="eduRequire" placeholder="学历要求">
+                <el-select
+                  v-model="eduRequire"
+                  clearable
+                  placeholder="学历要求"
+                >
                   <el-option
                     v-for="item in xl"
                     :key="item.value"
@@ -146,17 +154,17 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="recruitNum" placeholder="学历">
+                <el-select v-model="recruitNum" clearable placeholder="学历">
                   <el-option
-                    v-for="item in options"
+                    v-for="item in xlOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="value" placeholder="专业">
+                <el-select v-model="zy" clearable placeholder="专业">
                   <el-option
-                    v-for="item in options"
+                    v-for="item in zyOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -194,7 +202,7 @@ export default {
     return {
       positionId: '4',
       positionName: '销售/客服/技术支持',
-      salaryScope: '20-5004',
+      salaryScope: '6000',
       workArea: '06',
       workNature: '01',
       eduRequire: '08',
@@ -211,7 +219,7 @@ export default {
       type: '1',
       salaryUp: '',
       salaryDown: '',
-      value: '',
+      zy: '',
       options: [
         {
           label: '123',
@@ -225,7 +233,7 @@ export default {
         }
       ],
       result: [],
-      qx: [
+      qxOptions: [
         { value: '01', label: '黄浦' },
         { value: '04', label: '徐汇' },
         { value: '05', label: '长宁' },
@@ -243,7 +251,7 @@ export default {
         { value: '26', label: '奉贤' },
         { value: '30', label: '崇明' }
       ],
-      xl: [
+      xlOptions: [
         { value: '01', label: '初中及以下' },
         { value: '02', label: '高中' },
         { value: '03', label: '职高' },
@@ -253,6 +261,25 @@ export default {
         { value: '07', label: '本科' },
         { value: '08', label: '硕士' },
         { value: '09', label: '博士及以上' }
+      ],
+      xcOptions: [
+        { value: '5000', label: '5000' },
+        { value: '6000', label: '6000' },
+        { value: '7000', label: '7000' },
+        { value: '8000', label: '8000' },
+        { value: '9000', label: '9000' },
+        { value: '10000', label: '10000' },
+        { value: '11000', label: '11000' },
+        { value: '12000', label: '12000' },
+        { value: '12000+', label: '12000以上' }
+      ],
+      zyOptions: [
+        { value: '01', label: '计算机' },
+        { value: '02', label: '土木工程' },
+        { value: '03', label: '能源与动力' },
+        { value: '04', label: '机械工程' },
+        { value: '05', label: '生物医疗' },
+        { value: '06', label: '材料科学' }
       ]
     };
   },

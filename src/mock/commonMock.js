@@ -2,8 +2,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:27:47
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-09 07:02:43
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -30,7 +30,9 @@ const dicMockDataPost = function(req) {
       //dicData: dic[code]
       status: 200,
       message: '',
-      result: dic[code]
+      result: {
+        data: JSON.stringify(dic[code])
+      }
     };
   }
   return {
@@ -49,7 +51,9 @@ const dicMockData = function(options) {
     return {
       status: 200,
       message: '',
-      result: dic[code]
+      result: {
+        data: JSON.stringify(dic[code])
+      }
     };
   }
   return {

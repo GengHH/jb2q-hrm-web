@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:39:09
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-09 07:00:17
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -153,7 +153,7 @@ const actions = {
             'set_' + dicTpye,
             res.result.data && typeof res.result.data === 'string'
               ? JSON.parse(res.result.data)
-              : res.result
+              : res.result.data
           );
         } else {
           console.log('加载数据字典时出错：' + res.message);
