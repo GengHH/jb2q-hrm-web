@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-01-26 10:37:18
+ * @LastEditTime: 2021-03-04 16:38:52
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -49,13 +49,31 @@ if (config.mock) {
   require('@/mock/person/index.js');
   //console.log('++++++++++成功引入mock数据+++++++');
 }
+//判断是不是已经登录
+let isEmpty = function(obj) {
+  if (obj === null || obj === undefined || obj.length === 0) {
+    return true;
+  }
+};
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  store,
-  router,
-  //render: h => h(App)
-  template: '<App/>',
-  components: { App }
-});
+if (isEmpty(store.getters.zjhm)) {
+  //获取个人登录信息
+  store.dispatch('person/get_personInfo');
+}
+//初始化字典表;
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+
+window.setTimeout(function() {
+  //console.log('定时器-模拟能获取人员的登录信息');
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    store,
+    router,
+    //render: h => h(App)
+    template: '<App/>',
+    components: { App }
+  });
+}, 1000);

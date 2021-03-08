@@ -1,6 +1,7 @@
-var path = require('path');
-var utils = require('./utils');
-var config = require('../config');
+let path = require('path');
+let utils = require('./utils');
+let config = require('../config');
+let webpack = require('webpack');
 const vueLoaderConfig = require('./vue-loader.conf');
 //提取css
 //const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -104,5 +105,12 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    })
+  ]
 };

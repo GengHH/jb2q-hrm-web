@@ -1,6 +1,6 @@
 <template>
   <div id="indexBody">
-    <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
+    <BaseSearch></BaseSearch>
     <!-- S demo2筛选部分 -->
     <div id="demo2">
       <div class="filter-content">
@@ -9,7 +9,7 @@
             <div class="grid-content bg-purple">工作年限：</div>
           </el-col>
           <el-col :span="22">
-            <el-radio-group v-model="workYearNeed" size="medium">
+            <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="1">1年以下</el-radio-button>
               <el-radio-button label="2">1~2年</el-radio-button>
@@ -24,7 +24,7 @@
             <div class="grid-content bg-purple">意向职位：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group v-model="positionName" size="medium">
+            <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持"
                 >居民服务和其他服务业</el-radio-button
@@ -57,7 +57,7 @@
           </el-col>
           <el-col :span="20">
             <!-- <el-form-item label="" required> -->
-            <el-radio-group v-model="workNature" size="medium">
+            <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持"
                 >销售/客服/技术支持</el-radio-button
@@ -87,10 +87,10 @@
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple">工作性质：</div>
+            <div class="grid-content bg-purple">单位性质：</div>
           </el-col>
           <el-col :span="22">
-            <div class="grid-content bg-purple-light">
+            <!-- <div class="grid-content bg-purple-light">
               <div class="radio-span">
                 <span class="active-span">不限</span>
                 <span>国有</span>
@@ -98,9 +98,9 @@
                 <span>民营</span>
                 <span>股份制</span>
               </div>
-            </div>
+            </div>-->
 
-            <el-radio-group v-model="workNature" size="medium">
+            <el-radio-group v-model="jobRadio" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持">国有</el-radio-button>
               <el-radio-button label="会计/金融/银行/保险"
@@ -130,23 +130,23 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="workArea" placeholder="工作区域">
+                <el-select v-model="value" placeholder="工作区域">
                   <el-option
-                    v-for="item in qx"
+                    v-for="item in options"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="eduRequire" placeholder="学历要求">
+                <el-select v-model="value" placeholder="学历要求">
                   <el-option
-                    v-for="item in xl"
+                    v-for="item in options"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="recruitNum" placeholder="学历">
+                <el-select v-model="value" placeholder="学历">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -183,7 +183,6 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseInfoNotificationCard from '@/components/common/BaseInfoNotificationCard.vue';
-import { queryJobs } from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
@@ -192,25 +191,7 @@ export default {
   },
   data() {
     return {
-      positionId: '4',
-      positionName: '销售/客服/技术支持',
-      salaryScope: '20-5004',
-      workArea: '06',
-      workNature: '01',
-      eduRequire: '08',
-      recruitNum: '3',
-      corpName: '上海新移力自动化科技有限公司',
-      cid: '201002025628331',
-      workYearNeed: '05',
-      releaseTime: '2021-12-10 10:44:36',
-      tranBaseSymbol: '0',
-      agencyRecruit: '0',
-      entrustCorpName: '',
-      favor: '0',
-      releaseUserId: '0000941012',
-      type: '1',
-      salaryUp: '',
-      salaryDown: '',
+      jobRadio: '不限',
       value: '',
       options: [
         {
@@ -223,52 +204,8 @@ export default {
           id: '1',
           name: '123'
         }
-      ],
-      result: [],
-      qx: [
-        { value: '01', label: '黄浦' },
-        { value: '04', label: '徐汇' },
-        { value: '05', label: '长宁' },
-        { value: '06', label: '静安' },
-        { value: '07', label: '普陀' },
-        { value: '09', label: '虹口' },
-        { value: '10', label: '杨浦' },
-        { value: '12', label: '闵行' },
-        { value: '13', label: '宝山' },
-        { value: '14', label: '嘉定' },
-        { value: '15', label: '浦东' },
-        { value: '16', label: '金山' },
-        { value: '17', label: '松江' },
-        { value: '18', label: '青浦' },
-        { value: '26', label: '奉贤' },
-        { value: '30', label: '崇明' }
-      ],
-      xl: [
-        { value: '01', label: '初中及以下' },
-        { value: '02', label: '高中' },
-        { value: '03', label: '职高' },
-        { value: '04', label: '技校' },
-        { value: '05', label: '中专' },
-        { value: '06', label: '大专' },
-        { value: '07', label: '本科' },
-        { value: '08', label: '硕士' },
-        { value: '09', label: '博士及以上' }
       ]
     };
-  },
-  methods: {
-    async queryJobs(val) {
-      // content
-      this.$alert(val);
-      try {
-        let result = await queryJobs({ pid: '201906186258910' });
-        console.log('result', result);
-        if (result.status === 200)
-          this.$set(this, 'result', result.result.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
   }
 };
 </script>
