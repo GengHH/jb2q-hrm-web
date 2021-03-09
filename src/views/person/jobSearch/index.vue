@@ -3,7 +3,7 @@
     <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
     <!-- S demo2筛选部分 -->
     <div id="demo2">
-      <div class="filter-content">
+      <div class="filter-content" :ref="queryJobFrom">
         <el-row>
           <el-col :span="2">
             <div class="grid-content bg-purple">工作年限：</div>
@@ -21,7 +21,7 @@
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple">意向职位：</div>
+            <div class="grid-content bg-purple">职位：</div>
           </el-col>
           <el-col :span="20">
             <el-radio-group v-model="positionName" size="medium">
@@ -53,67 +53,43 @@
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple">意向行业：</div>
+            <div class="grid-content bg-purple">薪酬:</div>
           </el-col>
           <el-col :span="20">
-            <!-- <el-form-item label="" required> -->
-            <el-radio-group v-model="workNature" size="medium">
+            <el-radio-group v-model="salaryScope" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持"
-                >销售/客服/技术支持</el-radio-button
-              >
-              <el-radio-button label="会计/金融/银行/保险"
-                >会计/金融/银行/保险</el-radio-button
-              >
-              <el-radio-button label="生产/营运/采购/物流"
-                >生产/营运/采购/物流</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >生物/制药/医疗/护理</el-radio-button
-              >
-              <el-radio-button label="广告/市场/媒体/艺术"
-                >广告/市场/媒体/艺术</el-radio-button
-              >
-              <el-radio-button label="建筑/房地产">建筑/房地产</el-radio-button>
+              <el-radio-button label="1">3500以下</el-radio-button>
+              <el-radio-button label="2">3500-8000</el-radio-button>
+              <el-radio-button label="3">8000-15000</el-radio-button>
+              <el-radio-button label="4">15000-30000</el-radio-button>
+              <el-radio-button label="5">30000以上</el-radio-button>
             </el-radio-group>
-            <!-- </el-form-item> -->
           </el-col>
-          <el-col :span="2">
+          <!-- <el-col :span="2">
             <div class="grid-content bg-purple more-ico">
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
             </div>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple">工作性质：</div>
+            <div class="grid-content bg-purple">工作性质:</div>
           </el-col>
-          <el-col :span="22">
-            <!-- <div class="grid-content bg-purple-light">
-              <div class="radio-span">
-                <span class="active-span">不限</span>
-                <span>国有</span>
-                <span>私营</span>
-                <span>民营</span>
-                <span>股份制</span>
-              </div>
-            </div> -->
-
+          <el-col :span="20">
             <el-radio-group v-model="workNature" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持">国有</el-radio-button>
-              <el-radio-button label="会计/金融/银行/保险"
-                >私营</el-radio-button
-              >
-              <el-radio-button label="生产/营运/采购/物流"
-                >民营</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >股份制</el-radio-button
-              >
+              <el-radio-button label="01">全职</el-radio-button>
+              <el-radio-button label="02">兼职</el-radio-button>
+              <el-radio-button label="03">就业见习</el-radio-button>
             </el-radio-group>
           </el-col>
+          <!-- <el-col :span="2">
+            <div class="grid-content bg-purple more-ico">
+              <span>更多</span>
+              <i class="el-icon-caret-bottom"></i>
+            </div>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="2">
@@ -122,13 +98,22 @@
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <el-select
-                  v-model="salaryScope"
-                  clearable
-                  placeholder="意向薪酬"
+                <el-radio v-model="radio1" label="1">中介待招</el-radio>
+                <el-radio v-model="radio2" label="1"
+                  >就业公共服务机构代理招聘</el-radio
                 >
+                <el-radio v-model="radio3" label="1">招聘特定人群</el-radio>
+                <el-select v-model="wt" clearable placeholder="委托待招单位">
                   <el-option
-                    v-for="item in xcOptions"
+                    v-for="item in wtOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <el-select v-model="nl" clearable placeholder="年龄">
+                  <el-option
+                    v-for="item in nlOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -154,7 +139,7 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="recruitNum" clearable placeholder="学历">
+                <el-select v-model="xl" clearable placeholder="学历要求">
                   <el-option
                     v-for="item in xlOptions"
                     :key="item.value"
@@ -162,7 +147,7 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="zy" clearable placeholder="专业">
+                <el-select v-model="zy" clearable placeholder="工作班时">
                   <el-option
                     v-for="item in zyOptions"
                     :key="item.value"
@@ -174,7 +159,10 @@
             </div>
           </el-col>
           <el-col :span="3">
-            <div class="grid-content bg-purple more-ico">
+            <div
+              class="grid-content bg-purple more-ico"
+              @click="clearQueryParams"
+            >
               <i class="el-icon-delete"></i>
               <span>清空筛选条件</span>
             </div>
@@ -184,32 +172,39 @@
     </div>
     <!-- E demo2筛选部分 -->
     <!-- 查询结果 -->
-    <base-info-notification-card></base-info-notification-card>
+    <per-search-job></per-search-job>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
-import BaseInfoNotificationCard from '@/components/common/BaseInfoNotificationCard.vue';
+import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import { queryJobs } from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
-    BaseInfoNotificationCard
+    PerSearchJob
   },
   data() {
     return {
+      radio1: '',
+      radio2: '',
+      radio3: '',
+      zy: '',
+      nl: '',
+      wt: '',
+      xl: '',
       positionId: '4',
       positionName: '销售/客服/技术支持',
-      salaryScope: '6000',
-      workArea: '06',
-      workNature: '01',
-      eduRequire: '08',
+      salaryScope: '不限',
+      workArea: '',
+      workNature: '',
+      eduRequire: '',
       recruitNum: '3',
       corpName: '上海新移力自动化科技有限公司',
       cid: '201002025628331',
-      workYearNeed: '05',
+      workYearNeed: '不限',
       releaseTime: '2021-12-10 10:44:36',
       tranBaseSymbol: '0',
       agencyRecruit: '0',
@@ -219,7 +214,6 @@ export default {
       type: '1',
       salaryUp: '',
       salaryDown: '',
-      zy: '',
       options: [
         {
           label: '123',
@@ -233,6 +227,17 @@ export default {
         }
       ],
       result: [],
+      nlOptions: [
+        { value: '01', label: '20' },
+        { value: '04', label: '21' },
+        { value: '05', label: '22' },
+        { value: '06', label: '23' },
+        { value: '07', label: '24' },
+        { value: '09', label: '25' },
+        { value: '10', label: '26' },
+        { value: '12', label: '27' },
+        { value: '13', label: '28' }
+      ],
       qxOptions: [
         { value: '01', label: '黄浦' },
         { value: '04', label: '徐汇' },
@@ -262,6 +267,10 @@ export default {
         { value: '08', label: '硕士' },
         { value: '09', label: '博士及以上' }
       ],
+      wtOptions: [
+        { value: '0', label: '否' },
+        { value: '1', label: '是' }
+      ],
       xcOptions: [
         { value: '5000', label: '5000' },
         { value: '6000', label: '6000' },
@@ -280,10 +289,12 @@ export default {
         { value: '04', label: '机械工程' },
         { value: '05', label: '生物医疗' },
         { value: '06', label: '材料科学' }
-      ]
+      ],
+      jobList: []
     };
   },
   methods: {
+    clearQueryParams: function() {},
     async queryJobs(val) {
       // content
       this.$alert(val);

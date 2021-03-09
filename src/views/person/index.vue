@@ -114,7 +114,8 @@
 
 <script>
 import { testData } from '@pub/mockTestData';
-import { getQx } from '@/api/common';
+//import { getQx } from '@/api/common';
+import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
 import plButton from '@/components/common/BaseLoadingButton';
@@ -197,17 +198,33 @@ export default {
     }
   },
   methods: {
-    async getQx() {
-      try {
-        let result = await getQx();
-        console.log('dic', result);
-        this.$set(this, 'dicQx', result.dicData);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async getQx() {
+    //   try {
+    //     let result = await getQx();
+    //     console.log('dic', result);
+    //     this.$set(this, 'dicQx', result.dicData);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     async getPersonInfo() {
       try {
+        if (!this.$store.getters['person/token']) {
+          this.$message({
+            showClose: true,
+            message: '请先登录，谢谢',
+            type: 'error'
+          });
+          // Notification({
+          //   title: '系统提示',
+          //   message: '请先登录，谢谢',
+          //   //duration: 4500,
+          //   type: 'error'
+          // });
+          setTimeout(() => {
+            window.location.href = '/ggzp-shrs/index.html';
+          }, 2000);
+        }
         // TODO 更换pid this.$store.getters['person/pid']
         let result = await getPersonBaseInfo({
           pid: this.$store.getters['person/pid'] || '201906186258910'
@@ -262,7 +279,7 @@ export default {
     }
   },
   created() {
-    this.getQx();
+    //this.getQx();
     this.getPersonInfo();
     // this.axios
     //   .get('/mock-pers-api/person/info/loadPersonInfo')

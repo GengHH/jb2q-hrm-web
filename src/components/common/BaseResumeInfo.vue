@@ -1252,7 +1252,7 @@ export default {
     }
   },
   created() {
-    this.loadDicData();
+    //this.loadDicData();
     this.loadPsnlResume();
   }
 };

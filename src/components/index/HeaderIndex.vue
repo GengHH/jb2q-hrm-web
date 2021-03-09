@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-02-08 16:43:49
+ * @LastEditTime: 2021-03-09 18:28:48
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -31,7 +31,18 @@
           router
           background-color="#fc6f3d"
           text-color="#fff"
+          @select="handleSelect"
         >
+          <!-- 个人信息栏 -->
+          <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
+            <template slot="title">{{ userLogInfo.nvaText }}</template>
+            <el-menu-item
+              v-for="nvaIndex in userLogInfo.subMenu"
+              :key="nvaIndex.id"
+              :index="nvaIndex.id"
+              >{{ nvaIndex.nvaText }}</el-menu-item
+            >
+          </el-submenu>
           <el-menu-item
             v-for="nvaIndex in navList"
             :key="nvaIndex.id"
@@ -51,10 +62,21 @@
 </template>
 
 <script>
+import { doLogout } from '@/api/personApi';
+
 export default {
   name: 'HeaderIndex',
   props: {
-    navList: Array
+    navList: Array,
+    userLogInfo: {
+      type: Object,
+      default: () => ({
+        id: 'user',
+        path: '',
+        nvaText: 'Anyone',
+        subMenu: []
+      })
+    }
   },
   data() {
     return {
@@ -63,10 +85,42 @@ export default {
     };
   },
   created() {
-    console.log(this.$route);
     if (this.$route.path) {
       this.activeIndex = this.$route.path;
     }
+  },
+  watch: {
+    $route(to, from) {
+      //to:即将要跳转到的页面   from:即将离开的页面
+      if (to.path === '/logout' && !this.$store.getters['person/token']) {
+        this.$alert('没有登录！无法退出');
+        this.$router.push(from.path);
+      } else if (to.path === '/logout') {
+        this.$alert('退出成功');
+        // TODO 调用退出接口
+        doLogout()
+          .then(res => {
+            // retuen a primess
+            let logout = this.$store.dispatch('person/do_logout');
+            logout
+              .then(res => {
+                this.$alert('退出成功');
+              })
+              .catch(err => {
+                this.$alert('退出异常');
+              });
+          })
+          .catch(err => {
+            this.$alert('退出失败');
+          });
+        window.location.href = '/ggzp-shrs/index.html';
+        //this.$router.push('/')
+        //this.$router.push(from.path)
+      }
+    }
+  },
+  methods: {
+    handleSelect(index) {}
   }
 };
 </script>
@@ -128,6 +182,7 @@ export default {
     }
   }
   ::v-deep .el-menu--horizontal {
+    .el-submenu,
     .el-menu-item {
       float: right;
     }

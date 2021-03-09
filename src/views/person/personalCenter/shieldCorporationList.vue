@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-02-10 14:54:55
+ * @LastEditTime: 2021-03-09 18:43:53
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -28,6 +28,13 @@
       show-pager
       v-if="modeValue"
     >
+      <template #date="{row}">
+        <i class="el-icon-time"></i>
+        <span style="margin-left: 10px">{{ row.date }}</span>
+      </template>
+      <template #star="{row}">
+        <el-rate v-model="row.star"></el-rate>
+      </template>
     </pl-table>
     <base-info-notification-card
       v-else
@@ -60,6 +67,7 @@ export default {
       tableData: [
         {
           date: '2019-05-01',
+          star: null,
           name: '王小虎',
           province: '上海',
           city: '普陀区',
@@ -71,6 +79,7 @@ export default {
         },
         {
           date: '2019-05-04',
+          star: null,
           name: '王小虎',
           province: '上海',
           city: '普陀区',
@@ -82,6 +91,7 @@ export default {
         },
         {
           date: '2019-05-03',
+          star: null,
           name: '王小虎',
           province: '上海',
           city: '普陀区',
@@ -93,6 +103,7 @@ export default {
         },
         {
           date: '2019-05-02',
+          star: null,
           name: '王小虎',
           province: '上海',
           city: '普陀区',
@@ -149,7 +160,8 @@ export default {
             [2, 4]
           ]
         },
-        { label: '日期', prop: 'date', formatter: 'date' },
+        { label: '日期', prop: 'date', formatter: 'date', slotName: 'date' },
+        { label: '评分', prop: 'star', slotName: 'star' },
         { label: '名称', prop: 'name', rowSpan: 'all' },
         {
           label: '地址',

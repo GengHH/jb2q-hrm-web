@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 19:03:04
+ * @LastEditTime: 2021-03-09 18:17:27
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -80,6 +80,7 @@ const getters = {
   // username(state) {
   //   return state.name;
   // }
+  token: state => state.token,
   username: state => state.name,
   pid: state => state.pid
 };
@@ -113,18 +114,19 @@ const actions = {
   //     }
   //   });
   // },
-  // //用户退出
-  // logout({ commit }) {
-  //   return new Promise(resolve => {
-  //     commit('SET_TOKEN', '');
-  //     commit('SET_LOGINTYPE', '');
-  //     commit('SET_CENTER', '');
-  //     commit('SET_LOGINSTATUS', 0);
-  //     commit('SET_LOGIN_TIME', 0);
-  //     sessionStorage.setItem('vuex', null);
-  //     resolve();
-  //   });
-  // }
+  //用户退出
+  do_logout({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_PERSONINOF', { logonUser: {} });
+      commit('SET_TOKEN', '');
+      commit('SET_LOGINTYPE', '');
+      commit('SET_CENTER', '');
+      commit('SET_LOGINSTATUS', 0);
+      commit('SET_LOGIN_TIME', 0);
+      //sessionStorage.setItem('vuex', null);
+      resolve();
+    });
+  },
 
   get_personInfo({ commit }) {
     getLogonUser()
@@ -132,6 +134,7 @@ const actions = {
         console.log('个人登录信息', res);
         if (res.status == 200) {
           commit('SET_PERSONINOF', res.result);
+          commit('SET_TOKEN', 'login');
         } else {
           console.log('加载个人登录信息失败：' + res.message);
         }
