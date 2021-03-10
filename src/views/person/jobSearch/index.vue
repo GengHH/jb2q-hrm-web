@@ -1,15 +1,15 @@
 <template>
   <div id="indexBody">
     <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
-    <!-- S demo2筛选部分 -->
-    <div id="demo2">
-      <div class="filter-content" :ref="queryJobFrom">
-        <el-row>
+    <!-- S筛选部分 -->
+    <div class="filter-content">
+      <el-form ref="queryJobFrom" :model="queryParams">
+        <el-row class="condition condition-one">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作年限：</div>
           </el-col>
           <el-col :span="22">
-            <el-radio-group v-model="workYearNeed" size="medium">
+            <el-radio-group v-model="queryParams.workYearNeed" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="1">1年以下</el-radio-button>
               <el-radio-button label="2">1~2年</el-radio-button>
@@ -19,12 +19,17 @@
             </el-radio-group>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="condition condition-two">
           <el-col :span="2">
             <div class="grid-content bg-purple">职位：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group v-model="positionName" size="medium">
+            <el-radio-group
+              v-model="queryParams.positionName"
+              size="medium"
+              id="positionNameRadios"
+              class="radio-list-bar"
+            >
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="销售/客服/技术支持"
                 >居民服务和其他服务业</el-radio-button
@@ -32,8 +37,8 @@
               <el-radio-button label="会计/金融/银行/保险"
                 >水利、环境和公共设施管理业</el-radio-button
               >
-              <el-radio-button label="生产/营运/采购/物流"
-                >科学研究、技术服务和地质勘查业</el-radio-button
+              <el-radio-button label="生产/营运/采购/物流">
+                科学研究、技术服务和地质勘查业</el-radio-button
               >
               <el-radio-button label="生物/制药/医疗/护理"
                 >租赁和商务服务业</el-radio-button
@@ -42,21 +47,27 @@
               <el-radio-button label="建筑/房地产"
                 >科学研究、技术服务和地质勘查业</el-radio-button
               >
+              <el-radio-button v-for="index in 10" :key="index" :label="index"
+                >{{ index }}.科学研究、技术服务和地质勘查业</el-radio-button
+              >
             </el-radio-group>
           </el-col>
           <el-col :span="2">
-            <div class="grid-content bg-purple more-ico">
+            <div
+              class="grid-content bg-purple more-ico"
+              @click="showMoreRadios('positionNameRadios')"
+            >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="condition condition-three">
           <el-col :span="2">
-            <div class="grid-content bg-purple">薪酬:</div>
+            <div class="grid-content bg-purple">薪酬：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group v-model="salaryScope" size="medium">
+            <el-radio-group v-model="queryParams.salaryScope" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="1">3500以下</el-radio-button>
               <el-radio-button label="2">3500-8000</el-radio-button>
@@ -66,18 +77,18 @@
             </el-radio-group>
           </el-col>
           <!-- <el-col :span="2">
-            <div class="grid-content bg-purple more-ico">
-              <span>更多</span>
-              <i class="el-icon-caret-bottom"></i>
-            </div>
-          </el-col> -->
+              <div class="grid-content bg-purple more-ico">
+                <span>更多</span>
+                <i class="el-icon-caret-bottom"></i>
+              </div>
+            </el-col> -->
         </el-row>
-        <el-row>
+        <el-row class="condition condition-fore">
           <el-col :span="2">
-            <div class="grid-content bg-purple">工作性质:</div>
+            <div class="grid-content bg-purple">工作性质：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group v-model="workNature" size="medium">
+            <el-radio-group v-model="queryParams.workNature" size="medium">
               <el-radio-button label="不限">不限</el-radio-button>
               <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
@@ -85,25 +96,38 @@
             </el-radio-group>
           </el-col>
           <!-- <el-col :span="2">
-            <div class="grid-content bg-purple more-ico">
-              <span>更多</span>
-              <i class="el-icon-caret-bottom"></i>
-            </div>
-          </el-col> -->
+              <div class="grid-content bg-purple more-ico">
+                <span>更多</span>
+                <i class="el-icon-caret-bottom"></i>
+              </div>
+            </el-col> -->
         </el-row>
-        <el-row>
+        <el-row class="condition condition-five">
           <el-col :span="2">
             <div class="place-holder">placeHolder</div>
           </el-col>
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <el-radio v-model="radio1" label="1">中介待招</el-radio>
-                <el-radio v-model="radio2" label="1"
+                <!-- <el-radio v-model="queryParams.radio1" label="1"
+                  >中介待招</el-radio
+                >
+                <el-radio v-model="queryParams.radio2" label="1"
                   >就业公共服务机构代理招聘</el-radio
                 >
-                <el-radio v-model="radio3" label="1">招聘特定人群</el-radio>
-                <el-select v-model="wt" clearable placeholder="委托待招单位">
+                <el-radio v-model="queryParams.radio3" label="1"
+                  >招聘特定人群</el-radio
+                > -->
+                <el-checkbox v-model="queryParams.checked1">中介待招</el-checkbox>
+                <el-checkbox v-model="queryParams.checked2"
+                  >就业公共服务机构代理招聘</el-checkbox
+                >
+                <el-checkbox v-model="queryParams.checked3">招聘特定人群</el-checkbox>
+                <el-select
+                  v-model="queryParams.wt"
+                  clearable
+                  placeholder="委托待招单位"
+                >
                   <el-option
                     v-for="item in wtOptions"
                     :key="item.value"
@@ -111,7 +135,11 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="nl" clearable placeholder="年龄">
+                <el-select
+                  v-model="queryParams.nl"
+                  clearable
+                  placeholder="年龄"
+                >
                   <el-option
                     v-for="item in nlOptions"
                     :key="item.value"
@@ -119,7 +147,11 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="workArea" clearable placeholder="工作区域">
+                <el-select
+                  v-model="queryParams.workArea"
+                  clearable
+                  placeholder="工作区域"
+                >
                   <el-option
                     v-for="item in qxOptions"
                     :key="item.value"
@@ -128,26 +160,34 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="eduRequire"
+                  v-model="queryParams.eduRequire"
                   clearable
                   placeholder="学历要求"
                 >
                   <el-option
-                    v-for="item in xl"
+                    v-for="item in queryParams.xl"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="xl" clearable placeholder="学历要求">
+                <el-select
+                  v-model="queryParams.xl"
+                  clearable
+                  placeholder="工作区域"
+                >
                   <el-option
-                    v-for="item in xlOptions"
+                    v-for="item in qxOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="zy" clearable placeholder="工作班时">
+                <el-select
+                  v-model="queryParams.zy"
+                  clearable
+                  placeholder="工作班时"
+                >
                   <el-option
                     v-for="item in zyOptions"
                     :key="item.value"
@@ -168,11 +208,12 @@
             </div>
           </el-col>
         </el-row>
-      </div>
+      </el-form>
     </div>
+
     <!-- E demo2筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job></per-search-job>
+    <per-search-job :jobData="queryResult"></per-search-job>
   </div>
 </template>
 
@@ -188,32 +229,34 @@ export default {
   },
   data() {
     return {
-      radio1: '',
-      radio2: '',
-      radio3: '',
-      zy: '',
-      nl: '',
-      wt: '',
-      xl: '',
-      positionId: '4',
-      positionName: '销售/客服/技术支持',
-      salaryScope: '不限',
-      workArea: '',
-      workNature: '',
-      eduRequire: '',
-      recruitNum: '3',
-      corpName: '上海新移力自动化科技有限公司',
-      cid: '201002025628331',
-      workYearNeed: '不限',
-      releaseTime: '2021-12-10 10:44:36',
-      tranBaseSymbol: '0',
-      agencyRecruit: '0',
-      entrustCorpName: '',
-      favor: '0',
-      releaseUserId: '0000941012',
-      type: '1',
-      salaryUp: '',
-      salaryDown: '',
+      queryParams: {
+        checked1: '',
+        checked2: '',
+        checked3: '',
+        zy: '',
+        nl: '',
+        wt: '',
+        xl: '',
+        positionId: '4',
+        positionName: '销售/客服/技术支持',
+        salaryScope: '不限',
+        workArea: '',
+        workNature: '',
+        eduRequire: '',
+        recruitNum: '3',
+        corpName: '上海新移力自动化科技有限公司',
+        cid: '201002025628331',
+        workYearNeed: '不限',
+        releaseTime: '2021-12-10 10:44:36',
+        tranBaseSymbol: '0',
+        agencyRecruit: '0',
+        entrustCorpName: '',
+        favor: '0',
+        releaseUserId: '0000941012',
+        type: '1',
+        salaryUp: '',
+        salaryDown: ''
+      },
       options: [
         {
           label: '123',
@@ -226,7 +269,7 @@ export default {
           name: '123'
         }
       ],
-      result: [],
+      queryResult: [],
       nlOptions: [
         { value: '01', label: '20' },
         { value: '04', label: '21' },
@@ -296,15 +339,23 @@ export default {
   methods: {
     clearQueryParams: function() {},
     async queryJobs(val) {
-      // content
-      this.$alert(val);
+      console.log(this.$refs['queryJobFrom'].model);
+      let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
       try {
-        let result = await queryJobs({ pid: '201906186258910' });
+        let result = await queryJobs(params);
         console.log('result', result);
         if (result.status === 200)
-          this.$set(this, 'result', result.result.data);
+          this.$set(this, 'queryResult', result.result.data);
       } catch (error) {
         console.log(error);
+      }
+    },
+    showMoreRadios(radiosIndex) {
+      let dom = $('#' + radiosIndex);
+      if (dom && dom.hasClass('radio-list-bar-more')) {
+        dom.removeClass('radio-list-bar-more');
+      } else {
+        dom.addClass('radio-list-bar-more');
       }
     }
   }
@@ -328,38 +379,69 @@ export default {
     display: block;
   }
 
-  #demo2 {
-    ::v-deep .el-radio-button__inner {
-      border: 0;
-    }
-    ::v-deep .el-input__inner {
-      border: 0;
-      width: 100px !important;
-      color: rgba(0, 0, 0, 0.8);
-      text-align: center;
-    }
+  .radio-list-bar {
+    max-height: 52px;
+    transition: height 0.5s;
+    -webkit-transition: max-height 0.5s;
+  }
+  .radio-list-bar-more {
+    max-height: 208px !important;
+  }
+}
 
-    .filter-content {
-      .place-holder {
-        visibility: hidden;
-      }
-      .el-row {
-        border-bottom: 1px solid #eeeeee;
-      }
-      .el-radio-group {
-        line-height: 52px;
-        text-align: center;
-        ::v-deep .el-radio-button__inner {
-          border-radius: 0;
-        }
-      }
-      .bg-purple {
-        line-height: 52px;
-        text-align: center;
-      }
-      .filter-select {
-        text-align: left;
-      }
+.filter-content {
+  ::v-deep .el-radio-button__inner {
+    border: 0;
+  }
+  ::v-deep .el-input__inner {
+    border: 0;
+    width: 100px !important;
+    color: rgba(0, 0, 0, 0.8);
+    text-align: center;
+  }
+  .condition {
+    background-color: #fff;
+  }
+  .condition-one {
+    z-index: 10;
+  }
+  .condition-two {
+    z-index: 20;
+  }
+  .condition-three {
+    z-index: 30;
+  }
+  .condition-fore {
+    z-index: 40;
+  }
+  .condition-five {
+    z-index: 50;
+  }
+  .place-holder {
+    visibility: hidden;
+  }
+  .el-row {
+    border-bottom: 1px solid #eeeeee;
+  }
+  .el-radio-group {
+    line-height: 52px;
+    //text-align: center;
+    ::v-deep .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  .bg-purple {
+    line-height: 52px;
+    text-align: center;
+  }
+  .filter-select {
+    text-align: left;
+  }
+  .more-ico:hover {
+    span,
+    i {
+      color: #fc6f3d;
+      cursor: pointer;
     }
   }
 }

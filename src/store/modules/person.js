@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-09 18:17:27
+ * @LastEditTime: 2021-03-10 18:19:00
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -39,7 +39,7 @@ const state = {
 const mutations = {
   SET_PERSONINOF: (state, value) => {
     state.zjhm = value.logonUser.zjhm || '310111199901011234';
-    state.pid = value.logonUser.pid || '123123123123';
+    state.pid = value.pid || '123123123123';
     state.name = value.logonUser.userName || '打工人';
   },
   SET_TOKEN: (state, token) => {
@@ -114,6 +114,25 @@ const actions = {
   //     }
   //   });
   // },
+  //用户登录（开发发环境使用）
+  do_login({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_PERSONINOF', {
+        logonUser: {
+          zjhm: '310111199901011234',
+          userName: '啊董'
+        },
+        pid: '201906186258910'
+      });
+      commit('SET_TOKEN', 'login');
+      commit('SET_LOGINTYPE', '');
+      commit('SET_CENTER', '');
+      commit('SET_LOGINSTATUS', 0);
+      commit('SET_LOGIN_TIME', 0);
+      //sessionStorage.setItem('vuex', null);
+      resolve();
+    });
+  },
   //用户退出
   do_logout({ commit }) {
     return new Promise(resolve => {

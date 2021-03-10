@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:24:09
+ * @LastEditTime: 2021-03-10 18:21:54
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -124,33 +124,37 @@ Mock.mock(basePath + '/person/info/saveLaborExp', 'post', function(options) {
   return successData;
 });
 //获取职位信息
-Mock.mock(basePath + '/person/manage/find/position', 'get', function(options) {
-  return {
-    status: 200,
-    message: '',
-    result: Mock.mock({
-      'data|1-10': [
-        {
-          positionId: '4',
-          positionName: 'JAVA架构工程师',
-          salaryScope: '20-5004',
-          workArea: '06',
-          workNature: '01',
-          eduRequire: '08',
-          recruitNum: '3',
-          corpName: '上海新移力自动化科技有限公司',
-          cid: '201002025628331',
-          workYearNeed: '05',
-          releaseTime: '2021-12-10 10:44:36',
-          tranBaseSymbol: '0',
-          agencyRecruit: '0',
-          entrustCorpName: '',
-          favor: '0',
-          releaseUserId: '0000941012',
-          type: '1'
-        }
-      ]
-    })
-  };
-});
+Mock.mock(
+  RegExp(basePath + '/person/manage/find/position' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            positionId: '4',
+            positionName: 'JAVA架构工程师',
+            salaryScope: '20-5004',
+            workArea: '06',
+            workNature: '01',
+            eduRequire: '08',
+            recruitNum: '3',
+            corpName: '上海新移力自动化科技有限公司',
+            cid: '201002025628331',
+            workYearNeed: '05',
+            releaseTime: '2021-12-10 10:44:36',
+            tranBaseSymbol: '0',
+            agencyRecruit: '0',
+            entrustCorpName: '',
+            favor: '0',
+            releaseUserId: '0000941012',
+            type: '1'
+          }
+        ]
+      })
+    };
+  }
+);
 export default Mock;

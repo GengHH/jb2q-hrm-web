@@ -55,7 +55,10 @@ let isEmpty = function(obj) {
     return true;
   }
 };
-
+// 开发环境使用mock时候，模拟登录
+if (config.mock) {
+  store.dispatch('person/do_login');
+}
 if (isEmpty(store.getters.zjhm)) {
   //获取个人登录信息
   store.dispatch('person/get_personInfo');

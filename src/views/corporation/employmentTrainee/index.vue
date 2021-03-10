@@ -313,6 +313,7 @@ export default {
       // content
       this.$alert(val);
       try {
+        // TODO 查询job列表
         let result = await queryJobs({ pid: '201906186258910' });
         console.log('result', result);
         if (result.status === 200)

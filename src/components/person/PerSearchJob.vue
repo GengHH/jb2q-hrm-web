@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-09 10:33:32
+ * @LastEditTime: 2021-03-10 18:42:18
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -18,7 +18,7 @@
       >
       <span class="favorite"><i class="el-icon-star-on"></i>收藏</span>
     </div>
-    <div class="div-box padd0">
+    <!-- <div class="div-box padd0">
       <el-row>
         <el-col :span="1" class="mat-15">
           <el-checkbox
@@ -140,6 +140,66 @@
           <span class="fourteen-opacity">发布时间：2020-11-06</span>
         </el-col>
       </div>
+    </div> -->
+    <!-- for everyone -->
+    <div class="div-box padd0" v-for="(jobItem, index) in jobData" :key="index">
+      <el-row>
+        <el-col :span="1" class="mat-15">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="checkAll"
+            @change="handleCheckAllChange"
+          ></el-checkbox>
+        </el-col>
+        <el-col :span="10">
+          <div class="infor-module">
+            <p class="name-infor font-or">
+              项目经理 <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
+            </p>
+            <p class="span-infor">
+              <span>上海</span>
+              <el-divider direction="vertical"></el-divider>
+              <span>本科</span>
+              <el-divider direction="vertical"></el-divider>
+              <span>全职</span>
+              <el-divider direction="vertical"></el-divider>
+              <span>经验1~2年</span>
+              <el-button type="primary" class="gray-btn"
+                ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
+              >
+            </p>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <p class="time-p sixteen-opacity">
+            万达信息股份有限公司
+            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
+          </p>
+          <p class="span-infor">
+            <span>移动互联网</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>股份</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>10000人以上</span>
+          </p>
+        </el-col>
+        <el-col :span="5">
+          <el-button type="primary" class="release-btn" @click="selectJob">
+            <i class="el-icon-position"></i>投递</el-button
+          >
+          <el-button type="primary" class="white-btn" @click="startJob"
+            ><i class="el-icon-star-off"></i> 收藏</el-button
+          >
+        </el-col>
+      </el-row>
+      <div class="foot-span">
+        <el-col :span="19">
+          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
+        </el-col>
+        <el-col :span="5">
+          <span class="fourteen-opacity">发布时间：2020-11-06</span>
+        </el-col>
+      </div>
     </div>
   </div>
   <!-- E demo3信息部分 -->
@@ -152,13 +212,16 @@
 export default {
   name: 'PerSearchJob',
   props: {
-    JobData: {
-      type: Object,
-      default: () => {}
+    jobData: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
-    return {};
+    return {
+      checkAll: false,
+      isIndeterminate: true
+    };
   },
   methods: {
     selectJob: function() {
@@ -166,7 +229,8 @@ export default {
     },
     startJob: function() {
       this.$alert('收藏成功');
-    }
+    },
+    handleCheckAllChange() {}
   }
 };
 </script>
