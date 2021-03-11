@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-09 07:00:17
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-11 14:21:54
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -106,7 +106,7 @@ const state = {
   //管理员发布内容详情类型
   RECRUIT_RELEASE_DETAIL_TYPE: [],
   //街镇
-  ORGIN: []
+  GGJBXX_STREET: []
 };
 const getters = {
   yesno: state => state.YESNO,
@@ -114,7 +114,7 @@ const getters = {
   recruit_position_f_type: state => state.RECRUIT_POSITION_F_TYPE,
   recruit_position_s_type: state => state.RECRUIT_POSITION_S_TYPE,
   recruit_edu: state => state.RECRUIT_EDU,
-  orgin: state => state.ORGIN
+  ggjbxx_street: state => state.GGJBXX_STREET
 };
 
 const mutations = {
@@ -138,8 +138,8 @@ const mutations = {
     state.RECRUIT_EDU = dictionary;
   },
 
-  set_ORGIN: (state, dictionary) => {
-    state.ORGIN = dictionary;
+  set_GGJBXX_STREET: (state, dictionary) => {
+    state.GGJBXX_STREET = dictionary;
   }
 };
 

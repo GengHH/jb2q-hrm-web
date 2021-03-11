@@ -79,8 +79,8 @@ if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
 if (isEmpty(store.getters['dictionary/recruit_edu'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
 }
-if (isEmpty(store.getters['dictionary/orgin'])) {
-  store.dispatch('dictionary/init_Dictionary', 'ORGIN');
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
 }
 
 window.setTimeout(function() {

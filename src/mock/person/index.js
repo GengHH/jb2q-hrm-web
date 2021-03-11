@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-10 18:21:54
+ * @LastEditTime: 2021-03-11 16:13:35
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -157,4 +157,9 @@ Mock.mock(
     };
   }
 );
+//投递简历
+Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
+  return successData;
+});
+
 export default Mock;

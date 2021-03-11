@@ -1,22 +1,21 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-10 18:42:18
+ * @LastEditTime: 2021-03-11 17:43:55
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
 -->
 <template>
-  <!-- S demo3信息部分 -->
-  <div id="demo3">
-    <div class="div-box bg-gray">
-      <el-checkbox
-        :indeterminate="isIndeterminate"
-        v-model="checkAll"
-        @change="handleCheckAllChange"
+  <!-- S 信息部分 -->
+  <div>
+    <div class="div-box bg-gray" v-if="jobData.length">
+      <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
         >全选</el-checkbox
       >
-      <span class="favorite"><i class="el-icon-star-on"></i>收藏</span>
+      <span class="favorite"
+        ><i class="el-icon-star-off" @click.stop="allStarAction"></i>收藏</span
+      >
     </div>
     <!-- <div class="div-box padd0">
       <el-row>
@@ -146,15 +145,18 @@
       <el-row>
         <el-col :span="1" class="mat-15">
           <el-checkbox
-            :indeterminate="isIndeterminate"
             v-model="checkAll"
             @change="handleCheckAllChange"
           ></el-checkbox>
         </el-col>
         <el-col :span="10">
           <div class="infor-module">
-            <p class="name-infor font-or">
-              项目经理 <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
+            <p
+              class="name-infor font-or"
+              @click="showJobDetial(jobItem.positionId)"
+            >
+              <span class="positionName"> 项目经理 </span>
+              <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
             </p>
             <p class="span-infor">
               <span>上海</span>
@@ -164,7 +166,10 @@
               <span>全职</span>
               <el-divider direction="vertical"></el-divider>
               <span>经验1~2年</span>
-              <el-button type="primary" class="gray-btn"
+              <el-button
+                type="primary"
+                class="gray-btn"
+                @click="callPositionCorp(jobItem.positionId)"
                 ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
               >
             </p>
@@ -184,7 +189,11 @@
           </p>
         </el-col>
         <el-col :span="5">
-          <el-button type="primary" class="release-btn" @click="selectJob">
+          <el-button
+            type="primary"
+            class="release-btn"
+            @click="selectJob(jobItem.positionId)"
+          >
             <i class="el-icon-position"></i>投递</el-button
           >
           <el-button type="primary" class="white-btn" @click="startJob"
@@ -202,13 +211,14 @@
       </div>
     </div>
   </div>
-  <!-- E demo3信息部分 -->
+  <!-- E 信息部分 -->
 </template>
 
 <script>
 /**
  * 个人简历界面-子菜单显示组件
  */
+import { doDeliveryResume } from '@/api/personApi';
 export default {
   name: 'PerSearchJob',
   props: {
@@ -223,14 +233,51 @@ export default {
       isIndeterminate: true
     };
   },
+  computed: {
+    // jobDataCount() {
+    //   return !!this.jobData.length;
+    // }
+  },
   methods: {
-    selectJob: function() {
-      this.$alert('功能暂未开放');
+    selectJob: function(positionId) {
+      //投递简历
+      let that = this;
+      console.log(positionId + '功能暂未开放');
+      doDeliveryResume({
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      })
+        .then(res => {
+          if (res.status === 200) {
+            // TODO 删除界面上的该职位
+            that.$alert('简历投递成功');
+          } else {
+            that.$message({
+              type: 'error',
+              message: '简历投递失败'
+            });
+          }
+        })
+        .catch(err =>
+          that.$$message({
+            type: 'error',
+            message: '系统异常，简历投递成功'
+          })
+        );
     },
     startJob: function() {
       this.$alert('收藏成功');
     },
-    handleCheckAllChange() {}
+    allStarAction(event) {
+      console.log(event);
+    },
+    handleCheckAllChange() {},
+    showJobDetial(positionId) {
+      this.$emit('showJobDetials', positionId);
+    },
+    callPositionCorp(positionId) {
+      this.$alert('暂时无法进行沟通');
+    }
   }
 };
 </script>
@@ -242,13 +289,16 @@ export default {
   border: 1px solid #e5e5e5;
   border-radius: 4px;
   margin-bottom: 16px;
+  .positionName:hover {
+    cursor: pointer;
+  }
   .favorite {
     float: right;
     font-size: 14px;
     color: #000;
     margin-top: 3px;
-    cursor: pointer;
     i {
+      cursor: pointer;
       color: #fc7540;
       font-size: 18px;
     }
@@ -297,5 +347,13 @@ export default {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.7);
   margin-top: 15px;
+  .gray-btn,
+  .gray-btn:hover {
+    color: #fc6f3d;
+    background-color: transparent;
+    border-color: #d1d1d1;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
 }
 </style>

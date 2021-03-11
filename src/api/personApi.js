@@ -2,13 +2,13 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-09 18:30:43
+ * @LastEditTime: 2021-03-11 15:35:02
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
 
 import apiUrlConfig from '../config';
-import { getAction, postAction } from './allActionManage';
+import { getAction, postAction, putAction } from './allActionManage';
 
 const basePath = apiUrlConfig.personBasePath;
 /**
@@ -43,6 +43,13 @@ const saveLanguageLevel = params =>
 //新增或修改个人劳动经历信息
 const saveLaborExp = params =>
   postAction(basePath + '/person/info/saveLaborExp', params);
+//修改个人权限信息
+const updatePersonalPermissions = params =>
+  putAction(basePath + '/person/info/update/allowSearch/1', params);
+
+//投递简历
+const doDeliveryResume = params =>
+  putAction(basePath + '/person/feedback/do-applyFor', params);
 
 export {
   doLogout,
@@ -53,5 +60,7 @@ export {
   saveSkillCert,
   saveLanguageLevel,
   saveLaborExp,
-  queryJobs
+  queryJobs,
+  updatePersonalPermissions,
+  doDeliveryResume
 };

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-09 18:31:55
+ * @LastEditTime: 2021-03-11 11:01:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -54,11 +54,11 @@ export default {
           icon: true,
           iconName: 'el-icon-bell'
         },
-        { id: '5', path: '/jobFindFeedback', nvaText: '求职反馈' },
-        { id: '4', path: '/personalCenter', nvaText: '个人中心' },
-        { id: '3', path: '/jobSearch', nvaText: '职位搜索' },
+        { id: '5', path: '/personInfo', nvaText: '个人信息维护' },
+        { id: '4', path: '/jobFindFeedback', nvaText: '求职反馈' },
+        { id: '3', path: '/personalCenter', nvaText: '个人中心' },
         { id: '2', path: '/resumeMgr', nvaText: '简历管理' },
-        { id: '1', path: '/', nvaText: '个人信息维护' }
+        { id: '1', path: '/', nvaText: '职位搜索' }
       ],
       userLogInfo: {
         id: 'user',

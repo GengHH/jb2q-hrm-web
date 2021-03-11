@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-09 18:28:48
+ * @LastEditTime: 2021-03-11 11:30:58
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -80,14 +80,14 @@ export default {
   },
   data() {
     return {
-      activeIndex: '/',
+      activeIndex: this.$store.getters['activeMenuIndex'],
       inco: true
     };
   },
   created() {
-    if (this.$route.path) {
-      this.activeIndex = this.$route.path;
-    }
+    // if (this.$route.path) {
+    //   this.activeIndex = this.$route.path;
+    // }
   },
   watch: {
     $route(to, from) {
@@ -120,7 +120,9 @@ export default {
     }
   },
   methods: {
-    handleSelect(index) {}
+    handleSelect(index) {
+      this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
+    }
   }
 };
 </script>

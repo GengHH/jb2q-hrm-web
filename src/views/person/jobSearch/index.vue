@@ -1,6 +1,6 @@
 <template>
   <div id="indexBody">
-    <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
+    <base-search @clickButton="queryJobs($event)"></base-search>
     <!-- S筛选部分 -->
     <div class="filter-content">
       <el-form ref="queryJobFrom" :model="queryParams">
@@ -31,7 +31,7 @@
               class="radio-list-bar"
             >
               <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持"
+              <!-- <el-radio-button label="销售/客服/技术支持"
                 >居民服务和其他服务业</el-radio-button
               >
               <el-radio-button label="会计/金融/银行/保险"
@@ -46,16 +46,19 @@
               <el-radio-button label="广告/市场/媒体/艺术">不</el-radio-button>
               <el-radio-button label="建筑/房地产"
                 >科学研究、技术服务和地质勘查业</el-radio-button
-              >
-              <el-radio-button v-for="index in 10" :key="index" :label="index"
-                >{{ index }}.科学研究、技术服务和地质勘查业</el-radio-button
+              > -->
+              <el-radio-button
+                v-for="index in zyLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-radio-button
               >
             </el-radio-group>
           </el-col>
           <el-col :span="2">
             <div
               class="grid-content bg-purple more-ico"
-              @click="showMoreRadios('positionNameRadios')"
+              @click="showMoreRadios($event, 'positionNameRadios')"
             >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
@@ -118,11 +121,15 @@
                 <el-radio v-model="queryParams.radio3" label="1"
                   >招聘特定人群</el-radio
                 > -->
-                <el-checkbox v-model="queryParams.checked1">中介待招</el-checkbox>
+                <el-checkbox v-model="queryParams.checked1"
+                  >中介待招</el-checkbox
+                >
                 <el-checkbox v-model="queryParams.checked2"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.checked3">招聘特定人群</el-checkbox>
+                <el-checkbox v-model="queryParams.checked3"
+                  >招聘特定人群</el-checkbox
+                >
                 <el-select
                   v-model="queryParams.wt"
                   clearable
@@ -211,24 +218,35 @@
       </el-form>
     </div>
 
-    <!-- E demo2筛选部分 -->
+    <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job :jobData="queryResult"></per-search-job>
+    <per-search-job
+      :jobData="queryResult"
+      @showJobDetials="showJobDetial($event)"
+    ></per-search-job>
+    <!-- 职位详细信息 弹窗部分 -->
+    <el-dialog width="75%" :visible.sync="dialog" :before-close="handleClose">
+      <job-details :positionData="onePosition"></job-details>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import { queryJobs } from '@/api/personApi';
+import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import { queryJobs, doDeliveryResume } from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
-    PerSearchJob
+    PerSearchJob,
+    JobDetails
   },
   data() {
     return {
+      dialog: false,
+      positionDetailsId: '',
       queryParams: {
         checked1: '',
         checked2: '',
@@ -238,10 +256,10 @@ export default {
         wt: '',
         xl: '',
         positionId: '4',
-        positionName: '销售/客服/技术支持',
+        positionName: '不限',
         salaryScope: '不限',
         workArea: '',
-        workNature: '',
+        workNature: '不限',
         eduRequire: '',
         recruitNum: '3',
         corpName: '上海新移力自动化科技有限公司',
@@ -270,6 +288,7 @@ export default {
         }
       ],
       queryResult: [],
+      zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       nlOptions: [
         { value: '01', label: '20' },
         { value: '04', label: '21' },
@@ -336,11 +355,30 @@ export default {
       jobList: []
     };
   },
+  computed: {
+    onePosition() {
+      let that = this;
+      return this.positionDetailsId
+        ? this.queryResult.find(function(i) {
+            return i.positionId === that.positionDetailsId;
+          })
+        : {};
+    }
+  },
   methods: {
-    clearQueryParams: function() {},
+    clearQueryParams: function() {
+      Object.keys(this.queryParams).forEach(
+        key => (this.queryParams[key] = '')
+      );
+      this.queryParams.positionName = '不限';
+      this.queryParams.salaryScope = '不限';
+      this.queryParams.workNature = '不限';
+      this.queryParams.workYearNeed = '不限';
+    },
     async queryJobs(val) {
       console.log(this.$refs['queryJobFrom'].model);
       let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
+      params.content = $.trim(val);
       try {
         let result = await queryJobs(params);
         console.log('result', result);
@@ -350,13 +388,55 @@ export default {
         console.log(error);
       }
     },
-    showMoreRadios(radiosIndex) {
+    showMoreRadios(event, radiosIndex) {
       let dom = $('#' + radiosIndex);
+      let $this = $(event.target);
       if (dom && dom.hasClass('radio-list-bar-more')) {
         dom.removeClass('radio-list-bar-more');
+        $this
+          .siblings('.el-icon-caret-bottom')
+          .css('transform', 'rotate(0deg)');
       } else {
         dom.addClass('radio-list-bar-more');
+        $this
+          .siblings('.el-icon-caret-bottom')
+          .css('transform', 'rotate(180deg)');
       }
+    },
+    showJobDetial(positionId) {
+      //显示岗位详细信息
+      console.log(positionId);
+      this.dialog = true;
+      this.positionDetailsId = positionId;
+    },
+    selectJob: function(positionId) {
+      //投递简历
+      let that = this;
+      console.log(positionId + '功能暂未开放');
+      doDeliveryResume({
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      })
+        .then(res => {
+          if (res.status === 200) {
+            // TODO 删除界面上的该职位
+            that.$alert('简历投递成功');
+          } else {
+            that.$message({
+              type: 'error',
+              message: '简历投递失败'
+            });
+          }
+        })
+        .catch(err =>
+          that.$$message({
+            type: 'error',
+            message: '系统异常，简历投递成功'
+          })
+        );
+    },
+    handleClose() {
+      this.dialog = false;
     }
   }
 };
@@ -385,7 +465,7 @@ export default {
     -webkit-transition: max-height 0.5s;
   }
   .radio-list-bar-more {
-    max-height: 208px !important;
+    max-height: 416px !important;
   }
 }
 
@@ -443,6 +523,9 @@ export default {
       color: #fc6f3d;
       cursor: pointer;
     }
+  }
+  .more-ico {
+    color: #999;
   }
 }
 </style>
