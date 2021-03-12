@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 15:57:22
+ * @LastEditTime: 2021-03-12 13:58:56
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -124,7 +124,7 @@ const dic = {
     { value: '11', label: '其他' }
   ],
   //语种等级
-  RECRUIT_LANGUAGE_filter: [
+  RECRUIT_LANGUAGE_LEVEL: [
     { value: '1', label: '一般' },
     { value: '2', label: '良好' },
     { value: '3', label: '熟练' },
@@ -183,19 +183,19 @@ const dic = {
     { value: '49', label: '农、林、牧、渔业' },
     { value: '50', label: '其他' }
   ],
-  //职业二级分类
+  //职业二级分类(TODO)
   RECRUIT_POSITION_S_TYPE: [
-    { value: '1501', label: '软件工程师' },
-    { value: '1502', label: '数据库开发、管理' },
-    { value: '1503', label: '程序设计员' },
-    { value: '1504', label: '系统分析、架构' },
-    { value: '1505', label: 'ERP技术开发、应用、实施' },
-    { value: '1506', label: '手机软件开发' },
-    { value: '1507', label: 'WEB前端开发' },
-    { value: '1508', label: '软件界面设计' },
-    { value: '1509', label: '硬件工程师' },
-    { value: '1510', label: '嵌入式软、硬件开发' },
-    { value: '1511', label: '其他计算机软硬件' }
+    { value: '1501', label: '软件工程师', filter: '15' },
+    { value: '1502', label: '数据库开发、管理', filter: '15' },
+    { value: '1503', label: '程序设计员', filter: '15' },
+    { value: '1504', label: '系统分析、架构', filter: '15' },
+    { value: '1505', label: 'ERP技术开发、应用、实施', filter: '15' },
+    { value: '1506', label: '手机软件开发', filter: '15' },
+    { value: '1507', label: 'WEB前端开发', filter: '15' },
+    { value: '1508', label: '软件界面设计', filter: '15' },
+    { value: '1509', label: '硬件工程师', filter: '15' },
+    { value: '1510', label: '嵌入式软、硬件开发', filter: '15' },
+    { value: '1511', label: '其他计算机软硬件', filter: '15' }
   ],
   //反馈来源
   RECRUIT_FEEDBACK_SOURCE: [],

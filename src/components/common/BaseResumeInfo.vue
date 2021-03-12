@@ -58,14 +58,18 @@
       <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe63d;</i> {{ positionNameText }}</span
+            ><i class="icon iconfont">&#xe641;</i> {{ positionNameText }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe641;</i> {{ salaryScope }}</span
+            ><i class="icon iconfont">&#xe644;</i> {{ salaryScope }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe63f;</i>
-            {{ salaryScope }}互联网-计算机软件-计算机多媒体服务-电子商务...
+            ><i class="icon iconfont">&#xe642;</i>
+            {{ positionLikeText }}
+          </span>
+          <span class="intention-item"
+            ><i class="icon iconfont">&#xe63e;</i>
+            {{ workNatureText }}
           </span>
           <span class="intention-item"
             ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
@@ -342,7 +346,11 @@
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item label="意向职位分类" :label-width="formLabelWidth">
+        <el-form-item
+          label="意向职位分类"
+          prop="workNature"
+          :label-width="formLabelWidth"
+        >
           <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option7"
@@ -353,7 +361,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="意向行业" :label-width="formLabelWidth">
+        <el-form-item
+          label="意向行业"
+          prop="positionName"
+          :label-width="formLabelWidth"
+        >
           <el-select
             v-model="jobIntentionForm.positionName"
             placeholder="请选择"
@@ -369,14 +381,22 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="薪酬下线" :label-width="formLabelWidth">
+            <el-form-item
+              label="薪酬下线"
+              prop="salaryScopeDown"
+              :label-width="formLabelWidth"
+            >
               <el-input
                 v-model="jobIntentionForm.salaryScopeDown"
                 autocomplete="off"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
-            ><el-form-item label="薪酬上线" :label-width="formLabelWidth">
+            ><el-form-item
+              label="薪酬上线"
+              prop="salaryScopeUp"
+              :label-width="formLabelWidth"
+            >
               <el-input
                 v-model="jobIntentionForm.salaryScopeUp"
                 autocomplete="off"
@@ -384,7 +404,11 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="意向工作区域" :label-width="formLabelWidth">
+        <el-form-item
+          label="意向工作区域"
+          prop="workArea"
+          :label-width="formLabelWidth"
+        >
           <el-select v-model="jobIntentionForm.workArea" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option1"
@@ -395,7 +419,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="意向工作性质" :label-width="formLabelWidth">
+        <el-form-item
+          label="意向工作性质"
+          prop="workNature"
+          :label-width="formLabelWidth"
+        >
           <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
             <el-option
               v-for="item in dicOptions.option2"
@@ -414,15 +442,16 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button
+          id="dialog1Btn"
           @click="dialogClear('jobIntentionForm')"
           class="white-btn btn-style"
-          >清 空</el-button
+          >还 原</el-button
         >
         <el-button
           type="primary"
           @click="dialogFormVisible = false"
           class="orange-btn btn-style"
-          >发布评价</el-button
+          >保 存</el-button
         >
       </div>
     </el-dialog>
@@ -445,7 +474,11 @@
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item label="曾任职公司名称" :label-width="formLabelWidth">
+        <el-form-item
+          label="曾任职公司名称"
+          prop="corpName"
+          :label-width="formLabelWidth"
+        >
           <el-input
             v-model="workExperienceForm.corpName"
             autocomplete="off"
@@ -458,7 +491,7 @@
               class="input-one"
               label="起始时间"
               :label-width="formLabelWidth"
-              prop="date1"
+              prop="entryDate"
             >
               <el-date-picker
                 type="date"
@@ -473,7 +506,7 @@
               class="input-two"
               label="结束时间"
               :label-width="formLabelWidth"
-              prop="date2"
+              prop="quitDate"
             >
               <el-date-picker
                 type="date"
@@ -484,14 +517,22 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="所任职位" :label-width="formLabelWidth">
+        <el-form-item
+          label="所任职位"
+          prop="positionName"
+          :label-width="formLabelWidth"
+        >
           <el-input
             v-model="workExperienceForm.positionName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
-        <el-form-item label="主要工作内容" :label-width="formLabelWidth">
+        <el-form-item
+          label="主要工作内容"
+          prop="workDescribe"
+          :label-width="formLabelWidth"
+        >
           <el-input
             type="textarea"
             placeholder="请输入（1000字符）"
@@ -501,6 +542,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
+          id="dialog2Btn"
           @click="dialogClear('workExperienceForm')"
           class="white-btn btn-style"
           >清 空</el-button
@@ -532,14 +574,22 @@
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item label="毕业院校" :label-width="formLabelWidth">
+        <el-form-item
+          label="毕业院校"
+          prop="collegesName"
+          :label-width="formLabelWidth"
+        >
           <el-input
             v-model="educationExperienceForm.collegesName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
-        <el-form-item label="专业" :label-width="formLabelWidth">
+        <el-form-item
+          label="专业"
+          prop="majorName"
+          :label-width="formLabelWidth"
+        >
           <el-select
             v-model="educationExperienceForm.majorName"
             placeholder="请选择"
@@ -554,7 +604,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="学历" :label-width="formLabelWidth">
+        <el-form-item
+          label="学历"
+          prop="eduLevel"
+          :label-width="formLabelWidth"
+        >
           <el-select
             v-model="educationExperienceForm.eduLevel"
             placeholder="请选择"
@@ -574,7 +628,7 @@
               class="input-one"
               label="入学时间"
               :label-width="formLabelWidth"
-              prop="date1"
+              prop="admissionDate"
             >
               <el-date-picker
                 type="date"
@@ -589,7 +643,7 @@
               class="input-two"
               label="毕业时间"
               :label-width="formLabelWidth"
-              prop="date2"
+              prop="graduateDate"
             >
               <el-date-picker
                 type="date"
@@ -603,6 +657,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
+          id="dialog3Btn"
           @click="dialogClear('educationExperienceForm')"
           class="white-btn btn-style"
           >清 空</el-button
@@ -674,6 +729,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
+          id="dialog4Btn"
           @click="dialogClear('languageSkillsForm')"
           class="white-btn btn-style"
           >清 空</el-button
@@ -705,14 +761,22 @@
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item label="证书名称" :label-width="formLabelWidth">
+        <el-form-item
+          label="证书名称"
+          prop="certName"
+          :label-width="formLabelWidth"
+        >
           <el-input
             v-model="skillsCertificateForm.certName"
             autocomplete="off"
             placeholder="请输入"
           ></el-input>
         </el-form-item>
-        <el-form-item label="技能等级" :label-width="formLabelWidth">
+        <el-form-item
+          label="技能等级"
+          prop="certLevel"
+          :label-width="formLabelWidth"
+        >
           <el-input
             v-model="skillsCertificateForm.certLevel"
             autocomplete="off"
@@ -723,7 +787,7 @@
           class="input-one"
           label="获得时间"
           :label-width="formLabelWidth"
-          prop="date1"
+          prop="receiveTime"
         >
           <el-date-picker
             type="date"
@@ -736,6 +800,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
+          id="dialog5Btn"
           @click="dialogClear('skillsCertificateForm')"
           class="white-btn btn-style"
           >清 空</el-button
@@ -795,12 +860,13 @@
 
 <script>
 import {
-  getGzxz,
-  getQx,
-  getLanguageType,
-  getLanguageLevel,
-  getRecruitEdu,
-  getPsnlResume
+  // getGzxz,
+  // getQx,
+  // getLanguageType,
+  // getLanguageLevel,
+  // getRecruitEdu,
+  getPsnlResume,
+  savePsnlEvaluate
 } from '@/api/common';
 import { getPersonBaseInfo } from '@/api/personApi';
 import { getDicText } from '@/utils/index';
@@ -900,21 +966,21 @@ export default {
       dialog6: false,
       dicOptions: {
         //区县
-        option1: [],
+        option1: this.$store.getters['dictionary/ggjbxx_qx'],
         //工作性质
-        option2: [],
+        option2: this.$store.getters['dictionary/recruit_work_nature'],
         //
-        option3: [],
-        //
-        option4: [],
-        //
-        option5: [],
-        //
-        option6: [],
+        option3: this.$store.getters['dictionary/ggjbxx_qx'],
+        //学历
+        option4: this.$store.getters['dictionary/recruit_edu'],
+        // 语种
+        option5: this.$store.getters['dictionary/recruit_language_type'],
+        // 语言等级
+        option6: this.$store.getters['dictionary/recruit_language_level'],
         //职位
-        option7: [],
+        option7: this.$store.getters['dictionary/recruit_position_s_type'],
         //行业
-        option8: []
+        option8: this.$store.getters['dictionary/recruit_position_f_type']
       },
       resume: {
         // applyForId: '',
@@ -941,6 +1007,19 @@ export default {
     };
   },
   computed: {
+    workNatureText: function() {
+      if (
+        this.$store.getters['dictionary/recruit_work_nature'] &&
+        this.resume.workNature
+      ) {
+        return getDicText(
+          this.$store.getters['dictionary/recruit_work_nature'],
+          'RECRUIT_WORK_NATURE',
+          this.resume.workNature
+        );
+      }
+      return this.resume.workArea;
+    },
     workAreaText: function() {
       if (this.$store.getters['dictionary/ggjbxx_qx'] && this.resume.workArea) {
         return getDicText(
@@ -955,6 +1034,27 @@ export default {
     salaryScope: function() {
       //return this.resume.salaryScopeUp + '-' + this.resume.salaryScopeDown;
       return this.resume.salaryScope;
+    },
+    positionLikeText: function() {
+      let that = this,
+        positionArray = [],
+        positionNameArray = [];
+      if (that.resume.positionLike) {
+        positionArray = that.resume.positionLike.split('-');
+      } else {
+        return;
+      }
+      if (that.$store.getters['dictionary/recruit_position_f_type']) {
+        positionNameArray = positionArray.map(function(val) {
+          let _dic = that.$store.getters[
+            'dictionary/recruit_position_f_type'
+          ].find(function(i) {
+            return i.value === val;
+          });
+          return _dic ? _dic.label : '';
+        });
+      }
+      return positionNameArray.join('-');
     },
     positionNameText: function() {
       let that = this;
@@ -1048,8 +1148,9 @@ export default {
     //初始化加载个人基本信息
     async getPersonInfo() {
       try {
-        // TODO 更换pid
-        let result = await getPersonBaseInfo({ pid: '201906186258910' });
+        let result = await getPersonBaseInfo({
+          pid: this.$store.getters['person/pid'] || '201906186258910'
+        });
         console.log('result', result);
         if (result.status === 200)
           this.$set(this, 'personInfo', result.result.data);
@@ -1075,32 +1176,33 @@ export default {
         });
     },
     loadDicData() {
-      let that = this;
-      Promise.all([
-        getQx(),
-        getGzxz(),
-        getRecruitEdu(),
-        getLanguageType(),
-        getLanguageLevel()
-      ])
-        .then(function(results) {
-          that.$set(that.dicOptions, 'option1', results[0].dicData);
-          that.$set(that.dicOptions, 'option2', results[1].dicData);
-          //that.$set(that.dicOptions, 'option3', results[2].dicData);
-          that.$set(that.dicOptions, 'option4', results[2].dicData);
-          that.$set(that.dicOptions, 'option5', results[3].dicData);
-          that.$set(that.dicOptions, 'option6', results[4].dicData);
-        })
-        .catch(function(err) {
-          this.$message({
-            message: '缺失字典信息' + err,
-            type: 'error'
-          });
-        });
+      // let that = this;
+      // Promise.all([
+      //   getQx(),
+      //   getGzxz(),
+      //   getRecruitEdu(),
+      //   getLanguageType(),
+      //   getLanguageLevel()
+      // ])
+      //   .then(function(results) {
+      //     that.$set(that.dicOptions, 'option1', results[0].dicData);
+      //     that.$set(that.dicOptions, 'option2', results[1].dicData);
+      //     //that.$set(that.dicOptions, 'option3', results[2].dicData);
+      //     that.$set(that.dicOptions, 'option4', results[2].dicData);
+      //     that.$set(that.dicOptions, 'option5', results[3].dicData);
+      //     that.$set(that.dicOptions, 'option6', results[4].dicData);
+      //   })
+      //   .catch(function(err) {
+      //     this.$message({
+      //       message: '缺失字典信息' + err,
+      //       type: 'error'
+      //     });
+      //   });
     },
     dialogSubmit(formName) {
       if (formName === 'selfEvaluationForm') {
-        console.log(this.$refs[formName].model.evaluate.length);
+        //console.log(this.$refs[formName].model.evaluate.length);
+        this.savePsnlEvaluate();
         return;
       }
 
@@ -1184,31 +1286,45 @@ export default {
       });
     },
     dialogClear(formName) {
+      //清空弹出框
       this.$refs[formName].resetFields();
-      console.log(this.$refs[formName]);
     },
     editCard(dialog, index) {
       if (dialog) {
         switch (dialog) {
           case 'dialog1':
             this.dialog1 = true;
+            //$("#dialog1Btn").children('span').html('还 原');
             this.jobIntentionForm = {
               contactPhone: this.resume.contactPhone,
               livingAddress: this.resume.livingAddress,
               positionName: this.resume.livingAddress,
-              workNature: this.resume.livingAddress,
-              salaryScopeDown: this.resume.salaryScope,
+              workNature: this.resume.workNature,
+              workArea: this.resume.workArea,
+              salaryScopeDown: this.resume.salaryScope
+                ? this.resume.salaryScope.split('-')[0]
+                : '',
               salaryScopeUp: this.resume.salaryScope
+                ? this.resume.salaryScope.split('-').length === 2
+                  ? this.resume.salaryScope.split('-')[1]
+                  : ''
+                : ''
             };
             break;
           case 'dialog2':
             this.dialog2 = true;
+            $('#dialog2Btn')
+              .children('span')
+              .html('还 原');
             this.workExperienceForm = JSON.parse(
               JSON.stringify(this.resume.laborExp[index])
             );
             break;
           case 'dialog3':
             this.dialog3 = true;
+            $('#dialog3Btn')
+              .children('span')
+              .html('还 原');
             this.educationExperienceForm = JSON.parse(
               JSON.stringify(this.resume.eduExp[index])
             );
@@ -1249,10 +1365,34 @@ export default {
       done();
       this.editStatus = false;
       this.editItemIdex = 0;
+      $('#dialog2Btn')
+        .children('span')
+        .html('清 空');
+      $('#dialog3Btn')
+        .children('span')
+        .html('清 空');
+    },
+    async savePsnlEvaluate() {
+      let saveResult = await savePsnlEvaluate({
+        pid: this.$store.getters['person/pid'],
+        content: this.selfEvaluationForm.evaluate
+      }).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '系统异常，保存失败'
+        });
+        return;
+      });
+      if (saveResult.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '个人描述保存成功'
+        });
+      }
     }
   },
   created() {
-    //this.loadDicData();
+    //初始化加载个人简历基本信息
     this.loadPsnlResume();
   }
 };

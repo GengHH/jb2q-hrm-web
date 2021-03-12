@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 15:35:02
+ * @LastEditTime: 2021-03-12 09:54:24
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -50,6 +50,9 @@ const updatePersonalPermissions = params =>
 //投递简历
 const doDeliveryResume = params =>
   putAction(basePath + '/person/feedback/do-applyFor', params);
+//修改个人评价（个人描述）
+const savePsnlEvaluate = params =>
+  putAction(basePath + '/person/resume/savePsnlEvaluate', params);
 
 export {
   doLogout,
@@ -62,5 +65,6 @@ export {
   saveLaborExp,
   queryJobs,
   updatePersonalPermissions,
-  doDeliveryResume
+  doDeliveryResume,
+  savePsnlEvaluate
 };

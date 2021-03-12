@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-08 19:15:15
+ * @LastEditTime: 2021-03-12 14:06:39
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -81,6 +81,15 @@ if (isEmpty(store.getters['dictionary/recruit_edu'])) {
 }
 if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
 
 window.setTimeout(function() {

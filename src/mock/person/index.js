@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 16:13:35
+ * @LastEditTime: 2021-03-12 09:56:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -157,8 +157,14 @@ Mock.mock(
     };
   }
 );
-//投递简历
+// TODO 投递简历
 Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
+  return successData;
+});
+//修改个人描述
+Mock.mock(basePath + '/person/resume/savePsnlEvaluate', 'put', function(
+  options
+) {
   return successData;
 });
 

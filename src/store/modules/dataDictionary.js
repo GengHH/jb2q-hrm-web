@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 14:21:54
+ * @LastEditTime: 2021-03-12 14:04:12
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -114,7 +114,10 @@ const getters = {
   recruit_position_f_type: state => state.RECRUIT_POSITION_F_TYPE,
   recruit_position_s_type: state => state.RECRUIT_POSITION_S_TYPE,
   recruit_edu: state => state.RECRUIT_EDU,
-  ggjbxx_street: state => state.GGJBXX_STREET
+  ggjbxx_street: state => state.GGJBXX_STREET,
+  recruit_language_type: state => state.RECRUIT_LANGUAGE_TYPE,
+  recruit_language_level: state => state.RECRUIT_LANGUAGE_LEVEL,
+  recruit_work_nature: state => state.RECRUIT_WORK_NATURE
 };
 
 const mutations = {
@@ -140,6 +143,16 @@ const mutations = {
 
   set_GGJBXX_STREET: (state, dictionary) => {
     state.GGJBXX_STREET = dictionary;
+  },
+
+  set_RECRUIT_LANGUAGE_TYPE: (state, dictionary) => {
+    state.RECRUIT_LANGUAGE_TYPE = dictionary;
+  },
+  set_RECRUIT_LANGUAGE_LEVEL: (state, dictionary) => {
+    state.RECRUIT_LANGUAGE_LEVEL = dictionary;
+  },
+  set_RECRUIT_WORK_NATURE: (state, dictionary) => {
+    state.RECRUIT_WORK_NATURE = dictionary;
   }
 };
 
