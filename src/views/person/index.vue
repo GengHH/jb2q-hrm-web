@@ -56,13 +56,13 @@
             label="出生日期"
             :disabled="false"
           ></pl-input> -->
-          <el-date-picker
+          <pl-date-picker
             v-model="personInfo.birthDate"
             type="date"
             value-format="yyyyMMdd"
-            placeholder="出生日期"
+            label="出生日期"
           >
-          </el-date-picker>
+          </pl-date-picker>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
@@ -126,12 +126,14 @@ import { phonePattern } from '@/utils/regexp';
 import plButton from '@/components/common/BaseLoadingButton';
 import plInput from '@/components/common/BaseLabelInput';
 import plSelect from '@/components/common/BaseLabelSelect';
+import plDatePicker from '@/components/common/BaseLabelDatepicker';
 export default {
   name: 'personApp',
   components: {
     plInput,
     plSelect,
-    plButton
+    plButton,
+    plDatePicker
   },
   data() {
     return {
