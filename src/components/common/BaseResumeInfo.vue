@@ -348,10 +348,14 @@
       >
         <el-form-item
           label="意向职位分类"
-          prop="workNature"
+          prop="positionLike"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
+          <el-select
+            v-model="jobIntentionForm.positionLike"
+            multiple
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option7"
               :key="item.value"
@@ -449,7 +453,7 @@
         >
         <el-button
           type="primary"
-          @click="dialogFormVisible = false"
+          @click="doPositionLike('jobIntentionForm')"
           class="orange-btn btn-style"
           >保 存</el-button
         >
@@ -865,10 +869,17 @@ import {
   // getLanguageType,
   // getLanguageLevel,
   // getRecruitEdu,
-  getPsnlResume,
-  savePsnlEvaluate
+  getPsnlResume
 } from '@/api/common';
-import { getPersonBaseInfo } from '@/api/personApi';
+import {
+  getPersonBaseInfo,
+  savePositionLike,
+  savePsnlEvaluate,
+  saveLaborExp,
+  saveEduExp,
+  saveLanguageLevel,
+  saveSkillCert
+} from '@/api/personApi';
 import { getDicText } from '@/utils/index';
 /**
  * 简历信息的基本模板
@@ -978,9 +989,9 @@ export default {
         // 语言等级
         option6: this.$store.getters['dictionary/recruit_language_level'],
         //职位
-        option7: this.$store.getters['dictionary/recruit_position_s_type'],
+        option7: this.$store.getters['dictionary/recruit_position_f_type'],
         //行业
-        option8: this.$store.getters['dictionary/recruit_position_f_type']
+        option8: this.$store.getters['dictionary/recruit_position_s_type']
       },
       resume: {
         // applyForId: '',
@@ -1018,7 +1029,7 @@ export default {
           this.resume.workNature
         );
       }
-      return this.resume.workArea;
+      return this.resume.workNature;
     },
     workAreaText: function() {
       if (this.$store.getters['dictionary/ggjbxx_qx'] && this.resume.workArea) {
@@ -1137,13 +1148,25 @@ export default {
     },
     //删除外语能力tag
     languageTagClose(index) {
-      // TODO 删除后台的数据
-      this.$delete(this.resume.psnlLanguage, index);
+      this.$confirm('确认删除此项外语能力？')
+        .then(() => {
+          // TODO
+          this.$delete(this.resume.psnlLanguage, index);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //删除技能证书tag
     skillTagClose(index) {
-      // TODO 删除后台的数据
-      this.$delete(this.resume.psnlSkillcert, index);
+      this.$confirm('确认删除此项技能证书？')
+        .then(() => {
+          // TODO
+          this.$delete(this.resume.psnlSkillcert, index);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //初始化加载个人基本信息
     async getPersonInfo() {
@@ -1223,7 +1246,27 @@ export default {
                 });
                 return;
               }
-              this.resume.laborExp.push(this.$refs[formName].model);
+              saveLaborExp(this.$refs[formName].model)
+                .then(res => {
+                  if (res.result.status === 200) {
+                    this.$message({
+                      type: 'error',
+                      message: '保存成功'
+                    });
+                    this.resume.laborExp.push(this.$refs[formName].model);
+                  } else {
+                    this.$message({
+                      type: 'error',
+                      message: '保存失败'
+                    });
+                  }
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'error',
+                    message: '系统异常，保存失败'
+                  });
+                });
               break;
 
             case 'educationExperienceForm':
@@ -1246,7 +1289,28 @@ export default {
                     });
                 return;
               }
-              this.resume.eduExp.push(this.$refs[formName].model);
+              saveEduExp(this.$refs[formName].model)
+                .then(res => {
+                  if (res.result.status === 200) {
+                    this.$message({
+                      type: 'error',
+                      message: '保存成功'
+                    });
+                    this.resume.eduExp.push(this.$refs[formName].model);
+                  } else {
+                    this.$message({
+                      type: 'error',
+                      message: '保存失败'
+                    });
+                  }
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'error',
+                    message: '系统异常，保存失败'
+                  });
+                });
+
               break;
 
             case 'languageSkillsForm':
@@ -1263,7 +1327,27 @@ export default {
                 });
                 return;
               }
-              this.resume.psnlLanguage.push(this.$refs[formName].model);
+              saveLanguageLevel(this.$refs[formName].model)
+                .then(res => {
+                  if (res.result.status === 200) {
+                    this.$message({
+                      type: 'error',
+                      message: '保存成功'
+                    });
+                    this.resume.psnlLanguage.push(this.$refs[formName].model);
+                  } else {
+                    this.$message({
+                      type: 'error',
+                      message: '保存失败'
+                    });
+                  }
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'error',
+                    message: '系统异常，保存失败'
+                  });
+                });
               break;
 
             case 'skillsCertificateForm':
@@ -1279,7 +1363,27 @@ export default {
                 });
                 return;
               }
-              this.resume.psnlSkillcert.push(this.$refs[formName].model);
+              saveSkillCert(this.$refs[formName].model)
+                .then(res => {
+                  if (res.result.status === 200) {
+                    this.$message({
+                      type: 'error',
+                      message: '保存成功'
+                    });
+                    this.resume.psnlSkillcert.push(this.$refs[formName].model);
+                  } else {
+                    this.$message({
+                      type: 'error',
+                      message: '保存失败'
+                    });
+                  }
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'error',
+                    message: '系统异常，保存失败'
+                  });
+                });
               break;
           }
         }
@@ -1298,7 +1402,10 @@ export default {
             this.jobIntentionForm = {
               contactPhone: this.resume.contactPhone,
               livingAddress: this.resume.livingAddress,
-              positionName: this.resume.livingAddress,
+              positionName: this.resume.positionName,
+              positionLike: this.resume.positionLike
+                ? this.resume.positionLike.split('-')
+                : [],
               workNature: this.resume.workNature,
               workArea: this.resume.workArea,
               salaryScopeDown: this.resume.salaryScope
@@ -1387,6 +1494,39 @@ export default {
         this.$message({
           type: 'success',
           message: '个人描述保存成功'
+        });
+      }
+    },
+    async doPositionLike(formName) {
+      let that = this;
+      that.dialogFormVisible = false;
+      console.log(this[formName]);
+      let saveResult = await savePositionLike(that.$refs[formName].model).catch(
+        err => {
+          that.$message({
+            type: 'error',
+            message: '系统异常，保存失败'
+          });
+        }
+      );
+      if (saveResult.status === 200) {
+        // TODO
+        this.$message({
+          type: 'success',
+          message: '保存成功'
+        });
+        this.resume.workNature = this.jobIntentionForm.workNature;
+        this.resume.positionName = this.jobIntentionForm.positionName;
+        this.resume.workArea = this.jobIntentionForm.workArea;
+        this.resume.salaryScopeUp = this.jobIntentionForm.salaryScopeUp;
+        this.resume.salaryScopeDown = this.jobIntentionForm.salaryScopeDown;
+        this.resume.positionLike = this.jobIntentionForm.positionLike
+          ? this.jobIntentionForm.positionLike.join('-')
+          : '';
+      } else {
+        this.$message({
+          type: 'error',
+          message: '保存失败'
         });
       }
     }

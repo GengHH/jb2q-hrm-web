@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 09:56:34
+ * @LastEditTime: 2021-03-15 13:20:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -163,6 +163,12 @@ Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
 });
 //修改个人描述
 Mock.mock(basePath + '/person/resume/savePsnlEvaluate', 'put', function(
+  options
+) {
+  return successData;
+});
+//修改个人描述
+Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
   options
 ) {
   return successData;

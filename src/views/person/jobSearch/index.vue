@@ -419,7 +419,7 @@ export default {
       })
         .then(res => {
           if (res.status === 200) {
-            // TODO 删除界面上的该职位
+            // TODO 投递简历信息
             that.$alert('简历投递成功');
           } else {
             that.$message({
@@ -429,7 +429,7 @@ export default {
           }
         })
         .catch(err =>
-          that.$$message({
+          that.$message({
             type: 'error',
             message: '系统异常，简历投递成功'
           })
