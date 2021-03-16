@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-04 16:38:52
+ * @LastEditTime: 2021-03-12 14:06:39
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -55,7 +55,10 @@ let isEmpty = function(obj) {
     return true;
   }
 };
-
+// 开发环境使用mock时候，模拟登录
+if (config.mock) {
+  store.dispatch('person/do_login');
+}
 if (isEmpty(store.getters.zjhm)) {
   //获取个人登录信息
   store.dispatch('person/get_personInfo');
@@ -63,6 +66,30 @@ if (isEmpty(store.getters.zjhm)) {
 //初始化字典表;
 if (isEmpty(store.getters['dictionary/yesno'])) {
   store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
 
 window.setTimeout(function() {

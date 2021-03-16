@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-05 18:21:59
+ * @LastEditTime: 2021-03-16 16:07:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -37,6 +37,7 @@ import {
   Submenu,
   Form,
   FormItem,
+  Radio,
   RadioButton,
   RadioGroup,
   Tag,
@@ -55,7 +56,9 @@ import {
   Main,
   CheckboxButton,
   CheckboxGroup,
-  Radio
+  Radio,
+  Upload,
+  ButtonGroup, 
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -84,6 +87,7 @@ export default {
     V.use(Submenu);
     V.use(Form);
     V.use(FormItem);
+    V.use(Radio);
     V.use(RadioButton);
     V.use(RadioGroup);
     V.use(Tag);
@@ -102,6 +106,9 @@ export default {
     V.use(CheckboxButton);
     V.use(CheckboxGroup);
     V.use(Radio);
+    V.use(Upload);
+    V.use(ButtonGroup);
+    
     
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;

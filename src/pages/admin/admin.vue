@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-05 14:40:20
+ * @LastEditTime: 2021-03-15 12:23:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -29,16 +29,17 @@
       <el-container>
         <el-aside width="22%">
           <el-menu
-            default-active="2"
+            :default-active="$route.path"
             class="el-menu-vertical-demo"
             :unique-opened="true"
             @open="handleOpen"
             @close="handleClose"
+            router
           >
             <template v-for="(v, k) in menuList">
               <el-submenu
                 v-if="v.childs && v.childs.length != 0"
-                :index="v.id"
+                :index="v.path"
                 :key="k"
               >
                 <template slot="title">
@@ -48,14 +49,19 @@
                 <el-menu-item
                   v-for="(value, key) in v.childs"
                   :key="key"
-                  :index="value.id"
+                  :index="value.path"
                   @click="menuClick(value)"
                 >
                   <i :class="value.iconName"></i>
                   <span>{{ value.text }}</span>
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="v.id" :key="k" @click="menuClick(v)">
+              <el-menu-item
+                v-else
+                :index="v.path"
+                :key="k"
+                @click="menuClick(v)"
+              >
                 <i :class="v.iconName"></i>
                 <span>{{ v.text }}</span>
               </el-menu-item>
@@ -64,11 +70,16 @@
         </el-aside>
         <el-container>
           <el-main style="padding:5px">
-            <div class="title-style">
-              {{ title }}
-            </div>
-            <div style="padding:10px 5px">
-              <keep-alive :include="['/']">
+            <div class="title-style">{{ $route.name }}</div>
+            <div
+              :style="{
+                padding: '10px 5px',
+                overflow: 'scroll',
+                overflowX: 'hidden',
+                height: height + 'px'
+              }"
+            >
+              <keep-alive>
                 <router-view></router-view>
               </keep-alive>
             </div>
@@ -84,20 +95,18 @@
  * 管理员系统入口界面
  */
 
-import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
   components: {},
   data: () => {
     return {
       userName: '超级管理员',
-      title: '账号管理',
       menuList: [
         {
           id: '1',
           path: '/',
           text: '账号管理',
-          iconName: 'el-icon-s-operation'
+          iconName: 'el-icon-setting'
         },
         {
           id: '2',
@@ -107,7 +116,7 @@ export default {
         },
         {
           id: '3',
-          path: '',
+          path: 'technocracy',
           text: '专家管理',
           iconName: 'el-icon-setting',
           childs: [
@@ -145,7 +154,7 @@ export default {
         },
         {
           id: '4',
-          path: '/technocracy',
+          path: '/profession',
           text: '职业指导',
           iconName: 'el-icon-setting',
           childs: [
@@ -177,7 +186,7 @@ export default {
         },
         {
           id: '5',
-          path: '/technocracy',
+          path: '/unitManagement',
           text: '单位管理',
           iconName: 'el-icon-setting',
           childs: [
@@ -203,7 +212,7 @@ export default {
         },
         {
           id: '6',
-          path: '/technocracy',
+          path: '/recruitmentManagement',
           text: '招聘会管理',
           iconName: 'el-icon-setting',
           childs: [
@@ -273,12 +282,17 @@ export default {
   },
   methods: {
     menuClick(e) {
-      this.title = e.text;
       this.$router.push(e.path);
     },
     handleOpen() {},
     handleClose() {},
     testRoute() {}
+  },
+  computed: {
+    height() {
+      let h = document.documentElement.clientHeight;
+      return h < 600 ? 600 : h - 112;
+    }
   },
   created() {}
 };

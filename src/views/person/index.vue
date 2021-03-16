@@ -25,7 +25,6 @@
           <pl-input
             v-model="personInfo.zjhm"
             label="证件号码"
-            placeholder="BHFE0099889988"
             :disabled="true"
           ></pl-input>
         </el-form-item>
@@ -52,11 +51,18 @@
       </el-col>
       <el-col :span="12" class="form-item-left">
         <el-form-item required>
-          <pl-input
+          <!-- <pl-input
             v-model="personInfo.birthDate"
             label="出生日期"
-            :disabled="true"
-          ></pl-input>
+            :disabled="false"
+          ></pl-input> -->
+          <pl-date-picker
+            v-model="personInfo.birthDate"
+            type="date"
+            value-format="yyyyMMdd"
+            label="出生日期"
+          >
+          </pl-date-picker>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
@@ -114,18 +120,20 @@
 
 <script>
 import { testData } from '@pub/mockTestData';
-import { getQx } from '@/api/common';
+//import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
 import plButton from '@/components/common/BaseLoadingButton';
 import plInput from '@/components/common/BaseLabelInput';
 import plSelect from '@/components/common/BaseLabelSelect';
+import plDatePicker from '@/components/common/BaseLabelDatepicker';
 export default {
   name: 'personApp',
   components: {
     plInput,
     plSelect,
-    plButton
+    plButton,
+    plDatePicker
   },
   data() {
     return {
@@ -158,7 +166,7 @@ export default {
           { required: true, message: '请输入详细地址', trigger: 'blur' }
         ]
       },
-      dicQx: [],
+      dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
       dicXb: [
         { value: '1', label: '男' },
         { value: '2', label: '女' }
@@ -171,7 +179,6 @@ export default {
       //   { value: '1309', label: '区域一' },
       //   { value: '1310', label: '区域二' }
       // ],
-      dicStreet: this.$store.getters['dictionary/yesno'],
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -179,26 +186,55 @@ export default {
     };
   },
   computed: {
+    dicStreet: function() {
+      let that = this;
+      if (this.$store.getters['dictionary/ggjbxx_street']) {
+        let array = this.$store.getters['dictionary/ggjbxx_street'];
+        let newArray = []; //查找符合条件值并存入新数组
+        for (let i in array) {
+          if (array[i].filter === that.personInfo.livingArea) {
+            newArray[newArray.length] = array[i];
+          }
+        }
+        return newArray;
+      }
+      return [];
+    },
     jobFaieList: function() {
       return this.showList ? this.showList.slice(0, 3) : [];
     }
   },
   methods: {
-    async getQx() {
-      try {
-        let result = await getQx();
-        console.log('dic', result);
-        this.$set(this, 'dicQx', result.dicData);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async getPersonInfo() {
       try {
-        let result = await getPersonBaseInfo({ pid: '201906186258910' });
+        if (!this.$store.getters['person/token']) {
+          this.$message({
+            showClose: true,
+            message: '请先登录，谢谢',
+            type: 'error'
+          });
+          // Notification({
+          //   title: '系统提示',
+          //   message: '请先登录，谢谢',
+          //   //duration: 4500,
+          //   type: 'error'
+          // });
+          setTimeout(() => {
+            window.location.href = '/ggzp-shrs/index.html';
+          }, 2000);
+        }
+        // TODO 更换pid this.$store.getters['person/pid']
+        let result = await getPersonBaseInfo({
+          pid: this.$store.getters['person/pid'] || '201906186258910'
+        });
         console.log('result', result);
-        if (result.status === 200)
+        if (result.status === 200 && result.result.data.pid)
           this.$set(this, 'personInfo', result.result.data);
+        else
+          this.$message({
+            type: 'error',
+            message: '未查询到任何信息'
+          });
       } catch (error) {
         console.log(error);
       }
@@ -213,15 +249,13 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
-          let reusult = await updatePersonBaseInfo({
-            data: formData
-          });
+          let reusult = await updatePersonBaseInfo(formData);
           console.log(reusult);
           if (reusult && reusult.status === 200) {
             done();
             this.$message({
               showClose: true,
-              message: 'submit successful!',
+              message: '保存成功!',
               type: 'success'
             });
           } else {
@@ -246,7 +280,7 @@ export default {
     }
   },
   created() {
-    this.getQx();
+    //this.getQx();
     this.getPersonInfo();
     // this.axios
     //   .get('/mock-pers-api/person/info/loadPersonInfo')
@@ -304,6 +338,7 @@ export default {
     .el-col {
       min-height: 80px;
     }
+    .el-input,
     .el-select {
       width: 100%;
     }

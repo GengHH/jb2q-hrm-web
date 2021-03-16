@@ -6,7 +6,8 @@
         <el-row>
           <el-col :span="19">
             <div class="job-title">
-              IOS开发工程师 <i class="bl-bg i-style font-size16">见习</i>
+              {{ positionData.positionName }}
+              <i class="bl-bg i-style font-size16">见习</i>
               <span class="font-size24 font-or">12k-15k</span>
             </div>
             <div class="sixteen-opacity mat-15">
@@ -18,10 +19,10 @@
               <el-divider direction="vertical"></el-divider>
               <span>经验1~2年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘8人</span>
+              <span>招聘{{ positionData.recruitNum }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              万达信息股份有限公司
+              {{ positionData.corpName }}
               <img
                 src="../../../assets/images/ico_rz.png"
                 alt=""
@@ -229,6 +230,12 @@
 <script>
 export default {
   name: 'JobSearchIndex',
+  props: {
+    positionData: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {};
   }
