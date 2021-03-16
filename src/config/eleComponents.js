@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-16 13:37:26
+ * @LastEditTime: 2021-03-16 16:07:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -37,6 +37,7 @@ import {
   Submenu,
   Form,
   FormItem,
+  Radio,
   RadioButton,
   RadioGroup,
   Tag,
@@ -86,6 +87,7 @@ export default {
     V.use(Submenu);
     V.use(Form);
     V.use(FormItem);
+    V.use(Radio);
     V.use(RadioButton);
     V.use(RadioGroup);
     V.use(Tag);

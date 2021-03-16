@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-02 16:57:19
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-02 18:42:51
+ * @LastEditTime: 2021-03-11 11:24:15
  * @Description: 获取登录人的基本信息
  * @FilePath: \jb2q-hrm-web\src\store\getters.js
  */
@@ -35,6 +35,7 @@ const getters = {
   },
   provinceAreas: state => state.dataDictionary.provinceAreas,
   industry: state => state.dataDictionary.industry,
-  occupation: state => state.dataDictionary.occupation
+  occupation: state => state.dataDictionary.occupation,
+  activeMenuIndex: state => state.index.activeMenuIndex
 };
 export default getters;

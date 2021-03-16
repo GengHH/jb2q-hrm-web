@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-05 14:01:24
+ * @LastEditTime: 2021-03-11 18:13:16
  * @Description: 各模块都可调用的功能接口，如：获取字典表
  * @FilePath: \jb2q-hrm-web\src\api\common.js
  */
@@ -16,6 +16,7 @@ const basePath = apiUrlConfig.commonBasePath;
  */
 
 //通用（根据字典表类型）的查询字典表信息
+//const queryDicData = params => getAction(basePath + '/dic/getDicJson', params);
 const queryDicData = params => postAction(basePath + '/dic/getDicJson', params);
 
 //获取工作性质字典表

@@ -29,7 +29,7 @@ export default new Router({
     {
       path: '/',
       //name: '个人首页',
-      redirect: '/personInfo',
+      redirect: '/jobSearch',
       component: () => import('@/views/person'),
       children: [
         {
