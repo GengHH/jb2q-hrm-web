@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-01 15:23:37
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-15 10:35:14
  * @Description: 各个环境的相关配置
  * @FilePath: \jb2q-hrm-web\config\index.js
  */
@@ -68,6 +68,15 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '^/new-corp-api': ''
+        }
+      },
+      '/test': {
+        
+        target: 'https://j2testzzjb.rsj.sh.cegn.cn/ggzp-ywjb-shrs',
+        //target: process.env.VUE_APP_BASE_URL + '/new-corp-api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/test': ''
         }
       }
     },
