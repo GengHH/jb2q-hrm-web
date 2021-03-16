@@ -12,17 +12,38 @@
         <el-col :sm="24" :md="6" :lg="8" :xl="8">
           <!-- 登录框 -->
           <div class="logo-module">
-            <div class="module-logs or-font clearfix" @click="personSignIn">
-              <span class="or-br-color"
+            <div id="persLogin" class="module-logs or-font clearfix">
+              <!-- <span class="or-br-color"
                 ><i class="icon iconfont">&#xe64c;</i></span
+              > -->
+              <h2>个人登录</h2>
+              <br />
+              <br />
+              <p>账号密码登录</p>
+              <p>随申办APP扫码登录</p>
+              <a href="#" @click="personSignIn" class="login-btn login-link-one"
+                >去登录</a
               >
-              <span>个人登录</span>
             </div>
-            <div class="module-logs co-font clearfix" @click="corpSignIn">
-              <span class="co-br-color"
+            <div
+              id="corpLogin"
+              class="module-logs co-font clearfix"
+              @click="corpSignIn"
+            >
+              <!-- <span class="co-br-color"
                 ><i class="icon iconfont">&#xe64d;</i></span
+              > -->
+              <h2>单位登录</h2>
+              <br />
+              <p>法人一证通登录</p>
+              <p>随申办APP/微信/支付宝</p>
+              <p>扫码登录</p>
+              <a
+                href="#"
+                @click="personSignIn"
+                class="login-btn  login-link-two"
+                >去登录</a
               >
-              <span>单位登录</span>
             </div>
           </div>
         </el-col>
@@ -206,10 +227,11 @@ export default {
       //window.location.href =
       //  'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://10.8.243.191:9083/ggzp-zzjb-shrs/loginController/ywtb-index';
       window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=http://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     corpSignIn() {
-      this.$alert('单位登录暂时未开放');
+      window.location.href =
+        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     test() {
       this.axios
@@ -263,55 +285,50 @@ export default {
   }
 }
 
-.el-carousel {
-  height: 300px;
-  width: 100%;
-  div {
-    height: 300px;
-    width: 100%;
-  }
-
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
-
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n + 1) {
-    background-color: #1b579c;
-  }
-}
-
-#carouselBox {
-  margin: 20px 0;
-  .el-col {
-    margin: 10px 0;
-  }
-}
-
 .logo-module {
   width: 100%;
-  height: 300px;
-  background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
+  //height: 300px;
+  //background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
+  background: #fff;
   border-radius: 3px;
   padding: 0 12px;
   display: inline-block;
 
+  #persLogin {
+    background-image: url('../../assets/images/pers-login.png');
+  }
+  #corpLogin {
+    background-image: url('../../assets/images/corp-login.png');
+  }
+  .login-btn {
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  .login-link-one {
+    color: #998cfd;
+  }
+  .login-link-two {
+    color: #ff7862;
+  }
   .module-logs {
-    color: #fda749;
-    background: #fff4ed;
-    font-size: 24px;
-    line-height: 120px;
-    height: 120px;
+    color: #fff;
+    //background: #fff4ed;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-size: 18px;
+    //line-height: 120px;
+    height: 170px;
     border-radius: 3px;
     margin: 20px 0;
-
+    padding-left: 50px;
+    padding-top: 10px;
+    p {
+      margin: 7px 0;
+      font-size: 16px;
+      line-height: 20px;
+    }
     & span:first-child {
       width: 100px;
       height: 100px;

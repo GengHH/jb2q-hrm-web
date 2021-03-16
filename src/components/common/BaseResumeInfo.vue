@@ -25,22 +25,22 @@
         </p>
         <p class="fourteen-opacity mat-15">
           <span
-            ><i class="icon iconfont">&#xe63d;</i>
+            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe63d;</i>
             {{ resume.contactPhone }}年毕业</span
           >
           <el-divider direction="vertical"></el-divider>
           <span
-            ><i class="icon iconfont">&#xe641;</i>
+            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe641;</i>
             {{ resume.contactPhone }}</span
           >
           <el-divider direction="vertical"></el-divider>
           <span
-            ><i class="icon iconfont">&#xe63f;</i>
+            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe63f;</i>
             {{ resume.contactPhone }}</span
           >
           <el-divider direction="vertical"></el-divider>
           <span
-            ><i class="icon iconfont">&#xe643;</i>
+            ><i class="icon iconfont" v-if="resume.livingAddress">&#xe643;</i>
             {{ resume.livingAddress }}</span
           >
         </p>
@@ -58,21 +58,21 @@
       <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe641;</i> {{ positionNameText }}</span
+            ><i class="icon iconfont" v-if="positionNameText">&#xe641;</i> {{ positionNameText }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe644;</i> {{ salaryScope }}</span
+            ><i class="icon iconfont" v-if="salaryScope">&#xe644;</i> {{ salaryScope }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe642;</i>
+            ><i class="icon iconfont" v-if="positionLikeText">&#xe642;</i>
             {{ positionLikeText }}
           </span>
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe63e;</i>
+            ><i class="icon iconfont" v-if="workNatureText">&#xe63e;</i>
             {{ workNatureText }}
           </span>
           <span class="intention-item"
-            ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
+            ><i class="icon iconfont" v-if="workAreaText">&#xe643;</i> {{ workAreaText }}</span
           >
         </p>
       </div>

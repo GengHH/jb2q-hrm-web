@@ -21,12 +21,17 @@
         ><base-search @clickButton="clickButton($event)"></base-search
       ></el-col>
     </el-row>
+    <base-info-notification-card
+      v-if="modeValue"
+      :data="tableData"
+      @deleteMessage="deleteMessage(arguments)"
+    ></base-info-notification-card>
     <pl-table
       :data="tableData"
       ref="serveTable"
       :columns="columns"
       show-pager
-      v-if="modeValue"
+      v-else      
     >
       <template #date="{row}">
         <i class="el-icon-time"></i>
@@ -36,11 +41,6 @@
         <el-rate v-model="row.star"></el-rate>
       </template>
     </pl-table>
-    <base-info-notification-card
-      v-else
-      :data="tableData"
-      @deleteMessage="deleteMessage(arguments)"
-    ></base-info-notification-card>
   </div>
 </template>
 

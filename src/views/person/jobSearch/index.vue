@@ -220,10 +220,11 @@
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job
+    <per-search-job v-if="queryResult.length"
       :jobData="queryResult"
       @showJobDetials="showJobDetial($event)"
     ></per-search-job>
+    <BaseLoadingSvg v-else></BaseLoadingSvg>
     <!-- 职位详细信息 弹窗部分 -->
     <el-dialog width="75%" :visible.sync="dialog" :before-close="handleClose">
       <job-details :positionData="onePosition"></job-details>
@@ -235,13 +236,15 @@
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { queryJobs, doDeliveryResume } from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
     PerSearchJob,
-    JobDetails
+    JobDetails,
+    BaseLoadingSvg
   },
   data() {
     return {
