@@ -1,8 +1,8 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-09 18:42:23
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-16 16:07:12
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
  */
@@ -49,7 +49,16 @@ import {
   Switch,
   Loading,
   Checkbox,
-  Tooltip
+  Tooltip,
+  Container,
+  Aside,
+  Header,
+  Main,
+  CheckboxButton,
+  CheckboxGroup,
+  Radio,
+  Upload,
+  ButtonGroup, 
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -90,7 +99,17 @@ export default {
     V.use(Checkbox);
     V.use(Tooltip);
     V.use(Loading);
-
+    V.use(Container);
+    V.use(Aside);
+    V.use(Header);
+    V.use(Main);
+    V.use(CheckboxButton);
+    V.use(CheckboxGroup);
+    V.use(Radio);
+    V.use(Upload);
+    V.use(ButtonGroup);
+    
+    
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;
     V.prototype.$msgbox = MessageBox;
