@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-15 13:20:10
+ * @LastEditTime: 2021-03-17 17:09:13
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -17,7 +17,7 @@ const basePath = apiUrlConfig.personBasePath;
  */
 
 //获取人员的登录的基本信息
-const doLogout = params =>
+const doPersonLogout = params =>
   postAction(basePath + '/loginController/logout', params);
 //获取人员的登录的基本信息
 const getLogonUser = params =>
@@ -61,7 +61,7 @@ const doDeliveryResume = params =>
   putAction(basePath + '/person/feedback/do-applyFor', params);
 
 export {
-  doLogout,
+  doPersonLogout,
   getLogonUser,
   getPersonBaseInfo,
   updatePersonBaseInfo,

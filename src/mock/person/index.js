@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-15 13:20:42
+ * @LastEditTime: 2021-03-17 18:11:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -80,6 +80,9 @@ const loadPsnlPermissionsInfo = pid => {
 //   return getPersonbaseInfo(options);
 // });
 
+Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
+  return successData;
+});
 Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   options
 ) {

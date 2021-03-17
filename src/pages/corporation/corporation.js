@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 14:54:57
+ * @LastEditTime: 2021-03-17 16:37:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -51,6 +51,9 @@ let isEmpty = function(obj) {
 };
 if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
 /* eslint-disable no-new */
 new Vue({

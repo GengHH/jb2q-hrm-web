@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 15:15:50
+ * @LastEditTime: 2021-03-17 18:12:10
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -72,7 +72,9 @@ const getCorpbaseInfo = pid => {
 // ) {
 //   return getCorpbaseInfo(options);
 // });
-
+Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
+  return successData;
+});
 Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   options
 ) {

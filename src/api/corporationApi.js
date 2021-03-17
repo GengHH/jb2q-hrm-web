@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 15:12:58
+ * @LastEditTime: 2021-03-17 17:09:43
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -17,7 +17,7 @@ const basePath = apiUrlConfig.personBasePath;
  */
 
 //退出
-const doLogout = params =>
+const doCorporaptionLogout = params =>
   postAction(basePath + '/loginController/logout', params);
 //获取人员的登录的基本信息
 const getLogonUser = params =>
@@ -29,4 +29,4 @@ const loadCorpInfo = params =>
 const saveCorpInfo = params =>
   postAction(basePath + '/corp/info/saveCorpInfo', params);
 
-export { doLogout, getLogonUser, loadCorpInfo, saveCorpInfo };
+export { doCorporaptionLogout, getLogonUser, loadCorpInfo, saveCorpInfo };

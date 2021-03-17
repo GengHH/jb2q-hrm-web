@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 15:13:52
+ * @LastEditTime: 2021-03-17 16:47:17
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -15,7 +15,7 @@ const state = {
   //单位标识
   cid: '',
   //用户名
-  name: '',
+  dwmc: '',
   //用户头像
   avatar: '',
   //用户选择城市，默认江苏省
@@ -37,7 +37,7 @@ const state = {
 };
 
 const mutations = {
-  SET_PERSONINOF: (state, value) => {
+  SET_CORPORATIONINOF: (state, value) => {
     state.tyshxym = value.logonUser.tyshxym || '91310107667812584X';
     state.cid = value.cid || '123123123123';
     state.dwmc = value.logonUser.userName || '集团';
@@ -45,7 +45,7 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
   },
-  SET_NAME: (state, name) => {
+  SET_DWMC: (state, name) => {
     state.name = name;
   },
   SET_AVATAR: (state, avatar) => {
@@ -81,8 +81,8 @@ const getters = {
   //   return state.name;
   // }
   token: state => state.token,
-  username: state => state.name,
-  pid: state => state.pid
+  username: state => state.dwmc,
+  cid: state => state.cid
 };
 const actions = {
   //用户登录
@@ -117,7 +117,7 @@ const actions = {
   //用户登录（开发发环境使用）
   do_login({ commit }) {
     return new Promise(resolve => {
-      commit('SET_PERSONINOF', {
+      commit('SET_CORPORATIONINOF', {
         logonUser: {
           tyshxym: '91310107667812584X',
           userName: '万达信息股份有限公司'
@@ -136,7 +136,7 @@ const actions = {
   //用户退出
   do_logout({ commit }) {
     return new Promise(resolve => {
-      commit('SET_PERSONINOF', { logonUser: {} });
+      commit('SET_CORPORATIONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
@@ -152,7 +152,7 @@ const actions = {
       .then(res => {
         console.log('单位登录信息', res);
         if (res.status == 200) {
-          commit('SET_PERSONINOF', res.result);
+          commit('SET_CORPORATIONINOF', res.result);
           commit('SET_TOKEN', 'login');
         } else {
           console.log('加载单位登录信息失败：' + res.message);
