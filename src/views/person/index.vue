@@ -119,7 +119,6 @@
 </template>
 
 <script>
-import { testData } from '@pub/mockTestData';
 //import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
@@ -137,7 +136,6 @@ export default {
   },
   data() {
     return {
-      list: testData.list,
       personInfo: {
         birthDate: '',
         contactPhone: '',
@@ -180,8 +178,6 @@ export default {
       //   { value: '1310', label: '区域二' }
       // ],
       colRowGutter: 40,
-      jobActiveName: 'jobRecommended',
-      corpActiveName: 'corpRecommended',
       labelPosition: ''
     };
   },
@@ -239,12 +235,6 @@ export default {
         console.log(error);
       }
     },
-    jobHandleClick() {
-      console.log(1);
-    },
-    corpHandleClick() {
-      console.log(2);
-    },
     submitForm(done, formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
@@ -272,12 +262,12 @@ export default {
           return false;
         }
       });
-    },
-    submit(done) {
-      setTimeout(() => {
-        done();
-      }, 1000);
     }
+    // submit(done) {
+    //   setTimeout(() => {
+    //     done();
+    //   }, 1000);
+    // }
   },
   created() {
     //this.getQx();
