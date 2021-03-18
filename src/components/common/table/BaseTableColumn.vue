@@ -2,13 +2,14 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-26 18:28:55
+ * @LastEditTime: 2021-03-18 17:59:42
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
 
 <template>
   <el-table-column
+    v-if="!col.unshow"
     v-bind="col.attrs"
     :prop="col.prop"
     :label="col.label"
@@ -83,6 +84,7 @@
               :pop-config="item.popConfig && item.popConfig(scope)"
               fullscreen-loading
               type="text"
+              :icon="item.icon"
               @confirm="done => item.confirm(scope, done, index)"
             >
               {{ item.text || item.actionText(scope) }}
@@ -91,6 +93,7 @@
               v-else
               :key="index"
               v-bind="item.attrs"
+              :icon="item.icon"
               @click="item.onClick(scope)"
             >
               {{ item.text || item.actionText(scope) }}

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-29 10:51:00
+ * @LastEditTime: 2021-03-18 19:00:29
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -411,7 +411,7 @@ export default {
     },
     handleSelectionChange(val) {
       //绑定选取的数据
-      console.log('select Data', val);
+      //console.log('select Data', val);
       this.multipleSelection = val;
     },
     rowStyle({ row, rowIndex }) {
@@ -423,23 +423,27 @@ export default {
       });
     },
     rowClick(row, column, event) {
-      //监听row-click事件，实现选中
-      // 获取表格对象
-      let refsElTable = this.$refs.table;
-      let findRow = this.multipleSelection.find(c => {
-        console.log(c);
-        console.log(c.rowIndex);
-        console.log(row.rowIndex);
-        return c.rowIndex == row.rowIndex;
-      });
-      //找到选中的行
-      if (findRow) {
-        //如过重复选中，则取消选中
-        refsElTable.toggleRowSelection(row, false);
+      if (this.tableConfig && this.tableConfig.rowClickSelected === true) {
+        //监听row-click事件，实现选中
+        // 获取表格对象
+        let refsElTable = this.$refs.table;
+        let findRow = this.multipleSelection.find(c => {
+          console.log(c);
+          console.log(c.rowIndex);
+          console.log(row.rowIndex);
+          return c.rowIndex == row.rowIndex;
+        });
+        //找到选中的行
+        if (findRow) {
+          //如过重复选中，则取消选中
+          refsElTable.toggleRowSelection(row, false);
+          return;
+        }
+        // 实现选中行中选中事件
+        refsElTable.toggleRowSelection(row, true);
+      } else {
         return;
       }
-      // 实现选中行中选中事件
-      refsElTable.toggleRowSelection(row, true);
     }
   }
 };

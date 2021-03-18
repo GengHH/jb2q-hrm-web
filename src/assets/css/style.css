@@ -21,7 +21,6 @@ div {
   list-style: none;
 } */
 
-
 html::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 6px;
@@ -46,8 +45,6 @@ html::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.1);
 }
 
-
-
 i {
   font-style: normal;
 }
@@ -70,7 +67,7 @@ img {
 }
 
 .clearfix:after {
-  content: "";
+  content: '';
   height: 0;
   line-height: 0;
   display: block;
@@ -106,7 +103,7 @@ body {
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   font-size: 14px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -114,52 +111,51 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 /* 字体 */
-.font-eighteen{
-	font-size: 18px;
-	color: #000000;
+.font-eighteen {
+  font-size: 18px;
+  color: #000000;
 }
-.font-sixteen{
-	font-size: 16px;
-	color: #000000;
+.font-sixteen {
+  font-size: 16px;
+  color: #000000;
 }
-.sixteen-opacity{
-	font-size: 16px;
-	color: rgba(0,0,0,0.7);
+.sixteen-opacity {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.7);
 }
-.font-fourteen{
-	font-size: 14px;
-	color: #000000;
+.font-fourteen {
+  font-size: 14px;
+  color: #000000;
 }
-.fourteen-opacity{
-	font-size: 14px;
-	color: rgba(0,0,0,0.7);
+.fourteen-opacity {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
 }
-.four-opacity{
-	font-size: 14px;
-	color: rgba(0,0,0,0.4);
+.four-opacity {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.4);
 }
-.font-twoteen{
-	font-size: 12px;
-	color: #000000;
+.font-twoteen {
+  font-size: 12px;
+  color: #000000;
 }
-.font-or{
-	color: #fc6f3d;
+.font-or {
+  color: #fc6f3d;
 }
-.font-hui{
-	color: #a28171;
+.font-hui {
+  color: #a28171;
 }
-.font-bold{
-	font-weight: bold;
+.font-bold {
+  font-weight: bold;
 }
-.font14-or{
-	font-size: 14px;
-	color: rgba(252,111,61,0.8);
+.font14-or {
+  font-size: 14px;
+  color: rgba(252, 111, 61, 0.8);
 }
 
 /* 自定义（后期应该需要修改） */
-.hidden{
+.hidden {
   visibility: hidden;
 }
 
@@ -174,7 +170,7 @@ body {
   color: #ff9954 !important;
 }
 
-.el-pagination{
+.el-pagination {
   margin: 20px 0 0 10px !important;
 }
 
@@ -188,12 +184,30 @@ body {
   font-weight: 700;
 }
 /* 分页器显示位置 */
-.peger-center{
+.peger-center {
   text-align: center !important;
 }
-.peger-right{
+.peger-right {
   text-align: right !important;
 }
-.peger-left{
+.peger-left {
   text-align: left !important;
+}
+.no-col-padding {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.text-left {
+  text-align: left !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.orange-btn {
+  color: #fff !important;
+  background: #ff9954 linear-gradient(to right, #ff9854, #fc703d) !important;
+  border-color: #ff9954 !important;
 }
