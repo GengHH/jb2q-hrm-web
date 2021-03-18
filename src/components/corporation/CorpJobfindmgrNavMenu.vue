@@ -13,45 +13,22 @@
     @open="handleOpen"
     @close="handleClose"
   >
-    <router-link to="/jobMgr/jobAdd">
+    <router-link to="/jobFindMgr/resumeReceived">
       <el-menu-item index="1">
         <i class="el-icon-user"></i>
         <span slot="title">
-          发布职位
+          收到的简历
         </span>
       </el-menu-item>
     </router-link>
-    <router-link to="/jobMgr/unpublishJobQuery">
+    <router-link to="/jobFindMgr/resumeCollected">
       <el-menu-item index="2">
         <i class="el-icon-menu"></i>
         <span slot="title">
-          未发布职位
+          已收藏的简历
         </span>
       </el-menu-item>
     </router-link>
-    <router-link to="/jobMgr/publishJobQuery">
-      <el-menu-item index="3">
-        <i class="el-icon-document"></i>
-        <span slot="title">
-          已发布职位
-        </span>
-      </el-menu-item>
-    </router-link>
-    <router-link to="/jobMgr/overdueJobQuery">
-      <el-menu-item index="4">
-        <i class="el-icon-document"></i>
-        <span slot="title">
-          已过期职位
-        </span>
-      </el-menu-item>
-    </router-link>
-    <router-link to="/jobMgr/offJobQuery">
-      <el-menu-item index="5">
-        <i class="el-icon-document"></i>
-        <span slot="title">
-          已下架职位
-        </span>
-      </el-menu-item>
     </router-link>
   </el-menu>
 </template>

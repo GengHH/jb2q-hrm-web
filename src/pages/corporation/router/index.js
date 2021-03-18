@@ -53,7 +53,8 @@ export default new Router({
           name: '发布职位',
           components: {
             default: () => import('@/views/corporation/jobMgr/JobAdd'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobmgrNavMenu')
           }
         },
         {
@@ -62,7 +63,8 @@ export default new Router({
           components: {
             default: () =>
               import('@/views/corporation/jobMgr/JobQueryUnpublished'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobmgrNavMenu')
           }
         },
         {
@@ -71,7 +73,8 @@ export default new Router({
           components: {
             default: () =>
               import('@/views/corporation/jobMgr/JobQueryPublished'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobmgrNavMenu')
           }
         },
         {
@@ -80,7 +83,8 @@ export default new Router({
           components: {
             default: () =>
               import('@/views/corporation/jobMgr/JobQueryOverdued'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobmgrNavMenu')
           }
         },
         {
@@ -88,7 +92,8 @@ export default new Router({
           name: '已下架职位',
           components: {
             default: () => import('@/views/corporation/jobMgr/JobQueryOffline'),
-            corpNavMenu: () => import('@/components/corporation/CorpNavMenu')
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobmgrNavMenu')
           }
         }
         // {
@@ -101,12 +106,35 @@ export default new Router({
     {
       path: '/resumeSearch',
       name: '简历搜索',
-      component: () => import('@/views/corporation/employmentTrainee')
+      component: () => import('@/views/corporation/resumeSearch')
     },
     {
       path: '/jobFindMgr',
       name: '应聘管理',
-      component: () => import('@/views/corporation/recruitment')
+      redirect: '/jobFindMgr/resumeReceived',
+      component: () => import('@/views/corporation/corporationLayout'),
+      children: [
+        {
+          path: '/jobFindMgr/resumeReceived',
+          name: '收到的简历',
+          components: {
+            default: () =>
+              import('@/views/corporation/jobFindMgr/resumeReceived'),
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobfindmgrNavMenu')
+          }
+        },
+        {
+          path: '/jobFindMgr/resumeCollected',
+          name: '已收藏的简历',
+          components: {
+            default: () =>
+              import('@/views/corporation/jobFindMgr/resumeCollected'),
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobfindmgrNavMenu')
+          }
+        }
+      ]
     },
     {
       path: '/jobFair',

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-12 14:06:39
+ * @LastEditTime: 2021-03-18 11:40:47
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -28,6 +28,10 @@ import config from '@/config';
 import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
 import PlTable from '@/components/common/table/BaseTable.vue';
+import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
+import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
+import BaseLoadingButton from '@/components/common/BaseLoadingButton';
+import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
 import PlConfig from '@/config/plComponents';
 Vue.config.productionTip = false;
 //按需使用Element组件
@@ -43,6 +47,10 @@ Vue.prototype._ = _;
 
 //安装二次封装组件
 Vue.component(PlTable.name, PlTable);
+Vue.component(BaseLabelInput.name, BaseLabelInput);
+Vue.component(BaseLabelSelect.name, BaseLabelSelect);
+Vue.component(BaseLoadingButton.name, BaseLoadingButton);
+Vue.component(BaseLabelDatepicker.name, BaseLabelDatepicker);
 Vue.use(PlConfig, {});
 // 引入mock配置
 if (config.mock) {

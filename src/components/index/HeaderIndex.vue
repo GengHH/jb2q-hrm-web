@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-17 18:49:16
+ * @LastEditTime: 2021-03-18 10:10:31
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -25,7 +25,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb> -->
         <el-menu
-          :default-active="path"
+          :default-active="$route.path"
           class="el-menu-demo"
           mode="horizontal"
           router
@@ -33,7 +33,7 @@
           text-color="#fff"
           @select="handleSelect"
         >
-          <!-- 个人信息栏 -->
+          <!-- 个人or单位信息栏 -->
           <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
             <template slot="title">{{ userLogInfo.nvaText }}</template>
             <el-menu-item
@@ -81,20 +81,28 @@ export default {
   },
   data() {
     return {
-      //activeIndex: this.$store.getters['activeMenuIndex'],
-      inco: true,
-      path: this.$route.path
+      // activeIndex:
+      //   this.$route.path && this.$route.path.length > 1
+      //     ? this.$route.path.substr(1)
+      //     : this.$route.path,
+      inco: true
     };
   },
-  created() {
-    // if (this.$route.path) {
-    //   this.activeIndex = this.$route.path;
+  computed: {
+    // path() {
+    //   console.log(this.$route.path);
+    //   var aa =
+    //     this.$route.path && this.$route.path.length > 1
+    //       ? this.$route.path.substr(1)
+    //       : this.$route.path;
+    //   console.log(this.$route.path.length);
+    //   return aa;
     // }
   },
   watch: {
     async $route(to, from) {
       //to:即将要跳转到的页面   from:即将离开的页面
-      console.log(this);
+      //console.log(this);
       if (to.path === '/logout' && isNoBody(this)) {
         this.$alert('没有登录！无法退出');
         this.$router.push(from.path);

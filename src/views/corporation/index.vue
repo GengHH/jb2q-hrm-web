@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 15:16:47
+ * @LastEditTime: 2021-03-18 11:42:17
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -212,17 +212,17 @@
 <script>
 import { phonePattern } from '@/utils/regexp';
 import { loadCorpInfo, saveCorpInfo } from '@/api/corporationApi';
-import plButton from '@/components/common/BaseLoadingButton';
-import plInput from '@/components/common/BaseLabelInput';
-import plSelect from '@/components/common/BaseLabelSelect';
-import plDatePicker from '@/components/common/BaseLabelDatepicker';
+// import plButton from '@/components/common/BaseLoadingButton';
+// import plInput from '@/components/common/BaseLabelInput';
+// import plSelect from '@/components/common/BaseLabelSelect';
+// import plDatePicker from '@/components/common/BaseLabelDatepicker';
 export default {
   name: 'corporationApp',
   components: {
-    plButton,
-    plInput,
-    plSelect,
-    plDatePicker
+    // plButton,
+    // plInput,
+    // plSelect,
+    // plDatePicker
   },
   data() {
     return {

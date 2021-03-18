@@ -16,31 +16,36 @@
       <div class="column">
         <p class="font-size24">
           {{ resume.xm }}
-          <span class="sixteen-opacity">{{ resume.age }}岁</span>
+          <span class="sixteen-opacity" v-if="resume.age"
+            >{{ resume.age }}岁</span
+          >
           <i
             class="el-icon-male sixteen-opacity"
             v-if="resume.sex === '男'"
           ></i>
-          <i class="el-icon-female sixteen-opacity" v-else></i>
+          <i
+            class="el-icon-female sixteen-opacity"
+            v-else-if="resume.sex === '女'"
+          ></i>
         </p>
         <p class="fourteen-opacity mat-15">
-          <span
-            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe63d;</i>
+          <span v-if="resume.contactPhone"
+            ><i class="icon iconfont">&#xe63d;</i>
             {{ resume.contactPhone }}年毕业</span
           >
           <el-divider direction="vertical"></el-divider>
-          <span
-            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe641;</i>
+          <span v-if="resume.contactPhone"
+            ><i class="icon iconfont">&#xe641;</i>
             {{ resume.contactPhone }}</span
           >
           <el-divider direction="vertical"></el-divider>
-          <span
-            ><i class="icon iconfont" v-if="resume.contactPhone">&#xe63f;</i>
+          <span v-if="resume.contactPhone"
+            ><i class="icon iconfont">&#xe63f;</i>
             {{ resume.contactPhone }}</span
           >
           <el-divider direction="vertical"></el-divider>
-          <span
-            ><i class="icon iconfont" v-if="resume.livingAddress">&#xe643;</i>
+          <span v-if="resume.livingAddress"
+            ><i class="icon iconfont">&#xe643;</i>
             {{ resume.livingAddress }}</span
           >
         </p>
@@ -58,10 +63,12 @@
       <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item"
-            ><i class="icon iconfont" v-if="positionNameText">&#xe641;</i> {{ positionNameText }}</span
+            ><i class="icon iconfont" v-if="positionNameText">&#xe641;</i>
+            {{ positionNameText }}</span
           >
           <span class="intention-item"
-            ><i class="icon iconfont" v-if="salaryScope">&#xe644;</i> {{ salaryScope }}</span
+            ><i class="icon iconfont" v-if="salaryScope">&#xe644;</i>
+            {{ salaryScope }}</span
           >
           <span class="intention-item"
             ><i class="icon iconfont" v-if="positionLikeText">&#xe642;</i>
@@ -72,7 +79,8 @@
             {{ workNatureText }}
           </span>
           <span class="intention-item"
-            ><i class="icon iconfont" v-if="workAreaText">&#xe643;</i> {{ workAreaText }}</span
+            ><i class="icon iconfont" v-if="workAreaText">&#xe643;</i>
+            {{ workAreaText }}</span
           >
         </p>
       </div>
@@ -1172,7 +1180,7 @@ export default {
     async getPersonInfo() {
       try {
         let result = await getPersonBaseInfo({
-          pid: this.$store.getters['person/pid'] || '201906186258910'
+          pid: this.$store.getters['person/pid'] || ''
         });
         console.log('result', result);
         if (result.status === 200)
@@ -1184,7 +1192,7 @@ export default {
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
-      getPsnlResume()
+      getPsnlResume(this.$store.getters['person/pid'] || '')
         .then(function(res) {
           console.log('个人简历信息', res);
           if (res.status == 200) {

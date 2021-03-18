@@ -122,17 +122,17 @@
 //import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
-import plButton from '@/components/common/BaseLoadingButton';
-import plInput from '@/components/common/BaseLabelInput';
-import plSelect from '@/components/common/BaseLabelSelect';
-import plDatePicker from '@/components/common/BaseLabelDatepicker';
+// import plButton from '@/components/common/BaseLoadingButton';
+// import plInput from '@/components/common/BaseLabelInput';
+// import plSelect from '@/components/common/BaseLabelSelect';
+// import plDatePicker from '@/components/common/BaseLabelDatepicker';
 export default {
   name: 'personApp',
   components: {
-    plInput,
-    plSelect,
-    plButton,
-    plDatePicker
+    // plInput,
+    // plSelect,
+    // plButton,
+    // plDatePicker
   },
   data() {
     return {
