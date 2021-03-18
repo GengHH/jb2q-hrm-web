@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 18:12:10
+ * @LastEditTime: 2021-03-18 20:05:05
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -198,6 +198,10 @@ Mock.mock(basePath + '/common/dic/getRecruitEdu', 'get', {
 Mock.mock(basePath + '/dic/getDicJson', 'post', dicMockDataPost);
 
 //获取个人的基本简历信息
-Mock.mock(basePath + '/person/resume/loadPsnlResume', 'get', resumeMockData);
+Mock.mock(
+  RegExp(basePath + '/person/resume/loadPsnlResume' + '.*'),
+  'get',
+  resumeMockData
+);
 
 export default Mock;

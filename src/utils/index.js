@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 17:56:45
+ * @LastEditTime: 2021-03-18 19:59:59
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -153,6 +153,9 @@ export function queryParams(
   isPrefix = true,
   arrayFormat = 'brackets'
 ) {
+  if (typeof data !== 'object') {
+    return '?' + data;
+  }
   let prefix = isPrefix ? '?' : '';
   let _result = [];
   if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1)

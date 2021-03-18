@@ -594,7 +594,7 @@
           <el-input
             v-model="educationExperienceForm.collegesName"
             autocomplete="off"
-            placeholder="请输入"
+            placeholder="请输入毕业院校"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -602,7 +602,12 @@
           prop="majorName"
           :label-width="formLabelWidth"
         >
-          <el-select
+        <el-input
+            v-model="educationExperienceForm.majorName"
+            autocomplete="off"
+            placeholder="请输入专业"
+          ></el-input>
+          <!-- <el-select
             v-model="educationExperienceForm.majorName"
             placeholder="请选择"
           >
@@ -612,7 +617,7 @@
               :label="item.label"
               :value="item.value"
             >
-            </el-option>
+            </el-option> -->
           </el-select>
         </el-form-item>
 
@@ -988,7 +993,7 @@ export default {
         option1: this.$store.getters['dictionary/ggjbxx_qx'],
         //工作性质
         option2: this.$store.getters['dictionary/recruit_work_nature'],
-        //
+        //专业（暂时没有）
         option3: this.$store.getters['dictionary/ggjbxx_qx'],
         //学历
         option4: this.$store.getters['dictionary/recruit_edu'],
@@ -1192,7 +1197,7 @@ export default {
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
-      getPsnlResume(this.$store.getters['person/pid'] || '')
+      getPsnlResume({ pid: this.$store.getters['person/pid'] } || '')
         .then(function(res) {
           console.log('个人简历信息', res);
           if (res.status == 200) {
@@ -1256,7 +1261,7 @@ export default {
               }
               saveLaborExp(this.$refs[formName].model)
                 .then(res => {
-                  if (res.result.status === 200) {
+                  if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
@@ -1299,7 +1304,7 @@ export default {
               }
               saveEduExp(this.$refs[formName].model)
                 .then(res => {
-                  if (res.result.status === 200) {
+                  if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
@@ -1337,7 +1342,7 @@ export default {
               }
               saveLanguageLevel(this.$refs[formName].model)
                 .then(res => {
-                  if (res.result.status === 200) {
+                  if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
@@ -1373,7 +1378,7 @@ export default {
               }
               saveSkillCert(this.$refs[formName].model)
                 .then(res => {
-                  if (res.result.status === 200) {
+                  if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'

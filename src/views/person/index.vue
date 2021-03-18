@@ -57,8 +57,9 @@
             :disabled="false"
           ></pl-input> -->
           <pl-date-picker
-            v-model="personInfo.birthDate"
+            v-model="newBirthDate"
             type="date"
+            :disabled="true"
             value-format="yyyyMMdd"
             label="出生日期"
           >
@@ -71,7 +72,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="livingArea">
           <pl-select
             v-model="personInfo.livingArea"
             :optionData="dicQx"
@@ -81,7 +82,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required>
+        <el-form-item prop="livingStreet">
           <pl-select
             v-model="personInfo.livingStreet"
             label="居住街镇"
@@ -157,6 +158,12 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
+        livingArea: [
+          { required: true, message: '请输入居住区域', trigger: 'blur' }
+        ],
+        livingStreet: [
+          { required: true, message: '请输入居住街镇', trigger: 'blur' }
+        ],
         livingAddress: [
           { required: true, message: '请输入联系地址', trigger: 'blur' }
         ],
@@ -182,6 +189,14 @@ export default {
     };
   },
   computed: {
+    newBirthDate() {
+      // return this.personInfo.birthDate
+      //   ? this.personInfo.birthDate
+      //   : this.personInfo.zjhm
+      //   ? this.personInfo.zjhm.substring(6, 14)
+      //   : '';
+      return this.personInfo.zjhm ? this.personInfo.zjhm.substring(6, 14) : '';
+    },
     dicStreet: function() {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
@@ -239,6 +254,7 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
+          //formData.birthDate = newBirthDate || formData.birthDate;
           let reusult = await updatePersonBaseInfo(formData);
           console.log(reusult);
           if (reusult && reusult.status === 200) {
