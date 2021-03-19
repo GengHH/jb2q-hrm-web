@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-16 16:07:12
+ * @LastEditTime: 2021-03-16 16:32:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -56,7 +56,6 @@ import {
   Main,
   CheckboxButton,
   CheckboxGroup,
-  Radio,
   Upload,
   ButtonGroup, 
 } from 'element-ui';
@@ -105,7 +104,6 @@ export default {
     V.use(Main);
     V.use(CheckboxButton);
     V.use(CheckboxGroup);
-    V.use(Radio);
     V.use(Upload);
     V.use(ButtonGroup);
     

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-15 10:57:14
+ * @LastEditTime: 2021-03-18 15:58:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -23,7 +23,11 @@
             <div style="line-height:40px;text-align:center">关键字</div>
           </el-col>
           <el-col :span="22">
-            <el-input placeholder="请输入内容"></el-input>
+            <el-input
+              :disabled="advancedQuery"
+              v-model="form.value"
+              placeholder="请输入内容"
+            ></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -32,17 +36,24 @@
           <i class="el-icon-search"></i>
           搜索
         </el-button>
-        <el-button style="margin-left:3px" type="primary" plain>清屏</el-button>
+        <el-button
+          @click="form.value = ''"
+          style="margin-left:3px"
+          type="primary"
+          plain
+          >清屏</el-button
+        >
         <el-button
           style="margin-left:3px"
           type="primary"
           plain
           @click="advancedQuery = !advancedQuery"
+          :icon="!advancedQuery ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"
           >高级搜索</el-button
         >
       </el-col>
     </el-row>
-    <transition name="fade">
+    <transition name="bounce">
       <div v-show="advancedQuery">
         <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
       </div>
@@ -65,7 +76,6 @@
 <script>
 import querylist from './module/queryList';
 import tform from '../common/t_form'; //高级查询
-import axios from 'axios';
 export default {
   name: 'serviceManagement',
   components: {
@@ -74,6 +84,9 @@ export default {
   },
   data() {
     return {
+      form: {
+        input: ''
+      },
       formConfig: {
         inline: true,
         size: 'small',
@@ -297,4 +310,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: translate(0, -50px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+</style>

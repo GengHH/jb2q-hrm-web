@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 11:01:22
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-19 09:24:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -49,7 +49,7 @@ export default {
         },
         {
           id: '6',
-          path: '/blak2',
+          path: '/remind',
           nvaText: '铃铛',
           icon: true,
           iconName: 'el-icon-bell'

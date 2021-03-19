@@ -18,7 +18,8 @@ const config = {
   defaultImgUrl: '//localhost:8085/static/default.jpg',
   commonBasePath: '/ggzp-zzjb-shrs',
   personBasePath: '/ggzp-zzjb-shrs',
-  corpBasePath: '/ggzp-zzjb-shrs'
+  corpBasePath: '/ggzp-zzjb-shrs',
+  adminBasePath: '/ggzp-ywjb-shrs',
 };
 
 export default config;

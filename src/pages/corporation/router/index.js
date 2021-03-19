@@ -114,6 +114,22 @@ export default new Router({
       component: () => import('@/views/corporation/jobFair')
     },
     {
+      path: '/remind',
+      name: '提醒',
+      redirect: '/remind/remind',
+      component: () => import('@/views/corporation/corporationLayout'),
+      children: [
+        {
+          path: '/remind/remind',
+          name: '私信',
+          components: {
+            default: () => import('@/views/corporation/remind/remindCenter'),
+            corpNavMenu: () => import('@/components/corporation/remindMenu')
+          }
+        }
+      ]
+    },
+    {
       path: '/*',
       component: NotFoundPage
     }

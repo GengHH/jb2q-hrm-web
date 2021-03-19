@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-15 10:57:02
+ * @LastEditTime: 2021-03-18 14:40:39
  * @Description: file content
 -->
 <template>
@@ -46,7 +46,7 @@
  * 管理员登陆入口界面
  */
 import SecCtrl from './module/SecCtrl.js';
-import { queryLogonUser } from '@/api/adminApi';
+import { queryLogin } from '@/api/adminApi';
 
 let ks_provider = 'SKF&SKFAPI20046.dll'; // 介质
 let ks_alg = 0; // 使用证书时自动适配
@@ -68,19 +68,11 @@ function getCert() {
   return SecCtrl.KS_GetCert(2);
 }
 
-function getOid() {
-  let signCert = getCert();
-  let oid = SecCtrl.KS_GetCertInfoByOid(signCert, '1.2.156.2319');
-  if (oid.length > 16) oid = oid.substr(oid.length - 16);
-  if (oid.length !== 16) throw 'NO_CERT';
-  return oid;
-}
-
 function signature(srcData, pinCode) {
   let cert = getCert();
   if (!cert) return;
   SecCtrl.KS_SetParam('userpin', pinCode);
-  signature = SecCtrl.KS_SignData(srcData, hashAlg);
+  let signature = SecCtrl.KS_SignData(srcData, hashAlg);
   if (
     SecCtrl.KS_GetLastErrorCode() != 0 &&
     SecCtrl.KS_GetLastErrorMsg() != '成功'
@@ -109,17 +101,6 @@ function checkPass(pinCode) {
   return false;
 }
 
-function modifyPassword(pswOld, pwdNew) {
-  if (!initProv()) return false;
-  let nRet = SecCtrl.KS_ModifyPin(pswOld, pwdNew);
-  if (nRet != 0) {
-    alert('修改密码失败！' + SecCtrl.KS_GetLastErrorMsg());
-    return;
-  } else {
-    alert('修改密码成功！');
-  }
-}
-
 function getLastErr() {
   if (
     SecCtrl.KS_GetLastErrorCode() != 0 &&
@@ -131,20 +112,6 @@ function getLastErr() {
   return true;
 }
 
-function checkVersion(nowVersion) {
-  try {
-    let version = SecCtrl.KS_GetVersion();
-    if (version < 0 || version == undefined || version == 'undefined') {
-      return false;
-    }
-    if (nowVersion && version != nowVersion) {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
 export default {
   name: 'app',
   components: {},
@@ -207,89 +174,26 @@ export default {
           if (signatureInfo == null || signatureInfo['signature'].length == 0) {
             return false;
           }
-          this.$store.state.admin.logonUser = {
-            userId: '',
-            userIdStr: '0000309307',
-            userName: '丁丽莉',
-            loginName: '2b44928ae11fb938',
-            userType: '02',
-            organId: '',
-            organIdStr: '1666',
-            organName: '上海市社会保险事业管理中心金山分中心',
-            organType: '',
-            domainId: 1,
-            domainIdStr: '',
-            domainName: '',
-            roleKey: '',
-            userKey: '',
-            expire: -1,
-            extInfo: {
-              sessionId: '',
-              logid: '',
-              userType: '02',
-              userId: '0000309307',
-              userName: '丁丽莉',
-              userPhone: '',
-              loginName: '2b44928ae11fb938',
-              userKey: '310105810117000',
-              organId: '1666',
-              organCode: '',
-              organName: '上海市社会保险事业管理中心金山分中心',
-              organType: '',
-              organStatus: '',
-              deptId: '',
-              deptCode: '',
-              deptType: '',
-              deptName: '',
-              districtCode: '16',
-              districtName: '金山',
-              streetCode: '1600',
-              streetName: '金山',
-              communityCode: '',
-              communityName: '',
-              loginCaType: '',
-              cookieToken: '',
-              pid: '',
-              deviceSN: '',
-              sfbz: 'TEST_shq310105198101170428',
-              passBySb: false,
-              yxbz: '1',
-              sbdwmc: '',
-              tyshxym: ''
-            },
-            areaInfo: {
-              areaCode: '16',
-              areaCode1: '1600',
-              areaCode2: '166600',
-              areaCode3: '',
-              areaCode4: '',
-              areaCode5: '',
-              areaCode6: '',
-              areaName: '金山',
-              areaName1: '金山',
-              areaName2: '上海市社会保险事业管理中心金山分中心',
-              areaName3: '',
-              areaName4: '',
-              areaName5: '',
-              areaName6: ''
-            },
-            roles: [
-              {
-                roleId: 'R1',
-                roleName: '业务经办'
-              }
-            ],
-            readOnly: false,
-            domainIdKey: '1',
-            userIdKey: '0000309307',
-            organIdKey: '1666'
-          };
+
           this.form.signData = signatureInfo['signature'];
-          console.log(random);
-          console.log(this.form.loginName);
-          console.log(this.form.signData);
-          console.log('登陆成功');
-          window.location.href = 'http://localhost:8089/ggzp-shrs/admin.html';
+          queryLogin({
+            password: strpassword,
+            random: random,
+            loginName: this.form.loginName,
+            signData: this.form.signData
+          })
+            .then(function(response) {
+              if (response.status == 200) {
+                sessionStorage.setItem(
+                  'userInfo',
+                  JSON.stringify(response.result.logonUser)
+                );
+                window.location.href = '../ggzp-shrs/admin.html';
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         } else {
           return false;
         }

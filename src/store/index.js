@@ -2,9 +2,9 @@
  * @Author: GengHH
  * @Date: 2020-12-02 10:48:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-16 16:07:32
+ * @LastEditTime: 2021-03-16 16:29:49
  * @Description: file content
- * @FilePath: \jb2q-hrm-web\src\store\index.js
+ * @FilePath: \jb2q-hrm-web\src\store\index.js 
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
