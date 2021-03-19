@@ -275,8 +275,8 @@
           closable
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
-          @close="languageTagClose(index)"
-          >{{ languageItem }}
+          @close="languageTagClose(index,languageItem.languageId)"
+          >{{ languageItem.text }}
         </el-tag>
       </div>
       <div id="skillsCertificate" class="title-style font-or font-bold">
@@ -299,7 +299,7 @@
             class="tag-card-item"
             size="medium"
             closable
-            @close="skillTagClose(index)"
+            @close="skillTagClose(index,skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
               <span>{{ skillItem.certLevel }}</span>
@@ -1096,7 +1096,8 @@ export default {
     psnlLanguageTags: function() {
       if (this.resume.psnlLanguage && this.resume.psnlLanguage.length) {
         return this.resume.psnlLanguage.map(obj => {
-          let newObj = [];
+          //let newObj = {};
+          let textStr = '';
           let _obj1 = this.dicOptions.option5.find(item => {
             return item.value === obj.languageType;
           });
@@ -1104,9 +1105,9 @@ export default {
             return item.value === obj.languageLevel;
           });
           if (_obj1 || _obj2) {
-            newObj = _obj1.label + _obj2.label;
+            textStr = _obj1.label + _obj2.label;
           }
-          return newObj;
+          return {languageId:obj.languageId, text:textStr};
         });
       } else {
         return [];
@@ -1160,10 +1161,11 @@ export default {
       this.$message(val);
     },
     //删除外语能力tag
-    languageTagClose(index) {
+    languageTagClose(index,languageId) {
       this.$confirm('确认删除此项外语能力？')
         .then(() => {
           // TODO
+          console.log(languageId);
           this.$delete(this.resume.psnlLanguage, index);
         })
         .catch(err => {
@@ -1171,10 +1173,11 @@ export default {
         });
     },
     //删除技能证书tag
-    skillTagClose(index) {
+    skillTagClose(index,certId) {
       this.$confirm('确认删除此项技能证书？')
         .then(() => {
           // TODO
+          console.log(certId);
           this.$delete(this.resume.psnlSkillcert, index);
         })
         .catch(err => {

@@ -1,9 +1,9 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-18 19:53:32
+ * @LastEditTime: 2021-03-19 15:21:39
  * @LastEditors: GengHH
- * @Description: In User Settings Edit
+ * @Description: 个人权限控制
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\permissionSettings.vue
 -->
 <template>
@@ -11,36 +11,46 @@
     <el-col :span="8" v-loading="loading1">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <el-switch v-model="allowSearchView"></el-switch>
+          <el-switch v-model="allowSearchView" :disabled="disabled"></el-switch>
         </div>
-        <div class="text item">是否允许特定单位搜索到本人简历</div>
+        <div class="text item">{{ allowSearchText }}</div>
       </el-card>
     </el-col>
     <el-col :span="8" v-loading="loading2">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <el-switch v-model="allowArtificialRecoView"></el-switch>
+          <el-switch
+            v-model="allowArtificialRecoView"
+            :disabled="disabled"
+          ></el-switch>
         </div>
-        <div class="text item">是否接受管理员人工推荐职位</div>
+        <div class="text item">{{ allowArtificialRecoText }}</div>
       </el-card>
     </el-col>
     <el-col :span="8" v-loading="loading3">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <el-switch v-model="allowAutoRecoView"></el-switch>
+          <el-switch
+            v-model="allowAutoRecoView"
+            :disabled="disabled"
+          ></el-switch>
         </div>
-        <div class="text item">是否接受系统自动推荐职位</div>
+        <div class="text item">{{ allowAutoRecoText }}</div>
       </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import {
+  loadPsnlPermissionsInfo,
+  updatePersonalPermissions
+} from '@/api/personApi';
 export default {
   name: 'permissionSettings',
   data() {
     return {
-      pid: '',
+      disabled: false,
       allowSearch: '0',
       allowArtificialReco: '1',
       allowAutoReco: '0',
@@ -61,6 +71,11 @@ export default {
         this.setPermission(1);
       }
     },
+    allowSearchText() {
+      return this.allowSearch === '1'
+        ? '用人单位将能主动搜索到您的简历'
+        : '用人单位将不能主动搜索到您的简历';
+    },
     allowArtificialRecoView: {
       get: function() {
         return !!Number(this.allowArtificialReco);
@@ -72,6 +87,11 @@ export default {
         this.setPermission(2);
       }
     },
+    allowArtificialRecoText() {
+      return this.allowArtificialReco == '1'
+        ? '将能接受管理员人工推荐职位'
+        : '将不能接受管理员人工推荐职位';
+    },
     allowAutoRecoView: {
       get: function() {
         return !!Number(this.allowAutoReco);
@@ -82,6 +102,11 @@ export default {
         this.loading3 = true;
         this.setPermission(3);
       }
+    },
+    allowAutoRecoText() {
+      return this.allowAutoReco === '1'
+        ? '将接受系统自动推荐职位'
+        : '将不能接受系统自动推荐职位';
     }
   },
   methods: {
@@ -91,30 +116,64 @@ export default {
         message: msg
       });
     },
-    setPermission(index) {
-      setTimeout(() => {
-        switch (index) {
-          case 1:
-            this['loading' + index] = false;
-            this.allowSearchView
-              ? this.showMessage('success', '用人单位将能主动搜索到您的简历')
-              : this.showMessage('success', '用人单位将不能主动搜索到您的简历');
-            break;
-          case 2:
-            this['loading' + index] = false;
-            this.allowArtificialRecoView
-              ? this.showMessage('success', '将能接受管理员人工推荐职位')
-              : this.showMessage('success', '将不能接受管理员人工推荐职位');
-            break;
-          case 3:
-            this['loading' + index] = false;
-            this.allowAutoRecoView
-              ? this.showMessage('success', '将接受系统自动推荐职位')
-              : this.showMessage('success', '接受系统自动推荐职位');
-            break;
+    async setPermission(index) {
+      // TODO 调用后台接口
+      if (index == 1) {
+        let updateResult1 = await updatePersonalPermissions(
+          'allowSearch/' + this.allowSearch
+        );
+        if (updateResult1 && updateResult1.status == 200) {
+          this.allowSearchView
+            ? this.showMessage('success', '用人单位将能主动搜索到您的简历')
+            : this.showMessage('error', '用人单位将不能主动搜索到您的简历');
+        } else {
+          this.showMessage('success', '修改失败');
         }
-      }, 2000);
+        this['loading' + index] = false;
+      } else if (index === 2) {
+        let updateResult2 = await updatePersonalPermissions(
+          'allowArtificialReco/' + this.allowArtificialReco
+        );
+        if (updateResult2 && updateResult2.status == 200) {
+          this.allowArtificialRecoView
+            ? this.showMessage('success', '将能接受管理员人工推荐职位')
+            : this.showMessage('success', '将不能接受管理员人工推荐职位');
+        } else {
+          this.showMessage('error', '修改失败');
+        }
+        this['loading' + index] = false;
+      } else if (index === 3) {
+        let updateResult3 = await updatePersonalPermissions(
+          'allowAutoReco/' + this.allowAutoReco
+        );
+        if (updateResult3 && updateResult3.status == 200) {
+          this.allowAutoRecoView
+            ? this.showMessage('success', '将接受系统自动推荐职位')
+            : this.showMessage('success', '将不能接受系统自动推荐职位');
+        } else {
+          this.showMessage('error', '修改失败');
+        }
+        this['loading' + index] = false;
+      }
     }
+  },
+  created() {
+    loadPsnlPermissionsInfo({ pid: this.$store.getters['person/pid'] } || '')
+      .then(res => {
+        if (res.status === 200) {
+          this.allowSearch = res.result.data.allowSearch;
+          this.allowArtificialReco = res.result.data.allowArtificialReco;
+          this.allowAutoReco = res.result.data.allowAutoReco;
+        } else {
+          // 禁用控件
+          this.disabled = true;
+          this.showMessage('error', '无法加载个人权限信息');
+        }
+      })
+      .catch(() => {
+        this.disabled = true;
+        this.showMessage('error', '系统异常，无法加载个人权限信息');
+      });
   }
 };
 </script>

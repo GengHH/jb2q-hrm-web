@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 20:05:56
+ * @LastEditTime: 2021-03-19 15:20:17
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -59,16 +59,9 @@ const loadPsnlPermissionsInfo = pid => {
     message: '',
     result: {
       data: {
-        pid: '201906186258910',
-        zjlxId: '01',
-        zjhm: '370283199506142214',
-        xm: 'genghonghui',
-        sexId: '1',
-        birthDate: '19960613',
-        contactPhone: '13122272095',
-        livingArea: '01',
-        livingStreet: '1310',
-        livingAddress: '宝山淞南镇新梅松南苑11号楼1201'
+        allowSearch: '1',
+        allowArtificialReco: '1',
+        allowAutoReco: '0'
       }
     }
   };
@@ -106,10 +99,18 @@ Mock.mock(
     return getPersonbaseInfo(options);
   }
 );
-Mock.mock(basePath + '/person/info/loadPsnlPermissionsInfo', 'get', function(
+// 权限控制
+Mock.mock(
+  RegExp(basePath + '/person/info/loadPsnlPermissionsInfo' + '.*'),
+  'get',
+  function(options) {
+    return loadPsnlPermissionsInfo(options);
+  }
+);
+Mock.mock(RegExp(basePath + '/person/info/update' + '.*'), 'put', function(
   options
 ) {
-  return loadPsnlPermissionsInfo(options);
+  return successData;
 });
 
 Mock.mock(basePath + '/person/info/savePersonInfo', 'post', function(options) {
@@ -177,6 +178,11 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
   return successData;
 });
 //新增或修改个人劳动经历信息
-Mock.mock(basePath + '/person/info/saveEduExp', 'post', successData);
-
+Mock.mock(basePath + '/person/info/saveEduExp', 'post', function(options) {
+  return successData;
+});
+//屏蔽所选企业
+Mock.mock(basePath + '/person/info/shieldCorp', 'put', function(options) {
+  return successData;
+});
 export default Mock;

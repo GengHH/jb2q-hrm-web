@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-03-18 11:41:31
+ * @LastEditTime: 2021-03-19 10:45:45
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -64,11 +64,16 @@ export default {
     };
   },
   methods: {
-    getCode() {},
+    getCode() {
+      this.$alert('缺少获取验证码的Api接口，请稍后！');
+    },
     upDateNum() {
       this.$ref['form'].validate(valid => {
         if (valid) {
-          alert('submit!');
+          this.$message({
+            type: 'error',
+            message: '验证码不正确'
+          });
         }
       });
     }

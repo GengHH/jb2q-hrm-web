@@ -2,18 +2,265 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2020-12-31 17:14:23
+ * @LastEditTime: 2021-03-19 13:23:36
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
 <template>
-  <div>jobStarList</div>
+  <div id="jobStarList">
+    <div class="title-style">职位收藏列表</div>
+    <el-row>
+      <el-col :span="12">
+        <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
+          >删除</pl-button
+        >
+      </el-col>
+      <el-col :span="12">
+        <BaseSearch></BaseSearch>
+      </el-col>
+    </el-row>
+    <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
+      <template #date="{row}">
+        <i class="el-icon-time"></i>
+        <span style="margin-left: 10px">{{ row.date }}</span>
+      </template>
+      <template #star="{row}">
+        <el-rate v-model="row.star"></el-rate>
+      </template>
+    </pl-table>
+  </div>
 </template>
 
 <script>
+import BaseSearch from '@/components/common/BaseSearch';
 export default {
-  name: 'JobStarList'
+  name: 'jobStarList',
+  components: {
+    BaseSearch
+  },
+  data() {
+    return {
+      tableData: [
+        {
+          id: '1',
+          date: '2019-05-01',
+          star: null,
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '金沙江路 1518 弄',
+          zip: 200333,
+          tag: '家',
+          status: 0,
+          actions: ['action1', 'action2']
+        },
+        {
+          id: '2',
+          date: '2019-05-04',
+          star: null,
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '金沙江路 1517 弄',
+          zip: 200333,
+          tag: '公司',
+          status: 1,
+          actions: ['action1', 'action2']
+        },
+        {
+          id: '3',
+          date: '2019-05-03',
+          star: null,
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '金沙江路 1519 弄',
+          zip: 200333,
+          tag: '家',
+          status: 0,
+          actions: ['action1', 'action2']
+        },
+        {
+          id: '4',
+          date: '2019-05-02',
+          star: null,
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '金沙江路 1516 弄',
+          zip: 200333,
+          tag: '公司',
+          status: 0,
+          actions: ['action1', 'action2']
+        },
+        {
+          id: '5',
+          date: '2019-05-05',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '金沙江路 1515 弄',
+          zip: 200333,
+          tag: '公司',
+          status: 0,
+          actions: ['action1', 'action2']
+        }
+      ]
+    };
+  },
+  computed: {
+    columns() {
+      return [
+        { attrs: { type: 'selection' } },
+        {
+          label: '行序号',
+          attrs: { type: 'index', width: 100 },
+          rowSpan: [
+            [0, 1],
+            [2, 4]
+          ]
+        },
+        {
+          label: '单位名称',
+          prop: 'positionName',
+          rowSpan: 'all'
+        },
+        {
+          label: '职位名称',
+          prop: 'positionName',
+          rowSpan: 'all'
+        },
+        {
+          label: '职位薪资',
+          prop: 'name',
+          rowSpan: 'all'
+        },
+        {
+          label: '学历要求',
+          prop: 'xl',
+          rowSpan: 'all'
+        },
+        {
+          label: '工作性质',
+          prop: 'age',
+          rowSpan: 'all'
+        },
+        {
+          label: '工作年限',
+          prop: 'age',
+          rowSpan: 'all'
+        },
+        {
+          label: '招聘人数',
+          prop: 'age',
+          rowSpan: 'all'
+        },
+        {
+          label: '工作地点',
+          prop: 'age',
+          rowSpan: 'all'
+        },
+        {
+          label: '收藏时间',
+          prop: 'date',
+          formatter: 'date',
+          slotName: 'date'
+        },
+        {
+          label: '操作',
+          attrs: { width: 200 },
+          actions: [
+            {
+              id: 'action1',
+              text: '查看',
+              attrs: { round: true, size: 'small' },
+              icon: 'el-icon-search',
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action2',
+              text: '收藏',
+              attrs: { round: true, size: 'small' },
+              icon: 'el-icon-edit',
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            }
+          ]
+        }
+      ];
+    },
+    selection() {
+      return this.$refs.jobTable.multipleSelection;
+    }
+  },
+  methods: {
+    deleteJob() {
+      let that = this;
+      if (this.selection && this.selection.length == 0) {
+        this.$alert('请选择一条');
+      } else {
+        // TODO 删除数据
+        that.tableData = that.tableData.filter(
+          obj => !that.selection.some(i => obj.id === i.id)
+        );
+      }
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#jobStarList {
+  #seek-box {
+    margin: 0;
+    ::v-deep #seek-box-input {
+      height: 40px !important;
+    }
+  }
+  .title-style {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 40px;
+    border-bottom: 1px solid #e9eef3;
+    text-align: left;
+    padding: 0 30px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    position: relative;
+  }
+  .title-style::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: #fc7a43;
+    position: absolute;
+    left: 12px;
+    top: 13px;
+  }
+  .el-row {
+    & > .el-col {
+      margin: 10px 0;
+    }
+    .delimiter {
+      line-height: 40px;
+    }
+    .no-col-padding {
+      button {
+        width: 100px;
+      }
+    }
+    .el-range-editor {
+      width: 100%;
+    }
+  }
+}
+</style>

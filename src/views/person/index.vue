@@ -254,7 +254,7 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
-          //formData.birthDate = newBirthDate || formData.birthDate;
+          formData.birthDate = this.newBirthDate || formData.birthDate;
           let reusult = await updatePersonBaseInfo(formData);
           console.log(reusult);
           if (reusult && reusult.status === 200) {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 17:09:13
+ * @LastEditTime: 2021-03-19 14:54:28
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -33,7 +33,10 @@ const queryJobs = params =>
   getAction(basePath + '/person/manage/find/position', params);
 //加载个人权限信息
 const loadPsnlPermissionsInfo = params =>
-  postAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
+  getAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
+//修改个人权限信息
+const updatePersonalPermissions = params =>
+  putAction(basePath + '/person/info/update/', params, true);
 //新增或修改个人技能证书信息
 const saveSkillCert = params =>
   postAction(basePath + '/person/info/saveSkillCert', params);
@@ -52,13 +55,14 @@ const savePsnlEvaluate = params =>
 //保存个人求职意向信息
 const savePositionLike = params =>
   postAction(basePath + '/person/resume/savePositionLike', params);
-//修改个人权限信息
-const updatePersonalPermissions = params =>
-  putAction(basePath + '/person/info/update/allowSearch/1', params);
 
 //投递简历
 const doDeliveryResume = params =>
   putAction(basePath + '/person/feedback/do-applyFor', params);
+
+//屏蔽所选企业
+const doShieldCorp = params =>
+  putAction(basePath + '/person/feedback/shieldCorp', params);
 
 export {
   doPersonLogout,
@@ -74,5 +78,6 @@ export {
   savePsnlEvaluate,
   queryJobs,
   updatePersonalPermissions,
-  doDeliveryResume
+  doDeliveryResume,
+  doShieldCorp
 };

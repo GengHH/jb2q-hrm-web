@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:21:17
+ * @LastEditTime: 2021-03-19 14:53:54
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
@@ -44,7 +44,14 @@ export function getAction(url, parameter) {
 }
 
 //put
-export function putAction(url, parameter) {
+export function putAction(url, parameter, isRestful = false) {
+  if (isRestful) {
+    console.log('restful', parameter);
+    return axios({
+      url: url + parameter,
+      method: 'put'
+    });
+  }
   return axios({
     url: url,
     method: 'put',
