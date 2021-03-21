@@ -57,8 +57,9 @@
             :disabled="false"
           ></pl-input> -->
           <pl-date-picker
-            v-model="personInfo.birthDate"
+            v-model="newBirthDate"
             type="date"
+            :disabled="true"
             value-format="yyyyMMdd"
             label="出生日期"
           >
@@ -71,7 +72,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="livingArea">
           <pl-select
             v-model="personInfo.livingArea"
             :optionData="dicQx"
@@ -81,7 +82,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required>
+        <el-form-item prop="livingStreet">
           <pl-select
             v-model="personInfo.livingStreet"
             label="居住街镇"
@@ -119,25 +120,23 @@
 </template>
 
 <script>
-import { testData } from '@pub/mockTestData';
 //import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
 import { phonePattern } from '@/utils/regexp';
-import plButton from '@/components/common/BaseLoadingButton';
-import plInput from '@/components/common/BaseLabelInput';
-import plSelect from '@/components/common/BaseLabelSelect';
-import plDatePicker from '@/components/common/BaseLabelDatepicker';
+// import plButton from '@/components/common/BaseLoadingButton';
+// import plInput from '@/components/common/BaseLabelInput';
+// import plSelect from '@/components/common/BaseLabelSelect';
+// import plDatePicker from '@/components/common/BaseLabelDatepicker';
 export default {
   name: 'personApp',
   components: {
-    plInput,
-    plSelect,
-    plButton,
-    plDatePicker
+    // plInput,
+    // plSelect,
+    // plButton,
+    // plDatePicker
   },
   data() {
     return {
-      list: testData.list,
       personInfo: {
         birthDate: '',
         contactPhone: '',
@@ -158,6 +157,12 @@ export default {
             message: '请输入正确格式的手机号',
             trigger: ['blur', 'change']
           }
+        ],
+        livingArea: [
+          { required: true, message: '请输入居住区域', trigger: 'blur' }
+        ],
+        livingStreet: [
+          { required: true, message: '请输入居住街镇', trigger: 'blur' }
         ],
         livingAddress: [
           { required: true, message: '请输入联系地址', trigger: 'blur' }
@@ -180,12 +185,18 @@ export default {
       //   { value: '1310', label: '区域二' }
       // ],
       colRowGutter: 40,
-      jobActiveName: 'jobRecommended',
-      corpActiveName: 'corpRecommended',
       labelPosition: ''
     };
   },
   computed: {
+    newBirthDate() {
+      // return this.personInfo.birthDate
+      //   ? this.personInfo.birthDate
+      //   : this.personInfo.zjhm
+      //   ? this.personInfo.zjhm.substring(6, 14)
+      //   : '';
+      return this.personInfo.zjhm ? this.personInfo.zjhm.substring(6, 14) : '';
+    },
     dicStreet: function() {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
@@ -239,16 +250,11 @@ export default {
         console.log(error);
       }
     },
-    jobHandleClick() {
-      console.log(1);
-    },
-    corpHandleClick() {
-      console.log(2);
-    },
     submitForm(done, formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
+          //formData.birthDate = newBirthDate || formData.birthDate;
           let reusult = await updatePersonBaseInfo(formData);
           console.log(reusult);
           if (reusult && reusult.status === 200) {
@@ -272,12 +278,12 @@ export default {
           return false;
         }
       });
-    },
-    submit(done) {
-      setTimeout(() => {
-        done();
-      }, 1000);
     }
+    // submit(done) {
+    //   setTimeout(() => {
+    //     done();
+    //   }, 1000);
+    // }
   },
   created() {
     //this.getQx();

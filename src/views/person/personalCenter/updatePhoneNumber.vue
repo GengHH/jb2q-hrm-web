@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-01-22 17:24:42
+ * @LastEditTime: 2021-03-18 11:41:31
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import plInput from '@/components/common/BaseLabelInput';
+//import plInput from '@/components/common/BaseLabelInput';
 import { phonePattern } from '@/utils/regexp';
 export default {
   name: 'updatePhoneNumber',
   components: {
-    plInput
+    //plInput
   },
   data() {
     return {

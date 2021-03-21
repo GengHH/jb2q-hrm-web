@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-03-15 15:20:21
+ * @LastEditTime: 2021-03-19 15:08:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -103,7 +103,7 @@
       <el-pagination
         @size-change="handleChange"
         @current-change="handleChange"
-        :current-page.sync="pageList.currentPage"
+        :current-page.sync="pageList.pageIndex"
         :page-size="pageList.pageSize"
         layout="prev, pager, next, jumper"
         :total="pageList.total"

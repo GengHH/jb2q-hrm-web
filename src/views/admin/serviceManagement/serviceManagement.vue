@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-18 15:58:48
+ * @LastEditTime: 2021-03-19 17:35:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -32,7 +32,7 @@
         </el-row>
       </el-col>
       <el-col :sm="10" :md="9" :lg="7" :xl="6" style="text-align:right">
-        <el-button type="primary">
+        <el-button @click="onSearch" type="primary">
           <i class="el-icon-search"></i>
           搜索
         </el-button>
@@ -47,7 +47,10 @@
           style="margin-left:3px"
           type="primary"
           plain
-          @click="advancedQuery = !advancedQuery"
+          @click="
+            advancedQuery = !advancedQuery;
+            form.value = '';
+          "
           :icon="!advancedQuery ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"
           >高级搜索</el-button
         >
@@ -55,7 +58,7 @@
     </el-row>
     <transition name="bounce">
       <div v-show="advancedQuery">
-        <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+        <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
       </div>
     </transition>
     <!-- <el-row>
@@ -70,12 +73,14 @@
       :dataList="dataList"
       @handleChange="handleChange"
     ></querylist>
+    {{ dicOptions.option1 }}
   </div>
 </template>
 
 <script>
 import querylist from './module/queryList';
 import tform from '../common/t_form'; //高级查询
+import { emphasis_keypoint } from '@/api/adminApi';
 export default {
   name: 'serviceManagement',
   components: {
@@ -261,14 +266,32 @@ export default {
       },
       advancedQuery: false,
       pageList: {
-        total: 15,
+        total: 0,
         pageSize: 5,
-        currentPage: 1
+        pageIndex: 0
+      },
+      dicOptions: {
+        //区县
+        option1: this.$store.getters['dictionary/ggjbxx_qx'],
+        //工作性质
+        option2: this.$store.getters['dictionary/recruit_work_nature'],
+        //专业（暂时没有）
+        option3: this.$store.getters['dictionary/ggjbxx_qx'],
+        //学历
+        option4: this.$store.getters['dictionary/recruit_edu'],
+        // 语种
+        option5: this.$store.getters['dictionary/recruit_language_type'],
+        // 语言等级
+        option6: this.$store.getters['dictionary/recruit_language_level'],
+        //职位
+        option7: this.$store.getters['dictionary/recruit_position_f_type'],
+        //行业
+        option8: this.$store.getters['dictionary/recruit_position_s_type']
       },
       dataList: [
         {
-          aaa001: '张大军',
-          aaa002: '男',
+          xm: '张大军',
+          sex_id: '男',
           aaa003: 0,
           aaa004: '412825199402100277',
           aaa005: '1994-02-10',
@@ -302,10 +325,39 @@ export default {
     },
     handleChange(e) {
       console.log(e + '---');
+    },
+    advancedSearch(e) {
+      console.log(e);
+      this.form = { ...e };
+      this.onSearch();
+    },
+    onSearch() {
+      console.log(this.form);
+      let params = { ...this.form };
+      params.pageParam = this.pageList;
+      const loading = this.$loading({
+        lock: true,
+        text: '搜索中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      emphasis_keypoint(
+        {
+          paramData: params
+        },
+        res => {
+          loading.close();
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
   },
   created() {
     console.log(this.$store.state.admin);
+    console.log('----------------------------------');
   }
 };
 </script>

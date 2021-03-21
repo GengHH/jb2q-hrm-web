@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-15 13:20:42
+ * @LastEditTime: 2021-03-18 20:05:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -80,6 +80,9 @@ const loadPsnlPermissionsInfo = pid => {
 //   return getPersonbaseInfo(options);
 // });
 
+Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
+  return successData;
+});
 Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   options
 ) {
@@ -161,7 +164,7 @@ Mock.mock(
 Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
   return successData;
 });
-//修改个人描述
+//修改个人评价
 Mock.mock(basePath + '/person/resume/savePsnlEvaluate', 'put', function(
   options
 ) {
@@ -173,5 +176,7 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
 ) {
   return successData;
 });
+//新增或修改个人劳动经历信息
+Mock.mock(basePath + '/person/info/saveEduExp', 'post', successData);
 
 export default Mock;

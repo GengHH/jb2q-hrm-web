@@ -1,11 +1,44 @@
+/* eslint-disable no-case-declarations */
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:19:27
+ * @LastEditTime: 2021-03-18 19:59:59
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
+
+/**
+ * 判断是不是个人和单位都没有登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isNoBody(vm) {
+  let a =
+    !!vm ||
+    !!vm.$store ||
+    !!vm.$store.getters['person/token'] ||
+    !!vm.$store.getters['corporation/token'];
+  return !a;
+}
+
+/**
+ * 判断是不是个人登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isPerson(vm) {
+  return vm && vm.$store && vm.$store.getters['person/token'];
+}
+
+/**
+ * 判断是不是单位登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isCorporation(vm) {
+  return vm && vm.$store && vm.$store.getters['corporation/token'];
+}
 
 /**
  * 获取随机key
@@ -120,6 +153,9 @@ export function queryParams(
   isPrefix = true,
   arrayFormat = 'brackets'
 ) {
+  if (typeof data !== 'object') {
+    return '?' + data;
+  }
   let prefix = isPrefix ? '?' : '';
   let _result = [];
   if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1)

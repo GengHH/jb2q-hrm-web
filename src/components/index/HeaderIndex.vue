@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-11 11:30:58
+ * @LastEditTime: 2021-03-18 10:10:31
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -25,7 +25,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb> -->
         <el-menu
-          :default-active="activeIndex"
+          :default-active="$route.path"
           class="el-menu-demo"
           mode="horizontal"
           router
@@ -33,7 +33,7 @@
           text-color="#fff"
           @select="handleSelect"
         >
-          <!-- 个人信息栏 -->
+          <!-- 个人or单位信息栏 -->
           <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
             <template slot="title">{{ userLogInfo.nvaText }}</template>
             <el-menu-item
@@ -62,8 +62,9 @@
 </template>
 
 <script>
-import { doLogout } from '@/api/personApi';
-
+import { doPersonLogout } from '@/api/personApi';
+import { doCorporationLogout } from '@/api/corporationApi';
+import { isNoBody, isPerson, isCorporation } from '@/utils';
 export default {
   name: 'HeaderIndex',
   props: {
@@ -80,47 +81,79 @@ export default {
   },
   data() {
     return {
-      activeIndex: this.$store.getters['activeMenuIndex'],
+      // activeIndex:
+      //   this.$route.path && this.$route.path.length > 1
+      //     ? this.$route.path.substr(1)
+      //     : this.$route.path,
       inco: true
     };
   },
-  created() {
-    // if (this.$route.path) {
-    //   this.activeIndex = this.$route.path;
+  computed: {
+    // path() {
+    //   console.log(this.$route.path);
+    //   var aa =
+    //     this.$route.path && this.$route.path.length > 1
+    //       ? this.$route.path.substr(1)
+    //       : this.$route.path;
+    //   console.log(this.$route.path.length);
+    //   return aa;
     // }
   },
   watch: {
-    $route(to, from) {
+    async $route(to, from) {
       //to:即将要跳转到的页面   from:即将离开的页面
-      if (to.path === '/logout' && !this.$store.getters['person/token']) {
+      //console.log(this);
+      if (to.path === '/logout' && isNoBody(this)) {
         this.$alert('没有登录！无法退出');
         this.$router.push(from.path);
       } else if (to.path === '/logout') {
-        this.$alert('退出成功');
-        // TODO 调用退出接口
-        doLogout()
-          .then(res => {
-            // retuen a primess
+        if (isPerson(this)) {
+          //个人退出
+          let logoutResult = await doPersonLogout();
+          if (logoutResult && logoutResult.status === 200) {
             let logout = this.$store.dispatch('person/do_logout');
             logout
               .then(res => {
                 this.$alert('退出成功');
+                window.setTimeout(function() {
+                  window.location.href = '/ggzp-shrs/index.html';
+                }, 2000);
+                return;
               })
               .catch(err => {
                 this.$alert('退出异常');
               });
-          })
-          .catch(err => {
+          } else {
             this.$alert('退出失败');
-          });
-        window.location.href = '/ggzp-shrs/index.html';
+          }
+        } else if (isCorporation(this)) {
+          //单位退出
+          let logoutResult = await doCorporationLogout();
+          if (logoutResult && logoutResult.status === 200) {
+            this.$store
+              .dispatch('corporation/do_logout')
+              .then(res => {
+                this.$alert('退出成功');
+                window.setTimeout(function() {
+                  window.location.href = '/ggzp-shrs/index.html';
+                }, 2000);
+                return;
+              })
+              .catch(err => {
+                this.$alert('退出异常');
+              });
+          } else {
+            this.$alert('退出失败');
+          }
+        }
         //this.$router.push('/')
-        //this.$router.push(from.path)
+        this.$router.push(from.path);
       }
     }
   },
   methods: {
     handleSelect(index) {
+      console.log(this.$route.path);
       this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
     }
   }

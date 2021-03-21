@@ -17,10 +17,10 @@
                 ><i class="icon iconfont">&#xe64c;</i></span
               > -->
               <h2>个人登录</h2>
-              <br />
-              <br />
               <p>账号密码登录</p>
               <p>随申办APP扫码登录</p>
+              <br />
+              <br />
               <a href="#" @click="personSignIn" class="login-btn login-link-one"
                 >去登录</a
               >
@@ -34,10 +34,10 @@
                 ><i class="icon iconfont">&#xe64d;</i></span
               > -->
               <h2>单位登录</h2>
-              <br />
               <p>法人一证通登录</p>
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
+              <br />
               <a
                 href="#"
                 @click="personSignIn"

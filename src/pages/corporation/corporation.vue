@@ -1,15 +1,20 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
+<<<<<<< HEAD
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2021-03-17 11:11:10
+=======
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-17 18:40:13
+>>>>>>> upstream/master
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
 <template>
   <div id="indexApp">
     <!-- Header -->
-    <HeaderIndex :nav-list="navList"></HeaderIndex>
+    <HeaderIndex :nav-list="navList" :user-log-info="userLogInfo"></HeaderIndex>
     <!-- <transition name="fade">
       <router-view></router-view>
     </transition> -->
@@ -28,7 +33,7 @@ export default {
   components: {
     HeaderIndex
   },
-  data: () => {
+  data() {
     return {
       path: require('@/assets/logo.png'),
       list: testData.list,
@@ -55,7 +60,19 @@ export default {
         { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
         { id: '1', path: '/', nvaText: '单位信息维护' }
-      ]
+      ],
+      userLogInfo: {
+        id: 'user',
+        path: '/user',
+        nvaText: this.$store.getters['corporation/username'] || '临时单位',
+        subMenu: [
+          {
+            id: '/logout',
+            path: '',
+            nvaText: '退出'
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -74,7 +91,7 @@ export default {
   },
   created() {
     // console.log("index begin creating");
-    // console.log(this);
+    console.log(this.$store);
     // console.log(this.$data);
     // this.axios.get('/admin/index').then(res =>{
     //   this.$set(this.obj,'siet',res.data)

@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-01-26 10:40:18
+ * @LastEditTime: 2021-03-18 15:33:18
  * @LastEditors: GengHH
  * @Description: 自定义的pl-table（源于el-table的二次封装）以及其他的组件参数配置
  * @FilePath: \jb2q-hrm-web\src\config\plComponents.js
@@ -15,7 +15,8 @@ export default {
       tableConfig: opts.tableConfig || {
         stripe: true,
         border: true,
-        highlightCurrentRow: true
+        highlightCurrentRow: true,
+        rowClickSelected: false
       },
       pageConfig: opts.pageConfig || {
         background: false,

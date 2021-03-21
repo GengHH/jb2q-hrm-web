@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-19 09:24:08
+ * @LastEditTime: 2021-03-19 17:27:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -63,7 +63,7 @@ export default {
       userLogInfo: {
         id: 'user',
         path: '/user',
-        nvaText: this.$store.getters.name || '临时工',
+        nvaText: this.$store.getters['person/username'] || '临时工',
         subMenu: [
           {
             id: '/logout',

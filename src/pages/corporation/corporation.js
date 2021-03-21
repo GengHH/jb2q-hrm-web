@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-04 16:58:19
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-18 11:52:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -23,17 +23,49 @@ import config from '@/config';
 import ElementUI from '@/config/eleComponents';
 //import { Button } from 'element-ui';
 //import 'assets/sass/index.scss';
+import '@/utils/placeholderPolyfill';
+import _ from 'lodash';
+import PlTable from '@/components/common/table/BaseTable.vue';
+import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
+import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
+import BaseLoadingButton from '@/components/common/BaseLoadingButton';
+import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
+import PlConfig from '@/config/plComponents';
 
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
 // 使用Element组件
 Vue.use(ElementUI);
+// 直接绑定原型来按安装lodash插件
+Vue.prototype._ = _;
+// 安装二次封装组件
+Vue.component(PlTable.name, PlTable);
+Vue.component(BaseLabelInput.name, BaseLabelInput);
+Vue.component(BaseLabelSelect.name, BaseLabelSelect);
+Vue.component(BaseLoadingButton.name, BaseLoadingButton);
+Vue.component(BaseLabelDatepicker.name, BaseLabelDatepicker);
+Vue.use(PlConfig, {});
 // 引入mock配置
 if (config.mock) {
-  require('@/mock/index/index.js');
+  require('@/mock/corporation/index.js');
 }
 
+//判断是不是已经登录
+let isEmpty = function(obj) {
+  if (obj === null || obj === undefined || obj.length === 0) {
+    return true;
+  }
+};
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+}
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
