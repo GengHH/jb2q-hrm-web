@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 11:26:54
+ * @LastEditTime: 2021-03-22 18:17:38
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -25,7 +25,7 @@
       <el-tab-pane label="未查看" name="first">
         <pl-table
           :data="tableData"
-          ref="serveTable"
+          ref="serveTable1"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
@@ -34,15 +34,64 @@
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.date }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate v-model="row.star"></el-rate>
-          </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="second">待处理</el-tab-pane>
-      <el-tab-pane label="通知面试" name="third">通知面试</el-tab-pane>
-      <el-tab-pane label="通知录用" name="fourth">通知录用</el-tab-pane>
-      <el-tab-pane label="通知不录用" name="fifth">通知不录用</el-tab-pane>
+      <el-tab-pane label="待处理" name="second"
+        ><pl-table
+          :data="tableData"
+          ref="serveTable2"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.date }}</span>
+          </template>
+        </pl-table></el-tab-pane
+      >
+      <el-tab-pane label="通知面试" name="third"
+        ><pl-table
+          :data="tableData"
+          ref="serveTable3"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.date }}</span>
+          </template>
+        </pl-table></el-tab-pane
+      >
+      <el-tab-pane label="通知录用" name="fourth"
+        ><pl-table
+          :data="tableData"
+          ref="serveTable4"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.date }}</span>
+          </template>
+        </pl-table></el-tab-pane
+      >
+      <el-tab-pane label="通知不录用" name="fifth"
+        ><pl-table
+          :data="tableData"
+          ref="serveTable5"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.date }}</span>
+          </template>
+        </pl-table></el-tab-pane
+      >
     </el-tabs>
   </div>
 </template>
@@ -143,7 +192,7 @@ export default {
           ]
         },
         {
-          label: '姓名',
+          label: '单位名称',
           prop: 'name',
           rowSpan: 'all'
         },
@@ -153,17 +202,12 @@ export default {
           rowSpan: 'all'
         },
         {
-          label: '年龄',
-          prop: 'age',
-          rowSpan: 'all'
-        },
-        {
-          label: '工作年限',
+          label: '职位薪资',
           prop: 'province',
           rowSpan: 'all'
         },
         {
-          label: '学历',
+          label: '工作地点',
           prop: 'city',
           rowSpan: 'all'
         },
@@ -173,7 +217,7 @@ export default {
           formatter: 'date',
           slotName: 'date'
         },
-        // { label: '评分', prop: 'star', slotName: 'star' },
+        { label: '类别', prop: 'type' },
         // {
         //   label: '地址',
         //   attrs: { showOverflowTooltip: true },
@@ -189,7 +233,7 @@ export default {
           actions: [
             {
               id: 'action1',
-              text: '查看简历',
+              text: '查看详情',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
@@ -215,6 +259,42 @@ export default {
               id: 'action3',
               text: '聊天',
               icon: 'el-icon-chat-line-round',
+              attrs: { round: true, size: 'small' },
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action4',
+              text: '参加面试',
+              icon: 'el-icon-chat-line-round',
+              attrs: { round: true, size: 'small' },
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action5',
+              text: '未参加面试',
+              icon: 'el-icon-chat-line-round',
+              attrs: { round: true, size: 'small' },
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action6',
+              text: '评价',
+              icon: 'el-icon-chat-edit',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
                 //console.log(row);

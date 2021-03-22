@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-21 17:46:23
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-22 15:23:37
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -51,7 +51,7 @@ const saveLanguageLevel = params =>
 //新增或修改个人劳动经历信息
 const saveLaborExp = params =>
   postAction(basePath + '/person/resume/saveLaborExp', params);
-//新增或修改个人劳动经历信息
+//新增或修改个人教育经历信息
 const saveEduExp = params =>
   postAction(basePath + '/person/resume/saveEduExp', params);
 //修改个人评价（个人描述）
@@ -70,7 +70,14 @@ const doDeliveryResume = params =>
 
 //屏蔽所选企业
 const doShieldCorp = params =>
-  putAction(basePath + '/person/feedback/shieldCorp', params);
+  putAction(basePath + '/person/info/shieldCorp', params);
+
+//获取关注单位列表
+const queryCorpStarList = params =>
+  getAction(basePath + '/person/feedback/corp/findFavorRecord', params);
+//获取个人收藏职位列表
+const queryPositionStarList = params =>
+  getAction(basePath + '/person/feedback/position/findFavorRecord', params);
 
 export {
   doPersonLogout,
@@ -88,5 +95,7 @@ export {
   queryJobs,
   updatePersonalPermissions,
   doDeliveryResume,
-  doShieldCorp
+  doShieldCorp,
+  queryCorpStarList,
+  queryPositionStarList
 };

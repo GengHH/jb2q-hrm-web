@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 13:31:12
+ * @LastEditTime: 2021-03-22 11:01:46
  * @Description: 职位评价子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobEvaluation.vue
 -->
@@ -19,7 +19,7 @@
         > -->
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryJobEvaluationList($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
@@ -140,28 +140,10 @@ export default {
           rowSpan: 'all'
         },
         {
-          label: '操作时间',
+          label: '评价时间',
           prop: 'date',
           formatter: 'date',
           slotName: 'date'
-        },
-        {
-          label: '操作',
-          attrs: { width: 100 },
-          actions: [
-            {
-              id: 'action1',
-              text: '编辑',
-              attrs: { round: true, size: 'small' },
-              icon: 'el-icon-edit',
-              onClick: ({ row }) => {
-                //console.log(row);
-              },
-              hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
-              }
-            }
-          ]
         }
       ];
     },
@@ -170,16 +152,17 @@ export default {
     }
   },
   methods: {
-    deleteJob() {
-      let that = this;
-      if (this.selection && this.selection.length == 0) {
-        this.$alert('请选择一条');
-      } else {
-        // TODO 删除数据
-        that.tableData = that.tableData.filter(
-          obj => !that.selection.some(i => obj.id === i.id)
-        );
-      }
+    queryJobEvaluationList(params) {
+      console.log(params);
+      // let that = this;
+      // if (this.selection && this.selection.length == 0) {
+      //   this.$alert('请选择一条');
+      // } else {
+      //   // TODO 删除数据
+      //   that.tableData = that.tableData.filter(
+      //     obj => !that.selection.some(i => obj.id === i.id)
+      //   );
+      // }
     }
   }
 };

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-19 15:21:39
+ * @LastEditTime: 2021-03-22 16:36:30
  * @LastEditors: GengHH
  * @Description: 个人权限控制
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\permissionSettings.vue
@@ -52,7 +52,7 @@ export default {
     return {
       disabled: false,
       allowSearch: '0',
-      allowArtificialReco: '1',
+      allowArtificialReco: '0',
       allowAutoReco: '0',
       loading1: false,
       loading2: false,
@@ -125,7 +125,7 @@ export default {
         if (updateResult1 && updateResult1.status == 200) {
           this.allowSearchView
             ? this.showMessage('success', '用人单位将能主动搜索到您的简历')
-            : this.showMessage('error', '用人单位将不能主动搜索到您的简历');
+            : this.showMessage('success', '用人单位将不能主动搜索到您的简历');
         } else {
           this.showMessage('success', '修改失败');
         }
@@ -161,9 +161,15 @@ export default {
     loadPsnlPermissionsInfo({ pid: this.$store.getters['person/pid'] } || '')
       .then(res => {
         if (res.status === 200) {
-          this.allowSearch = res.result.data.allowSearch;
-          this.allowArtificialReco = res.result.data.allowArtificialReco;
-          this.allowAutoReco = res.result.data.allowAutoReco;
+          this.allowSearch = res.result.data
+            ? res.result.data.allowSearch
+            : '0';
+          this.allowArtificialReco = res.result.data
+            ? res.result.data.allowArtificialReco
+            : '0';
+          this.allowAutoReco = res.result.data
+            ? res.result.data.allowAutoReco
+            : '0';
         } else {
           // 禁用控件
           this.disabled = true;

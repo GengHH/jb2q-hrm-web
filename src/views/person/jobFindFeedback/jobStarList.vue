@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 13:23:36
+ * @LastEditTime: 2021-03-22 13:30:48
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -11,7 +11,7 @@
     <div class="title-style">职位收藏列表</div>
     <el-row>
       <el-col :span="12">
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
+        <pl-button type="danger" icon="el-icon-delete" @click="cancelFavorite"
           >删除</pl-button
         >
       </el-col>
@@ -22,10 +22,7 @@
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
       <template #date="{row}">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ row.date }}</span>
-      </template>
-      <template #star="{row}">
-        <el-rate v-model="row.star"></el-rate>
+        <span style="margin-left: 10px">{{ row.favorTime }}</span>
       </template>
     </pl-table>
   </div>
@@ -33,6 +30,7 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
+import { queryPositionStarList } from '@/api/personApi';
 export default {
   name: 'jobStarList',
   components: {
@@ -40,72 +38,7 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          id: '1',
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1', 'action2']
-        },
-        {
-          id: '2',
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
-          actions: ['action1', 'action2']
-        },
-        {
-          id: '3',
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1', 'action2']
-        },
-        {
-          id: '4',
-          date: '2019-05-02',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2']
-        },
-        {
-          id: '5',
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2']
-        }
-      ]
+      tableData: []
     };
   },
   computed: {
@@ -122,47 +55,49 @@ export default {
         },
         {
           label: '单位名称',
-          prop: 'positionName',
+          attrs: { showOverflowTooltip: true },
+          prop: 'corpName',
           rowSpan: 'all'
         },
         {
           label: '职位名称',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'positionName',
           rowSpan: 'all'
         },
         {
           label: '职位薪资',
-          prop: 'name',
+          prop: 'salaryScope',
           rowSpan: 'all'
         },
         {
           label: '学历要求',
-          prop: 'xl',
+          prop: 'eduRequire',
           rowSpan: 'all'
         },
         {
           label: '工作性质',
-          prop: 'age',
+          prop: 'workNature',
           rowSpan: 'all'
         },
         {
           label: '工作年限',
-          prop: 'age',
+          prop: 'workYearNeed',
           rowSpan: 'all'
         },
         {
           label: '招聘人数',
-          prop: 'age',
+          prop: 'recruitNum',
           rowSpan: 'all'
         },
         {
           label: '工作地点',
-          prop: 'age',
+          prop: 'workArea',
           rowSpan: 'all'
         },
         {
           label: '收藏时间',
-          prop: 'date',
+          prop: 'favorTime',
           formatter: 'date',
           slotName: 'date'
         },
@@ -203,7 +138,20 @@ export default {
     }
   },
   methods: {
-    deleteJob() {
+    async queryList() {
+      let res = await queryPositionStarList({
+        pid: this.$store.getters['person/pid'] || ''
+      });
+      if (res.status === 200) {
+        res.result.data.forEach(item => {
+          item.actions = ['action1', 'action2'];
+        });
+        this.tableData = res.result.data;
+      } else {
+        this.$message({ type: 'success', message: '未查询到信息' });
+      }
+    },
+    cancelFavorite() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
@@ -214,6 +162,9 @@ export default {
         );
       }
     }
+  },
+  created() {
+    this.queryList();
   }
 };
 </script>

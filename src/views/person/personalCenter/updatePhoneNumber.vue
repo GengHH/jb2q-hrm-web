@@ -1,13 +1,13 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-03-19 10:45:45
+ * @LastEditTime: 2021-03-22 11:16:24
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
 -->
 <template>
-  <el-form ref="form" :model="formData" :rules="rules">
+  <el-form ref="dataForm" :model="formData" :rules="rules">
     <el-form-item required prop="newphoneNum">
       <pl-input v-model="formData.newphoneNum" label="新手机号码"></pl-input>
     </el-form-item>
@@ -68,7 +68,7 @@ export default {
       this.$alert('缺少获取验证码的Api接口，请稍后！');
     },
     upDateNum() {
-      this.$ref['form'].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.$message({
             type: 'error',

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-03 16:52:10
+ * @LastEditTime: 2021-03-22 09:45:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -44,9 +44,9 @@ var isEmpty = function(obj) {
     return true;
   }
 };
-if (isEmpty(store.getters['dictionary/yesno'])) {
-  store.dispatch('dictionary/init_Dictionary', 'YESNO');
-}
+// if (isEmpty(store.getters['dictionary/yesno'])) {
+//   store.dispatch('dictionary/init_Dictionary', 'YESNO');
+// }
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

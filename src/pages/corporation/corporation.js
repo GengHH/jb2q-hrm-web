@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 11:52:27
+ * @LastEditTime: 2021-03-22 14:13:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -57,14 +57,33 @@ let isEmpty = function(obj) {
     return true;
   }
 };
+//初始化字典表;
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
 if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
 }
-if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
-  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
 }
 if (isEmpty(store.getters['dictionary/recruit_edu'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
 /* eslint-disable no-new */
 new Vue({

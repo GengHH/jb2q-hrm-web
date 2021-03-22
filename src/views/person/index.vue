@@ -68,7 +68,11 @@
       </el-col>
       <el-col :span="12" class="form-item-right">
         <el-form-item prop="contactPhone">
-          <pl-input v-model="personInfo.contactPhone" label="手机号"></pl-input>
+          <pl-input
+            v-model="personInfo.contactPhone"
+            :disabled="true"
+            label="手机号"
+          ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">

@@ -3,8 +3,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-21 17:59:42
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-22 15:25:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -199,4 +199,69 @@ Mock.mock(
 Mock.mock(basePath + '/person/info/shieldCorp', 'put', function(options) {
   return successData;
 });
+
+//获取关注单位列表
+Mock.mock(
+  RegExp(basePath + '/person/feedback/corp/findFavorRecord' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            corpName: '上海新移力自动化科技有限公司',
+            industryType: '02',
+            corpNature: '02',
+            logo: '',
+            positionId: '123',
+            positionName: '软件开发工程师',
+            salaryScope: '9999',
+            eduRequire: '123',
+            workNature: '123',
+            workYearNeed: '5',
+            recruitNum: '100',
+            workArea: '01',
+            favorTime: '2021-01-14 16:32:30',
+            favorId: '30'
+          }
+        ]
+      })
+    };
+  }
+);
+
+//获取个人收藏职位列表
+Mock.mock(
+  RegExp(basePath + '/person/feedback/position/findFavorRecord' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            corpName: '上海新移力自动化科技有限公司',
+            industryType: '02',
+            corpNature: '02',
+            logo: '',
+            positionId: '123',
+            positionName: '软件开发工程师',
+            salaryScope: '9999',
+            eduRequire: '123',
+            workNature: '123',
+            workYearNeed: '5',
+            recruitNum: '100',
+            workArea: '01',
+            favorTime: '2021-01-14 16:32:30',
+            favorId: '30'
+          }
+        ]
+      })
+    };
+  }
+);
+
 export default Mock;

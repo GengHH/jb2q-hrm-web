@@ -25,9 +25,9 @@
           </el-col>
           <el-col :span="20">
             <el-radio-group
-              v-model="queryParams.positionName"
+              v-model="queryParams.positions"
               size="medium"
-              id="positionNameRadios"
+              id="positionsRadios"
               class="radio-list-bar"
             >
               <el-radio-button label="不限">不限</el-radio-button>
@@ -58,7 +58,7 @@
           <el-col :span="2">
             <div
               class="grid-content bg-purple more-ico"
-              @click="showMoreRadios($event, 'positionNameRadios')"
+              @click="showMoreRadios($event, 'positionsRadios')"
             >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
@@ -121,17 +121,17 @@
                 <el-radio v-model="queryParams.radio3" label="1"
                   >招聘特定人群</el-radio
                 > -->
-                <el-checkbox v-model="queryParams.checked1"
+                <el-checkbox v-model="queryParams.agencyRecruit"
                   >中介待招</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.checked2"
+                <el-checkbox v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.checked3"
+                <el-checkbox v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
                 <el-select
-                  v-model="queryParams.wt"
+                  v-model="queryParams.entrustCorpName"
                   clearable
                   placeholder="委托待招单位"
                 >
@@ -143,7 +143,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.nl"
+                  v-model="queryParams.age"
                   clearable
                   placeholder="年龄"
                 >
@@ -155,12 +155,12 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.workArea"
+                  v-model="queryParams.eduRequire"
                   clearable
-                  placeholder="工作区域"
+                  placeholder="学历要求"
                 >
                   <el-option
-                    v-for="item in qxOptions"
+                    v-for="item in xlOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -169,18 +169,6 @@
                 <el-select
                   v-model="queryParams.eduRequire"
                   clearable
-                  placeholder="学历要求"
-                >
-                  <el-option
-                    v-for="item in queryParams.xl"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-                <el-select
-                  v-model="queryParams.xl"
-                  clearable
                   placeholder="工作区域"
                 >
                   <el-option
@@ -191,7 +179,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.zy"
+                  v-model="queryParams.workHour"
                   clearable
                   placeholder="工作班时"
                 >
@@ -220,7 +208,8 @@
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job v-if="queryResult.length"
+    <per-search-job
+      v-if="queryResult.length"
       :jobData="queryResult"
       @showJobDetials="showJobDetial($event)"
     ></per-search-job>
@@ -251,45 +240,27 @@ export default {
       dialog: false,
       positionDetailsId: '',
       queryParams: {
-        checked1: '',
-        checked2: '',
-        checked3: '',
-        zy: '',
-        nl: '',
-        wt: '',
-        xl: '',
-        positionId: '4',
-        positionName: '不限',
+        pid: this.$store.getters['person/pid'],
+        age: '',
+        positions: '不限',
         salaryScope: '不限',
         workArea: '',
         workNature: '不限',
         eduRequire: '',
         recruitNum: '3',
-        corpName: '上海新移力自动化科技有限公司',
-        cid: '201002025628331',
         workYearNeed: '不限',
         releaseTime: '2021-12-10 10:44:36',
         tranBaseSymbol: '0',
+        special: '',
         agencyRecruit: '0',
         entrustCorpName: '',
-        favor: '0',
-        releaseUserId: '0000941012',
         type: '1',
         salaryUp: '',
         salaryDown: ''
+        //content: '上海新移力自动化科技有限公司'
       },
-      options: [
-        {
-          label: '123',
-          value: 'haha'
-        }
-      ],
-      tableData: [
-        {
-          id: '1',
-          name: '123'
-        }
-      ],
+      options: [],
+      tableData: [],
       queryResult: [],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       nlOptions: [
@@ -373,7 +344,7 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.positionName = '不限';
+      this.queryParams.positions = '不限';
       this.queryParams.salaryScope = '不限';
       this.queryParams.workNature = '不限';
       this.queryParams.workYearNeed = '不限';
@@ -431,7 +402,7 @@ export default {
             });
           }
         })
-        .catch(err =>
+        .catch(() =>
           that.$message({
             type: 'error',
             message: '系统异常，简历投递成功'

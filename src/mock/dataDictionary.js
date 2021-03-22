@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 13:58:56
+ * @LastEditTime: 2021-03-22 16:05:25
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -50,7 +50,56 @@ const dic = {
     { value: '15', label: '其他' }
   ],
   //行业分类
-  RECRUIT_INDUSTRY_TYPE: [],
+  RECRUIT_INDUSTRY_TYPE: [
+    { value: '01', label: '计算机软件/硬件' },
+    { value: '02', label: '计算机系统/维修' },
+    { value: '03', label: '通信(设备/运营' },
+    { value: '04', label: '互联网/电子商务' },
+    { value: '05', label: '网络游戏' },
+    { value: '06', label: '电子/半导体/集成电路' },
+    { value: '07', label: '仪器仪表/工业自动化' },
+    { value: '08', label: '会计/审计' },
+    { value: '09', label: '金融(投资/证券' },
+    { value: '10', label: '金融(银行/保险' },
+    { value: '11', label: '贸易/进出口' },
+    { value: '12', label: '批发/零售' },
+    { value: '13', label: '消费品(食/饮/烟酒)' },
+    { value: '14', label: '服装/纺织/皮革' },
+    { value: '15', label: '家具/家电/工艺品' },
+    { value: '16', label: '办公用品及设备' },
+    { value: '17', label: '机械/设备/重工' },
+    { value: '18', label: '汽车/摩托车/零配件' },
+    { value: '19', label: '制药/生物工程' },
+    { value: '20', label: '医疗/美容/保健' },
+    { value: '21', label: '医疗设备/器械' },
+    { value: '22', label: '广告/市场推广' },
+    { value: '23', label: '会展/博览' },
+    { value: '24', label: '影视/媒体/艺术' },
+    { value: '25', label: '印刷/包装/造纸' },
+    { value: '26', label: '房地产开发' },
+    { value: '27', label: '建筑与工程' },
+    { value: '28', label: '家居/室内设计/装潢' },
+    { value: '29', label: '物业管理/商业中心' },
+    { value: '30', label: '中介服务/家政服务' },
+    { value: '31', label: '专业服务/财会/法律' },
+    { value: '32', label: '检测/认证' },
+    { value: '33', label: '教育/培训' },
+    { value: '34', label: '学术/科研' },
+    { value: '35', label: '餐饮/娱乐/休闲' },
+    { value: '36', label: '酒店/旅游' },
+    { value: '37', label: '交通/运输/物流' },
+    { value: '38', label: '航天/航空' },
+    { value: '39', label: '能源(石油/化工/矿产)' },
+    { value: '40', label: '能源(采掘/冶炼/原材料)' },
+    { value: '41', label: '电力/水利/新能源' },
+    { value: '42', label: '政府部门/事业单位' },
+    { value: '43', label: '非盈利机构/行业协会' },
+    { value: '44', label: '农业/渔业/林业' },
+    { value: '45', label: '其他行业' },
+    { value: '46', label: '水利/环境和公共设施管理业' },
+    { value: '47', label: '国际组织' },
+    { value: '99', label: '其他' }
+  ],
   //特定人群
   RECRUIT_SPECIAL_PEOPLE: [],
   //工作性质
