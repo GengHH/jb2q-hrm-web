@@ -275,7 +275,7 @@
           closable
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
-          @close="languageTagClose(index,languageItem.languageId)"
+          @close="languageTagClose(index, languageItem.languageId)"
           >{{ languageItem.text }}
         </el-tag>
       </div>
@@ -299,7 +299,7 @@
             class="tag-card-item"
             size="medium"
             closable
-            @close="skillTagClose(index,skillItem.certId)"
+            @close="skillTagClose(index, skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
               <span>{{ skillItem.certLevel }}</span>
@@ -602,7 +602,7 @@
           prop="majorName"
           :label-width="formLabelWidth"
         >
-        <el-input
+          <el-input
             v-model="educationExperienceForm.majorName"
             autocomplete="off"
             placeholder="请输入专业"
@@ -617,8 +617,8 @@
               :label="item.label"
               :value="item.value"
             >
-            </el-option> -->
-          </el-select>
+            </el-option> 
+          </el-select> -->
         </el-form-item>
 
         <el-form-item
@@ -891,7 +891,8 @@ import {
   saveLaborExp,
   saveEduExp,
   saveLanguageLevel,
-  saveSkillCert
+  saveSkillCert,
+  deleteSomeResume
 } from '@/api/personApi';
 import { getDicText } from '@/utils/index';
 /**
@@ -1107,7 +1108,7 @@ export default {
           if (_obj1 || _obj2) {
             textStr = _obj1.label + _obj2.label;
           }
-          return {languageId:obj.languageId, text:textStr};
+          return { languageId: obj.languageId, text: textStr };
         });
       } else {
         return [];
@@ -1161,7 +1162,7 @@ export default {
       this.$message(val);
     },
     //删除外语能力tag
-    languageTagClose(index,languageId) {
+    languageTagClose(index, languageId) {
       this.$confirm('确认删除此项外语能力？')
         .then(() => {
           // TODO
@@ -1173,7 +1174,7 @@ export default {
         });
     },
     //删除技能证书tag
-    skillTagClose(index,certId) {
+    skillTagClose(index, certId) {
       this.$confirm('确认删除此项技能证书？')
         .then(() => {
           // TODO
@@ -1458,7 +1459,7 @@ export default {
         this.editItemIdex = index;
       }
     },
-    deleteCard(dialog, index) {
+    deleteCard(dialog, index, itemId) {
       if (dialog) {
         switch (dialog) {
           case 'dialog2':

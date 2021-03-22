@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 14:53:54
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-21 17:26:29
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
@@ -60,7 +60,14 @@ export function putAction(url, parameter, isRestful = false) {
 }
 
 //delete
-export function deleteAction(url, parameter) {
+export function deleteAction(url, parameter, isRestful = false) {
+  if (isRestful) {
+    return axios({
+      url: url + parameter,
+      method: 'delete',
+      data: ''
+    });
+  }
   return axios({
     url: url,
     method: 'delete',

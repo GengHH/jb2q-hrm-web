@@ -3,8 +3,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 15:20:17
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-21 17:59:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -112,19 +112,24 @@ Mock.mock(RegExp(basePath + '/person/info/update' + '.*'), 'put', function(
 ) {
   return successData;
 });
-
+//维护个人基本信息
 Mock.mock(basePath + '/person/info/savePersonInfo', 'post', function(options) {
   return successData;
 });
-Mock.mock(basePath + '/person/info/saveSkillCert', 'post', function(options) {
-  return successData;
-});
-Mock.mock(basePath + '/person/info/saveLanguageLevel', 'post', function(
+//新增或修改个人技能证书信息
+Mock.mock(basePath + '/person/inresumeo/saveSkillCert', 'post', function(
   options
 ) {
   return successData;
 });
-Mock.mock(basePath + '/person/info/saveLaborExp', 'post', function(options) {
+//新增或修改个人语言能力信息
+Mock.mock(basePath + '/person/resume/saveLanguageLevel', 'post', function(
+  options
+) {
+  return successData;
+});
+//新增或修改个人劳动经历信息
+Mock.mock(basePath + '/person/resume/saveLaborExp', 'post', function(options) {
   return successData;
 });
 //获取职位信息
@@ -177,10 +182,19 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
 ) {
   return successData;
 });
-//新增或修改个人劳动经历信息
-Mock.mock(basePath + '/person/info/saveEduExp', 'post', function(options) {
+//保存个人教育经历信息
+Mock.mock(basePath + '/person/resume/saveEduExp', 'post', function(options) {
   return successData;
 });
+//删除某种能力或经历信息
+Mock.mock(
+  RegExp(basePath + '/person/resume/delete/' + '.*'),
+  'delete',
+  function(options) {
+    return successData;
+  }
+);
+
 //屏蔽所选企业
 Mock.mock(basePath + '/person/info/shieldCorp', 'put', function(options) {
   return successData;

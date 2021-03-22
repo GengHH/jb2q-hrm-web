@@ -1,14 +1,19 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 14:54:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-21 17:46:23
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
 
 import apiUrlConfig from '../config';
-import { getAction, postAction, putAction } from './allActionManage';
+import {
+  getAction,
+  postAction,
+  putAction,
+  deleteAction
+} from './allActionManage';
 
 const basePath = apiUrlConfig.personBasePath;
 /**
@@ -39,22 +44,25 @@ const updatePersonalPermissions = params =>
   putAction(basePath + '/person/info/update/', params, true);
 //新增或修改个人技能证书信息
 const saveSkillCert = params =>
-  postAction(basePath + '/person/info/saveSkillCert', params);
+  postAction(basePath + '/person/resume/saveSkillCert', params);
 //新增或修改个人语言能力信息
 const saveLanguageLevel = params =>
-  postAction(basePath + '/person/info/saveLanguageLevel', params);
+  postAction(basePath + '/person/resume/saveLanguageLevel', params);
 //新增或修改个人劳动经历信息
 const saveLaborExp = params =>
-  postAction(basePath + '/person/info/saveLaborExp', params);
+  postAction(basePath + '/person/resume/saveLaborExp', params);
 //新增或修改个人劳动经历信息
 const saveEduExp = params =>
-  postAction(basePath + '/person/info/saveEduExp', params);
+  postAction(basePath + '/person/resume/saveEduExp', params);
 //修改个人评价（个人描述）
 const savePsnlEvaluate = params =>
   putAction(basePath + '/person/resume/savePsnlEvaluate', params);
 //保存个人求职意向信息
 const savePositionLike = params =>
   postAction(basePath + '/person/resume/savePositionLike', params);
+//删除某种能力或经历信息
+const deleteSomeResume = params =>
+  deleteAction(basePath + '/person/resume/delete/', params, true);
 
 //投递简历
 const doDeliveryResume = params =>
@@ -76,6 +84,7 @@ export {
   saveEduExp,
   saveLaborExp,
   savePsnlEvaluate,
+  deleteSomeResume,
   queryJobs,
   updatePersonalPermissions,
   doDeliveryResume,
