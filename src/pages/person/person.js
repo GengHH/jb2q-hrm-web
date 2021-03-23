@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-22 16:06:39
+ * @LastEditTime: 2021-03-23 16:09:16
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -32,10 +32,14 @@ import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
 import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
 import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
+import BaseWChat from '@/components/common/BaseWChat';
 import PlConfig from '@/config/plComponents';
+import Chat from 'jwchat';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
+//加载jwchat（基于element-ui）
+Vue.use(Chat);
 //安装vue-axios插件
 Vue.use(VueAxios, router);
 //安装print插件
@@ -51,6 +55,7 @@ Vue.component(BaseLabelInput.name, BaseLabelInput);
 Vue.component(BaseLabelSelect.name, BaseLabelSelect);
 Vue.component(BaseLoadingButton.name, BaseLoadingButton);
 Vue.component(BaseLabelDatepicker.name, BaseLabelDatepicker);
+Vue.component(BaseWChat.name, BaseWChat);
 Vue.use(PlConfig, {});
 // 引入mock配置
 if (config.mock) {

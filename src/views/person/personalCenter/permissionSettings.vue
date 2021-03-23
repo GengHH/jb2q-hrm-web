@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-22 16:36:30
+ * @LastEditTime: 2021-03-23 15:29:38
  * @LastEditors: GengHH
  * @Description: 个人权限控制
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\permissionSettings.vue
@@ -118,10 +118,12 @@ export default {
     },
     async setPermission(index) {
       // TODO 调用后台接口
+      let _pid = this.$store.getters['person/pid'];
       if (index == 1) {
-        let updateResult1 = await updatePersonalPermissions(
-          'allowSearch/' + this.allowSearch
-        );
+        let updateResult1 = await updatePersonalPermissions({
+          pid: _pid,
+          allowSearch: this.allowSearch
+        });
         if (updateResult1 && updateResult1.status == 200) {
           this.allowSearchView
             ? this.showMessage('success', '用人单位将能主动搜索到您的简历')
@@ -131,9 +133,10 @@ export default {
         }
         this['loading' + index] = false;
       } else if (index === 2) {
-        let updateResult2 = await updatePersonalPermissions(
-          'allowArtificialReco/' + this.allowArtificialReco
-        );
+        let updateResult2 = await updatePersonalPermissions({
+          pid: _pid,
+          allowArtificialReco: this.allowArtificialReco
+        });
         if (updateResult2 && updateResult2.status == 200) {
           this.allowArtificialRecoView
             ? this.showMessage('success', '将能接受管理员人工推荐职位')
@@ -143,9 +146,10 @@ export default {
         }
         this['loading' + index] = false;
       } else if (index === 3) {
-        let updateResult3 = await updatePersonalPermissions(
-          'allowAutoReco/' + this.allowAutoReco
-        );
+        let updateResult3 = await updatePersonalPermissions({
+          pid: _pid,
+          allowAutoReco: this.allowAutoReco
+        });
         if (updateResult3 && updateResult3.status == 200) {
           this.allowAutoRecoView
             ? this.showMessage('success', '将接受系统自动推荐职位')

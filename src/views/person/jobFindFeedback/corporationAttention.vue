@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 12:04:37
+ * @LastEditTime: 2021-03-23 10:04:12
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -19,7 +19,7 @@
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryCorpAttentionList($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
@@ -107,7 +107,7 @@ export default {
     }
   },
   methods: {
-    async queryList() {
+    async queryCorpAttentionList() {
       let res = await queryCorpStarList({
         pid: this.$store.getters['person/pid'] || ''
       });
@@ -133,7 +133,7 @@ export default {
     }
   },
   created() {
-    this.queryList();
+    this.queryCorpAttentionList();
   }
 };
 </script>

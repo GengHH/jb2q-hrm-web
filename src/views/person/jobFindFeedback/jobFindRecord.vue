@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 18:17:38
+ * @LastEditTime: 2021-03-23 18:28:03
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -17,7 +17,7 @@
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryJobRecordList($event)"></BaseSearch>
       </el-col>
     </el-row>
     <!-- 查询结果Tabs -->
@@ -93,6 +93,94 @@
         </pl-table></el-tab-pane
       >
     </el-tabs>
+    <!----------------------->
+    <!-- 评价弹窗部分 -->
+    <!----------------------->
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog1"
+      :before-close="handleClose"
+    >
+      <div class="pup-btn">
+        <p class="pup-tit">
+          <i class="icon iconfont ico-no">&#xe648;</i>职位评价
+        </p>
+      </div>
+      <el-form
+        class="width70"
+        :model="jobEvaluationForm"
+        ref="jobEvaluationForm"
+        :label-position="labelPosition"
+        :rules="rules"
+      >
+        <el-form-item
+          label="单位名称"
+          prop="dwMc"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="jobEvaluationForm.dwMc"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="职位名称"
+          prop="positionName"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="jobEvaluationForm.positionName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-row>
+          <el-form-item
+            label="评价星级"
+            prop="star"
+            :label-width="formLabelWidth"
+          >
+            <el-rate
+              v-model="jobEvaluationForm.star"
+              show-text
+              :texts="starText"
+            >
+            </el-rate>
+          </el-form-item>
+        </el-row>
+        <el-form-item
+          label="评价内容"
+          prop="content"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            placeholder="请输入（1000字以内）"
+            v-model="jobEvaluationForm.content"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <p class="fourteen-opacity font-or tac line20">
+        注：请按岗位真实性、HR反馈速度、面试体验、招聘规范性几方面评价
+        <br />个人填写的相关评价，对企业不可见。
+      </p>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button
+          id="dialog1Btn"
+          @click="dialogClear('jobEvaluationForm')"
+          class="white-btn btn-style"
+          >清 空</el-button
+        >
+        <el-button
+          type="primary"
+          @click="doPositionLike('jobEvaluationForm')"
+          class="orange-btn btn-style"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
+    <!-- 聊天弹框 -->
+    <!-- <pl-wchat></pl-wchat> -->
   </div>
 </template>
 
@@ -107,10 +195,20 @@ export default {
   data() {
     return {
       activeName: 'first',
+      labelPosition: 'right',
+      formLabelWidth: '120px',
+      dialog1: false,
+      starText: this.$store.getters['dictionary/common_startext'],
       queryParam: {
         gjz: ''
       },
-      data: [],
+      jobEvaluationForm: {
+        star: 0,
+        dwMc: '',
+        positionName: '',
+        content: ''
+      },
+      rules: {},
       tableData: [
         {
           age: 20,
@@ -123,7 +221,7 @@ export default {
           zip: 200333,
           tag: '家',
           status: 0,
-          actions: ['action1']
+          actions: ['action1', 'action6']
         },
         {
           age: 20,
@@ -297,7 +395,9 @@ export default {
               icon: 'el-icon-chat-edit',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                //console.log(row);
+                console.log(row);
+                console.log(this);
+                this.dialog1 = true;
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);
@@ -315,6 +415,12 @@ export default {
     handleSelectionChange(val) {
       console.log(val);
     },
+    handleClose() {
+      this.dialog1 = false;
+    },
+    queryJobRecordList(val) {
+      this.$alert('暂时没有此Api接口，请稍后！');
+    },
     deleteJob() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
@@ -325,6 +431,9 @@ export default {
           obj => !that.selection.some(i => obj.id === i.id)
         );
       }
+    },
+    bindEnter(val) {
+      console.log(val);
     }
   }
 };
@@ -370,6 +479,34 @@ export default {
         width: 100px;
       }
     }
+  }
+  .pup-btn {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: #f7f7f7;
+    left: 0;
+    padding: 5px 0;
+    z-index: 2;
+    border-bottom: 1px solid #e6e6e6;
+    .pup-tit {
+      text-align: left;
+      font-size: 14px;
+      color: #fc6f3d;
+      font-weight: bold;
+      padding: 0 20px;
+      line-height: 30px;
+      i {
+        margin-right: 6px;
+      }
+    }
+  }
+  .el-rate {
+    line-height: 50px !important;
+  }
+  textarea {
+    height: 150px !important;
   }
 }
 </style>

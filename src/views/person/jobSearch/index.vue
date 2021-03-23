@@ -434,6 +434,7 @@ export default {
   }
 
   .radio-list-bar {
+    overflow: hidden;
     max-height: 52px;
     transition: height 0.5s;
     -webkit-transition: max-height 0.5s;

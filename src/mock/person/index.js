@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 15:25:15
+ * @LastEditTime: 2021-03-23 14:01:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -58,10 +58,30 @@ const loadPsnlPermissionsInfo = pid => {
     status: 200,
     message: '',
     result: {
-      data: {
-        allowSearch: '1',
-        allowArtificialReco: '1',
-        allowAutoReco: '0'
+      logonUser: {
+        userId: 309307,
+        userIdStr: '0000309307',
+        userName: '开发人员',
+        loginName: 'user',
+        userType: 'user',
+        organId: '',
+        organIdStr: '-2',
+        organName: '维护',
+        organType: '',
+        domainId: 1,
+        domainIdStr: '',
+        domainName: '',
+        roleKey: 'SC:R:1_c4ca4238a0b923820dcc509a6f75849b',
+        userKey:
+          'a3db4e507c72aa47c99b9c8bacf16da7f98dd24fcc62795fb79ebd65fe2260eb',
+        expire: -1,
+        extInfo: '',
+        areaInfo: '',
+        roles: [{ roleId: '1', roleName: '普通角色' }],
+        readOnly: false,
+        organIdKey: '-2',
+        domainIdKey: '1',
+        userIdKey: '0000309307'
       }
     }
   };
@@ -72,7 +92,6 @@ const loadPsnlPermissionsInfo = pid => {
 // ) {
 //   return getPersonbaseInfo(options);
 // });
-
 Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
   return successData;
 });
@@ -107,7 +126,12 @@ Mock.mock(
     return loadPsnlPermissionsInfo(options);
   }
 );
-Mock.mock(RegExp(basePath + '/person/info/update' + '.*'), 'put', function(
+// Mock.mock(RegExp(basePath + '/person/info/update' + '.*'), 'put', function(
+//   options
+// ) {
+//   return successData;
+// });
+Mock.mock(basePath + '/person/info/updatePsnlPermissionsInfo', 'post', function(
   options
 ) {
   return successData;

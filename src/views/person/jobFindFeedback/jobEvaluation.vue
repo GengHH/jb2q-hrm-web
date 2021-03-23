@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 11:01:46
+ * @LastEditTime: 2021-03-23 10:03:38
  * @Description: 职位评价子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobEvaluation.vue
 -->
@@ -152,8 +152,9 @@ export default {
     }
   },
   methods: {
-    queryJobEvaluationList(params) {
-      console.log(params);
+    queryJobEvaluationList(val) {
+      console.log(val);
+      this.$alert('暂时没有此Api接口，请稍后！');
       // let that = this;
       // if (this.selection && this.selection.length == 0) {
       //   this.$alert('请选择一条');

@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-17 10:01:31
+ * @LastEditTime: 2021-03-23 16:25:48
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -58,7 +58,9 @@ import {
   CheckboxGroup,
   //Radio,
   Upload,
-  ButtonGroup
+  ButtonGroup,
+  Badge,
+  Popover
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -108,6 +110,8 @@ export default {
     //V.use(Radio);
     V.use(Upload);
     V.use(ButtonGroup);
+    V.use(Badge);
+    V.use(Popover);
 
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;

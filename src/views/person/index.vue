@@ -155,12 +155,12 @@ export default {
       },
       rules: {
         contactPhone: [
-          { required: true, message: '请输手机号', trigger: 'blur' },
-          {
-            pattern: phonePattern,
-            message: '请输入正确格式的手机号',
-            trigger: ['blur', 'change']
-          }
+          // { required: true, message: '请输手机号', trigger: 'blur' },
+          // {
+          //   pattern: phonePattern,
+          //   message: '请输入正确格式的手机号',
+          //   trigger: ['blur', 'change']
+          // }
         ],
         livingArea: [
           { required: true, message: '请输入居住区域', trigger: 'blur' }

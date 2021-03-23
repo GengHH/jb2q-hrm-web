@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 13:30:48
+ * @LastEditTime: 2021-03-23 10:03:00
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -16,7 +16,7 @@
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryStarList($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
@@ -138,7 +138,7 @@ export default {
     }
   },
   methods: {
-    async queryList() {
+    async queryStarList() {
       let res = await queryPositionStarList({
         pid: this.$store.getters['person/pid'] || ''
       });
@@ -164,7 +164,7 @@ export default {
     }
   },
   created() {
-    this.queryList();
+    this.queryStarList();
   }
 };
 </script>
