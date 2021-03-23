@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 18:28:03
+ * @LastEditTime: 2021-03-23 18:29:16
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -180,7 +180,7 @@
       </div>
     </el-dialog>
     <!-- 聊天弹框 -->
-    <!-- <pl-wchat></pl-wchat> -->
+    <pl-wchat></pl-wchat>
   </div>
 </template>
 
