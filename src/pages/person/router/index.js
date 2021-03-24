@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
-//import Test from '@/components/Test';
+import ErrorPage from '@/views/error';
+import store from '@/store';
 
 //解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
 //使用时：this.$router.push(...).catch(err => err)要有后面的catch
@@ -17,11 +18,11 @@ try {
 Vue.use(Router);
 
 //默认空白的局部组件
-// const BlankComponent = {
-//   template:'<div>暂时空白</div>'
-// }
+const BlankComponent = {
+  template: '<div></div>'
+};
 
-export default new Router({
+let router = new Router({
   mode: 'hash',
   //mode: 'history',
   base: '/ggzp-shrs',
@@ -217,8 +218,36 @@ export default new Router({
       ]
     },
     {
+      path: '/logout',
+      component: BlankComponent
+    },
+    {
+      path: '/error',
+      component: ErrorPage
+    },
+    {
       path: '/*',
       component: NotFoundPage
     }
   ]
 });
+
+//全局路由钩子函数（根据用户的权限判断路由的跳转）
+router.beforeEach((to, from, next) => {
+  if (!store.getters['person/token']) {
+    next('/error');
+  } else if (
+    store.getters['person/first_login'] &&
+    to.name !== '个人信息维护' &&
+    to.name
+  ) {
+    Vue.prototype.$alert(
+      '首次进入本系统，请先维护个人基本信息，以正常使用系统功能！'
+    );
+    next('/personInfo');
+  } else {
+    next();
+  }
+});
+
+export default router;

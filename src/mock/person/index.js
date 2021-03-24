@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 14:01:26
+ * @LastEditTime: 2021-03-24 11:15:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -58,6 +58,30 @@ const loadPsnlPermissionsInfo = pid => {
     status: 200,
     message: '',
     result: {
+      data: {
+        allowSearch: '0',
+        allowArtificialReco: '0',
+        allowAutoReco: '0'
+      }
+    }
+  };
+};
+
+// Mock.mock(RegExp('/person/info/loadPersonInfo' + '.*'), 'get', function(
+//   options
+// ) {
+//   return getPersonbaseInfo(options);
+// });
+Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
+  return successData;
+});
+Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
       logonUser: {
         userId: 309307,
         userIdStr: '0000309307',
@@ -82,30 +106,6 @@ const loadPsnlPermissionsInfo = pid => {
         organIdKey: '-2',
         domainIdKey: '1',
         userIdKey: '0000309307'
-      }
-    }
-  };
-};
-
-// Mock.mock(RegExp('/person/info/loadPersonInfo' + '.*'), 'get', function(
-//   options
-// ) {
-//   return getPersonbaseInfo(options);
-// });
-Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
-  return successData;
-});
-Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
-  options
-) {
-  return {
-    status: 200,
-    message: '',
-    result: {
-      data: {
-        allowSearch: '0',
-        allowArtificialReco: '1',
-        allowAutoReco: '0'
       }
     }
   };

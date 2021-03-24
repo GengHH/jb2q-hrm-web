@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 14:02:18
+ * @LastEditTime: 2021-03-24 09:36:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\login\index.js
  */
@@ -20,7 +20,9 @@ const basePath = config.personBasePath;
 const successData = {
   status: 200,
   message: '',
-  result: {}
+  result: {
+    data: true
+  }
 };
 
 Mock.mock(basePath + '/psnl/login', 'post', function(options) {

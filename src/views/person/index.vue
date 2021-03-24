@@ -260,7 +260,6 @@ export default {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
           formData.birthDate = this.newBirthDate || formData.birthDate;
           let reusult = await updatePersonBaseInfo(formData);
-          console.log(reusult);
           if (reusult && reusult.status === 200) {
             done();
             this.$message({
@@ -268,17 +267,23 @@ export default {
               message: '保存成功!',
               type: 'success'
             });
+            //修改该人员为不是第一次登录
+            this.$store.commit('SET_FIRST_LOGIN', false);
           } else {
             done();
             this.$message({
               showClose: true,
-              message: 'error submit!',
+              message: '保存失败!',
               type: 'error'
             });
           }
         } else {
           done();
-          console.log('error submit!!');
+          this.$message({
+            showClose: true,
+            message: '系统异常，保存报错!',
+            type: 'error'
+          });
           return false;
         }
       });

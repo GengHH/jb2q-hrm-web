@@ -2,14 +2,17 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-10 18:19:00
+ * @LastEditTime: 2021-03-24 15:08:10
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
 import { getLogonUser } from '@/api/personApi';
+import router from '@/pages/person/router';
 const state = {
   //用户token
   token: '',
+  //是不是首次登录本系统
+  first_login: true,
   //证件号码
   zjhm: '',
   //个人标识
@@ -44,6 +47,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_FIRST_LOGIN: (state, first_login) => {
+    state.first_login = first_login;
   },
   SET_NAME: (state, name) => {
     state.name = name;
@@ -81,6 +87,7 @@ const getters = {
   //   return state.name;
   // }
   token: state => state.token,
+  first_login: state => state.first_login,
   username: state => state.name,
   pid: state => state.pid
 };
@@ -114,7 +121,7 @@ const actions = {
   //     }
   //   });
   // },
-  //用户登录（开发发环境使用）
+  //用户登录（开发环境使用）
   do_login({ commit }) {
     return new Promise(resolve => {
       commit('SET_PERSONINOF', {
@@ -125,6 +132,7 @@ const actions = {
         pid: '201906186258910'
       });
       commit('SET_TOKEN', 'login');
+      commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -138,6 +146,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_PERSONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
+      commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -154,7 +163,12 @@ const actions = {
         if (res.status == 200) {
           commit('SET_PERSONINOF', res.result);
           commit('SET_TOKEN', 'login');
+          commit('SET_FIRST_LOGIN', true);
+          // TODO判断是不是首次进入系统
+          //router.push('/personInfo');
         } else {
+          //! TODO 登录成功但是获取人员进本信息失败，还怎样处理？
+          router.push('/error');
           console.log('加载个人登录信息失败：' + res.message);
         }
       })

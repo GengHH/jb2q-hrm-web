@@ -194,7 +194,7 @@
         <el-card
           class="box-card bg-gray"
           shadow="hover"
-          v-for="(eduCarditem, index) in resume.eduExp"
+          v-for="(eduCarditem, index) in eduExpTransformed"
           :key="index"
         >
           <div slot="header" class="clearfix">
@@ -225,12 +225,12 @@
                 {{ eduCarditem.majorName }}
               </p>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <p class="fourteen-opacity line40">
                 {{ eduCarditem.eduLevel }}
               </p>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
               <p class="four-opacity line40">
                 {{
                   eduCarditem.admissionDate
@@ -1132,6 +1132,18 @@ export default {
       } else {
         return [];
       }
+    },
+    eduExpTransformed() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      return this.resume.eduExp
+        ? this.resume.eduExp.map(item => {
+            let dic = dictionary.find(i => {
+              return i.value === item.eduLevel;
+            });
+            item.eduLevel = dic ? dic.label : item.eduLevel;
+            return item;
+          })
+        : [];
     }
   },
   methods: {
@@ -1263,6 +1275,7 @@ export default {
           switch (formName) {
             case 'workExperienceForm':
               if (
+                !this.editStatus &&
                 this.resume.laborExp.find(
                   element =>
                     element.corpName === this.workExperienceForm.corpName
@@ -1301,21 +1314,17 @@ export default {
             case 'educationExperienceForm':
               this.dialog3 = false;
               if (
-                this.editStatus ||
+                !this.editStatus &&
                 this.resume.eduExp.find(
                   element =>
                     element.collegesName ===
                     this.educationExperienceForm.collegesName
                 )
               ) {
-                this.editStatus
-                  ? (this.resume.eduExp[this.editItemIdex] = JSON.parse(
-                      JSON.stringify(params)
-                    ))
-                  : this.$message({
-                      type: 'warning',
-                      message: '此教育经历已经添加过！'
-                    });
+                this.$message({
+                  type: 'warning',
+                  message: '此教育经历已经添加过！'
+                });
                 return;
               }
               saveEduExp(params)
@@ -1326,7 +1335,7 @@ export default {
                       message: '保存成功'
                     });
                     this.resume.eduExp.push(params);
-                    this.loadPsnlResume();
+                    //this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1345,6 +1354,7 @@ export default {
 
             case 'languageSkillsForm':
               if (
+                !this.editStatus &&
                 this.resume.psnlLanguage.find(
                   element =>
                     element.languageType ===
@@ -1383,6 +1393,7 @@ export default {
 
             case 'skillsCertificateForm':
               if (
+                !this.editStatus &&
                 this.resume.psnlSkillcert.find(
                   element =>
                     element.certName === this.skillsCertificateForm.certName
@@ -1756,5 +1767,8 @@ export default {
 ::v-deep .el-date-editor,
 ::v-deep .el-select {
   width: 100% !important;
+}
+::v-deep textarea {
+  min-height: 150px !important;
 }
 </style>

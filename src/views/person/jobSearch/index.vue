@@ -167,7 +167,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.eduRequire"
+                  v-model="queryParams.workArea"
                   clearable
                   placeholder="工作区域"
                 >
@@ -244,69 +244,37 @@ export default {
         age: '',
         positions: '不限',
         salaryScope: '不限',
-        workArea: '',
         workNature: '不限',
+        workYearNeed: '不限',
+        workArea: '',
         eduRequire: '',
         recruitNum: '3',
-        workYearNeed: '不限',
-        releaseTime: '2021-12-10 10:44:36',
         tranBaseSymbol: '0',
         special: '',
         agencyRecruit: '0',
         entrustCorpName: '',
-        type: '1',
         salaryUp: '',
-        salaryDown: ''
-        //content: '上海新移力自动化科技有限公司'
+        salaryDown: '',
+        content: ''
       },
       options: [],
       tableData: [],
       queryResult: [],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       nlOptions: [
-        { value: '01', label: '20' },
-        { value: '04', label: '21' },
-        { value: '05', label: '22' },
-        { value: '06', label: '23' },
-        { value: '07', label: '24' },
-        { value: '09', label: '25' },
-        { value: '10', label: '26' },
-        { value: '12', label: '27' },
-        { value: '13', label: '28' }
+        { value: '20', label: '20' },
+        { value: '21', label: '21' },
+        { value: '22', label: '22' },
+        { value: '23', label: '23' },
+        { value: '24', label: '24' },
+        { value: '25', label: '25' },
+        { value: '26', label: '26' },
+        { value: '27', label: '27' },
+        { value: '28', label: '28' }
       ],
-      qxOptions: [
-        { value: '01', label: '黄浦' },
-        { value: '04', label: '徐汇' },
-        { value: '05', label: '长宁' },
-        { value: '06', label: '静安' },
-        { value: '07', label: '普陀' },
-        { value: '09', label: '虹口' },
-        { value: '10', label: '杨浦' },
-        { value: '12', label: '闵行' },
-        { value: '13', label: '宝山' },
-        { value: '14', label: '嘉定' },
-        { value: '15', label: '浦东' },
-        { value: '16', label: '金山' },
-        { value: '17', label: '松江' },
-        { value: '18', label: '青浦' },
-        { value: '26', label: '奉贤' },
-        { value: '30', label: '崇明' }
-      ],
-      xlOptions: [
-        { value: '01', label: '初中及以下' },
-        { value: '02', label: '高中' },
-        { value: '03', label: '职高' },
-        { value: '04', label: '技校' },
-        { value: '05', label: '中专' },
-        { value: '06', label: '大专' },
-        { value: '07', label: '本科' },
-        { value: '08', label: '硕士' },
-        { value: '09', label: '博士及以上' }
-      ],
-      wtOptions: [
-        { value: '0', label: '否' },
-        { value: '1', label: '是' }
-      ],
+      qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
+      xlOptions: this.$store.getters['dictionary/recruit_edu'],
+      wtOptions: this.$store.getters['dictionary/yesno'],
       xcOptions: [
         { value: '5000', label: '5000' },
         { value: '6000', label: '6000' },
