@@ -268,7 +268,7 @@ export default {
               type: 'success'
             });
             //修改该人员为不是第一次登录
-            this.$store.commit('SET_FIRST_LOGIN', false);
+            this.$store.commit('person/SET_FIRST_LOGIN', false);
           } else {
             done();
             this.$message({

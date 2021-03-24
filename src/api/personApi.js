@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 13:49:47
+ * @LastEditTime: 2021-03-24 16:46:43
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -28,6 +28,9 @@ const doPersonLogout = params =>
 //获取人员的登录的基本信息
 const getLogonUser = params =>
   postAction(basePath + '/loginController/getLogonUser', params);
+//检验该人员是不是首次进入系统
+const checkPsnlInit = params =>
+  getAction(basePath + '/person/info/checkPsnlInit', params);
 //获取人员的基本信息
 const getPersonBaseInfo = params =>
   getAction(basePath + '/person/info/loadPersonInfo', params);
@@ -87,6 +90,7 @@ export {
   doPersonLogout,
   getLogonUser,
   getPersonBaseInfo,
+  checkPsnlInit,
   updatePersonBaseInfo,
   loadPsnlPermissionsInfo,
   savePositionLike,

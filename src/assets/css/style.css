@@ -211,3 +211,27 @@ body {
   background: #ff9954 linear-gradient(to right, #ff9854, #fc703d) !important;
   border-color: #ff9954 !important;
 }
+
+.dialog-content-full-screen .el-dialog__header {
+  padding: 20px 20px 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 999;
+}
+.dialog-content-full-screen .el-dialog__body {
+  padding: 0 !important;
+}
+
+.dialog-content-full-screen .el-dialog__body .ChatPage,
+.dialog-content-full-screen .el-dialog__body .wrapper,
+.dialog-content-full-screen .el-dialog__body .chatBox,
+.dialog-content-full-screen .el-dialog__body .chatPage {
+  width: 100% !important;
+}
+
+.el-menu--popup {
+  letter-spacing: 10px;
+  text-align: center;
+  text-indent: 10px;
+}

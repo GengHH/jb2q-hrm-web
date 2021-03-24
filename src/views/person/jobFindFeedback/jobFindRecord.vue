@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 18:29:16
+ * @LastEditTime: 2021-03-24 16:08:02
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -120,6 +120,7 @@
         >
           <el-input
             v-model="jobEvaluationForm.dwMc"
+            :disabled="true"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -130,6 +131,7 @@
         >
           <el-input
             v-model="jobEvaluationForm.positionName"
+            :disabled="true"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -153,6 +155,7 @@
           :label-width="formLabelWidth"
         >
           <el-input
+            class="star-textarea"
             type="textarea"
             placeholder="请输入（1000字以内）"
             v-model="jobEvaluationForm.content"
@@ -180,7 +183,13 @@
       </div>
     </el-dialog>
     <!-- 聊天弹框 -->
-    <pl-wchat></pl-wchat>
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="wchatDialog"
+      :before-close="wchatHandleClose"
+    >
+      <pl-wchat></pl-wchat>
+    </el-dialog>
   </div>
 </template>
 
@@ -198,6 +207,7 @@ export default {
       labelPosition: 'right',
       formLabelWidth: '120px',
       dialog1: false,
+      wchatDialog: false,
       starText: this.$store.getters['dictionary/common_startext'],
       queryParam: {
         gjz: ''
@@ -214,8 +224,9 @@ export default {
           age: 20,
           date: '2019-05-01',
           star: null,
-          name: '王小虎',
-          province: '上海',
+          dwMc: '万达信息股份有限公司',
+          positionName: '软件工程师',
+          province: '10k',
           city: '普陀区',
           address: '金沙江路 1518 弄',
           zip: 200333,
@@ -227,8 +238,9 @@ export default {
           age: 20,
           date: '2019-05-04',
           star: null,
-          name: '王小虎',
-          province: '上海',
+          dwMc: '万达信息股份有限公司',
+          positionName: '软件工程师',
+          province: '10k',
           city: '普陀区',
           address: '金沙江路 1517 弄',
           zip: 200333,
@@ -240,8 +252,9 @@ export default {
           age: 20,
           date: '2019-05-03',
           star: null,
-          name: '王小虎',
-          province: '上海',
+          dwMc: '万达信息股份有限公司',
+          positionName: '软件工程师',
+          province: '10k',
           city: '普陀区',
           address: '金沙江路 1519 弄',
           zip: 200333,
@@ -253,8 +266,9 @@ export default {
           age: 20,
           date: '2019-05-02',
           star: null,
-          name: '王小虎',
-          province: '上海',
+          dwMc: '万达信息股份有限公司',
+          positionName: '软件工程师',
+          province: '10k',
           city: '普陀区',
           address: '金沙江路 1516 弄',
           zip: 200333,
@@ -265,8 +279,10 @@ export default {
         {
           age: 20,
           date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
+          star: null,
+          dwMc: '万达信息股份有限公司',
+          positionName: '软件工程师',
+          province: '10k',
           city: '普陀区',
           address: '金沙江路 1515 弄',
           zip: 200333,
@@ -291,12 +307,12 @@ export default {
         },
         {
           label: '单位名称',
-          prop: 'name',
+          prop: 'dwMc',
           rowSpan: 'all'
         },
         {
           label: '职位名称',
-          prop: 'name',
+          prop: 'positionName',
           rowSpan: 'all'
         },
         {
@@ -360,6 +376,7 @@ export default {
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
                 //console.log(row);
+                this.wchatDialog = true;
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);
@@ -397,6 +414,8 @@ export default {
               onClick: ({ row }) => {
                 console.log(row);
                 console.log(this);
+                this.jobEvaluationForm.dwMc = row.dwMc;
+                this.jobEvaluationForm.positionName = row.positionName;
                 this.dialog1 = true;
               },
               hidden: ({ row }, item) => {
@@ -417,6 +436,9 @@ export default {
     },
     handleClose() {
       this.dialog1 = false;
+    },
+    wchatHandleClose() {
+      this.wchatDialog = false;
     },
     queryJobRecordList(val) {
       this.$alert('暂时没有此Api接口，请稍后！');
@@ -503,10 +525,13 @@ export default {
     }
   }
   .el-rate {
-    line-height: 50px !important;
+    height: 100%;
+    padding-top: 10px;
   }
-  textarea {
-    height: 150px !important;
+  ::v-deep .star-textarea {
+    textarea {
+      height: 150px !important;
+    }
   }
 }
 </style>

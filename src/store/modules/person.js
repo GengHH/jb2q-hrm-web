@@ -2,11 +2,11 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 15:08:10
+ * @LastEditTime: 2021-03-24 17:56:41
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
-import { getLogonUser } from '@/api/personApi';
+import { getLogonUser, checkPsnlInit } from '@/api/personApi';
 import router from '@/pages/person/router';
 const state = {
   //用户token
@@ -132,7 +132,7 @@ const actions = {
         pid: '201906186258910'
       });
       commit('SET_TOKEN', 'login');
-      commit('SET_FIRST_LOGIN', false);
+      commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -158,16 +158,29 @@ const actions = {
 
   get_personInfo({ commit }) {
     getLogonUser()
-      .then(res => {
+      .then(async res => {
         console.log('个人登录信息', res);
         if (res.status == 200) {
           commit('SET_PERSONINOF', res.result);
           commit('SET_TOKEN', 'login');
-          commit('SET_FIRST_LOGIN', true);
-          // TODO判断是不是首次进入系统
-          //router.push('/personInfo');
+          //判断是不是首次进入系统
+          if (res.result.pid) {
+            let checkRes = await checkPsnlInit({ pid: res.result.pid }).catch(
+              () => {
+                // 检验人员信息失败，显示系统异常界面
+                router.push('/error');
+              }
+            );
+            if (
+              checkRes.status === 200 &&
+              checkRes.result.data &&
+              checkRes.result.data.isInit === '1'
+            ) {
+              commit('SET_FIRST_LOGIN', false);
+            }
+          }
         } else {
-          //! TODO 登录成功但是获取人员进本信息失败，还怎样处理？
+          // 登录成功但是获取人员进本信息失败，显示系统异常界面
           router.push('/error');
           console.log('加载个人登录信息失败：' + res.message);
         }

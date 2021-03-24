@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-24 13:25:26
+ * @LastEditTime: 2021-03-24 15:17:49
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -69,9 +69,9 @@ let isEmpty = function(obj) {
   }
 };
 // 开发环境使用mock时候，模拟登录
-// if (config.mock) {
-//   store.dispatch('person/do_login');
-// }
+if (config.mock) {
+  store.dispatch('person/do_login');
+}
 if (isEmpty(store.getters.zjhm)) {
   //获取个人登录信息
   store.dispatch('person/get_personInfo');
