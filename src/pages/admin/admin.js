@@ -2,7 +2,7 @@
   * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-19 17:48:19
+ * @LastEditTime: 2021-03-23 10:18:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -80,6 +80,7 @@ if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
 if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
+
 
 /* eslint-disable no-new */
 new Vue({

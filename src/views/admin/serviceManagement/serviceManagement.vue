@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-19 17:35:45
+ * @LastEditTime: 2021-03-24 18:12:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -25,7 +25,7 @@
           <el-col :span="22">
             <el-input
               :disabled="advancedQuery"
-              v-model="form.value"
+              v-model="form.gjz"
               placeholder="请输入内容"
             ></el-input>
           </el-col>
@@ -37,7 +37,7 @@
           搜索
         </el-button>
         <el-button
-          @click="form.value = ''"
+          @click="form.gjz = ''"
           style="margin-left:3px"
           type="primary"
           plain
@@ -49,13 +49,14 @@
           plain
           @click="
             advancedQuery = !advancedQuery;
-            form.value = '';
+            form.gjz = '';
           "
           :icon="!advancedQuery ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"
           >高级搜索</el-button
         >
       </el-col>
     </el-row>
+
     <transition name="bounce">
       <div v-show="advancedQuery">
         <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
@@ -69,11 +70,10 @@
     </el-row> -->
     <!-- ----------------------------------------------------------------------------------- -->
     <querylist
-      :pageList="pageList"
+      :pageListData="pageList"
       :dataList="dataList"
       @handleChange="handleChange"
     ></querylist>
-    {{ dicOptions.option1 }}
   </div>
 </template>
 
@@ -89,8 +89,9 @@ export default {
   },
   data() {
     return {
+      dates: ['2021-03-16', '2021-03-17'],
       form: {
-        input: ''
+        gjz: ''
       },
       formConfig: {
         inline: true,
@@ -104,12 +105,13 @@ export default {
           border: '1px solid #e2e2e2',
           boxShadow: '2px 2px 5px #bbbbbb'
         },
+
         formItemList: [
           {
             type: 'checkbox',
             label: '身份标签',
             rules: [],
-            key: 'checkbox',
+            key: 'label',
             data: [],
             style: { width: '532px' },
             options: [
@@ -159,7 +161,7 @@ export default {
             type: 'select',
             label: '管理所属区',
             rules: [],
-            key: 'aaa',
+            key: 'livingArea',
             style: { width: '210px' },
             options: [
               {
@@ -180,31 +182,31 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入姓名',
             rules: [],
-            key: 'name'
+            key: 'xm'
           },
           {
             type: 'input',
             label: '证件号码',
             style: { width: '210px' },
-            placeholder: '请输入姓名',
+            placeholder: '请输入证件号码',
             rules: [],
-            key: 'name2'
+            key: 'zjhm'
           },
           {
             type: 'select',
             label: '就业状态',
             rules: [],
             style: { width: '210px' },
-            key: 'aaa1',
+            key: 'employStatus',
             options: [
               {
                 value: '1',
-                label: '男',
+                label: '已就业',
                 disabled: false
               },
               {
                 value: '0',
-                label: '女',
+                label: '无业',
                 disabled: false
               }
             ]
@@ -214,7 +216,7 @@ export default {
             label: '居住地',
             style: { width: '210px' },
             rules: [],
-            key: 'aaa2',
+            key: 'livingAddress',
             options: [
               {
                 value: '1',
@@ -233,7 +235,7 @@ export default {
             label: '户籍地',
             style: { width: '210px' },
             rules: [],
-            key: 'aaa3',
+            key: 'houseArea',
             options: [
               {
                 value: '1',
@@ -251,16 +253,17 @@ export default {
             type: 'daterange',
             label: '至今天数',
             style: { width: '210px' },
+            format: 'yyyy-MM-dd',
             rules: [],
-            key: 'daterange'
+            key: 'time'
           },
           {
             type: 'input',
             label: '关键字',
             style: { width: '534px' },
-            placeholder: '请输入姓名',
+            placeholder: '请输入关键字',
             rules: [],
-            key: 'name22'
+            key: 'gjz'
           }
         ]
       },
@@ -286,36 +289,20 @@ export default {
         //职位
         option7: this.$store.getters['dictionary/recruit_position_f_type'],
         //行业
-        option8: this.$store.getters['dictionary/recruit_position_s_type']
+        option8: this.$store.getters['dictionary/recruit_position_s_type'],
+        //身份标签
+        option9: [
+          { value: '01', label: '就业困难人员' },
+          { value: '04', label: '登记失业人员' },
+          { value: '05', label: '长期失业青年' },
+          { value: '06', label: '退工三个月仍无业人员' },
+          { value: '07', label: '基层排摸无业人员' },
+          { value: '09', label: '退役军人' },
+          { value: '10', label: '高校毕业生' },
+          { value: '12', label: '特别关注人员' }
+        ]
       },
-      dataList: [
-        {
-          xm: '张大军',
-          sex_id: '男',
-          aaa003: 0,
-          aaa004: '412825199402100277',
-          aaa005: '1994-02-10',
-          aaa006: '本科',
-          aaa007: 1,
-          aaa008: [
-            {
-              title: '失业'
-            },
-            {
-              title: '无业'
-            }
-          ],
-          aaa009: [
-            {
-              title: '黄埔'
-            },
-            {
-              title: '宋江'
-            }
-          ],
-          aaa010: '2019-12-11'
-        }
-      ]
+      dataList: []
     };
   },
   computed: {},
@@ -324,30 +311,41 @@ export default {
       console.log(e);
     },
     handleChange(e) {
-      console.log(e + '---');
+      this.pageList.pageIndex = e;
+      this.onSearch();
     },
     advancedSearch(e) {
       console.log(e);
       this.form = { ...e };
+      if (this.form.time) {
+        this.form.zjtsStart = this.form.time[0];
+        this.form.zjtsEnd = this.form.time[1];
+      }
+
       this.onSearch();
     },
     onSearch() {
-      console.log(this.form);
       let params = { ...this.form };
-      params.pageParam = this.pageList;
+      params.pageParam = { ...this.pageList };
       const loading = this.$loading({
         lock: true,
         text: '搜索中...',
         spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        background: 'rgba(0, 0, 0, 0.5)'
       });
+
       emphasis_keypoint(
-        {
-          paramData: params
-        },
+        params,
         res => {
           loading.close();
           console.log(res);
+          let record = res.result.record;
+          this.dataList = record.data;
+          this.pageList = {
+            total: record.total,
+            pageSize: record.pageSize,
+            pageIndex: record.pageIndex
+          };
         },
         err => {
           console.log(err);

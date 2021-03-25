@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-19 09:51:50
+ * @LastEditTime: 2021-03-24 10:01:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -58,7 +58,9 @@ import {
   CheckboxGroup,
   //Radio,
   Upload,
-  ButtonGroup
+  ButtonGroup,
+  Calendar,
+  TimeSelect
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -108,7 +110,8 @@ export default {
     //V.use(Radio);
     V.use(Upload);
     V.use(ButtonGroup);
-
+    V.use(Calendar),
+    V.use(TimeSelect),
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;
     V.prototype.$msgbox = MessageBox;

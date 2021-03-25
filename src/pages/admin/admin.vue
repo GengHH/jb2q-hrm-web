@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-18 14:44:08
+ * @LastEditTime: 2021-03-23 15:12:01
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -196,12 +196,12 @@ export default {
               text: '查询单位信息',
               iconName: 'el-icon-setting'
             },
-            {
-              id: '5-2',
-              path: '/unitManagement/recruitment',
-              text: '代理招聘',
-              iconName: 'el-icon-setting'
-            },
+            // {
+            //   id: '5-2',
+            //   path: '/unitManagement/recruitment',
+            //   text: '代理招聘',
+            //   iconName: 'el-icon-setting'
+            // },
             {
               id: '5-3',
               path: '/unitManagement/management',

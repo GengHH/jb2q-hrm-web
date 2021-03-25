@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 13:58:56
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-23 10:19:11
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */

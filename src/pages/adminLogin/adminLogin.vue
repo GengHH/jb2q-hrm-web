@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-18 14:40:39
+ * @LastEditTime: 2021-03-24 10:57:20
  * @Description: file content
 -->
 <template>
@@ -47,7 +47,7 @@
  */
 import SecCtrl from './module/SecCtrl.js';
 import { queryLogin } from '@/api/adminApi';
-
+import apiUrlConfig from '@/config';
 let ks_provider = 'SKF&SKFAPI20046.dll'; // 介质
 let ks_alg = 0; // 使用证书时自动适配
 let ks_path = ''; // 如果为软算法，对应路径
@@ -174,26 +174,30 @@ export default {
           if (signatureInfo == null || signatureInfo['signature'].length == 0) {
             return false;
           }
-
+          console.log();
           this.form.signData = signatureInfo['signature'];
-          queryLogin({
-            password: strpassword,
-            random: random,
-            loginName: this.form.loginName,
-            signData: this.form.signData
-          })
-            .then(function(response) {
+          queryLogin(
+            {
+              password: strpassword,
+              random: random,
+              loginName: this.form.loginName,
+              signData: this.form.signData
+            },
+            response => {
               if (response.status == 200) {
                 sessionStorage.setItem(
                   'userInfo',
                   JSON.stringify(response.result.logonUser)
                 );
-                window.location.href = '../ggzp-shrs/admin.html';
+
+                window.location.href =
+                  apiUrlConfig.loginBasePath + '/ggzp-shrs/admin.html';
               }
-            })
-            .catch(function(error) {
+            },
+            error => {
               console.log(error);
-            });
+            }
+          );
         } else {
           return false;
         }
