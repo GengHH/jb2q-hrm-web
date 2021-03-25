@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 17:56:41
+ * @LastEditTime: 2021-03-25 16:12:56
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -132,7 +132,7 @@ const actions = {
         pid: '201906186258910'
       });
       commit('SET_TOKEN', 'login');
-      commit('SET_FIRST_LOGIN', true);
+      commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -151,7 +151,7 @@ const actions = {
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
       commit('SET_LOGIN_TIME', 0);
-      //sessionStorage.setItem('vuex', null);
+      localStorage.setItem('vuex', null);
       resolve();
     });
   },

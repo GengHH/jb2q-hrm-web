@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 16:52:55
+ * @LastEditTime: 2021-03-25 17:29:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -241,17 +241,46 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
 Mock.mock(basePath + '/person/resume/saveEduExp', 'post', function(options) {
   return successData;
 });
-//删除某种能力或经历信息
+//个人查询屏蔽信息列表
 Mock.mock(
-  RegExp(basePath + '/person/resume/delete/' + '.*'),
-  'delete',
+  RegExp(basePath + '/person/info/queryShieldList' + '.*'),
+  'get',
   function(options) {
-    return successData;
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            shieldId: '61',
+            shieldType: '1',
+            pid: '1',
+            corpId: '11',
+            corpName: '测试单位名称'
+          },
+          {
+            shieldId: '62',
+            shieldType: '1',
+            pid: '1',
+            corpId: '11',
+            corpName: '测试单位名称'
+          }
+        ]
+      }
+    };
   }
 );
 
-//屏蔽所选企业
-Mock.mock(basePath + '/person/info/shieldCorp', 'put', function(options) {
+//个人屏蔽单位
+Mock.mock(basePath + '/person/info/queryShieldList', 'post', function(options) {
+  return successData;
+});
+//个人屏蔽单位
+Mock.mock(basePath + '/person/info/shieldCorp', 'post', function(options) {
+  return successData;
+});
+//个人取消屏蔽单位
+Mock.mock(basePath + '/person/info/cancelShield', 'post', function(options) {
   return successData;
 });
 
@@ -318,5 +347,49 @@ Mock.mock(
     };
   }
 );
+//删除某种能力或经历信息
+Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: Mock.mock({
+      'data|1-10': [
+        {
+          applyforId: '49',
+          resumeId: '1',
+          source: '01',
+          positionName: 'JAVA架构工程师',
+          tranBaseSymbol: '',
+          laborYear: '',
+          xm: '',
+          contactPhone: '',
+          pid: '',
+          age: '',
+          edu: '',
+          graduateSchool: '',
+          sex: '',
+          corpName: '上海新移力自动化科技有限公司',
+          positionId: '4',
+          releaseUserId: '0000941012',
+          salaryScope: '10000-50000',
+          workArea: '06',
+          interviewDate: '',
+          reply: '1',
+          evaluateLevel: '',
+          evaluateContent: '',
+          createTime: '2020-12-23 16:23:15',
+          recId: '',
+          meetId: ''
+        }
+      ]
+    })
+  };
+});
 
+// TODO 评价职位
+Mock.mock(basePath + '/person/feedback/do-evaluate', 'put', function(options) {
+  return successData;
+});
 export default Mock;

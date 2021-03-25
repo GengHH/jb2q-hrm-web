@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 10:04:12
+ * @LastEditTime: 2021-03-25 16:57:28
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -95,7 +95,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             }
           ]

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 10:03:00
+ * @LastEditTime: 2021-03-25 16:57:41
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -114,7 +114,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -126,7 +126,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             }
           ]

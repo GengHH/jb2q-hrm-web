@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-24 15:17:49
+ * @LastEditTime: 2021-03-25 15:15:52
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -64,6 +64,9 @@ if (config.mock) {
 }
 //判断是不是已经登录
 let isEmpty = function(obj) {
+  //! TODO由于使用loaclStorage存储登录信息（用于多页面共享登录信息），
+  //! TODO但是无法实时更新其他数据信息，例如字典数据；
+  //! TODO所以（需要处理）
   if (obj === null || obj === undefined || obj.length === 0) {
     return true;
   }

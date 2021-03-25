@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 16:46:43
+ * @LastEditTime: 2021-03-25 17:30:16
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -74,9 +74,15 @@ const deleteSomeResume = params =>
 const doDeliveryResume = params =>
   putAction(basePath + '/person/feedback/do-applyFor', params);
 
-//屏蔽所选企业
+//个人查询屏蔽信息列表
+const queryShieldList = params =>
+  getAction(basePath + '/person/info/queryShieldList', params);
+//个人屏蔽单位
 const doShieldCorp = params =>
-  putAction(basePath + '/person/info/shieldCorp', params);
+  postAction(basePath + '/person/info/shieldCorp', params);
+//个人取消屏蔽单位
+const doCancelShield = params =>
+  postAction(basePath + '/person/info/cancelShield', params);
 
 //获取关注单位列表
 const queryCorpStarList = params =>
@@ -84,6 +90,13 @@ const queryCorpStarList = params =>
 //获取个人收藏职位列表
 const queryPositionStarList = params =>
   getAction(basePath + '/person/feedback/position/findFavorRecord', params);
+
+//根据不同状态获取简历投递记录
+const findRecord = (type, params) =>
+  getAction(basePath + '/person/feedback/' + type + '/findRecord', params);
+//评价职位
+const doEvaluateJob = params =>
+  putAction(basePath + '/person/feedback/do-evaluate', params);
 
 export {
   doLogin,
@@ -103,7 +116,11 @@ export {
   queryJobs,
   updatePersonalPermissions,
   doDeliveryResume,
+  queryShieldList,
   doShieldCorp,
+  doCancelShield,
   queryCorpStarList,
-  queryPositionStarList
+  queryPositionStarList,
+  findRecord,
+  doEvaluateJob
 };

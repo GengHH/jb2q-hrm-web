@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 16:08:02
+ * @LastEditTime: 2021-03-25 17:11:19
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -22,7 +22,7 @@
     </el-row>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="未查看" name="first">
+      <el-tab-pane label="未查看" name="unread">
         <pl-table
           :data="tableData"
           ref="serveTable1"
@@ -36,9 +36,9 @@
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="second"
+      <el-tab-pane label="待处理" name="readed"
         ><pl-table
-          :data="tableData"
+          :data="tableData2"
           ref="serveTable2"
           :columns="columns"
           show-pager
@@ -50,9 +50,9 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知面试" name="third"
+      <el-tab-pane label="通知面试" name="interview"
         ><pl-table
-          :data="tableData"
+          :data="tableData3"
           ref="serveTable3"
           :columns="columns"
           show-pager
@@ -64,9 +64,9 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知录用" name="fourth"
+      <el-tab-pane label="通知录用" name="hire"
         ><pl-table
-          :data="tableData"
+          :data="tableData4"
           ref="serveTable4"
           :columns="columns"
           show-pager
@@ -78,9 +78,9 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知不录用" name="fifth"
+      <el-tab-pane label="通知不录用" name="unhire"
         ><pl-table
-          :data="tableData"
+          :data="tableData5"
           ref="serveTable5"
           :columns="columns"
           show-pager
@@ -113,6 +113,17 @@
         :label-position="labelPosition"
         :rules="rules"
       >
+        <el-form-item
+          label="所评价的投递面试记录id"
+          prop="dwMc"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="jobEvaluationForm.applyForId"
+            :disabled="true"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
         <el-form-item
           label="单位名称"
           prop="dwMc"
@@ -174,11 +185,11 @@
           class="white-btn btn-style"
           >清 空</el-button
         >
-        <el-button
+        <pl-button
           type="primary"
-          @click="doPositionLike('jobEvaluationForm')"
+          @click="doEvaluateJob('jobEvaluationForm')"
           class="orange-btn btn-style"
-          >保 存</el-button
+          >保 存</pl-button
         >
       </div>
     </el-dialog>
@@ -195,7 +206,7 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-
+import { findRecord, doEvaluateJob } from '@/api/personApi';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -203,11 +214,12 @@ export default {
   },
   data() {
     return {
-      activeName: 'first',
+      activeName: 'unread',
       labelPosition: 'right',
       formLabelWidth: '120px',
       dialog1: false,
       wchatDialog: false,
+      pid: this.$store.getters['person/pid'],
       starText: this.$store.getters['dictionary/common_startext'],
       queryParam: {
         gjz: ''
@@ -290,7 +302,12 @@ export default {
           status: 0,
           actions: ['action1', 'action2']
         }
-      ]
+      ],
+      tableData1: [],
+      tableData2: [],
+      tableData3: [],
+      tableData4: [],
+      tableData5: []
     };
   },
   computed: {
@@ -354,7 +371,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -366,7 +383,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -379,7 +396,7 @@ export default {
                 this.wchatDialog = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -391,7 +408,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -403,7 +420,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
             {
@@ -415,11 +432,12 @@ export default {
                 console.log(row);
                 console.log(this);
                 this.jobEvaluationForm.dwMc = row.dwMc;
+                this.jobEvaluationForm.dwMc = row.dwMc;
                 this.jobEvaluationForm.positionName = row.positionName;
                 this.dialog1 = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row.actions || !row.actions.find(c => c === item.id);
               }
             }
           ]
@@ -440,9 +458,6 @@ export default {
     wchatHandleClose() {
       this.wchatDialog = false;
     },
-    queryJobRecordList(val) {
-      this.$alert('暂时没有此Api接口，请稍后！');
-    },
     deleteJob() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
@@ -456,6 +471,70 @@ export default {
     },
     bindEnter(val) {
       console.log(val);
+    },
+    /**
+     * unread : 未读
+     * readed ：已读
+     * interview ： 面试邀请
+     * hire ： 雇佣
+     * unhire ： 未雇佣
+     */
+    async queryJobRecordList(val) {
+      // this.$alert('暂时没有此Api接口，请稍后！');
+      let that = this;
+      let queryResult = await findRecord(this.activeName, {
+        pid: this.pid,
+        content: val
+      });
+      let _data = queryResult.result.data;
+      if (queryResult.status === 200) {
+        switch (this.activeName) {
+          case 'unread':
+            _data.forEach(element => {
+              element.actions = ['action1', 'action2', 'action3'];
+            });
+            that.tableData1 = _data;
+            break;
+          case 'readed':
+            _data.forEach(element => {
+              element.actions = ['action1', 'action2', 'action3'];
+            });
+            that.tableData2 = _data;
+            break;
+          case 'interview':
+            _data.forEach(element => {
+              element.actions = ['action1', 'action6', 'action3'];
+            });
+            that.tableData3 = _data;
+            break;
+          case 'hire':
+            _data.forEach(element => {
+              element.actions = ['action1', 'action4', 'action3'];
+            });
+            that.tableData4 = _data;
+            break;
+          case 'unhire':
+            _data.forEach(element => {
+              element.actions = ['action1', 'action2', 'action3'];
+            });
+            that.tableData5 = _data;
+            break;
+        }
+      }
+    },
+    doEvaluateJob(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          let params = this.$refs[formName].model;
+          params.pid = this.pid;
+          let result = await doEvaluateJob(params);
+          if (result.status == 200) {
+            this.$message({ type: 'success', message: '评价成功' });
+          } else {
+            this.$message({ type: 'error', message: '评价失败' });
+          }
+        }
+      });
     }
   }
 };
@@ -499,6 +578,16 @@ export default {
     .no-col-padding {
       button {
         width: 100px;
+      }
+    }
+  }
+  ::v-deep .el-table {
+    .cell {
+      padding: 0 !important;
+    }
+    th {
+      .cell {
+        padding: 0 !important;
       }
     }
   }

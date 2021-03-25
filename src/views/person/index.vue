@@ -206,13 +206,23 @@ export default {
       if (this.$store.getters['dictionary/ggjbxx_street']) {
         let array = this.$store.getters['dictionary/ggjbxx_street'];
         let newArray = []; //查找符合条件值并存入新数组
+        let exist = false;
         for (let i in array) {
           if (array[i].filter === that.personInfo.livingArea) {
             newArray[newArray.length] = array[i];
           }
         }
+        for (let s in newArray) {
+          if (newArray[s].value === that.personInfo.livingStreet) {
+            exist = true;
+          }
+        }
+        if (!exist) {
+          that.personInfo.livingStreet = '';
+        }
         return newArray;
       }
+      that.personInfo.livingStreet = '';
       return [];
     },
     jobFaieList: function() {
