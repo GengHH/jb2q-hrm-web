@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-03-16 14:10:25
+ * @LastEditTime: 2021-03-25 16:01:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -43,6 +43,7 @@
       >
     </div>
     <managementadd
+      v-if="visible"
       :visible="visible"
       @onclose="visible = false"
     ></managementadd>

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-03-25 11:03:57
+ * @LastEditTime: 2021-03-25 16:39:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -9,35 +9,49 @@
 <template>
   <el-dialog title="申请" width="70%" :visible="visible" @close="onclose">
     <div style="height:500px;overflow: scroll;overflow-x: hidden;">
-      <el-form ref="form" :model="form" label-width="150px">
+      <el-form ref="form" :rules="rules" :model="form" label-width="150px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="姓名">
+            <el-form-item label="姓名" prop="xm">
               <el-input v-model="form.xm"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="证件照">
               <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action=""
                 class="avatar-uploader"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
+                :on-remove="handleRemove"
+                :file-list="fileList2"
+                :auto-upload="false"
+                :on-change="uploadUserChange"
                 :before-upload="beforeAvatarUpload"
+                :limit="1"
+                :show-file-list="false"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              <div
+                class="userClose"
+                @click="
+                  imageUrl = '';
+                  fileList2 = [];
+                "
+              >
+                <i class="el-icon-close"></i>
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="出生年月">
+            <el-form-item label="出生年月" prop="birthDate">
               <el-date-picker
                 v-model="form.birthDate"
                 type="date"
                 style="width:100%"
+                value-format="yyyyMMdd"
               >
               </el-date-picker>
             </el-form-item>
@@ -48,23 +62,23 @@
           <el-col :span="12">
             <el-form-item label="民族">
               <el-select v-model="form.region" style="width:100%">
-                <el-option label="汉" value="shanghai"></el-option>
+                <el-option label="汉" value="01"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="性别">
+            <el-form-item label="性别" prop="sexId">
               <el-select v-model="form.sexId" style="width:100%">
-                <el-option label="男" value="shanghai"></el-option>
+                <el-option label="男" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="证件类型">
+            <el-form-item label="证件类型" prop="zjlxId">
               <el-select v-model="form.zjlxId" style="width:100%">
-                <el-option label="身份证" value="shanghai"></el-option>
+                <el-option label="身份证" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -77,25 +91,25 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="毕业学校">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.collegesName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="证件号码">
-              <el-input v-model="form.zjhm"></el-input>
+            <el-form-item label="证件号码" prop="zjhm">
+              <el-input v-model="form.zjhm" maxlength="18"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="专业">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.majorName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学历">
+            <el-form-item label="学历" prop="eduId">
               <el-select v-model="form.eduId" style="width:100%">
-                <el-option label="身份证" value="shanghai"></el-option>
+                <el-option label="身份证" value="1"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -103,31 +117,33 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="职务">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.positionName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="工作单位">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.corpName"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="联系电话">
-              <el-input v-model="form.contactNumber"></el-input>
+              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="职称">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.positionTitle"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="联系住址所属区">
-              <el-input v-model="form.contactDistrict"></el-input>
+            <el-form-item label="联系住址所属区" prop="contactDistrict">
+              <el-select v-model="form.contactDistrict" style="width:100%">
+                <el-option label="浦东区" value="01"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -138,7 +154,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="联系住址（详细住址）">
+            <el-form-item label="联系住址（详细住址）" prop="contactAddress">
               <el-input v-model="form.contactAddress"></el-input>
             </el-form-item>
           </el-col>
@@ -167,32 +183,44 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="可提供服务时间">
-              <el-date-picker
-                v-model="form.workday"
-                type="date"
+            <el-form-item label="可提供服务时间" prop="timeday">
+              <el-select
+                v-model="form.timeday"
+                @change="timedayClick"
                 style="width:100%"
               >
-              </el-date-picker>
+                <el-option label="工作日可提供服务" value="workday"></el-option>
+                <el-option label="周末可提供服务" value="weekend"></el-option>
+                <el-option
+                  label="其他时间可提供服务"
+                  value="otherTime"
+                ></el-option>
+              </el-select>
+              <el-input
+                v-if="form.timeday == 'otherTime'"
+                v-model="form.otherTime"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="管理所属区">
-              <el-input v-model="form.desc"></el-input>
+            <el-form-item label="管理所属区" prop="districtCode">
+              <el-select v-model="form.districtCode" style="width:100%">
+                <el-option label="浦东区" value="01"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="银行账号">
+            <el-form-item label="银行账号" prop="bankaccount">
               <el-input v-model="form.bankaccount"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="开户银行">
+            <el-form-item label="开户银行" prop="bankName">
               <el-select v-model="form.bankName" style="width:100%">
-                <el-option label="建设银行" value="shanghai"></el-option>
+                <el-option label="建设银行" value="01"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -219,7 +247,7 @@
                   class="el-upload__tip"
                   style="display: inline-block;margin-top: 0px;margin-left: 10px;"
                 >
-                  只能上传1张jpg/png格式文件，且不超过500kb
+                  只能上传1张jpg/png格式文件，且不超过2MB
                 </div>
               </el-upload>
             </el-form-item>
@@ -234,63 +262,150 @@
 </template>
 
 <script>
+import { specialist_add } from '../api/index';
 export default {
   name: 'managementAdd',
   props: ['visible'],
   data() {
     return {
       fileList: [],
+      fileList2: [],
       imageUrl: '',
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        zjlxId: '',
+        zjhm: '',
+        xm: '',
+        sexId: '',
+        birthDate: '',
+        eduId: '',
+        nationId: '',
+        mail: '',
+        contactNumber: '',
+        contactAddress: '',
+        contactDistrict: '',
+        postcode: '',
+        laborInfo: '',
+        majorResult: '',
+        bankName: '',
+        bankaccount: '',
+        psnlPhotoBase64: '',
+        formImageBase64: '',
+        collegesName: '',
+        majorName: '',
+        corpName: '',
+        positionName: '',
+        positionTitle: '',
+        timeday: '',
+        districtCode: '',
+        workday: '',
+        weekend: '',
+        otherTime: '',
+        bankId: 1
+      },
+      rules: {
+        zjlxId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        sexId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        birthDate: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        eduId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        contactAddress: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        contactDistrict: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        districtCode: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        timeday: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        bankName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        bankaccount: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ]
       }
     };
   },
   computed: {},
   methods: {
-    getBase64(file) {
+    timedayClick(e) {
+      if (e == 'workday') {
+        this.form.workday = 1;
+        this.form.weekend = 0;
+        this.form.otherTime = '';
+      } else if (e == 'weekend') {
+        this.form.workday = 0;
+        this.form.weekend = 1;
+        this.form.otherTime = '';
+      } else {
+        this.form.workday = 0;
+        this.form.weekend = 0;
+      }
+    },
+    getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function() {
         console.log(reader.result);
+        this[name] = reader.result;
       };
       reader.onerror = function(error) {
         console.log('Error: ', error);
       };
     },
-    uploadChange(file, fileList) {
-      console.log(file, fileList);
-      this.getBase64(file.raw);
+    //登记表base64
+    uploadChange(file) {
+      this.getBase64(file.raw, 'formImageBase64');
     },
-    submitUpload() {
-      this.$refs.upload.submit();
+    //照片base64
+    uploadUserChange(file) {
+      this.getBase64(file.raw, 'psnlPhotoBase64');
+      this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     onSubmit() {
-      console.log('submit!');
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          specialist_add(
+            this.form,
+            res => {
+              if (res.status == 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500
+                });
+                setTimeout(() => {
+                  this.onclose();
+                }, 1500);
+              }
+              console.log(res);
+            },
+            err => {
+              console.log(err);
+            }
+          );
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
     onclose() {
       this.$emit('onclose');
-    },
-    handleAvatarSuccess(res, file) {
-      console.log(res);
-      this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!');
@@ -302,6 +417,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.userClose {
+  position: absolute;
+  left: 100px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  text-align: center;
+}
 .avatar-uploader {
   height: 100px;
   position: absolute;
