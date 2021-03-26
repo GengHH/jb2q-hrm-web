@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-03-23 10:20:26
+ * @LastEditTime: 2021-03-26 13:59:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -43,19 +43,22 @@
           <el-col :md="10" :lg="10" :xl="10" style="text-align: right;">
             <div style="margin-top:20px;font-weight: 600;">
               <span
-                @mouseover="show = true"
-                @mouseout="show = false"
+                @mouseover="v.titleListShow = true"
+                @mouseout="v.titleListShow = false"
                 style="color:#fc7a43;position: relative;cursor: pointer;"
                 ><i class="el-icon-caret-bottom"></i> 求职档案
-                <div class="selectList" v-show="show">
+                <div class="selectList" v-show="v.titleListShow">
                   <ul>
                     <li
                       @click="liClick(k0)"
-                      v-for="(v0, k0) in titleList"
+                      v-for="(v0, k0) in v.titleList"
                       :key="k0"
                     >
                       <span> {{ v0.title }}</span>
-                      <div v-if="k0 != titleList.length - 1" class="line"></div>
+                      <div
+                        v-if="k0 != v.titleList.length - 1"
+                        class="line"
+                      ></div>
                     </li>
                   </ul>
                 </div>
@@ -139,20 +142,7 @@ export default {
       pagelistIndex: {},
       //遮罩开关
       visible: false,
-      dialogTableVisible: false,
-      show: false,
-
-      titleList: [
-        { title: '个人基本信息' },
-        { title: '简历信息' },
-        { title: '劳动经历' },
-        { title: '社保缴费记录' },
-        { title: '就业见习记录' },
-        { title: '简历投递及反馈记录' },
-        { title: '职位评论记录' },
-        { title: '职位收藏记录' },
-        { title: '就业服务记录' }
-      ]
+      dialogTableVisible: false
     };
   },
   computed: {},

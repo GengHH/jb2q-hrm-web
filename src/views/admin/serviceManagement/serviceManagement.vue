@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-24 18:12:03
+ * @LastEditTime: 2021-03-26 16:48:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -80,7 +80,9 @@
 <script>
 import querylist from './module/queryList';
 import tform from '../common/t_form'; //高级查询
-import { emphasis_keypoint } from '@/api/adminApi';
+import { emphasis_keypoint } from './api/index';
+import { allAction } from '@/api/adminApi';
+
 export default {
   name: 'serviceManagement',
   components: {
@@ -302,7 +304,18 @@ export default {
           { value: '12', label: '特别关注人员' }
         ]
       },
-      dataList: []
+      dataList: [],
+      titleList: [
+        { title: '个人基本信息' },
+        { title: '简历信息' },
+        { title: '劳动经历' },
+        { title: '社保缴费记录' },
+        { title: '就业见习记录' },
+        { title: '简历投递及反馈记录' },
+        { title: '职位评论记录' },
+        { title: '职位收藏记录' },
+        { title: '就业服务记录' }
+      ]
     };
   },
   computed: {},
@@ -325,6 +338,7 @@ export default {
       this.onSearch();
     },
     onSearch() {
+      console.log('------------------');
       let params = { ...this.form };
       params.pageParam = { ...this.pageList };
       const loading = this.$loading({
@@ -340,7 +354,13 @@ export default {
           loading.close();
           console.log(res);
           let record = res.result.record;
-          this.dataList = record.data;
+          let data = record.data.map(e => {
+            e.titleList = this.titleList;
+            e.titleListShow = false;
+            return e;
+          });
+          console.log(data);
+          this.dataList = data;
           this.pageList = {
             total: record.total,
             pageSize: record.pageSize,
@@ -353,7 +373,40 @@ export default {
       );
     }
   },
+
   created() {
+    let fn = [
+      {
+        url: '/admin/keypoint/show/resume',
+        data: { pid: '200008000237040' }
+      },
+      {
+        url: '/admin/keypoint/show/employ',
+        data: { pid: '200008000237040' }
+      },
+      {
+        url: '/admin/keypoint/show/favor',
+        data: { pid: '200008000237040' }
+      },
+      {
+        url: '/admin/keypoint/show/labor',
+        data: { pid: '200008000237040' }
+      },
+      {
+        url: '/admin/keypoint/show/evaluation',
+        data: { pid: '200008000237040' }
+      }
+    ];
+    allAction(
+      fn,
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
     console.log(this.$store.state.admin);
     console.log('----------------------------------');
   }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-03-25 14:35:57
+ * @LastEditTime: 2021-03-26 16:14:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
@@ -10,13 +10,12 @@ import apiUrlConfig from '../config';
 import { Notification } from 'element-ui';
 // import { getAction, postAction } from './allActionManage';
 import axios from 'axios';
-import qs from 'qs';
 //const basePath = apiUrlConfig.personBasePath;
 const ywBasePath = apiUrlConfig.adminBasePath;
 
 
 
-const urlStr = '/admin/keypoint/';
+
 function errors(response){
     if(response.status >= 500){
         Notification({
@@ -82,37 +81,45 @@ function getAction(url,params,fn,fnErr){
         //console.log(error);
       });
 }
+
+
 //登陆接口
 const queryLogin = (params,fn,fnErr) => postAction( '/loginController/ywjbIndex', params,fn,fnErr);
-//重点人群接口----------------------------------------------------------------------
-//查询重点人员信息
-const emphasis_keypoint = (params,fn,fnErr) => postAction( urlStr + 'find/keypoint', params,fn,fnErr);
-//显示个人劳动经历信息
-const emphasis_labor = (params,fn,fnErr) => postAction( urlStr + 'show/labor', params,fn,fnErr);
-//查询收藏职位列表信息
-const emphasis_favor = (params,fn,fnErr) => postAction( urlStr + 'show/favor', params,fn,fnErr);
-//查询个人简历详细信息
-const emphasis_resume = (params,fn,fnErr) => postAction( urlStr + 'show/resume', params,fn,fnErr);
-//查询就业服务信息
-const emphasis_employ = (params,fn,fnErr) => postAction( urlStr + 'show/employ', params,fn,fnErr);
-//显示个人社保缴费信息
-const emphasis_insur = (params,fn,fnErr) => postAction( urlStr + 'show/insur', params,fn,fnErr);
-//显示个人就业见习记录
-const emphasis_trainee = (params,fn,fnErr) => postAction( urlStr + 'show/trainee', params,fn,fnErr);
-//显示职位评价信息
-const emphasis_evaluation = (params,fn,fnErr) => getAction( urlStr + 'show/evaluation', params,fn,fnErr);
+
+
+function initQuery(obj) {
+  let type = obj.type || 'post';
+  return new Promise((reslove, reject) => {
+    axios[type](obj.url, obj.data)
+      .then(res => {
+        reslove(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+function allAction(arr,fn,errFn){
+  let queryArr = [];
+  for(let i  = 0;i < arr.length;i++){
+    arr[i].url = ywBasePath + arr[i].url  ; 
+    queryArr.push(initQuery(arr[i]));
+  }
+  let res = Promise.all(queryArr);
+  res.then(
+    arr => {
+      fn(arr);
+    },
+    err => {
+      errFn(err);
+    }
+  );
+}
 
 
 export { 
     queryLogin,
-    emphasis_keypoint,
-    emphasis_labor,
-    emphasis_favor,
-    emphasis_resume,
-    emphasis_employ,
-    emphasis_insur,
-    emphasis_trainee,
-    emphasis_evaluation,
     postAction,
-    getAction
+    getAction,
+    allAction
  };

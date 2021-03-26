@@ -53,11 +53,15 @@ let isEmpty = function(obj) {
     return true;
   }
 };
-if (isEmpty(store.getters['dictionary/yesno'])) {
-  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+if (isEmpty(store.getters['dictionary/ggjbxx_sex'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_SEX');
 }
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+//民族
 if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
-  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_NATIONALITY');
 }
 if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
@@ -65,9 +69,7 @@ if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
 if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
 }
-if (isEmpty(store.getters['dictionary/recruit_edu'])) {
-  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
-}
+
 if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
 }
