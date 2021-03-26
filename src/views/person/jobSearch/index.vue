@@ -112,15 +112,6 @@
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <!-- <el-radio v-model="queryParams.radio1" label="1"
-                  >中介待招</el-radio
-                >
-                <el-radio v-model="queryParams.radio2" label="1"
-                  >就业公共服务机构代理招聘</el-radio
-                >
-                <el-radio v-model="queryParams.radio3" label="1"
-                  >招聘特定人群</el-radio
-                > -->
                 <el-checkbox v-model="queryParams.agencyRecruit"
                   >中介待招</el-checkbox
                 >
@@ -211,12 +202,28 @@
     <per-search-job
       v-if="queryResult.length"
       :jobData="queryResult"
+      showPager
+      @deliveryResume="deliveryResume(arguments)"
+      @favorJob="favorJob(arguments)"
       @showJobDetials="showJobDetial($event)"
+      @callPositionCorp="callPositionCorp(arguments)"
     ></per-search-job>
     <BaseLoadingSvg v-else></BaseLoadingSvg>
     <!-- 职位详细信息 弹窗部分 -->
-    <el-dialog width="75%" :visible.sync="dialog" :before-close="handleClose">
+    <el-dialog
+      width="75%"
+      :visible.sync="detailsDialog"
+      :before-close="handleClose"
+    >
       <job-details :positionData="onePosition"></job-details>
+    </el-dialog>
+    <!-- 聊天框 弹窗部分 -->
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="wchatDialog"
+      :before-close="handleClose"
+    >
+      <pl-wchat></pl-wchat>
     </el-dialog>
   </div>
 </template>
@@ -226,7 +233,12 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
-import { queryJobs, doDeliveryResume } from '@/api/personApi';
+import {
+  queryJobs,
+  doDeliveryResume,
+  doFavorJobs,
+  doUnfavorJobs
+} from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
@@ -237,7 +249,8 @@ export default {
   },
   data() {
     return {
-      dialog: false,
+      detailsDialog: false,
+      wchatDialog: false,
       positionDetailsId: '',
       queryParams: {
         pid: this.$store.getters['person/pid'],
@@ -348,37 +361,66 @@ export default {
     showJobDetial(positionId) {
       //显示岗位详细信息
       console.log(positionId);
-      this.dialog = true;
+      this.detailsDialog = true;
       this.positionDetailsId = positionId;
     },
-    selectJob: function(positionId) {
+    async deliveryResume(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
       //投递简历
-      let that = this;
-      console.log(positionId + '功能暂未开放');
-      doDeliveryResume({
+      let res = await doDeliveryResume({
         positionId: positionId,
         pid: this.$store.getters['person/pid']
-      })
-        .then(res => {
-          if (res.status === 200) {
-            // TODO 投递简历信息
-            that.$alert('简历投递成功');
-          } else {
-            that.$message({
-              type: 'error',
-              message: '简历投递失败'
-            });
-          }
-        })
-        .catch(() =>
-          that.$message({
-            type: 'error',
-            message: '系统异常，简历投递成功'
-          })
-        );
+      });
+      if (res.status === 200) {
+        // TODO 不显示本条数据
+        this.queryResult.splice(index, 1);
+        this.$message({ type: 'success', message: '简历投递成功' });
+      } else {
+        this.$message({
+          type: 'error',
+          message: '简历投递失败'
+        });
+      }
+    },
+    async favorJob(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      let orginType = arg[2];
+      if (orginType === '0') {
+        let res = await doFavorJobs('2', {
+          id: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = '1';
+          this.$message({ type: 'success', message: '收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '收藏职位失败' });
+        }
+      } else {
+        //取消收藏职位
+        let res = await doUnfavorJobs({
+          id: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = '0';
+          this.$message({ type: 'success', message: '取消收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '取消收藏职位失败' });
+        }
+      }
+    },
+    callPositionCorp(arg) {
+      //! TODO显示聊天框
+      this.wchatDialog = true;
     },
     handleClose() {
-      this.dialog = false;
+      this.detailsDialog = false;
+      this.wchatDialog = false;
     }
   }
 };

@@ -381,20 +381,20 @@ export default {
   .form-btns {
     margin-top: 30px;
     text-align: center;
-    .orange-btn {
-      color: #fff;
-      background: #ff9954 linear-gradient(to right, #ff9854, #fc703d);
-      border-color: #ff9954;
-    }
-    .btn-style {
-      width: 200px;
-      border-radius: 6px;
-    }
-    .white-btn {
-      color: #fc6f3d;
-      background-color: #fff;
-      border-color: #ff9954;
-    }
+    // .orange-btn {
+    //   color: #fff;
+    //   background: #ff9954 linear-gradient(to right, #ff9854, #fc703d);
+    //   border-color: #ff9954;
+    // }
+    // .btn-style {
+    //   width: 200px;
+    //   border-radius: 6px;
+    // }
+    // .white-btn {
+    //   color: #fc6f3d;
+    //   background-color: #fff;
+    //   border-color: #ff9954;
+    // }
   }
 }
 </style>

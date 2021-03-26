@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-11 17:43:55
+ * @LastEditTime: 2021-03-26 17:05:03
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -9,14 +9,14 @@
 <template>
   <!-- S 信息部分 -->
   <div>
-    <div class="div-box bg-gray" v-if="jobData.length">
+    <!-- <div class="div-box bg-gray" v-if="jobData.length">
       <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
         >全选</el-checkbox
       >
       <span class="favorite"
         ><i class="el-icon-star-off" @click.stop="allStarAction"></i>收藏</span
       >
-    </div>
+    </div> -->
     <!-- <div class="div-box padd0">
       <el-row>
         <el-col :span="1" class="mat-15">
@@ -126,7 +126,7 @@
           <el-button type="primary" class="release-btn" @click="selectJob">
             <i class="el-icon-position"></i>投递</el-button
           >
-          <el-button type="primary" class="white-btn" @click="startJob"
+          <el-button type="primary" class="white-btn" @click="favorJob"
             ><i class="el-icon-star-off"></i> 收藏</el-button
           >
         </el-col>
@@ -141,7 +141,11 @@
       </div>
     </div> -->
     <!-- for everyone -->
-    <div class="div-box padd0" v-for="(jobItem, index) in jobData" :key="index">
+    <div
+      class="div-box padd0"
+      v-for="(jobItem, index) in pageTableData"
+      :key="index"
+    >
       <el-row>
         <el-col :span="1" class="mat-15">
           <el-checkbox
@@ -192,24 +196,47 @@
           <el-button
             type="primary"
             class="release-btn"
-            @click="selectJob(jobItem.positionId)"
+            @click="selectJob(index, jobItem.positionId)"
           >
-            <i class="el-icon-position"></i>投递</el-button
+            <i class="el-icon-position"></i>投递{{
+              jobItem.positionId
+            }}</el-button
           >
-          <el-button type="primary" class="white-btn" @click="startJob"
-            ><i class="el-icon-star-off"></i> 收藏</el-button
+          <el-button
+            type="primary"
+            class="white-btn job-bar-btn"
+            @click="favorJob(jobItem.favor, index, jobItem.positionId)"
           >
+            <i v-if="jobItem.favor === '0'" class="el-icon-star-off">收藏</i>
+            <i v-else class="el-icon-star-on">已收藏</i>
+          </el-button>
         </el-col>
       </el-row>
       <div class="foot-span">
         <el-col :span="19">
-          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
+          <span class="fourteen-opacity marl-65"
+            >招聘人数 <i>{{ jobItem.recruitNum }}</i
+            >人</span
+          >
         </el-col>
         <el-col :span="5">
-          <span class="fourteen-opacity">发布时间：2020-11-06</span>
+          <span class="fourteen-opacity"
+            >发布时间：{{ jobItem.releaseTime }}</span
+          >
         </el-col>
       </div>
     </div>
+    <!-- 分页器 -->
+    <el-pagination
+      v-show="showPager"
+      v-bind="pageAttrs"
+      :class="pagerClass"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :total="jobData.length"
+    >
+    </el-pagination>
   </div>
   <!-- E 信息部分 -->
 </template>
@@ -218,10 +245,18 @@
 /**
  * 个人简历界面-子菜单显示组件
  */
-import { doDeliveryResume } from '@/api/personApi';
+// import { doDeliveryResume, doFavorJobs } from '@/api/personApi';
 export default {
   name: 'PerSearchJob',
   props: {
+    showPager: {
+      type: Boolean,
+      default: false
+    },
+    pagerClass: {
+      type: String,
+      default: 'peger-center'
+    },
     jobData: {
       type: Array,
       default: () => []
@@ -230,43 +265,55 @@ export default {
   data() {
     return {
       checkAll: false,
-      isIndeterminate: true
+      isIndeterminate: true,
+      currentPage: 1,
+      pageSize: 10
     };
   },
   computed: {
-    // jobDataCount() {
-    //   return !!this.jobData.length;
-    // }
+    pageAttrs() {
+      return {
+        ...this.$PlElement?.pageConfig,
+        ...this.pageConfig
+      };
+    },
+    pageTableData() {
+      //前端分页实现逻辑
+      return this.showPager
+        ? this.jobData.slice(
+            (this.currentPage - 1) * this.pageSize,
+            this.currentPage * this.pageSize
+          )
+        : this.jobData;
+    }
   },
   methods: {
-    selectJob: function(positionId) {
-      //投递简历
-      let that = this;
-      console.log(positionId + '功能暂未开放');
-      doDeliveryResume({
-        positionId: positionId,
-        pid: this.$store.getters['person/pid']
-      })
-        .then(res => {
-          if (res.status === 200) {
-            // TODO 删除界面上的该职位
-            that.$alert('简历投递成功');
-          } else {
-            that.$message({
-              type: 'error',
-              message: '简历投递失败'
-            });
-          }
-        })
-        .catch(err =>
-          that.$$message({
-            type: 'error',
-            message: '系统异常，简历投递成功'
-          })
-        );
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
     },
-    startJob: function() {
-      this.$alert('收藏成功');
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+    },
+    selectJob(index, positionId) {
+      //投递简历
+      this.$confirm('确认向该职位投递简历？')
+        .then(() => {
+          this.$emit('deliveryResume', index, positionId); //通知父组件改变。
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    favorJob(favor, index, positionId) {
+      //收藏或者取消收藏职位
+      let str = favor === '0' ? '确认收藏该职位？' : '确认取消收藏该职位？';
+      this.$confirm(str)
+        .then(() => {
+          this.$emit('favorJob', index, positionId, favor);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     allStarAction(event) {
       console.log(event);
@@ -275,7 +322,8 @@ export default {
     showJobDetial(positionId) {
       this.$emit('showJobDetials', positionId);
     },
-    callPositionCorp(positionId) {
+    callPositionCorp(index, positionId) {
+      this.$emit('callPositionCorp', index, positionId);
       this.$alert('暂时无法进行沟通');
     }
   }
@@ -289,6 +337,9 @@ export default {
   border: 1px solid #e5e5e5;
   border-radius: 4px;
   margin-bottom: 16px;
+  .positionName {
+    font-size: 20px;
+  }
   .positionName:hover {
     cursor: pointer;
   }
@@ -308,16 +359,8 @@ export default {
     line-height: 32px;
     background-color: #f6f6f6;
   }
-  .release-btn {
-    background-color: #fc7a43;
-    font-size: 14px;
-    color: #fff;
-    border-color: #fc7a43;
-  }
-  .white-btn {
-    color: #fc6f3d;
-    background-color: #fff;
-    border-color: #ff9954;
+  .job-bar-btn {
+    min-width: 100px;
   }
   .i-style {
     font-size: 14px;

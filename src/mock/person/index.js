@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-25 17:29:49
+ * @LastEditTime: 2021-03-26 16:19:44
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -198,21 +198,21 @@ Mock.mock(
       result: Mock.mock({
         'data|1-10': [
           {
-            positionId: '4',
+            'positionId|+1': '@string("number", 5)',
             positionName: 'JAVA架构工程师',
             salaryScope: '20-5004',
             workArea: '06',
             workNature: '01',
             eduRequire: '08',
-            recruitNum: '3',
+            recruitNum: '@string("number", 1,4)',
             corpName: '上海新移力自动化科技有限公司',
             cid: '201002025628331',
             workYearNeed: '05',
-            releaseTime: '2021-12-10 10:44:36',
+            releaseTime: '@datetime', //'2021-12-10 10:44:36',
             tranBaseSymbol: '0',
             agencyRecruit: '0',
             entrustCorpName: '',
-            favor: '0',
+            'favor|+1': ['0', '1'],
             releaseUserId: '0000941012',
             type: '1'
           }
@@ -221,7 +221,21 @@ Mock.mock(
     };
   }
 );
-// TODO 投递简历
+//个人收藏职位信息
+Mock.mock(
+  RegExp(basePath + '/person/manage/find/do-favor/' + '.*'),
+  'post',
+  function(options) {
+    return successData;
+  }
+);
+//个人取消收藏职位信息
+Mock.mock(basePath + '/person/manage/find/cancle-favor', 'post', function(
+  options
+) {
+  return successData;
+});
+//个人投递简历
 Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
   return successData;
 });
@@ -357,8 +371,8 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
     result: Mock.mock({
       'data|1-10': [
         {
-          applyforId: '49',
-          resumeId: '1',
+          'applyforId|+1': '@string("number", 5)', //'49',
+          resumeId: '@string("number", 1)', //'1',
           source: '01',
           positionName: 'JAVA架构工程师',
           tranBaseSymbol: '',
@@ -369,9 +383,9 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
           age: '',
           edu: '',
           graduateSchool: '',
-          sex: '',
+          'sex|+1': ['1', '2'],
           corpName: '上海新移力自动化科技有限公司',
-          positionId: '4',
+          'positionId|+1': '@string("number", 5)',
           releaseUserId: '0000941012',
           salaryScope: '10000-50000',
           workArea: '06',
@@ -379,7 +393,7 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
           reply: '1',
           evaluateLevel: '',
           evaluateContent: '',
-          createTime: '2020-12-23 16:23:15',
+          createTime: '@datetime', //'2020-12-23 16:23:15',
           recId: '',
           meetId: ''
         }

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-27 18:51:45
+ * @LastEditTime: 2021-03-26 17:04:05
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -341,25 +341,5 @@ export default {
 .form-btns {
   text-align: center;
   padding: 40px 0;
-  .btn-style {
-    width: 200px;
-    border-radius: 6px;
-  }
-  .white-btn {
-    color: #fc6f3d;
-    background-color: #fff;
-    border-color: #ff9954;
-  }
-  .brown-btn {
-    color: #fff;
-    background: #ab8a76 linear-gradient(to right, #d1b29c, #86614f);
-    border-color: transparent;
-    border: 0;
-  }
-  .orange-btn {
-    color: #fff;
-    background: #ff9954 linear-gradient(to right, #ff9854, #fc703d);
-    border-color: #ff9954;
-  }
 }
 </style>

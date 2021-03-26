@@ -1,10 +1,10 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-09 10:10:00
+ * @LastEditTime: 2021-03-26 17:05:30
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
- * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
+ * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
 -->
 <template>
   <!-- S demo3信息部分 -->
@@ -230,17 +230,6 @@ export default {
     height: 32px;
     line-height: 32px;
     background-color: #f6f6f6;
-  }
-  .release-btn {
-    background-color: #fc7a43;
-    font-size: 14px;
-    color: #fff;
-    border-color: #fc7a43;
-  }
-  .white-btn {
-    color: #fc6f3d;
-    background-color: #fff;
-    border-color: #ff9954;
   }
   .i-style {
     font-size: 14px;
