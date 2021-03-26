@@ -62,25 +62,22 @@
       </div>
       <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
-          <span class="intention-item"
-            ><i class="icon iconfont" v-if="positionNameText">&#xe641;</i>
-            {{ positionNameText }}</span
+          <span class="intention-item" v-if="industryLikeText"
+            ><i class="icon iconfont">&#xe641;</i> {{ industryLikeText }}</span
           >
-          <span class="intention-item"
-            ><i class="icon iconfont" v-if="salaryScope">&#xe644;</i>
-            {{ salaryScope }}</span
+          <span class="intention-item" v-if="salaryScope && salaryScope !== '-'"
+            ><i class="icon iconfont">&#xe644;</i> {{ salaryScope }}</span
           >
-          <span class="intention-item"
-            ><i class="icon iconfont" v-if="positionLikeText">&#xe642;</i>
+          <span class="intention-item" v-if="positionLikeText"
+            ><i class="icon iconfont">&#xe642;</i>
             {{ positionLikeText }}
           </span>
-          <span class="intention-item"
-            ><i class="icon iconfont" v-if="workNatureText">&#xe63e;</i>
+          <span class="intention-item" v-if="workNatureText"
+            ><i class="icon iconfont">&#xe63e;</i>
             {{ workNatureText }}
           </span>
-          <span class="intention-item"
-            ><i class="icon iconfont" v-if="workAreaText">&#xe643;</i>
-            {{ workAreaText }}</span
+          <span class="intention-item" v-if="workAreaText"
+            ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
           >
         </p>
       </div>
@@ -111,7 +108,7 @@
               circle
               style="float: right;"
               class="card-btn hidden"
-              @click="deleteCard('dialog2', index)"
+              @click="deleteCard('dialog2', index, workCarditem.expId)"
             ></el-button>
             <el-button
               type="primary"
@@ -197,7 +194,7 @@
         <el-card
           class="box-card bg-gray"
           shadow="hover"
-          v-for="(eduCarditem, index) in resume.eduExp"
+          v-for="(eduCarditem, index) in eduExpTransformed"
           :key="index"
         >
           <div slot="header" class="clearfix">
@@ -210,7 +207,7 @@
               circle
               style="float: right;"
               class="card-btn hidden"
-              @click="deleteCard('dialog3', index)"
+              @click="deleteCard('dialog3', index, eduCarditem.eduId)"
             ></el-button>
             <el-button
               type="primary"
@@ -228,12 +225,12 @@
                 {{ eduCarditem.majorName }}
               </p>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <p class="fourteen-opacity line40">
                 {{ eduCarditem.eduLevel }}
               </p>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
               <p class="four-opacity line40">
                 {{
                   eduCarditem.admissionDate
@@ -275,8 +272,8 @@
           closable
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
-          @close="languageTagClose(index)"
-          >{{ languageItem }}
+          @close="languageTagClose(index, languageItem.languageId)"
+          >{{ languageItem.text }}
         </el-tag>
       </div>
       <div id="skillsCertificate" class="title-style font-or font-bold">
@@ -299,7 +296,7 @@
             class="tag-card-item"
             size="medium"
             closable
-            @close="skillTagClose(index)"
+            @close="skillTagClose(index, skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
               <span>{{ skillItem.certLevel }}</span>
@@ -375,11 +372,11 @@
         </el-form-item>
         <el-form-item
           label="意向行业"
-          prop="positionName"
+          prop="industryLike"
           :label-width="formLabelWidth"
         >
           <el-select
-            v-model="jobIntentionForm.positionName"
+            v-model="jobIntentionForm.industryLike"
             placeholder="请选择"
           >
             <el-option
@@ -602,7 +599,7 @@
           prop="majorName"
           :label-width="formLabelWidth"
         >
-        <el-input
+          <el-input
             v-model="educationExperienceForm.majorName"
             autocomplete="off"
             placeholder="请输入专业"
@@ -617,8 +614,8 @@
               :label="item.label"
               :value="item.value"
             >
-            </el-option> -->
-          </el-select>
+            </el-option> 
+          </el-select> -->
         </el-form-item>
 
         <el-form-item
@@ -891,7 +888,8 @@ import {
   saveLaborExp,
   saveEduExp,
   saveLanguageLevel,
-  saveSkillCert
+  saveSkillCert,
+  deleteSomeResume
 } from '@/api/personApi';
 import { getDicText } from '@/utils/index';
 /**
@@ -907,25 +905,25 @@ export default {
       formLabelWidth: '120px',
       applyForId: '',
       resumeId: '',
-      pid: '',
-      xm: '',
-      age: 0,
-      sex: '',
-      contactPhone: '',
-      livingAddress: '',
-      workNature: '',
-      positionName: '',
+      pid: this.$store.getters['person/pid'],
+      // xm: '',
+      // age: 0,
+      // sex: '',
+      // contactPhone: '',
+      // livingAddress: '',
+      // workNature: '',
+      // positionName: '',
       //salaryScopeUp: '',
       //salaryScopeDown: '',
-      workArea: '',
-      positionLike: '',
+      //workArea: '',
+      //positionLike: '',
       jobIntentionForm: {
         workNature: '',
-        positionName: '',
+        industryLike: '',
         workArea: '',
         salaryScopeUp: '',
         salaryScopeDown: '',
-        positionLike: ''
+        positionLike: []
       },
       workExperienceForm: {
         expId: '',
@@ -1001,10 +999,10 @@ export default {
         option5: this.$store.getters['dictionary/recruit_language_type'],
         // 语言等级
         option6: this.$store.getters['dictionary/recruit_language_level'],
-        //职位
-        option7: this.$store.getters['dictionary/recruit_position_f_type'],
+        //职位（级）
+        option7: this.$store.getters['dictionary/recruit_position_s_type'],
         //行业
-        option8: this.$store.getters['dictionary/recruit_position_s_type']
+        option8: this.$store.getters['dictionary/recruit_industry_type']
       },
       resume: {
         // applyForId: '',
@@ -1059,6 +1057,12 @@ export default {
       //return this.resume.salaryScopeUp + '-' + this.resume.salaryScopeDown;
       return this.resume.salaryScope;
     },
+
+    positionLikeArray: function() {
+      return this.resume.positionLike
+        ? this.resume.positionLike.split('-')
+        : [];
+    },
     positionLikeText: function() {
       let that = this,
         positionArray = [],
@@ -1068,10 +1072,10 @@ export default {
       } else {
         return;
       }
-      if (that.$store.getters['dictionary/recruit_position_f_type']) {
+      if (that.$store.getters['dictionary/recruit_position_s_type']) {
         positionNameArray = positionArray.map(function(val) {
           let _dic = that.$store.getters[
-            'dictionary/recruit_position_f_type'
+            'dictionary/recruit_position_s_type'
           ].find(function(i) {
             return i.value === val;
           });
@@ -1080,23 +1084,24 @@ export default {
       }
       return positionNameArray.join('-');
     },
-    positionNameText: function() {
+    industryLikeText: function() {
       let that = this;
-      if (this.$store.getters['dictionary/recruit_position_s_type']) {
-        let _dic = this.$store.getters[
-          'dictionary/recruit_position_s_type'
-        ].find(function(i) {
-          return i.value === that.resume.positionName;
-        });
+      if (this.$store.getters['dictionary/recruit_industry_type']) {
+        let _dic = this.$store.getters['dictionary/recruit_industry_type'].find(
+          function(i) {
+            return i.value === that.resume.industryLike;
+          }
+        );
         return _dic ? _dic.label : '';
       }
-      return this.resume.positionName;
+      return this.resume.industryLike;
     },
     //组合成语言技能tags
     psnlLanguageTags: function() {
       if (this.resume.psnlLanguage && this.resume.psnlLanguage.length) {
         return this.resume.psnlLanguage.map(obj => {
-          let newObj = [];
+          //let newObj = {};
+          let textStr = '';
           let _obj1 = this.dicOptions.option5.find(item => {
             return item.value === obj.languageType;
           });
@@ -1104,9 +1109,9 @@ export default {
             return item.value === obj.languageLevel;
           });
           if (_obj1 || _obj2) {
-            newObj = _obj1.label + _obj2.label;
+            textStr = _obj1.label + _obj2.label;
           }
-          return newObj;
+          return { languageId: obj.languageId, text: textStr };
         });
       } else {
         return [];
@@ -1127,6 +1132,18 @@ export default {
       } else {
         return [];
       }
+    },
+    eduExpTransformed() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      return this.resume.eduExp
+        ? this.resume.eduExp.map(item => {
+            let dic = dictionary.find(i => {
+              return i.value === item.eduLevel;
+            });
+            item.eduLevel = dic ? dic.label : item.eduLevel;
+            return item;
+          })
+        : [];
     }
   },
   methods: {
@@ -1160,25 +1177,33 @@ export default {
       this.$message(val);
     },
     //删除外语能力tag
-    languageTagClose(index) {
+    languageTagClose(index, languageId) {
       this.$confirm('确认删除此项外语能力？')
-        .then(() => {
-          // TODO
-          this.$delete(this.resume.psnlLanguage, index);
+        .then(async () => {
+          let deleteResult = await deleteSomeResume('language/' + languageId);
+          if (deleteResult.status == 200) {
+            this.$delete(this.resume.psnlLanguage, index);
+          } else {
+            this.$message({ type: 'error', message: '删除失败' });
+          }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          //this.$message({ type: 'error', message: '系统异常，删除失败' });
         });
     },
     //删除技能证书tag
-    skillTagClose(index) {
+    skillTagClose(index, certId) {
       this.$confirm('确认删除此项技能证书？')
-        .then(() => {
-          // TODO
-          this.$delete(this.resume.psnlSkillcert, index);
+        .then(async () => {
+          let deleteResult = await deleteSomeResume('skillCert /' + certId);
+          if (deleteResult.status == 200) {
+            this.$delete(this.resume.psnlSkillcert, index);
+          } else {
+            this.$message({ type: 'error', message: '删除失败' });
+          }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
+          //this.$message({ type: 'error', message: '系统异常，删除失败' });
         });
     },
     //初始化加载个人基本信息
@@ -1236,6 +1261,7 @@ export default {
       //   });
     },
     dialogSubmit(formName) {
+      //保存各模块录入的信息
       if (formName === 'selfEvaluationForm') {
         //console.log(this.$refs[formName].model.evaluate.length);
         this.savePsnlEvaluate();
@@ -1244,10 +1270,12 @@ export default {
 
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // TODO 保存数据
+          let params = this.$refs[formName].model;
+          params.pid = this.$store.getters['person/pid'];
           switch (formName) {
             case 'workExperienceForm':
               if (
+                !this.editStatus &&
                 this.resume.laborExp.find(
                   element =>
                     element.corpName === this.workExperienceForm.corpName
@@ -1259,14 +1287,15 @@ export default {
                 });
                 return;
               }
-              saveLaborExp(this.$refs[formName].model)
+              saveLaborExp(params)
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
                     });
-                    this.resume.laborExp.push(this.$refs[formName].model);
+                    this.resume.laborExp.push(params);
+                    this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1285,31 +1314,28 @@ export default {
             case 'educationExperienceForm':
               this.dialog3 = false;
               if (
-                this.editStatus ||
+                !this.editStatus &&
                 this.resume.eduExp.find(
                   element =>
                     element.collegesName ===
                     this.educationExperienceForm.collegesName
                 )
               ) {
-                this.editStatus
-                  ? (this.resume.eduExp[this.editItemIdex] = JSON.parse(
-                      JSON.stringify(this.$refs[formName].model)
-                    ))
-                  : this.$message({
-                      type: 'warning',
-                      message: '此教育经历已经添加过！'
-                    });
+                this.$message({
+                  type: 'warning',
+                  message: '此教育经历已经添加过！'
+                });
                 return;
               }
-              saveEduExp(this.$refs[formName].model)
+              saveEduExp(params)
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
                     });
-                    this.resume.eduExp.push(this.$refs[formName].model);
+                    this.resume.eduExp.push(params);
+                    //this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1328,6 +1354,7 @@ export default {
 
             case 'languageSkillsForm':
               if (
+                !this.editStatus &&
                 this.resume.psnlLanguage.find(
                   element =>
                     element.languageType ===
@@ -1340,14 +1367,15 @@ export default {
                 });
                 return;
               }
-              saveLanguageLevel(this.$refs[formName].model)
+              saveLanguageLevel(params)
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
                     });
-                    this.resume.psnlLanguage.push(this.$refs[formName].model);
+                    this.resume.psnlLanguage.push(params);
+                    this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1365,6 +1393,7 @@ export default {
 
             case 'skillsCertificateForm':
               if (
+                !this.editStatus &&
                 this.resume.psnlSkillcert.find(
                   element =>
                     element.certName === this.skillsCertificateForm.certName
@@ -1376,14 +1405,15 @@ export default {
                 });
                 return;
               }
-              saveSkillCert(this.$refs[formName].model)
+              saveSkillCert(params)
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
                       type: 'error',
                       message: '保存成功'
                     });
-                    this.resume.psnlSkillcert.push(this.$refs[formName].model);
+                    this.resume.psnlSkillcert.push(params);
+                    this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1407,26 +1437,29 @@ export default {
       this.$refs[formName].resetFields();
     },
     editCard(dialog, index) {
+      let _orginData = {};
       if (dialog) {
         switch (dialog) {
           case 'dialog1':
             this.dialog1 = true;
             //$("#dialog1Btn").children('span').html('还 原');
+            $.extend(true, _orginData, this.resume);
             this.jobIntentionForm = {
-              contactPhone: this.resume.contactPhone,
-              livingAddress: this.resume.livingAddress,
-              positionName: this.resume.positionName,
-              positionLike: this.resume.positionLike
-                ? this.resume.positionLike.split('-')
-                : [],
-              workNature: this.resume.workNature,
-              workArea: this.resume.workArea,
-              salaryScopeDown: this.resume.salaryScope
-                ? this.resume.salaryScope.split('-')[0]
+              contactPhone: _orginData.contactPhone,
+              livingAddress: _orginData.livingAddress,
+              industryLike: _orginData.industryLike,
+              // positionLike: _orginData.positionLike
+              //   ? _orginData.positionLike.split('-')
+              //   : [],
+              positionLike: this.positionLikeArray,
+              workNature: _orginData.workNature,
+              workArea: _orginData.workArea,
+              salaryScopeDown: _orginData.salaryScope
+                ? _orginData.salaryScope.split('-')[0]
                 : '',
-              salaryScopeUp: this.resume.salaryScope
-                ? this.resume.salaryScope.split('-').length === 2
-                  ? this.resume.salaryScope.split('-')[1]
+              salaryScopeUp: _orginData.salaryScope
+                ? _orginData.salaryScope.split('-').length === 2
+                  ? _orginData.salaryScope.split('-')[1]
                   : ''
                 : ''
             };
@@ -1455,27 +1488,35 @@ export default {
         this.editItemIdex = index;
       }
     },
-    deleteCard(dialog, index) {
+    deleteCard(dialog, index, itemId) {
       if (dialog) {
         switch (dialog) {
           case 'dialog2':
             this.$confirm('确认删除此项工作经历？')
-              .then(() => {
-                // TODO
-                this.$delete(this.resume.laborExp, index);
+              .then(async () => {
+                let deleteResult = await deleteSomeResume('labor/' + itemId);
+                if (deleteResult.status == 200) {
+                  this.$delete(this.resume.laborExp, index);
+                } else {
+                  this.$message({ type: 'error', message: '删除失败' });
+                }
               })
-              .catch(err => {
-                console.log(err);
+              .catch(() => {
+                //this.$message({ type: 'error', message: '系统异常，删除失败' });
               });
             break;
           case 'dialog3':
             this.$confirm('确认删除此项教育经历？')
-              .then(() => {
-                // TODO
-                this.$delete(this.resume.eduExp, index);
+              .then(async () => {
+                let deleteResult = await deleteSomeResume('edu/' + itemId);
+                if (deleteResult.status == 200) {
+                  this.$delete(this.resume.eduExp, index);
+                } else {
+                  this.$message({ type: 'error', message: '删除失败' });
+                }
               })
-              .catch(err => {
-                console.log(err);
+              .catch(() => {
+                //this.$message({ type: 'error', message: '系统异常，删除失败' });
               });
             break;
         }
@@ -1508,34 +1549,42 @@ export default {
           type: 'success',
           message: '个人描述保存成功'
         });
+      } else {
+        this.$message({
+          type: 'success',
+          message: '个人描述保存失败'
+        });
       }
     },
     async doPositionLike(formName) {
       let that = this;
       that.dialogFormVisible = false;
       console.log(this[formName]);
-      let saveResult = await savePositionLike(that.$refs[formName].model).catch(
-        err => {
-          that.$message({
-            type: 'error',
-            message: '系统异常，保存失败'
-          });
-        }
-      );
+      let params = this.$refs[formName].model;
+      params.positionLike = params.positionLike.join('-');
+      params.pid = this.$store.getters['person/pid'];
+      let saveResult = await savePositionLike(params).catch(() => {
+        that.$message({
+          type: 'error',
+          message: '系统异常，保存失败'
+        });
+      });
       if (saveResult.status === 200) {
-        // TODO
         this.$message({
           type: 'success',
           message: '保存成功'
         });
+        console.log(this.jobIntentionForm.positionLike);
         this.resume.workNature = this.jobIntentionForm.workNature;
-        this.resume.positionName = this.jobIntentionForm.positionName;
+        this.resume.industryLike = this.jobIntentionForm.industryLike;
         this.resume.workArea = this.jobIntentionForm.workArea;
         this.resume.salaryScopeUp = this.jobIntentionForm.salaryScopeUp;
         this.resume.salaryScopeDown = this.jobIntentionForm.salaryScopeDown;
-        this.resume.positionLike = this.jobIntentionForm.positionLike
-          ? this.jobIntentionForm.positionLike.join('-')
-          : '';
+        // this.resume.positionLike = this.jobIntentionForm.positionLike
+        //   ? this.jobIntentionForm.positionLike.join('-')
+        //   : '';
+        this.resume.positionLike = this.jobIntentionForm.positionLike;
+        this.jobIntentionForm.positionLike = this.positionLikeArray;
       } else {
         this.$message({
           type: 'error',
@@ -1718,5 +1767,8 @@ export default {
 ::v-deep .el-date-editor,
 ::v-deep .el-select {
   width: 100% !important;
+}
+::v-deep textarea {
+  min-height: 150px !important;
 }
 </style>

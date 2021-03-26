@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 16:47:17
+ * @LastEditTime: 2021-03-22 14:18:23
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -39,7 +39,7 @@ const state = {
 const mutations = {
   SET_CORPORATIONINOF: (state, value) => {
     state.tyshxym = value.logonUser.tyshxym || '91310107667812584X';
-    state.cid = value.cid || '123123123123';
+    state.cid = value.cid || '201002025628331';
     state.dwmc = value.logonUser.userName || '集团';
   },
   SET_TOKEN: (state, token) => {
@@ -122,7 +122,7 @@ const actions = {
           tyshxym: '91310107667812584X',
           userName: '万达信息股份有限公司'
         },
-        cid: '200306186258910'
+        cid: '201002025628331'
       });
       commit('SET_TOKEN', 'login');
       commit('SET_LOGINTYPE', '');

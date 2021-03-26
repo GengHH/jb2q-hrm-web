@@ -17,9 +17,9 @@ try {
 Vue.use(Router);
 
 //默认空白的局部组件
-// const BlankComponent = {
-//   template:'<div>暂时空白</div>'
-// }
+const BlankComponent = {
+  template: '<div></div>'
+};
 
 export default new Router({
   mode: 'hash',
@@ -156,6 +156,10 @@ export default new Router({
           }
         }
       ]
+    },
+    {
+      path: '/logout',
+      component: BlankComponent
     },
     {
       path: '/*',

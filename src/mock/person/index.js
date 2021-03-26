@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 20:05:56
+ * @LastEditTime: 2021-03-25 17:29:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -59,16 +59,9 @@ const loadPsnlPermissionsInfo = pid => {
     message: '',
     result: {
       data: {
-        pid: '201906186258910',
-        zjlxId: '01',
-        zjhm: '370283199506142214',
-        xm: 'genghonghui',
-        sexId: '1',
-        birthDate: '19960613',
-        contactPhone: '13122272095',
-        livingArea: '01',
-        livingStreet: '1310',
-        livingAddress: '宝山淞南镇新梅松南苑11号楼1201'
+        allowSearch: '0',
+        allowArtificialReco: '0',
+        allowAutoReco: '0'
       }
     }
   };
@@ -79,7 +72,6 @@ const loadPsnlPermissionsInfo = pid => {
 // ) {
 //   return getPersonbaseInfo(options);
 // });
-
 Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
   return successData;
 });
@@ -90,14 +82,65 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
     status: 200,
     message: '',
     result: {
-      data: {
-        allowSearch: '0',
-        allowArtificialReco: '1',
-        allowAutoReco: '0'
+      logonUser: {
+        userId: 309307,
+        userIdStr: '0000309307',
+        userName: '开发人员',
+        loginName: 'user',
+        userType: 'user',
+        organId: '',
+        organIdStr: '-2',
+        organName: '维护',
+        organType: '',
+        domainId: 1,
+        domainIdStr: '',
+        domainName: '',
+        roleKey: 'SC:R:1_c4ca4238a0b923820dcc509a6f75849b',
+        userKey:
+          'a3db4e507c72aa47c99b9c8bacf16da7f98dd24fcc62795fb79ebd65fe2260eb',
+        expire: -1,
+        extInfo: '',
+        areaInfo: '',
+        roles: [{ roleId: '1', roleName: '普通角色' }],
+        readOnly: false,
+        organIdKey: '-2',
+        domainIdKey: '1',
+        userIdKey: '0000309307'
       }
     }
   };
 });
+//检验该人员是不是首次进入系统
+Mock.mock(
+  RegExp(basePath + '/person/info/checkPsnlInit' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: {
+          pid: '',
+          zjlxId: '',
+          zjhm: '',
+          xm: '',
+          sexId: '',
+          birthDate: '',
+          contactPhone: '',
+          livingArea: '',
+          livingStreet: '',
+          livingAddress: '',
+          houseArea: '',
+          houseStreet: '',
+          employStatus: '',
+          eduId: '',
+          type: '',
+          isInit: '0'
+        }
+      }
+    };
+  }
+);
 
 Mock.mock(
   RegExp(basePath + '/person/info/loadPersonInfo' + '.*'),
@@ -106,24 +149,42 @@ Mock.mock(
     return getPersonbaseInfo(options);
   }
 );
-Mock.mock(basePath + '/person/info/loadPsnlPermissionsInfo', 'get', function(
+// 权限控制
+Mock.mock(
+  RegExp(basePath + '/person/info/loadPsnlPermissionsInfo' + '.*'),
+  'get',
+  function(options) {
+    return loadPsnlPermissionsInfo(options);
+  }
+);
+// Mock.mock(RegExp(basePath + '/person/info/update' + '.*'), 'put', function(
+//   options
+// ) {
+//   return successData;
+// });
+Mock.mock(basePath + '/person/info/updatePsnlPermissionsInfo', 'post', function(
   options
 ) {
-  return loadPsnlPermissionsInfo(options);
+  return successData;
 });
-
+//维护个人基本信息
 Mock.mock(basePath + '/person/info/savePersonInfo', 'post', function(options) {
   return successData;
 });
-Mock.mock(basePath + '/person/info/saveSkillCert', 'post', function(options) {
-  return successData;
-});
-Mock.mock(basePath + '/person/info/saveLanguageLevel', 'post', function(
+//新增或修改个人技能证书信息
+Mock.mock(basePath + '/person/inresumeo/saveSkillCert', 'post', function(
   options
 ) {
   return successData;
 });
-Mock.mock(basePath + '/person/info/saveLaborExp', 'post', function(options) {
+//新增或修改个人语言能力信息
+Mock.mock(basePath + '/person/resume/saveLanguageLevel', 'post', function(
+  options
+) {
+  return successData;
+});
+//新增或修改个人劳动经历信息
+Mock.mock(basePath + '/person/resume/saveLaborExp', 'post', function(options) {
   return successData;
 });
 //获取职位信息
@@ -176,7 +237,159 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
 ) {
   return successData;
 });
-//新增或修改个人劳动经历信息
-Mock.mock(basePath + '/person/info/saveEduExp', 'post', successData);
+//保存个人教育经历信息
+Mock.mock(basePath + '/person/resume/saveEduExp', 'post', function(options) {
+  return successData;
+});
+//个人查询屏蔽信息列表
+Mock.mock(
+  RegExp(basePath + '/person/info/queryShieldList' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            shieldId: '61',
+            shieldType: '1',
+            pid: '1',
+            corpId: '11',
+            corpName: '测试单位名称'
+          },
+          {
+            shieldId: '62',
+            shieldType: '1',
+            pid: '1',
+            corpId: '11',
+            corpName: '测试单位名称'
+          }
+        ]
+      }
+    };
+  }
+);
 
+//个人屏蔽单位
+Mock.mock(basePath + '/person/info/queryShieldList', 'post', function(options) {
+  return successData;
+});
+//个人屏蔽单位
+Mock.mock(basePath + '/person/info/shieldCorp', 'post', function(options) {
+  return successData;
+});
+//个人取消屏蔽单位
+Mock.mock(basePath + '/person/info/cancelShield', 'post', function(options) {
+  return successData;
+});
+
+//获取关注单位列表
+Mock.mock(
+  RegExp(basePath + '/person/feedback/corp/findFavorRecord' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            corpName: '上海新移力自动化科技有限公司',
+            industryType: '02',
+            corpNature: '02',
+            logo: '',
+            positionId: '123',
+            positionName: '软件开发工程师',
+            salaryScope: '9999',
+            eduRequire: '123',
+            workNature: '123',
+            workYearNeed: '5',
+            recruitNum: '100',
+            workArea: '01',
+            favorTime: '2021-01-14 16:32:30',
+            favorId: '30'
+          }
+        ]
+      })
+    };
+  }
+);
+
+//获取个人收藏职位列表
+Mock.mock(
+  RegExp(basePath + '/person/feedback/position/findFavorRecord' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            corpName: '上海新移力自动化科技有限公司',
+            industryType: '02',
+            corpNature: '02',
+            logo: '',
+            positionId: '123',
+            positionName: '软件开发工程师',
+            salaryScope: '9999',
+            eduRequire: '123',
+            workNature: '123',
+            workYearNeed: '5',
+            recruitNum: '100',
+            workArea: '01',
+            favorTime: '2021-01-14 16:32:30',
+            favorId: '30'
+          }
+        ]
+      })
+    };
+  }
+);
+//删除某种能力或经历信息
+Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: Mock.mock({
+      'data|1-10': [
+        {
+          applyforId: '49',
+          resumeId: '1',
+          source: '01',
+          positionName: 'JAVA架构工程师',
+          tranBaseSymbol: '',
+          laborYear: '',
+          xm: '',
+          contactPhone: '',
+          pid: '',
+          age: '',
+          edu: '',
+          graduateSchool: '',
+          sex: '',
+          corpName: '上海新移力自动化科技有限公司',
+          positionId: '4',
+          releaseUserId: '0000941012',
+          salaryScope: '10000-50000',
+          workArea: '06',
+          interviewDate: '',
+          reply: '1',
+          evaluateLevel: '',
+          evaluateContent: '',
+          createTime: '2020-12-23 16:23:15',
+          recId: '',
+          meetId: ''
+        }
+      ]
+    })
+  };
+});
+
+// TODO 评价职位
+Mock.mock(basePath + '/person/feedback/do-evaluate', 'put', function(options) {
+  return successData;
+});
 export default Mock;

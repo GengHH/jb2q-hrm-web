@@ -25,9 +25,9 @@
           </el-col>
           <el-col :span="20">
             <el-radio-group
-              v-model="queryParams.positionName"
+              v-model="queryParams.positions"
               size="medium"
-              id="positionNameRadios"
+              id="positionsRadios"
               class="radio-list-bar"
             >
               <el-radio-button label="不限">不限</el-radio-button>
@@ -58,7 +58,7 @@
           <el-col :span="2">
             <div
               class="grid-content bg-purple more-ico"
-              @click="showMoreRadios($event, 'positionNameRadios')"
+              @click="showMoreRadios($event, 'positionsRadios')"
             >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
@@ -121,17 +121,17 @@
                 <el-radio v-model="queryParams.radio3" label="1"
                   >招聘特定人群</el-radio
                 > -->
-                <el-checkbox v-model="queryParams.checked1"
+                <el-checkbox v-model="queryParams.agencyRecruit"
                   >中介待招</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.checked2"
+                <el-checkbox v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.checked3"
+                <el-checkbox v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
                 <el-select
-                  v-model="queryParams.wt"
+                  v-model="queryParams.entrustCorpName"
                   clearable
                   placeholder="委托待招单位"
                 >
@@ -143,12 +143,24 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.nl"
+                  v-model="queryParams.age"
                   clearable
                   placeholder="年龄"
                 >
                   <el-option
                     v-for="item in nlOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <el-select
+                  v-model="queryParams.eduRequire"
+                  clearable
+                  placeholder="学历要求"
+                >
+                  <el-option
+                    v-for="item in xlOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -167,31 +179,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.eduRequire"
-                  clearable
-                  placeholder="学历要求"
-                >
-                  <el-option
-                    v-for="item in queryParams.xl"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-                <el-select
-                  v-model="queryParams.xl"
-                  clearable
-                  placeholder="工作区域"
-                >
-                  <el-option
-                    v-for="item in qxOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-                <el-select
-                  v-model="queryParams.zy"
+                  v-model="queryParams.workHour"
                   clearable
                   placeholder="工作班时"
                 >
@@ -220,7 +208,8 @@
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job v-if="queryResult.length"
+    <per-search-job
+      v-if="queryResult.length"
       :jobData="queryResult"
       @showJobDetials="showJobDetial($event)"
     ></per-search-job>
@@ -251,91 +240,41 @@ export default {
       dialog: false,
       positionDetailsId: '',
       queryParams: {
-        checked1: '',
-        checked2: '',
-        checked3: '',
-        zy: '',
-        nl: '',
-        wt: '',
-        xl: '',
-        positionId: '4',
-        positionName: '不限',
+        pid: this.$store.getters['person/pid'],
+        age: '',
+        positions: '不限',
         salaryScope: '不限',
-        workArea: '',
         workNature: '不限',
+        workYearNeed: '不限',
+        workArea: '',
         eduRequire: '',
         recruitNum: '3',
-        corpName: '上海新移力自动化科技有限公司',
-        cid: '201002025628331',
-        workYearNeed: '不限',
-        releaseTime: '2021-12-10 10:44:36',
         tranBaseSymbol: '0',
+        special: '',
         agencyRecruit: '0',
         entrustCorpName: '',
-        favor: '0',
-        releaseUserId: '0000941012',
-        type: '1',
         salaryUp: '',
-        salaryDown: ''
+        salaryDown: '',
+        content: ''
       },
-      options: [
-        {
-          label: '123',
-          value: 'haha'
-        }
-      ],
-      tableData: [
-        {
-          id: '1',
-          name: '123'
-        }
-      ],
+      options: [],
+      tableData: [],
       queryResult: [],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       nlOptions: [
-        { value: '01', label: '20' },
-        { value: '04', label: '21' },
-        { value: '05', label: '22' },
-        { value: '06', label: '23' },
-        { value: '07', label: '24' },
-        { value: '09', label: '25' },
-        { value: '10', label: '26' },
-        { value: '12', label: '27' },
-        { value: '13', label: '28' }
+        { value: '20', label: '20' },
+        { value: '21', label: '21' },
+        { value: '22', label: '22' },
+        { value: '23', label: '23' },
+        { value: '24', label: '24' },
+        { value: '25', label: '25' },
+        { value: '26', label: '26' },
+        { value: '27', label: '27' },
+        { value: '28', label: '28' }
       ],
-      qxOptions: [
-        { value: '01', label: '黄浦' },
-        { value: '04', label: '徐汇' },
-        { value: '05', label: '长宁' },
-        { value: '06', label: '静安' },
-        { value: '07', label: '普陀' },
-        { value: '09', label: '虹口' },
-        { value: '10', label: '杨浦' },
-        { value: '12', label: '闵行' },
-        { value: '13', label: '宝山' },
-        { value: '14', label: '嘉定' },
-        { value: '15', label: '浦东' },
-        { value: '16', label: '金山' },
-        { value: '17', label: '松江' },
-        { value: '18', label: '青浦' },
-        { value: '26', label: '奉贤' },
-        { value: '30', label: '崇明' }
-      ],
-      xlOptions: [
-        { value: '01', label: '初中及以下' },
-        { value: '02', label: '高中' },
-        { value: '03', label: '职高' },
-        { value: '04', label: '技校' },
-        { value: '05', label: '中专' },
-        { value: '06', label: '大专' },
-        { value: '07', label: '本科' },
-        { value: '08', label: '硕士' },
-        { value: '09', label: '博士及以上' }
-      ],
-      wtOptions: [
-        { value: '0', label: '否' },
-        { value: '1', label: '是' }
-      ],
+      qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
+      xlOptions: this.$store.getters['dictionary/recruit_edu'],
+      wtOptions: this.$store.getters['dictionary/yesno'],
       xcOptions: [
         { value: '5000', label: '5000' },
         { value: '6000', label: '6000' },
@@ -373,7 +312,7 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.positionName = '不限';
+      this.queryParams.positions = '不限';
       this.queryParams.salaryScope = '不限';
       this.queryParams.workNature = '不限';
       this.queryParams.workYearNeed = '不限';
@@ -431,7 +370,7 @@ export default {
             });
           }
         })
-        .catch(err =>
+        .catch(() =>
           that.$message({
             type: 'error',
             message: '系统异常，简历投递成功'
@@ -463,6 +402,7 @@ export default {
   }
 
   .radio-list-bar {
+    overflow: hidden;
     max-height: 52px;
     transition: height 0.5s;
     -webkit-transition: max-height 0.5s;

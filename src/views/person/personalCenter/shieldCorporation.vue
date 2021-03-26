@@ -1,9 +1,9 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-01-25 14:23:41
+ * @LastEditTime: 2021-03-19 10:59:14
  * @LastEditors: GengHH
- * @Description: In User Settings Edit
+ * @Description: 个人屏蔽单位
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporation.vue
 -->
 <template>
@@ -22,12 +22,17 @@
         </el-col>
       </el-row>
     </div>
-    <el-button @click="turnOther">跳转</el-button>
+    <div class="btn-bar">
+      <el-button class="orange-btn" @click="doShieldCorp"
+        >屏蔽所选企业</el-button
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import baseSearch from '@/components/common/BaseSearch';
+import { doShieldCorp } from '@/api/personApi';
 export default {
   name: 'shieldCorporation',
   components: {
@@ -39,26 +44,32 @@ export default {
       value: '',
       corpList: [
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         },
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         },
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         },
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         },
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         },
         {
+          pid: '123123123123',
           name: '百度在线网络技术有限公司',
           easyName: '百度'
         }
@@ -72,6 +83,26 @@ export default {
     },
     turnOther() {
       this.$router.push('/personalCenter/shieldCorporationList');
+    },
+    doShieldCorp() {
+      let that = this;
+      doShieldCorp()
+        .then(res => {
+          if (res.status === 200) {
+            this.$router.push('/personalCenter/shieldCorporationList');
+          } else {
+            that.$message({
+              type: 'error',
+              message: '操作失败'
+            });
+          }
+        })
+        .catch(() => {
+          that.$message({
+            type: 'error',
+            message: '系统异常,操作失败'
+          });
+        });
     }
   }
 };
@@ -101,6 +132,11 @@ export default {
   .easy-name {
     color: rgb(96, 192, 147);
     margin: 15px 0;
+  }
+  .btn-bar {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
   }
 }
 </style>

@@ -68,7 +68,11 @@
       </el-col>
       <el-col :span="12" class="form-item-right">
         <el-form-item prop="contactPhone">
-          <pl-input v-model="personInfo.contactPhone" label="手机号"></pl-input>
+          <pl-input
+            v-model="personInfo.contactPhone"
+            :disabled="true"
+            label="手机号"
+          ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
@@ -151,12 +155,12 @@ export default {
       },
       rules: {
         contactPhone: [
-          { required: true, message: '请输手机号', trigger: 'blur' },
-          {
-            pattern: phonePattern,
-            message: '请输入正确格式的手机号',
-            trigger: ['blur', 'change']
-          }
+          // { required: true, message: '请输手机号', trigger: 'blur' },
+          // {
+          //   pattern: phonePattern,
+          //   message: '请输入正确格式的手机号',
+          //   trigger: ['blur', 'change']
+          // }
         ],
         livingArea: [
           { required: true, message: '请输入居住区域', trigger: 'blur' }
@@ -202,13 +206,23 @@ export default {
       if (this.$store.getters['dictionary/ggjbxx_street']) {
         let array = this.$store.getters['dictionary/ggjbxx_street'];
         let newArray = []; //查找符合条件值并存入新数组
+        let exist = false;
         for (let i in array) {
           if (array[i].filter === that.personInfo.livingArea) {
             newArray[newArray.length] = array[i];
           }
         }
+        for (let s in newArray) {
+          if (newArray[s].value === that.personInfo.livingStreet) {
+            exist = true;
+          }
+        }
+        if (!exist) {
+          that.personInfo.livingStreet = '';
+        }
         return newArray;
       }
+      that.personInfo.livingStreet = '';
       return [];
     },
     jobFaieList: function() {
@@ -254,9 +268,8 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let formData = JSON.parse(JSON.stringify(this.personInfo));
-          //formData.birthDate = newBirthDate || formData.birthDate;
+          formData.birthDate = this.newBirthDate || formData.birthDate;
           let reusult = await updatePersonBaseInfo(formData);
-          console.log(reusult);
           if (reusult && reusult.status === 200) {
             done();
             this.$message({
@@ -264,17 +277,23 @@ export default {
               message: '保存成功!',
               type: 'success'
             });
+            //修改该人员为不是第一次登录
+            this.$store.commit('person/SET_FIRST_LOGIN', false);
           } else {
             done();
             this.$message({
               showClose: true,
-              message: 'error submit!',
+              message: '保存失败!',
               type: 'error'
             });
           }
         } else {
           done();
-          console.log('error submit!!');
+          this.$message({
+            showClose: true,
+            message: '系统异常，保存报错!',
+            type: 'error'
+          });
           return false;
         }
       });

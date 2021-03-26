@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 19:59:59
+ * @LastEditTime: 2021-03-24 14:22:23
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -15,10 +15,10 @@
  */
 export function isNoBody(vm) {
   let a =
-    !!vm ||
-    !!vm.$store ||
-    !!vm.$store.getters['person/token'] ||
-    !!vm.$store.getters['corporation/token'];
+    !!vm &&
+    !!vm.$store &&
+    (!!vm.$store.getters['person/token'] ||
+      !!vm.$store.getters['corporation/token']);
   return !a;
 }
 
@@ -206,4 +206,27 @@ export function queryParams(
     }
   }
   return _result.length ? prefix + _result.join('&') : '';
+}
+
+/**
+ * 时间格式化
+ * @param {*} date
+ */
+let formatNumber = n => {
+  n = n.toString();
+  return n[1] ? n : '0' + n;
+};
+export function formatTime(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+
+  return (
+    [year, month, day].map(formatNumber).join('-') +
+    ' ' +
+    [hour, minute, second].map(formatNumber).join(':')
+  );
 }

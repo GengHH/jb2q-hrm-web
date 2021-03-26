@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /*
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-17 18:28:07
+ * @LastEditTime: 2021-03-26 17:41:08
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
@@ -49,7 +50,14 @@ export function getAction(url, parameter) {
 }
 
 //put
-export function putAction(url, parameter) {
+export function putAction(url, parameter, isRestful = false) {
+  if (isRestful) {
+    console.log('restful', parameter);
+    return axios({
+      url: url + parameter,
+      method: 'put'
+    });
+  }
   return axios({
     url: url,
     method: 'put',
@@ -58,7 +66,14 @@ export function putAction(url, parameter) {
 }
 
 //delete
-export function deleteAction(url, parameter) {
+export function deleteAction(url, parameter, isRestful = false) {
+  if (isRestful) {
+    return axios({
+      url: url + parameter,
+      method: 'delete',
+      data: ''
+    });
+  }
   return axios({
     url: url,
     method: 'delete',

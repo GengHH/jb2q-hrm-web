@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 14:04:12
+ * @LastEditTime: 2021-03-23 10:23:03
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -106,7 +106,9 @@ const state = {
   //管理员发布内容详情类型
   RECRUIT_RELEASE_DETAIL_TYPE: [],
   //街镇
-  GGJBXX_STREET: []
+  GGJBXX_STREET: [],
+  //系统中通用的静态字段
+  COMMON_STARTEXT: ['差', '一般', '良', '好', '极好']
 };
 const getters = {
   yesno: state => state.YESNO,
@@ -117,7 +119,9 @@ const getters = {
   ggjbxx_street: state => state.GGJBXX_STREET,
   recruit_language_type: state => state.RECRUIT_LANGUAGE_TYPE,
   recruit_language_level: state => state.RECRUIT_LANGUAGE_LEVEL,
-  recruit_work_nature: state => state.RECRUIT_WORK_NATURE
+  recruit_work_nature: state => state.RECRUIT_WORK_NATURE,
+  recruit_industry_type: state => state.RECRUIT_INDUSTRY_TYPE,
+  common_startext: state => state.COMMON_STARTEXT
 };
 
 const mutations = {
@@ -153,6 +157,9 @@ const mutations = {
   },
   set_RECRUIT_WORK_NATURE: (state, dictionary) => {
     state.RECRUIT_WORK_NATURE = dictionary;
+  },
+  set_RECRUIT_INDUSTRY_TYPE: (state, dictionary) => {
+    state.RECRUIT_INDUSTRY_TYPE = dictionary;
   }
 };
 
