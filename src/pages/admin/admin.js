@@ -1,8 +1,8 @@
 /*
-  * @Author: TangQiang
+ * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-23 10:18:34
+ * @LastEditTime: 2021-03-26 17:56:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -60,7 +60,7 @@ if (isEmpty(store.getters['dictionary/recruit_edu'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
 }
 //民族
-if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+if (isEmpty(store.getters['dictionary/ggjbxx_nationality'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_NATIONALITY');
 }
 if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
@@ -82,7 +82,6 @@ if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
 if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
 }
-
 
 /* eslint-disable no-new */
 new Vue({
