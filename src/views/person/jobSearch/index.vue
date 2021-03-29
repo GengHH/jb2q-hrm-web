@@ -24,36 +24,20 @@
             <div class="grid-content bg-purple">职位：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group
+            <el-checkbox-group
               v-model="queryParams.positions"
               size="medium"
               id="positionsRadios"
               class="radio-list-bar"
             >
-              <el-radio-button label="不限">不限</el-radio-button>
-              <!-- <el-radio-button label="销售/客服/技术支持"
-                >居民服务和其他服务业</el-radio-button
-              >
-              <el-radio-button label="会计/金融/银行/保险"
-                >水利、环境和公共设施管理业</el-radio-button
-              >
-              <el-radio-button label="生产/营运/采购/物流">
-                科学研究、技术服务和地质勘查业</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >租赁和商务服务业</el-radio-button
-              >
-              <el-radio-button label="广告/市场/媒体/艺术">不</el-radio-button>
-              <el-radio-button label="建筑/房地产"
-                >科学研究、技术服务和地质勘查业</el-radio-button
-              > -->
-              <el-radio-button
+              <el-checkbox-button label="不限">不限</el-checkbox-button>
+              <el-checkbox-button
                 v-for="index in zyLists"
                 :key="index.value"
                 :label="index.value"
-                >{{ index.label }}</el-radio-button
+                >{{ index.label }}</el-checkbox-button
               >
-            </el-radio-group>
+            </el-checkbox-group>
           </el-col>
           <el-col :span="2">
             <div
@@ -86,7 +70,7 @@
               </div>
             </el-col> -->
         </el-row>
-        <el-row class="condition condition-fore">
+        <el-row class="condition condition-four">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作性质：</div>
           </el-col>
@@ -107,6 +91,39 @@
         </el-row>
         <el-row class="condition condition-five">
           <el-col :span="2">
+            <div class="grid-content bg-purple">年龄：</div>
+          </el-col>
+          <el-col :span="22">
+            <div class="grid-content bg-purple filter-select">
+              <el-row>
+                <el-col :span="4">
+                  <el-input
+                    id="minAge"
+                    placeholder="请输入最小年龄"
+                    v-model="queryParams.minAge"
+                    @change="minAgeChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
+                <el-col :span="2" class="horizontalLine">-</el-col>
+                <el-col :span="4">
+                  <el-input
+                    id="maxAge"
+                    placeholder="请输入最大年龄"
+                    v-model="queryParams.maxAge"
+                    @change="maxAgeChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
+                <el-col :span="14"> </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="condition condition-six">
+          <el-col :span="2">
             <div class="place-holder">placeHolder</div>
           </el-col>
           <el-col :span="19">
@@ -121,7 +138,7 @@
                 <el-checkbox v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
-                <el-select
+                <!-- <el-select
                   v-model="queryParams.entrustCorpName"
                   clearable
                   placeholder="委托待招单位"
@@ -132,8 +149,8 @@
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
-                </el-select>
-                <el-select
+                </el-select> -->
+                <!-- <el-select
                   v-model="queryParams.age"
                   clearable
                   placeholder="年龄"
@@ -144,7 +161,7 @@
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
-                </el-select>
+                </el-select> -->
                 <el-select
                   v-model="queryParams.eduRequire"
                   clearable
@@ -175,7 +192,7 @@
                   placeholder="工作班时"
                 >
                   <el-option
-                    v-for="item in zyOptions"
+                    v-for="item in bsOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -255,7 +272,7 @@ export default {
       queryParams: {
         pid: this.$store.getters['person/pid'],
         age: '',
-        positions: '不限',
+        positions: ['不限'],
         salaryScope: '不限',
         workNature: '不限',
         workYearNeed: '不限',
@@ -268,11 +285,23 @@ export default {
         entrustCorpName: '',
         salaryUp: '',
         salaryDown: '',
-        content: ''
+        content: '',
+        minAge: '',
+        maxAge: ''
       },
       options: [],
       tableData: [],
       queryResult: [],
+      // rules: {
+      //   minAge: [
+      //     { type: 'number', message: '请选择语种', trigger: 'change' },
+      //     { min: 18, max: 60, message: '年龄介于18至60周岁', trigger: 'blur' }
+      //   ],
+      //   maxAge: [
+      //     { type: 'number', message: '请选择等级', trigger: 'change' },
+      //     { min: 18, max: 60, message: '年龄介于18至60周岁', trigger: 'blur' }
+      //   ]
+      // },
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       nlOptions: [
         { value: '20', label: '20' },
@@ -299,14 +328,8 @@ export default {
         { value: '12000', label: '12000' },
         { value: '12000+', label: '12000以上' }
       ],
-      zyOptions: [
-        { value: '01', label: '计算机' },
-        { value: '02', label: '土木工程' },
-        { value: '03', label: '能源与动力' },
-        { value: '04', label: '机械工程' },
-        { value: '05', label: '生物医疗' },
-        { value: '06', label: '材料科学' }
-      ],
+      zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
+      bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       jobList: []
     };
   },
@@ -321,11 +344,55 @@ export default {
     }
   },
   methods: {
+    validateMaxAge(value) {
+      // console.log(value);
+      // if (!this.queryParams.minAge) {
+      //   callback(new Error('请先输入最下年龄'))
+      // } else if (value > (this.queryParams.minAge * 3)) {
+      //   callback(new Error('两次输入密码不一致!'))
+      // }
+    },
+    minAgeChange() {
+      if (!this.queryParams.minAge) {
+        return;
+      }
+      if (this.queryParams.minAge && isNaN(Number(this.queryParams.minAge))) {
+        this.$alert('请输入数值');
+        this.queryParams.minAge = '';
+      } else if (this.queryParams.minAge < 18) {
+        this.$alert('年龄不得低于18周岁');
+        this.queryParams.minAge = '';
+      } else if (this.queryParams.minAge > 60) {
+        this.$alert('年龄不得超过60周岁');
+        this.queryParams.minAge = '';
+      }
+    },
+    maxAgeChange() {
+      if (!this.queryParams.maxAge) {
+        return;
+      }
+      if (this.queryParams.maxAge && isNaN(Number(this.queryParams.maxAge))) {
+        this.$alert('请输入数值');
+        this.queryParams.maxAge = '';
+      } else if (this.queryParams.maxAge < 18) {
+        this.$alert('年龄不得低于18周岁');
+        this.queryParams.maxAge = '';
+      } else if (this.queryParams.maxAge > 60) {
+        this.$alert('年龄不得超过60周岁');
+        this.queryParams.maxAge = '';
+      } else if (
+        this.queryParams.minAge &&
+        this.queryParams.minAge * 3 > this.queryParams.maxAge
+      ) {
+        this.$alert('最大年龄不得超过最小年龄的三倍');
+        this.queryParams.maxAge = '';
+      }
+    },
     clearQueryParams: function() {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.positions = '不限';
+      this.queryParams.positions = ['不限'];
       this.queryParams.salaryScope = '不限';
       this.queryParams.workNature = '不限';
       this.queryParams.workYearNeed = '不限';
@@ -415,6 +482,7 @@ export default {
       }
     },
     callPositionCorp(arg) {
+      console.log(arg);
       //! TODO显示聊天框
       this.wchatDialog = true;
     },
@@ -448,9 +516,17 @@ export default {
     max-height: 52px;
     transition: height 0.5s;
     -webkit-transition: max-height 0.5s;
+    ::v-deep .el-checkbox-button__inner {
+      border: 0 !important;
+      padding: 10px 20px !important;
+      border-radius: 0 !important;
+    }
   }
   .radio-list-bar-more {
     max-height: 416px !important;
+  }
+  .el-checkbox-button {
+    margin: 10px 0;
   }
 }
 
@@ -460,7 +536,7 @@ export default {
   }
   ::v-deep .el-input__inner {
     border: 0;
-    width: 100px !important;
+    //width: 100px !important;
     color: rgba(0, 0, 0, 0.8);
     text-align: center;
   }
@@ -476,11 +552,22 @@ export default {
   .condition-three {
     z-index: 30;
   }
-  .condition-fore {
+  .condition-four {
     z-index: 40;
   }
   .condition-five {
     z-index: 50;
+    .horizontalLine {
+      text-align: center;
+    }
+    ::v-deep #minAge,
+    ::v-deep #maxAge {
+      border: 1px solid #eeeeee;
+      width: 100% !important;
+    }
+  }
+  .condition-six {
+    z-index: 60;
   }
   .place-holder {
     visibility: hidden;

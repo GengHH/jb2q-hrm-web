@@ -31,6 +31,9 @@ const service = axios.create({
 
 // common error function
 const err = error => {
+  console.log('----------超时--------------');
+  console.log(error);
+  console.log('----------超时--------------');
   if (error.response) {
     // ('');
     // let data = error.response.data;
@@ -133,6 +136,15 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(response => {
+  console.log(response.data);
+  if (response.data && response.data.includes('!DOCTYPE')) {
+    Notification({
+      title: '系统提示',
+      type: 'error',
+      dangerouslyUseHTMLString: true,
+      message: response.data
+    });
+  }
   return response.data;
 }, err);
 

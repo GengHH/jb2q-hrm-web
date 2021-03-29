@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 16:19:44
+ * @LastEditTime: 2021-03-29 19:27:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -47,6 +47,18 @@ const getPersonbaseInfo = pid => {
       }
     }
   };
+  // return `<!DOCTYPE html>
+  //       <html lang="en">
+  //       <head>
+  //         <meta charset="UTF-8">
+  //         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  //         <title>Document</title>
+  //       </head>
+  //       <body>
+  //         hahahha
+  //       </body>
+  //       </html>`;
 };
 /**
  *加载个人权限信息

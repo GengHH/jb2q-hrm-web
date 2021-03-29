@@ -262,7 +262,7 @@
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
-          @click="dialog4 = true"
+          @click="addLanguageSkills"
           >添加</el-button
         >
       </div>
@@ -1604,6 +1604,13 @@ export default {
           type: 'error',
           message: '保存失败'
         });
+      }
+    },
+    addLanguageSkills() {
+      if (this.psnlLanguageTags && this.psnlLanguageTags.length >= 5) {
+        this.$alert('外语能力最多只能添加5条');
+      } else {
+        this.dialog4 = true;
       }
     }
   },

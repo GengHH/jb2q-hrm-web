@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-25 15:15:52
+ * @LastEditTime: 2021-03-29 17:20:54
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -109,6 +109,9 @@ if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_INDUSTRY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
 }
 
 window.setTimeout(function() {

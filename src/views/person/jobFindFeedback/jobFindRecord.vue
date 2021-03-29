@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 17:11:23
+ * @LastEditTime: 2021-03-29 13:14:30
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -344,7 +344,14 @@ export default {
         {
           label: '工作地点',
           prop: 'workArea',
-          rowSpan: 'all'
+          rowSpan: 'all',
+          customerRenderText: ({ row }) => {
+            const { workArea } = row;
+            const data = this.$store.getters['dictionary/ggjbxx_qx'] || [];
+            return (
+              data.find(element => (element.value = workArea)).label || workArea
+            );
+          }
         },
         {
           label: '投递时间',
