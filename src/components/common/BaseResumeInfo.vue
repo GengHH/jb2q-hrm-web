@@ -357,6 +357,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="jobIntentionForm.positionLike"
             multiple
             placeholder="请选择"
@@ -376,6 +377,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="jobIntentionForm.industryLike"
             placeholder="请选择"
           >
@@ -418,7 +420,11 @@
           prop="workArea"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="jobIntentionForm.workArea" placeholder="请选择">
+          <el-select
+            filterable
+            v-model="jobIntentionForm.workArea"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option1"
               :key="item.value"
@@ -433,7 +439,11 @@
           prop="workNature"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
+          <el-select
+            filterable
+            v-model="jobIntentionForm.workNature"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option2"
               :key="item.value"
@@ -605,6 +615,7 @@
             placeholder="请输入专业"
           ></el-input>
           <!-- <el-select
+          filterable 
             v-model="educationExperienceForm.majorName"
             placeholder="请选择"
           >
@@ -624,6 +635,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="educationExperienceForm.eduLevel"
             placeholder="请选择"
           >
@@ -709,6 +721,7 @@
           prop="languageType"
         >
           <el-select
+            filterable
             v-model="languageSkillsForm.languageType"
             placeholder="请选择"
           >
@@ -728,6 +741,7 @@
           prop="languageLevel"
         >
           <el-select
+            filterable
             v-model="languageSkillsForm.languageLevel"
             placeholder="请选择"
           >
