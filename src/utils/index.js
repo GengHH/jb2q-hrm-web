@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 14:22:23
+ * @LastEditTime: 2021-03-30 18:06:19
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -130,10 +130,10 @@ export function filterObject(val, omit = DEFAULT_OMIT) {
 /**
  * 获取字典表中的某项TEXT
  * @param {Array} data
- * @param {String} code
+ * @param {String} value
  */
-export function getDicText(data, code, value) {
-  if (isArray(data) && data.length && code && value) {
+export function getDicText(data, value) {
+  if (isArray(data) && data.length && value) {
     let _dic = data.find(function(i) {
       return i.value === value;
     });

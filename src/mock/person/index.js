@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-29 19:27:50
+ * @LastEditTime: 2021-03-30 17:16:32
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -211,6 +211,7 @@ Mock.mock(
         'data|1-10': [
           {
             'positionId|+1': '@string("number", 5)',
+            positionCode: '20210100000002',
             positionName: 'JAVA架构工程师',
             salaryScope: '20-5004',
             workArea: '06',
@@ -224,9 +225,24 @@ Mock.mock(
             tranBaseSymbol: '0',
             agencyRecruit: '0',
             entrustCorpName: '',
-            'favor|+1': ['0', '1'],
             releaseUserId: '0000941012',
-            type: '1'
+            type: '1',
+            'favor|+1': [false, true],
+            recruitType: '1',
+            entrustTyshxym: '',
+            corpId: '201002025628331',
+            positionType: '0201',
+            ageMax: '35',
+            ageMin: '18',
+            workAddress: '上海市普陀区中江路889号804室',
+            workHour: '01',
+            salaryMax: '20000',
+            salaryMin: '6000',
+            salaryPayType: '04',
+            special: '0',
+            describe: '嘴皮子溜，脸皮子厚',
+            onTop: '0',
+            releaseStatusId: '2'
           }
         ]
       })
@@ -267,6 +283,15 @@ Mock.mock(basePath + '/person/resume/savePositionLike', 'post', function(
 Mock.mock(basePath + '/person/resume/saveEduExp', 'post', function(options) {
   return successData;
 });
+//删除某种能力或经历信息
+Mock.mock(
+  RegExp(basePath + '/person/resume/delete/' + '.*'),
+  'delete',
+  function(options) {
+    return successData;
+  }
+);
+
 //个人查询屏蔽信息列表
 Mock.mock(
   RegExp(basePath + '/person/info/queryShieldList' + '.*'),

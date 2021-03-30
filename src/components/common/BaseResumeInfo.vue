@@ -1050,7 +1050,6 @@ export default {
       ) {
         return getDicText(
           this.$store.getters['dictionary/recruit_work_nature'],
-          'RECRUIT_WORK_NATURE',
           this.resume.workNature
         );
       }
@@ -1060,7 +1059,6 @@ export default {
       if (this.$store.getters['dictionary/ggjbxx_qx'] && this.resume.workArea) {
         return getDicText(
           this.$store.getters['dictionary/ggjbxx_qx'],
-          'GGJBXX_QX',
           this.resume.workArea
         );
       }

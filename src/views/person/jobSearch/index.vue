@@ -10,7 +10,7 @@
           </el-col>
           <el-col :span="22">
             <el-radio-group v-model="queryParams.workYearNeed" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
+              <el-radio-button label="">不限</el-radio-button>
               <el-radio-button label="1">1年以下</el-radio-button>
               <el-radio-button label="2">1~2年</el-radio-button>
               <el-radio-button label="3">3~5年</el-radio-button>
@@ -21,16 +21,48 @@
         </el-row>
         <el-row class="condition condition-two">
           <el-col :span="2">
+            <div class="grid-content bg-purple">行业：</div>
+          </el-col>
+          <el-col :span="20">
+            <el-checkbox-group
+              v-model="queryParams.industry"
+              size="medium"
+              id="industryRadios"
+              class="radio-list-bar"
+              @change="industryGroupChange"
+            >
+              <el-checkbox-button label="">不限</el-checkbox-button>
+              <el-checkbox-button
+                v-for="index in hyLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-checkbox-button
+              >
+            </el-checkbox-group>
+          </el-col>
+          <el-col :span="2">
+            <div
+              class="grid-content bg-purple more-ico"
+              @click="showMoreRadios($event, 'industryRadios')"
+            >
+              <span>更多</span>
+              <i class="el-icon-caret-bottom"></i>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="condition condition-three">
+          <el-col :span="2">
             <div class="grid-content bg-purple">职位：</div>
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.positions"
+              v-model="queryParams.positionTypeList"
               size="medium"
               id="positionsRadios"
               class="radio-list-bar"
+              @change="positionGroupChange"
             >
-              <el-checkbox-button label="不限">不限</el-checkbox-button>
+              <el-checkbox-button label="">不限</el-checkbox-button>
               <el-checkbox-button
                 v-for="index in zyLists"
                 :key="index.value"
@@ -49,7 +81,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="condition condition-three">
+        <!-- <el-row class="condition condition-three">
           <el-col :span="2">
             <div class="grid-content bg-purple">薪酬：</div>
           </el-col>
@@ -63,31 +95,19 @@
               <el-radio-button label="5">30000以上</el-radio-button>
             </el-radio-group>
           </el-col>
-          <!-- <el-col :span="2">
-              <div class="grid-content bg-purple more-ico">
-                <span>更多</span>
-                <i class="el-icon-caret-bottom"></i>
-              </div>
-            </el-col> -->
-        </el-row>
+        </el-row> -->
         <el-row class="condition condition-four">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作性质：</div>
           </el-col>
           <el-col :span="20">
             <el-radio-group v-model="queryParams.workNature" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
+              <el-radio-button label="">不限</el-radio-button>
               <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
               <el-radio-button label="03">就业见习</el-radio-button>
             </el-radio-group>
           </el-col>
-          <!-- <el-col :span="2">
-              <div class="grid-content bg-purple more-ico">
-                <span>更多</span>
-                <i class="el-icon-caret-bottom"></i>
-              </div>
-            </el-col> -->
         </el-row>
         <el-row class="condition condition-five">
           <el-col :span="2">
@@ -99,25 +119,47 @@
                 <el-col :span="4">
                   <el-input
                     id="minAge"
-                    placeholder="请输入最小年龄"
-                    v-model="queryParams.minAge"
+                    placeholder="请输入年龄下限"
+                    v-model="queryParams.ageMin"
                     @change="minAgeChange"
                     clearable
                   >
                   </el-input>
                 </el-col>
-                <el-col :span="2" class="horizontalLine">-</el-col>
+                <el-col :span="1" class="horizontalLine">-</el-col>
                 <el-col :span="4">
                   <el-input
                     id="maxAge"
-                    placeholder="请输入最大年龄"
-                    v-model="queryParams.maxAge"
+                    placeholder="请输入年龄上限"
+                    v-model="queryParams.ageMax"
                     @change="maxAgeChange"
                     clearable
                   >
                   </el-input>
                 </el-col>
-                <el-col :span="14"> </el-col>
+                <el-col :span="4"></el-col>
+                <el-col :span="2" class="text-right">薪酬：</el-col>
+                <el-col :span="4">
+                  <el-input
+                    id="minSalary"
+                    placeholder="请输入薪酬下限"
+                    v-model="queryParams.salaryMin"
+                    @change="minSalaryChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
+                <el-col :span="1" class="horizontalLine">-</el-col>
+                <el-col :span="4">
+                  <el-input
+                    id="maxSalary"
+                    placeholder="请输入薪酬上限"
+                    v-model="queryParams.salaryMax"
+                    @change="maxSalaryChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -138,34 +180,11 @@
                 <el-checkbox v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
-                <!-- <el-select
-                  v-model="queryParams.entrustCorpName"
-                  clearable
-                  placeholder="委托待招单位"
-                >
-                  <el-option
-                    v-for="item in wtOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select> -->
-                <!-- <el-select
-                  v-model="queryParams.age"
-                  clearable
-                  placeholder="年龄"
-                >
-                  <el-option
-                    v-for="item in nlOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select> -->
                 <el-select
                   v-model="queryParams.eduRequire"
                   clearable
                   placeholder="学历要求"
+                  class="min-size-select"
                 >
                   <el-option
                     v-for="item in xlOptions"
@@ -178,6 +197,7 @@
                   v-model="queryParams.workArea"
                   clearable
                   placeholder="工作区域"
+                  class="min-size-select"
                 >
                   <el-option
                     v-for="item in qxOptions"
@@ -190,6 +210,7 @@
                   v-model="queryParams.workHour"
                   clearable
                   placeholder="工作班时"
+                  class="min-size-select"
                 >
                   <el-option
                     v-for="item in bsOptions"
@@ -203,7 +224,7 @@
           </el-col>
           <el-col :span="3">
             <div
-              class="grid-content bg-purple more-ico"
+              class="grid-content bg-purple more-ico clear-ico"
               @click="clearQueryParams"
             >
               <i class="el-icon-delete"></i>
@@ -232,7 +253,11 @@
       :visible.sync="detailsDialog"
       :before-close="handleClose"
     >
-      <job-details :positionData="onePosition"></job-details>
+      <job-details
+        :positionData="onePosition"
+        @perfectResume="perfectResume"
+        @uploadResume="uploadResume"
+      ></job-details>
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
@@ -250,6 +275,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
+import { getDicText } from '@/utils';
 import {
   queryJobs,
   doDeliveryResume,
@@ -272,62 +298,51 @@ export default {
       queryParams: {
         pid: this.$store.getters['person/pid'],
         age: '',
-        positions: ['不限'],
-        salaryScope: '不限',
-        workNature: '不限',
-        workYearNeed: '不限',
+        industry: [''],
+        positionTypeList: [''],
+        workNature: '',
+        workYearNeed: '',
         workArea: '',
         eduRequire: '',
         recruitNum: '3',
         tranBaseSymbol: '0',
         special: '',
         agencyRecruit: '0',
-        entrustCorpName: '',
-        salaryUp: '',
-        salaryDown: '',
-        content: '',
-        minAge: '',
-        maxAge: ''
+        salaryMin: '',
+        salaryMax: '',
+        ageMin: '',
+        ageMax: '',
+        workHour: '',
+        corpName: ''
+
+        // pid: '1',
+        // tranBaseSymbol: '0',
+        // agencyRecruit: '0',
+        // workNature: '1 ',
+        // ageMax: '35',
+        // ageMin: '18',
+        // workArea: '06',
+        // workYearNeed: '05',
+        // eduRequire: '08',
+        // salaryMax: '20000',
+        // salaryMin: '6000',
+        // special: '0',
+        //corpName: '上海新移力自动化科技有限公司'
+        //workHour: '01',
+        //positionTypeList: '0201',
+
+        // positionName: '链家',
+        // salaryPayType: '04',
+        // recruitType: '1',
       },
       options: [],
       tableData: [],
       queryResult: [],
-      // rules: {
-      //   minAge: [
-      //     { type: 'number', message: '请选择语种', trigger: 'change' },
-      //     { min: 18, max: 60, message: '年龄介于18至60周岁', trigger: 'blur' }
-      //   ],
-      //   maxAge: [
-      //     { type: 'number', message: '请选择等级', trigger: 'change' },
-      //     { min: 18, max: 60, message: '年龄介于18至60周岁', trigger: 'blur' }
-      //   ]
-      // },
-      zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
-      nlOptions: [
-        { value: '20', label: '20' },
-        { value: '21', label: '21' },
-        { value: '22', label: '22' },
-        { value: '23', label: '23' },
-        { value: '24', label: '24' },
-        { value: '25', label: '25' },
-        { value: '26', label: '26' },
-        { value: '27', label: '27' },
-        { value: '28', label: '28' }
-      ],
+      hyLists: this.$store.getters['dictionary/recruit_industry_type'],
+      zyLists: this.$store.getters['dictionary/recruit_position_s_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       wtOptions: this.$store.getters['dictionary/yesno'],
-      xcOptions: [
-        { value: '5000', label: '5000' },
-        { value: '6000', label: '6000' },
-        { value: '7000', label: '7000' },
-        { value: '8000', label: '8000' },
-        { value: '9000', label: '9000' },
-        { value: '10000', label: '10000' },
-        { value: '11000', label: '11000' },
-        { value: '12000', label: '12000' },
-        { value: '12000+', label: '12000以上' }
-      ],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
       bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       jobList: []
@@ -344,68 +359,119 @@ export default {
     }
   },
   methods: {
-    validateMaxAge(value) {
-      // console.log(value);
-      // if (!this.queryParams.minAge) {
-      //   callback(new Error('请先输入最下年龄'))
-      // } else if (value > (this.queryParams.minAge * 3)) {
-      //   callback(new Error('两次输入密码不一致!'))
-      // }
-    },
-    minAgeChange() {
-      if (!this.queryParams.minAge) {
+    minSalaryChange() {
+      if (!this.queryParams.salaryMin) {
         return;
       }
-      if (this.queryParams.minAge && isNaN(Number(this.queryParams.minAge))) {
+      if (isNaN(Number(this.queryParams.salaryMin))) {
         this.$alert('请输入数值');
-        this.queryParams.minAge = '';
-      } else if (this.queryParams.minAge < 18) {
-        this.$alert('年龄不得低于18周岁');
-        this.queryParams.minAge = '';
-      } else if (this.queryParams.minAge > 60) {
-        this.$alert('年龄不得超过60周岁');
-        this.queryParams.minAge = '';
+        this.queryParams.salaryMin = '';
+      } else if (this.queryParams.salaryMin > this.queryParams.salaryMax) {
+        this.$alert('薪酬下限不得低于薪酬上限');
+        this.queryParams.salaryMin = '';
+      } else if (
+        this.queryParams.salaryMax &&
+        this.queryParams.salaryMin * 3 < this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.queryParams.salaryMax = '';
+      }
+    },
+    maxSalaryChange() {
+      if (!this.queryParams.salaryMax) {
+        return;
+      }
+      if (isNaN(Number(this.queryParams.salaryMax))) {
+        this.$alert('请输入数值');
+        this.queryParams.salaryMax = '';
+      } else if (this.queryParams.salaryMin > this.queryParams.salaryMax) {
+        this.$alert('薪酬上限不得高于薪酬下限');
+        this.queryParams.salaryMin = '';
+      } else if (
+        this.queryParams.salaryMin &&
+        this.queryParams.salaryMin * 3 < this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.queryParams.salaryMax = '';
+      }
+    },
+    minAgeChange() {
+      if (!this.queryParams.ageMin) {
+        return;
+      }
+      if (this.queryParams.ageMin && isNaN(Number(this.queryParams.ageMin))) {
+        this.$alert('请输入数值');
+        this.queryParams.ageMin = '';
+      } else if (this.queryParams.ageMin < 16) {
+        this.$alert('年龄下限不得低于16周岁');
+        this.queryParams.ageMin = '';
+      } else if (this.queryParams.ageMin > 60) {
+        this.$alert('年龄下限不得超过60周岁');
+        this.queryParams.ageMin = '';
       }
     },
     maxAgeChange() {
-      if (!this.queryParams.maxAge) {
+      if (!this.queryParams.ageMax) {
         return;
       }
-      if (this.queryParams.maxAge && isNaN(Number(this.queryParams.maxAge))) {
+      if (this.queryParams.ageMax && isNaN(Number(this.queryParams.ageMax))) {
         this.$alert('请输入数值');
-        this.queryParams.maxAge = '';
-      } else if (this.queryParams.maxAge < 18) {
-        this.$alert('年龄不得低于18周岁');
-        this.queryParams.maxAge = '';
-      } else if (this.queryParams.maxAge > 60) {
-        this.$alert('年龄不得超过60周岁');
-        this.queryParams.maxAge = '';
+        this.queryParams.ageMax = '';
+      } else if (this.queryParams.ageMax < 16) {
+        this.$alert('年龄上线不得低于16周岁');
+        this.queryParams.ageMax = '';
+      } else if (this.queryParams.ageMax > 60) {
+        this.$alert('年龄下线不得超过60周岁');
+        this.queryParams.ageMax = '';
       } else if (
-        this.queryParams.minAge &&
-        this.queryParams.minAge * 3 > this.queryParams.maxAge
+        this.queryParams.ageMin &&
+        this.queryParams.ageMin * 3 < this.queryParams.ageMax
       ) {
-        this.$alert('最大年龄不得超过最小年龄的三倍');
-        this.queryParams.maxAge = '';
+        this.$alert('年龄上限不得超过年龄下限的三倍');
+        this.queryParams.ageMax = '';
       }
     },
     clearQueryParams: function() {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.positions = ['不限'];
-      this.queryParams.salaryScope = '不限';
-      this.queryParams.workNature = '不限';
-      this.queryParams.workYearNeed = '不限';
+      this.queryParams.industry = [''];
+      this.queryParams.positionTypeList = [''];
+      this.queryParams.workNature = '';
+      this.queryParams.workYearNeed = '';
     },
     async queryJobs(val) {
       console.log(this.$refs['queryJobFrom'].model);
+      let that = this;
       let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
-      params.content = $.trim(val);
+      params.corpName = $.trim(val);
       try {
         let result = await queryJobs(params);
         console.log('result', result);
-        if (result.status === 200)
+        if (result.status === 200) {
+          result.result.data.forEach(item => {
+            // 转换字典
+            if (item.workArea) {
+              item.workAreaText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.workArea
+              );
+            }
+            if (item.eduRequire) {
+              item.eduRequireText = getDicText(
+                that.$store.getters['dictionary/recruit_edu'],
+                item.eduRequire
+              );
+            }
+            if (item.workNature) {
+              item.workNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_work_nature'],
+                item.workNature
+              );
+            }
+          });
           this.$set(this, 'queryResult', result.result.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -461,7 +527,7 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = '1';
+          this.queryResult[index].favor = true;
           this.$message({ type: 'success', message: '收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '收藏职位失败' });
@@ -474,7 +540,7 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = '0';
+          this.queryResult[index].favor = false;
           this.$message({ type: 'success', message: '取消收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '取消收藏职位失败' });
@@ -489,6 +555,32 @@ export default {
     handleClose() {
       this.detailsDialog = false;
       this.wchatDialog = false;
+    },
+    industryGroupChange(newVal) {
+      if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
+        this.queryParams.industry = [''];
+      } else if (newVal && newVal.length > 1 && newVal.includes('')) {
+        this.queryParams.industry = newVal.filter(item => item !== '');
+      }
+    },
+    positionGroupChange(newVal) {
+      if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
+        this.queryParams.positionTypeList = [''];
+      } else if (newVal && newVal.length && newVal.length > 10) {
+        this.$alert('最多只可选择10种职位');
+        newVal.pop();
+        this.queryParams.positionTypeList = newVal;
+      } else if (newVal && newVal.length > 1 && newVal.includes('')) {
+        this.queryParams.positionTypeList = newVal.filter(item => item !== '');
+      }
+    },
+    perfectResume() {
+      //完善简历
+      this.$router.push('/personInfo');
+    },
+    uploadResume() {
+      //上传简历
+      this.$alert('此功能暂时未开放，请稍候！');
     }
   }
 };
@@ -588,6 +680,9 @@ export default {
   }
   .filter-select {
     text-align: left;
+    .min-size-select {
+      width: 150px !important;
+    }
   }
   .more-ico:hover {
     span,
@@ -598,6 +693,11 @@ export default {
   }
   .more-ico {
     color: #999;
+  }
+  .clear-ico {
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 }
 </style>

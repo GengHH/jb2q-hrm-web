@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-26 17:05:03
+ * @LastEditTime: 2021-03-30 18:48:13
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -148,10 +148,10 @@
     >
       <el-row>
         <el-col :span="1" class="mat-15">
-          <el-checkbox
+          <!-- <el-checkbox
             v-model="checkAll"
             @change="handleCheckAllChange"
-          ></el-checkbox>
+          ></el-checkbox> -->
         </el-col>
         <el-col :span="10">
           <div class="infor-module">
@@ -159,17 +159,18 @@
               class="name-infor font-or"
               @click="showJobDetial(jobItem.positionId)"
             >
-              <span class="positionName"> 项目经理 </span>
-              <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
+              <span class="positionName"> {{ jobItem.positionName }} </span>
+              <i class="bl-bg i-style">见习</i>
+              <span>{{ jobItem.salaryMin }}- {{ jobItem.salaryMax }}</span>
             </p>
             <p class="span-infor">
-              <span>上海</span>
+              <span>上海{{ jobItem.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
+              <span>{{ jobItem.eduRequireText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
+              <span>{{ jobItem.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
+              <span>{{ Number(jobItem.workHour) }}年</span>
               <el-button
                 type="primary"
                 class="gray-btn"
@@ -181,15 +182,15 @@
         </el-col>
         <el-col :span="8">
           <p class="time-p sixteen-opacity">
-            万达信息股份有限公司
+            {{ jobItem.corpName }}
             <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
           </p>
           <p class="span-infor">
-            <span>移动互联网</span>
+            <span>A移动互联网</span>
             <el-divider direction="vertical"></el-divider>
-            <span>股份</span>
+            <span>A股份</span>
             <el-divider direction="vertical"></el-divider>
-            <span>10000人以上</span>
+            <span>A10000人以上</span>
           </p>
         </el-col>
         <el-col :span="5">
@@ -207,13 +208,14 @@
             class="white-btn job-bar-btn"
             @click="favorJob(jobItem.favor, index, jobItem.positionId)"
           >
-            <i v-if="jobItem.favor === '0'" class="el-icon-star-off">收藏</i>
-            <i v-else class="el-icon-star-on">已收藏</i>
+            <i v-if="jobItem.favor" class="el-icon-star-on">已收藏</i>
+            <i v-else class="el-icon-star-off">收藏</i>
           </el-button>
         </el-col>
       </el-row>
       <div class="foot-span">
-        <el-col :span="19">
+        <el-col :span="1"> </el-col>
+        <el-col :span="18">
           <span class="fourteen-opacity marl-65"
             >招聘人数 <i>{{ jobItem.recruitNum }}</i
             >人</span

@@ -7,19 +7,23 @@
           <el-col :span="19">
             <div class="job-title">
               {{ positionData.positionName }}
-              <i class="bl-bg i-style font-size16">见习</i>
+              <i
+                v-if="positionData.tranBaseSymbol === '1'"
+                class="bl-bg i-style font-size16"
+                >见习</i
+              >
               <span class="font-size24 font-or">12k-15k</span>
             </div>
             <div class="sixteen-opacity mat-15">
-              <span>上海静安</span>
+              <span>上海{{ positionData.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
+              <span>{{ positionData.eduRequireText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
+              <span>{{ positionData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
+              <span>经验{{ positionData.workAreaText }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘{{ positionData.recruitNum }}人</span>
+              <span>招聘{{ Number(positionData.workHour) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
               {{ positionData.corpName }}
@@ -29,24 +33,26 @@
                 class="ico_rz"
               />
             </p>
-            <p class="four-opacity mat-15">更新于 2020-11-06</p>
+            <p class="four-opacity mat-15">
+              更新于 {{ positionData.releaseTime }}
+            </p>
           </el-col>
           <el-col :span="5" class="padd-l">
             <el-button type="primary" class="white-btn mat-15"
-              ><i class="el-icon-star-off"></i> 收藏</el-button
+              ><i class="el-icon-star-off"></i>收藏</el-button
             >
             <el-button type="primary" class="release-btn mat-15">
               <i class="el-icon-position"></i>投简历</el-button
             >
             <div class="font12">
-              <el-link :underline="false"
+              <el-link :underline="false" @click="perfectResume"
                 ><img
                   class="ico_rz"
                   src="../../../assets/images/ico-01.png"
                   alt=""
                 />完善在线简历</el-link
               >
-              <el-link :underline="false"
+              <el-link :underline="false" @click="uploadResume"
                 ><img
                   class="ico_rz"
                   src="../../../assets/images/ico-02.png"
@@ -54,7 +60,12 @@
                 />上传附件简历</el-link
               >
             </div>
-            <p class="four-opacity mat-50">发布机构:上海某某职业代理有限公司</p>
+            <p
+              v-if="positionData.tranBaseSymbol === '0'"
+              class="four-opacity mat-50"
+            >
+              发布机构:{{ positionData.corpName }}
+            </p>
           </el-col>
         </el-row>
       </div>
@@ -63,7 +74,7 @@
     <el-row id="jobSearchBox">
       <el-col :span="19" class="middle-box padd-lr bor-r">
         <div class="title-border">职位描述</div>
-        <p class="mat-15 little-tit">岗位职责：</p>
+        <p class="mat-15 little-tit">岗位职责 TODO：</p>
         <p class="little-tit">
           1、负责公司房产的营销推广，并做好相应的渠道开拓，并维护好渠道及客户关系；
         </p>
@@ -80,7 +91,7 @@
         <p class="little-tit">
           6、根据本区域市场状况及具体个案，确定目标项目进行接洽。
         </p>
-        <p class="little-tit">任职要求：</p>
+        <p class="little-tit">任职要求 TODO：</p>
         <p class="little-tit">1.有房产相关经验（有车者优先）</p>
         <p class="little-tit">2.责任心强，业绩能力突出，致力于从事销售工作；</p>
         <p class="little-tit">
@@ -95,13 +106,16 @@
         <div class="title-border mat-15">公司介绍</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
+            {{ positionData.describe }}
+          </p>
+          <!-- <p class="introduce little-tit">
             金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
             经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
             公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易、
             以及房地产相关咨询等专业、完美、全面的不...金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
             经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
             公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易
-          </p>
+          </p> -->
           <span class="look-all"
             >查看全部<i class="el-icon-arrow-down"></i
           ></span>
@@ -111,7 +125,7 @@
           <img src="../../../assets/images/map.png" alt="" />
         </div>
         <div class="title-border mat-15">
-          看过该职位的人还看了
+          看过该职位的人还看了 TODO
           <span class="fr fourteen-opacity">更多职位 > </span>
         </div>
         <el-row>
@@ -157,9 +171,13 @@
           />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
-              王琳 <span class="dqzx-span">当前在线</span>
+              {{ positionData.releaseUserId }}
+              <span class="dqzx-span">当前在线</span>
             </p>
-            <el-button type="primary" class="gray-btn or-br mat-15"
+            <el-button
+              type="primary"
+              class="gray-btn or-br mat-15"
+              @click="callPositionCorp(positionData.positionId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
             >
           </div>
@@ -170,7 +188,7 @@
             src="../../../assets/images/logos.png"
             alt=""
           />
-          <p class="font-sixteen font-or name-p">万达信息股份有限公司</p>
+          <p class="font-sixteen font-or name-p">{{ positionData.corpName }}</p>
         </div>
         <div class="module1">
           <p class="four-opacity">
@@ -238,6 +256,19 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    describeList() {
+      return this.positionData.describe.split('\n');
+    }
+  },
+  methods: {
+    perfectResume() {
+      this.$emit('perfectResume');
+    },
+    uploadResume() {
+      this.$emit('uploadResume');
+    }
   }
 };
 </script>
