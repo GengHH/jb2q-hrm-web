@@ -1,18 +1,17 @@
 <!--
  * @Author: your name
- * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-03-30 20:14:58
+ * @Date: 2021-03-30 18:19:39
+ * @LastEditTime: 2021-03-30 19:51:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
 -->
 <template>
   <el-dialog
-    title="申请"
-    width="70%"
+    title="专家结对记录"
+    width="850px"
     :visible="visible"
     @close="onclose"
-    @open="open"
   >
     <div style="height:500px;overflow: scroll;overflow-x: hidden;">
       <el-form
@@ -218,40 +217,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="可提供服务时间" prop="timeday">
-              <el-select
-                v-model="form.timeday"
-                @change="timedayClick"
-                style="width:100%"
-              >
-                <el-option label="工作日可提供服务" value="workday"></el-option>
-                <el-option label="周末可提供服务" value="weekend"></el-option>
-                <el-option
-                  label="其他时间可提供服务"
-                  value="otherTime"
-                ></el-option>
-              </el-select>
-              <el-input
-                v-if="form.timeday == 'otherTime'"
-                v-model="form.otherTime"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="管理所属区" prop="districtCode">
-              <el-select v-model="form.districtCode" style="width:100%">
-                <el-option
-                  v-for="(v, k) in dicOptions.qx"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
         <el-row>
           <el-col :span="12">
@@ -309,13 +274,50 @@
 </template>
 
 <script>
-import { joinTeam_add } from '../api/index';
 import { trim } from '@/utils/index';
+import {
+  joinTeam_audit,
+  continue_audit,
+  quit_audit,
+  move_audit
+} from '../api/index';
 export default {
-  name: 'managementAdd',
-  props: ['visible', 'form', 'disabled'],
+  name: 'recordDetail',
+  props: ['visible', 'disabled'],
+  components: {},
   data() {
     return {
+      form: {
+        zjlxId: '',
+        zjhm: '',
+        xm: '',
+        sexId: '',
+        birthDate: '',
+        eduId: '',
+        nationId: '',
+        mail: '',
+        contactNumber: '',
+        contactAddress: '',
+        contactDistrict: '',
+        postcode: '',
+        laborInfo: '',
+        majorResult: '',
+        bankName: '',
+        bankaccount: '',
+        psnlPhotoBase64: '',
+        formImageBase64: '',
+        collegesName: '',
+        majorName: '',
+        corpName: '',
+        positionName: '',
+        positionTitle: '',
+        timeday: '',
+        districtCode: '',
+        workday: '',
+        weekend: '',
+        otherTime: '',
+        bankId: ''
+      },
       fileList: [],
       fileList2: [],
       imageUrl: '',
@@ -364,20 +366,8 @@ export default {
   },
   computed: {},
   methods: {
-    open() {},
-    timedayClick(e) {
-      if (e == 'workday') {
-        this.form.workday = 1;
-        this.form.weekend = 0;
-        this.form.otherTime = '';
-      } else if (e == 'weekend') {
-        this.form.workday = 0;
-        this.form.weekend = 1;
-        this.form.otherTime = '';
-      } else {
-        this.form.workday = 0;
-        this.form.weekend = 0;
-      }
+    onsubmit(e) {
+      console.log(e);
     },
     getBase64(file, name) {
       var reader = new FileReader();
@@ -406,25 +396,25 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          joinTeam_add(
-            trim(this.form),
-            res => {
-              if (res.status == 200) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1000,
-                  onClose: () => {
-                    this.onclose();
-                  }
-                });
-              }
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-          );
+          // joinTeam_add(
+          //   trim(this.form),
+          //   res => {
+          //     if (res.status == 200) {
+          //       this.$message({
+          //         message: '操作成功',
+          //         type: 'success',
+          //         duration: 1000,
+          //         onClose: () => {
+          //           this.onclose();
+          //         }
+          //       });
+          //     }
+          //     console.log(res);
+          //   },
+          //   err => {
+          //     console.log(err);
+          //   }
+          // );
         } else {
           console.log('error submit!!');
           return false;
@@ -450,35 +440,4 @@ export default {
   created() {}
 };
 </script>
-<style lang="scss" scoped>
-.userClose {
-  position: absolute;
-  left: 100px;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  cursor: pointer;
-  text-align: center;
-}
-.avatar-uploader {
-  height: 100px;
-  position: absolute;
-  border: 1px solid #dcdfe6;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
-  text-align: center;
-}
-.avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
-}
-</style>
+<style lang="scss" scoped></style>

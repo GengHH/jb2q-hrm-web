@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-03-10 12:58:03
+ * @LastEditTime: 2021-03-30 15:37:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -21,6 +21,7 @@
       :load="loadGetData"
       ref="mutipleTable"
       style="width:100%;"
+      :width="options.width"
       @row-click="clickRow"
       @row-dblclick="dblclickRow"
       @row-contextmenu="contextmenu"
@@ -156,7 +157,7 @@ export default {
     };
   },
   mounted() {},
-
+  watch: {},
   computed: {},
 
   methods: {

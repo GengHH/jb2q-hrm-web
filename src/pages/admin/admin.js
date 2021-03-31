@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-26 17:56:50
+ * @LastEditTime: 2021-03-30 20:12:07
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -43,6 +43,7 @@ Vue.prototype._ = _;
 //安装二次封装组件
 Vue.component(PlTable.name, PlTable);
 Vue.use(PlConfig, {});
+
 // 引入mock配置
 if (config.mock) {
   require('@/mock/admin/index.js');
@@ -53,9 +54,11 @@ let isEmpty = function(obj) {
     return true;
   }
 };
+//性别
 if (isEmpty(store.getters['dictionary/ggjbxx_sex'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_SEX');
 }
+//学历
 if (isEmpty(store.getters['dictionary/recruit_edu'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
 }
@@ -63,24 +66,42 @@ if (isEmpty(store.getters['dictionary/recruit_edu'])) {
 if (isEmpty(store.getters['dictionary/ggjbxx_nationality'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_NATIONALITY');
 }
-if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
-  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
-}
-if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
-  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
-}
-
+//街镇
 if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
 }
+//语言
 if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
 }
+//语言等级
 if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
 }
+//工作性质
 if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+}
+//区县
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+//证件类型
+if (isEmpty(store.getters['dictionary/ggjbxx_zjlx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_ZJLX');
+}
+//银行
+
+if (isEmpty(store.getters['dictionary/sybx_jhh'])) {
+  store.dispatch('dictionary/init_Dictionary', 'SYBX_JHH');
+}
+//专家状态
+if (isEmpty(store.getters['dictionary/recruit_expert_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_STATUS');
+}
+//专家当前状态
+if (isEmpty(store.getters['dictionary/recruit_expert_curr_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_CURR_STATUS');
 }
 
 /* eslint-disable no-new */

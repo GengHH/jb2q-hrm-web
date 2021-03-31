@@ -1,91 +1,107 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-03-26 16:14:06
+ * @LastEditTime: 2021-03-29 18:14:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
  */
 import apiUrlConfig from '../config';
-import { Notification } from 'element-ui';
+import { Notification, Loading } from 'element-ui';
 // import { getAction, postAction } from './allActionManage';
 import axios from 'axios';
 //const basePath = apiUrlConfig.personBasePath;
 const ywBasePath = apiUrlConfig.adminBasePath;
 
+let loading = null;
 
-
-
-function errors(response){
-    if(response.status >= 500){
-        Notification({
-            title: '系统提示',
-            message: '系统繁忙，请稍后再试!',
-            //duration: 4500,
-            type: 'error'
-          });
-    }else if(response.status == 404){
-        Notification({
-            title: '系统提示',
-            message: '很抱歉，资源未找到!',
-            //duration: 4500,
-            type: 'error'
-          });
-    }else{
-        Notification({
-            title: '系统提示',
-            message: '很抱歉，系统出来点故障，请联系管理员!',
-            //duration: 4500,
-            type: 'error'
-          });
-    }
+function startLoading() {
+  loading = Loading.service({
+    lock: true,
+    text: '加载中...',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.5)'
+  });
 }
-function postAction(url,params,fn,fnErr){
-    axios.post(ywBasePath + url, params)
-      .then(function (response) {
-        if(response.status == 200){
-            fn(response.data);
-        }else{
-          errors(response) ;
-        }
-        //console.log(response);
-      })
-      .catch(function (error) {
-        Notification({
-            title: '系统提示',
-            message: '很抱歉，系统出来点故障，请联系管理员!',
-            //duration: 4500,
-            type: 'error'
-          });
-        fnErr(error);
-        //console.log(error);
+
+function endLoading() {
+  loading.close();
+}
+
+function errors(response) {
+  if (response.status >= 500) {
+    Notification({
+      title: '系统提示',
+      message: '系统繁忙，请稍后再试!',
+      //duration: 4500,
+      type: 'error'
+    });
+  } else if (response.status == 404) {
+    Notification({
+      title: '系统提示',
+      message: '很抱歉，资源未找到!',
+      //duration: 4500,
+      type: 'error'
+    });
+  } else {
+    Notification({
+      title: '系统提示',
+      message: '很抱歉，系统出来点故障，请联系管理员!',
+      //duration: 4500,
+      type: 'error'
+    });
+  }
+}
+function postAction(url, params, fn, fnErr) {
+  startLoading();
+  axios
+    .post(ywBasePath + url, params)
+    .then(function(response) {
+      endLoading();
+      if (response.status == 200) {
+        fn(response.data);
+      } else {
+        errors(response);
+      }
+      //console.log(response);
+    })
+    .catch(function(error) {
+      endLoading();
+      Notification({
+        title: '系统提示',
+        message: '很抱歉，系统出来点故障，请联系管理员!',
+        //duration: 4500,
+        type: 'error'
       });
+      fnErr(error);
+      //console.log(error);
+    });
 }
-function getAction(url,params,fn,fnErr){
-    axios.get(url, params)
-      .then(function (response) {
-        if(response.status == 200){
-            fn(response.data);
-        }
-        errors(response) ;
-        //console.log(response);
-      })
-      .catch(function (error) {
-        Notification({
-            title: '系统提示',
-            message: '很抱歉，系统出来点故障，请联系管理员!',
-            //duration: 4500,
-            type: 'error'
-          });
-        fnErr(error);
-        //console.log(error);
+function getAction(url, params, fn, fnErr) {
+  axios
+    .get(url, params)
+    .then(function(response) {
+      if (response.status == 200) {
+        fn(response.data);
+      }
+      errors(response);
+      //console.log(response);
+    })
+    .catch(function(error) {
+      Notification({
+        title: '系统提示',
+        message: '很抱歉，系统出来点故障，请联系管理员!',
+        //duration: 4500,
+        type: 'error'
       });
+      fnErr(error);
+      //console.log(error);
+    });
 }
-
 
 //登陆接口
-const queryLogin = (params,fn,fnErr) => postAction( '/loginController/ywjbIndex', params,fn,fnErr);
-
+const queryLogin = (params, fn, fnErr) =>
+  postAction('/loginController/ywjbIndex', params, fn, fnErr);
 
 function initQuery(obj) {
   let type = obj.type || 'post';
@@ -99,10 +115,10 @@ function initQuery(obj) {
       });
   });
 }
-function allAction(arr,fn,errFn){
+function allAction(arr, fn, errFn) {
   let queryArr = [];
-  for(let i  = 0;i < arr.length;i++){
-    arr[i].url = ywBasePath + arr[i].url  ; 
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].url = ywBasePath + arr[i].url;
     queryArr.push(initQuery(arr[i]));
   }
   let res = Promise.all(queryArr);
@@ -116,10 +132,4 @@ function allAction(arr,fn,errFn){
   );
 }
 
-
-export { 
-    queryLogin,
-    postAction,
-    getAction,
-    allAction
- };
+export { queryLogin, postAction, getAction, allAction };

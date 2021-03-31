@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-03-24 17:07:42
+ * @LastEditTime: 2021-03-30 19:04:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -349,9 +349,6 @@ export default {
   },
   computed: {},
   methods: {
-    abc(e) {
-      console.log(e);
-    },
     onSubmit() {
       this.$refs.value.validate(valid => {
         if (valid) {

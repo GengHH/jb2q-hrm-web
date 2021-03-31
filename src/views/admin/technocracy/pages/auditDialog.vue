@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 13:59:30
- * @LastEditTime: 2021-03-16 15:42:25
+ * @LastEditTime: 2021-03-30 14:44:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\auditDialog.vue
@@ -16,17 +16,80 @@
       <div v-if="auditConfig.type == '3'" class="title-style">转移审核</div>
       <el-form size="small" ref="form" :model="form" label-width="120px">
         <el-form-item label="审核状态">
-          <el-select v-model="form.name" placeholder="请选择审核状态">
+          <el-select
+            v-model="form.verifyResult"
+            @change="selectChange"
+            placeholder="请选择审核状态"
+          >
             <el-option label="通过" value="1"></el-option>
             <el-option label="不通过" value="0"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.region"></el-input>
+        <el-form-item :label="auditConfig.type > 1 ? '理由' : '备注'">
+          <el-input type="textarea" v-model="form.verifyMemo"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item
+          v-if="auditConfig.type == '0' && form.verifyResult == '1'"
+          label="入团时间"
+        >
+          <el-date-picker
+            v-model="form.joinDate"
+            type="date"
+            value-format="yyyyMMdd"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item
+          v-if="auditConfig.type == '0' && form.verifyResult == '2'"
+          label="出团时间"
+        >
+          <el-date-picker
+            v-model="form.outDate"
+            type="date"
+            value-format="yyyyMMdd"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item
+          v-if="auditConfig.type == '0' && form.verifyResult == '3'"
+          label="转移时间"
+        >
+          <el-date-picker
+            v-model="form.moveDate"
+            type="date"
+            value-format="yyyyMMdd"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item
+          v-if="form.verifyResult == '1' && auditConfig.type < 2"
+          label="新聘期时间"
+        >
+          <el-date-picker
+            v-model="form.time"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyyMMdd"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item v-if="form.verifyResult == '3'" label="转入区">
+          <el-select v-model="form.bankName" style="width:100%">
+            <el-option
+              v-for="(v, k) in dicOptions.qx"
+              :key="k"
+              :label="v.label"
+              :value="v.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <div style="text-align:center">
           <el-button type="primary" @click="onSubmit">审核</el-button>
-        </el-form-item>
+        </div>
       </el-form>
     </div>
   </el-dialog>
@@ -34,24 +97,139 @@
 
 <script>
 import tform from '../../common/t_form'; //高级查询
+import {
+  joinTeam_audit,
+  continue_audit,
+  quit_audit,
+  move_audit
+} from '../api/index';
 export default {
   name: 'auditDialog',
   props: ['visible', 'auditConfig'],
   components: { tform },
   data() {
     return {
+      dicOptions: {
+        //区县
+        qx: this.$store.getters['dictionary/ggjbxx_qx']
+      },
       form: {
-        name: '',
-        region: ''
+        verifyResult: '1',
+        region: '',
+        verifyMemo: '',
+        joinDate: '',
+        time: ''
       }
     };
   },
   computed: {},
   methods: {
+    selectChange(e) {
+      console.log(e);
+    },
     onclose() {
       this.$emit('onclose');
     },
-    onSubmit() {}
+    message(type, msg) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {
+          if (type == 'success') {
+            this.onclose();
+          }
+        }
+      });
+    },
+    onSubmit() {
+      let form = this.form;
+      let index = this.auditConfig.type;
+      let row = this.auditConfig.row;
+      if (form.time) {
+        form.startDate = form.time[0];
+        form.endDate = form.time[1];
+      }
+      let data = { ...form };
+      if (data.verifyResult == '0') {
+        if (!data.verifyMemo) {
+          this.$message({
+            message: '请填写备注',
+            type: 'warning'
+          });
+          return;
+        }
+      }
+      //0入团 1续聘 2退团 3转移
+      if (index == '0') {
+        data.innerId = row.innerId;
+        joinTeam_audit(
+          data,
+          res => {
+            if (res.result.data.result) {
+              this.message('success', '操作成功');
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else if (index == '1') {
+        data.renewId = row.renewId;
+        data.expertId = row.expertId;
+        continue_audit(
+          data,
+          res => {
+            if (res.result.data.result) {
+              this.message('success', '操作成功');
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else if (index == '2') {
+        data.quitId = row.quitId;
+        data.expertId = row.expertId;
+        quit_audit(
+          data,
+          res => {
+            if (res.result.data.result) {
+              this.message('success', '操作成功');
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        data.moveId = row.moveId;
+        data.expertId = row.expertId;
+        move_audit(
+          data,
+          res => {
+            if (res.result.data.result) {
+              this.message('success', '操作成功');
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
+    }
   },
   created() {}
 };
