@@ -1,6 +1,9 @@
 <template>
   <div id="indexBody">
-    <base-search @clickButton="queryJobs($event)"></base-search>
+    <base-search
+      placeholder="请输入相关职位名称"
+      @clickButton="queryJobs($event)"
+    ></base-search>
     <!-- S筛选部分 -->
     <div class="filter-content">
       <el-form ref="queryJobFrom" :model="queryParams">
@@ -243,7 +246,7 @@
       showPager
       @deliveryResume="deliveryResume(arguments)"
       @favorJob="favorJob(arguments)"
-      @showJobDetials="showJobDetial($event)"
+      @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
     ></per-search-job>
     <BaseLoadingSvg v-else></BaseLoadingSvg>
@@ -255,8 +258,12 @@
     >
       <job-details
         :positionData="onePosition"
+        :index="detailsIndex"
         @perfectResume="perfectResume"
         @uploadResume="uploadResume"
+        @deliveryResume="deliveryResume(arguments)"
+        @favorJob="favorJob(arguments)"
+        @callPositionCorp="callPositionCorp(arguments)"
       ></job-details>
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
@@ -292,6 +299,7 @@ export default {
   },
   data() {
     return {
+      detailsIndex: null,
       detailsDialog: false,
       wchatDialog: false,
       positionDetailsId: '',
@@ -313,6 +321,7 @@ export default {
         ageMin: '',
         ageMax: '',
         workHour: '',
+        positionName: '',
         corpName: ''
 
         // pid: '1',
@@ -331,7 +340,6 @@ export default {
         //workHour: '01',
         //positionTypeList: '0201',
 
-        // positionName: '链家',
         // salaryPayType: '04',
         // recruitType: '1',
       },
@@ -366,7 +374,10 @@ export default {
       if (isNaN(Number(this.queryParams.salaryMin))) {
         this.$alert('请输入数值');
         this.queryParams.salaryMin = '';
-      } else if (this.queryParams.salaryMin > this.queryParams.salaryMax) {
+      } else if (
+        this.queryParams.salaryMax &&
+        this.queryParams.salaryMin > this.queryParams.salaryMax
+      ) {
         this.$alert('薪酬下限不得低于薪酬上限');
         this.queryParams.salaryMin = '';
       } else if (
@@ -384,7 +395,10 @@ export default {
       if (isNaN(Number(this.queryParams.salaryMax))) {
         this.$alert('请输入数值');
         this.queryParams.salaryMax = '';
-      } else if (this.queryParams.salaryMin > this.queryParams.salaryMax) {
+      } else if (
+        this.queryParams.salaryMin &&
+        this.queryParams.salaryMin > this.queryParams.salaryMax
+      ) {
         this.$alert('薪酬上限不得高于薪酬下限');
         this.queryParams.salaryMin = '';
       } else if (
@@ -442,9 +456,13 @@ export default {
     },
     async queryJobs(val) {
       console.log(this.$refs['queryJobFrom'].model);
+      if (!val) {
+        this.$alert('请输入查询条件');
+        return;
+      }
       let that = this;
       let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
-      params.corpName = $.trim(val);
+      params.positionName = $.trim(val);
       try {
         let result = await queryJobs(params);
         console.log('result', result);
@@ -491,9 +509,11 @@ export default {
           .css('transform', 'rotate(180deg)');
       }
     },
-    showJobDetial(positionId) {
+    showJobDetial(arg) {
       //显示岗位详细信息
-      console.log(positionId);
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      this.detailsIndex = index;
       this.detailsDialog = true;
       this.positionDetailsId = positionId;
     },
@@ -519,8 +539,8 @@ export default {
     async favorJob(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
-      let orginType = arg[2];
-      if (orginType === '0') {
+      let orginFavorType = arg[2];
+      if (!orginFavorType) {
         let res = await doFavorJobs('2', {
           id: positionId,
           pid: this.$store.getters['person/pid']
@@ -623,6 +643,7 @@ export default {
 }
 
 .filter-content {
+  margin-bottom: 20px;
   ::v-deep .el-radio-button__inner {
     border: 0;
   }

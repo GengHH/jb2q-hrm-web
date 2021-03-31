@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 15:25:10
+ * @LastEditTime: 2021-03-31 16:01:19
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -39,7 +39,7 @@ const updatePersonBaseInfo = params =>
   postAction(basePath + '/person/info/savePersonInfo', params);
 //搜索数据库中的已经发布的职位列表信息
 const queryJobs = params =>
-  getAction(basePath + '/person/manage/find/position', params);
+  postAction(basePath + '/person/manage/find/position', params);
 //加载个人权限信息
 const loadPsnlPermissionsInfo = params =>
   getAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
@@ -62,7 +62,7 @@ const saveEduExp = params =>
   postAction(basePath + '/person/resume/saveEduExp', params);
 //修改个人评价（个人描述）
 const savePsnlEvaluate = params =>
-  putAction(basePath + '/person/resume/savePsnlEvaluate', params);
+  postAction(basePath + '/person/resume/savePsnlEvaluate', params);
 //保存个人求职意向信息
 const savePositionLike = params =>
   postAction(basePath + '/person/resume/savePositionLike', params);
@@ -72,7 +72,7 @@ const deleteSomeResume = params =>
 
 //个人投递简历
 const doDeliveryResume = params =>
-  putAction(basePath + '/person/feedback/do-applyFor', params);
+  postAction(basePath + '/person/feedback/do-applyFor', params);
 //个人收藏单位or职位
 const doFavorJobs = (type, params) =>
   postAction(basePath + '/person/manage/find/do-favor/' + type, params);

@@ -1,13 +1,16 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-30 16:26:22
+ * @LastEditTime: 2021-03-31 10:22:54
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
 -->
 <template>
   <div id="indexHeader">
+    <div class="float-log">
+      <img class="logo2" src="@/assets/img/logo2.png" alt="" />
+    </div>
     <div id="indexPageHeader">
       <el-row id="index-title">
         <el-col :sm="24" :md="6" :lg="8" :xl="8" class="text-left">
@@ -160,6 +163,20 @@ export default {
   z-index: 999;
   background-color: $g-white-color;
   //color: $g-white-color !important;
+  .float-log {
+    position: absolute;
+    width: 5%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    img {
+      /* width: 90%; */
+      margin: 0 auto;
+      vertical-align: middle;
+      height: 50px;
+      margin: 20px 0;
+    }
+  }
   #indexPageHeader {
     height: 30px;
     width: 100%;

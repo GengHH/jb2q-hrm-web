@@ -20,7 +20,7 @@
         </el-tab-pane>
       </el-tabs>
       <el-button id="fairListMore" class="more-btn" @click="showMore"
-        >加载更过</el-button
+        >加载更多</el-button
       >
     </div>
   </div>

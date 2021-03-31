@@ -34,7 +34,7 @@
         </el-tab-pane>
       </el-tabs>
       <el-button id="jobListMore" class="more-btn" @click="showMore"
-        >查看更过</el-button
+        >查看更多</el-button
       >
 
       <!-- 单位展示位 -->
@@ -59,7 +59,7 @@
         </el-tab-pane>
       </el-tabs>
       <el-button id="corpListMore" class="more-btn" @click="showMore"
-        >查看更过</el-button
+        >查看更多</el-button
       >
 
       <!-- 首页-招聘会信息列表 -->

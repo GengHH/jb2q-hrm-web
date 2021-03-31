@@ -38,10 +38,7 @@
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
               <br />
-              <a
-                href="#"
-                @click="personSignIn"
-                class="login-btn  login-link-two"
+              <a href="#" @click="corpSignIn" class="login-btn  login-link-two"
                 >去登录</a
               >
             </div>
@@ -79,7 +76,7 @@
         </el-tab-pane>
       </el-tabs>
       <el-button id="jobListMore" class="more-btn" @click="showMore"
-        >查看更过</el-button
+        >查看更多</el-button
       >
 
       <!-- 单位展示位 -->
@@ -104,7 +101,7 @@
         </el-tab-pane>
       </el-tabs>
       <el-button id="corpListMore" class="more-btn" @click="showMore"
-        >查看更过</el-button
+        >查看更多</el-button
       >
 
       <!-- 首页-招聘会信息列表 -->

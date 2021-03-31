@@ -8,7 +8,7 @@
       </div> -->
 
       <!--S 专栏部分 -->
-      <div class="middle-box white-bg padding10 mat-15">
+      <div class="middle-box white-bg ">
         <el-row>
           <el-col :span="12">
             <img width="100%" src="../../../assets/img/img02.png" alt="" />
@@ -127,6 +127,7 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
+  padding-top: 100px;
   margin: 0 auto 150px;
   #activityBox {
     background-color: #fff;

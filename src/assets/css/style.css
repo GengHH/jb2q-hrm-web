@@ -165,6 +165,9 @@ body {
   visibility: hidden;
 }
 
+.el-carousel--horizontal{
+  overflow-y: hidden;
+}
 .el-pager li.active {
   color: #fff !important;
   border-radius: 5px;

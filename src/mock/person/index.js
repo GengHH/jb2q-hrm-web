@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 17:16:32
+ * @LastEditTime: 2021-03-31 16:00:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -202,7 +202,7 @@ Mock.mock(basePath + '/person/resume/saveLaborExp', 'post', function(options) {
 //获取职位信息
 Mock.mock(
   RegExp(basePath + '/person/manage/find/position' + '.*'),
-  'get',
+  'post',
   function(options) {
     return {
       status: 200,
@@ -264,7 +264,7 @@ Mock.mock(basePath + '/person/manage/find/cancle-favor', 'post', function(
   return successData;
 });
 //个人投递简历
-Mock.mock(basePath + '/person/feedback/do-applyFor', 'put', function(options) {
+Mock.mock(basePath + '/person/feedback/do-applyFor', 'post', function(options) {
   return successData;
 });
 //修改个人评价
@@ -440,7 +440,7 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
 });
 
 // TODO 评价职位
-Mock.mock(basePath + '/person/feedback/do-evaluate', 'put', function(options) {
+Mock.mock(basePath + '/person/feedback/do-evaluate', 'post', function(options) {
   return successData;
 });
 export default Mock;

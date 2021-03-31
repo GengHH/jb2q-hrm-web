@@ -12,7 +12,9 @@
                 class="bl-bg i-style font-size16"
                 >见习</i
               >
-              <span class="font-size24 font-or">12k-15k</span>
+              <span class="font-size24 font-or"
+                >{{ positionData.salaryMin }}-{{ positionData.salaryMax }}</span
+              >
             </div>
             <div class="sixteen-opacity mat-15">
               <span>上海{{ positionData.workAreaText }}</span>
@@ -23,7 +25,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>经验{{ positionData.workAreaText }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘{{ Number(positionData.workHour) }}人</span>
+              <span>招聘{{ Number(positionData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
               {{ positionData.corpName }}
@@ -38,10 +40,26 @@
             </p>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <el-button type="primary" class="white-btn mat-15"
-              ><i class="el-icon-star-off"></i>收藏</el-button
+            <el-button
+              type="primary"
+              class="white-btn mat-15"
+              @click="
+                favorJob(positionData.favor, index, positionData.positionId)
+              "
+              ><i v-if="positionData.favor" class="el-icon-star-on">已收藏</i>
+              <i v-else class="el-icon-star-off">收藏</i></el-button
             >
-            <el-button type="primary" class="release-btn mat-15">
+            <el-button
+              type="primary"
+              class="release-btn mat-15"
+              @click="
+                deliveryResume(
+                  positionData.favor,
+                  index,
+                  positionData.positionId
+                )
+              "
+            >
               <i class="el-icon-position"></i>投简历</el-button
             >
             <div class="font12">
@@ -249,6 +267,10 @@
 export default {
   name: 'JobSearchIndex',
   props: {
+    index: {
+      type: Number,
+      default: null
+    },
     positionData: {
       type: Object,
       default: () => {}
@@ -268,6 +290,30 @@ export default {
     },
     uploadResume() {
       this.$emit('uploadResume');
+    },
+    deliveryResume(favor, index, positionId) {
+      //投递简历
+      this.$confirm('确认向该职位投递简历？')
+        .then(() => {
+          this.$emit('deliveryResume', index, positionId); //通知父组件改变。
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    favorJob(favor, index, positionId) {
+      //收藏或者取消收藏职位
+      let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
+      this.$confirm(str)
+        .then(() => {
+          this.$emit('favorJob', index, positionId, favor);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    callPositionCorp(positionId) {
+      this.$emit('callPositionCorp', positionId);
     }
   }
 };

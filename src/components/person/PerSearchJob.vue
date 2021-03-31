@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-30 18:48:13
+ * @LastEditTime: 2021-03-31 16:25:57
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -157,7 +157,7 @@
           <div class="infor-module">
             <p
               class="name-infor font-or"
-              @click="showJobDetial(jobItem.positionId)"
+              @click="showJobDetial(index, jobItem.positionId)"
             >
               <span class="positionName"> {{ jobItem.positionName }} </span>
               <i class="bl-bg i-style">见习</i>
@@ -199,9 +199,7 @@
             class="release-btn"
             @click="selectJob(index, jobItem.positionId)"
           >
-            <i class="el-icon-position"></i>投递{{
-              jobItem.positionId
-            }}</el-button
+            <i class="el-icon-position"></i>投递</el-button
           >
           <el-button
             type="primary"
@@ -308,7 +306,7 @@ export default {
     },
     favorJob(favor, index, positionId) {
       //收藏或者取消收藏职位
-      let str = favor === '0' ? '确认收藏该职位？' : '确认取消收藏该职位？';
+      let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
       this.$confirm(str)
         .then(() => {
           this.$emit('favorJob', index, positionId, favor);
@@ -321,8 +319,8 @@ export default {
       console.log(event);
     },
     handleCheckAllChange() {},
-    showJobDetial(positionId) {
-      this.$emit('showJobDetials', positionId);
+    showJobDetial(index, positionId) {
+      this.$emit('showJobDetials', index, positionId);
     },
     callPositionCorp(index, positionId) {
       this.$emit('callPositionCorp', index, positionId);
