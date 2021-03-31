@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-25 17:11:19
+ * @LastEditTime: 2021-03-30 14:55:35
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -24,71 +24,71 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="未查看" name="unread">
         <pl-table
-          :data="tableData"
-          ref="serveTable1"
+          :data="tableData1"
+          ref="dataTable1"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
         >
-          <template #date="{row}">
+          <template #createTime="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
         </pl-table>
       </el-tab-pane>
       <el-tab-pane label="待处理" name="readed"
         ><pl-table
           :data="tableData2"
-          ref="serveTable2"
+          ref="dataTable2"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
         >
-          <template #date="{row}">
+          <template #createTime="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
       <el-tab-pane label="通知面试" name="interview"
         ><pl-table
           :data="tableData3"
-          ref="serveTable3"
+          ref="dataTable3"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
         >
-          <template #date="{row}">
+          <template #createTime="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
       <el-tab-pane label="通知录用" name="hire"
         ><pl-table
           :data="tableData4"
-          ref="serveTable4"
+          ref="dataTable4"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
         >
-          <template #date="{row}">
+          <template #createTime="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
       <el-tab-pane label="通知不录用" name="unhire"
         ><pl-table
           :data="tableData5"
-          ref="serveTable5"
+          ref="dataTable5"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
         >
-          <template #date="{row}">
+          <template #createTime="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
@@ -113,24 +113,25 @@
         :label-position="labelPosition"
         :rules="rules"
       >
-        <el-form-item
+        <!-- <el-form-item
+          v-if="0 !== 0"
           label="所评价的投递面试记录id"
-          prop="dwMc"
+          prop="applyforId"
           :label-width="formLabelWidth"
         >
           <el-input
-            v-model="jobEvaluationForm.applyForId"
+            v-model="jobEvaluationForm.applyforId"
             :disabled="true"
             autocomplete="off"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           label="单位名称"
-          prop="dwMc"
+          prop="corpName"
           :label-width="formLabelWidth"
         >
           <el-input
-            v-model="jobEvaluationForm.dwMc"
+            v-model="jobEvaluationForm.corpName"
             :disabled="true"
             autocomplete="off"
           ></el-input>
@@ -225,8 +226,9 @@ export default {
         gjz: ''
       },
       jobEvaluationForm: {
+        applyforId: '',
         star: 0,
-        dwMc: '',
+        corpName: '',
         positionName: '',
         content: ''
       },
@@ -236,10 +238,10 @@ export default {
           age: 20,
           date: '2019-05-01',
           star: null,
-          dwMc: '万达信息股份有限公司',
+          corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
-          province: '10k',
-          city: '普陀区',
+          salaryScope: '10k',
+          workArea: '普陀区',
           address: '金沙江路 1518 弄',
           zip: 200333,
           tag: '家',
@@ -250,10 +252,10 @@ export default {
           age: 20,
           date: '2019-05-04',
           star: null,
-          dwMc: '万达信息股份有限公司',
+          corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
-          province: '10k',
-          city: '普陀区',
+          salaryScope: '10k',
+          workArea: '普陀区',
           address: '金沙江路 1517 弄',
           zip: 200333,
           tag: '公司',
@@ -264,10 +266,10 @@ export default {
           age: 20,
           date: '2019-05-03',
           star: null,
-          dwMc: '万达信息股份有限公司',
+          corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
-          province: '10k',
-          city: '普陀区',
+          salaryScope: '10k',
+          workArea: '普陀区',
           address: '金沙江路 1519 弄',
           zip: 200333,
           tag: '家',
@@ -278,10 +280,10 @@ export default {
           age: 20,
           date: '2019-05-02',
           star: null,
-          dwMc: '万达信息股份有限公司',
+          corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
-          province: '10k',
-          city: '普陀区',
+          salaryScope: '10k',
+          workArea: '普陀区',
           address: '金沙江路 1516 弄',
           zip: 200333,
           tag: '公司',
@@ -292,10 +294,10 @@ export default {
           age: 20,
           date: '2019-05-05',
           star: null,
-          dwMc: '万达信息股份有限公司',
+          corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
-          province: '10k',
-          city: '普陀区',
+          salaryScope: '10k',
+          workArea: '普陀区',
           address: '金沙江路 1515 弄',
           zip: 200333,
           tag: '公司',
@@ -324,29 +326,38 @@ export default {
         },
         {
           label: '单位名称',
-          prop: 'dwMc',
+          prop: 'corpName',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
         {
           label: '职位名称',
           prop: 'positionName',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
         {
           label: '职位薪资',
-          prop: 'province',
+          prop: 'salaryScope',
           rowSpan: 'all'
         },
         {
           label: '工作地点',
-          prop: 'city',
-          rowSpan: 'all'
+          prop: 'workArea',
+          rowSpan: 'all',
+          customerRenderText: ({ row }) => {
+            const { workArea } = row;
+            const data = this.$store.getters['dictionary/ggjbxx_qx'] || [];
+            return (
+              data.find(element => (element.value = workArea)).label || workArea
+            );
+          }
         },
         {
           label: '投递时间',
-          prop: 'date',
+          prop: 'createTime',
           formatter: 'date',
-          slotName: 'date'
+          slotName: 'createTime'
         },
         { label: '类别', prop: 'type' },
         // {
@@ -354,8 +365,8 @@ export default {
         //   attrs: { showOverflowTooltip: true },
         //   customerRenderText: ({ row, $index }) => {
         //     //console.log($index);
-        //     const { province, city, address } = row;
-        //     return province + city + address;
+        //     const { salaryScope, workArea, address } = row;
+        //     return salaryScope + workArea + address;
         //   }
         // },
         {
@@ -429,10 +440,8 @@ export default {
               icon: 'el-icon-chat-edit',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                console.log(row);
-                console.log(this);
-                this.jobEvaluationForm.dwMc = row.dwMc;
-                this.jobEvaluationForm.dwMc = row.dwMc;
+                this.jobEvaluationForm.applyforId = row.applyforId;
+                this.jobEvaluationForm.corpName = row.corpName;
                 this.jobEvaluationForm.positionName = row.positionName;
                 this.dialog1 = true;
               },
@@ -443,14 +452,29 @@ export default {
           ]
         }
       ];
+    },
+    selection1() {
+      return this.$refs.dataTable1.multipleSelection;
+    },
+    selection2() {
+      return this.$refs.dataTable2.multipleSelection;
+    },
+    selection3() {
+      return this.$refs.dataTable3.multipleSelection;
+    },
+    selection4() {
+      return this.$refs.dataTable4.multipleSelection;
+    },
+    selection5() {
+      return this.$refs.dataTable5.multipleSelection;
     }
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      //console.log(tab, event);
     },
     handleSelectionChange(val) {
-      console.log(val);
+      //console.log(val);
     },
     handleClose() {
       this.dialog1 = false;
@@ -460,13 +484,69 @@ export default {
     },
     deleteJob() {
       let that = this;
-      if (this.selection && this.selection.length == 0) {
-        this.$alert('请选择一条');
-      } else {
-        // TODO 删除数据
-        that.tableData = that.tableData.filter(
-          obj => !that.selection.some(i => obj.id === i.id)
-        );
+
+      // TODO 删除数据
+      switch (this.activeName) {
+        case 'unread':
+          if (
+            !this.selection1 ||
+            (this.selection1 && this.selection1.length == 0)
+          ) {
+            this.$alert('请选择一条');
+          } else {
+            that.tableData1 = that.tableData1.filter(
+              obj => !that.selection1.some(i => obj.id === i.id)
+            );
+          }
+          break;
+        case 'readed':
+          if (
+            !this.selection2 ||
+            (this.selection2 && this.selection2.length == 0)
+          ) {
+            this.$alert('请选择一条');
+          } else {
+            that.tableData2 = that.tableData2.filter(
+              obj => !that.selection2.some(i => obj.id === i.id)
+            );
+          }
+          break;
+        case 'interview':
+          if (
+            !this.selection3 ||
+            (this.selection3 && this.selection3.length == 0)
+          ) {
+            this.$alert('请选择一条');
+          } else {
+            that.tableData3 = that.tableData3.filter(
+              obj => !that.selection3.some(i => obj.id === i.id)
+            );
+          }
+          break;
+        case 'hire':
+          if (
+            !this.selection4 ||
+            (this.selection4 && this.selection4.length == 0)
+          ) {
+            this.$alert('请选择一条');
+          } else {
+            that.tableData4 = that.tableData4.filter(
+              obj => !that.selection4.some(i => obj.id === i.id)
+            );
+          }
+          break;
+        case 'unhire':
+          if (
+            !this.selection5 ||
+            (this.selection5 && this.selection5.length == 0)
+          ) {
+            this.$alert('请选择一条');
+          } else {
+            that.tableData5 = that.tableData5.filter(
+              obj => !that.selection5.some(i => obj.id === i.id)
+            );
+          }
+          break;
       }
     },
     bindEnter(val) {

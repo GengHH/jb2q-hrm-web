@@ -262,7 +262,7 @@
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
-          @click="dialog4 = true"
+          @click="addLanguageSkills"
           >添加</el-button
         >
       </div>
@@ -349,7 +349,7 @@
         :model="jobIntentionForm"
         ref="jobIntentionForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :rules="rules.positionsLikeRules"
       >
         <el-form-item
           label="意向职位分类"
@@ -357,6 +357,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="jobIntentionForm.positionLike"
             multiple
             placeholder="请选择"
@@ -376,6 +377,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="jobIntentionForm.industryLike"
             placeholder="请选择"
           >
@@ -392,22 +394,22 @@
           <el-col :span="12">
             <el-form-item
               label="薪酬下线"
-              prop="salaryScopeDown"
+              prop="salaryMin"
               :label-width="formLabelWidth"
             >
               <el-input
-                v-model="jobIntentionForm.salaryScopeDown"
+                v-model.number="jobIntentionForm.salaryMin"
                 autocomplete="off"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
             ><el-form-item
               label="薪酬上线"
-              prop="salaryScopeUp"
+              prop="salaryMax"
               :label-width="formLabelWidth"
             >
               <el-input
-                v-model="jobIntentionForm.salaryScopeUp"
+                v-model.number="jobIntentionForm.salaryMax"
                 autocomplete="off"
               ></el-input>
             </el-form-item>
@@ -418,7 +420,11 @@
           prop="workArea"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="jobIntentionForm.workArea" placeholder="请选择">
+          <el-select
+            filterable
+            v-model="jobIntentionForm.workArea"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option1"
               :key="item.value"
@@ -433,7 +439,11 @@
           prop="workNature"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="jobIntentionForm.workNature" placeholder="请选择">
+          <el-select
+            filterable
+            v-model="jobIntentionForm.workNature"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in dicOptions.option2"
               :key="item.value"
@@ -605,6 +615,7 @@
             placeholder="请输入专业"
           ></el-input>
           <!-- <el-select
+          filterable 
             v-model="educationExperienceForm.majorName"
             placeholder="请选择"
           >
@@ -624,6 +635,7 @@
           :label-width="formLabelWidth"
         >
           <el-select
+            filterable
             v-model="educationExperienceForm.eduLevel"
             placeholder="请选择"
           >
@@ -709,6 +721,7 @@
           prop="languageType"
         >
           <el-select
+            filterable
             v-model="languageSkillsForm.languageType"
             placeholder="请选择"
           >
@@ -728,6 +741,7 @@
           prop="languageLevel"
         >
           <el-select
+            filterable
             v-model="languageSkillsForm.languageLevel"
             placeholder="请选择"
           >
@@ -913,16 +927,16 @@ export default {
       // livingAddress: '',
       // workNature: '',
       // positionName: '',
-      //salaryScopeUp: '',
-      //salaryScopeDown: '',
+      //salaryMax: '',
+      //salaryMin: '',
       //workArea: '',
       //positionLike: '',
       jobIntentionForm: {
         workNature: '',
         industryLike: '',
         workArea: '',
-        salaryScopeUp: '',
-        salaryScopeDown: '',
+        salaryMax: '',
+        salaryMin: '',
         positionLike: []
       },
       workExperienceForm: {
@@ -963,6 +977,34 @@ export default {
         evaluate: ''
       },
       rules: {
+        positionsLikeRules: {
+          salaryMin: [
+            {
+              required: true,
+              message: '薪酬下限不能为空',
+              trigger: 'blur'
+            },
+            { type: 'number', message: '请输入数值' },
+            {
+              pattern: /^\d{4,5}$/,
+              message: '月薪介于1000和99999',
+              trigger: 'blur'
+            }
+          ],
+          salaryMax: [
+            {
+              required: true,
+              message: '薪酬上限不能为空',
+              trigger: 'blur'
+            },
+            { type: 'number', message: '请输入数值' },
+            {
+              pattern: /^\d{4,5}$/,
+              message: '月薪介于1000和99999',
+              trigger: 'blur'
+            }
+          ]
+        },
         languageRules: {
           languageType: [
             { required: true, message: '请选择语种', trigger: 'change' }
@@ -978,8 +1020,6 @@ export default {
           ]
         }
       },
-      baseInfoDialog: false,
-      dialogFormVisible2: false,
       dialog1: false,
       dialog2: false,
       dialog3: false,
@@ -1015,8 +1055,8 @@ export default {
         // livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
         // workNature: '01',
         // positionName: '1506'
-        // salaryScopeUp: '10000',
-        // salaryScopeDown: '50000',
+        // salaryMax: '10000',
+        // salaryMin: '50000',
         // workArea: '05',
         // positionLike: '01-04',
         // laborExp: [],
@@ -1036,7 +1076,6 @@ export default {
       ) {
         return getDicText(
           this.$store.getters['dictionary/recruit_work_nature'],
-          'RECRUIT_WORK_NATURE',
           this.resume.workNature
         );
       }
@@ -1046,7 +1085,6 @@ export default {
       if (this.$store.getters['dictionary/ggjbxx_qx'] && this.resume.workArea) {
         return getDicText(
           this.$store.getters['dictionary/ggjbxx_qx'],
-          'GGJBXX_QX',
           this.resume.workArea
         );
       }
@@ -1054,7 +1092,7 @@ export default {
     },
     //薪资范围
     salaryScope: function() {
-      //return this.resume.salaryScopeUp + '-' + this.resume.salaryScopeDown;
+      //return this.resume.salaryMax + '-' + this.resume.salaryMin;
       return this.resume.salaryScope;
     },
 
@@ -1454,14 +1492,14 @@ export default {
               positionLike: this.positionLikeArray,
               workNature: _orginData.workNature,
               workArea: _orginData.workArea,
-              salaryScopeDown: _orginData.salaryScope
-                ? _orginData.salaryScope.split('-')[0]
-                : '',
-              salaryScopeUp: _orginData.salaryScope
+              salaryMin: _orginData.salaryScope
+                ? Number(_orginData.salaryScope.split('-')[0])
+                : 0,
+              salaryMax: _orginData.salaryScope
                 ? _orginData.salaryScope.split('-').length === 2
-                  ? _orginData.salaryScope.split('-')[1]
-                  : ''
-                : ''
+                  ? Number(_orginData.salaryScope.split('-')[1])
+                  : 0
+                : 0
             };
             break;
           case 'dialog2':
@@ -1556,40 +1594,52 @@ export default {
         });
       }
     },
-    async doPositionLike(formName) {
+    doPositionLike(formName) {
       let that = this;
-      that.dialogFormVisible = false;
-      console.log(this[formName]);
-      let params = this.$refs[formName].model;
-      params.positionLike = params.positionLike.join('-');
-      params.pid = this.$store.getters['person/pid'];
-      let saveResult = await savePositionLike(params).catch(() => {
-        that.$message({
-          type: 'error',
-          message: '系统异常，保存失败'
-        });
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          let params = this.$refs[formName].model;
+          params.positionLike = params.positionLike.join('-');
+          params.pid = this.$store.getters['person/pid'];
+          let saveResult = await savePositionLike(params).catch(() => {
+            that.$message({
+              type: 'error',
+              message: '系统异常，保存失败'
+            });
+          });
+          if (saveResult.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            });
+            this.resume.workNature = this.jobIntentionForm.workNature;
+            this.resume.industryLike = this.jobIntentionForm.industryLike;
+            this.resume.workArea = this.jobIntentionForm.workArea;
+            this.resume.salaryMax = this.jobIntentionForm.salaryMax;
+            this.resume.salaryMin = this.jobIntentionForm.salaryMin;
+            this.resume.salaryScope =
+              this.jobIntentionForm.salaryMin +
+              '-' +
+              this.jobIntentionForm.salaryMax;
+            // this.resume.positionLike = this.jobIntentionForm.positionLike
+            //   ? this.jobIntentionForm.positionLike.join('-')
+            //   : '';
+            this.resume.positionLike = this.jobIntentionForm.positionLike;
+            this.jobIntentionForm.positionLike = this.positionLikeArray;
+          } else {
+            this.$message({
+              type: 'error',
+              message: '保存失败'
+            });
+          }
+        }
       });
-      if (saveResult.status === 200) {
-        this.$message({
-          type: 'success',
-          message: '保存成功'
-        });
-        console.log(this.jobIntentionForm.positionLike);
-        this.resume.workNature = this.jobIntentionForm.workNature;
-        this.resume.industryLike = this.jobIntentionForm.industryLike;
-        this.resume.workArea = this.jobIntentionForm.workArea;
-        this.resume.salaryScopeUp = this.jobIntentionForm.salaryScopeUp;
-        this.resume.salaryScopeDown = this.jobIntentionForm.salaryScopeDown;
-        // this.resume.positionLike = this.jobIntentionForm.positionLike
-        //   ? this.jobIntentionForm.positionLike.join('-')
-        //   : '';
-        this.resume.positionLike = this.jobIntentionForm.positionLike;
-        this.jobIntentionForm.positionLike = this.positionLikeArray;
+    },
+    addLanguageSkills() {
+      if (this.psnlLanguageTags && this.psnlLanguageTags.length >= 5) {
+        this.$alert('外语能力最多只能添加5条');
       } else {
-        this.$message({
-          type: 'error',
-          message: '保存失败'
-        });
+        this.dialog4 = true;
       }
     }
   },

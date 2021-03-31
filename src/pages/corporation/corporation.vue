@@ -1,20 +1,15 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
-<<<<<<< HEAD
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-17 11:11:10
-=======
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 18:40:13
->>>>>>> upstream/master
+ * @LastEditTime: 2021-03-31 16:51:00
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
 <template>
   <div id="indexApp">
     <!-- Header -->
-    <HeaderIndex :nav-list="navList" :user-log-info="userLogInfo"></HeaderIndex>
+    <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade">
       <router-view></router-view>
     </transition> -->
@@ -26,12 +21,12 @@
 /**
  * 公司管理系统入口界面
  */
-import HeaderIndex from '@/components/index/HeaderIndex.vue';
+import BaseHeader from '@/components/common/BaseHeader.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
   components: {
-    HeaderIndex
+    BaseHeader
   },
   data() {
     return {

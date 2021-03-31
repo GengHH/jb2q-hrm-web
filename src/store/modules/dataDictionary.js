@@ -1,8 +1,13 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
+<<<<<<< HEAD
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-30 20:13:50
+ * @LastEditTime: 2021-03-31 16:52:01
+=======
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-29 17:20:32
+>>>>>>> upstream/master
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -111,6 +116,7 @@ const state = {
   COMMON_STARTEXT: ['差', '一般', '良', '好', '极好']
 };
 const getters = {
+  common_startext: state => state.COMMON_STARTEXT,
   yesno: state => state.YESNO,
   ggjbxx_qx: state => state.GGJBXX_QX,
   recruit_position_f_type: state => state.RECRUIT_POSITION_F_TYPE,
@@ -121,13 +127,13 @@ const getters = {
   recruit_language_level: state => state.RECRUIT_LANGUAGE_LEVEL,
   recruit_work_nature: state => state.RECRUIT_WORK_NATURE,
   recruit_industry_type: state => state.RECRUIT_INDUSTRY_TYPE,
-  common_startext: state => state.COMMON_STARTEXT,
   ggjbxx_sex: state => state.GGJBXX_SEX,
   ggjbxx_nationality: state => state.GGJBXX_NATIONALITY,
   ggjbxx_zjlx: state => state.GGJBXX_ZJLX,
   sybx_jhh: state => state.SYBX_JHH,
   recruit_expert_curr_status: state => state.RECRUIT_EXPERT_CURR_STATUS,
-  recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS
+  recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS,
+  recruit_work_hour: state => state.RECRUIT_WORK_HOUR
 };
 
 const mutations = {
@@ -184,6 +190,9 @@ const mutations = {
   },
   set_RECRUIT_INDUSTRY_TYPE: (state, dictionary) => {
     state.RECRUIT_INDUSTRY_TYPE = dictionary;
+  },
+  set_RECRUIT_WORK_HOUR: (state, dictionary) => {
+    state.RECRUIT_WORK_HOUR = dictionary;
   }
 };
 
