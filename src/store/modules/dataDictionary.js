@@ -1,13 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
-<<<<<<< HEAD
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2021-03-31 16:52:01
-=======
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-29 17:20:32
->>>>>>> upstream/master
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */

@@ -456,13 +456,18 @@ export default {
     },
     async queryJobs(val) {
       console.log(this.$refs['queryJobFrom'].model);
-      if (!val) {
-        this.$alert('请输入查询条件');
-        return;
-      }
+      // if (!val) {
+      //   this.$alert('请输入查询条件');
+      //   return;
+      // }
       let that = this;
       let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
       params.positionName = $.trim(val);
+      params.pageParam = {
+        total: 0,
+        pageSize: 10,
+        pageIndex: 0
+      };
       try {
         let result = await queryJobs(params);
         console.log('result', result);
