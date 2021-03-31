@@ -1,11 +1,44 @@
+/* eslint-disable no-case-declarations */
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 20:19:27
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-31 16:52:12
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
+
+/**
+ * 判断是不是个人和单位都没有登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isNoBody(vm) {
+  let a =
+    !!vm &&
+    !!vm.$store &&
+    (!!vm.$store.getters['person/token'] ||
+      !!vm.$store.getters['corporation/token']);
+  return !a;
+}
+
+/**
+ * 判断是不是个人登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isPerson(vm) {
+  return vm && vm.$store && vm.$store.getters['person/token'];
+}
+
+/**
+ * 判断是不是单位登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isCorporation(vm) {
+  return vm && vm.$store && vm.$store.getters['corporation/token'];
+}
 
 /**
  * 获取随机key
@@ -97,10 +130,10 @@ export function filterObject(val, omit = DEFAULT_OMIT) {
 /**
  * 获取字典表中的某项TEXT
  * @param {Array} data
- * @param {String} code
+ * @param {String} value
  */
-export function getDicText(data, code, value) {
-  if (isArray(data) && data.length && code && value) {
+export function getDicText(data, value) {
+  if (isArray(data) && data.length && value) {
     let _dic = data.find(function(i) {
       return i.value === value;
     });
@@ -120,6 +153,9 @@ export function queryParams(
   isPrefix = true,
   arrayFormat = 'brackets'
 ) {
+  if (typeof data !== 'object') {
+    return '?' + data;
+  }
   let prefix = isPrefix ? '?' : '';
   let _result = [];
   if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1)
@@ -170,4 +206,66 @@ export function queryParams(
     }
   }
   return _result.length ? prefix + _result.join('&') : '';
+}
+
+/**
+ * 时间格式化
+ * @param {*} date
+ */
+let formatNumber = n => {
+  n = n.toString();
+  return n[1] ? n : '0' + n;
+};
+export function formatTime(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+
+  return (
+    [year, month, day].map(formatNumber).join('-') +
+    ' ' +
+    [hour, minute, second].map(formatNumber).join(':')
+  );
+}
+/**
+ * 去除空格
+ */
+export function trim(data) {
+  if (data == null || data == undefined) {
+    return '不是一个字符串或者对象';
+  }
+  if (typeof data === 'string') {
+    return data.trim();
+  } else if (typeof data === 'object') {
+    if (data.constructor === Array) {
+      if (data.length) {
+        if (data[0].constructor === Object) {
+          for (let i = 0; i < data.length; i++) {
+            for (let j in data[i]) {
+              data[i][j] =
+                typeof data[i][j] == 'string' ? data[i][j].trim() : data[i][j];
+            }
+          }
+          return data;
+        } else {
+          for (let i = 0; i < data.length; i++) {
+            data[i] = typeof data[i] == 'string' ? data[i].trim() : data[i];
+          }
+          return data;
+        }
+      } else {
+        return '空数组';
+      }
+    } else if (data.constructor === Object) {
+      for (let i in data) {
+        data[i] = typeof data[i] == 'string' ? data[i].trim() : data[i];
+      }
+      return data;
+    }
+  } else {
+    return '不是一个字符串或者对象';
+  }
 }

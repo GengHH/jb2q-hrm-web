@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-03-15 15:20:21
+ * @LastEditTime: 2021-03-26 13:59:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -16,46 +16,49 @@
         <el-row>
           <el-col :md="9" :lg="9" :xl="9" class="bg-purple">
             <div>
-              <span class="listTiele">{{ v.aaa001 }}</span>
-              <span class="listSubTiele">{{ v.aaa002 }}</span>
+              <span class="listTiele">{{ v.xm }}</span>
+              <span class="listSubTiele">{{ v.sex }}</span>
               <span
                 ><el-tag
                   size="small"
-                  :class="[!!v.aaa007 ? 'yesColor' : 'noColor']"
-                  >{{ !!v.aaa007 ? '已就业' : '未就业' }}</el-tag
+                  :class="[!!v.registerRecruit ? 'yesColor' : 'noColor']"
+                  >{{ !!v.registerRecruit ? '已就业' : '未就业' }}</el-tag
                 ></span
               >
             </div>
             <div style="margin-top:15px">
-              <span class="listSubTiele">{{ v.aaa004 }}</span
+              <span class="listSubTiele">{{ v.zjhm }}</span
               ><el-divider direction="vertical"></el-divider>
-              <span class="listSubTiele">{{ v.aaa005 }}</span
+              <span class="listSubTiele">{{ v.birthDate }}</span
               ><el-divider direction="vertical"></el-divider>
-              <span class="listSubTiele">{{ v.aaa006 }}</span>
+              <span class="listSubTiele">{{ v.specialFocus }}</span>
             </div>
           </el-col>
           <el-col :md="5" :lg="5" :xl="5" style="text-align: center;">
             <div style="margin-top:20px">
               <span class="listSubTiele">是否注册平台账号</span
-              ><el-checkbox :checked="!!v.aaa003" disabled></el-checkbox>
+              ><el-checkbox :checked="!!v.employStatus" disabled></el-checkbox>
             </div>
           </el-col>
           <el-col :md="10" :lg="10" :xl="10" style="text-align: right;">
             <div style="margin-top:20px;font-weight: 600;">
               <span
-                @mouseover="show = true"
-                @mouseout="show = false"
+                @mouseover="v.titleListShow = true"
+                @mouseout="v.titleListShow = false"
                 style="color:#fc7a43;position: relative;cursor: pointer;"
                 ><i class="el-icon-caret-bottom"></i> 求职档案
-                <div class="selectList" v-show="show">
+                <div class="selectList" v-show="v.titleListShow">
                   <ul>
                     <li
                       @click="liClick(k0)"
-                      v-for="(v0, k0) in titleList"
+                      v-for="(v0, k0) in v.titleList"
                       :key="k0"
                     >
                       <span> {{ v0.title }}</span>
-                      <div v-if="k0 != titleList.length - 1" class="line"></div>
+                      <div
+                        v-if="k0 != v.titleList.length - 1"
+                        class="line"
+                      ></div>
                     </li>
                   </ul>
                 </div>
@@ -96,17 +99,19 @@
             >
           </el-col>
           <el-col :md="6" :lg="6" :xl="6" style="text-align: right;">
-            <span class="listSubTiele">列表名单起始时间：{{ v.aaa010 }}</span>
+            <span class="listSubTiele"
+              >列表名单起始时间：{{ v.updateTime }}</span
+            >
           </el-col>
         </el-row>
       </div>
       <el-pagination
         @size-change="handleChange"
         @current-change="handleChange"
-        :current-page.sync="pageList.currentPage"
-        :page-size="pageList.pageSize"
+        :current-page.sync="pageListData.pageIndex"
+        :page-size="pageListData.pageSize"
         layout="prev, pager, next, jumper"
-        :total="pageList.total"
+        :total="pageListData.total"
       >
       </el-pagination>
     </div>
@@ -117,6 +122,7 @@
       @evclose="dialogTableVisible = false"
     >
     </pagelist>
+
     <recommend :visible="visible" @onclose="visible = false"></recommend>
   </div>
 </template>
@@ -126,7 +132,7 @@ import pagelist from './pageList';
 import recommend from '../pages/recommend'; //推荐职位
 export default {
   name: 'queryList',
-  props: ['pageList', 'dataList'],
+  props: ['pageListData', 'dataList'],
   components: {
     pagelist,
     recommend
@@ -136,19 +142,7 @@ export default {
       pagelistIndex: {},
       //遮罩开关
       visible: false,
-      dialogTableVisible: false,
-      show: false,
-      titleList: [
-        { title: '个人基本信息' },
-        { title: '简历信息' },
-        { title: '劳动经历' },
-        { title: '社保缴费记录' },
-        { title: '就业见习记录' },
-        { title: '简历投递及反馈记录' },
-        { title: '职位评论记录' },
-        { title: '职位收藏记录' },
-        { title: '就业服务记录' }
-      ]
+      dialogTableVisible: false
     };
   },
   computed: {},

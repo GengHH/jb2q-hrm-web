@@ -1,0 +1,443 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-03-30 18:19:39
+ * @LastEditTime: 2021-03-30 19:51:05
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
+-->
+<template>
+  <el-dialog
+    title="专家结对记录"
+    width="850px"
+    :visible="visible"
+    @close="onclose"
+  >
+    <div style="height:500px;overflow: scroll;overflow-x: hidden;">
+      <el-form
+        ref="form"
+        :disabled="disabled"
+        :rules="rules"
+        :model="form"
+        label-width="150px"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="xm">
+              <el-input v-model="form.xm"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="证件照">
+              <el-upload
+                action=""
+                class="avatar-uploader"
+                :on-remove="handleRemove"
+                :file-list="fileList2"
+                :auto-upload="false"
+                :on-change="uploadUserChange"
+                :before-upload="beforeAvatarUpload"
+                :limit="1"
+                :show-file-list="false"
+              >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <div
+                class="userClose"
+                @click="
+                  imageUrl = '';
+                  fileList2 = [];
+                "
+              >
+                <i class="el-icon-close"></i>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="出生年月" prop="birthDate">
+              <el-date-picker
+                v-model="form.birthDate"
+                type="date"
+                style="width:100%"
+                value-format="yyyyMMdd"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12"> </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="民族">
+              <el-select v-model="form.region" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.nationality"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="sexId">
+              <el-select v-model="form.sexId" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.sex"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="证件类型" prop="zjlxId">
+              <el-select v-model="form.zjlxId" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.type"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱">
+              <el-input v-model="form.mail"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="毕业学校">
+              <el-input v-model="form.collegesName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="证件号码" prop="zjhm">
+              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="专业">
+              <el-input v-model="form.majorName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="学历" prop="eduId">
+              <el-select v-model="form.eduId" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.edu"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="职务">
+              <el-input v-model="form.positionName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="工作单位">
+              <el-input v-model="form.corpName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="联系电话">
+              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="职称">
+              <el-input v-model="form.positionTitle"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="联系住址所属区" prop="contactDistrict">
+              <el-select v-model="form.contactDistrict" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.qx"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮编">
+              <el-input v-model="form.postcode"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="联系住址（详细住址）" prop="contactAddress">
+              <el-input v-model="form.contactAddress"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="个人工作经历及主要业绩（起止年月）">
+              <el-input
+                :autosize="{ minRows: 5, maxRows: 7 }"
+                type="textarea"
+                v-model="form.laborInfo"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="曾获荣誉、专业成果及担任社会职务">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 7 }"
+                v-model="form.majorResult"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="银行账号" prop="bankaccount">
+              <el-input v-model="form.bankaccount"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开户银行" prop="bankId">
+              <el-select v-model="form.bankId" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.jhh"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="16">
+            <el-form-item label="签字后的登记表">
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action=""
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false"
+                :on-change="uploadChange"
+                :before-upload="beforeAvatarUpload"
+                :limit="1"
+              >
+                <el-button slot="trigger" size="small" type="primary"
+                  >选取文件</el-button
+                >
+                <div
+                  slot="tip"
+                  class="el-upload__tip"
+                  style="display: inline-block;margin-top: 0px;margin-left: 10px;"
+                >
+                  只能上传1张jpg/png格式文件，且不超过2MB
+                </div>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div v-if="!disabled" style="text-align:center">
+          <el-button type="primary" @click="onSubmit">保存</el-button>
+        </div>
+      </el-form>
+    </div>
+  </el-dialog>
+</template>
+
+<script>
+import { trim } from '@/utils/index';
+import {
+  joinTeam_audit,
+  continue_audit,
+  quit_audit,
+  move_audit
+} from '../api/index';
+export default {
+  name: 'recordDetail',
+  props: ['visible', 'disabled'],
+  components: {},
+  data() {
+    return {
+      form: {
+        zjlxId: '',
+        zjhm: '',
+        xm: '',
+        sexId: '',
+        birthDate: '',
+        eduId: '',
+        nationId: '',
+        mail: '',
+        contactNumber: '',
+        contactAddress: '',
+        contactDistrict: '',
+        postcode: '',
+        laborInfo: '',
+        majorResult: '',
+        bankName: '',
+        bankaccount: '',
+        psnlPhotoBase64: '',
+        formImageBase64: '',
+        collegesName: '',
+        majorName: '',
+        corpName: '',
+        positionName: '',
+        positionTitle: '',
+        timeday: '',
+        districtCode: '',
+        workday: '',
+        weekend: '',
+        otherTime: '',
+        bankId: ''
+      },
+      fileList: [],
+      fileList2: [],
+      imageUrl: '',
+
+      dicOptions: {
+        //性别
+        sex: trim(this.$store.getters['dictionary/ggjbxx_sex']),
+        //民族
+        nationality: trim(this.$store.getters['dictionary/ggjbxx_nationality']),
+        //证件类型
+        type: trim(this.$store.getters['dictionary/ggjbxx_zjlx']),
+        //银行
+        jhh: trim(this.$store.getters['dictionary/sybx_jhh']),
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        //学历
+        edu: trim(this.$store.getters['dictionary/recruit_edu'])
+      },
+      rules: {
+        zjlxId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        sexId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        birthDate: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        eduId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        contactAddress: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        contactDistrict: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        districtCode: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        timeday: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        bankName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        bankaccount: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ]
+      }
+    };
+  },
+  computed: {},
+  methods: {
+    onsubmit(e) {
+      console.log(e);
+    },
+    getBase64(file, name) {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function() {
+        console.log(reader.result);
+        this[name] = reader.result;
+      };
+      reader.onerror = function(error) {
+        console.log('Error: ', error);
+      };
+    },
+    //登记表base64
+    uploadChange(file) {
+      this.getBase64(file.raw, 'formImageBase64');
+    },
+    //照片base64
+    uploadUserChange(file) {
+      this.getBase64(file.raw, 'psnlPhotoBase64');
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+
+    onSubmit() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          // joinTeam_add(
+          //   trim(this.form),
+          //   res => {
+          //     if (res.status == 200) {
+          //       this.$message({
+          //         message: '操作成功',
+          //         type: 'success',
+          //         duration: 1000,
+          //         onClose: () => {
+          //           this.onclose();
+          //         }
+          //       });
+          //     }
+          //     console.log(res);
+          //   },
+          //   err => {
+          //     console.log(err);
+          //   }
+          // );
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    onclose() {
+      this.$emit('onclose');
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
+    }
+  },
+  created() {}
+};
+</script>
+<style lang="scss" scoped></style>

@@ -52,14 +52,15 @@ export default {
 #indexFooter {
   height: 130px;
   width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  // position: fixed;
+  // left: 0;
+  // bottom: 0;
   background-color: #fc7a43;
   z-index: 999;
   //position: relative;
   .el-row {
-    margin-top: 15px;
+    //margin-top: 15px;
+    padding-top: 15px;
     .ba-info {
       text-align: center;
     }

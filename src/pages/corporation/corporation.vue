@@ -1,15 +1,15 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
- * @LastEditors: GengHH
- * @LastEditTime: 2021-01-27 18:16:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-31 16:51:00
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
 <template>
   <div id="indexApp">
     <!-- Header -->
-    <HeaderIndex :nav-list="navList"></HeaderIndex>
+    <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade">
       <router-view></router-view>
     </transition> -->
@@ -21,14 +21,14 @@
 /**
  * 公司管理系统入口界面
  */
-import HeaderIndex from '@/components/index/HeaderIndex.vue';
+import BaseHeader from '@/components/common/BaseHeader.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
   components: {
-    HeaderIndex
+    BaseHeader
   },
-  data: () => {
+  data() {
     return {
       path: require('@/assets/logo.png'),
       list: testData.list,
@@ -36,12 +36,38 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList: [
+        {
+          id: '7',
+          path: '/blak1',
+          nvaText: '时钟',
+          icon: true,
+          iconName: 'el-icon-time'
+        },
+        {
+          id: '6',
+          path: '/remind',
+          nvaText: '铃铛',
+          icon: true,
+          iconName: 'el-icon-bell'
+        },
         { id: '5', path: '/jobFair', nvaText: '招聘会' },
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },
         { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
         { id: '1', path: '/', nvaText: '单位信息维护' }
-      ]
+      ],
+      userLogInfo: {
+        id: 'user',
+        path: '/user',
+        nvaText: this.$store.getters['corporation/username'] || '临时单位',
+        subMenu: [
+          {
+            id: '/logout',
+            path: '',
+            nvaText: '退出'
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -60,7 +86,7 @@ export default {
   },
   created() {
     // console.log("index begin creating");
-    // console.log(this);
+    console.log(this.$store);
     // console.log(this.$data);
     // this.axios.get('/admin/index').then(res =>{
     //   this.$set(this.obj,'siet',res.data)

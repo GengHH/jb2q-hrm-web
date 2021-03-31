@@ -133,7 +133,16 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(response => {
-  return response.data;
+  let _data = response.data;
+  if (_data && typeof _data === 'string' && _data.includes('!DOCTYPE')) {
+    Notification({
+      title: '系统提示',
+      type: 'error',
+      dangerouslyUseHTMLString: true,
+      message: _data
+    });
+  }
+  return _data;
 }, err);
 
 // 封装成VueAxios安装器

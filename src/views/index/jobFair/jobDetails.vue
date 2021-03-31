@@ -404,17 +404,17 @@ export default {
   .mat-30 {
     margin-top: 30px;
   }
-  .white-btn {
-    color: #fc6f3d;
-    background-color: #fff;
-    border-color: #ff9954;
-  }
-  .release-btn {
-    background-color: #fc7a43;
-    font-size: 14px;
-    color: #fff;
-    border-color: #fc7a43;
-  }
+  // .white-btn {
+  //   color: #fc6f3d;
+  //   background-color: #fff;
+  //   border-color: #ff9954;
+  // }
+  // .release-btn {
+  //   background-color: #fc7a43;
+  //   font-size: 14px;
+  //   color: #fff;
+  //   border-color: #fc7a43;
+  // }
   .font12 {
     font-size: 12px;
     color: #656565;

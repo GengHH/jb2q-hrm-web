@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-15 10:35:14
+ * @LastEditTime: 2021-03-19 17:52:08
  * @Description: 各个环境的相关配置
  * @FilePath: \jb2q-hrm-web\config\index.js
  */
@@ -47,11 +47,11 @@ module.exports = {
       },
       //本地开发的后台机器（nginx指向单独的一台测试机）
       '/new-common-api': {
-        target: 'http://localhost:8099/new-common-api',
+        target: 'http://localhost:8080/new-common-api',
         //target: '10.5.102.154:8080/new-pers-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/new-common-api': ''
+          '^/new-common-api': '' 
         }
       },
       '/new-pers-api': {
@@ -70,13 +70,12 @@ module.exports = {
           '^/new-corp-api': ''
         }
       },
-      '/test': {
-        
-        target: 'https://j2testzzjb.rsj.sh.cegn.cn/ggzp-ywjb-shrs',
+      '/new-admin-api': {
+        target: 'http://localhost:8080/ggzp-ywjb-shrs',
         //target: process.env.VUE_APP_BASE_URL + '/new-corp-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/test': ''
+          '^/new-admin-api': ''
         }
       }
     },

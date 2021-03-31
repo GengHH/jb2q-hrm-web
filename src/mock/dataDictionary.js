@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 13:58:56
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-30 20:11:47
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -50,7 +50,56 @@ const dic = {
     { value: '15', label: '其他' }
   ],
   //行业分类
-  RECRUIT_INDUSTRY_TYPE: [],
+  RECRUIT_INDUSTRY_TYPE: [
+    { value: '01', label: '计算机软件/硬件' },
+    { value: '02', label: '计算机系统/维修' },
+    { value: '03', label: '通信(设备/运营' },
+    { value: '04', label: '互联网/电子商务' },
+    { value: '05', label: '网络游戏' },
+    { value: '06', label: '电子/半导体/集成电路' },
+    { value: '07', label: '仪器仪表/工业自动化' },
+    { value: '08', label: '会计/审计' },
+    { value: '09', label: '金融(投资/证券' },
+    { value: '10', label: '金融(银行/保险' },
+    { value: '11', label: '贸易/进出口' },
+    { value: '12', label: '批发/零售' },
+    { value: '13', label: '消费品(食/饮/烟酒)' },
+    { value: '14', label: '服装/纺织/皮革' },
+    { value: '15', label: '家具/家电/工艺品' },
+    { value: '16', label: '办公用品及设备' },
+    { value: '17', label: '机械/设备/重工' },
+    { value: '18', label: '汽车/摩托车/零配件' },
+    { value: '19', label: '制药/生物工程' },
+    { value: '20', label: '医疗/美容/保健' },
+    { value: '21', label: '医疗设备/器械' },
+    { value: '22', label: '广告/市场推广' },
+    { value: '23', label: '会展/博览' },
+    { value: '24', label: '影视/媒体/艺术' },
+    { value: '25', label: '印刷/包装/造纸' },
+    { value: '26', label: '房地产开发' },
+    { value: '27', label: '建筑与工程' },
+    { value: '28', label: '家居/室内设计/装潢' },
+    { value: '29', label: '物业管理/商业中心' },
+    { value: '30', label: '中介服务/家政服务' },
+    { value: '31', label: '专业服务/财会/法律' },
+    { value: '32', label: '检测/认证' },
+    { value: '33', label: '教育/培训' },
+    { value: '34', label: '学术/科研' },
+    { value: '35', label: '餐饮/娱乐/休闲' },
+    { value: '36', label: '酒店/旅游' },
+    { value: '37', label: '交通/运输/物流' },
+    { value: '38', label: '航天/航空' },
+    { value: '39', label: '能源(石油/化工/矿产)' },
+    { value: '40', label: '能源(采掘/冶炼/原材料)' },
+    { value: '41', label: '电力/水利/新能源' },
+    { value: '42', label: '政府部门/事业单位' },
+    { value: '43', label: '非盈利机构/行业协会' },
+    { value: '44', label: '农业/渔业/林业' },
+    { value: '45', label: '其他行业' },
+    { value: '46', label: '水利/环境和公共设施管理业' },
+    { value: '47', label: '国际组织' },
+    { value: '99', label: '其他' }
+  ],
   //特定人群
   RECRUIT_SPECIAL_PEOPLE: [],
   //工作性质
@@ -220,7 +269,11 @@ const dic = {
   //重点人员类型
   RECRUIT_POINT_TYPE: [],
   //专家状态
-  RECRUIT_EXPERT_STATUS: [],
+  RECRUIT_EXPERT_STATUS: [
+    { value: '1', label: '新聘' },
+    { value: '2', label: '续聘' },
+    { value: '3', label: '退团' }
+  ],
   //专家活动类型
   RECRUIT_ACT_TYPE: [],
   //专家活动日期类型
@@ -507,6 +560,94 @@ const dic = {
     { value: '0111', label: '淮海中路街道', filter: '01' },
     { value: '0112', label: '打浦桥街道', filter: '01' },
     { value: '0113', label: '瑞金二路街道', filter: '01' }
+  ],
+  //性别
+  GGJBXX_SEX: [
+    { value: '0', label: '未知的性别' },
+    { value: '1', label: '男' },
+    { value: '2', label: '女' },
+    { value: '3', label: '女性改男性' },
+    { value: '4', label: '男性改(变)为女性' },
+    { value: '9', label: '未说明的性别' }
+  ],
+  //民族
+  GGJBXX_NATIONALITY: [
+    { value: '01', label: '	汉族' },
+    { value: '81', label: '	穿青人' },
+    { value: '03', label: '	回族' },
+    { value: '04', label: '	藏族' },
+    { value: '05', label: '	维吾尔族' },
+    { value: '06', label: '	苗族' },
+    { value: '07', label: '	彝族' },
+    { value: '08', label: '	壮族' },
+    { value: '09', label: '	布依族' },
+    { value: '10', label: '	朝鲜族' },
+    { value: '11', label: '	满族' },
+    { value: '12', label: '	侗族' },
+    { value: '13', label: '	瑶族' },
+    { value: '14', label: '	白族' },
+    { value: '15', label: '	土家族' },
+    { value: '16', label: '	哈尼族' },
+    { value: '17', label: '	哈萨克族' },
+    { value: '18', label: '	傣族' },
+    { value: '19', label: '	黎族' },
+    { value: '20', label: '	傈僳族' },
+    { value: '21', label: '	佤族' },
+    { value: '22', label: '	畲族' },
+    { value: '23', label: '	高山族' },
+    { value: '24', label: '	拉祜族' },
+    { value: '25', label: '	水族' },
+    { value: '26', label: '	东乡族' },
+    { value: '27', label: '	纳西族' },
+    { value: '28', label: '	景颇族' },
+    { value: '29', label: '	柯尔克孜族' }
+  ],
+  GGJBXX_ZJLX: [
+    { value: '01', label: '身份证' },
+    { value: '02', label: '其他证件' }
+  ],
+  SYBX_JHH: [
+    { value: '000001', label: '	上海银行                 ' },
+    { value: '000003', label: '	工商银行                 ' },
+    { value: '000002', label: '	农业银行                 ' },
+    { value: '000005', label: '	邮政局                   ' },
+    { value: '000006', label: '	招商银行                 ' },
+    { value: '000007', label: '	浦东发展银行             ' },
+    { value: '000033', label: '	渤海银行                 ' },
+    { value: '000037', label: '	华一银行                 ' },
+    { value: '000049', label: '	恒生银行                 ' },
+    { value: '000050', label: '	大新银行                 ' },
+    { value: '000046', label: '	浙江民泰商业银行         ' },
+    { value: '000055', label: '	金山惠民村镇银行         ' },
+    { value: '000019', label: '	澳新银行                 ' },
+    { value: '000020', label: '	德累斯登银行             ' },
+    { value: '000021', label: '	德意志银行               ' },
+    { value: '000022', label: '	法国巴黎银行             ' },
+    { value: '000023', label: '	东方汇理银行             ' },
+    { value: '000024', label: '	荷兰银行                 ' },
+    { value: '000025', label: '	花旗银行                 ' },
+    { value: '000026', label: '	美国银行                 ' },
+    { value: '000027', label: '	渣打银行                 ' },
+    { value: '000028', label: '	宁波银行                 ' },
+    { value: '000029', label: '	瑞穗实业银行             ' },
+    { value: '000030', label: '	三井住友银行             ' },
+    { value: '000031', label: '	三菱东京日联银行         ' },
+    { value: '000044', label: '	温州银行                 ' },
+    { value: '000047', label: '	浙江稠州商业银行上海分行  ' },
+    { value: '000048', label: '	星展银行                 ' },
+    { value: '000004', label: '	交通银行                 ' }
+  ],
+  //专家当前状态
+  RECRUIT_EXPERT_CURR_STATUS: [
+    { value: '01', label: '新聘未审核' },
+    { value: '02', label: '新聘审核通过' },
+    { value: '03', label: '新聘审核不通过' },
+    { value: '04', label: '续聘未审核' },
+    { value: '05', label: '续聘审核通过' },
+    { value: '06', label: '续聘审核不通过' },
+    { value: '07', label: '退团未审核' },
+    { value: '08', label: '退团审核通过' },
+    { value: '09', label: '退团审核不通过' }
   ]
 };
 

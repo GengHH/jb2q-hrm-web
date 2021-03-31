@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-03-15 15:09:39
+ * @LastEditTime: 2021-03-19 09:26:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -180,7 +180,7 @@ export default {
       });
     },
     async handleShow(fn) {
-      await this.handleAsync().then(res => {
+      await this.handleAsync().then(() => {
         fn();
       });
     }
@@ -214,7 +214,7 @@ export default {
         h1 {
           padding: 10px 0;
           display: inline-block;
-          font-size: 16px;
+          font-size: 20px;
           color: #585858;
           border-bottom: 2px solid $g-mian-color;
         }

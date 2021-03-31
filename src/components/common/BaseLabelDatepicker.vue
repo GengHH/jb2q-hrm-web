@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-12 16:28:03
+ * @LastEditTime: 2021-03-18 15:04:00
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelDatepicker.vue
 -->
@@ -32,7 +32,7 @@
 </template>
 <script>
 export default {
-  name: 'pl-data-picker',
+  name: 'pl-date-picker',
   props: {
     label: {
       type: String,

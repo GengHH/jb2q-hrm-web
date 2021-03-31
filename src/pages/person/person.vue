@@ -2,14 +2,14 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 11:01:22
+ * @LastEditTime: 2021-03-30 15:56:17
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
 <template>
   <div id="indexApp">
     <!-- Header -->
-    <HeaderIndex :nav-list="navList" :user-log-info="userLogInfo"></HeaderIndex>
+    <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade"> -->
     <router-view></router-view>
     <!-- </transition> -->
@@ -20,12 +20,12 @@
 /**
  * 个人管理系统入口界面
  */
-import HeaderIndex from '@/components/index/HeaderIndex.vue';
+import BaseHeader from '@/components/common/BaseHeader.vue';
 import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
   components: {
-    HeaderIndex
+    BaseHeader
   },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
         },
         {
           id: '6',
-          path: '/blak2',
+          path: '/remind',
           nvaText: '铃铛',
           icon: true,
           iconName: 'el-icon-bell'
@@ -63,7 +63,7 @@ export default {
       userLogInfo: {
         id: 'user',
         path: '/user',
-        nvaText: this.$store.getters.name || '临时工',
+        nvaText: this.$store.getters['person/username'] || '临时工',
         subMenu: [
           {
             id: '/logout',

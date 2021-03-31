@@ -2,14 +2,17 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-10 18:19:00
+ * @LastEditTime: 2021-03-25 16:12:56
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
-import { getLogonUser } from '@/api/personApi';
+import { getLogonUser, checkPsnlInit } from '@/api/personApi';
+import router from '@/pages/person/router';
 const state = {
   //用户token
   token: '',
+  //是不是首次登录本系统
+  first_login: true,
   //证件号码
   zjhm: '',
   //个人标识
@@ -44,6 +47,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_FIRST_LOGIN: (state, first_login) => {
+    state.first_login = first_login;
   },
   SET_NAME: (state, name) => {
     state.name = name;
@@ -81,6 +87,7 @@ const getters = {
   //   return state.name;
   // }
   token: state => state.token,
+  first_login: state => state.first_login,
   username: state => state.name,
   pid: state => state.pid
 };
@@ -114,7 +121,7 @@ const actions = {
   //     }
   //   });
   // },
-  //用户登录（开发发环境使用）
+  //用户登录（开发环境使用）
   do_login({ commit }) {
     return new Promise(resolve => {
       commit('SET_PERSONINOF', {
@@ -125,6 +132,7 @@ const actions = {
         pid: '201906186258910'
       });
       commit('SET_TOKEN', 'login');
+      commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -138,23 +146,42 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_PERSONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
+      commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
       commit('SET_LOGIN_TIME', 0);
-      //sessionStorage.setItem('vuex', null);
+      localStorage.setItem('vuex', null);
       resolve();
     });
   },
 
   get_personInfo({ commit }) {
     getLogonUser()
-      .then(res => {
+      .then(async res => {
         console.log('个人登录信息', res);
         if (res.status == 200) {
           commit('SET_PERSONINOF', res.result);
           commit('SET_TOKEN', 'login');
+          //判断是不是首次进入系统
+          if (res.result.pid) {
+            let checkRes = await checkPsnlInit({ pid: res.result.pid }).catch(
+              () => {
+                // 检验人员信息失败，显示系统异常界面
+                router.push('/error');
+              }
+            );
+            if (
+              checkRes.status === 200 &&
+              checkRes.result.data &&
+              checkRes.result.data.isInit === '1'
+            ) {
+              commit('SET_FIRST_LOGIN', false);
+            }
+          }
         } else {
+          // 登录成功但是获取人员进本信息失败，显示系统异常界面
+          router.push('/error');
           console.log('加载个人登录信息失败：' + res.message);
         }
       })

@@ -1,10 +1,10 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-09 07:58:22
- * @Description: file content
- * @FilePath: \jb2q-hrm-web\src\views\corporation\employmentTrainee\index.vue
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-22 14:18:40
+ * @Description: 单位模块的简历搜索
+ * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
 <template>
   <div id="indexBody">
@@ -154,7 +154,7 @@
                   placeholder="学历要求"
                 >
                   <el-option
-                    v-for="item in xl"
+                    v-for="item in xlOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"

@@ -1,13 +1,27 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-11 11:30:58
+ * @LastEditTime: 2021-03-31 10:22:54
  * @LastEditors: GengHH
- * @Description: In User Settings Edit
+ * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
 -->
 <template>
   <div id="indexHeader">
+    <div class="float-log">
+      <img class="logo2" src="@/assets/img/logo2.png" alt="" />
+    </div>
+    <div id="indexPageHeader">
+      <el-row id="index-title">
+        <el-col :sm="24" :md="6" :lg="8" :xl="8" class="text-left">
+          上海市人力资源和社会保障局 | 公共服务平台
+        </el-col>
+        <el-col :sm="24" :md="18" :lg="16" :xl="16" class="text-right">
+          <i class="el-icon-user"></i>
+          登录 | 注册
+        </el-col>
+      </el-row>
+    </div>
     <el-row>
       <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
         <img src="@/assets/img/logo.png" alt="" />
@@ -15,34 +29,15 @@
         <img class="logo3" src="@/assets/img/logo3.png" alt="" />
       </el-col>
       <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
-        <!-- <el-breadcrumb separator="">
-          <el-breadcrumb-item
-            v-for="nvaIndex in navList"
-            :key="nvaIndex.id"
-            :to="{ path: nvaIndex.path }"
-          >
-            {{ nvaIndex.nvaText }}
-          </el-breadcrumb-item>
-        </el-breadcrumb> -->
         <el-menu
-          :default-active="activeIndex"
+          :default-active="$route.path"
           class="el-menu-demo"
           mode="horizontal"
           router
-          background-color="#fc6f3d"
-          text-color="#fff"
+          background-color="#fff"
+          text-color="#333"
           @select="handleSelect"
         >
-          <!-- 个人信息栏 -->
-          <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
-            <template slot="title">{{ userLogInfo.nvaText }}</template>
-            <el-menu-item
-              v-for="nvaIndex in userLogInfo.subMenu"
-              :key="nvaIndex.id"
-              :index="nvaIndex.id"
-              >{{ nvaIndex.nvaText }}</el-menu-item
-            >
-          </el-submenu>
           <el-menu-item
             v-for="nvaIndex in navList"
             :key="nvaIndex.id"
@@ -62,8 +57,9 @@
 </template>
 
 <script>
-import { doLogout } from '@/api/personApi';
-
+// import { doPersonLogout } from '@/api/personApi';
+// import { doCorporationLogout } from '@/api/corporationApi';
+// import { isNoBody, isPerson, isCorporation } from '@/utils';
 export default {
   name: 'HeaderIndex',
   props: {
@@ -80,47 +76,79 @@ export default {
   },
   data() {
     return {
-      activeIndex: this.$store.getters['activeMenuIndex'],
+      // activeIndex:
+      //   this.$route.path && this.$route.path.length > 1
+      //     ? this.$route.path.substr(1)
+      //     : this.$route.path,
       inco: true
     };
   },
-  created() {
-    // if (this.$route.path) {
-    //   this.activeIndex = this.$route.path;
+  computed: {
+    // path() {
+    //   console.log(this.$route.path);
+    //   var aa =
+    //     this.$route.path && this.$route.path.length > 1
+    //       ? this.$route.path.substr(1)
+    //       : this.$route.path;
+    //   console.log(this.$route.path.length);
+    //   return aa;
     // }
   },
   watch: {
-    $route(to, from) {
-      //to:即将要跳转到的页面   from:即将离开的页面
-      if (to.path === '/logout' && !this.$store.getters['person/token']) {
-        this.$alert('没有登录！无法退出');
-        this.$router.push(from.path);
-      } else if (to.path === '/logout') {
-        this.$alert('退出成功');
-        // TODO 调用退出接口
-        doLogout()
-          .then(res => {
-            // retuen a primess
-            let logout = this.$store.dispatch('person/do_logout');
-            logout
-              .then(res => {
-                this.$alert('退出成功');
-              })
-              .catch(err => {
-                this.$alert('退出异常');
-              });
-          })
-          .catch(err => {
-            this.$alert('退出失败');
-          });
-        window.location.href = '/ggzp-shrs/index.html';
-        //this.$router.push('/')
-        //this.$router.push(from.path)
-      }
-    }
+    // async $route(to, from) {
+    //   //to:即将要跳转到的页面   from:即将离开的页面
+    //   //console.log(this);
+    //   if (to.path === '/logout' && isNoBody(this)) {
+    //     this.$alert('没有登录！无法退出');
+    //     this.$router.push(from.path);
+    //   } else if (to.path === '/logout') {
+    //     if (isPerson(this)) {
+    //       //个人退出
+    //       let logoutResult = await doPersonLogout();
+    //       if (logoutResult && logoutResult.status === 200) {
+    //         let logout = this.$store.dispatch('person/do_logout');
+    //         logout
+    //           .then(res => {
+    //             this.$alert('退出成功');
+    //             window.setTimeout(function() {
+    //               window.location.href = '/ggzp-shrs/index.html';
+    //             }, 2000);
+    //             return;
+    //           })
+    //           .catch(err => {
+    //             this.$alert('退出异常');
+    //           });
+    //       } else {
+    //         this.$alert('退出失败');
+    //       }
+    //     } else if (isCorporation(this)) {
+    //       //单位退出
+    //       let logoutResult = await doCorporationLogout();
+    //       if (logoutResult && logoutResult.status === 200) {
+    //         this.$store
+    //           .dispatch('corporation/do_logout')
+    //           .then(res => {
+    //             this.$alert('退出成功');
+    //             window.setTimeout(function() {
+    //               window.location.href = '/ggzp-shrs/index.html';
+    //             }, 2000);
+    //             return;
+    //           })
+    //           .catch(err => {
+    //             this.$alert('退出异常');
+    //           });
+    //       } else {
+    //         this.$alert('退出失败');
+    //       }
+    //     }
+    //     //this.$router.push('/')
+    //     this.$router.push(from.path);
+    //   }
+    // }
   },
   methods: {
     handleSelect(index) {
+      console.log(this.$route.path);
       this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
     }
   }
@@ -130,15 +158,39 @@ export default {
 <style lang="scss" scoped>
 #indexHeader {
   position: fixed;
-  height: 60px;
+  height: 90px;
   width: 100%;
-  padding: 0 5%;
   z-index: 999;
-  background-color: $g-mian-color;
-  color: $g-white-color !important;
+  background-color: $g-white-color;
+  //color: $g-white-color !important;
+  .float-log {
+    position: absolute;
+    width: 5%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    img {
+      /* width: 90%; */
+      margin: 0 auto;
+      vertical-align: middle;
+      height: 50px;
+      margin: 20px 0;
+    }
+  }
+  #indexPageHeader {
+    height: 30px;
+    width: 100%;
+    background-color: $g-mian-color;
+  }
+  #index-title {
+    font-size: 12px;
+    line-height: 30px;
+    color: $g-white-color;
+  }
   .el-row {
     width: 100%;
-    height: 100%;
+    padding: 0 5%;
+    //height: 100%;
     img {
       float: left;
       width: 30px;
@@ -153,12 +205,6 @@ export default {
     }
   }
 
-  .bg-purple {
-    //background: #d3dce6;
-  }
-  .bg-purple-light {
-    //background: #e5e9f2;
-  }
   .el-col {
     height: 100%;
     // .el-breadcrumb {
@@ -189,8 +235,8 @@ export default {
       float: right;
     }
     .el-menu-item.is-active {
-      border-bottom: 2px solid #ffc107;
-      color: #ffc107;
+      border-bottom: 2px solid $g-mian-color;
+      color: $g-mian-color;
     }
   }
 }
