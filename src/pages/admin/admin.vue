@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-15 12:23:29
+ * @LastEditTime: 2021-03-23 15:12:01
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -196,12 +196,12 @@ export default {
               text: '查询单位信息',
               iconName: 'el-icon-setting'
             },
-            {
-              id: '5-2',
-              path: '/unitManagement/recruitment',
-              text: '代理招聘',
-              iconName: 'el-icon-setting'
-            },
+            // {
+            //   id: '5-2',
+            //   path: '/unitManagement/recruitment',
+            //   text: '代理招聘',
+            //   iconName: 'el-icon-setting'
+            // },
             {
               id: '5-3',
               path: '/unitManagement/management',
@@ -294,7 +294,90 @@ export default {
       return h < 600 ? 600 : h - 112;
     }
   },
-  created() {}
+  mounted() {
+    this.userName = this.$store.state.admin.userInfo.userName;
+  },
+  created() {
+    console.log('--------------------------测试');
+    let userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+    this.$store.state.admin.userInfo = {
+      userId: '',
+      userIdStr: '0000309307',
+      userName: '丁丽莉',
+      loginName: '2b44928ae11fb938',
+      userType: '02',
+      organId: '',
+      organIdStr: '1666',
+      organName: '上海市社会保险事业管理中心金山分中心',
+      organType: '',
+      domainId: 1,
+      domainIdStr: '',
+      domainName: '',
+      roleKey: '',
+      userKey: '',
+      expire: -1,
+      extInfo: {
+        sessionId: '',
+        logid: '',
+        userType: '02',
+        userId: '0000309307',
+        userName: '丁丽莉',
+        userPhone: '',
+        loginName: '2b44928ae11fb938',
+        userKey: '310105810117000',
+        organId: '1666',
+        organCode: '',
+        organName: '上海市社会保险事业管理中心金山分中心',
+        organType: '',
+        organStatus: '',
+        deptId: '',
+        deptCode: '',
+        deptType: '',
+        deptName: '',
+        districtCode: '16',
+        districtName: '金山',
+        streetCode: '1600',
+        streetName: '金山',
+        communityCode: '',
+        communityName: '',
+        loginCaType: '',
+        cookieToken: '',
+        pid: '',
+        deviceSN: '',
+        sfbz: 'TEST_shq310105198101170428',
+        passBySb: false,
+        yxbz: '1',
+        sbdwmc: '',
+        tyshxym: ''
+      },
+      areaInfo: {
+        areaCode: '16',
+        areaCode1: '1600',
+        areaCode2: '166600',
+        areaCode3: '',
+        areaCode4: '',
+        areaCode5: '',
+        areaCode6: '',
+        areaName: '金山',
+        areaName1: '金山',
+        areaName2: '上海市社会保险事业管理中心金山分中心',
+        areaName3: '',
+        areaName4: '',
+        areaName5: '',
+        areaName6: ''
+      },
+      roles: [
+        {
+          roleId: 'R1',
+          roleName: '业务经办'
+        }
+      ],
+      readOnly: false,
+      domainIdKey: '1',
+      userIdKey: '0000309307',
+      organIdKey: '1666'
+    };
+  }
 };
 </script>
 

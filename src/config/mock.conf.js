@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-01 15:29:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-19 17:57:01
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\mock.conf.js
  */
@@ -18,6 +18,6 @@ const config = {
   commonBasePath: '/mock-common-api',
   personBasePath: '/mock-pers-api',
   corpBasePath: '/mock-corp-api',
-  adminBasePath: '/mock-admin-api'
+  adminBasePath: '/new-admin-api'
 };
 export default config;

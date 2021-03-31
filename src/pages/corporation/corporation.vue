@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 15:56:01
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-31 16:51:00
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -36,6 +36,20 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList: [
+        {
+          id: '7',
+          path: '/blak1',
+          nvaText: '时钟',
+          icon: true,
+          iconName: 'el-icon-time'
+        },
+        {
+          id: '6',
+          path: '/remind',
+          nvaText: '铃铛',
+          icon: true,
+          iconName: 'el-icon-bell'
+        },
         { id: '5', path: '/jobFair', nvaText: '招聘会' },
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },
         { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },

@@ -1,8 +1,13 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
+<<<<<<< HEAD
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-31 16:52:01
+=======
  * @LastEditors: GengHH
  * @LastEditTime: 2021-03-29 17:20:32
+>>>>>>> upstream/master
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -122,10 +127,34 @@ const getters = {
   recruit_language_level: state => state.RECRUIT_LANGUAGE_LEVEL,
   recruit_work_nature: state => state.RECRUIT_WORK_NATURE,
   recruit_industry_type: state => state.RECRUIT_INDUSTRY_TYPE,
+  ggjbxx_sex: state => state.GGJBXX_SEX,
+  ggjbxx_nationality: state => state.GGJBXX_NATIONALITY,
+  ggjbxx_zjlx: state => state.GGJBXX_ZJLX,
+  sybx_jhh: state => state.SYBX_JHH,
+  recruit_expert_curr_status: state => state.RECRUIT_EXPERT_CURR_STATUS,
+  recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS,
   recruit_work_hour: state => state.RECRUIT_WORK_HOUR
 };
 
 const mutations = {
+  set_RECRUIT_EXPERT_CURR_STATUS: (state, dictionary) => {
+    state.RECRUIT_EXPERT_CURR_STATUS = dictionary;
+  },
+  set_RECRUIT_EXPERT_STATUS: (state, dictionary) => {
+    state.RECRUIT_EXPERT_STATUS = dictionary;
+  },
+  set_SYBX_JHH: (state, dictionary) => {
+    state.SYBX_JHH = dictionary;
+  },
+  set_GGJBXX_ZJLX: (state, dictionary) => {
+    state.GGJBXX_ZJLX = dictionary;
+  },
+  set_GGJBXX_NATIONALITY: (state, dictionary) => {
+    state.GGJBXX_NATIONALITY = dictionary;
+  },
+  set_GGJBXX_SEX: (state, dictionary) => {
+    state.GGJBXX_SEX = dictionary;
+  },
   set_YESNO: (state, dictionary) => {
     state.YESNO = dictionary;
   },

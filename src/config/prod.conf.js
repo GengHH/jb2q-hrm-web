@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-05 16:46:17
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-24 10:42:02
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\prod.conf.js
  */
@@ -18,7 +18,9 @@ const config = {
   defaultImgUrl: '//localhost:8085/static/default.jpg',
   commonBasePath: '/ggzp-zzjb-shrs',
   personBasePath: '/ggzp-zzjb-shrs',
-  corpBasePath: '/ggzp-zzjb-shrs'
+  corpBasePath: '/ggzp-zzjb-shrs',
+  adminBasePath: '/ggzp-ywjb-shrs',
+  loginBasePath: 'https://j2testzzjb.rsj.sh.cegn.cn',
 };
 
 export default config;

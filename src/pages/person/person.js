@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-30 13:14:34
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-03-31 16:51:09
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
  */

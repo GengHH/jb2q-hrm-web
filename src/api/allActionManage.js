@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /*
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-21 17:26:29
+ * @LastEditTime: 2021-03-26 17:41:08
  * @Description: 将axios封装成通用的restful的接口
  * @FilePath: \jb2q-hrm-web\src\api\allActionManage.js
  */
@@ -31,16 +32,21 @@ export function getAction(url, parameter) {
   //? TODO 本地开发使用mock时，采用axios.get(),否则mockjs无法拦截到；问题原因尚未知晓
   //return axios.get(url, { parameter: parameter }); //种情况mock可以拦截，但是获取不到传递的参数
   // console.log(config);
-  if (config.mock) {
-    let paramStr = queryParams(parameter);
-    return axios.get(url + paramStr);
-  } else {
-    return axios({
-      url: url,
-      method: 'get',
-      params: parameter
-    });
-  }
+  return axios({
+    url: url,
+    method: 'get',
+    params: parameter
+  });
+  // if (config.mock) {
+  //   let paramStr = queryParams(parameter);
+  //   return axios.get(url + paramStr);
+  // } else {
+  //   return axios({
+  //     url: url,
+  //     method: 'get',
+  //     params: parameter
+  //   });
+  // }
 }
 
 //put

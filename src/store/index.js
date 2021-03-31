@@ -1,10 +1,17 @@
 /*
  * @Author: GengHH
  * @Date: 2020-12-02 10:48:20
+<<<<<<< HEAD
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-16 16:29:49
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\store\index.js 
+=======
  * @LastEditors: GengHH
  * @LastEditTime: 2021-03-25 11:20:49
  * @Description: 全局基本数据
  * @FilePath: \jb2q-hrm-web\src\store\index.js
+>>>>>>> upstream/master
  */
 import Vue from 'vue';
 import Vuex from 'vuex';

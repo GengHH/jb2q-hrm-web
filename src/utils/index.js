@@ -2,8 +2,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 18:06:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-31 16:52:12
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -229,4 +229,43 @@ export function formatTime(date) {
     ' ' +
     [hour, minute, second].map(formatNumber).join(':')
   );
+}
+/**
+ * 去除空格
+ */
+export function trim(data) {
+  if (data == null || data == undefined) {
+    return '不是一个字符串或者对象';
+  }
+  if (typeof data === 'string') {
+    return data.trim();
+  } else if (typeof data === 'object') {
+    if (data.constructor === Array) {
+      if (data.length) {
+        if (data[0].constructor === Object) {
+          for (let i = 0; i < data.length; i++) {
+            for (let j in data[i]) {
+              data[i][j] =
+                typeof data[i][j] == 'string' ? data[i][j].trim() : data[i][j];
+            }
+          }
+          return data;
+        } else {
+          for (let i = 0; i < data.length; i++) {
+            data[i] = typeof data[i] == 'string' ? data[i].trim() : data[i];
+          }
+          return data;
+        }
+      } else {
+        return '空数组';
+      }
+    } else if (data.constructor === Object) {
+      for (let i in data) {
+        data[i] = typeof data[i] == 'string' ? data[i].trim() : data[i];
+      }
+      return data;
+    }
+  } else {
+    return '不是一个字符串或者对象';
+  }
 }

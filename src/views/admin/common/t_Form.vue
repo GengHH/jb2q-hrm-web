@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-03-16 15:29:45
+ * @LastEditTime: 2021-03-30 19:04:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -64,6 +64,7 @@
         <el-date-picker
           :style="v.style"
           v-model="value[v.key]"
+          :value-format="v.format"
           type="daterange"
           range-separator=""
           start-placeholder="开始日期"
@@ -92,7 +93,7 @@
 
       <!-- 时间 单时间 -->
       <el-form-item
-        v-if="v.type == 'date2'"
+        v-if="v.type == 'date'"
         :key="k"
         :label="v.label"
         :prop="v.key"
@@ -167,12 +168,28 @@
       >
         <el-input
           type="textarea"
+          :autosize="v.autosize"
           :style="v.style"
           v-model="value[v.key]"
           :value="v.value"
           :disabled="v.disabled"
           :placeholder="v.placeholder"
         ></el-input>
+      </el-form-item>
+      <el-form-item
+        v-if="v.type == 'time'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-time-select
+          :style="v.style"
+          v-model="value[v.key]"
+          :picker-options="v.options"
+          :placeholder="v.placeholder"
+        >
+        </el-time-select>
       </el-form-item>
     </template>
     <el-row v-if="!formConfig.isBtn">
@@ -187,11 +204,21 @@
             </el-button>
           </template>
           <template v-else>
-            <el-button type="primary" @click="onSubmit">
-              <i class="el-icon-search"></i>
-              查询
+            <el-button
+              :icon="
+                formConfig.saveBtn ? formConfig.saveBtn.icon : 'el-icon-search'
+              "
+              type="primary"
+              @click="onSubmit"
+            >
+              {{ formConfig.saveBtn ? formConfig.saveBtn.title : '查询' }}
             </el-button>
-            <el-button @click="resetForm()">重置</el-button>
+            <el-button
+              :icon="formConfig.resetBtn ? formConfig.resetBtn.icon : ''"
+              @click="resetForm()"
+            >
+              {{ formConfig.resetBtn ? formConfig.resetBtn.title : '重置' }}
+            </el-button>
           </template>
         </el-form-item>
       </el-col>
@@ -215,7 +242,15 @@ export default {
       //  operation:{
       //     title:'保存',
       //   }
+      // saveBtn:{
+      //   title:'保存',
+      //   icon:''
+      // },
 
+      // resetBtn:{
+      //   title:'重置',
+      //   icon:''
+      // },
       //   formItemList: [
       //     {
       //       type: 'input',
@@ -276,11 +311,11 @@ export default {
       //       key: 'daterange'
       //     },
       //     {
-      //       type: 'date2',
+      //       type: 'date',
       //       label: '时间2',
       //       placeholder: '请输入时间2',
       //       rules: [],
-      //       key: 'date2'
+      //       key: 'date'
       //     },
       //     {
       //       type: 'switch',
@@ -314,9 +349,6 @@ export default {
   },
   computed: {},
   methods: {
-    abc(e) {
-      console.log(e);
-    },
     onSubmit() {
       this.$refs.value.validate(valid => {
         if (valid) {

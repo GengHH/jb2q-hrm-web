@@ -5,7 +5,7 @@
       <el-col id="personNavMenuFixed" :span="6">
         <router-view name="personNavMenu" />
       </el-col>
-      <el-col :span="18"> </el-col>
+      <el-col :span="18"></el-col>
     </el-row>
     <el-row class="person-layout" :gutter="20">
       <el-col class="col-place-holder" :span="6"> </el-col>

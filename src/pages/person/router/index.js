@@ -164,11 +164,23 @@ let router = new Router({
         }
       ]
     },
-    // {
-    //   path: '/findJobFeedback',
-    //   name: '求职反馈',
-    //   component: () => import('@/views/person/jobFindFeedback')
-    // },
+    {
+      path: '/remind',
+      name: '提醒',
+      redirect: '/remind/remind',
+      component: () => import('@/views/person/PersonLayout'),
+      children: [
+        {
+          path: '/remind/remind',
+          name: '私信',
+          components: {
+            personNavMenu: () => import('@/components/person/remindMenu'),
+            default: () =>
+              import('@/views/person/remind/remindCenter')
+          }
+        }
+      ]
+    },
     {
       path: '/jobFindFeedback',
       name: '求职反馈',

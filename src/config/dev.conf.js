@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 17:45:12
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-08 19:39:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-03-24 10:42:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\config\dev.conf.js
  */
@@ -21,6 +21,7 @@ const config = {
   commonBasePath: '/new-common-api',
   personBasePath: '/new-pers-api',
   corpBasePath: '/new-corp-api',
-  adminBasePath: '/new-admin-api'
+  adminBasePath: '/new-admin-api',
+  loginBasePath: 'localhost:8089',
 };
 export default config;

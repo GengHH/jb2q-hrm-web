@@ -2,42 +2,84 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-15 10:57:02
+ * @LastEditTime: 2021-03-27 16:55:58
  * @Description: file content
 -->
 <template>
   <div id="indexApp">
-    <el-form
-      ref="loginForm"
-      :model="form"
-      :rules="rules"
-      label-width="0px"
-      class="login-box"
-    >
-      <h3 class="login-title">RA登录</h3>
-      <el-form-item style="margin-bottom:25px" prop="password">
-        <el-input
-          prefix-icon="el-icon-lock"
-          type="password"
-          placeholder="请输入密码"
-          v-model="form.password"
-        />
-      </el-form-item>
-      <el-form-item style="margin-bottom:10px">
-        <el-button
-          :disabled="show"
-          class="btn"
-          type="primary"
-          @click="onSubmit('loginForm')"
-          >登录</el-button
-        >
-      </el-form-item>
-      <div style="height:18px;font-size:14px">
-        如果您还未下载驱动，请先<span style="color:#fc6f3d;cursor: pointer;"
-          >下载驱动</span
-        >
+    <div class="herder">
+      <div class="title">
+        <img class="img1" src="../../assets/img/logoWhite.png" alt="图标" />
+        <img class="img2" src="../../assets/img/logo3White.png" alt="标题" />
+        <span>欢迎登录</span>
       </div>
-    </el-form>
+    </div>
+    <img class="bg" src="../../assets/images/logo_bg.png" alt="背景图片" />
+    <div class="login-box">
+      <el-form ref="loginForm" :model="form" :rules="rules" label-width="0px">
+        <h3 class="login-title">RA登录</h3>
+        <img src="../../assets/images/ca.png" width="100%" alt="ca" />
+        <h4 style="text-align:center;padding:10px 0">
+          请插入<span style="color:#fd7a43">RA</span>登录
+        </h4>
+        <el-form-item style="margin-bottom:25px" prop="password">
+          <el-input
+            prefix-icon="el-icon-lock"
+            type="password"
+            placeholder="请输入密码"
+            v-model="form.password"
+          />
+        </el-form-item>
+        <el-form-item style="margin-bottom:10px">
+          <el-button
+            :disabled="show"
+            class="btn"
+            type="primary"
+            @click="onSubmit('loginForm')"
+            >登录</el-button
+          >
+        </el-form-item>
+        <div style="height:18px;font-size:14px">
+          如果您还未下载驱动，请先<span style="color:#fc6f3d;cursor: pointer;"
+            >下载驱动</span
+          >
+        </div>
+      </el-form>
+    </div>
+    <div class="footer">
+      <el-row>
+        <el-col :span="4">
+          <img src="../../assets/images/logo-img1.png" alt="" />
+        </el-col>
+        <el-col :span="3">
+          <img
+            style="margin:12px 0 0 20px;"
+            src="../../assets/images/logo-img3.png"
+            alt=""
+          />
+        </el-col>
+        <el-col :span="4">
+          <img
+            style="margin-top:14px"
+            src="../../assets/images/logo-img2.png"
+            alt=""
+          />
+        </el-col>
+        <el-col :span="4" style="margin-top:10px">
+          <div class="textStyle">地址：人民大道200号</div>
+          <div class="textStyle">邮编：200003</div>
+        </el-col>
+        <el-col :span="4" style="margin-top:10px">
+          <div class="textStyle">联系电话：23111111</div>
+          <div class="textStyle">上海政务服务总客服：12345</div>
+        </el-col>
+        <el-col :span="5" style="margin-top:10px">
+          <div class="textStyle">沪ICP备：12004267</div>
+          <div class="textStyle">沪公安备：31010102045442号</div>
+          <div class="textStyle">政府网站标识码：310000000044</div>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -46,8 +88,8 @@
  * 管理员登陆入口界面
  */
 import SecCtrl from './module/SecCtrl.js';
-import { queryLogonUser } from '@/api/adminApi';
-
+import { queryLogin } from '@/api/adminApi';
+import apiUrlConfig from '@/config';
 let ks_provider = 'SKF&SKFAPI20046.dll'; // 介质
 let ks_alg = 0; // 使用证书时自动适配
 let ks_path = ''; // 如果为软算法，对应路径
@@ -68,19 +110,11 @@ function getCert() {
   return SecCtrl.KS_GetCert(2);
 }
 
-function getOid() {
-  let signCert = getCert();
-  let oid = SecCtrl.KS_GetCertInfoByOid(signCert, '1.2.156.2319');
-  if (oid.length > 16) oid = oid.substr(oid.length - 16);
-  if (oid.length !== 16) throw 'NO_CERT';
-  return oid;
-}
-
 function signature(srcData, pinCode) {
   let cert = getCert();
   if (!cert) return;
   SecCtrl.KS_SetParam('userpin', pinCode);
-  signature = SecCtrl.KS_SignData(srcData, hashAlg);
+  let signature = SecCtrl.KS_SignData(srcData, hashAlg);
   if (
     SecCtrl.KS_GetLastErrorCode() != 0 &&
     SecCtrl.KS_GetLastErrorMsg() != '成功'
@@ -109,17 +143,6 @@ function checkPass(pinCode) {
   return false;
 }
 
-function modifyPassword(pswOld, pwdNew) {
-  if (!initProv()) return false;
-  let nRet = SecCtrl.KS_ModifyPin(pswOld, pwdNew);
-  if (nRet != 0) {
-    alert('修改密码失败！' + SecCtrl.KS_GetLastErrorMsg());
-    return;
-  } else {
-    alert('修改密码成功！');
-  }
-}
-
 function getLastErr() {
   if (
     SecCtrl.KS_GetLastErrorCode() != 0 &&
@@ -131,20 +154,6 @@ function getLastErr() {
   return true;
 }
 
-function checkVersion(nowVersion) {
-  try {
-    let version = SecCtrl.KS_GetVersion();
-    if (version < 0 || version == undefined || version == 'undefined') {
-      return false;
-    }
-    if (nowVersion && version != nowVersion) {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
 export default {
   name: 'app',
   components: {},
@@ -169,6 +178,7 @@ export default {
     return {
       show: false,
       form: {
+        bgUrl: require('@/assets/images/logo_bg.png'),
         password: '',
         random: onrandom(),
         signData: '',
@@ -207,89 +217,30 @@ export default {
           if (signatureInfo == null || signatureInfo['signature'].length == 0) {
             return false;
           }
-          this.$store.state.admin.logonUser = {
-            userId: '',
-            userIdStr: '0000309307',
-            userName: '丁丽莉',
-            loginName: '2b44928ae11fb938',
-            userType: '02',
-            organId: '',
-            organIdStr: '1666',
-            organName: '上海市社会保险事业管理中心金山分中心',
-            organType: '',
-            domainId: 1,
-            domainIdStr: '',
-            domainName: '',
-            roleKey: '',
-            userKey: '',
-            expire: -1,
-            extInfo: {
-              sessionId: '',
-              logid: '',
-              userType: '02',
-              userId: '0000309307',
-              userName: '丁丽莉',
-              userPhone: '',
-              loginName: '2b44928ae11fb938',
-              userKey: '310105810117000',
-              organId: '1666',
-              organCode: '',
-              organName: '上海市社会保险事业管理中心金山分中心',
-              organType: '',
-              organStatus: '',
-              deptId: '',
-              deptCode: '',
-              deptType: '',
-              deptName: '',
-              districtCode: '16',
-              districtName: '金山',
-              streetCode: '1600',
-              streetName: '金山',
-              communityCode: '',
-              communityName: '',
-              loginCaType: '',
-              cookieToken: '',
-              pid: '',
-              deviceSN: '',
-              sfbz: 'TEST_shq310105198101170428',
-              passBySb: false,
-              yxbz: '1',
-              sbdwmc: '',
-              tyshxym: ''
-            },
-            areaInfo: {
-              areaCode: '16',
-              areaCode1: '1600',
-              areaCode2: '166600',
-              areaCode3: '',
-              areaCode4: '',
-              areaCode5: '',
-              areaCode6: '',
-              areaName: '金山',
-              areaName1: '金山',
-              areaName2: '上海市社会保险事业管理中心金山分中心',
-              areaName3: '',
-              areaName4: '',
-              areaName5: '',
-              areaName6: ''
-            },
-            roles: [
-              {
-                roleId: 'R1',
-                roleName: '业务经办'
-              }
-            ],
-            readOnly: false,
-            domainIdKey: '1',
-            userIdKey: '0000309307',
-            organIdKey: '1666'
-          };
+          console.log();
           this.form.signData = signatureInfo['signature'];
-          console.log(random);
-          console.log(this.form.loginName);
-          console.log(this.form.signData);
-          console.log('登陆成功');
-          window.location.href = 'http://localhost:8089/ggzp-shrs/admin.html';
+          queryLogin(
+            {
+              password: strpassword,
+              random: random,
+              loginName: this.form.loginName,
+              signData: this.form.signData
+            },
+            response => {
+              if (response.status == 200) {
+                sessionStorage.setItem(
+                  'userInfo',
+                  JSON.stringify(response.result.logonUser)
+                );
+
+                window.location.href =
+                  apiUrlConfig.loginBasePath + '/ggzp-shrs/admin.html';
+              }
+            },
+            error => {
+              console.log(error);
+            }
+          );
         } else {
           return false;
         }
@@ -302,7 +253,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$headerHeight: 80px;
 #indexApp {
+  position: relative;
+  overflow-x: hidden;
+  .bg {
+    width: 100%;
+    min-width: 1600px;
+  }
+  .herder {
+    .title {
+      img {
+        float: left;
+      }
+      .img1 {
+        margin-top: 17px;
+        height: 46px;
+        width: 46px;
+      }
+      .img2 {
+        margin-top: 23px;
+        height: 34px;
+      }
+      span {
+        color: #ffffff;
+        float: left;
+        margin-top: 32px;
+        font-size: 16px;
+        margin-left: 30px;
+      }
+      height: $headerHeight;
+      width: 1200px;
+      margin: 0 auto;
+    }
+    min-width: 1600px;
+    width: 100%;
+    height: $headerHeight;
+    background: #fd7a43;
+  }
+  .footer {
+    width: 1200px;
+    margin: 15px auto 0 auto;
+    .textStyle {
+      color: #666666;
+      padding: 5px;
+    }
+  }
   //font-family: "Avenir", Helvetica, Arial, sans-serif;
   //-webkit-font-smoothing: antialiased;
   //-moz-osx-font-smoothing: grayscale;
@@ -310,22 +306,29 @@ export default {
   //color: #2c3e50;
   height: 100%;
   width: 100%;
-  padding-top: 15%;
   .login-box {
+    position: absolute;
+    z-index: 9;
+    top: 0;
+    bottom: 0;
+    background: #ffffff;
     border: 1px solid #dcdfe6;
     width: 350px;
-    margin: 0 auto;
+    margin: auto 0;
+    right: 20%;
     padding: 35px 35px 15px 35px;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     box-shadow: 0 0 1px #909399;
+    height: 404px;
   }
 
   .login-title {
     text-align: center;
-    margin: 0 auto 40px auto;
-    color: #303133;
+    margin: 0 auto 20px auto;
+    color: #fd7a43;
+    font-size: 20px;
   }
 
   .btn {

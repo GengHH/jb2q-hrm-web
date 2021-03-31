@@ -49,7 +49,7 @@ export default {
         },
         {
           id: '6',
-          path: '/blak2',
+          path: '/remind',
           nvaText: '铃铛',
           icon: true,
           iconName: 'el-icon-bell'
