@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-03-30 20:15:53
+ * @LastEditTime: 2021-03-31 14:02:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -15,6 +15,24 @@
       :options="tableoptions"
       @handleSelectionChange="e => (selectData = e)"
     >
+      <el-table-column slot="districtCode" label="管理区" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.qx" :key="k">
+            <el-tag v-if="v.value == scope.row.districtCode">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column slot="statusId" label="专家状态" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.status" :key="k">
+            <el-tag v-if="v.value == scope.row.statusId" type="warning">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="260" slot="aaa006" label="聘期" align="center">
         <template slot-scope="scope">
           {{ scope.row.startDate ? scope.row.startDate.split(' ')[0] : '' }} -
@@ -56,6 +74,17 @@
             width="400"
             trigger="click"
           >
+            <el-select
+              v-model="scope.row.targetDistrict"
+              placeholder="请输入转移所属区"
+            >
+              <el-option
+                v-for="(v, k) in dicOptions.qx"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+              ></el-option>
+            </el-select>
             <el-input
               type="textarea"
               :rows="2"
@@ -112,10 +141,7 @@
       :visible="visible"
       :form="form"
       :disabled="disabled"
-      @onclose="
-        visible = false;
-        disabled = false;
-      "
+      @onclose="onclose"
     ></managementadd>
     <continueadd
       :visible="continueVisible"
@@ -150,7 +176,7 @@ export default {
   data() {
     return {
       tableoptions: {
-        height: '400px'
+        height: '350px'
       },
       selectData: [],
       advancedQuery: false,
@@ -170,17 +196,21 @@ export default {
         { title: '姓名', prop: 'xm' },
         { title: '学历', prop: 'eduId' },
         { title: '联系电话', prop: 'contactNumber' },
-        { title: '专家状态', prop: 'statusId' },
+        { title: '专家状态', prop: 'statusId', slot: 'statusId' },
         { title: '聘期', prop: 'aaa006', slot: 'aaa006' },
         { title: '复核状态', prop: 'verifyResult' },
-        { title: '管理区', prop: 'districtCode' },
+        { title: '管理区', prop: 'districtCode', slot: 'districtCode' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 400 }
       ],
       dicOptions: {
         //专家当前状态
-        status: trim(
+        statusthisStatus: trim(
           this.$store.getters['dictionary/recruit_expert_curr_status']
-        )
+        ),
+        //专家状态
+        status: trim(this.$store.getters['dictionary/recruit_expert_status']),
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
       },
       formConfig: {
         inline: true,
@@ -248,16 +278,27 @@ export default {
   },
   computed: {},
   methods: {
+    onclose() {
+      this.visible = false;
+      this.disabled = false;
+      this.onsubmit(this.queryData);
+    },
     quit_add(scope) {
       quit_add(
         scope.row,
         res => {
           document.body.click();
           if (res.result.data.result) {
-            this.message('success', '操作成功');
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
           } else {
             console.log(res.result.data.msg);
-            this.message('warning', res.result.data.msg);
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning'
+            });
           }
           console.log(res);
         },
@@ -291,9 +332,27 @@ export default {
           data,
           res => {
             if (res.status == 200) {
+              let datas = res.result.datas;
+              let err = '';
+              for (let i = 0; i < datas.length; i++) {
+                if (!datas[i].result) {
+                  err +=
+                    '姓名：' +
+                    datas[i].xm +
+                    '，编号：' +
+                    datas[i].expertId +
+                    '。原因：' +
+                    datas[i].msg;
+                }
+              }
+              if (err) {
+                this.message('warning', err, 3000);
+              } else {
+                this.message('success', '操作成功');
+              }
+
               console.log(res);
             }
-            console.log(res);
           },
           err => {
             console.log(err);
@@ -304,11 +363,11 @@ export default {
         return;
       }
     },
-    message(type, msg) {
+    message(type, msg, time) {
       this.$message({
         message: msg,
         type: type,
-        duration: 1000,
+        duration: time || 1500,
         onClose: () => {
           if (type == 'success') {
             this.onclose();
@@ -321,6 +380,7 @@ export default {
       let data = { ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+      this.queryData = data;
       synthesize_query(
         data,
         res => {

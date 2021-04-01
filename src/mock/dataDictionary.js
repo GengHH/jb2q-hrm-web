@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-30 20:11:47
+ * @LastEditTime: 2021-03-31 17:41:05
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -275,9 +275,18 @@ const dic = {
     { value: '3', label: '退团' }
   ],
   //专家活动类型
-  RECRUIT_ACT_TYPE: [],
+  RECRUIT_ACT_TYPE: [
+    { value: '01', label: '一对一咨询' },
+    { value: '02', label: '主题活动咨询' },
+    { value: '03', label: '专家讲座' },
+    { value: '04', label: '结对帮扶' }
+  ],
   //专家活动日期类型
-  RECRUIT_ACT_DATE_TYPE: [],
+  RECRUIT_ACT_DATE_TYPE: [
+    { value: '1', label: '上午' },
+    { value: '2', label: '下午' },
+    { value: '3', label: '全天' }
+  ],
   //职业指导类型
   RECRUIT_GUIDE_TYPE: [],
   //特色活动类型

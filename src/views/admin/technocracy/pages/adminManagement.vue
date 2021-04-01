@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-03-30 14:07:50
+ * @LastEditTime: 2021-03-31 14:18:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -10,6 +10,9 @@
   <div id="indexBody">
     <div class="queryList">
       <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+      <el-button size="mini" @click="triggerUser((demoUser = !demoUser))"
+        >管理员切换</el-button
+      >
       <el-button-group>
         <el-button
           @click="auditStutas = '1'"
@@ -32,8 +35,18 @@
       </el-button-group>
     </div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane style="margin-top:130px" label="入团" name="0">
-        <ttable :tableClass="'tableClass'" :columns="columns0" :list="list0">
+      <el-tab-pane
+        v-if="userType"
+        style="margin-top:130px"
+        label="入团"
+        name="0"
+      >
+        <ttable
+          :options="{ height: '350px' }"
+          :tableClass="'tableClass'"
+          :columns="columns0"
+          :list="list0"
+        >
           <el-table-column slot="verifyStatus" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag type="warning">{{ scope.row.verifyStatus }}</el-tag>
@@ -61,8 +74,17 @@
           :total="params0.total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane style="margin-top:130px" label="续聘" name="1">
-        <ttable :columns="columns1" :list="list1">
+      <el-tab-pane
+        v-if="userType"
+        style="margin-top:130px"
+        label="续聘"
+        name="1"
+      >
+        <ttable
+          :options="{ height: '350px' }"
+          :columns="columns1"
+          :list="list1"
+        >
           <el-table-column slot="aaa007" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.aaa007 == '1'" type="success"
@@ -93,8 +115,17 @@
           :total="params1.total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane style="margin-top:130px" label="退团" name="2">
-        <ttable :columns="columns2" :list="list2">
+      <el-tab-pane
+        v-if="userType"
+        style="margin-top:130px"
+        label="退团"
+        name="2"
+      >
+        <ttable
+          :options="{ height: '350px' }"
+          :columns="columns2"
+          :list="list2"
+        >
           <el-table-column slot="aaa007" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.aaa007 == '1'" type="success"
@@ -125,8 +156,17 @@
           :total="params2.total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane style="margin-top:130px" label="转移" name="3">
-        <ttable :columns="columns3" :list="list3">
+      <el-tab-pane
+        v-if="!userType"
+        style="margin-top:130px"
+        label="转移"
+        name="3"
+      >
+        <ttable
+          :options="{ height: '350px' }"
+          :columns="columns3"
+          :list="list3"
+        >
           <el-table-column slot="aaa007" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.aaa007 == '1'" type="success"
@@ -162,7 +202,7 @@
       v-if="visible"
       :visible="visible"
       :auditConfig="auditConfig"
-      @onclose="visible = false"
+      @onclose="onclose"
     ></auditdialog>
   </div>
 </template>
@@ -186,10 +226,12 @@ export default {
   },
   data() {
     return {
+      demoUser: false,
+      userType: false,
       queryData: {},
       visible: false,
       auditStutas: '1',
-      activeName: '0',
+      activeName: '3',
       params0: {
         pageIndex: 1,
         total: 0
@@ -217,7 +259,7 @@ export default {
       },
       columns0: [
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'registerId' },
+        { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
         { title: '管理所属区', prop: 'districtCode' },
         { title: '专家状态', prop: 'statusId' },
@@ -226,7 +268,7 @@ export default {
       ],
       columns1: [
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'registerId' },
+        { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
         { title: '续聘申请人', prop: 'applyName' },
         { title: '续聘申请时间', prop: 'applyTime' },
@@ -239,22 +281,22 @@ export default {
       ],
       columns2: [
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'registerId' },
+        { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
-        { title: '退出理由', prop: 'aaa003' },
-        { title: '退团申请人', prop: 'aaa004' },
-        { title: '退团申请时间', prop: 'aaa005' },
+        { title: '退出理由', prop: 'quitReason' },
+        { title: '退团申请人', prop: 'applyName' },
+        { title: '退团申请时间', prop: 'quitTime' },
         { title: '复核状态', prop: 'verifystatus', slot: 'verifyStatus' },
-        { title: '复核备注', prop: 'aaa006' },
-        { title: '出团时间', prop: 'aaa008' },
+        { title: '复核备注', prop: 'verifyMemo' },
+        { title: '出团时间', prop: 'outDate' },
         { title: '复核时间', prop: 'verifyDate' },
         { title: '复核人', prop: 'verifyName' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns3: [
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'aaa001' },
-        { title: '姓名', prop: 'aaa002' },
+        { title: '专家编号', prop: 'expertId' },
+        { title: '姓名', prop: 'xm' },
         { title: '转移理由', prop: 'aaa003' },
         { title: '转入区', prop: 'aaa004' },
         { title: '转出申请人', prop: 'aaa005' },
@@ -308,6 +350,10 @@ export default {
   },
   computed: {},
   methods: {
+    onclose() {
+      this.visible = false;
+      this.onsubmit(this.queryData);
+    },
     checkValue(val) {
       let arr = this.dicOptions.qx;
       let str = '';
@@ -448,6 +494,15 @@ export default {
         }
       }
       return c;
+    },
+    triggerUser(bool) {
+      if (bool) {
+        this.userType = true;
+        this.activeName = '0';
+      } else {
+        this.userType = false;
+        this.activeName = '3';
+      }
     }
   },
   created() {}

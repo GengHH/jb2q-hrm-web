@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-30 20:12:07
+ * @LastEditTime: 2021-03-31 17:42:14
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -103,7 +103,14 @@ if (isEmpty(store.getters['dictionary/recruit_expert_status'])) {
 if (isEmpty(store.getters['dictionary/recruit_expert_curr_status'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_CURR_STATUS');
 }
-
+//专家活动类型
+if (isEmpty(store.getters['dictionary/recruit_act_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_ACT_TYPE');
+}
+//专家活动日期类型
+if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_ACT_DATE_TYPE');
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
