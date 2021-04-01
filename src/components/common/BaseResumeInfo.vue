@@ -311,7 +311,7 @@
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
-          @click="dialog6 = true"
+          @click="editCard('dialog6', 1)"
           >编辑</el-button
         >
       </div>
@@ -873,7 +873,7 @@
         <el-button
           @click="dialogClear('selfEvaluationForm')"
           class="white-btn btn-style"
-          >清 空</el-button
+          >还 原</el-button
         >
         <el-button
           type="primary"
@@ -1156,8 +1156,7 @@ export default {
       }
     },
     evaluateView: function() {
-      if (this.selfEvaluationForm.evaluate)
-        return this.selfEvaluationForm.evaluate.split('\n');
+      if (this.resume.evaluate) return this.resume.evaluate.split('\n');
       else {
         return [];
       }
@@ -1520,6 +1519,10 @@ export default {
               JSON.stringify(this.resume.eduExp[index])
             );
             break;
+          case 'dialog6':
+            this.dialog6 = true;
+            this.selfEvaluationForm.evaluate = this.resume.evaluate;
+            break;
         }
         //标记成"编辑"状态
         this.editStatus = true;
@@ -1574,7 +1577,7 @@ export default {
     async savePsnlEvaluate() {
       let saveResult = await savePsnlEvaluate({
         pid: this.$store.getters['person/pid'],
-        content: this.selfEvaluationForm.evaluate
+        evaluate: this.selfEvaluationForm.evaluate
       }).catch(() => {
         this.$message({
           type: 'error',
@@ -1643,7 +1646,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     //初始化加载个人简历基本信息
     this.loadPsnlResume();
   }

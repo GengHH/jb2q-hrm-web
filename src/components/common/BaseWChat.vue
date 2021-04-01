@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 18:25:04
+ * @LastEditTime: 2021-04-01 11:30:41
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
@@ -227,7 +227,7 @@ export default {
     color: #aaa;
   }
   ::v-deep .header {
-    background-color: #d35e5e69 !important;
+    background-color: #f1b6b6 !important;
   }
 }
 </style>

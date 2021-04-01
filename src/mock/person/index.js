@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 16:00:58
+ * @LastEditTime: 2021-04-01 15:18:12
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -199,7 +199,7 @@ Mock.mock(basePath + '/person/resume/saveLanguageLevel', 'post', function(
 Mock.mock(basePath + '/person/resume/saveLaborExp', 'post', function(options) {
   return successData;
 });
-//获取职位信息
+//获取职位信息(分页)
 Mock.mock(
   RegExp(basePath + '/person/manage/find/position' + '.*'),
   'post',
@@ -207,45 +207,48 @@ Mock.mock(
     return {
       status: 200,
       message: '',
-      result: Mock.mock({
-        'data|1-10': [
-          {
-            'positionId|+1': '@string("number", 5)',
-            positionCode: '20210100000002',
-            positionName: 'JAVA架构工程师',
-            salaryScope: '20-5004',
-            workArea: '06',
-            workNature: '01',
-            eduRequire: '08',
-            recruitNum: '@string("number", 1,4)',
-            corpName: '上海新移力自动化科技有限公司',
-            cid: '201002025628331',
-            workYearNeed: '05',
-            releaseTime: '@datetime', //'2021-12-10 10:44:36',
-            tranBaseSymbol: '0',
-            agencyRecruit: '0',
-            entrustCorpName: '',
-            releaseUserId: '0000941012',
-            type: '1',
-            'favor|+1': [false, true],
-            recruitType: '1',
-            entrustTyshxym: '',
-            corpId: '201002025628331',
-            positionType: '0201',
-            ageMax: '35',
-            ageMin: '18',
-            workAddress: '上海市普陀区中江路889号804室',
-            workHour: '01',
-            salaryMax: '20000',
-            salaryMin: '6000',
-            salaryPayType: '04',
-            special: '0',
-            describe: '嘴皮子溜，脸皮子厚',
-            onTop: '0',
-            releaseStatusId: '2'
-          }
-        ]
-      })
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'positionId|+1': '@string("number", 5)',
+              positionCode: '20210100000002',
+              positionName: 'JAVA架构工程师',
+              salaryScope: '20-5004',
+              workArea: '06',
+              workNature: '01',
+              eduRequire: '08',
+              recruitNum: '@string("number", 1,4)',
+              corpName: '上海新移力自动化科技有限公司',
+              cid: '201002025628331',
+              workYearNeed: '05',
+              releaseTime: '@datetime', //'2021-12-10 10:44:36',
+              tranBaseSymbol: '0',
+              agencyRecruit: '0',
+              entrustCorpName: '',
+              releaseUserId: '0000941012',
+              type: '1',
+              'favor|+1': [false, true],
+              recruitType: '1',
+              entrustTyshxym: '',
+              corpId: '201002025628331',
+              positionType: '0201',
+              ageMax: '35',
+              ageMin: '18',
+              workAddress: '上海市普陀区中江路889号804室',
+              workHour: '01',
+              salaryMax: '20000',
+              salaryMin: '6000',
+              salaryPayType: '04',
+              special: '0',
+              describe: '嘴皮子溜，脸皮子厚',
+              onTop: '0',
+              releaseStatusId: '2'
+            }
+          ]
+        })
+      }
     };
   }
 );
@@ -268,7 +271,7 @@ Mock.mock(basePath + '/person/feedback/do-applyFor', 'post', function(options) {
   return successData;
 });
 //修改个人评价
-Mock.mock(basePath + '/person/resume/savePsnlEvaluate', 'put', function(
+Mock.mock(basePath + '/person/resume/savePsnlEvaluate', 'post', function(
   options
 ) {
   return successData;

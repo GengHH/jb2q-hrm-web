@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 14:55:35
+ * @LastEditTime: 2021-04-01 14:20:31
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -150,27 +150,27 @@
         <el-row>
           <el-form-item
             label="评价星级"
-            prop="star"
+            prop="evaluationLevel"
             :label-width="formLabelWidth"
           >
             <el-rate
-              v-model="jobEvaluationForm.star"
+              v-model="jobEvaluationForm.evaluationLevel"
               show-text
-              :texts="starText"
+              :texts="evaluationLevelText"
             >
             </el-rate>
           </el-form-item>
         </el-row>
         <el-form-item
           label="评价内容"
-          prop="content"
+          prop="evaluationContent"
           :label-width="formLabelWidth"
         >
           <el-input
-            class="star-textarea"
+            class="evaluationLevel-textarea"
             type="textarea"
             placeholder="请输入（1000字以内）"
-            v-model="jobEvaluationForm.content"
+            v-model="jobEvaluationForm.evaluationContent"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -221,23 +221,25 @@ export default {
       dialog1: false,
       wchatDialog: false,
       pid: this.$store.getters['person/pid'],
-      starText: this.$store.getters['dictionary/common_startext'],
+      evaluationLevelText: this.$store.getters[
+        'dictionary/common_evaluationLeveltext'
+      ],
       queryParam: {
         gjz: ''
       },
       jobEvaluationForm: {
         applyforId: '',
-        star: 0,
+        evaluationLevel: 0,
         corpName: '',
         positionName: '',
-        content: ''
+        evaluationContent: ''
       },
       rules: {},
       tableData: [
         {
           age: 20,
           date: '2019-05-01',
-          star: null,
+          evaluationLevel: null,
           corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
           salaryScope: '10k',
@@ -251,7 +253,7 @@ export default {
         {
           age: 20,
           date: '2019-05-04',
-          star: null,
+          evaluationLevel: null,
           corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
           salaryScope: '10k',
@@ -265,7 +267,7 @@ export default {
         {
           age: 20,
           date: '2019-05-03',
-          star: null,
+          evaluationLevel: null,
           corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
           salaryScope: '10k',
@@ -279,7 +281,7 @@ export default {
         {
           age: 20,
           date: '2019-05-02',
-          star: null,
+          evaluationLevel: null,
           corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
           salaryScope: '10k',
@@ -293,7 +295,7 @@ export default {
         {
           age: 20,
           date: '2019-05-05',
-          star: null,
+          evaluationLevel: null,
           corpName: '万达信息股份有限公司',
           positionName: '软件工程师',
           salaryScope: '10k',
@@ -697,7 +699,7 @@ export default {
     height: 100%;
     padding-top: 10px;
   }
-  ::v-deep .star-textarea {
+  ::v-deep .evaluationLevel-textarea {
     textarea {
       height: 150px !important;
     }
