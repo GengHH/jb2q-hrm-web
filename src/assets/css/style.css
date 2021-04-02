@@ -165,7 +165,7 @@ body {
   visibility: hidden;
 }
 
-.el-carousel--horizontal{
+.el-carousel--horizontal {
   overflow-y: hidden;
 }
 .el-pager li.active {

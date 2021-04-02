@@ -287,15 +287,16 @@ export default {
               type: 'error'
             });
           }
-        } else {
-          done();
-          this.$message({
-            showClose: true,
-            message: '系统异常，保存报错!',
-            type: 'error'
-          });
-          return false;
         }
+        // else {
+        //   done();
+        //   this.$message({
+        //     showClose: true,
+        //     message: '系统异常，保存报错!',
+        //     type: 'error'
+        //   });
+        //   return false;
+        // }
       });
     }
     // submit(done) {
