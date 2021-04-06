@@ -539,7 +539,7 @@ export default {
       let that = this;
       let params = this.$refs['queryJobFrom']?.model
         ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
-        : {};
+        : this.queryParams;
       params.positionName = $.trim(val);
       that.queryParams.positionName = $.trim(val);
       params.pageParam = {
@@ -550,7 +550,11 @@ export default {
       try {
         let result = await queryJobs(params);
         console.log('result', result);
-        if (result.status === 200) {
+        if (
+          result.status === 200 &&
+          result.result.pageresult &&
+          result.result.pageresult.total
+        ) {
           result.result.pageresult.data.forEach(item => {
             // 转换字典
             if (item.workArea) {
@@ -578,6 +582,11 @@ export default {
             'queryResultTotal',
             Number(result.result.pageresult.total) || 0
           );
+        } else {
+          this.$message({
+            type: 'success',
+            message: '未查询到信息'
+          });
         }
       } catch (error) {
         console.log(error);

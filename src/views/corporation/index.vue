@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 17:03:53
+ * @LastEditTime: 2021-04-06 19:14:37
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -60,10 +60,12 @@
       </el-col>
       <el-col :span="12" class="form-item-left">
         <el-form-item required>
-          <pl-input
+          <pl-select
             v-model="corporationInfo.corpNature"
+            :optionData="dicCorpNature"
             label="单位性质"
-          ></pl-input>
+          >
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
@@ -100,7 +102,7 @@
           <pl-select
             v-model="corporationInfo.industryType"
             label="行业类别"
-            :optionData="dicStreet"
+            :optionData="dicIndustryType"
             class="w-select"
           >
           </pl-select>
@@ -202,7 +204,7 @@
       >
         保存
       </pl-button>
-      <el-button class="white-btn btn-style" @click="getcorporationInfo()"
+      <el-button class="white-btn btn-style" @click="dialogClear"
         >取消</el-button
       >
     </div>
@@ -288,11 +290,8 @@ export default {
         ]
       },
       dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
-      dicStreet: [
-        { value: '1309', label: '区域一' },
-        { value: '1310', label: '区域二' }
-      ],
-      colRowGutter: 40,
+      dicCorpNature: this.$store.getters['dictionary/recruit_corp_nature'],
+      dicIndustryType: this.$store.getters['dictionary/recruit_industry_type'],
       labelPosition: ''
     };
   },
@@ -323,10 +322,10 @@ export default {
         }
         // TODO 更换cid this.$store.getters['corporation/cid']
         let result = await loadCorpInfo({
-          pid: this.$store.getters['corporation/cid'] || '201002025628331'
+          cid: this.$store.getters['corporation/cid'] || '201002025628331'
         });
         console.log('result', result);
-        if (result.status === 200 && result.result.data.cid)
+        if (result.status === 200 && result.result.data)
           this.$set(this, 'corporationInfo', result.result.data);
         else
           this.$message({
@@ -365,7 +364,13 @@ export default {
         }
       });
     },
-    changeQx() {}
+    changeQx() {
+      this.$alert('暂时没有此Api接口，请稍后！');
+    },
+    dialogClear() {
+      //清空弹出框
+      this.$refs.corporationInfo.resetFields();
+    }
   },
   created() {
     // console.log("index begin creating");
@@ -376,6 +381,7 @@ export default {
     // }).catch( err=>{
     //   console.log(err)
     // });
+    this.getcorporationInfo();
   }
 };
 </script>

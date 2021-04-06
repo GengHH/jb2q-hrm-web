@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 16:52:01
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-06 20:04:55
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -128,7 +128,9 @@ const getters = {
   sybx_jhh: state => state.SYBX_JHH,
   recruit_expert_curr_status: state => state.RECRUIT_EXPERT_CURR_STATUS,
   recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS,
-  recruit_work_hour: state => state.RECRUIT_WORK_HOUR
+  recruit_work_hour: state => state.RECRUIT_WORK_HOUR,
+  recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
+  recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE
 };
 
 const mutations = {
@@ -188,6 +190,12 @@ const mutations = {
   },
   set_RECRUIT_WORK_HOUR: (state, dictionary) => {
     state.RECRUIT_WORK_HOUR = dictionary;
+  },
+  set_RECRUIT_CORP_NATURE: (state, dictionary) => {
+    state.RECRUIT_CORP_NATURE = dictionary;
+  },
+  set_RECRUIT_SPECIAL_PEOPLE: (state, dictionary) => {
+    state.RECRUIT_SPECIAL_PEOPLE = dictionary;
   }
 };
 

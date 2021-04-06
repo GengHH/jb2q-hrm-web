@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-17 18:12:10
+ * @LastEditTime: 2021-04-06 18:50:23
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -13,7 +13,7 @@ import Mock from 'mockjs';
 import config from '../../config/mock.conf';
 import '../commonMock';
 
-const basePath = config.personBasePath;
+const basePath = config.corpBasePath;
 /**
  * 通用的测试通过返回的结果
  */
@@ -24,7 +24,7 @@ const successData = {
 };
 
 /**
- * 查询个人的基本信息
+ * 查询单位的基本信息
  * @param {*} pid
  */
 const getCorpbaseInfo = pid => {
@@ -82,12 +82,91 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
     status: 200,
     message: '',
     result: {
-      cid: '123123123123'
+      logonUser: {
+        userId: '',
+        userIdStr: '0000785243',
+        userName: 'srg',
+        loginName: '6030@XY91310000631291289X',
+        userType: '01',
+        organId: '',
+        organIdStr: '200008010546251',
+        organName: '上海市数字证书认证中心有限公司',
+        organType: '',
+        domainId: 1,
+        domainIdStr: '',
+        domainName: '',
+        roleKey: 'SC:R:1_c81e728d9d4c2f636f067f89cc14862c',
+        userKey:
+          '384e86e36b7a8fb4d3e700c2a177e39ceba04f93d9d5684c3dd569074a2d7c17',
+        expire: -1,
+        extInfo: {
+          sessionId: 'bd369ffc-96c1-11eb-af7f-005056896dc3',
+          logid: '',
+          userType: '01',
+          userId: '0000785243',
+          userName: 'srg',
+          userPhone: '11111111111',
+          loginName: '6030@XY91310000631291289X',
+          userKey: '111111111111111111',
+          organId: '200008010546251',
+          organCode: '00051499',
+          organName: '上海市数字证书认证中心有限公司',
+          organType: '159',
+          organStatus: '',
+          deptId: '',
+          deptCode: '',
+          deptType: '40',
+          deptName: '上海市数字证书认证中心有限公司',
+          districtCode: '09',
+          districtName: '虹口',
+          streetCode: '',
+          streetName: '',
+          communityCode: '',
+          communityName: '',
+          loginCaType: '01',
+          cookieToken: '',
+          pid: '',
+          deviceSN: '',
+          sfbz: '200008010546251',
+          passBySb: true,
+          yxbz: '1',
+          sbdwmc: '',
+          tyshxym: ''
+        },
+        areaInfo: {
+          areaCode: '09',
+          areaCode1: '',
+          areaCode2: '200008010546251',
+          areaCode3: '',
+          areaCode4: '',
+          areaCode5: '',
+          areaCode6: '',
+          areaName: '虹口',
+          areaName1: '',
+          areaName2: '上海市数字证书认证中心有限公司',
+          areaName3: '',
+          areaName4: '',
+          areaName5: '',
+          areaName6: ''
+        },
+        roles: [
+          {
+            roleId: '2',
+            roleName: '普通角色'
+          }
+        ],
+        readOnly: false,
+        userIdKey: '0000785243',
+        domainIdKey: '1',
+        organIdKey: '200008010546251'
+      }
     }
   };
 });
 
-Mock.mock(basePath + '/corp/info/loadCorpInfo', 'get', function(options) {
+Mock.mock(RegExp(basePath + '/corp/info/loadCorpInfo' + '.*'), 'get', function(
+  options
+) {
   return getCorpbaseInfo(options);
 });
 Mock.mock(basePath + '/person/info/saveCorpInfo', 'post', function(options) {

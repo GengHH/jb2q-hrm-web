@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-02 16:31:55
+ * @LastEditTime: 2021-04-06 20:04:19
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -101,7 +101,11 @@ const dic = {
     { value: '99', label: '其他' }
   ],
   //特定人群
-  RECRUIT_SPECIAL_PEOPLE: [],
+  RECRUIT_SPECIAL_PEOPLE: [
+    { value: '01', label: '应届毕业生' },
+    { value: '02', label: '残疾人' },
+    { value: '03', label: '退役' }
+  ],
   //工作性质
   RECRUIT_WORK_NATURE: [
     { value: '01', label: '全职' },

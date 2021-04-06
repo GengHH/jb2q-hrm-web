@@ -400,6 +400,7 @@
               <el-input
                 v-model.number="jobIntentionForm.salaryMin"
                 autocomplete="off"
+                @change="minSalaryChange"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
@@ -411,6 +412,7 @@
               <el-input
                 v-model.number="jobIntentionForm.salaryMax"
                 autocomplete="off"
+                @change="maxSalaryChange"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -491,7 +493,7 @@
         :model="workExperienceForm"
         ref="workExperienceForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :rules="rules.workExperienceRules"
       >
         <el-form-item
           label="曾任职公司名称"
@@ -591,7 +593,7 @@
         :model="educationExperienceForm"
         ref="educationExperienceForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :rules="rules.educationExperienceRules"
       >
         <el-form-item
           label="毕业院校"
@@ -787,7 +789,7 @@
         :model="skillsCertificateForm"
         ref="skillsCertificateForm"
         :label-position="labelPosition"
-        :rules="rules"
+        :rules="rules.skillsCertificateRules"
       >
         <el-form-item
           label="证书名称"
@@ -818,11 +820,11 @@
           prop="receiveTime"
         >
           <el-date-picker
-            type="date"
+            type="month"
             placeholder="请选择"
             v-model="skillsCertificateForm.receiveTime"
             style="width: 70%;"
-            value-format="yyyy-MM-dd"
+            value-format="yyyyMM"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -916,7 +918,7 @@ export default {
       editStatus: false,
       editItemIdex: 0,
       labelPosition: 'right',
-      formLabelWidth: '120px',
+      formLabelWidth: '150px',
       applyForId: '',
       resumeId: '',
       pid: this.$store.getters['person/pid'],
@@ -978,6 +980,19 @@ export default {
       },
       rules: {
         positionsLikeRules: {
+          positionLike: [
+            { required: true, message: '请输入', trigger: 'blur' }
+          ],
+          industryLike: [
+            { required: true, message: '请输入意向行业', trigger: 'blur' },
+            { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
+          ],
+          workArea: [
+            { required: true, message: '请输入意向工作区域', trigger: 'blur' }
+          ],
+          workNature: [
+            { required: true, message: '请输入意向工作性质', trigger: 'blur' }
+          ],
           salaryMin: [
             {
               required: true,
@@ -1003,6 +1018,59 @@ export default {
               message: '月薪介于1000和99999',
               trigger: 'blur'
             }
+          ]
+        },
+        workExperienceRules: {
+          corpName: [
+            { required: true, message: '请输入单位名称', trigger: 'blur' },
+            { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
+          ],
+          entryDate: [
+            { required: true, message: '请输入起始时间', trigger: 'blur' }
+          ],
+          quitDate: [
+            { required: true, message: '请输入结束时间', trigger: 'blur' }
+          ],
+          positionName: [
+            { required: true, message: '请输入所任职位', trigger: 'blur' },
+            { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
+          ],
+          workDescribe: [
+            { required: true, message: '请输入主要工作内容', trigger: 'blur' },
+            { max: 1000, message: '长度不可超过1000个字符', trigger: 'blur' }
+          ]
+        },
+        educationExperienceRules: {
+          collegesName: [
+            { required: true, message: '请输入毕业院校', trigger: 'blur' },
+            { max: 100, message: '长度不可超过100个字符', trigger: 'blur' }
+          ],
+          majorName: [
+            { required: true, message: '请输入专业', trigger: 'blur' },
+            { max: 400, message: '长度不可超过400个字符', trigger: 'blur' }
+          ],
+          eduLevel: [
+            { required: true, message: '请输入学历', trigger: 'blur' },
+            { max: 1000, message: '长度不可超过1000个字符', trigger: 'blur' }
+          ],
+          admissionDate: [
+            { required: true, message: '请输入入学时间', trigger: 'blur' }
+          ],
+          graduateDate: [
+            { required: true, message: '请输入毕业时间', trigger: 'blur' }
+          ]
+        },
+        skillsCertificateRules: {
+          certName: [
+            { required: true, message: '请输入证书名称', trigger: 'blur' },
+            { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
+          ],
+          certLevel: [
+            { required: true, message: '请输入技能等级', trigger: 'blur' },
+            { max: 100, message: '长度不可超过100个字符', trigger: 'blur' }
+          ],
+          receiveTime: [
+            { required: true, message: '请输入获得时间', trigger: 'blur' }
           ]
         },
         languageRules: {
@@ -1328,7 +1396,7 @@ export default {
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
-                      type: 'error',
+                      type: 'success',
                       message: '保存成功'
                     });
                     this.resume.laborExp.push(params);
@@ -1368,7 +1436,7 @@ export default {
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
-                      type: 'error',
+                      type: 'success',
                       message: '保存成功'
                     });
                     this.resume.eduExp.push(params);
@@ -1408,7 +1476,7 @@ export default {
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
-                      type: 'error',
+                      type: 'success',
                       message: '保存成功'
                     });
                     this.resume.psnlLanguage.push(params);
@@ -1446,7 +1514,7 @@ export default {
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
-                      type: 'error',
+                      type: 'success',
                       message: '保存成功'
                     });
                     this.resume.psnlSkillcert.push(params);
@@ -1629,6 +1697,7 @@ export default {
             //   : '';
             this.resume.positionLike = this.jobIntentionForm.positionLike;
             this.jobIntentionForm.positionLike = this.positionLikeArray;
+            this.dialog1 = false;
           } else {
             this.$message({
               type: 'error',
@@ -1643,6 +1712,50 @@ export default {
         this.$alert('外语能力最多只能添加5条');
       } else {
         this.dialog4 = true;
+      }
+    },
+    minSalaryChange() {
+      if (!this.jobIntentionForm.salaryMin) {
+        return;
+      }
+      // if (isNaN(Number(this.jobIntentionForm.salaryMin))) {
+      //   this.$alert('请输入数值');
+      //   this.jobIntentionForm.salaryMin = '';
+      // } else
+      if (
+        this.jobIntentionForm.salaryMax &&
+        this.jobIntentionForm.salaryMin > this.jobIntentionForm.salaryMax
+      ) {
+        this.$alert('薪酬下限不得低于薪酬上限');
+        this.jobIntentionForm.salaryMin = '';
+      } else if (
+        this.jobIntentionForm.salaryMax &&
+        this.jobIntentionForm.salaryMin * 3 < this.jobIntentionForm.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.jobIntentionForm.salaryMax = '';
+      }
+    },
+    maxSalaryChange() {
+      if (!this.jobIntentionForm.salaryMax) {
+        return;
+      }
+      // if (isNaN(Number(this.jobIntentionForm.salaryMax))) {
+      //   this.$alert('请输入数值');
+      //   this.jobIntentionForm.salaryMax = '';
+      // } else
+      if (
+        this.jobIntentionForm.salaryMin &&
+        this.jobIntentionForm.salaryMin > this.jobIntentionForm.salaryMax
+      ) {
+        this.$alert('薪酬上限不得高于薪酬下限');
+        this.jobIntentionForm.salaryMin = '';
+      } else if (
+        this.jobIntentionForm.salaryMin &&
+        this.jobIntentionForm.salaryMin * 3 < this.jobIntentionForm.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.jobIntentionForm.salaryMax = '';
       }
     }
   },
