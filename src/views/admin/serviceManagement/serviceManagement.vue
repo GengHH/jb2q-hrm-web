@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-26 16:48:37
+ * @LastEditTime: 2021-04-02 17:33:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -11,13 +11,13 @@
     <el-row>
       <el-col>
         <div style="margin-left:20px;color:#fc7a43">
-          <span style="font-size:24px">4561131</span>
+          <span style="font-size:24px">{{ total }}</span>
           <span>人</span>
         </div>
       </el-col>
     </el-row>
     <el-row style="margin:15px 0">
-      <el-col :sm="14" :md="15" :lg="17" :xl="18">
+      <el-col :sm="12" :md="14" :lg="16" :xl="18">
         <el-row>
           <el-col :span="2">
             <div style="line-height:40px;text-align:center">关键字</div>
@@ -31,7 +31,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :sm="10" :md="9" :lg="7" :xl="6" style="text-align:right">
+      <el-col :sm="12" :md="10" :lg="8" :xl="6" style="text-align:right">
         <el-button @click="onSearch" type="primary">
           <i class="el-icon-search"></i>
           搜索
@@ -91,6 +91,8 @@ export default {
   },
   data() {
     return {
+      istotal: true,
+      total: 0,
       dates: ['2021-03-16', '2021-03-17'],
       form: {
         gjz: ''
@@ -103,7 +105,7 @@ export default {
         style: {
           width: '650px',
           margin: '0 auto',
-          background: '#eaeaea',
+          background: '#ffffff',
           border: '1px solid #e2e2e2',
           boxShadow: '2px 2px 5px #bbbbbb'
         },
@@ -341,19 +343,11 @@ export default {
       console.log('------------------');
       let params = { ...this.form };
       params.pageParam = { ...this.pageList };
-      const loading = this.$loading({
-        lock: true,
-        text: '搜索中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.5)'
-      });
-
       emphasis_keypoint(
         params,
         res => {
-          loading.close();
           console.log(res);
-          let record = res.result.record;
+          let record = res.result.data;
           let data = record.data.map(e => {
             e.titleList = this.titleList;
             e.titleListShow = false;
@@ -366,6 +360,11 @@ export default {
             pageSize: record.pageSize,
             pageIndex: record.pageIndex
           };
+
+          if (this.istotal) {
+            this.total = record.total;
+            this.istotal = false;
+          }
         },
         err => {
           console.log(err);
@@ -373,32 +372,59 @@ export default {
       );
     }
   },
-
+  mounted() {
+    this.onSearch();
+  },
   created() {
-    let fn = [
+    let path = [
+      //个人基本信息
+      {
+        url: '/admin/keypoint/show/psnlInfo',
+        data: { pid: '200008000237040' }
+      },
+      //简历信息
       {
         url: '/admin/keypoint/show/resume',
         data: { pid: '200008000237040' }
       },
-      {
-        url: '/admin/keypoint/show/employ',
-        data: { pid: '200008000237040' }
-      },
-      {
-        url: '/admin/keypoint/show/favor',
-        data: { pid: '200008000237040' }
-      },
+      //劳动经历
       {
         url: '/admin/keypoint/show/labor',
         data: { pid: '200008000237040' }
       },
+      //社保缴费记录
+      {
+        url: '/admin/keypoint/show/insur',
+        data: { pid: '200008000237040' }
+      },
+      //就业见习记录
+      {
+        url: '/admin/keypoint/show/trainee',
+        data: { pid: '200008000237040' }
+      },
+      //简历投递及反馈记录 --
+      {
+        url: '/admin/keypoint/show/employ',
+        data: { pid: '200008000237040' }
+      },
+      //职位评价记录
       {
         url: '/admin/keypoint/show/evaluation',
+        data: { pid: '200008000237040' }
+      },
+      //职位收藏记录
+      {
+        url: '/admin/keypoint/show/favor',
+        data: { pid: '200008000237040' }
+      },
+      //就业服务记录
+      {
+        url: '/admin/keypoint/show/employ',
         data: { pid: '200008000237040' }
       }
     ];
     allAction(
-      fn,
+      path,
       res => {
         console.log(res);
       },

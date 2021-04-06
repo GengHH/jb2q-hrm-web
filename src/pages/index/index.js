@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 09:38:17
+ * @LastEditTime: 2021-04-01 09:32:25
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -38,15 +38,48 @@ if (config.mock) {
   require('@/mock/index/index.js');
 }
 //sessionStorage.setItem('a', 'genghonghui');
-//测试获取字典表
-// var isEmpty = function(obj) {
-//   if (obj === null || obj === undefined || obj.length === 0) {
-//     return true;
-//   }
-// };
-// if (isEmpty(store.getters['dictionary/yesno'])) {
-//   store.dispatch('dictionary/init_Dictionary', 'YESNO');
-// }
+//测试获取字典表;
+var isEmpty = function(obj) {
+  if (obj === null || obj === undefined || obj.length === 0) {
+    return true;
+  }
+};
+
+//初始化字典表;
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+}
+if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_INDUSTRY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

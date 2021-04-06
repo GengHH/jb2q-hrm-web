@@ -133,6 +133,7 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(response => {
+  console.log('response', response);
   let _data = response.data;
   if (_data && typeof _data === 'string' && _data.includes('!DOCTYPE')) {
     Notification({

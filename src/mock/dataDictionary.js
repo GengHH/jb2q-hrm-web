@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 17:41:05
+ * @LastEditTime: 2021-04-02 17:51:38
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -657,6 +657,15 @@ const dic = {
     { value: '07', label: '退团未审核' },
     { value: '08', label: '退团审核通过' },
     { value: '09', label: '退团审核不通过' }
+  ],
+  //就业状态
+  GGJBXX_JYZT: [
+    { value: '1	', label: '就业' },
+    { value: '2	', label: '无业' },
+    { value: '3	', label: '失业' },
+    { value: '4	', label: '养老' },
+    { value: '5	', label: '农村富余' },
+    { value: '6	', label: '农村就业' }
   ]
 };
 

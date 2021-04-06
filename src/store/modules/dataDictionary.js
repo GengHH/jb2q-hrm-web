@@ -1,12 +1,15 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
-<<<<<<< HEAD
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 17:44:08
+<<<<<<< HEAD
+ * @LastEditTime: 2021-04-02 17:53:37
 =======
  * @LastEditors: GengHH
  * @LastEditTime: 2021-03-29 17:20:32
+>>>>>>> upstream/master
+=======
+ * @LastEditTime: 2021-03-31 16:52:01
 >>>>>>> upstream/master
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
@@ -135,9 +138,13 @@ const getters = {
   recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS,
   recruit_work_hour: state => state.RECRUIT_WORK_HOUR,
   recruit_act_date_type: state => state.RECRUIT_ACT_DATE_TYPE,
-  recruit_act_type: state => state.RECRUIT_ACT_TYPE
+  recruit_act_type: state => state.RECRUIT_ACT_TYPE,
+  ggjbxx_jyzt: state => state.GGJBXX_JYZT
 };
 const mutations = {
+  set_GGJBXX_JYZT: (state, dictionary) => {
+    state.GGJBXX_JYZT = dictionary;
+  },
   set_RECRUIT_ACT_TYPE: (state, dictionary) => {
     state.RECRUIT_ACT_TYPE = dictionary;
   },

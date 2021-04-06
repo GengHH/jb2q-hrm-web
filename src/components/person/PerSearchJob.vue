@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-31 16:25:57
+ * @LastEditTime: 2021-04-01 11:26:06
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -141,11 +141,7 @@
       </div>
     </div> -->
     <!-- for everyone -->
-    <div
-      class="div-box padd0"
-      v-for="(jobItem, index) in pageTableData"
-      :key="index"
-    >
+    <div class="div-box padd0" v-for="(jobItem, index) in jobData" :key="index">
       <el-row>
         <el-col :span="1" class="mat-15">
           <!-- <el-checkbox
@@ -193,7 +189,7 @@
             <span>A10000人以上</span>
           </p>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="5" class="text-right">
           <el-button
             type="primary"
             class="release-btn"
@@ -219,7 +215,7 @@
             >人</span
           >
         </el-col>
-        <el-col :span="5">
+        <el-col :span="5" class="text-right">
           <span class="fourteen-opacity"
             >发布时间：{{ jobItem.releaseTime }}</span
           >
@@ -233,8 +229,10 @@
       :class="pagerClass"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
+      @prev-click="handlePrevClick"
+      @next-click="handleNextClick"
       :current-page="currentPage"
-      :total="jobData.length"
+      :total="totalCount"
     >
     </el-pagination>
   </div>
@@ -260,13 +258,17 @@ export default {
     jobData: {
       type: Array,
       default: () => []
+    },
+    total: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
       checkAll: false,
       isIndeterminate: true,
-      currentPage: 1,
+      currentPage: 0,
       pageSize: 10
     };
   },
@@ -285,14 +287,35 @@ export default {
             this.currentPage * this.pageSize
           )
         : this.jobData;
+    },
+    totalCount() {
+      return this.total ? this.total : this.jobData.length;
     }
   },
   methods: {
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
+      if (this.$parent.queryJobs) {
+        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      }
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
+      if (this.$parent.queryJobs) {
+        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      }
+    },
+    handlePrevClick(currentPage) {
+      this.currentPage = currentPage;
+      if (this.$parent.queryJobs) {
+        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      }
+    },
+    handleNextClick(currentPage) {
+      this.currentPage = currentPage;
+      if (this.$parent.queryJobs) {
+        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      }
     },
     selectJob(index, positionId) {
       //投递简历

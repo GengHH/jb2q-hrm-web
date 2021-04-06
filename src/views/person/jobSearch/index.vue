@@ -123,7 +123,8 @@
                   <el-input
                     id="minAge"
                     placeholder="请输入年龄下限"
-                    v-model="queryParams.ageMin"
+                    prefix-icon="el-icon-user"
+                    v-model.number="queryParams.ageMin"
                     @change="minAgeChange"
                     clearable
                   >
@@ -134,7 +135,8 @@
                   <el-input
                     id="maxAge"
                     placeholder="请输入年龄上限"
-                    v-model="queryParams.ageMax"
+                    prefix-icon="el-icon-user"
+                    v-model.number="queryParams.ageMax"
                     @change="maxAgeChange"
                     clearable
                   >
@@ -146,7 +148,8 @@
                   <el-input
                     id="minSalary"
                     placeholder="请输入薪酬下限"
-                    v-model="queryParams.salaryMin"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMin"
                     @change="minSalaryChange"
                     clearable
                   >
@@ -157,7 +160,8 @@
                   <el-input
                     id="maxSalary"
                     placeholder="请输入薪酬上限"
-                    v-model="queryParams.salaryMax"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMax"
                     @change="maxSalaryChange"
                     clearable
                   >
@@ -174,13 +178,13 @@
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <el-checkbox v-model="queryParams.agencyRecruit"
+                <el-checkbox false-label="0" true-label="1" v-model="queryParams.agencyRecruit"
                   >中介待招</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.tranBaseSymbol"
+                <el-checkbox false-label="0" true-label="1" v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.special"
+                <el-checkbox false-label="0" true-label="1" v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
                 <el-select
@@ -242,7 +246,9 @@
     <!-- 查询结果 -->
     <per-search-job
       v-if="queryResult.length"
+      ref="searchJobList"
       :jobData="queryResult"
+      :total="queryResultTotal"
       showPager
       @deliveryResume="deliveryResume(arguments)"
       @favorJob="favorJob(arguments)"
@@ -314,7 +320,7 @@ export default {
         eduRequire: '',
         recruitNum: '3',
         tranBaseSymbol: '0',
-        special: '',
+        special: '0',
         agencyRecruit: '0',
         salaryMin: '',
         salaryMax: '',
@@ -346,6 +352,7 @@ export default {
       options: [],
       tableData: [],
       queryResult: [],
+      queryResultTotal: 0,
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_s_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -365,6 +372,9 @@ export default {
           })
         : {};
     }
+  },
+  created() {
+    this.queryJobs();
   },
   methods: {
     minSalaryChange() {
@@ -455,19 +465,24 @@ export default {
       this.queryParams.workYearNeed = '';
     },
     async queryJobs(val) {
-      console.log(this.$refs['queryJobFrom'].model);
-      if (!val) {
-        this.$alert('请输入查询条件');
-        return;
-      }
+      // if (!val) {
+      //   this.$alert('请输入查询条件');
+      //   return;
+      // }
       let that = this;
       let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
       params.positionName = $.trim(val);
+      that.queryParams.positionName = $.trim(val);
+      params.pageParam = {
+        total: 0,
+        pageSize: that.$refs.searchJobList?.pageSize || 10,
+        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+      };
       try {
         let result = await queryJobs(params);
         console.log('result', result);
         if (result.status === 200) {
-          result.result.data.forEach(item => {
+          result.result.pageresult.data.forEach(item => {
             // 转换字典
             if (item.workArea) {
               item.workAreaText = getDicText(
@@ -488,7 +503,12 @@ export default {
               );
             }
           });
-          this.$set(this, 'queryResult', result.result.data);
+          this.$set(this, 'queryResult', result.result.pageresult.data);
+          this.$set(
+            this,
+            'queryResultTotal',
+            Number(result.result.pageresult.total) || 0
+          );
         }
       } catch (error) {
         console.log(error);
@@ -674,7 +694,9 @@ export default {
       text-align: center;
     }
     ::v-deep #minAge,
-    ::v-deep #maxAge {
+    ::v-deep #maxAge,
+    ::v-deep #minSalary,
+    ::v-deep #maxSalary {
       border: 1px solid #eeeeee;
       width: 100% !important;
     }
