@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
- * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-03-31 17:36:14
+ * @Date: 2021-04-01 13:42:18
+ * @LastEditTime: 2021-04-02 09:29:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
 -->
 <template>
   <el-dialog
-    title="专家结对记录"
+    title="单位账号管理"
     width="850px"
     :visible="visible"
     @close="onclose"
@@ -23,28 +23,14 @@
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="姓名" prop="xm">
-              <el-input v-model="form.xm"></el-input>
+            <el-form-item label="单位名称" prop="meetTheme">
+              <el-input v-model="form.meetTheme"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="专家编号" prop="expertId">
-              <el-input v-model="form.expertId"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="结对人员姓名" prop="pid">
-              <el-select v-model="form.pid" style="width:100%">
-                <el-option label="陈进福" value="201605238646380"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结对开始时间" prop="pairStartTime">
+            <el-form-item label="单位状态" prop="meetTime">
               <el-date-picker
-                v-model="form.pairStartTime"
+                v-model="form.meetTime"
                 type="date"
                 style="width:100%"
                 value-format="yyyyMMdd"
@@ -55,27 +41,58 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="结对人员证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+            <el-form-item label="冻结/解冻时间" prop="meetAddress">
+              <el-input v-model="form.meetAddress"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="结对人员联系电话" prop="contactNumber">
-              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+          <!-- <el-col :span="12">
+            <el-form-item label="会议召集人" prop="meetCaller">
+              <el-input v-model="form.meetCaller"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="服务次数" prop="serviceCount">
-              <el-input v-model="form.serviceCount"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
         <el-row>
           <el-col :span="24">
-            <el-form-item v-if="!disabled" label="结对协议书">
+            <el-form-item label="冻结/解冻原因" prop="expertNames">
+              <el-select v-model="form.expertNames" style="width:100%">
+                <el-option label="测试专家" value="0052103001"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="12">
+            <el-form-item label="与会其他人员" prop="meetOtherPeople">
+              <el-input v-model="form.meetOtherPeople"></el-input>
+            </el-form-item>
+          </el-col> -->
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="冻结/解冻原因" prop="meetOtherPeople">
+              <el-checkbox-group v-model="checkList" @change="checkboxClick">
+                <el-checkbox value="1" label="就业见习基地"></el-checkbox>
+                <el-checkbox value="2" label="人力资源机构"></el-checkbox>
+                <el-checkbox value="3" label="代理招聘企业"></el-checkbox>
+                <el-checkbox value="4" label="重点企业"></el-checkbox>
+                <el-checkbox value="5" label="特定单位"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="checkListStatus" :span="20" style="margin-left:150px">
+            <el-checkbox-group v-model="checkList2">
+              <el-checkbox value="1" label="是否需要简历搜索"></el-checkbox>
+              <el-checkbox value="2" label="是否允许简历收藏"></el-checkbox>
+              <el-checkbox value="3" label="是否允许简历下载"></el-checkbox
+              ><span>每周简历下载最大数 30份</span>
+              <el-checkbox
+                value="4"
+                label="是否进入首页“推荐单位”"
+              ></el-checkbox>
+            </el-checkbox-group>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item v-if="!disabled" label="公司LOGO">
               <el-upload
                 class="upload-demo"
                 ref="upload"
@@ -102,9 +119,9 @@
 
             <img
               width="600px"
-              v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
-              alt="协议书"
+              v-if="disabled && form.meetImageBase64 != ''"
+              :src="form.meetImageBase64"
+              alt="logo"
             />
           </el-col>
         </el-row>
@@ -117,14 +134,21 @@
 </template>
 
 <script>
+import { management_edit } from '../api/index';
 import { trim } from '@/utils/index';
-import { record_add, record_edit } from '../api/index';
 export default {
-  name: 'recordDetail',
+  name: 'managementDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
     return {
+      checkListStatus: false,
+      checkList2: [],
+      checkList: [],
+      dicOptions: {
+        //专家状态
+        status: trim(this.$store.getters['dictionary/recruit_corp_status'])
+      },
       rules: {
         pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         expertId: [
@@ -160,7 +184,7 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'pairImageBase64');
+      this.getBase64(file.raw, 'meetImageBase64');
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -170,35 +194,18 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (!data.pairImageBase64) {
-            this.$message({
-              message: '操作成功',
-              type: 'warning'
-            });
-            return;
-          }
+          data.expertJoinDatas = [{ expertId: '0052103001' }];
+          // if (!data.meetImageBase64) {
+          //   this.$message({
+          //     message: '请上传签字记录',
+          //     type: 'warning'
+          //   });
+          //   return;
+          // }
           if (this.type == 3) {
-            record_add(
-              data,
-              res => {
-                if (res.status == 200) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    duration: 1000,
-                    onClose: () => {
-                      this.onclose(1);
-                    }
-                  });
-                }
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-            );
+            console.log(data);
           } else {
-            record_edit(
+            management_edit(
               data,
               res => {
                 if (res.status == 200) {
@@ -238,6 +245,13 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
+    },
+    checkboxClick(e) {
+      if (e.indexOf('特定单位') != -1) {
+        this.checkListStatus = true;
+      } else {
+        this.checkListStatus = false;
+      }
     }
   },
   created() {}

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-03-26 13:59:46
+ * @LastEditTime: 2021-04-02 18:24:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -13,31 +13,44 @@
     </div>
     <div class="body">
       <div class="list" v-for="(v, k) in dataList" :key="k">
-        <el-row>
-          <el-col :md="9" :lg="9" :xl="9" class="bg-purple">
+        <el-row style="padding:25px 15px 20px 15px;">
+          <el-col :md="10" :lg="10" :xl="10" class="bg-purple">
             <div>
               <span class="listTiele">{{ v.xm }}</span>
-              <span class="listSubTiele">{{ v.sex }}</span>
-              <span
+              <span class="listSubTiele">{{
+                v.sexId == '1' ? '男' : '女'
+              }}</span>
+              <span v-for="(value, key) in dicOptions.jyzt" :key="key"
                 ><el-tag
+                  v-if="value.value == v.employStatus"
                   size="small"
-                  :class="[!!v.registerRecruit ? 'yesColor' : 'noColor']"
-                  >{{ !!v.registerRecruit ? '已就业' : '未就业' }}</el-tag
+                  :class="[v.employStatus == '1' ? 'yesColor' : 'noColor']"
+                  >{{ value.label }}</el-tag
                 ></span
               >
             </div>
             <div style="margin-top:15px">
               <span class="listSubTiele">{{ v.zjhm }}</span
               ><el-divider direction="vertical"></el-divider>
-              <span class="listSubTiele">{{ v.birthDate }}</span
+              <span class="listSubTiele">{{ formatTime(v.birthDate) }}</span
               ><el-divider direction="vertical"></el-divider>
-              <span class="listSubTiele">{{ v.specialFocus }}</span>
+              <template v-for="(val, key) in dicOptions.edu">
+                <span
+                  v-if="val.value == v.eduId"
+                  :key="key"
+                  class="listSubTiele"
+                  >{{ val.label }}</span
+                >
+              </template>
             </div>
           </el-col>
-          <el-col :md="5" :lg="5" :xl="5" style="text-align: center;">
+          <el-col :md="4" :lg="4" :xl="4" style="text-align: center;">
             <div style="margin-top:20px">
               <span class="listSubTiele">是否注册平台账号</span
-              ><el-checkbox :checked="!!v.employStatus" disabled></el-checkbox>
+              ><el-checkbox
+                :checked="!!Number(v.registerRecruit)"
+                disabled
+              ></el-checkbox>
             </div>
           </el-col>
           <el-col :md="10" :lg="10" :xl="10" style="text-align: right;">
@@ -77,30 +90,41 @@
             </div>
           </el-col>
         </el-row>
-        <el-row style="margin-top:10px">
+        <el-row
+          style="padding:0px 10px;background:#eeeeee;height:44px;line-height:44px"
+        >
           <el-col :md="18" :lg="18" :xl="18">
-            <el-tag
-              style="margin:0 2px"
-              v-for="(v1, k1) in v.aaa008"
-              :key="'k' + k1"
-              effect="plain"
-              type="info"
-              size="small"
-              >{{ v1.title }}</el-tag
-            >
-            <el-tag
-              style="margin:0 2px"
-              v-for="(v2, k2) in v.aaa009"
-              :key="k2"
-              type="warning"
-              effect="dark"
-              size="small"
-              >关注-{{ v2.title }}</el-tag
-            >
+            <template v-if="v.keyPointLableDataList">
+              <template v-for="(v1, k1) in v.keyPointLableDataList">
+                <el-tag
+                  v-if="v1.pointType != '08'"
+                  style="margin:0 2px"
+                  :key="'k' + k1"
+                  effect="plain"
+                  type="info"
+                  size="small"
+                  >{{ v1.pointTypeName }}</el-tag
+                >
+                <el-tag
+                  v-if="v1.pointType == '08'"
+                  style="margin:0 2px"
+                  :key="'b' + k1"
+                  type="warning"
+                  effect="dark"
+                  size="small"
+                  >关注-{{ v1.pointTypeName }}</el-tag
+                >
+              </template>
+            </template>
+            <template v-if="!v.keyPointLableDataList.length">{{
+              '无'
+            }}</template>
           </el-col>
           <el-col :md="6" :lg="6" :xl="6" style="text-align: right;">
             <span class="listSubTiele"
-              >列表名单起始时间：{{ v.updateTime }}</span
+              >列表名单起始时间：{{
+                v.updateTime ? v.updateTime.split(' ')[0] : ''
+              }}</span
             >
           </el-col>
         </el-row>
@@ -129,6 +153,7 @@
 
 <script>
 import pagelist from './pageList';
+import { trim } from '@/utils/index';
 import recommend from '../pages/recommend'; //推荐职位
 export default {
   name: 'queryList',
@@ -139,6 +164,12 @@ export default {
   },
   data() {
     return {
+      dicOptions: {
+        //就业状态
+        jyzt: trim(this.$store.getters['dictionary/ggjbxx_jyzt']),
+        //学历
+        edu: trim(this.$store.getters['dictionary/RECRUIT_EDU'])
+      },
       pagelistIndex: {},
       //遮罩开关
       visible: false,
@@ -147,6 +178,18 @@ export default {
   },
   computed: {},
   methods: {
+    formatTime(time) {
+      if (!time) {
+        return '';
+      }
+      return (
+        time.substring(0, 4) +
+        '-' +
+        time.substring(4, 6) +
+        '-' +
+        time.substring(6, 8)
+      );
+    },
     liClick(e) {
       this.pagelistIndex = { id: e };
       this.dialogTableVisible = true;
@@ -194,8 +237,10 @@ export default {
   .body {
     padding: 15px 0;
     .list {
-      padding: 15px 20px;
+      border-radius: 5px;
+      overflow: hidden;
       border: 1px solid #e5e5e5;
+      margin: 5px 0;
       .listTiele {
         color: #fc7a43;
         font-size: 24px;

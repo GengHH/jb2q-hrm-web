@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
- * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-03-31 17:36:14
+ * @Date: 2021-04-01 15:33:13
+ * @LastEditTime: 2021-04-01 15:33:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
 -->
 <template>
   <el-dialog
-    title="专家结对记录"
+    title="专家会议纪要"
     width="850px"
     :visible="visible"
     @close="onclose"
@@ -23,28 +23,14 @@
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="姓名" prop="xm">
-              <el-input v-model="form.xm"></el-input>
+            <el-form-item label="会议议题" prop="meetTheme">
+              <el-input v-model="form.meetTheme"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="专家编号" prop="expertId">
-              <el-input v-model="form.expertId"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="结对人员姓名" prop="pid">
-              <el-select v-model="form.pid" style="width:100%">
-                <el-option label="陈进福" value="201605238646380"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结对开始时间" prop="pairStartTime">
+            <el-form-item label="会议日期" prop="meetTime">
               <el-date-picker
-                v-model="form.pairStartTime"
+                v-model="form.meetTime"
                 type="date"
                 style="width:100%"
                 value-format="yyyyMMdd"
@@ -55,27 +41,34 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="结对人员证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+            <el-form-item label="会议地点" prop="meetAddress">
+              <el-input v-model="form.meetAddress"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结对人员联系电话" prop="contactNumber">
-              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+            <el-form-item label="会议召集人" prop="meetCaller">
+              <el-input v-model="form.meetCaller"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="服务次数" prop="serviceCount">
-              <el-input v-model="form.serviceCount"></el-input>
+            <el-form-item label="与会专家" prop="expertNames">
+              <el-select v-model="form.expertNames" style="width:100%">
+                <el-option label="测试专家" value="0052103001"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="与会其他人员" prop="meetOtherPeople">
+              <el-input v-model="form.meetOtherPeople"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="24">
-            <el-form-item v-if="!disabled" label="结对协议书">
+            <el-form-item v-if="!disabled" label="签字记录">
               <el-upload
                 class="upload-demo"
                 ref="upload"
@@ -102,9 +95,9 @@
 
             <img
               width="600px"
-              v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
-              alt="协议书"
+              v-if="disabled && form.meetImageBase64 != ''"
+              :src="form.meetImageBase64"
+              alt="签字记录"
             />
           </el-col>
         </el-row>
@@ -117,10 +110,9 @@
 </template>
 
 <script>
-import { trim } from '@/utils/index';
-import { record_add, record_edit } from '../api/index';
+import { management_edit } from '../api/index';
 export default {
-  name: 'recordDetail',
+  name: 'recruitmentDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
@@ -160,7 +152,7 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'pairImageBase64');
+      this.getBase64(file.raw, 'meetImageBase64');
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -170,35 +162,18 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (!data.pairImageBase64) {
-            this.$message({
-              message: '操作成功',
-              type: 'warning'
-            });
-            return;
-          }
+          data.expertJoinDatas = [{ expertId: '0052103001' }];
+          // if (!data.meetImageBase64) {
+          //   this.$message({
+          //     message: '请上传签字记录',
+          //     type: 'warning'
+          //   });
+          //   return;
+          // }
           if (this.type == 3) {
-            record_add(
-              data,
-              res => {
-                if (res.status == 200) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    duration: 1000,
-                    onClose: () => {
-                      this.onclose(1);
-                    }
-                  });
-                }
-                console.log(res);
-              },
-              err => {
-                console.log(err);
-              }
-            );
+            console.log(data);
           } else {
-            record_edit(
+            management_edit(
               data,
               res => {
                 if (res.status == 200) {

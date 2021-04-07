@@ -1,28 +1,29 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-16 09:27:35
+ * @LastEditTime: 2021-03-31 18:48:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
   <div id="indexBody">
     <div style="text-align:right">
-      <el-input style="width:50%" placeholder="请输入内容" v-model="input3">
-        <el-button
-          style="background:#ff9350;color:#ffffff"
-          type="primary"
-          slot="append"
-          icon="el-icon-search"
-          >搜索</el-button
-        >
-      </el-input>
+      <!-- <el-input style="width:50%" placeholder="请输入内容" v-model="input3"> -->
+      <el-button
+        style="background:#ff9350;color:#ffffff"
+        type="primary"
+        slot="append"
+        icon="el-icon-search"
+        @click="onSubmit"
+        >搜索</el-button
+      >
+      <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
       <el-table-column slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
-            <i class="el-icon-edit"></i> 修改</el-button
+          <el-button size="mini" @click="opendio(1, scope)" plain>
+            <i class="el-icon-edit"></i> 编辑</el-button
           >
         </template>
       </el-table-column>
@@ -30,57 +31,132 @@
     <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :current-page.sync="params.pageIndex"
+      :page-size="params.pageSize"
       layout="prev, pager, next, jumper"
-      :total="1000"
+      :total="params.total"
     >
     </el-pagination>
     <div style="text-align:right">
-      <el-button type="primary"> <i class="el-icon-plus"></i> 添加</el-button>
+      <el-button type="primary" @click="opendio(3)">
+        <i class="el-icon-plus"></i> 添加</el-button
+      >
     </div>
+    <activitydetail
+      v-if="visible"
+      :disabled="disabled"
+      :visible="visible"
+      :form="form"
+      :type="type"
+      @onclose="onclose"
+    ></activitydetail>
   </div>
 </template>
 
 <script>
 import ttable from '../common/t_table';
+import activitydetail from './pages/activityDetail';
+import { activity_query } from './api/index';
 export default {
   name: 'activity',
   components: {
-    ttable
+    ttable,
+    activitydetail
   },
   data() {
     return {
+      type: 0,
+      form: {},
+      initform: {
+        expertId: '',
+        actType: '',
+        actDate: '',
+        actDateType: '',
+        pid: '',
+        zjhm: '',
+        xm: '',
+        contactNumber: '',
+        actName: '',
+        psnlCount: '',
+        recordImageBase64: ''
+      },
+      disabled: false,
+      visible: false,
+      params: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 10
+      },
       input3: '',
-      currentPage: 1,
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '测试',
-          aaa004: '测试',
-          aaa005: '测试',
-          aaa006: '测试',
-          aaa007: '1'
-        }
-      ],
+
+      list: [],
       columns: [
-        { type: 'selection' },
-        { title: '专家编号', prop: 'aaa001' },
-        { title: '姓名', prop: 'aaa002' },
-        { title: '活动时间', prop: 'aaa003' },
-        { title: '服务对象姓名', prop: 'aaa004' },
-        { title: '服务对象证件号码', prop: 'aaa005' },
-        { title: '服务对象联系电话', prop: 'aaa006' },
-        { title: '活动名称', prop: 'aaa007' },
-        { title: '参加人数', prop: 'aaa008' },
-        { title: '签名记录表', prop: 'aaa010' },
+        { type: 'index' },
+        { title: '专家编号', prop: 'expertId' },
+        { title: '姓名', prop: 'xm' },
+        { title: '活动名称', prop: 'actName' },
+        { title: '参与人员证件号码', prop: 'zjhm' },
+        { title: '参与人员联系电话', prop: 'contactNumber' },
+        { title: '参数人数', prop: 'psnlCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ]
     };
   },
   computed: {},
   methods: {
+    message(type, msg) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {}
+      });
+    },
+    onSubmit() {
+      let data = { ...this.params };
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      activity_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.message('success', '操作成功');
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    opendio(type, scope) {
+      //1 编辑 2 查看 3 新增
+      if (type == 1) {
+        this.type = 1;
+        this.disabled = false;
+        this.form = { ...scope.row };
+      } else if (type == 2) {
+        this.disabled = true;
+        this.form = { ...scope.row };
+      } else {
+        this.type = 3;
+        this.disabled = false;
+        this.form = { ...this.initform };
+      }
+      this.visible = true;
+    },
+    onclose(type) {
+      this.visible = false;
+      this.form = {};
+      if (!!type) {
+        this.onSubmit();
+      }
+    },
     handleChange(e) {
       console.log(e);
     }

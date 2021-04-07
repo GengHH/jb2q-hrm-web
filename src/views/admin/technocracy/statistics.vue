@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-15 18:39:00
+ * @LastEditTime: 2021-04-01 10:32:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -12,11 +12,12 @@
         <el-col :span="12">
           <el-form-item label="开始年月">
             <el-date-picker
-              v-model="form.name"
-              type="daterange"
+              v-model="form.time"
+              type="monthrange"
               range-separator=""
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              value-format="yyyyMM"
             >
             </el-date-picker>
           </el-form-item>
@@ -24,12 +25,12 @@
         <el-col :span="12">
           <el-form-item label="报表类型">
             <el-select
-              v-model="form.region"
+              v-model="form.type"
               placeholder="请选择报表类型"
               @change="formselect"
             >
-              <el-option label="区域一" value="0"></el-option>
-              <el-option label="区域二" value="1"></el-option>
+              <el-option label="日常经费汇总" value="1"></el-option>
+              <el-option label="日常经费清单" value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -37,12 +38,22 @@
 
       <el-form-item>
         <div style="text-align:center">
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onSubmit"
+            >搜索</el-button
+          >
         </div>
       </el-form-item>
     </el-form>
     <ttable :columns="columns" :list="list"></ttable>
+    <!-- <el-pagination
+      @size-change="handleChange"
+      @current-change="handleChange"
+      :current-page.sync="params.pageIndex"
+      :page-size="params.pageSize"
+      layout="prev, pager, next, jumper"
+      :total="params.total"
+    >
+    </el-pagination> -->
     <div
       style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
     >
@@ -57,21 +68,23 @@
 
 <script>
 import ttable from '../common/t_table';
+import { statistics_query } from './api/index';
+
 const columnsArr = [
   [
     { title: '序号', type: 'index' },
-    { title: '日期', prop: 'aaa001' },
-    { title: '支付费用', prop: 'aaa002' }
+    { title: '日期', prop: 'payMonth' },
+    { title: '支付费用', prop: 'payTotal' }
   ],
   [
     { title: '序号', type: 'index' },
-    { title: '所属区', prop: 'aaa001' },
-    { title: '专家姓名', prop: 'aaa002' },
-    { title: '身份证号', prop: 'aaa003' },
-    { title: '银行账号', prop: 'aaa004' },
-    { title: '开户银行', prop: 'aaa005' },
-    { title: '服务时间', prop: 'aaa006' },
-    { title: '支付费用', prop: 'aaa007' }
+    { title: '所属区', prop: 'districtCode' },
+    { title: '专家姓名', prop: 'expertName' },
+    { title: '身份证号', prop: 'expertZjhm' },
+    { title: '银行账号', prop: 'bankaccount' },
+    { title: '开户银行', prop: 'bankName' },
+    { title: '服务时间', prop: 'serviceTime' },
+    { title: '支付费用', prop: 'costStandard' }
   ]
 ];
 export default {
@@ -81,61 +94,74 @@ export default {
   },
   data() {
     return {
+      params: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 100
+      },
       mouey: 0,
       form: {
-        name: '',
-        region: '0'
+        time: [],
+        type: '1'
       },
       list: [],
-      columns: [],
-      formConfig: {
-        inline: true,
-        size: 'small',
-        labelPosition: 'right',
-        labelWidth: '100px',
-        style: {
-          width: '100%',
-          margin: '0 auto'
-        },
-        formItemList: [
-          {
-            type: 'daterange',
-            label: '开始年月',
-            style: { width: '100%' },
-            placeholder: '请输入专家编号',
-            rules: [],
-            key: 'name2'
-          },
-          {
-            type: 'select',
-            style: { width: '100%' },
-            label: '报表类型',
-            rules: [],
-            key: 'aaa',
-            options: [
-              {
-                value: '1',
-                label: '男',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '女',
-                disabled: false
-              }
-            ]
-          }
-        ]
-      }
+      columns: []
     };
   },
   computed: {},
   methods: {
-    formselect(e) {
-      this.columns = columnsArr[e - 0];
+    handleChange(e) {
       console.log(e);
     },
-    onSubmit() {}
+    message(type, msg) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {}
+      });
+    },
+    formselect(e) {
+      this.columns = columnsArr[e - 1];
+      console.log(e);
+    },
+    onSubmit() {
+      let data = { ...this.params, ...this.form };
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      if (data.time.length) {
+        data.startMonth = data.time[0];
+        data.endMonth = data.time[1];
+      }
+      statistics_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.message('success', '操作成功');
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.setMouey(pageresult.data);
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    setMouey(list) {
+      if (list) {
+        let val = 0;
+        let type = this.form.type == '1' ? 'payTotal' : 'costStandard';
+        for (let i = 0; i < list.length; i++) {
+          val = val + (list[i][type] - 0);
+        }
+        this.mouey = val;
+      }
+    }
   },
   mounted() {
     this.columns = columnsArr[0];

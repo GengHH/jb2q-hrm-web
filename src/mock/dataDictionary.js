@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 20:04:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-04-07 10:08:45
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -766,9 +766,18 @@ const dic = {
     { value: '3', label: '退团' }
   ],
   //专家活动类型
-  RECRUIT_ACT_TYPE: [],
+  RECRUIT_ACT_TYPE: [
+    { value: '01', label: '一对一咨询' },
+    { value: '02', label: '主题活动咨询' },
+    { value: '03', label: '专家讲座' },
+    { value: '04', label: '结对帮扶' }
+  ],
   //专家活动日期类型
-  RECRUIT_ACT_DATE_TYPE: [],
+  RECRUIT_ACT_DATE_TYPE: [
+    { value: '1', label: '上午' },
+    { value: '2', label: '下午' },
+    { value: '3', label: '全天' }
+  ],
   //职业指导类型
   RECRUIT_GUIDE_TYPE: [],
   //特色活动类型
@@ -1139,6 +1148,15 @@ const dic = {
     { value: '07', label: '退团未审核' },
     { value: '08', label: '退团审核通过' },
     { value: '09', label: '退团审核不通过' }
+  ],
+  //就业状态
+  GGJBXX_JYZT: [
+    { value: '1	', label: '就业' },
+    { value: '2	', label: '无业' },
+    { value: '3	', label: '失业' },
+    { value: '4	', label: '养老' },
+    { value: '5	', label: '农村富余' },
+    { value: '6	', label: '农村就业' }
   ]
 };
 

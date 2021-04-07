@@ -1,8 +1,9 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
+ * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 20:04:55
+ * @LastEditTime: 2021-04-07 10:10:14
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -129,11 +130,22 @@ const getters = {
   recruit_expert_curr_status: state => state.RECRUIT_EXPERT_CURR_STATUS,
   recruit_expert_status: state => state.RECRUIT_EXPERT_STATUS,
   recruit_work_hour: state => state.RECRUIT_WORK_HOUR,
+  recruit_act_date_type: state => state.RECRUIT_ACT_DATE_TYPE,
+  recruit_act_type: state => state.RECRUIT_ACT_TYPE,
+  ggjbxx_jyzt: state => state.GGJBXX_JYZT,
   recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
   recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE
 };
-
 const mutations = {
+  set_GGJBXX_JYZT: (state, dictionary) => {
+    state.GGJBXX_JYZT = dictionary;
+  },
+  set_RECRUIT_ACT_TYPE: (state, dictionary) => {
+    state.RECRUIT_ACT_TYPE = dictionary;
+  },
+  set_RECRUIT_ACT_DATE_TYPE: (state, dictionary) => {
+    state.RECRUIT_ACT_DATE_TYPE = dictionary;
+  },
   set_RECRUIT_EXPERT_CURR_STATUS: (state, dictionary) => {
     state.RECRUIT_EXPERT_CURR_STATUS = dictionary;
   },
