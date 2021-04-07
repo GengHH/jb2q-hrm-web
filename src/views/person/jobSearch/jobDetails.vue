@@ -23,7 +23,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>{{ positionData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验{{ positionData.workAreaText }}年</span>
+              <span>经验{{ Number(positionData.workYearNeed) }}年</span>
               <el-divider direction="vertical"></el-divider>
               <span>招聘{{ Number(positionData.recruitNum) }}人</span>
             </div>

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-01 09:32:25
+ * @LastEditTime: 2021-04-06 17:12:03
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -78,6 +78,9 @@ if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
+}
+if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_CORP_NATURE');
 }
 
 /* eslint-disable no-new */

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-30 15:56:41
+ * @LastEditTime: 2021-04-06 19:35:41
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -9,12 +9,12 @@
 <template>
   <div id="indexHeader">
     <el-row>
-      <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
+      <el-col :sm="24" :md="4" :lg="6" :xl="8" class="bg-purple">
         <img src="@/assets/img/logo.png" alt="" />
         <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
         <img class="logo3" src="@/assets/img/logo3.png" alt="" />
       </el-col>
-      <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
+      <el-col :sm="24" :md="20" :lg="22" :xl="16" class="bg-purple">
         <!-- <el-breadcrumb separator="">
           <el-breadcrumb-item
             v-for="nvaIndex in navList"

@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-04-01 11:26:06
+ * @LastEditTime: 2021-04-02 15:38:40
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -166,7 +166,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>{{ jobItem.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ Number(jobItem.workHour) }}年</span>
+              <span>{{ Number(jobItem.workYearNeed) }}年</span>
               <el-button
                 type="primary"
                 class="gray-btn"
@@ -185,8 +185,8 @@
             <span>A移动互联网</span>
             <el-divider direction="vertical"></el-divider>
             <span>A股份</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>A10000人以上</span>
+            <!-- <el-divider direction="vertical"></el-divider>
+            <span>A10000人以上</span> -->
           </p>
         </el-col>
         <el-col :span="5" class="text-right">

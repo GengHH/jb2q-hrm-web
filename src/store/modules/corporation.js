@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 14:18:23
+ * @LastEditTime: 2021-04-06 19:04:02
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -38,9 +38,9 @@ const state = {
 
 const mutations = {
   SET_CORPORATIONINOF: (state, value) => {
-    state.tyshxym = value.logonUser.tyshxym || '91310107667812584X';
-    state.cid = value.cid || '201002025628331';
-    state.dwmc = value.logonUser.userName || '集团';
+    //state.tyshxym = value.logonUser.tyshxym || '91310107667812584X';
+    state.cid = value.logonUser.organIdStr || '200008010546251';
+    state.dwmc = value.logonUser.organName || '集团';
   },
   SET_TOKEN: (state, token) => {
     state.token = token;
@@ -119,10 +119,10 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_CORPORATIONINOF', {
         logonUser: {
-          tyshxym: '91310107667812584X',
-          userName: '万达信息股份有限公司'
-        },
-        cid: '201002025628331'
+          //tyshxym: '91310107667812584X',
+          organIdStr: '200008010546251',
+          organName: '万达信息股份有限公司'
+        }
       });
       commit('SET_TOKEN', 'login');
       commit('SET_LOGINTYPE', '');
@@ -142,12 +142,12 @@ const actions = {
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
       commit('SET_LOGIN_TIME', 0);
-      //sessionStorage.setItem('vuex', null);
+      localStorage.setItem('vuex', null);
       resolve();
     });
   },
 
-  get_personInfo({ commit }) {
+  get_corporationInfo({ commit }) {
     getLogonUser()
       .then(res => {
         console.log('单位登录信息', res);

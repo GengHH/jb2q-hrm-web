@@ -2,15 +2,8 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
-<<<<<<< HEAD
- * @LastEditTime: 2021-04-02 17:53:37
-=======
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-29 17:20:32
->>>>>>> upstream/master
-=======
- * @LastEditTime: 2021-03-31 16:52:01
->>>>>>> upstream/master
+ * @LastEditTime: 2021-04-07 10:10:14
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -139,7 +132,9 @@ const getters = {
   recruit_work_hour: state => state.RECRUIT_WORK_HOUR,
   recruit_act_date_type: state => state.RECRUIT_ACT_DATE_TYPE,
   recruit_act_type: state => state.RECRUIT_ACT_TYPE,
-  ggjbxx_jyzt: state => state.GGJBXX_JYZT
+  ggjbxx_jyzt: state => state.GGJBXX_JYZT,
+  recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
+  recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE
 };
 const mutations = {
   set_GGJBXX_JYZT: (state, dictionary) => {
@@ -207,6 +202,12 @@ const mutations = {
   },
   set_RECRUIT_WORK_HOUR: (state, dictionary) => {
     state.RECRUIT_WORK_HOUR = dictionary;
+  },
+  set_RECRUIT_CORP_NATURE: (state, dictionary) => {
+    state.RECRUIT_CORP_NATURE = dictionary;
+  },
+  set_RECRUIT_SPECIAL_PEOPLE: (state, dictionary) => {
+    state.RECRUIT_SPECIAL_PEOPLE = dictionary;
   }
 };
 
