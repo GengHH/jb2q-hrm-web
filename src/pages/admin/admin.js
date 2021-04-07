@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-02 17:52:13
+ * @LastEditTime: 2021-04-06 13:40:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -21,6 +21,7 @@ import ElementUI from '@/config/eleComponents';
 //import 'element-ui/lib/theme-chalk/index.css';
 import { VueAxios } from '@/utils/httpService';
 import Print from '@/utils/print';
+import { isEmptyObject } from '@/utils/index';
 //import htmlToPdf from '@/utils/htmlToPdf';
 import '@/auth/permission';
 import config from '@/config';
@@ -115,6 +116,19 @@ if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
 if (isEmpty(store.getters['dictionary/ggjbxx_jyzt'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_JYZT');
 }
+//路由拦截
+router.beforeEach((to, from, next) => {
+  let userInfo = store.state.admin.userInfo;
+  if (!isEmptyObject(userInfo)) {
+    if (userInfo.userName && userInfo.userIdStr && userInfo.roles.length > 0) {
+      next();
+    } else {
+      window.history.go(-1);
+    }
+  } else {
+    window.history.go(-1);
+  }
+});
 
 /* eslint-disable no-new */
 new Vue({

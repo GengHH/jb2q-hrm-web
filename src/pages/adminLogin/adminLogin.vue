@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-27 16:55:58
+ * @LastEditTime: 2021-04-07 10:41:57
  * @Description: file content
 -->
 <template>
@@ -217,7 +217,6 @@ export default {
           if (signatureInfo == null || signatureInfo['signature'].length == 0) {
             return false;
           }
-          console.log();
           this.form.signData = signatureInfo['signature'];
           queryLogin(
             {
@@ -228,11 +227,10 @@ export default {
             },
             response => {
               if (response.status == 200) {
-                sessionStorage.setItem(
-                  'userInfo',
-                  JSON.stringify(response.result.logonUser)
+                this.$store.dispatch(
+                  'admin/setUserInfo',
+                  response.result.logonUser
                 );
-
                 window.location.href =
                   apiUrlConfig.loginBasePath + '/ggzp-shrs/admin.html';
               }

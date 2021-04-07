@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-01 10:10:31
+ * @LastEditTime: 2021-04-07 19:27:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\summaryDetail.vue
@@ -53,9 +53,24 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="与会专家" prop="expertNames">
-              <el-select v-model="form.expertNames" style="width:100%">
-                <el-option label="测试专家" value="0052103001"></el-option>
+            <el-form-item label="与会专家" prop="expertJoinDatas">
+              <el-select
+                multiple
+                filterable
+                v-model="form.expertJoinDatas"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="(v, k) in userList"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                >
+                  <span style="float: left">{{ v.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{
+                    v.value
+                  }}</span>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -111,7 +126,7 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { summary_add, summary_edit } from '../api/index';
+import { summary_add, summary_edit, synthesize_query } from '../api/index';
 export default {
   name: 'summaryDetail',
   props: ['visible', 'disabled', 'form', 'type'],
@@ -135,7 +150,8 @@ export default {
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
       },
-      fileList: []
+      fileList: [],
+      userList: []
     };
   },
   computed: {},
@@ -161,6 +177,10 @@ export default {
 
     onSubmit() {
       let data = { ...this.form };
+      console.log(data);
+      data.expertJoinDatas = data.expertJoinDatas.map(e => {
+        return { expertId: e };
+      });
       this.$refs.form.validate(valid => {
         if (valid) {
           data.expertJoinDatas = [{ expertId: '0052103001' }];
@@ -234,7 +254,31 @@ export default {
       return isJPG && isLt2M;
     }
   },
-  created() {}
+  created() {
+    synthesize_query(
+      {
+        pageIndex: 0,
+        pageSize: 999,
+        valid: 1
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.pageresult.data;
+          data.map(e => {
+            e.value = e.expertId;
+            e.label = e.xm;
+          });
+          this.userList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 };
 </script>
 <style lang="scss" scoped>

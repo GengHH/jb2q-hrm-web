@@ -1,13 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-03-30 20:14:58
+ * @LastEditTime: 2021-04-07 10:37:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
 -->
 <template>
   <el-dialog
+    :close-on-click-modal="false"
     title="申请"
     width="70%"
     :visible="visible"
@@ -41,8 +42,13 @@
                 :limit="1"
                 :show-file-list="false"
               >
-                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <template v-if="disabled">
+                  <img :src="form.psnlPhotoBase64" class="avatar" />
+                </template>
+                <template v-if="!disabled">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </template>
               </el-upload>
               <div
                 class="userClose"
@@ -72,8 +78,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="民族">
-              <el-select v-model="form.region" style="width:100%">
+            <el-form-item label="民族" prop="nationId">
+              <el-select v-model="form.nationId" style="width:100%">
                 <el-option
                   v-for="(v, k) in dicOptions.nationality"
                   :key="k"
@@ -86,12 +92,8 @@
           <el-col :span="12">
             <el-form-item label="性别" prop="sexId">
               <el-select v-model="form.sexId" style="width:100%">
-                <el-option
-                  v-for="(v, k) in dicOptions.sex"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
+                <el-option label="男" value="1"></el-option>
+                <el-option label="女" value="2"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -219,7 +221,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="可提供服务时间" prop="timeday">
               <el-select
                 v-model="form.timeday"
@@ -239,7 +241,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="管理所属区" prop="districtCode">
               <el-select v-model="form.districtCode" style="width:100%">
                 <el-option
@@ -250,13 +252,13 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="银行账号" prop="bankaccount">
-              <el-input v-model="form.bankaccount"></el-input>
+              <el-input v-model="form.bankaccount" maxlength="18"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -335,6 +337,9 @@ export default {
         edu: trim(this.$store.getters['dictionary/recruit_edu'])
       },
       rules: {
+        nationId: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
         zjlxId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
@@ -382,9 +387,9 @@ export default {
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = function() {
+      reader.onload = () => {
         console.log(reader.result);
-        this[name] = reader.result;
+        this.form[name] = reader.result;
       };
       reader.onerror = function(error) {
         console.log('Error: ', error);

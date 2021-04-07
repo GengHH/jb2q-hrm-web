@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 16:52:12
+ * @LastEditTime: 2021-04-06 10:12:59
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -229,6 +229,17 @@ export function formatTime(date) {
     ' ' +
     [hour, minute, second].map(formatNumber).join(':')
   );
+}
+/**
+ * 判断是否空对象
+ */
+export function isEmptyObject(obj) {
+  var name;
+
+  for (name in obj) {
+    return false;
+  }
+  return true;
 }
 /**
  * 去除空格

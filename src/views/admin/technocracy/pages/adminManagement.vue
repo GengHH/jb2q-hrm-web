@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-03-31 14:18:33
+ * @LastEditTime: 2021-04-07 15:36:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -15,19 +15,28 @@
       >
       <el-button-group>
         <el-button
-          @click="auditStutas = '1'"
+          @click="
+            auditStutas = '1';
+            isAudit = true;
+          "
           size="mini"
           :type="auditStutas == '1' ? 'primary' : ''"
           >待审核</el-button
         >
         <el-button
-          @click="auditStutas = '2'"
+          @click="
+            auditStutas = '2';
+            isAudit = false;
+          "
           size="mini"
           :type="auditStutas == '2' ? 'primary' : ''"
           >通过</el-button
         >
         <el-button
-          @click="auditStutas = '3'"
+          @click="
+            auditStutas = '3';
+            isAudit = false;
+          "
           size="mini"
           :type="auditStutas == '3' ? 'primary' : ''"
           >不通过</el-button
@@ -47,12 +56,26 @@
           :columns="columns0"
           :list="list0"
         >
+          <el-table-column slot="statusId" label="专家状态" align="center">
+            <template slot-scope="scope">
+              <div v-for="(v, k) in dicOptions.status" :key="k">
+                <el-tag type="warning" v-if="v.value == scope.row.statusId">{{
+                  v.label
+                }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column slot="verifyStatus" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag type="warning">{{ scope.row.verifyStatus }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column slot="aaa009" label="操作" align="center">
+          <el-table-column
+            v-if="isAudit"
+            slot="aaa009"
+            label="操作"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -93,7 +116,12 @@
               <el-tag v-else type="warning">未通过</el-tag>
             </template>
           </el-table-column>
-          <el-table-column slot="aaa009" label="操作" align="center">
+          <el-table-column
+            v-if="isAudit"
+            slot="aaa009"
+            label="操作"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -126,15 +154,12 @@
           :columns="columns2"
           :list="list2"
         >
-          <el-table-column slot="aaa007" label="复核状态" align="center">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.aaa007 == '1'" type="success"
-                >通过</el-tag
-              >
-              <el-tag v-else type="warning">未通过</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column slot="aaa009" label="操作" align="center">
+          <el-table-column
+            v-if="isAudit"
+            slot="aaa009"
+            label="操作"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -167,12 +192,13 @@
           :columns="columns3"
           :list="list3"
         >
-          <el-table-column slot="aaa007" label="复核状态" align="center">
+          <el-table-column slot="targetDistrict" label="转入区" align="center">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.aaa007 == '1'" type="success"
-                >通过</el-tag
-              >
-              <el-tag v-else type="warning">未通过</el-tag>
+              <div v-for="(v, k) in dicOptions.qx" :key="k">
+                <el-tag v-if="v.value == scope.row.targetDistrict">{{
+                  v.label
+                }}</el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column slot="aaa009" label="操作" align="center">
@@ -211,6 +237,7 @@
 import tform from '../../common/t_form'; //高级查询
 import ttable from '../../common/t_table';
 import auditdialog from './auditDialog';
+import { trim } from '@/utils/index';
 import {
   joinTeam_query,
   continue_query,
@@ -226,6 +253,7 @@ export default {
   },
   data() {
     return {
+      isAudit: true,
       demoUser: false,
       userType: false,
       queryData: {},
@@ -254,16 +282,23 @@ export default {
       list2: [],
       list3: [],
       dicOptions: {
+        //专家状态
+        status: trim(this.$store.getters['dictionary/recruit_expert_status']),
         //qx
-        qx: this.$store.getters['dictionary/ggjbxx_qx']
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        //专家当前状态
+        statusthisStatus: trim(
+          this.$store.getters['dictionary/recruit_expert_curr_status']
+        )
       },
+
       columns0: [
         { title: '序号', type: 'index' },
         { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
         { title: '管理所属区', prop: 'districtCode' },
-        { title: '专家状态', prop: 'statusId' },
-        { title: '复核状态', prop: 'verifystatus', slot: 'verifyStatus' },
+        { title: '专家状态', prop: 'statusId', slot: 'statusId' },
+        { title: '复核状态', prop: 'currStatus', slot: 'verifyStatus' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns1: [
@@ -272,7 +307,7 @@ export default {
         { title: '姓名', prop: 'xm' },
         { title: '续聘申请人', prop: 'applyName' },
         { title: '续聘申请时间', prop: 'applyTime' },
-        { title: '复核状态', prop: 'verifystatus', slot: 'verifyStatus' },
+        { title: '复核状态', prop: 'currStatus', slot: 'verifyStatus' },
         { title: '新聘期开始时间', prop: 'startDate' },
         { title: '新聘期结束时间', prop: 'endDate' },
         { title: '复核时间', prop: 'verifyDate' },
@@ -286,7 +321,7 @@ export default {
         { title: '退出理由', prop: 'quitReason' },
         { title: '退团申请人', prop: 'applyName' },
         { title: '退团申请时间', prop: 'quitTime' },
-        { title: '复核状态', prop: 'verifystatus', slot: 'verifyStatus' },
+        { title: '复核状态', prop: 'verifyStatus', slot: 'verifyStatus' },
         { title: '复核备注', prop: 'verifyMemo' },
         { title: '出团时间', prop: 'outDate' },
         { title: '复核时间', prop: 'verifyDate' },
@@ -297,12 +332,12 @@ export default {
         { title: '序号', type: 'index' },
         { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
-        { title: '转移理由', prop: 'aaa003' },
-        { title: '转入区', prop: 'aaa004' },
+        { title: '转移理由', prop: 'applyReason' },
+        { title: '转入区', prop: 'targetDistrict', slot: 'targetDistrict' },
         { title: '转出申请人', prop: 'aaa005' },
-        { title: '申请时间', prop: 'aaa006' },
-        { title: '确认状态', prop: 'aaa007', slot: 'aaa007' },
-        { title: '转移时间', prop: 'aaa008' },
+        { title: '申请时间', prop: 'applyTime' },
+        { title: '确认状态', prop: 'verifystatus', slot: 'verifystatus' },
+        { title: '转移时间', prop: 'moveDate' },
         { title: '确认时间', prop: 'aaa010' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
@@ -350,6 +385,31 @@ export default {
   },
   computed: {},
   methods: {
+    setDicOptions(val, str) {
+      if (val) {
+        let data = this.dicOptions[str];
+        for (let i = 0; i < data.length; i++) {
+          if (val == data[i].value) {
+            return data[i].label;
+          }
+        }
+        return '';
+      }
+      return '';
+    },
+    formatTime(time) {
+      if (time) {
+        if (time.length > 8) {
+          let t = time.split(' ')[0];
+          let tt = t.replace(/-/g, '');
+          return tt;
+        } else {
+          return time;
+        }
+      } else {
+        return '';
+      }
+    },
     onclose() {
       this.visible = false;
       this.onsubmit(this.queryData);
@@ -465,7 +525,15 @@ export default {
       let b = this['columns' + type];
       let c = this.getConfigData(a, b);
       let formItemList = [];
+
       for (let i = 0; i < c.length; i++) {
+        if (c[i].title == '转入区') {
+          c[i].value = this.setDicOptions(c[i].value, 'qx');
+        } else if (c[i].title == '复核状态') {
+          c[i].value = this.setDicOptions(c[i].value, 'statusthisStatus');
+        } else if (c[i].title == '专家状态') {
+          c[i].value = this.setDicOptions(c[i].value, 'status');
+        }
         formItemList.push({
           type: 'input',
           label: c[i].title,
@@ -475,6 +543,8 @@ export default {
           key: c[i].key
         });
       }
+      console.log(formItemList);
+
       this.auditConfig.formItemList = formItemList;
       this.auditConfig.type = type;
       this.auditConfig.row = a;

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-04-02 13:40:55
+ * @LastEditTime: 2021-04-06 20:43:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -36,19 +36,19 @@
               <div class="boxTiele">
                 <h1>个人基本信息</h1>
               </div>
-              <person></person>
+              <person :form="dataList.person"></person>
             </div>
             <div class="boxList" ref="b1">
               <div class="boxTiele">
                 <h1>简历信息</h1>
               </div>
-              <resume></resume>
+              <resume :form="resume"></resume>
             </div>
             <div class="boxList" ref="b2">
               <div class="boxTiele">
                 <h1>劳动经历</h1>
               </div>
-              <experience></experience>
+              <experience :list="dataList.experience"></experience>
             </div>
             <div class="boxList" ref="b3">
               <div class="boxTiele">
@@ -103,7 +103,7 @@ import person from '../pages/person'; //个人基本信息
 import resume from '../pages/resume'; //简历信息
 import serve from '../pages/serve'; //就业服务记录
 import socialsecurity from '../pages/socialSecurity'; //社保缴费记录
-
+import { allAction } from '@/api/adminApi';
 export default {
   name: 'pageList',
   props: ['dialogTableVisible', 'pagelistIndex'],
@@ -120,6 +120,8 @@ export default {
   },
   data() {
     return {
+      resume: {},
+      dataList: {},
       arrListHeight: [],
       titleList: [
         { title: '个人基本信息', state: true, id: 0 },
@@ -139,17 +141,26 @@ export default {
     evclose() {
       this.$emit('evclose');
     },
+    //获取现在的高
+    setHright() {
+      this.arrListHeight = [];
+      for (let i = 0; i < this.titleList.length; i++) {
+        this.arrListHeight.push(this.$refs['b' + i].offsetHeight);
+      }
+    },
     skip(e) {
+      this.setHright();
       let height = 0;
       let id = e.id;
       for (let i = 0; i < this.titleList; i++) {
         this.titleList[i].state = false;
       }
       this.titleList[id].state = true;
-      console.log(this.titleList);
       for (let i = 0; i < id; i++) {
         height += this.arrListHeight[i];
       }
+      console.log(height);
+      console.log(this.arrListHeight);
       this.$refs.viewScroll.scrollTop = height + 1;
     },
     scroll(e) {
@@ -185,18 +196,68 @@ export default {
       });
     }
   },
-  created() {},
-  mounted() {
-    //获取对应元素高度
-    setTimeout(() => {
-      this.handleShow(() => {
-        for (let i = 0; i < this.titleList.length; i++) {
-          this.arrListHeight.push(this.$refs['b' + i].offsetHeight);
-        }
-        this.skip(this.pagelistIndex);
-      });
-    }, 300);
-  }
+  created() {
+    let path = [
+      //个人基本信息
+      {
+        url: '/admin/keypoint/show/psnlInfo?pid=200008000237040'
+      },
+      //简历信息
+      {
+        url: '/admin/keypoint/show/resume?pid=200709138518590'
+      },
+      //劳动经历
+      {
+        url: '/admin/keypoint/show/labor?pid=201605238646380'
+      }
+      // //社保缴费记录
+      // {
+      //   url: '/admin/keypoint/show/insur',
+      //   data: { pid: '200008000237040' }
+      // },
+      // //就业见习记录
+      // {
+      //   url: '/admin/keypoint/show/trainee',
+      //   data: { pid: '200008000237040' }
+      // },
+      // //简历投递及反馈记录 --
+      // {
+      //   url: '/admin/keypoint/show/employ',
+      //   data: { pid: '200008000237040' }
+      // },
+      // //职位评价记录
+      // {
+      //   url: '/admin/keypoint/show/evaluation',
+      //   data: { pid: '200008000237040' }
+      // },
+      // //职位收藏记录
+      // {
+      //   url: '/admin/keypoint/show/favor',
+      //   data: { pid: '200008000237040' }
+      // },
+      // //就业服务记录
+      // {
+      //   url: '/admin/keypoint/show/employ',
+      //   data: { pid: '200008000237040' }
+      // }
+    ];
+    allAction(
+      path,
+      res => {
+        console.log(res);
+        this.dataList.person = res[0].data.result.data;
+        this.resume = res[1].data.result.data;
+        this.dataList.experience = res[2].data.result.data;
+        this.handleShow(() => {
+          this.skip(this.pagelistIndex);
+        });
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  },
+  mounted() {}
 };
 </script>
 

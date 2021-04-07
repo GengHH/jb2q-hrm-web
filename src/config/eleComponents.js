@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-03-30 16:58:44
+ * @LastEditTime: 2021-04-06 13:49:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -63,7 +63,8 @@ import {
   TimeSelect,
   Badge,
   Popover,
-  Popconfirm
+  Popconfirm,
+  Drawer
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -116,7 +117,7 @@ export default {
     V.use(Calendar), V.use(TimeSelect), V.use(Badge);
     V.use(Popover);
     V.use(Popconfirm);
-
+    V.use(Drawer);
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;
     V.prototype.$msgbox = MessageBox;

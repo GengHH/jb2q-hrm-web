@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-04-02 18:24:19
+ * @LastEditTime: 2021-04-06 15:41:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -168,7 +168,7 @@ export default {
         //就业状态
         jyzt: trim(this.$store.getters['dictionary/ggjbxx_jyzt']),
         //学历
-        edu: trim(this.$store.getters['dictionary/RECRUIT_EDU'])
+        edu: trim(this.$store.getters['dictionary/recruit_edu'])
       },
       pagelistIndex: {},
       //遮罩开关
@@ -237,8 +237,7 @@ export default {
   .body {
     padding: 15px 0;
     .list {
-      border-radius: 5px;
-      overflow: hidden;
+      border-radius: 4px;
       border: 1px solid #e5e5e5;
       margin: 5px 0;
       .listTiele {

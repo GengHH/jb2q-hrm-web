@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-02 17:33:05
+ * @LastEditTime: 2021-04-06 16:09:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -81,7 +81,6 @@
 import querylist from './module/queryList';
 import tform from '../common/t_form'; //高级查询
 import { emphasis_keypoint } from './api/index';
-import { allAction } from '@/api/adminApi';
 
 export default {
   name: 'serviceManagement',
@@ -375,67 +374,7 @@ export default {
   mounted() {
     this.onSearch();
   },
-  created() {
-    let path = [
-      //个人基本信息
-      {
-        url: '/admin/keypoint/show/psnlInfo',
-        data: { pid: '200008000237040' }
-      },
-      //简历信息
-      {
-        url: '/admin/keypoint/show/resume',
-        data: { pid: '200008000237040' }
-      },
-      //劳动经历
-      {
-        url: '/admin/keypoint/show/labor',
-        data: { pid: '200008000237040' }
-      },
-      //社保缴费记录
-      {
-        url: '/admin/keypoint/show/insur',
-        data: { pid: '200008000237040' }
-      },
-      //就业见习记录
-      {
-        url: '/admin/keypoint/show/trainee',
-        data: { pid: '200008000237040' }
-      },
-      //简历投递及反馈记录 --
-      {
-        url: '/admin/keypoint/show/employ',
-        data: { pid: '200008000237040' }
-      },
-      //职位评价记录
-      {
-        url: '/admin/keypoint/show/evaluation',
-        data: { pid: '200008000237040' }
-      },
-      //职位收藏记录
-      {
-        url: '/admin/keypoint/show/favor',
-        data: { pid: '200008000237040' }
-      },
-      //就业服务记录
-      {
-        url: '/admin/keypoint/show/employ',
-        data: { pid: '200008000237040' }
-      }
-    ];
-    allAction(
-      path,
-      res => {
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-
-    console.log(this.$store.state.admin);
-    console.log('----------------------------------');
-  }
+  created() {}
 };
 </script>
 

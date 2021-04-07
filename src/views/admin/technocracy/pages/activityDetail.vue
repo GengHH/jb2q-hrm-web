@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-03-31 18:22:11
+ * @LastEditTime: 2021-04-07 17:34:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
 -->
 <template>
   <el-dialog
-    title="专家结对记录"
+    title="专家活动情况"
     width="850px"
     :visible="visible"
     @close="onclose"
@@ -19,17 +19,21 @@
         :rules="rules"
         :disabled="disabled"
         :model="form"
-        label-width="150px"
+        label-width="250px"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="专家编号" prop="expertId">
               <el-input v-model="form.expertId"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="活动类型" prop="actType">
-              <el-select v-model="form.actType" style="width:100%">
+              <el-select
+                v-model="form.actType"
+                @change="selectType"
+                style="width:100%"
+              >
                 <el-option
                   v-for="(v, k) in dicOptions.act_type"
                   :key="k"
@@ -41,7 +45,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="活动日期" prop="actDate">
               <el-date-picker
                 v-model="form.actDate"
@@ -52,7 +56,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="活动日期类型" prop="actDateType">
               <el-select v-model="form.actDateType" style="width:100%">
                 <el-option
@@ -66,39 +70,51 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="参与人员标识" prop="pid">
+          <el-col v-if="actType == 1" :span="24">
+            <el-form-item label="服务对象姓名" prop="pid">
               <el-select v-model="form.pid" style="width:100%">
-                <el-option label="陈进福" value="201605238646380"></el-option>
+                <el-option
+                  v-for="(v, k) in userList"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="参与人员证件号码" prop="zjhm">
+          <el-col v-if="actType == 1" :span="24">
+            <el-form-item label="服务对象证件号码" prop="zjhm">
               <el-input v-model="form.zjhm" maxlength="18"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="参与人员姓名" prop="xm">
               <el-input v-model="form.xm"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="参与人员联系电话" prop="contactNumber">
+          </el-col> -->
+          <el-col v-if="actType == 1" :span="24">
+            <el-form-item label="服务对象联系电话" prop="contactNumber">
               <el-input v-model="form.contactNumber" maxlength="11"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col v-if="actType == 2 || actType == 3" :span="24">
             <el-form-item label="活动名称" prop="actName">
-              <el-input v-model="form.actName"></el-input>
+              <el-select v-model="form.actName" style="width:100%">
+                <el-option
+                  v-for="(v, k) in activityList"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="参数人数" prop="psnlCount">
+          <el-col v-if="actType == 2 || actType == 3" :span="24">
+            <el-form-item label="参加活动人数" prop="psnlCount">
               <el-input v-model="form.psnlCount"></el-input>
             </el-form-item>
           </el-col>
@@ -106,7 +122,7 @@
 
         <el-row>
           <el-col :span="24">
-            <el-form-item v-if="!disabled" label="结对协议书">
+            <el-form-item v-if="!disabled" label="签字记录表">
               <el-upload
                 class="upload-demo"
                 ref="upload"
@@ -135,7 +151,7 @@
               width="600px"
               v-if="disabled && form.pairImageBase64 != ''"
               :src="form.pairImageBase64"
-              alt="协议书"
+              alt="记录表"
             />
           </el-col>
         </el-row>
@@ -149,13 +165,16 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { activity_add, activity_edit } from '../api/index';
+import { activity_add, activity_edit, record_queryPsnls } from '../api/index';
+import { activity_query } from '../../profession/api/index';
+
 export default {
   name: 'activityDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
     return {
+      actType: 0,
       dicOptions: {
         //日期类型
         date_type: trim(
@@ -184,11 +203,17 @@ export default {
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
       },
-      fileList: []
+      fileList: [],
+      userList: [],
+      activityList: []
     };
   },
   computed: {},
   methods: {
+    selectType(e) {
+      console.log(e);
+      this.actType = Number(e);
+    },
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -282,7 +307,55 @@ export default {
       return isJPG && isLt2M;
     }
   },
-  created() {}
+  created() {
+    //获取人员信息
+    record_queryPsnls(
+      {
+        pageIndex: 0,
+        pageSize: 100
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.pageresult.data;
+          data.map(e => {
+            e.value = e.pid;
+            e.label = e.xm;
+          });
+          this.userList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    //获取活动信息
+    activity_query(
+      {
+        pageIndex: 0,
+        pageSize: 100,
+        actName: ''
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data.data;
+          data.map(e => {
+            e.value = e.pid;
+            e.label = e.xm;
+          });
+          this.activityList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 };
 </script>
 <style lang="scss" scoped>
