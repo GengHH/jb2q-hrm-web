@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 13:59:30
- * @LastEditTime: 2021-03-30 14:44:59
+ * @LastEditTime: 2021-03-31 18:14:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\auditDialog.vue
@@ -41,7 +41,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item
-          v-if="auditConfig.type == '0' && form.verifyResult == '2'"
+          v-if="auditConfig.type == '2' && form.verifyResult == '1'"
           label="出团时间"
         >
           <el-date-picker
@@ -53,7 +53,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item
-          v-if="auditConfig.type == '0' && form.verifyResult == '3'"
+          v-if="auditConfig.type == '3' && form.verifyResult == '1'"
           label="转移时间"
         >
           <el-date-picker
@@ -65,7 +65,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item
-          v-if="form.verifyResult == '1' && auditConfig.type < 2"
+          v-if="auditConfig.type < 2 && form.verifyResult == '1'"
           label="新聘期时间"
         >
           <el-date-picker
@@ -77,16 +77,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item v-if="form.verifyResult == '3'" label="转入区">
-          <el-select v-model="form.bankName" style="width:100%">
-            <el-option
-              v-for="(v, k) in dicOptions.qx"
-              :key="k"
-              :label="v.label"
-              :value="v.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+
         <div style="text-align:center">
           <el-button type="primary" @click="onSubmit">审核</el-button>
         </div>
@@ -127,8 +118,8 @@ export default {
     selectChange(e) {
       console.log(e);
     },
-    onclose() {
-      this.$emit('onclose');
+    onclose(type) {
+      this.$emit('onclose', type);
     },
     message(type, msg) {
       this.$message({
@@ -137,7 +128,7 @@ export default {
         duration: 1000,
         onClose: () => {
           if (type == 'success') {
-            this.onclose();
+            this.onclose(this.auditConfig.type);
           }
         }
       });

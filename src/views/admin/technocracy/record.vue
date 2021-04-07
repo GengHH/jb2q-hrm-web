@@ -1,30 +1,48 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-30 18:47:03
+ * @LastEditTime: 2021-03-31 18:26:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
   <div id="indexBody">
     <div style="text-align:right">
-      <el-input style="width:50%" placeholder="请输入内容" v-model="input3">
-        <el-button
-          style="background:#ff9350;color:#ffffff"
-          type="primary"
-          slot="append"
-          icon="el-icon-search"
-          >搜索</el-button
-        >
-      </el-input>
+      <!-- <el-input style="width:50%" placeholder="请输入内容" v-model="input3"> -->
+      <el-button
+        style="background:#ff9350;color:#ffffff"
+        type="primary"
+        slot="append"
+        icon="el-icon-search"
+        @click="onSubmit"
+        >搜索</el-button
+      >
+      <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
-      <el-table-column width="200" slot="aaa009" label="操作" align="center">
+      <el-table-column
+        width="120"
+        slot="pairImageBase64"
+        label="结对协议书"
+        align="center"
+      >
         <template slot-scope="scope">
-          <el-button size="mini" type="info" @click="opendio(1, scope)" plain>
+          <img
+            width="110px"
+            :src="scope.row.pairImageBase64"
+            alt="结对协议书"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column width="260" slot="aaa009" label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="opendio(1, scope)" plain>
+            <i class="el-icon-edit"></i> 编辑</el-button
+          >
+          <el-button size="mini" type="info" @click="opendio(2, scope)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
-          <el-button size="mini" type="danger" @click="opendio(2, scope)" plain
+          <el-button size="mini" type="danger" @click="remove(scope)" plain
             ><i class="el-icon-close"></i>删除</el-button
           >
         </template>
@@ -33,10 +51,10 @@
     <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :current-page.sync="params.pageIndex"
+      :page-size="params.pageSize"
       layout="prev, pager, next, jumper"
-      :total="1000"
+      :total="params.total"
     >
     </el-pagination>
     <div style="text-align:right">
@@ -45,9 +63,11 @@
       >
     </div>
     <recorddetail
-      :visible="visible"
+      v-if="visible"
       :disabled="disabled"
-      :auditConfig="auditConfig"
+      :visible="visible"
+      :form="form"
+      :type="type"
       @onclose="onclose"
     ></recorddetail>
   </div>
@@ -56,6 +76,7 @@
 <script>
 import ttable from '../common/t_table';
 import recorddetail from './pages/recordDetail';
+import { record_remove, record_query } from './api/index';
 export default {
   name: 'summarys',
   components: {
@@ -64,71 +85,117 @@ export default {
   },
   data() {
     return {
+      type: 0,
+      form: {},
+      initform: {
+        pid: '',
+        expertId: '',
+        xm: '',
+        zjhm: '',
+        contactNumber: '',
+        pairStartTime: '',
+        pairImageBase64: '',
+        serviceCount: ''
+      },
       disabled: false,
       visible: false,
-      auditConfig: {
-        inline: true,
-        size: 'small',
-        labelPosition: 'right',
-        labelWidth: '100px',
-        style: {
-          width: '100%',
-          margin: '0 auto'
-        },
-        formItemList: [
-          {
-            type: 'input',
-            label: '姓名',
-            style: { width: '210px' },
-            placeholder: '请输入姓名',
-            rules: [],
-            key: 'xm'
-          },
-
-          {
-            type: 'input',
-            label: '证件号码',
-            placeholder: '请输入证件号码',
-            style: { width: '210px' },
-            rules: [],
-            key: 'zjhm'
-          }
-        ]
+      params: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 10
       },
       input3: '',
-      currentPage: 1,
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '测试',
-          aaa004: '测试',
-          aaa005: '测试',
-          aaa006: '测试',
-          aaa007: '1'
-        }
-      ],
+      list: [],
       columns: [
-        { type: 'selection' },
-        { title: '专家编号', prop: 'aaa001' },
-        { title: '姓名', prop: 'aaa002' },
-        { title: '结对人员姓名', prop: 'aaa003' },
-        { title: '结对人员证件号码', prop: 'aaa004' },
-        { title: '结对人员联系电话', prop: 'aaa005' },
-        { title: '结对开始时间', prop: 'aaa006' },
-        { title: '结对协议书', prop: 'aaa007' },
-        { title: '服务次数', prop: 'aaa008' },
+        { type: 'index' },
+        { title: '专家编号', prop: 'expertId' },
+        { title: '姓名', prop: 'expertName' },
+        { title: '结对人员姓名', prop: 'xm' },
+        { title: '结对人员证件号码', prop: 'zjhm' },
+        { title: '结对人员联系电话', prop: 'contactNumber' },
+        { title: '结对开始时间', prop: 'pairStartTime' },
+        {
+          title: '结对协议书',
+          prop: 'pairImageBase64',
+          slot: 'pairImageBase64'
+        },
+        { title: '服务次数', prop: 'serviceCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 200 }
       ]
     };
   },
   computed: {},
   methods: {
-    opendio() {
+    remove(e) {
+      let data = { ...e.row };
+      record_remove(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.message('success', '操作成功');
+            this.onSubmit();
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    message(type, msg) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {}
+      });
+    },
+    onSubmit() {
+      let data = { ...this.params };
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      record_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.message('success', '操作成功');
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    opendio(type, scope) {
+      //1 编辑 2 查看 3 新增
+      if (type == 1) {
+        this.type = 1;
+        this.disabled = false;
+        this.form = { ...scope.row };
+      } else if (type == 2) {
+        this.disabled = true;
+        this.form = { ...scope.row };
+      } else {
+        this.type = 3;
+        this.disabled = false;
+        this.form = { ...this.initform };
+      }
       this.visible = true;
     },
-    onclose() {
+    onclose(type) {
       this.visible = false;
+      this.form = {};
+      if (!!type) {
+        this.onSubmit();
+      }
     },
     handleChange(e) {
       console.log(e);

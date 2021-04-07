@@ -2,104 +2,122 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 15:03:10
+ * @LastEditTime: 2021-03-31 19:34:45
  * @Description: file content
 -->
 <template>
   <div id="indexApp">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="证件登录" name="first">
-        <el-form
-          ref="zjhmLoginForm"
-          :model="form"
-          :rules="rules"
-          label-width="0px"
-          class="login-box"
-        >
-          <el-form-item style="margin-bottom:25px" prop="zjhm">
-            <el-input
-              prefix-icon="el-icon-lock"
-              type="zjhm"
-              placeholder="请输入证件号码"
-              v-model="form.zjhm"
-            />
-          </el-form-item>
-          <el-form-item style="margin-bottom:25px" prop="password">
-            <el-input
-              prefix-icon="el-icon-lock"
-              type="password"
-              placeholder="请输入密码"
-              v-model="form.password"
-            />
-          </el-form-item>
-          <el-form-item style="margin-bottom:10px">
-            <el-button
-              :disabled="show"
-              class="btn"
-              type="primary"
-              @click="onSubmit('zjhmLoginForm')"
-              >登录</el-button
+    <el-tabs id="typeTabs" v-model="activePath" @tab-click="handleClick">
+      <el-tab-pane label="个人登录" name="person">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="证件登录" name="first">
+            <el-form
+              ref="zjhmLoginForm"
+              :model="form"
+              :rules="rules"
+              label-width="0px"
+              class="login-box"
             >
-          </el-form-item>
-          <div style="height:18px;font-size:14px">
-            如果您还未注册，请先<span style="color:#fc6f3d;cursor: pointer;"
-              >下载人社app 注册</span
-            >
-          </div>
-        </el-form>
-      </el-tab-pane>
-      <el-tab-pane label="手机登录" name="second">
-        <el-form
-          ref="sjhmLoginForm"
-          :model="phoneForm"
-          :rules="rules"
-          label-width="0px"
-          class="login-box"
-        >
-          <el-form-item style="margin-bottom:25px" prop="phone">
-            <el-input
-              prefix-icon="el-icon-lock"
-              type="zjhm"
-              placeholder="请输入手机号码"
-              v-model="phoneForm.phone"
-            />
-          </el-form-item>
-          <el-form-item style="margin-bottom:25px" prop="message">
-            <el-row :gutter="10">
-              <el-col :span="14">
+              <el-form-item style="margin-bottom:25px" prop="zjhm">
                 <el-input
                   prefix-icon="el-icon-lock"
-                  type="message"
-                  placeholder="请输入短信验证码"
-                  v-model="phoneForm.message"
+                  type="zjhm"
+                  placeholder="请输入证件号码"
+                  v-model="form.zjhm"
                 />
-              </el-col>
-              <el-col :span="10" class="text-right">
-                <pl-button @click="getMessage">
-                  发送短信
-                </pl-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item style="margin-bottom:10px">
-            <el-button
-              :disabled="show"
-              class="btn"
-              type="primary"
-              @click="onSubmit('sjhmLoginForm')"
-              >登录</el-button
+              </el-form-item>
+              <el-form-item style="margin-bottom:25px" prop="password">
+                <el-input
+                  prefix-icon="el-icon-lock"
+                  type="password"
+                  placeholder="请输入密码"
+                  v-model="form.password"
+                />
+              </el-form-item>
+              <el-form-item style="margin-bottom:10px">
+                <el-button
+                  :disabled="show"
+                  class="btn"
+                  type="primary"
+                  @click="onSubmit('zjhmLoginForm')"
+                  >登录</el-button
+                >
+              </el-form-item>
+              <div style="height:18px;font-size:14px">
+                如果您还未注册，请先<span style="color:#fc6f3d;cursor: pointer;"
+                  >下载人社app 注册</span
+                >
+              </div>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="手机登录" name="second">
+            <el-form
+              ref="sjhmLoginForm"
+              :model="phoneForm"
+              :rules="rules"
+              label-width="0px"
+              class="login-box"
             >
-          </el-form-item>
-          <div style="height:18px;font-size:14px">
-            如果您还未注册，请先<span style="color:#fc6f3d;cursor: pointer;"
-              >下载人社app 注册</span
-            >
-          </div>
-        </el-form>
+              <el-form-item style="margin-bottom:25px" prop="phone">
+                <el-input
+                  prefix-icon="el-icon-lock"
+                  type="zjhm"
+                  placeholder="请输入手机号码"
+                  v-model="phoneForm.phone"
+                />
+              </el-form-item>
+              <el-form-item style="margin-bottom:25px" prop="message">
+                <el-row :gutter="10">
+                  <el-col :span="14">
+                    <el-input
+                      prefix-icon="el-icon-lock"
+                      type="message"
+                      placeholder="请输入短信验证码"
+                      v-model="phoneForm.message"
+                    />
+                  </el-col>
+                  <el-col :span="10" class="text-right">
+                    <pl-button @click="getMessage">
+                      发送短信
+                    </pl-button>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item style="margin-bottom:10px">
+                <el-button
+                  :disabled="show"
+                  class="btn"
+                  type="primary"
+                  @click="onSubmit('sjhmLoginForm')"
+                  >登录</el-button
+                >
+              </el-form-item>
+              <div style="height:18px;font-size:14px">
+                如果您还未注册，请先<span class="download-link"
+                  >下载人社app 注册</span
+                >
+              </div>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="扫码登录" name="third">
+            <div class="tab-content">
+              跳转中...
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </el-tab-pane>
-      <el-tab-pane label="扫码登录" name="third">
+      <el-tab-pane label="单位登录" name="corporation">
         <div class="tab-content">
-          跳转中...
+          <img src="@/assets/images/ca.png" alt="" class="corp-img" />
+        </div>
+        <div class="text-center">
+          <el-button
+            :disabled="show"
+            class="btn corp-btn"
+            type="primary"
+            @click="onCorpSubmit()"
+            >登录</el-button
+          >
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -115,6 +133,7 @@ export default {
   data() {
     return {
       show: false,
+      activePath: this.$store.getters.priorityLoginType || '',
       activeName: 'first',
       form: {
         zjhm: '',
@@ -167,9 +186,23 @@ export default {
       }
     };
   },
+  computed: {
+    // activePathName: {
+    //   get: function() {
+    //     return this.activePath ? this.activePath : 'person';
+    //   },
+    //   set: function(v) {
+    //     this.activePath = v;
+    //   }
+    // }
+  },
   methods: {
     handleClick(tab, event) {
-      if (tab.label === '扫码登录') {
+      if (tab.label === '个人登录') {
+        //this.$router.push('#/person');
+      } else if (tab.label === '单位登录') {
+        //this.$router.push('#/coporation');
+      } else if (tab.label === '扫码登录') {
         this.turnYwtb();
       }
     },
@@ -211,6 +244,9 @@ export default {
           return false;
         }
       });
+    },
+    onCorpSubmit() {
+      this.$alert('此功能暂未实现');
     }
   }
 };
@@ -228,6 +264,39 @@ export default {
   height: 100%;
   width: 100%;
   padding-top: 15%;
+  #typeTabs {
+    ::v-deep .el-tabs__header {
+      padding: 0px 0 10px;
+      .el-tabs__nav {
+        width: 100%;
+        // & > el-tabs__nav-wrap {
+        //   & > el-tabs__nav-scroll {
+        //     & > .el-tabs__active-bar {
+        //       height: 0;
+        //     }
+        //   }
+        // }
+        #tab-corporation,
+        #tab-person {
+          width: 50%;
+          text-align: center;
+          font-size: 18px;
+          font-weight: 200;
+          background-color: #eee;
+          z-index: 5;
+          bottom: -2px;
+        }
+        #tab-corporation.is-active,
+        #tab-person.is-active {
+          color: rgb(48, 49, 51);
+          background-color: #fff;
+        }
+      }
+      #tab-first {
+        padding-left: 10px;
+      }
+    }
+  }
   .el-tabs {
     width: 350px;
     margin: 0px 240px 0 auto;
@@ -247,6 +316,7 @@ export default {
   }
   .login-box {
     border: 1px solid #dcdfe6;
+    border-top: 0;
     width: 100%;
     //margin: 0 auto;
     padding: 35px 35px 15px 35px;
@@ -264,6 +334,17 @@ export default {
 
   .btn {
     width: 100%;
+  }
+  .download-link {
+    color: #fc6f3d;
+    cursor: pointer;
+  }
+  .corp-img {
+    margin: 0 auto;
+  }
+  .corp-btn {
+    width: 50%;
+    margin-top: 30px;
   }
 }
 </style>

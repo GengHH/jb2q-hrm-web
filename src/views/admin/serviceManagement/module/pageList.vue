@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-03-19 09:26:28
+ * @LastEditTime: 2021-04-02 13:40:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -188,12 +188,14 @@ export default {
   created() {},
   mounted() {
     //获取对应元素高度
-    this.handleShow(() => {
-      for (let i = 0; i < this.titleList.length; i++) {
-        this.arrListHeight.push(this.$refs['b' + i].offsetHeight);
-      }
-      this.skip(this.pagelistIndex);
-    });
+    setTimeout(() => {
+      this.handleShow(() => {
+        for (let i = 0; i < this.titleList.length; i++) {
+          this.arrListHeight.push(this.$refs['b' + i].offsetHeight);
+        }
+        this.skip(this.pagelistIndex);
+      });
+    }, 300);
   }
 };
 </script>

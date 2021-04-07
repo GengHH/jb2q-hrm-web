@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-22 14:18:40
+ * @LastEditTime: 2021-04-06 19:16:39
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -122,7 +122,7 @@
         </el-row>
         <el-row>
           <el-col :span="2">
-            <div class="grid-content bg-purple">其他选项:</div>
+            <div class="grid-content bg-purple">其他选项：</div>
             <!-- <div class="place-holder">其他选项</div> -->
           </el-col>
           <el-col :span="19">
@@ -311,7 +311,7 @@ export default {
   methods: {
     async queryJobs(val) {
       // content
-      this.$alert(val);
+      this.$alert('暂时没有此Api接口，请稍后！');
       try {
         // TODO 查询job列表
         let result = await queryJobs({ pid: '201906186258910' });

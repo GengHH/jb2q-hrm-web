@@ -65,13 +65,36 @@
               class="radio-list-bar"
               @change="positionGroupChange"
             >
-              <el-checkbox-button label="">不限</el-checkbox-button>
-              <el-checkbox-button
+              <el-checkbox-button id="postionsAll" label=""
+                >不限</el-checkbox-button
+              >
+              <!-- <el-checkbox-button
                 v-for="index in zyLists"
                 :key="index.value"
                 :label="index.value"
                 >{{ index.label }}</el-checkbox-button
+              > -->
+              <el-popover
+                v-for="(item, index) in zyLists"
+                :key="item.value"
+                placement="bottom"
+                width="600"
+                trigger="click"
+                popper-class="position-popover"
               >
+                <el-checkbox-button
+                  v-for="idx in zyListsTwo[index]"
+                  :key="idx.value"
+                  :label="idx.value"
+                  >{{ idx.label }}</el-checkbox-button
+                >
+                <el-button
+                  class="show-popover-button"
+                  :btnIndex="index"
+                  slot="reference"
+                  >{{ item.label }}</el-button
+                >
+              </el-popover>
             </el-checkbox-group>
           </el-col>
           <el-col :span="2">
@@ -123,7 +146,8 @@
                   <el-input
                     id="minAge"
                     placeholder="请输入年龄下限"
-                    v-model="queryParams.ageMin"
+                    prefix-icon="el-icon-user"
+                    v-model.number="queryParams.ageMin"
                     @change="minAgeChange"
                     clearable
                   >
@@ -134,7 +158,8 @@
                   <el-input
                     id="maxAge"
                     placeholder="请输入年龄上限"
-                    v-model="queryParams.ageMax"
+                    prefix-icon="el-icon-user"
+                    v-model.number="queryParams.ageMax"
                     @change="maxAgeChange"
                     clearable
                   >
@@ -146,7 +171,8 @@
                   <el-input
                     id="minSalary"
                     placeholder="请输入薪酬下限"
-                    v-model="queryParams.salaryMin"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMin"
                     @change="minSalaryChange"
                     clearable
                   >
@@ -157,7 +183,8 @@
                   <el-input
                     id="maxSalary"
                     placeholder="请输入薪酬上限"
-                    v-model="queryParams.salaryMax"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMax"
                     @change="maxSalaryChange"
                     clearable
                   >
@@ -174,13 +201,22 @@
           <el-col :span="19">
             <div class="grid-content bg-purple filter-select">
               <template>
-                <el-checkbox v-model="queryParams.agencyRecruit"
-                  >中介待招</el-checkbox
+                <el-checkbox
+                  false-label="0"
+                  true-label="1"
+                  v-model="queryParams.agencyRecruit"
+                  >中介代招</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.tranBaseSymbol"
+                <el-checkbox
+                  false-label="0"
+                  true-label="1"
+                  v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox v-model="queryParams.special"
+                <el-checkbox
+                  false-label="0"
+                  true-label="1"
+                  v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
                 >
                 <el-select
@@ -242,7 +278,9 @@
     <!-- 查询结果 -->
     <per-search-job
       v-if="queryResult.length"
+      ref="searchJobList"
       :jobData="queryResult"
+      :total="queryResultTotal"
       showPager
       @deliveryResume="deliveryResume(arguments)"
       @favorJob="favorJob(arguments)"
@@ -314,7 +352,7 @@ export default {
         eduRequire: '',
         recruitNum: '3',
         tranBaseSymbol: '0',
-        special: '',
+        special: '0',
         agencyRecruit: '0',
         salaryMin: '',
         salaryMax: '',
@@ -346,8 +384,9 @@ export default {
       options: [],
       tableData: [],
       queryResult: [],
+      queryResultTotal: 0,
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
-      zyLists: this.$store.getters['dictionary/recruit_position_s_type'],
+      zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       wtOptions: this.$store.getters['dictionary/yesno'],
@@ -357,6 +396,19 @@ export default {
     };
   },
   computed: {
+    zyListsTwo() {
+      let _data = this.$store.getters['dictionary/recruit_position_s_type'];
+      if (_data && _data.length) {
+        return Object.values(
+          _data.reduce((res, item) => {
+            let _code = '' + Number(item.value.substring(0, 2));
+            res[_code] ? res[_code].push(item) : (res[_code] = [item]);
+            return res;
+          }, {})
+        );
+      }
+      return [];
+    },
     onePosition() {
       let that = this;
       return this.positionDetailsId
@@ -365,6 +417,30 @@ export default {
           })
         : {};
     }
+  },
+  watch: {
+    'queryParams.positionTypeList': function(val, oldVal) {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (val && val.length) {
+          $('.show-popover-button').css({
+            backgroundColor: '#fff',
+            color: '#606266'
+          });
+          val.forEach(item => {
+            let styleIndex = Number(item.substring(0, 2)) - 1 + '';
+            $('.show-popover-button[btnIndex="' + styleIndex + '"]').css({
+              backgroundColor: '#fff1ec',
+              color: '#fc6f3d'
+            });
+          });
+        }
+      }, 500)();
+    }
+  },
+  created() {
+    this.queryJobs();
   },
   methods: {
     minSalaryChange() {
@@ -455,19 +531,31 @@ export default {
       this.queryParams.workYearNeed = '';
     },
     async queryJobs(val) {
-      console.log(this.$refs['queryJobFrom'].model);
-      if (!val) {
-        this.$alert('请输入查询条件');
-        return;
-      }
+      // if (!val) {
+      //   this.$alert('请输入查询条件');
+      //   return;
+      // }
+
       let that = this;
-      let params = JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model));
+      let params = this.$refs['queryJobFrom']?.model
+        ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
+        : this.queryParams;
       params.positionName = $.trim(val);
+      that.queryParams.positionName = $.trim(val);
+      params.pageParam = {
+        total: 0,
+        pageSize: that.$refs.searchJobList?.pageSize || 10,
+        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+      };
       try {
         let result = await queryJobs(params);
         console.log('result', result);
-        if (result.status === 200) {
-          result.result.data.forEach(item => {
+        if (
+          result.status === 200 &&
+          result.result.pageresult &&
+          result.result.pageresult.total
+        ) {
+          result.result.pageresult.data.forEach(item => {
             // 转换字典
             if (item.workArea) {
               item.workAreaText = getDicText(
@@ -488,7 +576,17 @@ export default {
               );
             }
           });
-          this.$set(this, 'queryResult', result.result.data);
+          this.$set(this, 'queryResult', result.result.pageresult.data);
+          this.$set(
+            this,
+            'queryResultTotal',
+            Number(result.result.pageresult.total) || 0
+          );
+        } else {
+          this.$message({
+            type: 'success',
+            message: '未查询到信息'
+          });
         }
       } catch (error) {
         console.log(error);
@@ -583,7 +681,8 @@ export default {
         this.queryParams.industry = newVal.filter(item => item !== '');
       }
     },
-    positionGroupChange(newVal) {
+    positionGroupChange(val) {
+      let newVal = val;
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
         this.queryParams.positionTypeList = [''];
       } else if (newVal && newVal.length && newVal.length > 10) {
@@ -592,6 +691,8 @@ export default {
         this.queryParams.positionTypeList = newVal;
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
         this.queryParams.positionTypeList = newVal.filter(item => item !== '');
+      } else if (!newVal.length) {
+        this.queryParams.positionTypeList = [''];
       }
     },
     perfectResume() {
@@ -674,7 +775,9 @@ export default {
       text-align: center;
     }
     ::v-deep #minAge,
-    ::v-deep #maxAge {
+    ::v-deep #maxAge,
+    ::v-deep #minSalary,
+    ::v-deep #maxSalary {
       border: 1px solid #eeeeee;
       width: 100% !important;
     }
@@ -719,6 +822,33 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
+  }
+  #postionsAll {
+    top: -5px;
+  }
+  .show-popover-button {
+    border: 0;
+    border-radius: 0;
+    padding: 10px 20px;
+    margin: 10px 0;
+  }
+}
+</style>
+
+<style lang="scss">
+.position-popover {
+  background-color: #fafafa;
+  border: 1px solid #fc6f3d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.32), 0 0 6px rgba(0, 0, 0, 0.04);
+  .el-checkbox-button__inner {
+    border: 0;
+    background-color: #fafafa;
+  }
+  .popper__arrow::after {
+    border-bottom-color: #fc6f3d !important;
+  }
+  .el-checkbox-button:first-child .el-checkbox-button__inner {
+    border-left: 0;
   }
 }
 </style>

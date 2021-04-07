@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 17:04:05
+ * @LastEditTime: 2021-04-06 20:18:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -20,49 +20,44 @@
       :model="ruleForm"
       :label-position="labelPosition"
       :rules="rules"
-      ref="ruleForm"
-      label-width="200px"
+      ref="positionForm"
+      label-width="20px"
       class="demo-ruleForm  inside-infor clearfix"
     >
       <el-col :span="12">
-        <el-form-item label="职位名称" required>
-          <el-input
-            v-model="ruleForm.jiotitle"
-            placeholder="请输入职位名称"
-          ></el-input>
+        <el-form-item required>
+          <pl-input v-model="ruleForm.jiotitle" label="职位名称"></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="是否属于中介代招" required>
-          <el-select
+        <el-form-item required>
+          <pl-select
             v-model="ruleForm.daizao"
-            placeholder="请选择"
+            label="是否属于中介代招"
+            :optionData="dicData"
             class="w-select"
           >
-            <el-option label="是" value="shanghai"></el-option>
-            <el-option label="否" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="委托代招单位" required>
-          <el-input v-model="ruleForm.unit" placeholder="请输入"></el-input>
+        <el-form-item required>
+          <pl-input v-model="ruleForm.unit" label="委托代招单位"></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="职位分类" required>
-          <el-select
+        <el-form-item required>
+          <pl-select
             v-model="ruleForm.classify"
-            placeholder="请选择"
+            label="职位分类"
+            :optionData="dicZyflData"
             class="w-select"
           >
-            <el-option label="是" value="shanghai"></el-option>
-            <el-option label="否" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="工作性质" required>
+        <el-form-item slabel="工作性质" required>
           <el-radio-group v-model="radio1" size="medium">
             <el-radio-button label="全职"></el-radio-button>
             <el-radio-button label="兼职"></el-radio-button>
@@ -71,77 +66,56 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-col :span="15" class="row-input-one">
-          <el-form-item
-            class="input-one"
-            label="年龄下限"
-            required
-            label-width="200px"
-          >
-            <el-input v-model="ruleForm.age1" placeholder="请输入"></el-input>
+        <el-col :span="12" class="row-input-one">
+          <el-form-item class="input-one" required label-width="20px">
+            <pl-input v-model="ruleForm.age1" label="年龄下限"></pl-input>
           </el-form-item>
         </el-col>
-        <el-col :span="9" class="row-input-two">
-          <el-form-item
-            class="input-two"
-            label="年龄上限"
-            required
-            label-width="80px"
-          >
-            <el-input v-model="ruleForm.age2" placeholder="请输入"></el-input>
+        <el-col :span="12" class="row-input-two">
+          <el-form-item class="input-two" required label-width="20px">
+            <pl-input v-model="ruleForm.age2" label="年龄上限"></pl-input>
           </el-form-item>
         </el-col>
       </el-col>
       <el-col :span="12" class="clearfix">
-        <el-form-item label="工作区域" class="input-one" required>
-          <el-select
+        <el-form-item class="input-one" required>
+          <pl-select
             v-model="ruleForm.region1"
-            placeholder="请选择"
+            label="工作区域"
+            :optionData="dicGzqyData"
             class="w-select"
           >
-            <el-option label="是" value="shanghai"></el-option>
-            <el-option label="否" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
-        <el-form-item
-          label="工作街镇"
-          class="input-two"
-          required
-          label-width="200px"
-        >
-          <el-select
+        <el-form-item class="input-two" required label-width="20px">
+          <pl-select
             v-model="ruleForm.region2"
-            placeholder="请选择"
+            label="工作街镇"
+            :optionData="dicGzjzData"
             class="w-select"
           >
-            <el-option label="是" value="shanghai"></el-option>
-            <el-option label="否" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="工作详细地址" required>
-          <el-input
-            v-model="ruleForm.site"
-            placeholder="请输入详细地址"
-          ></el-input>
+        <el-form-item required>
+          <pl-input v-model="ruleForm.site" label="工作详细地址"></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="工作班时" required>
-          <el-select
+        <el-form-item required>
+          <pl-select
             v-model="ruleForm.jobtime"
-            placeholder="请选择"
+            label="工作班时"
+            :optionData="dicBsData"
             class="w-select"
           >
-            <el-option label="8小时" value="shanghai"></el-option>
-            <el-option label="12小时" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12"></el-col>
       <el-col :span="24">
-        <el-form-item label="工作年限要求" required>
+        <el-form-item slabel="工作年限要求" required>
           <el-radio-group v-model="radio2" size="medium">
             <el-radio-button label="无需求"></el-radio-button>
             <el-radio-button label="1年以下"></el-radio-button>
@@ -153,74 +127,56 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="学历要求" required>
-          <el-select
+        <el-form-item required>
+          <pl-select
             v-model="ruleForm.education"
-            placeholder="请选择"
+            label="学历要求"
+            :optionData="dicData"
             class="w-select"
           >
-            <el-option label="大专" value="shanghai"></el-option>
-            <el-option label="本科" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-col :span="15" class="row-input-one">
-          <el-form-item
-            class="input-one"
-            label="薪酬下限"
-            required
-            label-width="200px"
-          >
-            <el-input
-              v-model="ruleForm.emolument1"
-              placeholder="请输入"
-            ></el-input>
+        <el-col :span="12" class="row-input-one">
+          <el-form-item class="input-one" required label-width="20px">
+            <pl-input v-model="ruleForm.emolument1" label="薪酬下限"></pl-input>
           </el-form-item>
         </el-col>
-        <el-col :span="9" class="row-input-two">
-          <el-form-item
-            class="input-two"
-            label="薪酬上限"
-            required
-            label-width="80px"
-          >
-            <el-input
-              v-model="ruleForm.emolument2"
-              placeholder="请输入"
-            ></el-input>
+        <el-col :span="12" class="row-input-two">
+          <el-form-item class="input-two" required label-width="20px">
+            <pl-input v-model="ruleForm.emolument2" label="薪酬上限"></pl-input>
           </el-form-item>
         </el-col>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="招聘人数" required>
-          <el-input v-model="ruleForm.people" placeholder="请输入"></el-input>
+        <el-form-item required>
+          <pl-input v-model="ruleForm.people" label="招聘人数"></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="招聘特定人群" required>
-          <el-select
+        <el-form-item required>
+          <pl-select
             v-model="ruleForm.crowd"
-            placeholder="请选择"
+            label="招聘特定人群"
             class="w-select"
+            :optionData="dicTdrqData"
           >
-            <el-option label="大专" value="shanghai"></el-option>
-            <el-option label="本科" value="beijing"></el-option>
-          </el-select>
+          </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="职位描述" required>
-          <el-input
+        <el-form-item required>
+          <pl-input
             id="jobTextarea"
             type="textarea"
-            placeholder="请输入职位描述（1000字符）"
+            label="职位描述（1000字符）"
             v-model="ruleForm.desc"
-          ></el-input>
+          ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="招聘类型" required>
+        <el-form-item slabel="招聘类型" required>
           <el-radio-group v-model="radio3" size="medium">
             <el-radio-button label="自主招聘"></el-radio-button>
             <el-radio-button label="代理招聘"></el-radio-button>
@@ -233,9 +189,15 @@
 
     <!-- S demo4按钮部分 -->
     <div id="demo4" class="form-btns">
-      <el-button class="white-btn btn-style">清空重置</el-button>
-      <el-button class="brown-btn btn-style">保存</el-button>
-      <el-button class="orange-btn btn-style">发布</el-button>
+      <el-button class="white-btn btn-style" @click="dialogClear"
+        >清空重置</el-button
+      >
+      <el-button class="brown-btn btn-style" @click="savePosition"
+        >保存</el-button
+      >
+      <el-button class="orange-btn btn-style" @click="publicPosition"
+        >发布</el-button
+      >
     </div>
   </div>
   <!-- E demo4按钮部分 -->
@@ -277,16 +239,27 @@ export default {
         date2: '',
         delivery: false,
         type: []
-      }
+      },
+      dicGzqyData: this.$store.getters['dictionary/ggjbxx_qx'],
+      dicGzjzData: this.$store.getters['dictionary/ggjbxx_street'],
+      dicBsData: this.$store.getters['dictionary/recruit_work_hour'],
+      dicTdrqData: this.$store.getters['dictionary/recruit_special_people'],
+      dicZyflData: this.$store.getters['dictionary/recruit_position_f_type'],
+      dicData: this.$store.getters['dictionary/yesno']
     };
   },
   methods: {
-    //ruleForm(){},
-    //labelPosition(){},
-    //rules(){},
-    //radio1(){},
-    //radio2(){},
-    elForm() {}
+    elForm() {},
+    dialogClear() {
+      //清空弹出框
+      this.$refs.positionForm.resetFields();
+    },
+    savePosition() {
+      this.$alert('暂时没有此Api接口，请稍后！');
+    },
+    publicPosition() {
+      this.$alert('暂时没有此Api接口，请稍后！');
+    }
   }
 };
 </script>
@@ -341,5 +314,8 @@ export default {
 .form-btns {
   text-align: center;
   padding: 40px 0;
+}
+::v-deep textarea {
+  min-height: 150px !important;
 }
 </style>

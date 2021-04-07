@@ -1,10 +1,10 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-03-31 17:36:14
+ * @LastEditTime: 2021-03-31 18:22:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
 -->
 <template>
   <el-dialog
@@ -23,28 +23,28 @@
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="姓名" prop="xm">
-              <el-input v-model="form.xm"></el-input>
+            <el-form-item label="专家编号" prop="expertId">
+              <el-input v-model="form.expertId"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="专家编号" prop="expertId">
-              <el-input v-model="form.expertId"></el-input>
+            <el-form-item label="活动类型" prop="actType">
+              <el-select v-model="form.actType" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.act_type"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="结对人员姓名" prop="pid">
-              <el-select v-model="form.pid" style="width:100%">
-                <el-option label="陈进福" value="201605238646380"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结对开始时间" prop="pairStartTime">
+            <el-form-item label="活动日期" prop="actDate">
               <el-date-picker
-                v-model="form.pairStartTime"
+                v-model="form.actDate"
                 type="date"
                 style="width:100%"
                 value-format="yyyyMMdd"
@@ -52,23 +52,54 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="活动日期类型" prop="actDateType">
+              <el-select v-model="form.actDateType" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.date_type"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="结对人员证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+            <el-form-item label="参与人员标识" prop="pid">
+              <el-select v-model="form.pid" style="width:100%">
+                <el-option label="陈进福" value="201605238646380"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结对人员联系电话" prop="contactNumber">
+            <el-form-item label="参与人员证件号码" prop="zjhm">
+              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="参与人员姓名" prop="xm">
+              <el-input v-model="form.xm"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="参与人员联系电话" prop="contactNumber">
               <el-input v-model="form.contactNumber" maxlength="11"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="服务次数" prop="serviceCount">
-              <el-input v-model="form.serviceCount"></el-input>
+            <el-form-item label="活动名称" prop="actName">
+              <el-input v-model="form.actName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="参数人数" prop="psnlCount">
+              <el-input v-model="form.psnlCount"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -118,27 +149,38 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { record_add, record_edit } from '../api/index';
+import { activity_add, activity_edit } from '../api/index';
 export default {
-  name: 'recordDetail',
+  name: 'activityDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
     return {
+      dicOptions: {
+        //日期类型
+        date_type: trim(
+          this.$store.getters['dictionary/recruit_act_date_type']
+        ),
+        //活动类型
+        act_type: trim(this.$store.getters['dictionary/recruit_act_type'])
+      },
       rules: {
-        pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         expertId: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
-        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        actType: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        actDate: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        actDateType: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         contactNumber: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
-        pairStartTime: [
-          { required: true, message: '请填写必选项', trigger: 'blur' }
-        ],
-        serviceCount: [
+        actName: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        psnlCount: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
       },
@@ -160,7 +202,7 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'pairImageBase64');
+      this.getBase64(file.raw, 'recordImageBase64');
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -170,7 +212,7 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (!data.pairImageBase64) {
+          if (!data.recordImageBase64) {
             this.$message({
               message: '操作成功',
               type: 'warning'
@@ -178,7 +220,7 @@ export default {
             return;
           }
           if (this.type == 3) {
-            record_add(
+            activity_add(
               data,
               res => {
                 if (res.status == 200) {
@@ -198,7 +240,7 @@ export default {
               }
             );
           } else {
-            record_edit(
+            activity_edit(
               data,
               res => {
                 if (res.status == 200) {

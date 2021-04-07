@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-03-30 15:37:57
+ * @LastEditTime: 2021-03-31 15:01:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -112,7 +112,7 @@ export default {
       type: Object,
       default: function() {
         return {
-          height: 'auto', //默认高度-为了表头固定
+          height: '350px', //默认高度-为了表头固定
           stripe: false, // 是否为斑马纹 table
           highlightCurrentRow: false, // 是否要高亮当前行
           border: false, //是否有纵向边框

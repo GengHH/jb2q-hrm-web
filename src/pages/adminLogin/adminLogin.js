@@ -1,8 +1,8 @@
 /*
-  * @Author: TangQiang
+ * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-12 10:16:47
+ * @LastEditTime: 2021-04-02 17:52:44
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -43,10 +43,76 @@ Vue.prototype._ = _;
 Vue.component(PlTable.name, PlTable);
 Vue.use(PlConfig, {});
 // 引入mock配置
-// if (config.mock) {
-//   require('@/mock/person/index.js');
-//   //console.log('++++++++++成功引入mock数据+++++++');
-// }
+if (config.mock) {
+  require('@/mock/admin/index.js');
+  //console.log('++++++++++成功引入mock数据+++++++');
+}
+let isEmpty = function(obj) {
+  if (obj === null || obj === undefined || obj.length === 0) {
+    return true;
+  }
+};
+//性别
+if (isEmpty(store.getters['dictionary/ggjbxx_sex'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_SEX');
+}
+//学历
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+//民族
+if (isEmpty(store.getters['dictionary/ggjbxx_nationality'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_NATIONALITY');
+}
+//街镇
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+//语言
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+//语言等级
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+//工作性质
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+}
+//区县
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+//证件类型
+if (isEmpty(store.getters['dictionary/ggjbxx_zjlx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_ZJLX');
+}
+//银行
+
+if (isEmpty(store.getters['dictionary/sybx_jhh'])) {
+  store.dispatch('dictionary/init_Dictionary', 'SYBX_JHH');
+}
+//专家状态
+if (isEmpty(store.getters['dictionary/recruit_expert_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_STATUS');
+}
+//专家当前状态
+if (isEmpty(store.getters['dictionary/recruit_expert_curr_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_CURR_STATUS');
+}
+//专家活动类型
+if (isEmpty(store.getters['dictionary/recruit_act_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_ACT_TYPE');
+}
+//专家活动日期类型
+if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_ACT_DATE_TYPE');
+}
+//就业状态
+if (isEmpty(store.getters['dictionary/ggjbxx_jyzt'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_JYZT');
+}
 
 /* eslint-disable no-new */
 new Vue({
