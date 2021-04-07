@@ -228,6 +228,9 @@ body {
 .orange-btn {
   color: #fff !important;
   background: #ff9954 linear-gradient(to right, #ff9854, #fc703d) !important;
+  /*兼容ie9*/
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1 ,startColorstr=#ff9854, endColorstr=#fc703d);
+
   border-color: #ff9954 !important;
 }
 .white-btn {
@@ -238,6 +241,9 @@ body {
 .brown-btn {
   color: #fff !important;
   background: #ab8a76 linear-gradient(to right, #d1b29c, #86614f) !important;
+  /*兼容ie9*/
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1 ,startColorstr=#d1b29c, endColorstr=#86614f);
+
   border-color: transparent !important;
   border: 0 !important;
 }

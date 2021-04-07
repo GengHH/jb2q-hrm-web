@@ -7,6 +7,7 @@
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
 import { getLogonUser } from '@/api/corporationApi';
+import router from '@/pages/corporation/router';
 const state = {
   //用户token
   token: '',
@@ -151,10 +152,12 @@ const actions = {
     getLogonUser()
       .then(res => {
         console.log('单位登录信息', res);
-        if (res.status == 200) {
+        if (res.status == 200 && res.result.logonUser?.organIdStr) {
           commit('SET_CORPORATIONINOF', res.result);
           commit('SET_TOKEN', 'login');
         } else {
+          // 登录成功但是获取人员进本信息失败，显示系统异常界面
+          router.push('/error');
           console.log('加载单位登录信息失败：' + res.message);
         }
       })

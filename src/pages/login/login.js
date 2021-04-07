@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 14:14:05
+ * @LastEditTime: 2021-04-07 17:20:41
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -22,6 +22,7 @@ import _ from 'lodash';
 import { isNoBody, isPerson, isCorporation } from '@/utils';
 import config from '@/config';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
+import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -30,6 +31,7 @@ Vue.use(VueAxios);
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
 Vue.component(BaseLoadingButton.name, BaseLoadingButton);
+Vue.component(BaseLabelInput.name, BaseLabelInput);
 //引入mock配置;
 if (config.mock) {
   require('@/mock/login/index.js');

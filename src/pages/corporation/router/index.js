@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
-//import Test from '@/components/Test';
+import ErrorPage from '@/views/error';
 
 //解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
 //使用时：this.$router.push(...).catch(err => err)要有后面的catch
@@ -160,6 +160,10 @@ export default new Router({
     {
       path: '/logout',
       component: BlankComponent
+    },
+    {
+      path: '/error',
+      component: ErrorPage
     },
     {
       path: '/*',

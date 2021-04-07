@@ -2,14 +2,14 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 19:34:45
+ * @LastEditTime: 2021-04-07 17:22:10
  * @Description: file content
 -->
 <template>
   <div id="indexApp">
     <el-tabs id="typeTabs" v-model="activePath" @tab-click="handleClick">
       <el-tab-pane label="个人登录" name="person">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
           <el-tab-pane label="证件登录" name="first">
             <el-form
               ref="zjhmLoginForm"
@@ -19,18 +19,18 @@
               class="login-box"
             >
               <el-form-item style="margin-bottom:25px" prop="zjhm">
-                <el-input
+                <pl-input
                   prefix-icon="el-icon-lock"
                   type="zjhm"
-                  placeholder="请输入证件号码"
+                  label="证件号码"
                   v-model="form.zjhm"
                 />
               </el-form-item>
               <el-form-item style="margin-bottom:25px" prop="password">
-                <el-input
+                <pl-input
                   prefix-icon="el-icon-lock"
                   type="password"
-                  placeholder="请输入密码"
+                  label="密码"
                   v-model="form.password"
                 />
               </el-form-item>
@@ -59,20 +59,20 @@
               class="login-box"
             >
               <el-form-item style="margin-bottom:25px" prop="phone">
-                <el-input
+                <pl-input
                   prefix-icon="el-icon-lock"
                   type="zjhm"
-                  placeholder="请输入手机号码"
+                  placeholder="手机号码"
                   v-model="phoneForm.phone"
                 />
               </el-form-item>
               <el-form-item style="margin-bottom:25px" prop="message">
                 <el-row :gutter="10">
                   <el-col :span="14">
-                    <el-input
+                    <pl-input
                       prefix-icon="el-icon-lock"
                       type="message"
-                      placeholder="请输入短信验证码"
+                      label="短信验证码"
                       v-model="phoneForm.message"
                     />
                   </el-col>
@@ -196,7 +196,11 @@ export default {
     //   }
     // }
   },
+  created() {
+    //PlaceholderInit();
+  },
   methods: {
+    // eslint-disable-next-line no-unused-vars
     handleClick(tab, event) {
       if (tab.label === '个人登录') {
         //this.$router.push('#/person');
@@ -266,7 +270,7 @@ export default {
   padding-top: 15%;
   #typeTabs {
     ::v-deep .el-tabs__header {
-      padding: 0px 0 10px;
+      padding: 0px 0 25px;
       .el-tabs__nav {
         width: 100%;
         // & > el-tabs__nav-wrap {
@@ -292,9 +296,9 @@ export default {
           background-color: #fff;
         }
       }
-      #tab-first {
-        padding-left: 10px;
-      }
+      // #tab-first {
+      //   padding-left: 10px;
+      // }
     }
   }
   .el-tabs {
@@ -315,11 +319,11 @@ export default {
     margin-top: 30px;
   }
   .login-box {
-    border: 1px solid #dcdfe6;
-    border-top: 0;
+    //border: 1px solid #dcdfe6;
+    //border-top: 0;
     width: 100%;
     //margin: 0 auto;
-    padding: 35px 35px 15px 35px;
+    padding: 10px 35px 15px 35px;
     border-radius: 0 0 5px 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;

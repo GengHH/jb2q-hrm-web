@@ -141,6 +141,8 @@ export default {
   .el-input-group__append {
     color: #fff;
     background: #ff9954 linear-gradient(to right, #ff9854, #fc703d);
+    /*兼容ie9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1 ,startColorstr=#ff9854, endColorstr=#fc703d);
   }
 }
 </style>

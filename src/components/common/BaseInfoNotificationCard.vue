@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-28 15:49:10
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-10 14:41:59
+ * @LastEditTime: 2021-04-07 14:27:17
  * @Description: 信息通知显示卡片
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseInfoNotificationCard.vue
 -->
@@ -245,6 +245,8 @@ export default {
       background: -o-linear-gradient(right, transparent, #fff 75%);
       background: -moz-linear-gradient(right, transparent, #fff 75%);
       background: linear-gradient(to right, transparent, #fff 75%);
+      /*兼容ie9*/
+      //filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1 ,startColorstr=#6972FF, endColorstr=#635BFE);
     }
     .notice-date {
       position: absolute;
