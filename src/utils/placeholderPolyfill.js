@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 09:58:51
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-07 18:37:36
+ * @LastEditTime: 2021-04-08 17:39:46
  * @Description: 兼容pl-xxx自定义组件IE9不支持placeHolder的情况
  * @FilePath: \jb2q-hrm-web\src\utils\placeholderPolyfill.js
  */
@@ -47,26 +47,30 @@ Vue.directive('support', {
       // span.style.display = "none";
       input.focus();
     });
-    input.onblur = function(event) {
-      if (!event.target.value) {
-        if (el.parentNode.querySelector('.float-label')) {
-          el.parentNode.querySelector('.float-label').className += ' hidden';
+    if (input) {
+      input.onblur = function(event) {
+        if (!event.target.value) {
+          if (el.parentNode.querySelector('.float-label')) {
+            el.parentNode.querySelector('.float-label').className += ' hidden';
+          }
+          span.style.display = 'inline';
         }
-        span.style.display = 'inline';
-      }
-    };
-    input.oninput = function(event) {
-      if (event.target.value) {
-        span.style.display = 'none';
-      } else {
-        span.style.display = 'inline';
-      }
-    };
+      };
+      input.oninput = function(event) {
+        if (event.target.value) {
+          span.style.display = 'none';
+        } else {
+          span.style.display = 'inline';
+        }
+      };
+    }
   },
 
   // 开始更新
   unbind: function(el) {
     var input = el.querySelector('input');
-    input.onfocus = input.onblur = input.oninput = null;
+    if (input) {
+      input.onfocus = input.onblur = input.oninput = null;
+    }
   }
 });

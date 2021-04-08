@@ -981,7 +981,7 @@ export default {
       rules: {
         positionsLikeRules: {
           positionLike: [
-            { required: true, message: '请输入', trigger: 'blur' }
+            { required: true, message: '请选择职位类型', trigger: 'blur' }
           ],
           industryLike: [
             { required: true, message: '请输入意向行业', trigger: 'blur' },

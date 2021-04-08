@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-29 09:50:55
+ * @LastEditTime: 2021-04-08 17:52:32
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelSelect.vue
 -->
@@ -24,13 +24,19 @@
       >
       </el-option>
     </el-select>
-    <span class="float-label hidden">{{ label }} </span>
+    <span class="float-label hidden"
+      ><i v-if="required" class="required-symbol">*</i>{{ label }}
+    </span>
   </div>
 </template>
 <script>
 export default {
   name: 'pl-select',
   props: {
+    required: {
+      type: Boolean,
+      default: false
+    },
     label: {
       type: String,
       default: ''
@@ -82,12 +88,21 @@ export default {
   },
   methods: {
     init() {
+      let that = this;
       if (this.value) {
-        $(this.$refs['select'])
-          .children('.float-label')
-          .removeClass('hidden')
-          .animate({ top: '-8px' }, 300);
-
+        if (this.$refs['input']) {
+          $(this.$refs['select'])
+            .children('.float-label')
+            .removeClass('hidden')
+            .animate({ top: '-8px' }, 300);
+        } else {
+          setTimeout(function() {
+            $(that.$refs['select'])
+              .children('.float-label')
+              .removeClass('hidden')
+              .animate({ top: '-8px' }, 300);
+          }, 500);
+        }
         $(this.$refs['select'])
           .children('.el-input')
           .children('.ie-placeholder')
@@ -146,5 +161,12 @@ export default {
 }
 .el-select {
   width: 100%;
+}
+.required-symbol {
+  color: red;
+  margin: 0px 3px 0;
+  /* display: inline-block; */
+  top: 3px;
+  position: relative;
 }
 </style>
