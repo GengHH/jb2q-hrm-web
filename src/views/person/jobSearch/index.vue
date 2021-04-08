@@ -548,6 +548,7 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
+        params.pid = that.$store.getters['person/pid'];
         let result = await queryJobs(params);
         console.log('result', result);
         if (
