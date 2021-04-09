@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-07 17:22:10
+ * @LastEditTime: 2021-04-09 14:55:08
  * @Description: file content
 -->
 <template>
@@ -118,6 +118,11 @@
             @click="onCorpSubmit()"
             >登录</el-button
           >
+          <div id="corpYwtb" style="height:18px;font-size:14px">
+            <span class="download-link" @click="turnYwtb2"
+              >一网通办入口登录 ></span
+            >
+          </div>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -211,9 +216,14 @@ export default {
       }
     },
     turnYwtb() {
-      //跳转到一网通办登录
+      //个人跳转到一网通办登录
       window.location.href =
         'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+    },
+    turnYwtb2() {
+      //单位跳转到一网通办登录
+      window.location.href =
+        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     getMessage() {
       // TODO获取短信验证码
@@ -349,6 +359,9 @@ export default {
   .corp-btn {
     width: 50%;
     margin-top: 30px;
+  }
+  #corpYwtb {
+    margin-top: 20px;
   }
 }
 </style>

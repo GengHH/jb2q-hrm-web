@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-07 11:27:33
+ * @LastEditTime: 2021-04-09 12:08:29
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -16,7 +16,7 @@ const state = {
   //证件号码
   zjhm: '',
   //个人标识
-  pid: '',
+  pid: '123',
   //用户名
   name: '',
   //用户头像

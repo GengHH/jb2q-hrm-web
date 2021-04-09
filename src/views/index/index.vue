@@ -211,7 +211,7 @@ export default {
   },
   methods: {
     personSignIn() {
-      console.log(this.$store);
+      this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'person');
       //this.$alert('个人登录暂时未开放');
       // this.axios
       //   .get('new-corp-api/loginController/ywtb-index')
@@ -224,8 +224,10 @@ export default {
       window.location.href = '/ggzp-shrs/login.html';
     },
     corpSignIn() {
-      window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+      this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'corporation');
+      window.location.href = '/ggzp-shrs/login.html';
+      // window.location.href =
+      //   'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     test() {
       this.axios

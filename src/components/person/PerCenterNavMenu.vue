@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2020-12-30 14:23:02
+ * @LastEditTime: 2021-04-09 10:36:43
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerCenterNavMenu.vue
@@ -60,4 +60,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-submenu {
+  .el-menu-item {
+    padding-right: 0 !important;
+    min-width: auto !important;
+  }
+}
+</style>

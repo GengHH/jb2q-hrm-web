@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-07 13:39:34
+ * @LastEditTime: 2021-04-09 15:15:22
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
 -->
 <template>
   <div id="indexHeader" class="two-column-layout">
-    <div class="left">
+    <div class="left" @click="goHome">
       <img src="@/assets/img/logo.png" alt="" />
       <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
       <img class="logo3" src="@/assets/img/logo3.png" alt="" />
@@ -155,9 +155,12 @@ export default {
     }
   },
   methods: {
+    goHome() {
+      window.location.href = '/ggzp-shrs/index.html';
+    },
     handleSelect(index) {
       console.log(this.$route.path);
-      this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
+      this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
     }
   }
 };

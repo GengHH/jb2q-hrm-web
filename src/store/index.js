@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-02 10:48:20
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 18:39:32
+ * @LastEditTime: 2021-04-09 14:34:11
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\store\index.js
  */

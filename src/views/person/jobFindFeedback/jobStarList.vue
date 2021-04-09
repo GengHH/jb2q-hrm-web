@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-25 16:57:41
+ * @LastEditTime: 2021-04-09 15:44:26
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -46,8 +46,8 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]
@@ -92,11 +92,13 @@ export default {
         },
         {
           label: '工作地点',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'workArea',
           rowSpan: 'all'
         },
         {
           label: '收藏时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'favorTime',
           formatter: 'date',
           slotName: 'date'

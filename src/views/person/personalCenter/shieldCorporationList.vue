@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-09 18:43:53
+ * @LastEditTime: 2021-04-09 10:46:54
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporationList.vue
@@ -31,7 +31,7 @@
       ref="serveTable"
       :columns="columns"
       show-pager
-      v-else      
+      v-else
     >
       <template #date="{row}">
         <i class="el-icon-time"></i>
@@ -153,8 +153,8 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]
