@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-04-07 10:37:05
+ * @LastEditTime: 2021-04-09 15:47:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -273,11 +273,30 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="聘期开始时间">
+              <el-input v-model="form.startDate"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="聘期结束时间">
+              <el-input v-model="form.endDate"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="专家编号">
+              <el-input v-model="form.expertId"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="16">
             <el-form-item label="签字后的登记表">
+              <template v-if="disabled">
+                <img :src="form.formImageBase64" class="avatar" />
+              </template>
               <el-upload
+                v-if="!disabled"
                 class="upload-demo"
                 ref="upload"
                 action=""

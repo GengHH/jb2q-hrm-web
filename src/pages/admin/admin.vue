@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-07 11:09:01
+ * @LastEditTime: 2021-04-09 15:42:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -26,7 +26,11 @@
               >
                 <i class="nva-icon" :class="v.iconName"></i>
               </div>
-              <div class="list">欢迎您！{{ userName }}</div>
+              <div class="list">
+                欢迎您！{{ userName }}（{{
+                  $store.state.admin.userInfo.organName
+                }}）
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -117,6 +121,7 @@
 /**
  * 管理员系统入口界面
  */
+import { loginControlle } from './api/index';
 import apiUrlConfig from '@/config';
 export default {
   name: 'app',
@@ -189,18 +194,18 @@ export default {
           text: '职业指导',
           iconName: 'el-icon-setting',
           childs: [
-            {
-              id: '4-1',
-              path: '/profession/makeAnAppointment',
-              text: '职业指导预约',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '4-2',
-              path: '/profession/audit',
-              text: '职业指导预约审核',
-              iconName: 'el-icon-setting'
-            },
+            // {
+            //   id: '4-1',
+            //   path: '/profession/makeAnAppointment',
+            //   text: '职业指导预约',
+            //   iconName: 'el-icon-setting'
+            // },
+            // {
+            //   id: '4-2',
+            //   path: '/profession/audit',
+            //   text: '职业指导预约审核',
+            //   iconName: 'el-icon-setting'
+            // },
             {
               id: '4-3',
               path: '/profession/management',
@@ -210,7 +215,7 @@ export default {
             {
               id: '4-4',
               path: '/profession/feedback',
-              text: '职业指导回馈',
+              text: '实施职业指导',
               iconName: 'el-icon-setting'
             }
           ]
@@ -227,12 +232,12 @@ export default {
               text: '查询单位信息',
               iconName: 'el-icon-setting'
             },
-            // {
-            //   id: '5-2',
-            //   path: '/unitManagement/recruitment',
-            //   text: '代理招聘',
-            //   iconName: 'el-icon-setting'
-            // },
+            {
+              id: '5-2',
+              path: '/unitManagement/recruitment',
+              text: '代理招聘',
+              iconName: 'el-icon-setting'
+            },
             {
               id: '5-3',
               path: '/unitManagement/management',
@@ -313,9 +318,20 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('admin/logout');
-      window.location.href =
-        apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+      loginControlle(
+        res => {
+          console.log(res);
+          this.$store.dispatch('admin/logout');
+          window.location.href =
+            apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+        },
+        err => {
+          console.log(err);
+          this.$store.dispatch('admin/logout');
+          window.location.href =
+            apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+        }
+      );
     },
     drawerClose() {
       this.drawer = false;

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-31 18:26:58
+ * @LastEditTime: 2021-04-09 18:47:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -180,6 +180,8 @@ export default {
         this.type = 1;
         this.disabled = false;
         this.form = { ...scope.row };
+        this.form.name = this.form.expertName;
+        this.form.pids = this.form.xm;
       } else if (type == 2) {
         this.disabled = true;
         this.form = { ...scope.row };

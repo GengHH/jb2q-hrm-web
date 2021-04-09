@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-06 13:40:31
+ * @LastEditTime: 2021-04-08 15:01:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -116,6 +116,11 @@ if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
 if (isEmpty(store.getters['dictionary/ggjbxx_jyzt'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_JYZT');
 }
+//特色活动状态
+if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
+
 //路由拦截
 router.beforeEach((to, from, next) => {
   let userInfo = store.state.admin.userInfo;

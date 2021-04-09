@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-07 17:34:56
+ * @LastEditTime: 2021-04-09 18:46:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -23,8 +23,42 @@
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="专家编号" prop="expertId">
-              <el-input v-model="form.expertId"></el-input>
+            <el-form-item label="专家姓名" prop="xm">
+              <el-select
+                v-model="form.name"
+                filterable
+                remote
+                reserve-keyword
+                style="width:350px"
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+                @change="
+                  e => {
+                    form.expertId = e;
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                  <span v-show="false">{{ (form.xm = item.label) }}</span>
+                  <span>{{ item.label }}</span
+                  >-<span>{{ item.value }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="专家编号">
+              <el-input
+                style="width:350px"
+                disabled
+                v-model="form.expertId"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -32,7 +66,7 @@
               <el-select
                 v-model="form.actType"
                 @change="selectType"
-                style="width:100%"
+                style="width:350px"
               >
                 <el-option
                   v-for="(v, k) in dicOptions.act_type"
@@ -50,7 +84,7 @@
               <el-date-picker
                 v-model="form.actDate"
                 type="date"
-                style="width:100%"
+                style="width:350px"
                 value-format="yyyyMMdd"
               >
               </el-date-picker>
@@ -58,7 +92,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="活动日期类型" prop="actDateType">
-              <el-select v-model="form.actDateType" style="width:100%">
+              <el-select v-model="form.actDateType" style="width:350px">
                 <el-option
                   v-for="(v, k) in dicOptions.date_type"
                   :key="k"
@@ -70,21 +104,43 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col v-if="actType == 1" :span="24">
+          <el-col v-if="Number(form.actType) == 1" :span="24">
             <el-form-item label="服务对象姓名" prop="pid">
-              <el-select v-model="form.pid" style="width:100%">
+              <el-select
+                v-model="form.pids"
+                filterable
+                remote
+                reserve-keyword
+                style="width:350px"
+                placeholder="请输入关键词"
+                :remote-method="orgRemoteMethod"
+                :loading="loading"
+                @change="
+                  e => {
+                    form.zjhm = e;
+                  }
+                "
+              >
                 <el-option
-                  v-for="(v, k) in userList"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
+                  v-for="item in orgOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                  <span v-show="false">{{ (form.pid = item.pid) }}</span>
+                  <span>{{ item.label }}</span
+                  >-<span>{{ item.value }}</span>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col v-if="actType == 1" :span="24">
-            <el-form-item label="服务对象证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+          <el-col v-if="Number(form.actType) == 1" :span="24">
+            <el-form-item label="服务对象证件号码">
+              <el-input
+                disabled
+                style="width:350px"
+                v-model="form.zjhm"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -94,16 +150,23 @@
               <el-input v-model="form.xm"></el-input>
             </el-form-item>
           </el-col> -->
-          <el-col v-if="actType == 1" :span="24">
+          <el-col v-if="Number(form.actType) == 1" :span="24">
             <el-form-item label="服务对象联系电话" prop="contactNumber">
-              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+              <el-input
+                style="width:350px"
+                v-model="form.contactNumber"
+                maxlength="11"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col v-if="actType == 2 || actType == 3" :span="24">
+          <el-col
+            v-if="Number(form.actType) == 2 || Number(form.actType) == 3"
+            :span="24"
+          >
             <el-form-item label="活动名称" prop="actName">
-              <el-select v-model="form.actName" style="width:100%">
+              <el-select style="width:350px" v-model="form.actName">
                 <el-option
                   v-for="(v, k) in activityList"
                   :key="k"
@@ -113,9 +176,12 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col v-if="actType == 2 || actType == 3" :span="24">
+          <el-col
+            v-if="Number(form.actType) == 2 || Number(form.actType) == 3"
+            :span="24"
+          >
             <el-form-item label="参加活动人数" prop="psnlCount">
-              <el-input v-model="form.psnlCount"></el-input>
+              <el-input style="width:350px" v-model="form.psnlCount"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -165,16 +231,19 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { activity_add, activity_edit, record_queryPsnls } from '../api/index';
-import { activity_query } from '../../profession/api/index';
-
+import { activity_add, activity_edit, synthesize_query } from '../api/index';
+import { emphasis_keypoint } from '../../serviceManagement/api/index';
+import { act_query } from '../../profession/api/index';
 export default {
   name: 'activityDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
     return {
-      actType: 0,
+      userOptions: [],
+      orgOption: [],
+      list: [],
+      loading: false,
       dicOptions: {
         //日期类型
         date_type: trim(
@@ -210,6 +279,70 @@ export default {
   },
   computed: {},
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let data = {
+          xm: query,
+          pageIndex: 0,
+          pageSize: 10,
+          valid: 1,
+          districtCode: this.$store.state.admin.userInfo.areaInfo.areaCode
+        };
+        synthesize_query(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.pageresult.data;
+              let list = pageresult.map(e => {
+                return { value: e.expertId, label: e.xm };
+              });
+              this.userOptions = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.options = [];
+      }
+    },
+    orgRemoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let params = {
+          xm: query,
+          pageParam: {
+            pageIndex: 0,
+            pageSize: 10
+          }
+        };
+
+        emphasis_keypoint(
+          params,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.data.data;
+              let list = pageresult.map(e => {
+                return { value: e.zjhm, label: e.xm, pid: e.pid };
+              });
+              this.orgOption = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log('错误');
+            console.log(err);
+          }
+        );
+      } else {
+        this.options = [];
+      }
+    },
     selectType(e) {
       console.log(e);
       this.actType = Number(e);
@@ -237,13 +370,13 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (!data.recordImageBase64) {
-            this.$message({
-              message: '操作成功',
-              type: 'warning'
-            });
-            return;
-          }
+          // if (!data.recordImageBase64) {
+          //   this.$message({
+          //     message: '请添加记录表',
+          //     type: 'warning'
+          //   });
+          //   return;
+          // }
           if (this.type == 3) {
             activity_add(
               data,
@@ -308,31 +441,8 @@ export default {
     }
   },
   created() {
-    //获取人员信息
-    record_queryPsnls(
-      {
-        pageIndex: 0,
-        pageSize: 100
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.pageresult.data;
-          data.map(e => {
-            e.value = e.pid;
-            e.label = e.xm;
-          });
-          this.userList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
     //获取活动信息
-    activity_query(
+    act_query(
       {
         pageIndex: 0,
         pageSize: 100,

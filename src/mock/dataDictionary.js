@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-07 10:08:45
+ * @LastEditTime: 2021-04-08 14:58:56
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -781,7 +781,12 @@ const dic = {
   //职业指导类型
   RECRUIT_GUIDE_TYPE: [],
   //特色活动类型
-  RECRUIT_SPECIAL_ACTIVITY_TYPE: [],
+  RECRUIT_SPECIAL_ACTIVITY_TYPE: [
+    { value: '01', label: '	讲座' },
+    { value: '02', label: '	主题咨询活动' },
+    { value: '03', label: '	集体指导活动' },
+    { value: '04', label: '	其他' }
+  ],
   //实施举措类型
   RECRUIT_IMPLE_ACT_TYPE: [],
   //就业类型
@@ -789,7 +794,11 @@ const dic = {
   //单位状态
   RECRUIT_CORP_STATUS: [],
   //招聘会类型
-  RECRUIT_MEET_TYPE: [],
+  RECRUIT_MEET_TYPE: [
+    { value: '1', label: '线上' },
+    { value: '2', label: '线上及线下' }
+  ],
+
   //应聘类型
   RECRUIT_APPLYFOR_TYPE: [],
   //推荐类型
@@ -1157,6 +1166,14 @@ const dic = {
     { value: '4	', label: '养老' },
     { value: '5	', label: '农村富余' },
     { value: '6	', label: '农村就业' }
+  ],
+  //评价星级
+  EVALUATION_LEVEL: [
+    { value: '1	', label: '一星' },
+    { value: '2	', label: '二星' },
+    { value: '3	', label: '三星' },
+    { value: '4	', label: '四星' },
+    { value: '5	', label: '五星' }
   ]
 };
 

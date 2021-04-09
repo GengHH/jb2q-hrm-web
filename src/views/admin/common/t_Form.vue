@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-03-30 19:04:07
+ * @LastEditTime: 2021-04-09 11:15:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -10,6 +10,7 @@
     ref="value"
     :inline="formConfig.inline"
     :model="value"
+    :disabled="formConfig.disabled"
     :labelPosition="formConfig.labelPosition"
     :label-width="formConfig.labelWidth"
     :size="formConfig.size"
@@ -40,6 +41,7 @@
         :rules="v.rules"
       >
         <el-select
+          :value="v.value"
           :style="v.style"
           v-model="value[v.key]"
           :placeholder="v.placeholder"
@@ -65,6 +67,7 @@
           :style="v.style"
           v-model="value[v.key]"
           :value-format="v.format"
+          :value="v.value"
           type="daterange"
           range-separator=""
           start-placeholder="开始日期"
@@ -82,7 +85,9 @@
       >
         <el-date-picker
           :style="v.style"
+          :value="v.value"
           v-model="value[v.key]"
+          :value-format="v.format"
           type="monthrange"
           range-separator="至"
           start-placeholder="开始月份"
@@ -101,6 +106,8 @@
       >
         <el-date-picker
           type="date"
+          :value-format="v.format"
+          :value="v.value"
           v-model="value[v.key]"
           :placeholder="v.placeholder"
           :style="v.style"
@@ -147,7 +154,11 @@
         :prop="v.key"
         :rules="v.rules"
       >
-        <el-radio-group :style="v.style" v-model="value[v.key]">
+        <el-radio-group
+          :style="v.style"
+          :value="v.value"
+          v-model="value[v.key]"
+        >
           <el-radio
             v-for="(item, key) in v.options"
             :key="key"
@@ -185,6 +196,7 @@
       >
         <el-time-select
           :style="v.style"
+          :value="v.value"
           v-model="value[v.key]"
           :picker-options="v.options"
           :placeholder="v.placeholder"

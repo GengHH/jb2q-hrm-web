@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-04-07 15:56:09
+ * @LastEditTime: 2021-04-09 18:47:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -268,6 +268,13 @@ export default {
             rules: [],
             key: 'zjhm'
           }
+          // {
+          //   type: 'select',
+          //   label: '区县',
+          //   rules: [],
+          //   key: 'districtCode',
+          //   options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          // }
         ]
       },
       disabled: false,
@@ -410,6 +417,8 @@ export default {
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
       this.queryData = data;
+      //获取当前用户所在区
+      data.districtCode = this.$store.state.admin.userInfo.areaInfo.areaCode;
       synthesize_query(
         data,
         res => {
@@ -448,6 +457,7 @@ export default {
     }
   },
   created() {
+    console.log(this.$store);
     console.log(this.dicOptions.status);
   }
 };

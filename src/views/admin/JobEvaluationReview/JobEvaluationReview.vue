@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-23 14:54:28
+ * @LastEditTime: 2021-04-08 14:12:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -12,17 +12,17 @@
       <!-- 内容部分-操作 -->
       <el-table-column
         width="140"
-        slot="aaa003"
+        slot="evaluationLevel"
         label="评价星级"
         align="center"
       >
         <template slot-scope="scope">
-          <el-rate :value="scope.row.aaa003 - 0"></el-rate>
+          <el-rate disabled :value="scope.row.evaluationLevel - 0"></el-rate>
         </template>
       </el-table-column>
       <el-table-column slot="aaa010" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
+          <el-button size="mini" type="primary" @click="look(scope)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
         </template>
@@ -31,23 +31,46 @@
     <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :current-page.sync="params.pageIndex"
+      :page-size="params.pageSize"
       layout="prev, pager, next, jumper"
-      :total="1000"
+      :total="params.total"
     >
     </el-pagination>
+    <el-dialog
+      width="75%"
+      title="查看"
+      :visible="dialogTableVisible"
+      v-loading="loading"
+      element-loading-text="加载中..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.5)"
+      @close="dialogTableVisible = false"
+    >
+      <resume :form="resume"></resume>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
+import { query } from './api/index';
+import resume from '../serviceManagement/pages/resume'; //简历信息
+import { allAction } from '@/api/adminApi';
 export default {
   name: 'index',
-  components: { ttable, tform },
+  components: { ttable, tform, resume },
   data() {
     return {
+      resume: {},
+      loading: false,
+      dialogTableVisible: false,
+      params: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 10
+      },
       formConfig: {
         inline: true,
         size: 'small',
@@ -61,7 +84,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入账号名',
             rules: [],
-            key: 'xm'
+            key: 'corpName'
           },
           {
             type: 'input',
@@ -69,23 +92,38 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入姓名',
             rules: [],
-            key: 'zjhm'
+            key: 'positionName'
           },
           {
             type: 'select',
             label: '评级星级',
             rules: [],
-            key: 'livingArea',
+            key: 'evaluationLevel',
             style: { width: '210px' },
             options: [
               {
                 value: '1',
-                label: '1星',
+                label: '一星',
                 disabled: false
               },
               {
-                value: '0',
-                label: '5星',
+                value: '2',
+                label: '二星',
+                disabled: false
+              },
+              {
+                value: '3',
+                label: '三星',
+                disabled: false
+              },
+              {
+                value: '4',
+                label: '四星',
+                disabled: false
+              },
+              {
+                value: '5',
+                label: '五星',
                 disabled: false
               }
             ]
@@ -95,24 +133,15 @@ export default {
       currentPage: 1,
       columns: [
         { title: '序号', type: 'index' },
-        { title: '单位名称', prop: 'aaa001' },
-        { title: '职位名称', prop: 'aaa002' },
-        { title: '评价星级', slot: 'aaa003' },
-        { title: '评价内容', prop: 'aaa004' },
-        { title: '评价时间', prop: 'aaa005' },
-        { title: '评价人', prop: 'aaa006' },
+        { title: '单位名称', prop: 'corpName' },
+        { title: '职位名称', prop: 'positionName' },
+        { title: '评价星级', prop: 'evaluationLevel', slot: 'evaluationLevel' },
+        { title: '评价内容', prop: 'evaluationContent' },
+        { title: '评价时间', prop: 'evaluationTime' },
+        { title: '评价人', prop: 'xm' },
         { title: '操作', slot: 'aaa010' }
       ],
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '1',
-          aaa004: '测试',
-          aaa005: '测试',
-          aaa006: '测试'
-        }
-      ]
+      list: []
     };
   },
   computed: {},
@@ -120,10 +149,59 @@ export default {
     handleChange(e) {
       console.log(e);
     },
+    message(type, msg) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {}
+      });
+    },
     advancedSearch(e) {
+      let data = { ...e, ...this.params };
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      query(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.message('success', '操作成功');
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
       console.log(e);
     },
-    look() {}
+    look(e) {
+      this.dialogTableVisible = true;
+      this.loading = true;
+      let path = [
+        //简历信息
+        {
+          url: '/admin/keypoint/show/resume?pid=' + e.row.pid
+        }
+      ];
+      allAction(
+        path,
+        res => {
+          console.log(res);
+          this.resume = res[0].data.result.data;
+
+          this.loading = false;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
   },
   created() {}
 };

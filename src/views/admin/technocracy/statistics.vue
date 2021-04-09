@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-01 10:32:22
+ * @LastEditTime: 2021-04-09 16:16:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -12,11 +12,9 @@
         <el-col :span="12">
           <el-form-item label="开始年月">
             <el-date-picker
-              v-model="form.time"
-              type="monthrange"
-              range-separator=""
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              v-model="form.startMonth"
+              type="month"
+              start-placeholder="请选择开始年月"
               value-format="yyyyMM"
             >
             </el-date-picker>
@@ -101,7 +99,6 @@ export default {
       },
       mouey: 0,
       form: {
-        time: [],
         type: '1'
       },
       list: [],
@@ -128,9 +125,8 @@ export default {
     onSubmit() {
       let data = { ...this.params, ...this.form };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
-      if (data.time.length) {
-        data.startMonth = data.time[0];
-        data.endMonth = data.time[1];
+      if (data.startMonth) {
+        data.endMonth = data.startMonth;
       }
       statistics_query(
         data,

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-07 17:07:32
+ * @LastEditTime: 2021-04-09 18:22:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -24,25 +24,72 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="姓名" prop="xm">
-              <el-input v-model="form.xm"></el-input>
+              <el-select
+                v-model="form.name"
+                filterable
+                remote
+                reserve-keyword
+                style="width:350px"
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+                @change="
+                  e => {
+                    form.expertId = e;
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                  <span v-show="false">{{ (form.xm = item.label) }}</span>
+                  <span>{{ item.label }}</span
+                  >-<span>{{ item.value }}</span>
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="专家编号" prop="expertId">
-              <el-input v-model="form.expertId"></el-input>
+              <el-input
+                style="width:350px"
+                disabled
+                v-model="form.expertId"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="结对人员姓名" prop="pid">
-              <el-select v-model="form.pid" style="width:100%">
+              <el-select
+                v-model="form.pids"
+                filterable
+                remote
+                reserve-keyword
+                style="width:350px"
+                placeholder="请输入关键词"
+                :remote-method="orgRemoteMethod"
+                :loading="loading"
+                @change="
+                  e => {
+                    form.zjhm = e;
+                  }
+                "
+              >
                 <el-option
-                  v-for="(v, k) in userList"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
+                  v-for="item in orgOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                  <span v-show="false">{{ (form.pid = item.pid) }}</span>
+                  <span>{{ item.label }}</span
+                  >-<span>{{ item.value }}</span>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -50,12 +97,21 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="结对人员证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+              <el-input
+                style="width:350px"
+                disabled
+                v-model="form.zjhm"
+                maxlength="18"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="结对人员联系电话" prop="contactNumber">
-              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+              <el-input
+                style="width:350px"
+                v-model="form.contactNumber"
+                maxlength="11"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,7 +122,7 @@
               <el-date-picker
                 v-model="form.pairStartTime"
                 type="date"
-                style="width:100%"
+                style="width:350px"
                 value-format="yyyyMMdd"
               >
               </el-date-picker>
@@ -130,13 +186,24 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { record_add, record_edit, record_queryPsnls } from '../api/index';
+import {
+  record_add,
+  record_edit,
+  record_queryPsnls,
+  synthesize_query
+} from '../api/index';
+import { emphasis_keypoint } from '../../serviceManagement/api/index';
 export default {
   name: 'recordDetail',
   props: ['visible', 'disabled', 'form', 'type'],
   components: {},
   data() {
     return {
+      userOptions: [],
+      orgOption: [],
+      list: [],
+      loading: false,
+
       userList: [],
       rules: {
         pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
@@ -160,6 +227,70 @@ export default {
   },
   computed: {},
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let data = {
+          xm: query,
+          pageIndex: 0,
+          pageSize: 10,
+          valid: 1,
+          districtCode: this.$store.state.admin.userInfo.areaInfo.areaCode
+        };
+        synthesize_query(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.pageresult.data;
+              let list = pageresult.map(e => {
+                return { value: e.expertId, label: e.xm };
+              });
+              this.userOptions = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.options = [];
+      }
+    },
+    orgRemoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let params = {
+          xm: query,
+          pageParam: {
+            pageIndex: 0,
+            pageSize: 10
+          }
+        };
+
+        emphasis_keypoint(
+          params,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.data.data;
+              let list = pageresult.map(e => {
+                return { value: e.zjhm, label: e.xm, pid: e.pid };
+              });
+              this.orgOption = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log('错误');
+            console.log(err);
+          }
+        );
+      } else {
+        this.options = [];
+      }
+    },
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -183,13 +314,13 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (!data.pairImageBase64) {
-            this.$message({
-              message: '操作成功',
-              type: 'warning'
-            });
-            return;
-          }
+          // if (!data.pairImageBase64) {
+          //   this.$message({
+          //     message: '请上传协议书',
+          //     type: 'warning'
+          //   });
+          //   return;
+          // }
           if (this.type == 3) {
             record_add(
               data,

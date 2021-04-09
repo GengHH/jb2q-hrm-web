@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-03-29 18:14:32
+ * @LastEditTime: 2021-04-09 17:47:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
@@ -56,7 +56,7 @@ function postAction(url, params, fn, fnErr) {
   startLoading();
   axios
     .post(ywBasePath + url, params)
-    .then(function(response) {
+    .then(response => {
       endLoading();
       if (response.status == 200) {
         fn(response.data);
@@ -65,7 +65,7 @@ function postAction(url, params, fn, fnErr) {
       }
       //console.log(response);
     })
-    .catch(function(error) {
+    .catch(error => {
       endLoading();
       Notification({
         title: '系统提示',
@@ -131,5 +131,4 @@ function allAction(arr, fn, errFn) {
     }
   );
 }
-
 export { queryLogin, postAction, getAction, allAction };

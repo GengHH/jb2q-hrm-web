@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-04-06 20:43:37
+ * @LastEditTime: 2021-04-08 09:30:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -11,6 +11,10 @@
     width="75%"
     title="求职档案"
     :visible="dialogTableVisible"
+    v-loading="loading"
+    element-loading-text="加载中..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.5)"
     @close="evclose"
     @open="onopen"
   >
@@ -36,7 +40,7 @@
               <div class="boxTiele">
                 <h1>个人基本信息</h1>
               </div>
-              <person :form="dataList.person"></person>
+              <person :form="person"></person>
             </div>
             <div class="boxList" ref="b1">
               <div class="boxTiele">
@@ -48,19 +52,19 @@
               <div class="boxTiele">
                 <h1>劳动经历</h1>
               </div>
-              <experience :list="dataList.experience"></experience>
+              <experience :list="experience"></experience>
             </div>
             <div class="boxList" ref="b3">
               <div class="boxTiele">
                 <h1>社保缴费记录</h1>
               </div>
-              <socialsecurity></socialsecurity>
+              <socialsecurity :list="socialsecurity"></socialsecurity>
             </div>
             <div class="boxList" ref="b4">
               <div class="boxTiele">
                 <h1>就业见习记录</h1>
               </div>
-              <getajob></getajob>
+              <getajob :lists="getajob"></getajob>
             </div>
             <div class="boxList" ref="b5">
               <div class="boxTiele">
@@ -72,7 +76,7 @@
               <div class="boxTiele">
                 <h1>职位评论记录</h1>
               </div>
-              <comment></comment>
+              <comment :list="comment"></comment>
             </div>
             <div class="boxList" ref="b7">
               <div class="boxTiele">
@@ -120,8 +124,18 @@ export default {
   },
   data() {
     return {
+      loading: false,
+
+      person: {},
       resume: {},
-      dataList: {},
+      experience: [],
+      socialsecurity: [],
+      getajob: [],
+      feedback: [],
+      comment: [],
+      collect: [],
+      serve: [],
+
       arrListHeight: [],
       titleList: [
         { title: '个人基本信息', state: true, id: 0 },
@@ -197,6 +211,7 @@ export default {
     }
   },
   created() {
+    this.loading = true;
     let path = [
       //个人基本信息
       {
@@ -209,45 +224,49 @@ export default {
       //劳动经历
       {
         url: '/admin/keypoint/show/labor?pid=201605238646380'
+      },
+      //社保缴费记录
+      {
+        url: '/admin/keypoint/show/insur?pid=201605238646380'
+      },
+      //就业见习记录
+      {
+        url: '/admin/keypoint/show/trainee?pid=201808077008090'
+      },
+      //简历投递及反馈记录 --
+      {
+        url: '/admin/keypoint/show/employ?pid=200008000237040'
+      },
+      //职位评价记录
+      {
+        url: '/admin/keypoint/show/evaluation?pid=201906186258910'
+      },
+      //职位收藏记录
+      {
+        url: '/admin/keypoint/show/favor?pid=200008000237040'
+      },
+      //就业服务记录
+      {
+        url: '/admin/keypoint/show/employ?pid=200008000237040'
       }
-      // //社保缴费记录
-      // {
-      //   url: '/admin/keypoint/show/insur',
-      //   data: { pid: '200008000237040' }
-      // },
-      // //就业见习记录
-      // {
-      //   url: '/admin/keypoint/show/trainee',
-      //   data: { pid: '200008000237040' }
-      // },
-      // //简历投递及反馈记录 --
-      // {
-      //   url: '/admin/keypoint/show/employ',
-      //   data: { pid: '200008000237040' }
-      // },
-      // //职位评价记录
-      // {
-      //   url: '/admin/keypoint/show/evaluation',
-      //   data: { pid: '200008000237040' }
-      // },
-      // //职位收藏记录
-      // {
-      //   url: '/admin/keypoint/show/favor',
-      //   data: { pid: '200008000237040' }
-      // },
-      // //就业服务记录
-      // {
-      //   url: '/admin/keypoint/show/employ',
-      //   data: { pid: '200008000237040' }
-      // }
     ];
     allAction(
       path,
       res => {
         console.log(res);
-        this.dataList.person = res[0].data.result.data;
+        this.person = res[0].data.result.data;
         this.resume = res[1].data.result.data;
-        this.dataList.experience = res[2].data.result.data;
+        this.experience = res[2].data.result.data;
+        this.socialsecurity = res[3].data.result.data
+          ? res[3].data.result.data
+          : [];
+        this.getajob = res[4].data.result.data;
+        this.feedback = res[5].data.result.data;
+        this.comment = res[6].data.result.data;
+        this.collect = res[7].data.result.data;
+        this.serve = res[8].data.result.data;
+
+        this.loading = false;
         this.handleShow(() => {
           this.skip(this.pagelistIndex);
         });
@@ -262,6 +281,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-icon-loading {
+  z-index: 999;
+}
 .liColor {
   color: #fc7a43;
 }

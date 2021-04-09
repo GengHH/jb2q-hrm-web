@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:14:04
- * @LastEditTime: 2021-04-06 20:08:50
+ * @LastEditTime: 2021-04-08 14:13:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\resume.vue
@@ -18,7 +18,7 @@
         <span>{{ form.sex }}</span
         ><!--  el-icon-male -->
         <span style="margin-left:40px;color:#4766a4">就业服务难度系数</span>
-        <span style="color:#fc7a43;font-size:20px">4.8</span>
+        <span style="color:#fc7a43;font-size:20px">5.0</span>
       </div>
       <div style="margin-top:15px">
         <span><i class="el-icon-time"></i> 2018年毕业</span>
@@ -47,7 +47,7 @@
     <div class="title-style">
       工作经历
     </div>
-    <div class="box" v-for="(v, k) in form.laborExp" :key="k">
+    <div class="box" v-for="(v, k) in form.laborExp" :key="k + 'd'">
       <div>
         <span class="h2SizeColor">{{ v.corpName }}</span>
         <span class="sizeColor marginLeft"
@@ -68,7 +68,7 @@
     <div class="title-style">
       教育经历
     </div>
-    <div class="box" v-for="(v, k) in form.eduExp" :key="k">
+    <div class="box" v-for="(v, k) in form.eduExp" :key="k + 'c'">
       <div style="padding:25px 0">
         <div>
           <span class="h2SizeColor">{{ v.collegesName }}</span>
@@ -92,7 +92,7 @@
         type="warning"
         style="margin-right:10px"
         v-for="(v, k) in form.psnlLanguage"
-        :key="k"
+        :key="k + 'b'"
       >
         {{
           setDicOptions(v.languageType, 'languageType') +
@@ -108,7 +108,7 @@
         type="warning"
         style="margin-right:10px"
         v-for="(v, k) in form.psnlSkillcert"
-        :key="k"
+        :key="k + 'a'"
       >
         {{ v.certLevel + ' - ' + v.certName }}
       </el-tag>
