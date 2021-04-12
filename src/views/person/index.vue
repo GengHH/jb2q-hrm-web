@@ -298,6 +298,7 @@ export default {
         //   return false;
         // }
       });
+      done();
     }
     // submit(done) {
     //   setTimeout(() => {

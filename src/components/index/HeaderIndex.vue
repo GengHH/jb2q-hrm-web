@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-03-31 10:22:54
+ * @LastEditTime: 2021-04-09 14:34:46
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -149,7 +149,7 @@ export default {
   methods: {
     handleSelect(index) {
       console.log(this.$route.path);
-      this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
+      this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
     }
   }
 };

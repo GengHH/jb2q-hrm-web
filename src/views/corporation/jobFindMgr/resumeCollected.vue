@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 16:33:38
+ * @LastEditTime: 2021-04-09 15:44:57
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -251,23 +251,27 @@ export default {
         },
         {
           label: '职位名称',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'positionName',
           rowSpan: 'all'
         },
         {
           label: '简历最近修改时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '账号最近登录时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '收藏时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'

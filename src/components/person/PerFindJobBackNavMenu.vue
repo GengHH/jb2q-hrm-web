@@ -67,4 +67,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-submenu {
+  .el-menu-item {
+    padding-right: 0 !important;
+    min-width: auto !important;
+  }
+}
+</style>

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 19:14:37
+ * @LastEditTime: 2021-04-08 16:35:47
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -16,11 +16,12 @@
       :rules="rules"
       ref="corporationInfo"
       label-width="0px"
-      class="demo-ruleForm clearfix"
+      class="clearfix"
     >
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="tyshxym">
           <pl-input
+            required
             v-model="corporationInfo.tyshxym"
             label="社会信用代码"
             :disabled="true"
@@ -28,8 +29,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required>
+        <el-form-item prop="corpName">
           <pl-input
+            required
             v-model="corporationInfo.corpName"
             label="单位名称"
             :disabled="true"
@@ -37,8 +39,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="establishDate">
           <pl-date-picker
+            required
             v-model="corporationInfo.establishDate"
             type="date"
             value-format="yyyyMMdd"
@@ -49,8 +52,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required>
+        <el-form-item prop="unitResidence">
           <pl-input
+            required
             v-model="corporationInfo.unitResidence"
             label="单位住所"
             :disabled="true"
@@ -59,28 +63,33 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="corpNature">
           <pl-select
+            required
             v-model="corporationInfo.corpNature"
             :optionData="dicCorpNature"
             label="单位性质"
+            :disabled="true"
           >
           </pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required prop="tranBaseSymbol">
+        <el-form-item prop="tranBaseSymbol">
           <pl-input
+            required
             v-model="corporationInfo.tranBaseSymbol"
             label="见习基地标志"
+            :disabled="true"
           ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="districtCode">
           <el-col :span="18" class="form-item-left">
             <pl-select
-              v-model="corporationInfo.corpNature"
+              required
+              v-model="corporationInfo.districtCode"
               :optionData="dicQx"
               label="管理所属区"
             >
@@ -98,8 +107,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item required>
+        <el-form-item prop="industryType">
           <pl-select
+            required
             v-model="corporationInfo.industryType"
             label="行业类别"
             :optionData="dicIndustryType"
@@ -109,16 +119,18 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="contactAddress">
           <pl-input
+            required
             v-model="corporationInfo.contactAddress"
             label="单位联系地址"
           ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item prop="contactPhone">
+        <el-form-item required prop="contactPhone">
           <pl-input
+            required
             v-model="corporationInfo.contactPhone"
             label="单位联系人"
           ></pl-input>
@@ -127,6 +139,7 @@
       <el-col :span="24">
         <el-form-item prop="businessRange">
           <pl-input
+            required
             v-model="corporationInfo.businessRange"
             label="经营范围"
             :disabled="true"
@@ -135,21 +148,23 @@
       </el-col>
       <el-col :span="24">
         <el-form-item prop="introduce">
-          <el-input
+          <pl-input
+            required
             type="textarea"
             autosize
-            placeholder="公司简介（不超过2000字符）"
+            label="公司简介（不超过2000字符）"
             maxlength="2000"
             show-word-limit
             :rows="12"
             v-model="corporationInfo.introduce"
           >
-          </el-input>
+          </pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
         <el-form-item prop="recruitChargeName">
           <pl-input
+            required
             v-model="corporationInfo.recruitChargeName"
             label="招聘负责人姓名"
           ></pl-input>
@@ -158,13 +173,14 @@
       <el-col :span="12" class="form-item-right">
         <el-form-item prop="recruitChargePhone">
           <pl-input
+            required
             v-model="corporationInfo.recruitChargePhone"
             label="招聘负责人手机"
           ></pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
-        <el-form-item required>
+        <el-form-item prop="recruitStaffName1">
           <pl-input
             v-model="corporationInfo.recruitStaffName1"
             label="招聘工作人员一姓名"
@@ -204,10 +220,31 @@
       >
         保存
       </pl-button>
-      <el-button class="white-btn btn-style" @click="dialogClear"
-        >取消</el-button
+      <pl-button class="white-btn btn-style" @click="dialogClear($event)"
+        >取消</pl-button
       >
     </div>
+
+    <el-dialog title="变更原因" :visible.sync="dialogFormVisible">
+      <el-form :model="areaForm" ref="reasonForm" :rules="arearules">
+        <el-form-item prop="changeReason">
+          <el-input
+            type="textarea"
+            autosize
+            placeholder="（不超过1000字符）"
+            maxlength="1000"
+            show-word-limit
+            :rows="12"
+            v-model="areaForm.changeReason"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doChangeQx($event)">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -229,6 +266,7 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
+      dialogFormVisible: false,
       corporationInfo: {
         cid: '',
         tyshxym: '',
@@ -257,7 +295,18 @@ export default {
         recruitStaffName2: '',
         recruitStaffPhone2: ''
       },
+      areaForm: {
+        changeReason: ''
+      },
       rules: {
+        introduce: [
+          { required: true, message: '请输公司简介', trigger: 'blur' },
+          {
+            max: 2000,
+            message: '最长不可超过2000字符',
+            trigger: ['blur', 'change']
+          }
+        ],
         recruitChargePhone: [
           { required: true, message: '请输手机号', trigger: 'blur' },
           {
@@ -267,7 +316,6 @@ export default {
           }
         ],
         recruitStaffPhone1: [
-          { required: true, message: '请输手机号', trigger: 'blur' },
           {
             pattern: phonePattern,
             message: '请输入正确格式的手机号',
@@ -275,7 +323,6 @@ export default {
           }
         ],
         recruitStaffPhone2: [
-          { required: true, message: '请输手机号', trigger: 'blur' },
           {
             pattern: phonePattern,
             message: '请输入正确格式的手机号',
@@ -284,9 +331,16 @@ export default {
         ],
         livingAddress: [
           { required: true, message: '请输入联系地址', trigger: 'blur' }
-        ],
-        livingAddressTest: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' }
+        ]
+      },
+      arearules: {
+        changeReason: [
+          { required: true, message: '请输变更原因', trigger: 'blur' },
+          {
+            max: 1000,
+            message: '最长不可超过1000字符',
+            trigger: ['blur', 'change']
+          }
         ]
       },
       dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -301,7 +355,7 @@ export default {
     // }
   },
   methods: {
-    async getcorporationInfo() {
+    async getcorporationInfo(done) {
       //! TODO 可以改成$refs,不需要再查一遍
       try {
         if (!this.$store.getters['corporation/token']) {
@@ -310,38 +364,38 @@ export default {
             message: '请先登录，谢谢',
             type: 'error'
           });
-          // Notification({
-          //   title: '系统提示',
-          //   message: '请先登录，谢谢',
-          //   //duration: 4500,
-          //   type: 'error'
-          // });
           setTimeout(() => {
             window.location.href = '/ggzp-shrs/index.html';
           }, 2000);
         }
-        // TODO 更换cid this.$store.getters['corporation/cid']
         let result = await loadCorpInfo({
-          cid: this.$store.getters['corporation/cid'] || '201002025628331'
+          cid: this.$store.getters['corporation/cid'] || ''
         });
         console.log('result', result);
-        if (result.status === 200 && result.result.data)
+        if (result.status === 200 && result.result.data) {
           this.$set(this, 'corporationInfo', result.result.data);
-        else
+          if (done) done();
+        } else {
           this.$message({
             type: 'error',
             message: '未查询到任何信息'
           });
+          if (done) done();
+        }
       } catch (error) {
+        if (done) done();
         console.log(error);
       }
     },
     submitForm(done, formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          let formData = JSON.parse(JSON.stringify(this.corporationInfo));
-          console.log(reusult);
-          let reusult = await saveCorpInfo(formData);
+          //let formData = JSON.parse(JSON.stringify(this.corporationInfo));
+          let formData = this.$refs[formName].model;
+          console.log(formData);
+          let reusult = await saveCorpInfo(formData).catch(() => {
+            done();
+          });
           if (reusult && reusult.status === 200) {
             done();
             this.$message({
@@ -351,25 +405,40 @@ export default {
             });
           } else {
             done();
-            this.$message({
-              showClose: true,
-              message: 'error submit!',
-              type: 'error'
-            });
+            // this.$message({
+            //   showClose: true,
+            //   message: '保存失败',
+            //   type: 'error'
+            // });
           }
         } else {
           done();
-          console.log('error submit!!');
+          this.$message({
+            showClose: true,
+            message: '系统异常，保存失败',
+            type: 'error'
+          });
           return false;
         }
       });
     },
     changeQx() {
-      this.$alert('暂时没有此Api接口，请稍后！');
+      this.dialogFormVisible = true;
     },
-    dialogClear() {
+    doChangeQx(done) {
+      // TODO 变更区县
+      this.$refs.reasonForm.validate(valid => {
+        if (valid) {
+          this.dialogFormVisible = false;
+          this.$alert('暂时没有此Api接口，请稍后！');
+          done();
+        }
+      });
+    },
+    dialogClear(done) {
       //清空弹出框
-      this.$refs.corporationInfo.resetFields();
+      //this.$refs.corporationInfo.resetFields();
+      this.getcorporationInfo(done);
     }
   },
   created() {
