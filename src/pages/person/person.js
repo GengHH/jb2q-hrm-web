@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-03-31 16:51:09
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-04-12 16:16:55
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
  */
@@ -112,6 +112,9 @@ if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
+}
+if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_PEOPLE');
 }
 
 window.setTimeout(function() {

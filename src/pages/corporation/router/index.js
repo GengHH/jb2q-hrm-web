@@ -139,7 +139,38 @@ export default new Router({
     {
       path: '/jobFair',
       name: '招聘会',
-      component: () => import('@/views/corporation/jobFair')
+      redirect: '/jobFair/jobFairApply',
+      //component: () => import('@/views/corporation/jobFair')
+      component: () => import('@/views/corporation/corporationLayout'),
+      children: [
+        {
+          path: '/jobFair/jobFairApply',
+          name: '单位招聘会报名',
+          components: {
+            default: () => import('@/views/corporation/jobFair/jobFairApply'),
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobfairNavMenu')
+          }
+        },
+        {
+          path: '/jobFair/jobFairReview',
+          name: '报名审核结果',
+          components: {
+            default: () => import('@/views/corporation/jobFair/jobFairReview'),
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobfairNavMenu')
+          }
+        },
+        {
+          path: '/jobFair/jobFairResume',
+          name: '收到招聘会简历',
+          components: {
+            default: () => import('@/views/corporation/jobFair/jobFairResume'),
+            corpNavMenu: () =>
+              import('@/components/corporation/CorpJobfairNavMenu')
+          }
+        }
+      ]
     },
     {
       path: '/remind',

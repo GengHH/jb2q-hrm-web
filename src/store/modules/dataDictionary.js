@@ -3,7 +3,7 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 18:52:53
+ * @LastEditTime: 2021-04-12 18:55:26
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -135,7 +135,8 @@ const getters = {
   ggjbxx_jyzt: state => state.GGJBXX_JYZT,
   recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
   recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE,
-  recruit_salary_pay_type: state => state.RECRUIT_SALARY_PAY_TYPE
+  recruit_salary_pay_type: state => state.RECRUIT_SALARY_PAY_TYPE,
+  recruit_work_year: state => state.RECRUIT_WORK_YEAR
 };
 const mutations = {
   set_GGJBXX_JYZT: (state, dictionary) => {
@@ -212,6 +213,9 @@ const mutations = {
   },
   set_RECRUIT_SALARY_PAY_TYPE: (state, dictionary) => {
     state.RECRUIT_SALARY_PAY_TYPE = dictionary;
+  },
+  set_RECRUIT_WORK_YEAR: (state, dictionary) => {
+    state.RECRUIT_WORK_YEAR = dictionary;
   }
 };
 

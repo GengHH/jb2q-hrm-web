@@ -1,37 +1,48 @@
 <template>
   <!-- <router-view></router-view> -->
-  <div id="indexBody">
-    <el-row :gutter="20">
-      <el-col :span="4" id="leftNav">
-        <router-view name="corpNavMenu" />
+  <div id="jobFairApply">
+    <div class="title-style">单位招聘会报名</div>
+    <el-row id="selectBar" :gutter="20">
+      <el-col :span="6">
+        <pl-input label="时间" v-model="date"></pl-input>
       </el-col>
-      <el-col :span="20">
-        <!-- <transition name="fade"> -->
-        <router-view name="default" />
-        <!-- </transition> -->
+      <el-col :span="6">
+        <pl-input label="地点" v-model="address"></pl-input>
+      </el-col>
+      <el-col :span="6">
+        <pl-input label="招聘类型" v-model="type"></pl-input>
+      </el-col>
+      <el-col :span="6" class="text-right">
+        <pl-button
+          @click="query($event)"
+          class="orange-btn"
+          icon="el-icon-search"
+          >搜索</pl-button
+        >
       </el-col>
     </el-row>
+    <!-- 职位展示位 -->
+
+    <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow>
   </div>
 </template>
 
 <script>
-import { testData } from '@pub/mockTestData';
+/**
+ * 单位招聘会报名界面
+ */
+import FairBoxShow from '@/components/corporation/FairBoxShow';
+
 export default {
-  name: 'corporationLayout',
+  name: 'jobFairApply',
   components: {
-    // FooterIndex,
-    // BaseSearch,
-    // BaseCarousel,
-    // BaseInfoGloriette,
+    FairBoxShow
   },
   data() {
     return {
-      path: require('@/assets/logo.png'),
-      list: testData.list,
-      obj: {},
-      colRowGutter: 40,
-      jobActiveName: 'jobRecommended',
-      corpActiveName: 'corpRecommended',
+      date: '',
+      address: '',
+      type: '',
       showList: [
         {
           id: '6',
@@ -102,65 +113,55 @@ export default {
     }
   },
   methods: {
-    jobHandleClick() {
-      console.log(1);
+    query(done) {
+      this.$alert('暂时没有此Api接口，请稍后');
+      done();
     },
-    corpHandleClick() {
-      console.log(2);
-    },
-    showMore() {
-      this.$message('this is more');
+    handleClick(tab, event) {
+      console.log(tab, event);
     }
   },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
-  }
+  created() {}
 };
 </script>
 
 <style lang="scss" scoped>
-#indexBody {
-  width: 90%;
+#jobFairApply {
+  // width: 90%;
   min-height: 100%;
   //max-height:1000px;
   margin: 0 auto;
-  padding-top: 60px;
-  //background-color: $g-gray1-color;
+  #selectBar {
+    width: 100%;
+    margin-top: 20px;
+  }
   .more-btn {
-    margin: 20px auto;
-    padding-left: 50px;
-    padding-right: 50px;
-    color: #fc6f3d;
-    border: 1px solid #fc6f3d;
+    margin: 20px auto 0;
     display: block;
   }
-  #leftNav {
+  .title-style {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 40px;
+    border-bottom: 1px solid #e9eef3;
+    text-align: left;
+    padding: 0 30px;
+    box-sizing: border-box;
     margin-top: 10px;
+    position: relative;
+  }
+  .title-style::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: #fc7a43;
+    position: absolute;
+    left: 12px;
+    top: 13px;
   }
 }
 
 .clearfix {
   zoom: 1;
-}
-// 职位信息列表类型
-#jobInfoGloriette {
-  ::v-deep .el-col {
-    color: blue;
-    //height: 100px;
-  }
-}
-// 单位信息列表类型
-#corpInfoGloriette {
-  ::v-deep .el-col {
-    color: red;
-    //height: 100px;
-  }
 }
 </style>

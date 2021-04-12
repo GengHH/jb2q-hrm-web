@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 16:35:47
+ * @LastEditTime: 2021-04-12 17:37:29
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -76,12 +76,13 @@
       </el-col>
       <el-col :span="12" class="form-item-right">
         <el-form-item prop="tranBaseSymbol">
-          <pl-input
+          <pl-select
             required
             v-model="corporationInfo.tranBaseSymbol"
             label="见习基地标志"
+            :optionData="dicData"
             :disabled="true"
-          ></pl-input>
+          ></pl-select>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-left">
@@ -96,13 +97,13 @@
             </pl-select>
           </el-col>
           <el-col :span="6" class="form-item-rigth text-right">
-            <pl-button
+            <el-button
               class="orange-btn btn-small-style"
               :auto-loading="true"
               @click="changeQx"
             >
               变更
-            </pl-button>
+            </el-button>
           </el-col>
         </el-form-item>
       </el-col>
@@ -242,7 +243,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="doChangeQx($event)">确 定</el-button>
+        <pl-button type="primary" @click="doChangeQx($event)">确 定</pl-button>
       </div>
     </el-dialog>
   </div>
@@ -250,7 +251,11 @@
 
 <script>
 import { phonePattern } from '@/utils/regexp';
-import { loadCorpInfo, saveCorpInfo } from '@/api/corporationApi';
+import {
+  loadCorpInfo,
+  saveCorpInfo,
+  updateDistrictCode
+} from '@/api/corporationApi';
 // import plButton from '@/components/common/BaseLoadingButton';
 // import plInput from '@/components/common/BaseLabelInput';
 // import plSelect from '@/components/common/BaseLabelSelect';
@@ -343,6 +348,7 @@ export default {
           }
         ]
       },
+      dicData: this.$store.getters['dictionary/yesno'],
       dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
       dicCorpNature: this.$store.getters['dictionary/recruit_corp_nature'],
       dicIndustryType: this.$store.getters['dictionary/recruit_industry_type'],
@@ -426,13 +432,36 @@ export default {
       this.dialogFormVisible = true;
     },
     doChangeQx(done) {
-      // TODO 变更区县
-      this.$refs.reasonForm.validate(valid => {
+      //变更区县
+      let that = this;
+      this.$refs.reasonForm.validate(async valid => {
         if (valid) {
+          let saveResult = await updateDistrictCode({
+            cid: that.$store.getters['corporation/cid'],
+            districtCode: that.corporationInfo.districtCode,
+            content: that.areaForm.changeReason
+          }).catch(() => {
+            done();
+            this.$message({
+              type: 'error',
+              message: '系统异常，保存失败'
+            });
+          });
+          if (saveResult.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            });
+          } else {
+            this.$message({
+              type: 'error',
+              message: '保存失败'
+            });
+          }
           this.dialogFormVisible = false;
-          this.$alert('暂时没有此Api接口，请稍后！');
-          done();
+          //this.$alert('暂时没有此Api接口，请稍后！');
         }
+        done();
       });
     },
     dialogClear(done) {

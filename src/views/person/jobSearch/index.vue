@@ -213,12 +213,26 @@
                   v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox
+                <!-- <el-checkbox
                   false-label="0"
                   true-label="1"
                   v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
+                > -->
+                <el-select
+                  v-model="queryParams.special"
+                  clearable
+                  placeholder="招聘特定人群"
+                  class="min-size-select"
                 >
+                  <el-option
+                    v-for="item in tpOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+
                 <el-select
                   v-model="queryParams.eduRequire"
                   clearable
@@ -350,9 +364,9 @@ export default {
         workYearNeed: '',
         workArea: '',
         eduRequire: '',
-        recruitNum: '3',
+        //recruitNum: '3',
         tranBaseSymbol: '0',
-        special: '0',
+        special: '',
         agencyRecruit: '0',
         salaryMin: '',
         salaryMax: '',
@@ -388,6 +402,7 @@ export default {
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
+      tpOptions: this.$store.getters['dictionary/recruit_special_people'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       wtOptions: this.$store.getters['dictionary/yesno'],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
@@ -525,10 +540,12 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
+      this.queryParams.tranBaseSymbol = '0';
+      this.queryParams.agencyRecruit = '0';
       this.queryParams.industry = [''];
       this.queryParams.positionTypeList = [''];
-      this.queryParams.workNature = '';
-      this.queryParams.workYearNeed = '';
+      //this.queryParams.workNature = '';
+      //this.queryParams.workYearNeed = '';
     },
     async queryJobs(val) {
       // if (!val) {

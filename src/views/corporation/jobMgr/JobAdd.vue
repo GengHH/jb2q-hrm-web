@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 19:24:23
+ * @LastEditTime: 2021-04-12 17:31:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -167,7 +167,7 @@
           <pl-select
             v-model="jobForm.eduRequir"
             label="学历要求"
-            :optionData="dicData"
+            :optionData="dicXlData"
             class="w-select"
           >
           </pl-select>
@@ -207,6 +207,7 @@
       <el-col :span="12">
         <el-form-item prop="special">
           <pl-select
+            multiple
             v-model="jobForm.special"
             label="招聘特定人群"
             class="w-select"
@@ -236,7 +237,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="radio-group" prop="publicDate">
+        <el-form-item class="date-picker" prop="publicDate">
           <pl-date-picker
             v-model="jobForm.publicDate"
             type="date"
@@ -342,7 +343,10 @@ export default {
           }
         ],
         special: '',
-        describe: '',
+        describe: [
+          { required: true, message: '请输职位描述', trigger: 'blur' },
+          { min: 1000, message: '不得超过1000字符', trigger: 'blur' }
+        ],
         ageMin: [
           { required: true, message: '请输入年龄下限', trigger: 'blur' },
           { type: 'number', message: '请输入数值', trigger: 'blur' },
@@ -412,7 +416,7 @@ export default {
         salaryMin: '',
         salaryPayType: '',
         recruitNum: '',
-        special: '',
+        special: [],
         describe: '',
         opWay: '',
         publicDate: ''
@@ -423,6 +427,7 @@ export default {
       dicTdrqData: this.$store.getters['dictionary/recruit_special_people'],
       dicZyflData: this.$store.getters['dictionary/recruit_position_f_type'],
       dicData: this.$store.getters['dictionary/yesno'],
+      dicXlData: this.$store.getters['dictionary/recruit_edu'],
       dicZffsData: this.$store.getters['dictionary/recruit_salary_pay_type']
     };
   },
@@ -575,6 +580,9 @@ export default {
   background-color: #ffffff;
   //box-shadow: rgba(0, 0, 0, 0.1) -5px 0 5px -5px;
   //padding-right: 50px;
+  .el-col {
+    min-height: 80px;
+  }
   .title-style {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.8);
@@ -599,6 +607,9 @@ export default {
     margin-top: 20px;
   }
   .el-select {
+    width: 100%;
+  }
+  .date-picker {
     width: 100%;
   }
   .row-input-one {
