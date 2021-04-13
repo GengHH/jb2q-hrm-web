@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-01 15:18:12
+ * @LastEditTime: 2021-04-12 19:57:28
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -444,6 +444,16 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
 
 // TODO 评价职位
 Mock.mock(basePath + '/person/feedback/do-evaluate', 'post', function(options) {
+  return successData;
+});
+
+//发送验证码
+Mock.mock(basePath + '/person/info/sendSms', 'post', function(options) {
+  return successData;
+});
+
+//更新手机号
+Mock.mock(basePath + '/person/info/updatePhoneNum', 'post', function(options) {
   return successData;
 });
 export default Mock;

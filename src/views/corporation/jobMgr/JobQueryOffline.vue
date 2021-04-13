@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 18:08:53
+ * @LastEditTime: 2021-04-12 18:46:18
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOffline.vue
 -->
@@ -20,7 +20,7 @@
     </el-row>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="自助招聘" name="first">
+      <el-tab-pane label="自主招聘" name="first">
         <pl-table
           :data="tableData"
           ref="serveTable"

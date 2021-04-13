@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 18:53:27
+ * @LastEditTime: 2021-04-12 18:53:20
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -100,6 +100,9 @@ if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
 
 window.setTimeout(function() {

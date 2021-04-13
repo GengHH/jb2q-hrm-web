@@ -1,53 +1,57 @@
 <!--
  * @Author: GengHH
- * @Date: 2020-12-16 11:32:31
+ * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 18:07:06
- * @Description: file content
- * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
+ * @LastEditTime: 2021-04-12 18:38:11
+ * @Description: 报名审核结果子页面
 -->
 <template>
-  <div id="jobQueryPublished">
-    <div class="title-style">已发布职位</div>
+  <div id="jobFairReview">
+    <div class="title-style">报名审核结果</div>
     <el-row>
+      <el-col :span="12"> </el-col>
       <el-col :span="12">
-        <pl-button class="orange-btn" icon="el-icon-upload2">置顶</pl-button>
-        <pl-button type="danger" icon="el-icon-close">下架</pl-button>
-      </el-col>
-      <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryResult($event)"></BaseSearch>
       </el-col>
     </el-row>
+
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="自主招聘" name="first">
+      <!-- 职位展示位 -->
+      <el-tab-pane label="线下招聘会" name="onlineFair">
         <pl-table
           :data="tableData"
-          ref="serveTable"
+          ref="jobTable"
           :columns="columns"
           show-pager
-          @selection-change="handleSelectionChange"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.date }}</span>
+          </template>
+          <template #star="{row}">
+            <el-rate disabled v-model="row.star"></el-rate>
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="代理招聘" name="second"
-        ><pl-table
+      <!-- 职位展示位 -->
+
+      <el-tab-pane label="线上招聘会" name="unlineFair">
+        <pl-table
           :data="tableData"
-          ref="serveTable"
+          ref="jobTable"
           :columns="columns"
           show-pager
-          @selection-change="handleSelectionChange"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.date }}</span>
           </template>
-        </pl-table></el-tab-pane
-      >
+          <template #star="{row}">
+            <el-rate disabled v-model="row.star"></el-rate>
+          </template>
+        </pl-table>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -55,16 +59,16 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 export default {
-  name: 'jobQueryPublished',
+  name: 'jobFairReview',
   components: {
     BaseSearch
   },
   data() {
     return {
-      activeName: 'first',
-      unshowShztColumn: true,
+      activeName: 'onlineFair',
       tableData: [
         {
+          id: '1',
           date: '2019-05-01',
           star: null,
           name: '王小虎',
@@ -72,11 +76,13 @@ export default {
           city: '普陀区',
           address: '金沙江路 1518 弄',
           zip: 200333,
-          tag: '家',
+          tag: '审核通过',
           status: 0,
+          fairName: '2020界高校毕业生全国网络联合招聘',
           actions: ['action1']
         },
         {
+          id: '2',
           date: '2019-05-04',
           star: null,
           name: '王小虎',
@@ -84,11 +90,13 @@ export default {
           city: '普陀区',
           address: '金沙江路 1517 弄',
           zip: 200333,
-          tag: '公司',
+          tag: '审核通过',
           status: 1,
+          fairName: '2020界高校毕业生全国网络联合招聘',
           actions: ['action1']
         },
         {
+          id: '3',
           date: '2019-05-03',
           star: null,
           name: '王小虎',
@@ -96,31 +104,36 @@ export default {
           city: '普陀区',
           address: '金沙江路 1519 弄',
           zip: 200333,
-          tag: '家',
+          tag: '审核通过',
           status: 0,
+          fairName: '2020界高校毕业生全国网络联合招聘',
           actions: ['action1']
         },
         {
+          id: '4',
           date: '2019-05-02',
-          star: null,
+          star: 3,
           name: '王小虎',
           province: '上海',
           city: '普陀区',
           address: '金沙江路 1516 弄',
           zip: 200333,
-          tag: '公司',
+          tag: '审核通过',
           status: 0,
+          fairName: '2020界高校毕业生全国网络联合招聘',
           actions: ['action1']
         },
         {
+          id: '5',
           date: '2019-05-05',
           name: '王小虎',
           province: '上海',
           city: '普陀区',
           address: '金沙江路 1515 弄',
           zip: 200333,
-          tag: '公司',
+          tag: '审核通过',
           status: 0,
+          fairName: '2020界高校毕业生全国网络联合招聘',
           actions: ['action1']
         }
       ]
@@ -131,29 +144,18 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]
           ]
         },
         {
-          label: '职位名称',
-          prop: 'positionName',
+          label: '招聘会名称',
+          prop: 'fairName',
           rowSpan: 'all'
         },
-        {
-          label: '薪酬',
-          prop: 'name',
-          rowSpan: 'all'
-        },
-        {
-          label: '工作地点',
-          prop: 'age',
-          rowSpan: 'all'
-        },
-
         {
           label: '操作时间',
           prop: 'date',
@@ -162,19 +164,18 @@ export default {
         },
         {
           label: '审核状态',
-          prop: 'age',
-          unshow: this.unshowShztColumn,
+          prop: 'tag',
           rowSpan: 'all'
         },
         {
           label: '操作',
-          attrs: { width: 100 },
+          attrs: { width: 120 },
           actions: [
             {
               id: 'action1',
-              text: '编辑',
+              text: '查看',
               attrs: { round: true, size: 'small' },
-              icon: 'el-icon-edit',
+              icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
               },
@@ -185,27 +186,39 @@ export default {
           ]
         }
       ];
+    },
+    selection() {
+      return this.$refs.jobTable.multipleSelection;
     }
   },
   methods: {
-    handleClick(tab, event) {
-      if (tab.label === '代理招聘') {
-        this.unshowShztColumn = false;
-      } else {
-        this.unshowShztColumn = true;
-      }
-    },
-    handleSelectionChange(val) {
+    queryResult(val) {
       console.log(val);
+      this.$alert('暂时没有此Api接口，请稍后！');
+      // let that = this;
+      // if (this.selection && this.selection.length == 0) {
+      //   this.$alert('请选择一条');
+      // } else {
+      //   // TODO 删除数据
+      //   that.tableData = that.tableData.filter(
+      //     obj => !that.selection.some(i => obj.id === i.id)
+      //   );
+      // }
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-#jobQueryPublished {
+#jobFairReview {
   #seek-box {
     margin: 0;
+    ::v-deep #seek-box-input {
+      height: 40px !important;
+    }
   }
   .title-style {
     font-size: 16px;

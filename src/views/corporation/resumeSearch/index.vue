@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 19:16:39
+ * @LastEditTime: 2021-04-12 19:41:26
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -24,103 +24,134 @@
     <!-- S demo2筛选部分 -->
     <div id="demo2">
       <div class="filter-content">
-        <el-row>
+        <el-row class="condition condition-one">
           <el-col :span="2">
-            <div class="grid-content bg-purple">意向职位：</div>
+            <div class="grid-content bg-purple">职位：</div>
           </el-col>
           <el-col :span="20">
-            <el-radio-group v-model="positionName" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持"
-                >居民服务和其他服务业</el-radio-button
+            <el-checkbox-group
+              v-model="queryParams.positionTypeList"
+              size="medium"
+              id="positionsRadios"
+              class="radio-list-bar"
+              @change="positionGroupChange"
+            >
+              <el-checkbox-button id="postionsAll" label=""
+                >不限</el-checkbox-button
               >
-              <el-radio-button label="会计/金融/银行/保险"
-                >水利、环境和公共设施管理业</el-radio-button
+              <el-popover
+                v-for="(item, index) in zyLists"
+                :key="item.value"
+                placement="bottom"
+                width="600"
+                trigger="click"
+                popper-class="position-popover"
               >
-              <el-radio-button label="生产/营运/采购/物流"
-                >科学研究、技术服务和地质勘查业</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >租赁和商务服务业</el-radio-button
-              >
-              <el-radio-button label="广告/市场/媒体/艺术">不</el-radio-button>
-              <el-radio-button label="建筑/房地产"
-                >科学研究、技术服务和地质勘查业</el-radio-button
-              >
-            </el-radio-group>
+                <el-checkbox-button
+                  v-for="idx in zyListsTwo[index]"
+                  :key="idx.value"
+                  :label="idx.value"
+                  >{{ idx.label }}</el-checkbox-button
+                >
+                <el-button
+                  class="show-popover-button"
+                  :btnIndex="index"
+                  slot="reference"
+                  >{{ item.label }}</el-button
+                >
+              </el-popover>
+            </el-checkbox-group>
           </el-col>
           <el-col :span="2">
-            <div class="grid-content bg-purple more-ico">
+            <div
+              class="grid-content bg-purple more-ico"
+              @click="showMoreRadios($event, 'positionsRadios')"
+            >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="condition condition-two">
           <el-col :span="2">
-            <div class="grid-content bg-purple">意向行业：</div>
+            <div class="grid-content bg-purple">行业：</div>
           </el-col>
           <el-col :span="20">
-            <!-- <el-form-item label="" required> -->
-            <el-radio-group v-model="workIndustry" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持"
-                >销售/客服/技术支持</el-radio-button
+            <el-checkbox-group
+              v-model="queryParams.industry"
+              size="medium"
+              id="industryRadios"
+              class="radio-list-bar"
+              @change="industryGroupChange"
+            >
+              <el-checkbox-button label="">不限</el-checkbox-button>
+              <el-checkbox-button
+                v-for="index in hyLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-checkbox-button
               >
-              <el-radio-button label="会计/金融/银行/保险"
-                >会计/金融/银行/保险</el-radio-button
-              >
-              <el-radio-button label="生产/营运/采购/物流"
-                >生产/营运/采购/物流</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >生物/制药/医疗/护理</el-radio-button
-              >
-              <el-radio-button label="广告/市场/媒体/艺术"
-                >广告/市场/媒体/艺术</el-radio-button
-              >
-              <el-radio-button label="建筑/房地产">建筑/房地产</el-radio-button>
-            </el-radio-group>
-            <!-- </el-form-item> -->
+            </el-checkbox-group>
           </el-col>
           <el-col :span="2">
-            <div class="grid-content bg-purple more-ico">
+            <div
+              class="grid-content bg-purple more-ico"
+              @click="showMoreRadios($event, 'industryRadios')"
+            >
               <span>更多</span>
               <i class="el-icon-caret-bottom"></i>
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="condition condition-three">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作性质：</div>
           </el-col>
-          <el-col :span="22">
-            <!-- <div class="grid-content bg-purple-light">
-              <div class="radio-span">
-                <span class="active-span">不限</span>
-                <span>国有</span>
-                <span>私营</span>
-                <span>民营</span>
-                <span>股份制</span>
-              </div>
-            </div> -->
-
-            <el-radio-group v-model="workNature" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="销售/客服/技术支持">国有</el-radio-button>
-              <el-radio-button label="会计/金融/银行/保险"
-                >私营</el-radio-button
-              >
-              <el-radio-button label="生产/营运/采购/物流"
-                >民营</el-radio-button
-              >
-              <el-radio-button label="生物/制药/医疗/护理"
-                >股份制</el-radio-button
-              >
+          <el-col :span="20">
+            <el-radio-group v-model="queryParams.workNature" size="medium">
+              <el-radio-button label="">不限</el-radio-button>
+              <el-radio-button label="01">全职</el-radio-button>
+              <el-radio-button label="02">兼职</el-radio-button>
+              <el-radio-button label="03">就业见习</el-radio-button>
             </el-radio-group>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class="condition condition-four">
+          <el-col :span="2">
+            <div class="grid-content bg-purple">薪酬：</div>
+          </el-col>
+          <el-col :span="22">
+            <div class="grid-content bg-purple filter-select">
+              <el-row>
+                <el-col :span="4">
+                  <el-input
+                    id="minSalary"
+                    placeholder="请输入薪酬下限"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMin"
+                    @change="minSalaryChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
+                <el-col :span="1" class="horizontalLine">-</el-col>
+                <el-col :span="4">
+                  <el-input
+                    id="maxSalary"
+                    placeholder="请输入薪酬上限"
+                    prefix-icon="el-icon-money"
+                    v-model.number="queryParams.salaryMax"
+                    @change="maxSalaryChange"
+                    clearable
+                  >
+                  </el-input>
+                </el-col>
+                <el-col :span="15"></el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="condition condition-five">
           <el-col :span="2">
             <div class="grid-content bg-purple">其他选项：</div>
             <!-- <div class="place-holder">其他选项</div> -->
@@ -129,18 +160,10 @@
             <div class="grid-content bg-purple filter-select">
               <template>
                 <el-select
-                  v-model="salaryScope"
+                  v-model="queryParams.workArea"
                   clearable
-                  placeholder="意向薪酬"
+                  placeholder="工作区域"
                 >
-                  <el-option
-                    v-for="item in xcOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-                <el-select v-model="workArea" clearable placeholder="工作区域">
                   <el-option
                     v-for="item in qxOptions"
                     :key="item.value"
@@ -149,7 +172,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="eduRequire"
+                  v-model="queryParams.eduRequire"
                   clearable
                   placeholder="学历要求"
                 >
@@ -160,15 +183,11 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="recruitNum" clearable placeholder="学历">
-                  <el-option
-                    v-for="item in xlOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-                <el-select v-model="zy" clearable placeholder="专业">
+                <el-select
+                  v-model="queryParams.eduRequir"
+                  clearable
+                  placeholder="专业"
+                >
                   <el-option
                     v-for="item in zyOptions"
                     :key="item.value"
@@ -176,17 +195,25 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="yz" clearable placeholder="外语语种">
+                <el-select
+                  v-model="queryParams.language"
+                  clearable
+                  placeholder="外语语种"
+                >
                   <el-option
-                    v-for="item in zyOptions"
+                    v-for="item in wyOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
-                <el-select v-model="zs" clearable placeholder="技能证书">
+                <el-select
+                  v-model="queryParams.certificate"
+                  clearable
+                  placeholder="技能证书"
+                >
                   <el-option
-                    v-for="item in zyOptions"
+                    v-for="item in zsOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -204,123 +231,417 @@
         </el-row>
       </div>
     </div>
-    <!-- E demo2筛选部分 -->
+
+    <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <base-info-notification-card></base-info-notification-card>
+    <per-search-job
+      v-if="queryResult.length"
+      ref="searchJobList"
+      :jobData="queryResult"
+      :total="queryResultTotal"
+      showPager
+      @deliveryResume="deliveryResume(arguments)"
+      @favorJob="favorJob(arguments)"
+      @showJobDetials="showJobDetial(arguments)"
+      @callPositionCorp="callPositionCorp(arguments)"
+    ></per-search-job>
+    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <!-- 职位详细信息 弹窗部分 -->
+    <el-dialog
+      width="75%"
+      :visible.sync="detailsDialog"
+      :before-close="handleClose"
+    >
+      <job-details
+        :positionData="onePosition"
+        :index="detailsIndex"
+        @perfectResume="perfectResume"
+        @uploadResume="uploadResume"
+        @deliveryResume="deliveryResume(arguments)"
+        @favorJob="favorJob(arguments)"
+        @callPositionCorp="callPositionCorp(arguments)"
+      ></job-details>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
-import BaseInfoNotificationCard from '@/components/common/BaseInfoNotificationCard.vue';
-import { queryJobs } from '@/api/personApi';
+import PerSearchJob from '@/components/person/PerSearchJob.vue';
+import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
+import { getDicText } from '@/utils';
+import {
+  queryJobs,
+  doDeliveryResume,
+  doFavorJobs,
+  doUnfavorJobs
+} from '@/api/personApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
-    BaseInfoNotificationCard
+    PerSearchJob,
+    JobDetails,
+    BaseLoadingSvg
   },
   data() {
     return {
-      positionId: '4',
-      positionName: '不限',
-      salaryScope: '',
-      workArea: '',
-      workIndustry: '不限',
-      workNature: '不限',
-      eduRequire: '',
-      recruitNum: '',
-      corpName: '上海新移力自动化科技有限公司',
-      cid: '201002025628331',
-      workYearNeed: '05',
-      releaseTime: '2021-12-10 10:44:36',
-      tranBaseSymbol: '0',
-      agencyRecruit: '0',
-      entrustCorpName: '',
-      favor: '0',
-      releaseUserId: '0000941012',
-      type: '1',
-      salaryUp: '',
-      salaryDown: '',
-      zy: '',
-      zs: '',
-      yz: '',
-      options: [
-        {
-          label: '123',
-          value: 'haha'
-        }
-      ],
-      tableData: [
-        {
-          id: '1',
-          name: '123'
-        }
-      ],
-      result: [],
-      qxOptions: [
-        { value: '01', label: '黄浦' },
-        { value: '04', label: '徐汇' },
-        { value: '05', label: '长宁' },
-        { value: '06', label: '静安' },
-        { value: '07', label: '普陀' },
-        { value: '09', label: '虹口' },
-        { value: '10', label: '杨浦' },
-        { value: '12', label: '闵行' },
-        { value: '13', label: '宝山' },
-        { value: '14', label: '嘉定' },
-        { value: '15', label: '浦东' },
-        { value: '16', label: '金山' },
-        { value: '17', label: '松江' },
-        { value: '18', label: '青浦' },
-        { value: '26', label: '奉贤' },
-        { value: '30', label: '崇明' }
-      ],
-      xlOptions: [
-        { value: '01', label: '初中及以下' },
-        { value: '02', label: '高中' },
-        { value: '03', label: '职高' },
-        { value: '04', label: '技校' },
-        { value: '05', label: '中专' },
-        { value: '06', label: '大专' },
-        { value: '07', label: '本科' },
-        { value: '08', label: '硕士' },
-        { value: '09', label: '博士及以上' }
-      ],
-      xcOptions: [
-        { value: '5000', label: '5000' },
-        { value: '6000', label: '6000' },
-        { value: '7000', label: '7000' },
-        { value: '8000', label: '8000' },
-        { value: '9000', label: '9000' },
-        { value: '10000', label: '10000' },
-        { value: '11000', label: '11000' },
-        { value: '12000', label: '12000' },
-        { value: '12000+', label: '12000以上' }
-      ],
-      zyOptions: [
-        { value: '01', label: '计算机' },
-        { value: '02', label: '土木工程' },
-        { value: '03', label: '能源与动力' },
-        { value: '04', label: '机械工程' },
-        { value: '05', label: '生物医疗' },
-        { value: '06', label: '材料科学' }
-      ]
+      detailsIndex: null,
+      detailsDialog: false,
+      wchatDialog: false,
+      positionDetailsId: '',
+      queryParams: {
+        cid: this.$store.getters['corporation/cid'],
+        industry: [''],
+        positionTypeList: [''],
+        workNature: '',
+        workYearNeed: '',
+        workArea: '',
+        eduRequire: '',
+        tranBaseSymbol: '0',
+        special: '',
+        agencyRecruit: '0',
+        salaryMin: '',
+        salaryMax: '',
+        ageMin: '',
+        ageMax: '',
+        workHour: '',
+        positionName: '',
+        corpName: '',
+
+        language: '',
+        certificate: ''
+      },
+      options: [],
+      tableData: [],
+      queryResult: [],
+      queryResultTotal: 0,
+      hyLists: this.$store.getters['dictionary/recruit_industry_type'],
+      zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
+      qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
+      tpOptions: this.$store.getters['dictionary/recruit_special_people'],
+      xlOptions: this.$store.getters['dictionary/recruit_edu'],
+      //wtOptions: this.$store.getters['dictionary/yesno'],
+      zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
+      wyOptions: this.$store.getters['dictionary/recruit_language_type'],
+      //bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
+      zsOptions: [],
+      jobList: []
     };
   },
+  computed: {
+    zyListsTwo() {
+      let _data = this.$store.getters['dictionary/recruit_position_s_type'];
+      if (_data && _data.length) {
+        return Object.values(
+          _data.reduce((res, item) => {
+            let _code = '' + Number(item.value.substring(0, 2));
+            res[_code] ? res[_code].push(item) : (res[_code] = [item]);
+            return res;
+          }, {})
+        );
+      }
+      return [];
+    },
+    onePosition() {
+      let that = this;
+      return this.positionDetailsId
+        ? this.queryResult.find(function(i) {
+            return i.positionId === that.positionDetailsId;
+          })
+        : {};
+    }
+  },
+  watch: {
+    'queryParams.positionTypeList': function(val, oldVal) {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (val && val.length) {
+          $('.show-popover-button').css({
+            backgroundColor: '#fff',
+            color: '#606266'
+          });
+          val.forEach(item => {
+            let styleIndex = Number(item.substring(0, 2)) - 1 + '';
+            $('.show-popover-button[btnIndex="' + styleIndex + '"]').css({
+              backgroundColor: '#fff1ec',
+              color: '#fc6f3d'
+            });
+          });
+        }
+      }, 500)();
+    }
+  },
+  created() {
+    this.queryJobs();
+  },
   methods: {
+    minSalaryChange() {
+      if (!this.queryParams.salaryMin) {
+        return;
+      }
+      if (isNaN(Number(this.queryParams.salaryMin))) {
+        this.$alert('请输入数值');
+        this.queryParams.salaryMin = '';
+      } else if (
+        this.queryParams.salaryMax &&
+        this.queryParams.salaryMin > this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬下限不得低于薪酬上限');
+        this.queryParams.salaryMin = '';
+      } else if (
+        this.queryParams.salaryMax &&
+        this.queryParams.salaryMin * 3 < this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.queryParams.salaryMax = '';
+      }
+    },
+    maxSalaryChange() {
+      if (!this.queryParams.salaryMax) {
+        return;
+      }
+      if (isNaN(Number(this.queryParams.salaryMax))) {
+        this.$alert('请输入数值');
+        this.queryParams.salaryMax = '';
+      } else if (
+        this.queryParams.salaryMin &&
+        this.queryParams.salaryMin > this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬上限不得高于薪酬下限');
+        this.queryParams.salaryMin = '';
+      } else if (
+        this.queryParams.salaryMin &&
+        this.queryParams.salaryMin * 3 < this.queryParams.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.queryParams.salaryMax = '';
+      }
+    },
+    minAgeChange() {
+      if (!this.queryParams.ageMin) {
+        return;
+      }
+      if (this.queryParams.ageMin && isNaN(Number(this.queryParams.ageMin))) {
+        this.$alert('请输入数值');
+        this.queryParams.ageMin = '';
+      } else if (this.queryParams.ageMin < 16) {
+        this.$alert('年龄下限不得低于16周岁');
+        this.queryParams.ageMin = '';
+      } else if (this.queryParams.ageMin > 60) {
+        this.$alert('年龄下限不得超过60周岁');
+        this.queryParams.ageMin = '';
+      }
+    },
+    maxAgeChange() {
+      if (!this.queryParams.ageMax) {
+        return;
+      }
+      if (this.queryParams.ageMax && isNaN(Number(this.queryParams.ageMax))) {
+        this.$alert('请输入数值');
+        this.queryParams.ageMax = '';
+      } else if (this.queryParams.ageMax < 16) {
+        this.$alert('年龄上线不得低于16周岁');
+        this.queryParams.ageMax = '';
+      } else if (this.queryParams.ageMax > 60) {
+        this.$alert('年龄下线不得超过60周岁');
+        this.queryParams.ageMax = '';
+      } else if (
+        this.queryParams.ageMin &&
+        this.queryParams.ageMin * 3 < this.queryParams.ageMax
+      ) {
+        this.$alert('年龄上限不得超过年龄下限的三倍');
+        this.queryParams.ageMax = '';
+      }
+    },
+    clearQueryParams: function() {
+      Object.keys(this.queryParams).forEach(
+        key => (this.queryParams[key] = '')
+      );
+      this.queryParams.tranBaseSymbol = '0';
+      this.queryParams.agencyRecruit = '0';
+      this.queryParams.industry = [''];
+      this.queryParams.positionTypeList = [''];
+      //this.queryParams.workNature = '';
+      //this.queryParams.workYearNeed = '';
+    },
     async queryJobs(val) {
-      // content
-      this.$alert('暂时没有此Api接口，请稍后！');
+      // if (!val) {
+      //   this.$alert('请输入查询条件');
+      //   return;
+      // }
+
+      let that = this;
+      let params = this.$refs['queryJobFrom']?.model
+        ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
+        : this.queryParams;
+      params.positionName = $.trim(val);
+      that.queryParams.positionName = $.trim(val);
+      params.pageParam = {
+        total: 0,
+        pageSize: that.$refs.searchJobList?.pageSize || 10,
+        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+      };
       try {
-        // TODO 查询job列表
-        let result = await queryJobs({ pid: '201906186258910' });
+        params.cid = that.$store.getters['corporation/cid'];
+        let result = await queryJobs(params);
         console.log('result', result);
-        if (result.status === 200)
-          this.$set(this, 'result', result.result.data);
+        if (
+          result.status === 200 &&
+          result.result.pageresult &&
+          result.result.pageresult.total
+        ) {
+          result.result.pageresult.data.forEach(item => {
+            // 转换字典
+            if (item.workArea) {
+              item.workAreaText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.workArea
+              );
+            }
+            if (item.eduRequire) {
+              item.eduRequireText = getDicText(
+                that.$store.getters['dictionary/recruit_edu'],
+                item.eduRequire
+              );
+            }
+            if (item.workNature) {
+              item.workNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_work_nature'],
+                item.workNature
+              );
+            }
+          });
+          this.$set(this, 'queryResult', result.result.pageresult.data);
+          this.$set(
+            this,
+            'queryResultTotal',
+            Number(result.result.pageresult.total) || 0
+          );
+        } else {
+          this.$set(this, 'queryResult', []);
+          this.$set(this, 'queryResultTotal', 0);
+          this.$message({
+            type: 'success',
+            message: '未查询到信息'
+          });
+        }
       } catch (error) {
         console.log(error);
       }
+    },
+    showMoreRadios(event, radiosIndex) {
+      let dom = $('#' + radiosIndex);
+      let $this = $(event.target);
+      if (dom && dom.hasClass('radio-list-bar-more')) {
+        dom.removeClass('radio-list-bar-more');
+        $this
+          .siblings('.el-icon-caret-bottom')
+          .css('transform', 'rotate(0deg)');
+      } else {
+        dom.addClass('radio-list-bar-more');
+        $this
+          .siblings('.el-icon-caret-bottom')
+          .css('transform', 'rotate(180deg)');
+      }
+    },
+    showJobDetial(arg) {
+      //显示岗位详细信息
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      this.detailsIndex = index;
+      this.detailsDialog = true;
+      this.positionDetailsId = positionId;
+    },
+    async deliveryResume(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      //投递简历
+      let res = await doDeliveryResume({
+        positionId: positionId,
+        cid: this.$store.getters['corporation/cid']
+      });
+      if (res.status === 200) {
+        // TODO 不显示本条数据
+        this.queryResult.splice(index, 1);
+        this.$message({ type: 'success', message: '简历投递成功' });
+      } else {
+        this.$message({
+          type: 'error',
+          message: '简历投递失败'
+        });
+      }
+    },
+    async favorJob(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      let orginFavorType = arg[2];
+      if (!orginFavorType) {
+        let res = await doFavorJobs('2', {
+          id: positionId,
+          cid: this.$store.getters['corporation/cid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = true;
+          this.$message({ type: 'success', message: '收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '收藏职位失败' });
+        }
+      } else {
+        //取消收藏职位
+        let res = await doUnfavorJobs({
+          id: positionId,
+          cid: this.$store.getters['corporation/cid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = false;
+          this.$message({ type: 'success', message: '取消收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '取消收藏职位失败' });
+        }
+      }
+    },
+    callPositionCorp(arg) {
+      console.log(arg);
+      //! TODO显示聊天框
+      this.wchatDialog = true;
+    },
+    handleClose() {
+      this.detailsDialog = false;
+      this.wchatDialog = false;
+    },
+    industryGroupChange(newVal) {
+      if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
+        this.queryParams.industry = [''];
+      } else if (newVal && newVal.length > 1 && newVal.includes('')) {
+        this.queryParams.industry = newVal.filter(item => item !== '');
+      }
+    },
+    positionGroupChange(val) {
+      let newVal = val;
+      if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
+        this.queryParams.positionTypeList = [''];
+      } else if (newVal && newVal.length && newVal.length > 10) {
+        this.$alert('最多只可选择10种职位');
+        newVal.pop();
+        this.queryParams.positionTypeList = newVal;
+      } else if (newVal && newVal.length > 1 && newVal.includes('')) {
+        this.queryParams.positionTypeList = newVal.filter(item => item !== '');
+      } else if (!newVal.length) {
+        this.queryParams.positionTypeList = [''];
+      }
+    },
+    perfectResume() {
+      //完善简历
+      this.$router.push('/personInfo');
+    },
+    uploadResume() {
+      //上传简历
+      this.$alert('此功能暂时未开放，请稍候！');
     }
   }
 };
@@ -354,39 +675,131 @@ export default {
     display: block;
   }
 
-  #demo2 {
-    ::v-deep .el-radio-button__inner {
-      border: 0;
+  .radio-list-bar {
+    overflow: hidden;
+    max-height: 52px;
+    transition: height 0.5s;
+    -webkit-transition: max-height 0.5s;
+    ::v-deep .el-checkbox-button__inner {
+      border: 0 !important;
+      padding: 10px 20px !important;
+      border-radius: 0 !important;
     }
-    ::v-deep .el-input__inner {
-      border: 0;
-      width: 100px !important;
-      color: rgba(0, 0, 0, 0.8);
+  }
+  .radio-list-bar-more {
+    max-height: 416px !important;
+  }
+  .el-checkbox-button {
+    margin: 10px 0;
+  }
+}
+
+.filter-content {
+  margin-bottom: 20px;
+  ::v-deep .el-radio-button__inner {
+    border: 0;
+  }
+  ::v-deep .el-input__inner {
+    border: 0;
+    //width: 100px !important;
+    color: rgba(0, 0, 0, 0.8);
+    text-align: center;
+  }
+  .condition {
+    background-color: #fff;
+  }
+  .condition-one {
+    z-index: 10;
+  }
+  .condition-two {
+    z-index: 20;
+  }
+  .condition-three {
+    z-index: 30;
+  }
+  .condition-four {
+    z-index: 40;
+  }
+  .condition-five {
+    z-index: 50;
+    .horizontalLine {
       text-align: center;
     }
-
-    .filter-content {
-      .place-holder {
-        visibility: hidden;
-      }
-      .el-row {
-        border-bottom: 1px solid #eeeeee;
-      }
-      .el-radio-group {
-        line-height: 52px;
-        text-align: center;
-        ::v-deep .el-radio-button__inner {
-          border-radius: 0;
-        }
-      }
-      .bg-purple {
-        line-height: 52px;
-        text-align: center;
-      }
-      .filter-select {
-        text-align: left;
-      }
+    ::v-deep #minAge,
+    ::v-deep #maxAge,
+    ::v-deep #minSalary,
+    ::v-deep #maxSalary {
+      border: 1px solid #eeeeee;
+      width: 100% !important;
     }
+  }
+  .condition-six {
+    z-index: 60;
+  }
+  .place-holder {
+    visibility: hidden;
+  }
+  .el-row {
+    border-bottom: 1px solid #eeeeee;
+  }
+  .el-radio-group {
+    line-height: 52px;
+    //text-align: center;
+    ::v-deep .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  .bg-purple {
+    line-height: 52px;
+    text-align: center;
+  }
+  .filter-select {
+    text-align: left;
+    .min-size-select {
+      width: 150px !important;
+    }
+  }
+  .more-ico:hover {
+    span,
+    i {
+      color: #fc6f3d;
+      cursor: pointer;
+    }
+  }
+  .more-ico {
+    color: #999;
+  }
+  .clear-ico {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  #postionsAll {
+    top: -5px;
+  }
+  .show-popover-button {
+    border: 0;
+    border-radius: 0;
+    padding: 10px 20px;
+    margin: 10px 0;
+  }
+}
+</style>
+
+<style lang="scss">
+.position-popover {
+  background-color: #fafafa;
+  border: 1px solid #fc6f3d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.32), 0 0 6px rgba(0, 0, 0, 0.04);
+  .el-checkbox-button__inner {
+    border: 0;
+    background-color: #fafafa;
+  }
+  .popper__arrow::after {
+    border-bottom-color: #fc6f3d !important;
+  }
+  .el-checkbox-button:first-child .el-checkbox-button__inner {
+    border-left: 0;
   }
 }
 </style>

@@ -3,7 +3,8 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 15:33:03
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-13 15:22:52
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -136,7 +137,8 @@ const getters = {
   recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
   recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE,
   recruit_special_activity_type: state => state.RECRUIT_SPECIAL_ACTIVITY_TYPE,
-  recruit_salary_pay_type: state => state.RECRUIT_SALARY_PAY_TYPE
+  recruit_salary_pay_type: state => state.RECRUIT_SALARY_PAY_TYPE,
+  recruit_work_year: state => state.RECRUIT_WORK_YEAR
 };
 const mutations = {
   set_RECRUIT_SPECIAL_ACTIVITY_TYPE: (state, dictionary) => {
@@ -216,6 +218,9 @@ const mutations = {
   },
   set_RECRUIT_SALARY_PAY_TYPE: (state, dictionary) => {
     state.RECRUIT_SALARY_PAY_TYPE = dictionary;
+  },
+  set_RECRUIT_WORK_YEAR: (state, dictionary) => {
+    state.RECRUIT_WORK_YEAR = dictionary;
   }
 };
 

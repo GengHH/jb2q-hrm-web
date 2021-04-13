@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 16:01:19
+ * @LastEditTime: 2021-04-12 19:46:51
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -104,6 +104,12 @@ const findRecord = (type, params) =>
 const doEvaluateJob = params =>
   putAction(basePath + '/person/feedback/do-evaluate', params);
 
+//发送验证码
+const sendSms = params => postAction(basePath + '/person/info/sendSms', params);
+//修改手机号
+const updatePhoneNum = params =>
+  postAction(basePath + '/person/info/updatePhoneNum', params);
+
 export {
   doLogin,
   doPersonLogout,
@@ -130,5 +136,7 @@ export {
   queryCorpStarList,
   queryPositionStarList,
   findRecord,
-  doEvaluateJob
+  doEvaluateJob,
+  updatePhoneNum,
+  sendSms
 };

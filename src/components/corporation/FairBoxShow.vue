@@ -71,7 +71,7 @@ export default {
   background-color: #ffffff;
   border-bottom: 1px solid #ededed;
   height: 250px;
-  padding: 30px;
+  padding: 30px 0;
   & > .el-row {
     height: 100%;
     width: 100%;

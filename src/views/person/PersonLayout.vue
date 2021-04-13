@@ -91,97 +91,21 @@ export default {
   }
 }
 
-// .el-carousel {
-//   height: 300px;
-//   width: 100%;
-//   div {
-//     height: 300px;
-//     width: 100%;
-//   }
-
-//   .el-carousel__item h3 {
-//     color: #475669;
-//     font-size: 14px;
-//     opacity: 0.75;
-//     line-height: 150px;
-//     margin: 0;
-//   }
-
-//   .el-carousel__item:nth-child(2n) {
-//     background-color: #99a9bf;
-//   }
-
-//   .el-carousel__item:nth-child(2n + 1) {
-//     background-color: #1b579c;
-//   }
-// }
-
-// #carouselBox {
-//   margin: 20px 0;
-//   .el-col {
-//     margin: 10px 0;
-//   }
-// }
-
-// .logo-module {
-//   width: 100%;
-//   height: 300px;
-//   background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
-//   border-radius: 3px;
-//   padding: 0 12px;
-//   display: inline-block;
-
-//   .module-logs {
-//     color: #fda749;
-//     background: #fff4ed;
-//     font-size: 24px;
-//     line-height: 120px;
-//     height: 120px;
-//     border-radius: 3px;
-//     margin: 20px 0;
-
-//     & span:first-child {
-//       width: 100px;
-//       height: 100px;
-//       border-radius: 50%;
-//       text-align: center;
-//       line-height: 56px;
-//       display: block;
-//       background: #fff;
-//       float: left;
-//       margin: 10px 20px;
-//     }
-//   }
-//   .or-font {
-//     .or-br-color i {
-//       font-size: 60px;
-//       margin: 20px 0;
-//       display: block;
-//     }
-//   }
-//   .co-font {
-//     .co-br-color i {
-//       font-size: 60px;
-//       margin: 20px 0;
-//       display: block;
-//     }
-//   }
-// }
 .clearfix {
   zoom: 1;
 }
-// 职位信息列表类型
-#jobInfoGloriette {
-  ::v-deep .el-col {
-    color: blue;
-    //height: 100px;
-  }
-}
-// 单位信息列表类型
-#corpInfoGloriette {
-  ::v-deep .el-col {
-    color: red;
-    //height: 100px;
-  }
-}
+// // 职位信息列表类型
+// #jobInfoGloriette {
+//   ::v-deep .el-col {
+//     color: blue;
+//     //height: 100px;
+//   }
+// }
+// // 单位信息列表类型
+// #corpInfoGloriette {
+//   ::v-deep .el-col {
+//     color: red;
+//     //height: 100px;
+//   }
+// }
 </style>

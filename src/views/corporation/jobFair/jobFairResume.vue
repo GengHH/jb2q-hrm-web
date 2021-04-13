@@ -2,13 +2,12 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 18:59:27
- * @Description: file content
- * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
+ * @LastEditTime: 2021-04-12 18:59:35
+ * @Description: 招聘会收到简历子界面
 -->
 <template>
-  <div id="resumeCollected">
-    <div class="title-style">已收藏的简历</div>
+  <div id="jobFairResume">
+    <div class="title-style">招聘会收到简历</div>
     <el-form>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -63,7 +62,7 @@
           </pl-select>
         </el-col>
         <el-col :span="8">
-          <el-date-picker
+          <!-- <el-date-picker
             v-model="queryParam.gjz"
             type="daterange"
             align="right"
@@ -74,13 +73,13 @@
             end-placeholder="收藏结束日期"
             :picker-options="pickerOptions"
           >
-          </el-date-picker>
+          </el-date-picker> -->
         </el-col>
       </el-row>
 
       <el-row :gutter="20">
         <el-col :span="8">
-          <pl-button class="orange-btn" icon="el-icon-edit">批量操作</pl-button>
+          <pl-button class="orange-btn" icon="el-icon-edit">批量删除</pl-button>
         </el-col>
         <el-col :span="8"> </el-col>
         <el-col :span="8">
@@ -88,7 +87,7 @@
             <pl-button class="orange-btn" icon="el-icon-search">搜索</pl-button>
           </el-col>
           <el-col :span="8" class="no-col-padding text-center">
-            <pl-button>清空</pl-button>
+            <pl-button>清屏</pl-button>
           </el-col>
           <el-col :span="8" class="no-col-padding text-right">
             <pl-button>高级搜索</pl-button>
@@ -110,7 +109,7 @@
 
 <script>
 export default {
-  name: 'resumeCollected',
+  name: 'jobFairResume',
   data() {
     return {
       queryParam: {
@@ -160,7 +159,7 @@ export default {
           zip: 200333,
           tag: '家',
           status: 0,
-          actions: ['action1']
+          actions: ['action1', 'action2', 'action3']
         },
         {
           date: '2019-05-04',
@@ -172,7 +171,7 @@ export default {
           zip: 200333,
           tag: '公司',
           status: 1,
-          actions: ['action1']
+          actions: ['action1', 'action2', 'action3']
         },
         {
           date: '2019-05-03',
@@ -184,7 +183,7 @@ export default {
           zip: 200333,
           tag: '家',
           status: 0,
-          actions: ['action1']
+          actions: ['action1', 'action2', 'action3']
         },
         {
           date: '2019-05-02',
@@ -196,7 +195,7 @@ export default {
           zip: 200333,
           tag: '公司',
           status: 0,
-          actions: ['action1']
+          actions: ['action1', 'action2', 'action3']
         },
         {
           date: '2019-05-05',
@@ -207,7 +206,7 @@ export default {
           zip: 200333,
           tag: '公司',
           status: 0,
-          actions: ['action1']
+          actions: ['action1', 'action2', 'action3']
         }
       ]
     };
@@ -217,31 +216,29 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]
           ]
         },
         {
+          label: '招聘会名称',
+          attrs: { 'show-overflow-tooltip': true },
+          prop: 'positionName',
+          rowSpan: 'all'
+        },
+        {
+          label: '招聘时间',
+          attrs: { 'show-overflow-tooltip': true },
+          prop: 'date',
+          formatter: 'date',
+          slotName: 'date'
+        },
+        {
           label: '姓名',
           prop: 'name',
-          rowSpan: 'all'
-        },
-        {
-          label: '年龄',
-          prop: 'age',
-          rowSpan: 'all'
-        },
-        {
-          label: '学历',
-          prop: 'city',
-          rowSpan: 'all'
-        },
-        {
-          label: '工作年限',
-          prop: 'province',
           rowSpan: 'all'
         },
         {
@@ -251,45 +248,38 @@ export default {
           rowSpan: 'all'
         },
         {
-          label: '简历最近修改时间',
-          attrs: { 'show-overflow-tooltip': true },
-          prop: 'date',
-          formatter: 'date',
-          slotName: 'date'
-        },
-        {
-          label: '账号最近登录时间',
-          attrs: { 'show-overflow-tooltip': true },
-          prop: 'date',
-          formatter: 'date',
-          slotName: 'date'
-        },
-        {
-          label: '收藏时间',
-          attrs: { 'show-overflow-tooltip': true },
-          prop: 'date',
-          formatter: 'date',
-          slotName: 'date'
-        },
-        // { label: '评分', prop: 'star', slotName: 'star' },
-        // {
-        //   label: '地址',
-        //   attrs: { showOverflowTooltip: true },
-        //   customerRenderText: ({ row, $index }) => {
-        //     //console.log($index);
-        //     const { province, city, address } = row;
-        //     return province + city + address;
-        //   }
-        // },
-        {
           label: '操作',
-          attrs: { width: 120 },
+          attrs: { width: 400 },
           actions: [
             {
               id: 'action1',
-              text: '取消收藏',
+              text: '查看简历',
               attrs: { round: true, size: 'small' },
-              icon: 'el-icon-star-on',
+              icon: 'el-icon-view',
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action1',
+              text: '反馈',
+              attrs: { round: true, size: 'small' },
+              icon: 'el-icon-edit',
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action3',
+              text: '聊天',
+              attrs: { round: true, size: 'small' },
+              icon: 'el-icon-chat-dot-round',
               onClick: ({ row }) => {
                 //console.log(row);
               },
@@ -311,7 +301,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#resumeCollected {
+#jobFairResume {
   .title-style {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.8);

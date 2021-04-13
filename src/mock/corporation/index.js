@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 18:04:14
+ * @LastEditTime: 2021-04-12 19:48:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -177,13 +177,18 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
     }
   };
 });
-
+//获取单位基本信息
 Mock.mock(RegExp(basePath + '/corp/info/loadCorpInfo' + '.*'), 'get', function(
   options
 ) {
   return getCorpbaseInfo(options);
 });
+//修改单位基本信息
 Mock.mock(basePath + '/corp/info/saveCorpInfo', 'post', function(options) {
+  return successData;
+});
+//变更转移区申请
+Mock.mock(basePath + '/corp/info/updateDistrictCode', 'put', function(options) {
   return successData;
 });
 //保存或者发布职位信息
