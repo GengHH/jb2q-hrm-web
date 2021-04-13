@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-04-09 18:47:49
+ * @LastEditTime: 2021-04-13 10:31:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -320,8 +320,16 @@ export default {
       this.onsubmit(this.queryData);
     },
     quit_add(scope) {
+      let data = { ...scope.row };
+      if (!data.quitReason) {
+        this.$message({
+          message: '请填写退团理由',
+          type: 'warning'
+        });
+        return;
+      }
       quit_add(
-        scope.row,
+        data,
         res => {
           document.body.click();
           if (res.result.data.result) {

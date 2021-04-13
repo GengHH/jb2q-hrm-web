@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-09 16:16:06
+ * @LastEditTime: 2021-04-13 10:48:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -42,7 +42,19 @@
         </div>
       </el-form-item>
     </el-form>
-    <ttable :columns="columns" :list="list"></ttable>
+    <div ref="print">
+      <ttable :columns="columns" :list="list">
+        <el-table-column slot="districtCode" label="管理区" align="center">
+          <template slot-scope="scope">
+            <div v-for="(v, k) in dicOptions.qx" :key="k">
+              <el-tag v-if="v.value == scope.row.districtCode">{{
+                v.label
+              }}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+      </ttable>
+    </div>
     <!-- <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
@@ -59,7 +71,7 @@
       <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}元</span>
     </div>
     <div style="text-align:right;padding:5px 15px;">
-      <el-button type="primary">打印</el-button>
+      <el-button type="primary" @click="print()">打印</el-button>
     </div>
   </div>
 </template>
@@ -67,7 +79,7 @@
 <script>
 import ttable from '../common/t_table';
 import { statistics_query } from './api/index';
-
+import { trim } from '@/utils/index';
 const columnsArr = [
   [
     { title: '序号', type: 'index' },
@@ -76,13 +88,13 @@ const columnsArr = [
   ],
   [
     { title: '序号', type: 'index' },
-    { title: '所属区', prop: 'districtCode' },
+    { title: '所属区', prop: 'districtCode', slot: 'districtCode' },
     { title: '专家姓名', prop: 'expertName' },
     { title: '身份证号', prop: 'expertZjhm' },
     { title: '银行账号', prop: 'bankaccount' },
     { title: '开户银行', prop: 'bankName' },
-    { title: '服务时间', prop: 'serviceTime' },
-    { title: '支付费用', prop: 'costStandard' }
+    { title: '服务时间', prop: 'actDate' },
+    { title: '支付费用', prop: 'payTotal' }
   ]
 ];
 export default {
@@ -91,7 +103,17 @@ export default {
     ttable
   },
   data() {
+    let getYYYYMM = () => {
+      let d = new Date();
+      let y = d.getFullYear();
+      let m = d.getMonth() + 1;
+      return y + '' + (m > 9 ? m : '0' + m);
+    };
     return {
+      dicOptions: {
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+      },
       params: {
         pageIndex: 1,
         total: 0,
@@ -99,7 +121,8 @@ export default {
       },
       mouey: 0,
       form: {
-        type: '1'
+        type: '1',
+        startMonth: getYYYYMM()
       },
       list: [],
       columns: []
@@ -107,6 +130,10 @@ export default {
   },
   computed: {},
   methods: {
+    print() {
+      // 打印
+      this.$print(this.$refs.print);
+    },
     handleChange(e) {
       console.log(e);
     },
@@ -120,6 +147,8 @@ export default {
     },
     formselect(e) {
       this.columns = columnsArr[e - 1];
+      this.list = [];
+      this.mouey = 0;
       console.log(e);
     },
     onSubmit() {
@@ -151,7 +180,7 @@ export default {
     setMouey(list) {
       if (list) {
         let val = 0;
-        let type = this.form.type == '1' ? 'payTotal' : 'costStandard';
+        let type = 'payTotal';
         for (let i = 0; i < list.length; i++) {
           val = val + (list[i][type] - 0);
         }

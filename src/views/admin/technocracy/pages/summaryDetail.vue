@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-07 19:27:58
+ * @LastEditTime: 2021-04-12 10:49:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\summaryDetail.vue
@@ -125,7 +125,6 @@
 </template>
 
 <script>
-import { trim } from '@/utils/index';
 import { summary_add, summary_edit, synthesize_query } from '../api/index';
 export default {
   name: 'summaryDetail',

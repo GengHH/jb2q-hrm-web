@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-04-02 09:29:42
+ * @LastEditTime: 2021-04-13 14:22:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -9,13 +9,14 @@
 <template>
   <el-dialog
     title="单位账号管理"
-    width="850px"
+    width="800px"
     :visible="visible"
     @close="onclose"
   >
     <div style="height:500px;overflow: scroll;overflow-x: hidden;">
       <el-form
         ref="form"
+        size="mini"
         :rules="rules"
         :disabled="disabled"
         :model="form"
@@ -24,13 +25,27 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="单位名称" prop="meetTheme">
-              <el-input v-model="form.meetTheme"></el-input>
+              <el-input v-model="form.corpName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="单位状态" prop="meetTime">
+              <el-select
+                :disabled="disabled"
+                v-model="form.frozen"
+                style="width:100%"
+              >
+                <el-option label="冻结" value="1"></el-option>
+                <el-option label="正常" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="冻结/解冻时间" prop="meetAddress">
               <el-date-picker
-                v-model="form.meetTime"
+                v-model="form.frozenTime"
                 type="date"
                 style="width:100%"
                 value-format="yyyyMMdd"
@@ -38,12 +53,10 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="冻结/解冻时间" prop="meetAddress">
-              <el-input v-model="form.meetAddress"></el-input>
-            </el-form-item>
+          <el-col :span="4">
+            <div style="color:#fc6f3d;height: 28px;line-height: 28px;">
+              查看详情>>
+            </div>
           </el-col>
           <!-- <el-col :span="12">
             <el-form-item label="会议召集人" prop="meetCaller">
@@ -52,12 +65,19 @@
           </el-col> -->
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="20">
             <el-form-item label="冻结/解冻原因" prop="expertNames">
-              <el-select v-model="form.expertNames" style="width:100%">
-                <el-option label="测试专家" value="0052103001"></el-option>
-              </el-select>
+              <el-input
+                type="textarea"
+                :rows="4"
+                v-model="form.frozenReason"
+              ></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <div style="color:#fc6f3d;height: 84px;line-height: 84px;">
+              查看详情>>
+            </div>
           </el-col>
           <!-- <el-col :span="12">
             <el-form-item label="与会其他人员" prop="meetOtherPeople">
@@ -67,30 +87,51 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="冻结/解冻原因" prop="meetOtherPeople">
-              <el-checkbox-group v-model="checkList" @change="checkboxClick">
-                <el-checkbox value="1" label="就业见习基地"></el-checkbox>
-                <el-checkbox value="2" label="人力资源机构"></el-checkbox>
-                <el-checkbox value="3" label="代理招聘企业"></el-checkbox>
-                <el-checkbox value="4" label="重点企业"></el-checkbox>
-                <el-checkbox value="5" label="特定单位"></el-checkbox>
-              </el-checkbox-group>
+            <el-form-item label="单位标签" prop="meetOtherPeople">
+              <el-checkbox
+                v-model="form.tranBaseSymbol"
+                label="就业见习基地"
+              ></el-checkbox>
+              <el-checkbox
+                v-model="form.humanResourceReg"
+                label="人力资源机构"
+              ></el-checkbox>
+              <el-checkbox
+                v-model="form.entrustStatus"
+                label="代理招聘企业"
+              ></el-checkbox>
+              <el-checkbox
+                v-model="form.keypointCorp"
+                label="重点企业"
+              ></el-checkbox>
+              <el-checkbox
+                v-model="form.specialCorp"
+                label="特定单位"
+              ></el-checkbox>
             </el-form-item>
           </el-col>
-          <el-col v-if="checkListStatus" :span="20" style="margin-left:150px">
-            <el-checkbox-group v-model="checkList2">
-              <el-checkbox value="1" label="是否需要简历搜索"></el-checkbox>
-              <el-checkbox value="2" label="是否允许简历收藏"></el-checkbox>
-              <el-checkbox value="3" label="是否允许简历下载"></el-checkbox
-              ><span>每周简历下载最大数 30份</span>
-              <el-checkbox
-                value="4"
-                label="是否进入首页“推荐单位”"
-              ></el-checkbox>
-            </el-checkbox-group>
+
+          <el-col v-if="form.specialCorp" :span="20" style="margin-left:150px">
+            <el-checkbox
+              v-model="form.resumeSearch"
+              label="是否需要简历搜索"
+            ></el-checkbox>
+            <el-checkbox
+              v-model="form.resumeFavor"
+              label="是否允许简历收藏"
+            ></el-checkbox>
+            <el-checkbox
+              v-model="form.resumeDownload"
+              label="是否允许简历下载"
+            ></el-checkbox
+            ><span>每周简历下载最大数 30份</span>
+            <el-checkbox
+              v-model="form.indexRec"
+              label="是否进入首页“推荐单位”"
+            ></el-checkbox>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row style="margin-top:15px">
           <el-col :span="24">
             <el-form-item v-if="!disabled" label="公司LOGO">
               <el-upload
@@ -189,12 +230,31 @@ export default {
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-
+    isYes(obj, arr) {
+      for (let j = 0; j < arr.length; j++) {
+        for (let i in obj) {
+          if (i == arr[j]) {
+            obj[i] = obj[i] ? '1' : '0';
+          }
+        }
+      }
+      return obj;
+    },
     onSubmit() {
       let data = { ...this.form };
+      data = this.isYes(data, [
+        'tranBaseSymbol',
+        'humanResourceReg',
+        'keypointCorp',
+        'specialCorp',
+        'entrustStatus',
+        'resumeSearch',
+        'resumeFavor',
+        'resumeDownload',
+        'indexRec'
+      ]);
       this.$refs.form.validate(valid => {
         if (valid) {
-          data.expertJoinDatas = [{ expertId: '0052103001' }];
           // if (!data.meetImageBase64) {
           //   this.$message({
           //     message: '请上传签字记录',
@@ -202,32 +262,33 @@ export default {
           //   });
           //   return;
           // }
-          if (this.type == 3) {
-            console.log(data);
-          } else {
-            management_edit(
-              data,
-              res => {
-                if (res.status == 200) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    duration: 1000,
-                    onClose: () => {
-                      this.onclose(1);
-                    }
-                  });
-                }
-                console.log(res);
-              },
-              err => {
-                console.log(err);
+          management_edit(
+            data,
+            res => {
+              if (res.result.data.result) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1000,
+                  onClose: () => {
+                    this.onclose(1);
+                  }
+                });
+              } else {
+                this.$message({
+                  message: res.result.data.msg,
+                  type: 'warning',
+                  duration: 2000
+                });
               }
-            );
-          }
+              console.log(res);
+            },
+            err => {
+              console.log(err);
+            }
+          );
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('参数错误');
         }
       });
     },
@@ -245,13 +306,6 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
-    },
-    checkboxClick(e) {
-      if (e.indexOf('特定单位') != -1) {
-        this.checkListStatus = true;
-      } else {
-        this.checkListStatus = false;
-      }
     }
   },
   created() {}

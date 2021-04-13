@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-08 14:58:56
+ * @LastEditTime: 2021-04-12 15:14:45
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -144,7 +144,10 @@ const dic = {
     { value: '05', label: '年' }
   ],
   //招聘类型
-  RECRUIT_TYPE: [],
+  RECRUIT_TYPE: [
+    { value: '1', label: '自主招聘' },
+    { value: '2', label: '代理招聘' }
+  ],
   //审核状态
   RECRUIT_VERIFY_STATUS: [],
   //发布状态

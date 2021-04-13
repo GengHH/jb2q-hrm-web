@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-02 17:52:44
+ * @LastEditTime: 2021-04-12 19:39:14
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -113,7 +113,30 @@ if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
 if (isEmpty(store.getters['dictionary/ggjbxx_jyzt'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_JYZT');
 }
-
+//特色活动状态
+if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
+//单位性质
+if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_CORP_NATURE');
+}
+//行业类别
+if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_INDUSTRY_TYPE');
+}
+//招聘类型
+if (isEmpty(store.getters['dictionary/recruit_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_TYPE');
+}
+//工作年限
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
+}
+//二级行业
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-09 18:22:54
+ * @LastEditTime: 2021-04-13 13:58:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -23,7 +23,7 @@
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="姓名" prop="xm">
+            <el-form-item label="专家姓名" prop="expertName">
               <el-select
                 v-model="form.name"
                 filterable
@@ -33,19 +33,14 @@
                 placeholder="请输入关键词"
                 :remote-method="remoteMethod"
                 :loading="loading"
-                @change="
-                  e => {
-                    form.expertId = e;
-                  }
-                "
+                @change="expertChange"
               >
                 <el-option
                   v-for="item in userOptions"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"
+                  :value="item"
                 >
-                  <span v-show="false">{{ (form.xm = item.label) }}</span>
                   <span>{{ item.label }}</span
                   >-<span>{{ item.value }}</span>
                 </el-option>
@@ -53,7 +48,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="专家编号" prop="expertId">
+            <el-form-item label="专家编号">
               <el-input
                 style="width:350px"
                 disabled
@@ -74,19 +69,14 @@
                 placeholder="请输入关键词"
                 :remote-method="orgRemoteMethod"
                 :loading="loading"
-                @change="
-                  e => {
-                    form.zjhm = e;
-                  }
-                "
+                @change="userChange"
               >
                 <el-option
                   v-for="item in orgOption"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"
+                  :value="item"
                 >
-                  <span v-show="false">{{ (form.pid = item.pid) }}</span>
                   <span>{{ item.label }}</span
                   >-<span>{{ item.value }}</span>
                 </el-option>
@@ -96,7 +86,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="结对人员证件号码" prop="zjhm">
+            <el-form-item label="结对人员证件号码">
               <el-input
                 style="width:350px"
                 disabled
@@ -106,9 +96,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="结对人员联系电话" prop="contactNumber">
+            <el-form-item label="结对人员联系电话">
               <el-input
                 style="width:350px"
+                :disabled="true"
                 v-model="form.contactNumber"
                 maxlength="11"
               ></el-input>
@@ -210,7 +201,9 @@ export default {
         expertId: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
-        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        expertName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         contactNumber: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
@@ -227,6 +220,16 @@ export default {
   },
   computed: {},
   methods: {
+    expertChange(e) {
+      this.form.expertName = e.label;
+      this.form.expertId = e.value;
+    },
+    userChange(e) {
+      this.form.zjhm = e.value;
+      this.form.pid = e.pid;
+      this.form.contactNumber = e.contactNumber;
+      this.form.xm = e.label;
+    },
     remoteMethod(query) {
       if (query !== '') {
         this.loading = true;
@@ -276,7 +279,12 @@ export default {
               this.loading = false;
               let pageresult = res.result.data.data;
               let list = pageresult.map(e => {
-                return { value: e.zjhm, label: e.xm, pid: e.pid };
+                return {
+                  value: e.zjhm,
+                  label: e.xm,
+                  pid: e.pid,
+                  contactNumber: e.contactNumber
+                };
               });
               this.orgOption = list;
             }

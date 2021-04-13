@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:14:04
- * @LastEditTime: 2021-04-08 14:13:17
+ * @LastEditTime: 2021-04-12 19:42:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\resume.vue
@@ -35,7 +35,7 @@
     </div>
     <div class="box">
       <div>
-        <span>{{ form.positionLike }}</span>
+        <span>{{ setDicOptions(form.positionLike, 'positionType') }}</span>
         <el-divider direction="vertical"></el-divider>
         <span>{{ form.salaryScope }}</span>
         <el-divider direction="vertical"></el-divider>
@@ -144,7 +144,11 @@ export default {
         //行业分类
         type: trim(this.$store.getters['dictionary/recruit_industry_type']),
         //学历
-        edu: trim(this.$store.getters['dictionary/recruit_edu'])
+        edu: trim(this.$store.getters['dictionary/recruit_edu']),
+        //学历
+        positionType: trim(
+          this.$store.getters['dictionary/recruit_position_s_type']
+        )
       }
     };
   },

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-09 18:46:37
+ * @LastEditTime: 2021-04-13 14:35:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -23,7 +23,7 @@
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="专家姓名" prop="xm">
+            <el-form-item label="专家姓名" prop="expertName">
               <el-select
                 v-model="form.name"
                 filterable
@@ -33,19 +33,14 @@
                 placeholder="请输入关键词"
                 :remote-method="remoteMethod"
                 :loading="loading"
-                @change="
-                  e => {
-                    form.expertId = e;
-                  }
-                "
+                @change="expertChange"
               >
                 <el-option
                   v-for="item in userOptions"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"
+                  :value="item"
                 >
-                  <span v-show="false">{{ (form.xm = item.label) }}</span>
                   <span>{{ item.label }}</span
                   >-<span>{{ item.value }}</span>
                 </el-option>
@@ -104,8 +99,11 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col v-if="Number(form.actType) == 1" :span="24">
-            <el-form-item label="服务对象姓名" prop="pid">
+          <el-col
+            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
+            :span="24"
+          >
+            <el-form-item label="服务对象姓名" prop="pids">
               <el-select
                 v-model="form.pids"
                 filterable
@@ -115,26 +113,24 @@
                 placeholder="请输入关键词"
                 :remote-method="orgRemoteMethod"
                 :loading="loading"
-                @change="
-                  e => {
-                    form.zjhm = e;
-                  }
-                "
+                @change="userChange"
               >
                 <el-option
                   v-for="item in orgOption"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"
+                  :value="item"
                 >
-                  <span v-show="false">{{ (form.pid = item.pid) }}</span>
                   <span>{{ item.label }}</span
                   >-<span>{{ item.value }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col v-if="Number(form.actType) == 1" :span="24">
+          <el-col
+            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
+            :span="24"
+          >
             <el-form-item label="服务对象证件号码">
               <el-input
                 disabled
@@ -150,9 +146,13 @@
               <el-input v-model="form.xm"></el-input>
             </el-form-item>
           </el-col> -->
-          <el-col v-if="Number(form.actType) == 1" :span="24">
-            <el-form-item label="服务对象联系电话" prop="contactNumber">
+          <el-col
+            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
+            :span="24"
+          >
+            <el-form-item label="服务对象联系电话">
               <el-input
+                :disabled="true"
                 style="width:350px"
                 v-model="form.contactNumber"
                 maxlength="11"
@@ -170,8 +170,8 @@
                 <el-option
                   v-for="(v, k) in activityList"
                   :key="k"
-                  :label="v.label"
-                  :value="v.value"
+                  :label="v.actName"
+                  :value="v.actId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -261,9 +261,11 @@ export default {
         actDateType: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
-        pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        pids: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
-        xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        expertName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
         contactNumber: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
@@ -279,6 +281,15 @@ export default {
   },
   computed: {},
   methods: {
+    expertChange(e) {
+      this.form.expertName = e.label;
+      this.form.expertId = e.value;
+    },
+    userChange(e) {
+      this.form.zjhm = e.value;
+      this.form.pid = e.pid;
+      this.form.contactNumber = e.contactNumber;
+    },
     remoteMethod(query) {
       if (query !== '') {
         this.loading = true;
@@ -328,7 +339,12 @@ export default {
               this.loading = false;
               let pageresult = res.result.data.data;
               let list = pageresult.map(e => {
-                return { value: e.zjhm, label: e.xm, pid: e.pid };
+                return {
+                  value: e.zjhm,
+                  label: e.xm,
+                  pid: e.pid,
+                  contactNumber: e.contactNumber
+                };
               });
               this.orgOption = list;
             }
@@ -440,7 +456,7 @@ export default {
       return isJPG && isLt2M;
     }
   },
-  created() {
+  mounted() {
     //获取活动信息
     act_query(
       {
@@ -465,7 +481,8 @@ export default {
         console.log(err);
       }
     );
-  }
+  },
+  created() {}
 };
 </script>
 <style lang="scss" scoped>

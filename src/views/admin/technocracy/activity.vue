@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-09 18:43:52
+ * @LastEditTime: 2021-04-13 10:52:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -93,7 +93,7 @@ export default {
       columns: [
         { type: 'index' },
         { title: '专家编号', prop: 'expertId' },
-        { title: '姓名', prop: 'xm' },
+        { title: '姓名', prop: 'expertName' },
         { title: '活动名称', prop: 'actName' },
         { title: '参与人员证件号码', prop: 'zjhm' },
         { title: '参与人员联系电话', prop: 'contactNumber' },
