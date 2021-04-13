@@ -3,21 +3,20 @@
   <div id="indexBody">
     <div class="bout-us-box">
       <!--S 地图部分 -->
-      <div id="demo3" class="map-div">
+      <!-- <div id="demo3" class="map-div">
         <img src="../../../assets/img/map.png" alt="未加载" />
-      </div>
+      </div> -->
+      <pl-map :pointList="testData"></pl-map>
       <!--E 地图部分 -->
-
       <!--S 表格部分 -->
       <div id="demo4">
         <el-table
           ref="multipleTable"
-          :data="tableData"
           tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
+          :data="tableData"
           :header-cell-style="{ 'text-align': 'center' }"
           :cell-style="{ 'text-align': 'center' }"
+          @selection-change="handleSelectionChange"
         >
           <el-table-column
             label="序号"
@@ -43,17 +42,23 @@
 </template>
 
 <script>
-import BasePagination from '@/components/common/BasePagination.vue';
+/**
+ * 测试使用百度地图
+ */
+import BasePagination from '@/components/common/BasePagination';
+import PlMap from '@/components/common/BaseMap';
 export default {
   name: 'Aboutus',
   props: {
     currentPage: String
   },
   components: {
+    PlMap,
     BasePagination
   },
   data() {
     return {
+      testData: ['上海市天山路1800号', '上海市天山路18号'],
       visible: false,
       labelPosition: 'right',
       tableData: [
@@ -131,15 +136,12 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
-
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
-
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     }
@@ -168,6 +170,10 @@ export default {
         width: 100%;
       }
     }
+  }
+
+  ::v-deep table {
+    width: 100% !important;
   }
 }
 
