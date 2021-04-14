@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-04-12 16:16:55
+ * @LastEditTime: 2021-04-14 18:51:27
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -34,10 +34,15 @@ import BaseLoadingButton from '@/components/common/BaseLoadingButton';
 import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
 import BaseWChat from '@/components/common/BaseWChat';
 import PlConfig from '@/config/plComponents';
+import BaiduMap from 'vue-baidu-map';
 import Chat from 'jwchat';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'GanPoYI5lBCc4rQ1hZbevgLyTE46ghkW'
+});
 //加载jwchat（基于element-ui）
 Vue.use(Chat);
 //安装vue-axios插件
@@ -115,6 +120,9 @@ if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_PEOPLE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
 
 window.setTimeout(function() {

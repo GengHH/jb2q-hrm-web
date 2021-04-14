@@ -1399,7 +1399,7 @@ export default {
                       type: 'success',
                       message: '保存成功'
                     });
-                    this.resume.laborExp.push(params);
+                    //this.resume.laborExp.push(params);
                     this.loadPsnlResume();
                   } else {
                     this.$message({
@@ -1414,10 +1414,11 @@ export default {
                     message: '系统异常，保存失败'
                   });
                 });
+              this.dialog2 = false;
+              this.editStatus = false;
               break;
 
             case 'educationExperienceForm':
-              this.dialog3 = false;
               if (
                 !this.editStatus &&
                 this.resume.eduExp.find(
@@ -1439,8 +1440,8 @@ export default {
                       type: 'success',
                       message: '保存成功'
                     });
-                    this.resume.eduExp.push(params);
-                    //this.loadPsnlResume();
+                    //this.resume.eduExp.push(params);
+                    this.loadPsnlResume();
                   } else {
                     this.$message({
                       type: 'error',
@@ -1454,7 +1455,8 @@ export default {
                     message: '系统异常，保存失败'
                   });
                 });
-
+              this.dialog3 = false;
+              this.editStatus = false;
               break;
 
             case 'languageSkillsForm':
@@ -1479,7 +1481,7 @@ export default {
                       type: 'success',
                       message: '保存成功'
                     });
-                    this.resume.psnlLanguage.push(params);
+                    //this.resume.psnlLanguage.push(params);
                     this.loadPsnlResume();
                   } else {
                     this.$message({
@@ -1494,6 +1496,8 @@ export default {
                     message: '系统异常，保存失败'
                   });
                 });
+              this.dialog4 = false;
+              this.editStatus = false;
               break;
 
             case 'skillsCertificateForm':
@@ -1517,7 +1521,7 @@ export default {
                       type: 'success',
                       message: '保存成功'
                     });
-                    this.resume.psnlSkillcert.push(params);
+                    //this.resume.psnlSkillcert.push(params);
                     this.loadPsnlResume();
                   } else {
                     this.$message({
@@ -1532,6 +1536,8 @@ export default {
                     message: '系统异常，保存失败'
                   });
                 });
+              this.dialog5 = false;
+              this.editStatus = false;
               break;
           }
         }
@@ -1633,6 +1639,7 @@ export default {
     },
     handleClose(done) {
       done();
+      console.log(done);
       this.editStatus = false;
       this.editItemIdex = 0;
       $('#dialog2Btn')

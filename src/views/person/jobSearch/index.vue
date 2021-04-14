@@ -14,11 +14,18 @@
           <el-col :span="22">
             <el-radio-group v-model="queryParams.workYearNeed" size="medium">
               <el-radio-button label="">不限</el-radio-button>
-              <el-radio-button label="1">1年以下</el-radio-button>
-              <el-radio-button label="2">1~2年</el-radio-button>
-              <el-radio-button label="3">3~5年</el-radio-button>
-              <el-radio-button label="4">6~9年</el-radio-button>
-              <el-radio-button label="5">10年及以上</el-radio-button>
+
+              <el-radio-button
+                v-for="index in gznxLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-radio-button
+              >
+              <!-- <el-radio-button label="01">1年以下</el-radio-button>
+              <el-radio-button label="02">1~2年</el-radio-button>
+              <el-radio-button label="03">3~5年</el-radio-button>
+              <el-radio-button label="04">6~9年</el-radio-button>
+              <el-radio-button label="05">10年及以上</el-radio-button> -->
             </el-radio-group>
           </el-col>
         </el-row>
@@ -129,9 +136,15 @@
           <el-col :span="20">
             <el-radio-group v-model="queryParams.workNature" size="medium">
               <el-radio-button label="">不限</el-radio-button>
-              <el-radio-button label="01">全职</el-radio-button>
+              <el-radio-button
+                v-for="index in gzxzLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-radio-button
+              >
+              <!-- <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
-              <el-radio-button label="03">就业见习</el-radio-button>
+              <el-radio-button label="03">就业见习</el-radio-button> -->
             </el-radio-group>
           </el-col>
         </el-row>
@@ -306,7 +319,7 @@
     <el-dialog
       width="75%"
       :visible.sync="detailsDialog"
-      :before-close="handleClose"
+      :before-close="detailsHandleClose"
     >
       <job-details
         :positionData="onePosition"
@@ -322,7 +335,7 @@
     <el-dialog
       class="width75 dialog-content-full-screen"
       :visible.sync="wchatDialog"
-      :before-close="handleClose"
+      :before-close="wchatHandleClose"
     >
       <pl-wchat></pl-wchat>
     </el-dialog>
@@ -407,6 +420,8 @@ export default {
       wtOptions: this.$store.getters['dictionary/yesno'],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
       bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
+      gznxLists: this.$store.getters['dictionary/recruit_work_year'],
+      gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: []
     };
   },
@@ -690,8 +705,10 @@ export default {
       //! TODO显示聊天框
       this.wchatDialog = true;
     },
-    handleClose() {
+    detailsHandleClose() {
       this.detailsDialog = false;
+    },
+    wchatHandleClose() {
       this.wchatDialog = false;
     },
     industryGroupChange(newVal) {
