@@ -234,7 +234,7 @@ export default {
           }
         ],
         verifyCode: [
-          { required: true, message: '请输入短信验证码', trigger: 'blur' }
+          { required: true, message: '短信验证码不能为空', trigger: 'blur' }
           // { type: 'number', message: '请输数字', trigger: 'blur' }
           //{ min: 6, max: 6, message: '请输六位验证码', trigger: 'blur' }
         ]
