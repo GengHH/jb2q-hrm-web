@@ -40,44 +40,57 @@
             </p>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <el-button
-              type="primary"
-              class="white-btn mat-15"
-              @click="
-                favorJob(positionData.favor, index, positionData.positionId)
-              "
-              ><i v-if="positionData.favor" class="el-icon-star-on">已收藏</i>
-              <i v-else class="el-icon-star-off">收藏</i></el-button
-            >
-            <el-button
-              type="primary"
-              class="release-btn mat-15"
-              @click="
-                deliveryResume(
-                  positionData.favor,
-                  index,
-                  positionData.positionId
-                )
-              "
-            >
-              <i class="el-icon-position"></i>投简历</el-button
-            >
-            <div class="font12">
-              <el-link :underline="false" @click="perfectResume"
-                ><img
-                  class="ico_rz"
-                  src="../../../assets/images/ico-01.png"
-                  alt=""
-                />完善在线简历</el-link
-              >
-              <el-link :underline="false" @click="uploadResume"
-                ><img
-                  class="ico_rz"
-                  src="../../../assets/images/ico-02.png"
-                  alt=""
-                />上传附件简历</el-link
-              >
-            </div>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-button
+                  type="primary"
+                  class="white-btn mat-15"
+                  @click="
+                    favorJob(positionData.favor, index, positionData.positionId)
+                  "
+                  ><i v-if="positionData.favor" class="el-icon-star-on"
+                    >已收藏</i
+                  >
+                  <i v-else class="el-icon-star-off">收藏</i></el-button
+                >
+              </el-col>
+              <el-col :span="12">
+                <el-button
+                  type="primary"
+                  class="release-btn mat-15"
+                  @click="
+                    deliveryResume(
+                      positionData.favor,
+                      index,
+                      positionData.positionId
+                    )
+                  "
+                >
+                  <i class="el-icon-position"></i>投简历</el-button
+                >
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" class="font12">
+              <el-col :span="12">
+                <el-link :underline="false" @click="perfectResume"
+                  ><img
+                    class="ico_rz"
+                    src="../../../assets/images/ico-01.png"
+                    alt=""
+                  />完善在线简历</el-link
+                >
+              </el-col>
+              <el-col :span="12">
+                <el-link :underline="false" @click="uploadResume"
+                  ><img
+                    class="ico_rz"
+                    src="../../../assets/images/ico-02.png"
+                    alt=""
+                  />上传附件简历</el-link
+                >
+              </el-col>
+            </el-row>
+
             <p
               v-if="positionData.tranBaseSymbol === '0'"
               class="four-opacity mat-50"
@@ -134,13 +147,14 @@
             经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
             公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易
           </p> -->
-          <span class="look-all"
+          <!-- <span class="look-all"
             >查看全部<i class="el-icon-arrow-down"></i
-          ></span>
+          ></span> -->
         </div>
         <div class="title-border mat-30">工作地址</div>
         <div class="map-box">
-          <img src="../../../assets/images/map.png" alt="" />
+          <!-- <img src="../../../assets/images/map.png" alt="" /> -->
+          <pl-map></pl-map>
         </div>
         <div class="title-border mat-15">
           看过该职位的人还看了 TODO
@@ -264,6 +278,7 @@
 </template>
 
 <script>
+import PlMap from '@/components/common/BaseMap';
 export default {
   name: 'JobSearchIndex',
   props: {
@@ -275,6 +290,9 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+  components: {
+    PlMap
   },
   data() {
     return {};
@@ -321,10 +339,10 @@ export default {
 
 <style lang="scss" scoped>
 #jobSearchView {
-  width: 90%;
+  width: 96%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto;
   background: #ffffff;
   //color: #000;
   //padding: 0;
@@ -343,7 +361,8 @@ export default {
       margin-top: 20px;
     }
     .font12 .el-link {
-      margin-right: 5px;
+      font-size: 12px;
+      //margin-right: 5px;
     }
     .font12 img {
       position: relative;

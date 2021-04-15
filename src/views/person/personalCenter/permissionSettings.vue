@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-23 15:29:38
+ * @LastEditTime: 2021-04-14 10:11:45
  * @LastEditors: GengHH
  * @Description: 个人权限控制
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\permissionSettings.vue
@@ -89,8 +89,8 @@ export default {
     },
     allowArtificialRecoText() {
       return this.allowArtificialReco == '1'
-        ? '将能接受管理员人工推荐职位'
-        : '将不能接受管理员人工推荐职位';
+        ? '您将接受管理员人工推荐职位'
+        : '您不再接受管理员人工推荐职位';
     },
     allowAutoRecoView: {
       get: function() {
@@ -105,8 +105,8 @@ export default {
     },
     allowAutoRecoText() {
       return this.allowAutoReco === '1'
-        ? '将接受系统自动推荐职位'
-        : '将不能接受系统自动推荐职位';
+        ? '您将接受系统自动推荐的职位'
+        : '您将不接受系统自动推荐的职位';
     }
   },
   methods: {
@@ -139,8 +139,8 @@ export default {
         });
         if (updateResult2 && updateResult2.status == 200) {
           this.allowArtificialRecoView
-            ? this.showMessage('success', '将能接受管理员人工推荐职位')
-            : this.showMessage('success', '将不能接受管理员人工推荐职位');
+            ? this.showMessage('success', '您将接受管理员人工推荐职位')
+            : this.showMessage('success', '您不再接受管理员人工推荐职位');
         } else {
           this.showMessage('error', '修改失败');
         }
@@ -152,8 +152,8 @@ export default {
         });
         if (updateResult3 && updateResult3.status == 200) {
           this.allowAutoRecoView
-            ? this.showMessage('success', '将接受系统自动推荐职位')
-            : this.showMessage('success', '将不能接受系统自动推荐职位');
+            ? this.showMessage('success', '您将接受系统自动推荐的职位')
+            : this.showMessage('success', '您将不接受系统自动推荐的职位');
         } else {
           this.showMessage('error', '修改失败');
         }

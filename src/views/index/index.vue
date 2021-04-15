@@ -21,7 +21,11 @@
               <p>随申办APP扫码登录</p>
               <br />
               <br />
-              <a href="#" @click="personSignIn" class="login-btn login-link-one"
+              <a
+                id="perosnLoginBtn"
+                href="#"
+                @click="personSignIn"
+                class="login-btn login-link-one"
                 >去登录</a
               >
             </div>
@@ -38,7 +42,11 @@
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
               <br />
-              <a href="#" @click="corpSignIn" class="login-btn  login-link-two"
+              <a
+                id="corpLoginBtn"
+                href="#"
+                @click="corpSignIn"
+                class="login-btn  login-link-two"
                 >去登录</a
               >
             </div>
@@ -124,6 +132,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
+import { isPerson, isCorporation } from '@/utils';
 export default {
   name: 'indexApp',
   components: {
@@ -221,11 +230,19 @@ export default {
       //   .catch(err => {
       //     throw new Error('调用API失败' + err);
       //   });
-      window.location.href = '/ggzp-shrs/login.html';
+      if (isPerson(this)) {
+        window.location.href = '/ggzp-shrs/person.html';
+      } else {
+        window.location.href = '/ggzp-shrs/login.html';
+      }
     },
     corpSignIn() {
       this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'corporation');
-      window.location.href = '/ggzp-shrs/login.html';
+      if (isCorporation(this)) {
+        window.location.href = '/ggzp-shrs/corporation.html';
+      } else {
+        window.location.href = '/ggzp-shrs/login.html';
+      }
       // window.location.href =
       //   'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
@@ -250,15 +267,17 @@ export default {
       this.$message('this is more');
     }
   },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+  mounted() {
+    if (isPerson(this)) {
+      $('#perosnLoginBtn').html('已登录');
+    } else {
+      $('#perosnLoginBtn').html('去登录');
+    }
+    if (isCorporation(this)) {
+      $('#corpLoginBtn').html('已登录');
+    } else {
+      $('#corpLoginBtn').html('去登录');
+    }
   }
 };
 </script>
