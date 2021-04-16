@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 19:48:21
+ * @LastEditTime: 2021-04-16 13:55:02
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -177,6 +177,38 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
     }
   };
 });
+
+//检验该单位是不是首次进入系统
+Mock.mock(
+  RegExp(basePath + '/person/info/checkCorpInit' + '.*'),
+  'get',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: {
+          cid: '',
+          zjlxId: '',
+          zjhm: '',
+          xm: '',
+          sexId: '',
+          birthDate: '',
+          contactPhone: '',
+          livingArea: '',
+          livingStreet: '',
+          livingAddress: '',
+          houseArea: '',
+          houseStreet: '',
+          employStatus: '',
+          eduId: '',
+          type: '',
+          isInit: '0'
+        }
+      }
+    };
+  }
+);
 //获取单位基本信息
 Mock.mock(RegExp(basePath + '/corp/info/loadCorpInfo' + '.*'), 'get', function(
   options

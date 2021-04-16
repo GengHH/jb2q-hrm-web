@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 18:53:20
+ * @LastEditTime: 2021-04-16 14:37:11
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -59,9 +59,9 @@ let isEmpty = function(obj) {
 };
 
 // 开发环境使用mock时候，模拟登录
-// if (config.mock) {
-//   store.dispatch('corporation/do_login');
-// }
+if (config.mock) {
+  store.dispatch('corporation/do_login');
+}
 if (isEmpty(store.getters.cid)) {
   //获取单位登录信息
   store.dispatch('corporation/get_corporationInfo');

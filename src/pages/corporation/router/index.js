@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import NotFoundPage from '@/views/404';
 import ErrorPage from '@/views/error';
-
+import store from '@/store';
 //解决 vue-router3.x重复点击路由，导致提示避免到当前位置的冗余导航问题
 //使用时：this.$router.push(...).catch(err => err)要有后面的catch
 try {
@@ -21,15 +21,15 @@ const BlankComponent = {
   template: '<div></div>'
 };
 
-export default new Router({
+let router = new Router({
   mode: 'hash',
   //mode: 'history',
-  //base: 'recruitment',
+  base: '/ggzp-shrs',
   routes: [
     {
       path: '/',
       //name: '单位首页',
-      redirect: '/corpInfo',
+      redirect: '/resumeSearch',
       component: () => import('@/views/corporation'),
       children: [
         {
@@ -202,3 +202,31 @@ export default new Router({
     }
   ]
 });
+
+//全局路由钩子函数（根据用户的权限判断路由的跳转）
+// router.beforeEach((to, from, next) => {
+//   console.log(0);
+//   //console.log(store.getters['corporation/first_login']);
+//   if (!store.getters['corporation/token']) {
+//     console.log(123);
+//     next('/error');
+//   } else if (
+//     store.getters['corporation/first_login'] &&
+//     to.name !== '单位信息维护' &&
+//     to.name
+//   ) {
+//     if (!store.getters['corporation/cid']) {
+//       console.log(456);
+//       Vue.prototype.$alert(
+//         '首次进入本系统，请先维护单位基本信息，以正常使用系统功能！'
+//       );
+//     }
+//     console.log(7890000);
+//     next();
+//   } else {
+//     console.log(789);
+//     next();
+//   }
+// });
+
+export default router;
