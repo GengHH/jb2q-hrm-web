@@ -2,7 +2,7 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch></BaseSearch>
+      <BaseSearch showSelect :selectData="selectData"></BaseSearch>
       <!-- <router-view></router-view> -->
       <el-row id="carouselBox" :gutter="20">
         <el-col :sm="24" :md="18" :lg="16" :xl="16">
@@ -210,6 +210,14 @@ export default {
           maxSalary: '15000',
           paymentUnit: '元/月'
         }
+      ],
+      selectValue: 'position',
+      selectData: [
+        {
+          label: '单位名称',
+          value: 'corporation'
+        },
+        { label: '职位类型', value: 'position' }
       ]
     };
   },
