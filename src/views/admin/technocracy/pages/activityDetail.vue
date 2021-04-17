@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-13 14:35:41
+ * @LastEditTime: 2021-04-13 18:00:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -458,6 +458,7 @@ export default {
   },
   mounted() {
     //获取活动信息
+
     act_query(
       {
         pageIndex: 0,
@@ -467,14 +468,11 @@ export default {
       res => {
         if (res.status == 200) {
           let data = res.result.data.data;
-          data.map(e => {
-            e.value = e.pid;
-            e.label = e.xm;
-          });
           this.activityList = data;
         } else {
           this.message('warning', res.result.data.msg);
         }
+        console.log('-----------------------------');
         console.log(res);
       },
       err => {

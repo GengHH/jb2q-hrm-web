@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-13 14:55:28
+ * @LastEditTime: 2021-04-14 16:52:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\recruitment.vue
@@ -9,15 +9,11 @@
 <template>
   <div id="indexBody">
     <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
-    <ttable :columns="columns" :list="list">
-      <el-table-column slot="time" label="代理招聘有效期" align="center">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.startEntrust + '-' + scope.row.endEntrust }}
-          </div>
-          <el-tag></el-tag>
-        </template>
-      </el-table-column>
+    <ttable
+      :columns="columns"
+      :list="list"
+      @handleSelectionChange="e => (selectData = e)"
+    >
       <el-table-column slot="frozen" label="单位状态" align="center">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.frozen == '1' ? '冻结' : '正常' }}</el-tag>
@@ -25,14 +21,31 @@
       </el-table-column>
       <el-table-column width="280" slot="aaa010" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
-            <i class="el-icon-search"></i> 查看</el-button
-          >
-          <el-button size="mini" type="primary" @click="look(scope, 2)" plain>
-            <i class="el-icon-search"></i> 修改</el-button
-          >
-          <el-button size="mini" type="primary" @click="look(scope, 3)" plain>
-            <i class="el-icon-search"></i> 审核</el-button
+          <el-popconfirm title="确定添加吗？" @confirm="add(scope)">
+            <el-button slot="reference" size="mini" type="primary" plain>
+              <i class="el-icon-folder-add"></i> 添加</el-button
+            >
+          </el-popconfirm>
+          <el-popover placement="bottom" width="400" trigger="click">
+            <el-date-picker
+              v-model="scope.row.time"
+              type="date"
+              placeholder="请输入代理有效期"
+              style="width:100%"
+              value-format="yyyyMMdd"
+            >
+            </el-date-picker>
+
+            <el-button size="mini" type="danger" @click="edit(scope)"
+              >确定修改</el-button
+            >
+            <el-button size="mini" slot="reference" type="primary" plain>
+              <i class="el-icon-edit"></i> 修改</el-button
+            >
+          </el-popover>
+
+          <el-button size="mini" type="primary" plain @click="audit(scope)">
+            <i class="el-icon-chat-dot-round"></i> 审核</el-button
           >
         </template>
       </el-table-column>
@@ -46,12 +59,17 @@
       :total="params.total"
     >
     </el-pagination>
-    <messagedetails
+    <div style="text-align:right">
+      <el-button type="danger" icon="el-icon-delete" @click="remove"
+        >删除</el-button
+      >
+    </div>
+    <recruitmentdetail
       v-if="visible"
       :visible="visible"
       :form="form"
       @onclose="onclose"
-    ></messagedetails>
+    ></recruitmentdetail>
   </div>
 </template>
 
@@ -61,18 +79,18 @@ import ttable from '../common/t_table';
 import { trim } from '@/utils/index';
 import {
   agency_query,
-  agency_add,
-  agency_edit,
   agency_cancel,
-  agency_verify,
-  agency_resume
+  agency_add,
+  agency_edit
 } from './api/index';
-import messagedetails from './pages/messageDetails';
+import recruitmentdetail from './pages/recruitment/recruitmentDetail';
 export default {
   name: 'recruitment',
-  components: { ttable, tform, messagedetails },
+  components: { ttable, tform, recruitmentdetail },
   data() {
     return {
+      type: '',
+      disabled: false,
       form: {},
       visible: false,
       params: {
@@ -108,18 +126,96 @@ export default {
       },
       currentPage: 1,
       columns: [
+        { type: 'selection' },
         { title: '序号', type: 'index' },
         { title: '单位名称', prop: 'corpName' },
         { title: '单位状态', prop: 'frozen', slot: 'frozen' },
-        { title: '代理招聘有效期', prop: 'time', slot: 'time' },
+        { title: '代理招聘有效期', prop: 'entrustValid' },
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
-      dataList: []
+      dataList: [],
+      selectData: []
     };
   },
   computed: {},
   methods: {
+    audit(e) {
+      this.form = e.row;
+
+      this.form.cid = '201002025628331';
+      this.visible = true;
+    },
+    edit(e) {
+      let data = { ...e.row };
+      data.entrustValid = data.time;
+      agency_edit(
+        data,
+        res => {
+          if (res.status == 200) {
+            document.body.click();
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.advancedSearch(this.dataList);
+              }
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    add(e) {
+      let data = { ...e.row };
+      agency_add(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.advancedSearch(this.dataList);
+              }
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    remove() {
+      if (this.selectData.length) {
+        agency_cancel(
+          this.selectData,
+          res => {
+            if (res.status == 200) {
+              let pageresult = res.result.pageresult;
+              this.list = pageresult.data;
+              this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+              this.params.total = pageresult.total;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.$message({
+          message: '请选取要删除的列表！',
+          type: 'warning'
+        });
+      }
+    },
     handleChange(e) {
       console.log(e);
     },
@@ -154,10 +250,6 @@ export default {
         this.advancedSearch(this.dataList);
       }
       this.visible = false;
-    },
-    look(scope) {
-      this.form = { ...scope.row };
-      this.visible = true;
     }
   },
   created() {}

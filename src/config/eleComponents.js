@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-04-08 16:38:10
+ * @LastEditTime: 2021-04-15 14:19:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -65,7 +65,8 @@ import {
   Popover,
   Popconfirm,
   Drawer,
-  inputNumber
+  InputNumber,
+  Tree
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -119,7 +120,8 @@ export default {
     V.use(Popover);
     V.use(Popconfirm);
     V.use(Drawer);
-    V.use(inputNumber);
+    V.use(InputNumber);
+    V.use(Tree);
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;
     V.prototype.$msgbox = MessageBox;

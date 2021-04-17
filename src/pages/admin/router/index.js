@@ -38,6 +38,11 @@ export default new Router({
       component: () => import('@/views/admin/index/index')
     },
     {
+      path: '/adminRight',
+      name: '账号权限配置',
+      component: () => import('@/views/admin/index/adminRight')
+    },
+    {
       path: '/serviceManagement',
       name: '重点人群就业服务管理',
       component: () =>

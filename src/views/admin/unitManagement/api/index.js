@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-26 14:41:47
- * @LastEditTime: 2021-04-12 13:44:32
+ * @LastEditTime: 2021-04-14 18:27:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\api\index.js
@@ -29,10 +29,13 @@ const agency_edit = (params, fn, fnErr) =>
   postAction(urlStr + 'entrust/modify', params, fn, fnErr);
 const agency_cancel = (params, fn, fnErr) =>
   postAction(urlStr + 'entrust/cancel', params, fn, fnErr);
-const agency_verify = (params, fn, fnErr) =>
+const agency_position_verify = (params, fn, fnErr) =>
   postAction(urlStr + 'position/verify', params, fn, fnErr);
 const agency_resume = (params, fn, fnErr) =>
   postAction(urlStr + 'position/resume/queryBycid', params, fn, fnErr);
+const agency_resume_verify = (params, fn, fnErr) =>
+  postAction(urlStr + 'position/resume/verify', params, fn, fnErr);
+
 //单位账号管理
 const management_query = (params, fn, fnErr) =>
   postAction(urlStr + 'query/all', params, fn, fnErr);
@@ -44,7 +47,8 @@ export {
   agency_add,
   agency_edit,
   agency_cancel,
-  agency_verify,
+  agency_position_verify,
+  agency_resume_verify,
   agency_resume,
   unit_query,
   unit_query_agency,

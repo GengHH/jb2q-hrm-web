@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-12 15:14:45
+ * @LastEditTime: 2021-04-17 16:33:10
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -759,7 +759,12 @@ const dic = {
   //应聘来源
   RECRUIT_APPLYFOR_SOURCE: [],
   //用户角色
-  RECRUIT_USER_ROLE: [],
+  RECRUIT_USER_ROLE: [
+    { value: '01', label: '市管理员' },
+    { value: '02', label: '区超级管理员' },
+    { value: '03', label: '区普通管理员' },
+    { value: '04', label: '街镇管理员' }
+  ],
   //重点人员类型
   RECRUIT_POINT_TYPE: [],
   //专家状态
@@ -791,9 +796,17 @@ const dic = {
     { value: '04', label: '	其他' }
   ],
   //实施举措类型
-  RECRUIT_IMPLE_ACT_TYPE: [],
+  RECRUIT_IMPLE_ACT_TYPE: [
+    { value: '1', label: '安排专家指导' },
+    { value: '2', label: '推荐职位' },
+    { value: '3', label: '再次预约指导' },
+    { value: '4', label: '推荐参加专项' }
+  ],
   //就业类型
-  RECRUIT_EMPLOY_TYPE: [],
+  RECRUIT_EMPLOY_TYPE: [
+    { value: '1', label: '	单位就业' },
+    { value: '2', label: '	灵活就业' }
+  ],
   //单位状态
   RECRUIT_CORP_STATUS: [],
   //招聘会类型

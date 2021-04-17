@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-09 11:15:17
+ * @LastEditTime: 2021-04-15 16:10:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -29,6 +29,8 @@
           v-model="value[v.key]"
           :placeholder="v.placeholder"
           :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
           :disabled="v.disabled"
         ></el-input>
       </el-form-item>

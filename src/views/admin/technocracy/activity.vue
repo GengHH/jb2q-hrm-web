@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-13 10:52:01
+ * @LastEditTime: 2021-04-17 16:54:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,6 +20,13 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
+      <el-table-column slot="actName" label="活动名称" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in activityList" :key="k">
+            <div v-if="v.actId == scope.row.actName">{{ v.actName }}</div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="opendio(1, scope)" plain>
@@ -57,6 +64,7 @@
 import ttable from '../common/t_table';
 import activitydetail from './pages/activityDetail';
 import { activity_query } from './api/index';
+import { act_query } from '../profession/api/index';
 export default {
   name: 'activity',
   components: {
@@ -92,24 +100,25 @@ export default {
       list: [],
       columns: [
         { type: 'index' },
-        { title: '专家编号', prop: 'expertId' },
-        { title: '姓名', prop: 'expertName' },
-        { title: '活动名称', prop: 'actName' },
-        { title: '参与人员证件号码', prop: 'zjhm' },
-        { title: '参与人员联系电话', prop: 'contactNumber' },
-        { title: '参数人数', prop: 'psnlCount' },
+        { title: '职位名称', prop: 'positionName' },
+        { title: '学历要求', prop: 'eduRequire' },
+        { title: '薪酬', prop: 'salary', slot: 'salary' },
+        { title: '职位描述', prop: 'xm' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
-      ]
+      ],
+      activityList: []
     };
   },
   computed: {},
   methods: {
-    message(type, msg) {
+    message(type, msg, fn) {
       this.$message({
         message: msg,
         type: type,
         duration: 1000,
-        onClose: () => {}
+        onClose: () => {
+          fn();
+        }
       });
     },
     onSubmit() {
@@ -163,7 +172,30 @@ export default {
       console.log(e);
     }
   },
-  created() {}
+  created() {},
+  mounted() {
+    //获取活动信息
+    act_query(
+      {
+        pageIndex: 0,
+        pageSize: 100,
+        actName: ''
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data.data;
+          this.activityList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log('-----------------------------');
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 };
 </script>
 

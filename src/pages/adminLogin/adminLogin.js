@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-12 19:39:14
+ * @LastEditTime: 2021-04-17 16:34:24
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -136,6 +136,22 @@ if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
 //二级行业
 if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+//招聘会类型
+if (isEmpty(store.getters['dictionary/recruit_meet_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_MEET_TYPE');
+}
+//角色类型
+if (isEmpty(store.getters['dictionary/recruit_user_role'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_USER_ROLE');
+}
+//就业类型
+if (isEmpty(store.getters['dictionary/recruit_employ_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EMPLOY_TYPE');
+}
+//实施举措
+if (isEmpty(store.getters['dictionary/recruit_imple_act_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_IMPLE_ACT_TYPE');
 }
 /* eslint-disable no-new */
 new Vue({
