@@ -204,29 +204,25 @@ let router = new Router({
 });
 
 //全局路由钩子函数（根据用户的权限判断路由的跳转）
-// router.beforeEach((to, from, next) => {
-//   console.log(0);
-//   //console.log(store.getters['corporation/first_login']);
-//   if (!store.getters['corporation/token']) {
-//     console.log(123);
-//     next('/error');
-//   } else if (
-//     store.getters['corporation/first_login'] &&
-//     to.name !== '单位信息维护' &&
-//     to.name
-//   ) {
-//     if (!store.getters['corporation/cid']) {
-//       console.log(456);
-//       Vue.prototype.$alert(
-//         '首次进入本系统，请先维护单位基本信息，以正常使用系统功能！'
-//       );
-//     }
-//     console.log(7890000);
-//     next();
-//   } else {
-//     console.log(789);
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  if (to.path === '/logout') {
+    next();
+  } else if (!store.getters['corporation/token']) {
+    next('/error');
+  } else if (
+    store.getters['corporation/first_login'] &&
+    to.name &&
+    to.name !== '单位信息管理'
+  ) {
+    if (store.getters['corporation/cid']) {
+      Vue.prototype.$alert(
+        '首次进入本系统，请先维护单位基本信息，以正常使用系统功能！'
+      );
+    }
+    next('/corpinfo');
+  } else {
+    next();
+  }
+});
 
 export default router;

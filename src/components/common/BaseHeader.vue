@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-09 15:15:22
+ * @LastEditTime: 2021-04-19 16:16:40
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -105,7 +105,6 @@ export default {
   watch: {
     async $route(to, from) {
       //to:即将要跳转到的页面   from:即将离开的页面
-      //console.log(this);
       if (to.path === '/logout' && isNoBody(this)) {
         this.$alert('没有登录！无法退出');
         this.$router.push(from.path);
@@ -150,7 +149,7 @@ export default {
           }
         }
         //this.$router.push('/')
-        this.$router.push(from.path);
+        //this.$router.push(from.path);
       }
     }
   },
