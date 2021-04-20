@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-16 19:14:01
+ * @LastEditTime: 2021-04-20 09:45:45
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -163,21 +163,18 @@ const actions = {
         if (res.status == 200 && res.result.logonUser?.organIdStr) {
           commit('SET_CORPORATIONINOF', res.result);
           commit('SET_TOKEN', 'login');
-          // let checkRes = await checkCorpInit({
-          //   cid: res.result.logonUser?.organIdStr
-          // }).catch(() => {
-          //   // 检验单位信息失败，显示系统异常界面
-          //   router.push('/error');
-          // });
-          // //判断是不是首次进入系统
-          // if (
-          //   checkRes.status === 200 &&
-          //   checkRes.result.data &&
-          //   checkRes.result.data.isInit === '1'
-          // ) {
-          //   commit('SET_FIRST_LOGIN', false);
-          // }
-          //commit('SET_FIRST_LOGIN', true);
+          let checkRes = await checkCorpInit({
+            cid: res.result.logonUser?.organIdStr
+          }).catch(() => {
+            // 检验单位信息失败，显示系统异常界面
+            router.push('/error');
+          });
+          //判断是不是首次进入系统
+          if (checkRes.status === 200 && checkRes.result.data) {
+            commit('SET_FIRST_LOGIN', true);
+          } else {
+            commit('SET_FIRST_LOGIN', false);
+          }
         } else {
           // 登录成功但是获取人员进本信息失败，显示系统异常界面
           router.push('/error');

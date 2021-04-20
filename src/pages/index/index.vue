@@ -2,17 +2,18 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 16:03:36
+ * @LastEditTime: 2021-04-20 17:10:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
 <template>
-  <div id="indexApp">
+  <div id="indexApp" class="index-scroll">
     <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
     <transition name="fade">
       <router-view></router-view>
     </transition>
+    <el-backtop target=".index-scroll"></el-backtop>
   </div>
 </template>
 
@@ -74,7 +75,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
+  height: 100%;
   color: #2c3e50;
   background-color: #f6f6f6;
   .fade-enter-active,
@@ -84,6 +85,10 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+}
+.index-scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 ::v-deep .el-breadcrumb__inner {
   color: #fff !important;

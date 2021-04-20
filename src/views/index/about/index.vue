@@ -154,7 +154,7 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto 30px;
   padding-top: 90px;
 
   .bout-us-box {

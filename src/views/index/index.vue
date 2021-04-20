@@ -19,8 +19,6 @@
               <h2>个人登录</h2>
               <p>账号密码登录</p>
               <p>随申办APP扫码登录</p>
-              <br />
-              <br />
               <a
                 id="perosnLoginBtn"
                 href="#"
@@ -41,7 +39,6 @@
               <p>法人一证通登录</p>
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
-              <br />
               <a
                 id="corpLoginBtn"
                 href="#"
@@ -318,16 +315,20 @@ export default {
   display: inline-block;
 
   #persLogin {
+    position: relative;
     background-image: url('../../assets/images/pers-login.png');
   }
   #corpLogin {
+    position: relative;
     background-image: url('../../assets/images/corp-login.png');
   }
   .login-btn {
     background-color: #fff;
-    padding: 5px 10px;
+    padding: 8px 20px;
     border-radius: 20px;
     font-size: 14px;
+    position: absolute;
+    bottom: 10px;
   }
   .login-link-one {
     color: #998cfd;
