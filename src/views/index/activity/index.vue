@@ -2,7 +2,10 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch :placeholder="searchPlaceHolder"></BaseSearch>
+      <BaseSearch
+        :placeholder="searchPlaceHolder"
+        @clickButton="queryActivies($event)"
+      ></BaseSearch>
       <!-- 职位展示位 -->
       <div id="activityBox">
         <ActivityBoxShow
@@ -13,7 +16,7 @@
         ></ActivityBoxShow>
       </div>
       <!-- 分页组件 -->
-      <BasePagination></BasePagination>
+      <BasePagination v-if="total > 0"></BasePagination>
     </div>
   </div>
 </template>
@@ -22,7 +25,7 @@
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import BasePagination from '@/components/common/BasePagination.vue';
 import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
-import { testData } from '@pub/mockTestData';
+import { queryActivies } from '@/api/indexApi';
 export default {
   name: 'app',
   components: {
@@ -33,73 +36,12 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
-      list: testData.list,
       obj: {},
       searchPlaceHolder: '请输入特色活动名称',
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
-      showList: [
-        {
-          id: '6',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '5',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '4',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '3',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '2',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '1',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        }
-      ]
+      total: 0,
+      showList: []
     };
   },
   computed: {
@@ -108,6 +50,27 @@ export default {
     }
   },
   methods: {
+    async queryActivies(actName) {
+      let res = await queryActivies({
+        pageSize: 10,
+        pageIndex: 0,
+        actName: actName
+      }).catch(() => {
+        this.$massage({
+          type: 'error',
+          message: '系统异常，查询失败'
+        });
+        this.showList = [];
+      });
+      if (res.status === 200) {
+        this.total = res.result.pageresult.total;
+        this.showList = res.result.pageresult.data;
+      } else {
+        this.total = 0;
+        this.showList = [];
+        this.$massage({ type: 'error', message: '查询失败' });
+      }
+    },
     activityBoxClick(e) {
       this.$router
         .push({
@@ -145,7 +108,7 @@ export default {
     background-color: #fff;
     margin-top: 32px;
     margin-bottom: 50px;
-    padding: 40px;
+    //padding: 40px;
   }
 }
 </style>

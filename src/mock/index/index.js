@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-21 10:33:37
+ * @LastEditTime: 2021-04-21 18:37:28
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -70,11 +70,12 @@ Mock.mock(adminBasePath + '/guide/special/activity/query', 'post', function(
             recApplyMax: 70,
             systemRecSpecialGuide: '83',
             propagandaImage: [
-              'http://dummyimage.com/400x400',
-              'http://dummyimage.com/400x400'
+              'http://dummyimage.com/400x200',
+              'http://dummyimage.com/400x200'
             ],
             selfApplyMax: 4,
-            content: 'anim ut',
+            content:
+              '这次公司2020上海某银行校园招聘公告解读备考指导特别讲座邀请了某某专家、某某专家为我们讲解...',
             applyStartTime: '1982-02-07 22:53:01'
           }
         ]
