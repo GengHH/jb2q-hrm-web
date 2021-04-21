@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-20 17:10:30
+ * @LastEditTime: 2021-04-21 17:47:25
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
@@ -19,7 +19,9 @@
 
 <script>
 import HeaderIndex from '@/components/index/HeaderIndex.vue';
+import { niceScroll } from '@/utils';
 import { testData } from '@pub/mockTestData';
+
 export default {
   name: 'app',
   components: {
@@ -57,15 +59,8 @@ export default {
     },
     jobHandleClick() {}
   },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+  mounted() {
+    niceScroll('#indexApp');
   }
 };
 </script>

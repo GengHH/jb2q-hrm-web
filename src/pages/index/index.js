@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-13 14:52:20
+ * @LastEditTime: 2021-04-21 16:32:57
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -12,6 +12,7 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
+import 'jquery.nicescroll';
 import Vue from 'vue';
 import App from './index.vue';
 import router from './router';
@@ -24,7 +25,6 @@ import _ from 'lodash';
 import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
 import BaiduMap from 'vue-baidu-map';
-
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);

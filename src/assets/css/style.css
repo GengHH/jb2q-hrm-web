@@ -29,11 +29,11 @@ html::-webkit-scrollbar,
 .el-table__body-wrapper::-webkit-scrollbar,
 .el-dialog__wrapper::-webkit-scrollbar {
   /*滚动条整体样式*/
-  width: 6px;
+  /* width: 6px; */
   /*高宽分别对应横竖滚动条的尺寸*/
-  background: #f2f3f7;
+  /* background: #f2f3f7;
   box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.2); */
 }
 
 html::-webkit-scrollbar-thumb,
@@ -41,19 +41,19 @@ html::-webkit-scrollbar-thumb,
 .el-table__body-wrapper::-webkit-scrollbar-thumb,
 .el-dialog__wrapper::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
-  border-radius: 3px;
+  /* border-radius: 3px;
   background: #bebec0;
-  height: 120px;
+  height: 120px; */
 }
 
 html::-webkit-scrollbar-track,
 .el-table__body-wrapper::-webkit-scrollbar-track,
 .el-dialog__wrapper::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
-  box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.2);
+  /* box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.1); */
 }
 
 i {
@@ -281,4 +281,42 @@ body {
   letter-spacing: 10px;
   text-align: center;
   text-indent: 10px;
+}
+
+.el-menu.el-menu--horizontal {
+  border-bottom: 0 !important;
+}
+
+/* .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+  outline: 0;
+  color: #303133;
+  border-bottom: 1px solid #fc7a43;
+} */
+
+/* 菜单hover时，模拟底部边框动画样式 */
+.bottom-inOutSpread:before,
+.bottom-inOutSpread:after
+/* .bottom-inOutSpread > .ui-border-element:before,
+.bottom-inOutSpread > .ui-border-element:after  */
+ {
+  content: '';
+  position: absolute;
+}
+.bottom-inOutSpread:after {
+  border-bottom: 2px solid #fc7a43;
+  left: 51%;
+  right: 51%;
+  bottom: -2px;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0, 0.98, 0.51, 0.93);
+  transition-duration: 400ms;
+  transition-delay: 0s;
+}
+.bottom-inOutSpread:hover:after {
+  left: 0%;
+  right: 0%;
+}
+.bottom-inOutSpread:not(:hover):after {
+  transition-delay: 0s;
 }

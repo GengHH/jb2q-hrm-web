@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-20 16:04:57
+ * @LastEditTime: 2021-04-21 16:57:29
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -42,6 +42,7 @@
             v-for="nvaIndex in navList"
             :key="nvaIndex.id"
             :index="nvaIndex.path"
+            class="bottom-inOutSpread"
           >
             <template v-if="nvaIndex.icon">
               <i class="nva-icon" :class="nvaIndex.iconName"></i>
