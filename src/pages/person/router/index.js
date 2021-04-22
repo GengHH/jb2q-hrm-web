@@ -254,7 +254,7 @@ router.beforeEach((to, from, next) => {
     to.name !== '个人信息维护' &&
     to.name
   ) {
-    if (!store.getters['person/pid']) {
+    if (store.getters['person/pid']) {
       Vue.prototype.$alert(
         '首次进入本系统，请先维护个人基本信息，以正常使用系统功能！'
       );

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-15 18:13:31
+ * @LastEditTime: 2021-04-22 14:09:08
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -208,6 +208,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob } from '@/api/personApi';
+import { niceScroll } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -418,6 +419,9 @@ export default {
     selection5() {
       return this.$refs.dataTable5.multipleSelection;
     }
+  },
+  mounted() {
+    niceScroll('.el-table__body-wrapper');
   },
   methods: {
     handleClick(tab, event) {

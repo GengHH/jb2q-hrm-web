@@ -1,13 +1,13 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 16:51:00
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-22 16:22:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
 <template>
-  <div id="indexApp">
+  <div id="indexApp" class="nice-scroll">
     <!-- Header -->
     <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade">
@@ -22,7 +22,7 @@
  * 公司管理系统入口界面
  */
 import BaseHeader from '@/components/common/BaseHeader.vue';
-import { testData } from '@pub/mockTestData';
+import { niceScroll } from '@/utils';
 export default {
   name: 'app',
   components: {
@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
-      list: testData.list,
       obj: {},
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -93,6 +92,9 @@ export default {
     // }).catch( err=>{
     //   console.log(err)
     // });
+  },
+  mounted() {
+    niceScroll('#indexApp');
   }
 };
 </script>
@@ -112,5 +114,9 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+}
+.nice-scroll {
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 </style>

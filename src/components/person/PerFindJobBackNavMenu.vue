@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:41:00
  * @LastEditors: GengHH
- * @LastEditTime: 2020-12-31 17:49:51
+ * @LastEditTime: 2021-04-22 14:59:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\person\PerFindJobBackNavMenu.vue
 -->
@@ -12,6 +12,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    :collapse="isCollapse"
   >
     <router-link to="/jobFindFeedback/jobFindRecord">
       <el-menu-item index="1">
@@ -28,12 +29,12 @@
         <!-- <template slot="title">分组一</template> -->
         <router-link to="/jobFindFeedback/corporationAttention">
           <el-menu-item index="2-1"
-            ><i class="el-icon-setting"></i>单位关注</el-menu-item
+            ><i class="el-icon-view"></i>单位关注</el-menu-item
           >
         </router-link>
         <router-link to="/jobFindFeedback/jobStarList">
           <el-menu-item index="2-2"
-            ><i class="el-icon-setting"></i>职位收藏列表</el-menu-item
+            ><i class="el-icon-star-off"></i>职位收藏列表</el-menu-item
           >
         </router-link>
       </el-menu-item-group>
@@ -54,9 +55,30 @@
 export default {
   name: 'PerFindJobBackNavMenu',
   data() {
-    return {};
+    return {
+      isCollapse: false
+    };
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this.changeMenuStyle();
+      });
+    });
   },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.isCollapse = true;
+      } else {
+        this.isCollapse = false;
+      }
+    },
     handleOpen() {
       console.log(1);
     },

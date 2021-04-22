@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-16 14:37:11
+ * @LastEditTime: 2021-04-22 16:23:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -12,6 +12,7 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
+import 'jquery.nicescroll';
 import Vue from 'vue';
 import App from './corporation.vue';
 import router from './router';

@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-04-09 10:36:55
+ * @LastEditTime: 2021-04-22 16:15:13
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerResumeNavMenu.vue
@@ -12,6 +12,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    :collapse="isCollapse"
   >
     <!-- <router-link
       v-for="navIndex in navArray"
@@ -37,11 +38,10 @@
       v-for="navIndex in navArray"
       :key="navIndex.id"
       :index="navIndex.id"
+      @click="anchorPoint(navIndex.anchorPointId)"
     >
       <i :class="navIndex.incoName"></i>
-      <span slot="title" @click="anchorPoint(navIndex.anchorPointId)">{{
-        navIndex.name
-      }}</span>
+      <span slot="title">{{ navIndex.name }}</span>
     </el-menu-item>
 
     <!-- <el-menu-item index="1">
@@ -83,6 +83,7 @@ export default {
   name: 'PerResumeNavMenu',
   data() {
     return {
+      isCollapse: false,
       navArray: [
         {
           id: '1',
@@ -143,7 +144,26 @@ export default {
       ]
     };
   },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this.changeMenuStyle();
+      });
+    });
+  },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.isCollapse = true;
+      } else {
+        this.isCollapse = false;
+      }
+    },
     handleOpen() {
       console.log(1);
     },
@@ -151,10 +171,8 @@ export default {
       console.log(2);
     },
     anchorPoint(id) {
-      $('html, body').animate(
-        { scrollTop: $('#' + id).offset().top - 60 },
-        500
-      );
+      console.log(id);
+      $('#indexApp').animate({ scrollTop: $('#' + id).offset().top - 60 }, 500);
     }
   }
 };

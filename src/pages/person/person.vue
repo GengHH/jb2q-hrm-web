@@ -2,12 +2,12 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-30 15:56:17
+ * @LastEditTime: 2021-04-22 16:10:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
 <template>
-  <div id="indexApp">
+  <div id="indexApp" class="nice-scroll">
     <!-- Header -->
     <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade"> -->
@@ -21,7 +21,6 @@
  * 个人管理系统入口界面
  */
 import BaseHeader from '@/components/common/BaseHeader.vue';
-import { testData } from '@pub/mockTestData';
 export default {
   name: 'app',
   components: {
@@ -30,7 +29,6 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
-      list: testData.list,
       obj: {},
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -114,5 +112,9 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+}
+.nice-scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 </style>

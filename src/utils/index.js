@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-21 17:46:43
+ * @LastEditTime: 2021-04-22 14:06:58
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -274,9 +274,9 @@ export function trim(data) {
  * 使用jquery.nicescroll 自定义样式（兼容IE,全局统一）
  * @param {*} id
  */
-export function niceScroll(id) {
-  if (id) {
-    $(id).niceScroll({
+export function niceScroll(dom) {
+  if (dom) {
+    let scrollConfig = {
       cursorcolor: '#aaa', // 改变滚动条颜色，使用16进制颜色值
       cursoropacitymin: 0, // 当滚动条是隐藏状态时改变透明度, 值范围 1 到 0
       cursoropacitymax: 1, // 当滚动条是显示状态时改变透明度, 值范围 1 到 0
@@ -292,6 +292,14 @@ export function niceScroll(id) {
       gesturezoom: false, // (仅 boxzoom=true 和触屏设备时有效) 激活变焦当out/in（两个手指外张或收缩）
       grabcursorenabled: true, // (仅当 touchbehavior=true) 显示“抓住”图标display "grab" icon
       autohidemode: true // 隐藏滚动条的方式, 可用的值:true or false
-    });
+    };
+    let $doms = $(dom);
+    if ($doms.length && $doms.length === 1) {
+      $doms.niceScroll(scrollConfig);
+    } else if ($doms.length && $doms.length > 0) {
+      $doms.each(function() {
+        $(this).niceScroll(scrollConfig);
+      });
+    }
   }
 }
