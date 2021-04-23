@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-09 12:08:29
+ * @LastEditTime: 2021-04-22 13:43:48
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -176,6 +176,8 @@ const actions = {
             checkRes.result.data.isInit === '1'
           ) {
             commit('SET_FIRST_LOGIN', false);
+          } else {
+            commit('SET_FIRST_LOGIN', true);
           }
         } else {
           // 登录成功但是获取人员进本信息失败，显示系统异常界面

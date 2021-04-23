@@ -2,14 +2,14 @@
   <!-- <router-view></router-view> -->
   <div id="indexBody">
     <el-row class="person-layout" :gutter="20">
-      <el-col id="personNavMenuFixed" :span="4">
+      <el-col id="personNavMenuFixed" :span="leftSpan">
         <router-view name="personNavMenu" />
       </el-col>
-      <el-col :span="20"></el-col>
+      <el-col :span="rightSpan"></el-col>
     </el-row>
     <el-row class="person-layout" :gutter="20">
-      <el-col class="col-place-holder" :span="4"> </el-col>
-      <el-col :span="20">
+      <el-col class="col-place-holder" :span="leftSpan"> </el-col>
+      <el-col :span="rightSpan">
         <!-- <transition name="fade"> -->
         <router-view name="default" />
         <!-- </transition> -->
@@ -19,17 +19,43 @@
 </template>
 
 <script>
+import { niceScroll } from '@/utils';
 export default {
   name: 'personLayout',
   data() {
-    return {};
+    return {
+      leftSpan: 4,
+      rightSpan: 20
+    };
   },
   computed: {
     jobFaieList: function() {
       return this.showList ? this.showList.slice(0, 3) : [];
     }
   },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    niceScroll('#indexApp');
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this.changeMenuStyle();
+      });
+    });
+  },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.leftSpan = 2;
+        this.rightSpan = 22;
+      } else {
+        this.leftSpan = 4;
+        this.rightSpan = 20;
+      }
+    },
     jobHandleClick() {
       console.log(1);
     },

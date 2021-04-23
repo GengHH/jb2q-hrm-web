@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-04-12 20:17:29
+ * @LastEditTime: 2021-04-16 13:32:34
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -15,7 +15,7 @@
       <el-row>
         <el-col :span="16">
           <pl-input
-            v-model.number="formData.verificationCode"
+            v-model="formData.verificationCode"
             label="手机短信验证码"
           ></pl-input>
         </el-col>
@@ -36,7 +36,7 @@
 
 <script>
 //import plInput from '@/components/common/BaseLabelInput';
-import { phonePattern } from '@/utils/regexp';
+import { phonePattern, codePattern } from '@/utils/regexp';
 import { sendSms, updatePhoneNum } from '@/api/personApi';
 export default {
   name: 'updatePhoneNumber',
@@ -59,8 +59,13 @@ export default {
           }
         ],
         verificationCode: [
-          { required: true, message: '请输入短信验证码', trigger: 'blur' },
-          { type: 'number', message: '请输数字', trigger: 'blur' }
+          { required: true, message: '短信验证码不能为空', trigger: 'blur' },
+          //{ type: 'number', message: '请输数字', trigger: 'blur' },
+          {
+            pattern: codePattern,
+            message: '请输入六位数字验证码',
+            trigger: ['blur', 'change']
+          }
           //{ min: 6, max: 6, message: '请输六位验证码', trigger: 'blur' }
         ]
       }

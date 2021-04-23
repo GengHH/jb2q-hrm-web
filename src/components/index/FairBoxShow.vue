@@ -34,7 +34,8 @@
               <i class="icon iconfont">&#xe650;</i>
               招聘地点：长宁区就业促进中心(长宁区武夷路517号)
               <el-link class="blue-font" :underline="false">
-                <i class="icon iconfont">&#xe654;</i> 附近交通</el-link
+                <i class="icon iconfont">&#xe654;</i>
+                <span @click="showMap">附近交通</span></el-link
               >
             </p>
           </el-col>
@@ -47,21 +48,44 @@
         </el-row>
       </el-col>
     </el-row>
+    <!-- 地图弹框 -->
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="mapDialog"
+      :before-close="mapHandleClose"
+    >
+      <pl-map :pointList="pointList"></pl-map>
+    </el-dialog>
   </div>
   <!--E 特色专栏部分 -->
 </template>
 
 <script>
+import PlMap from '@/components/common/BaseMap';
 export default {
   name: 'ActivityBoxShow',
+  components: {
+    PlMap
+  },
   props: {
     activityInfo: Object
   },
   data() {
     return {
       online: true,
-      offline: false
+      offline: false,
+      mapDialog: false,
+      pointList: ['长宁区就业促进中心(长宁区武夷路517号)']
     };
+  },
+  methods: {
+    showMap() {
+      console.log(123);
+      this.mapDialog = true;
+    },
+    mapHandleClose() {
+      this.mapDialog = false;
+    }
   }
 };
 </script>
@@ -71,7 +95,7 @@ export default {
   background-color: #ffffff;
   border-bottom: 1px solid #ededed;
   height: 250px;
-  padding: 30px;
+  padding: 30px 0;
   & > .el-row {
     height: 100%;
     width: 100%;

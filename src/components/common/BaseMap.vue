@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-04-13 15:25:56
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-13 19:37:44
+ * @LastEditTime: 2021-04-16 10:27:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseMap.vue
 -->
@@ -73,7 +73,20 @@ export default {
       this.BMap = BMap;
       //根据多个地址显示多个图片
       if (this.pointList.length > 0) {
-        let local = new BMap.LocalSearch(map, {
+        this.markByAddress();
+      }
+    },
+    infoWindowClose() {
+      this.show = false;
+    },
+    infoWindowOpen() {
+      this.show = true;
+    },
+    markByAddress() {
+      //根据一个或者多个地址，查询坐标并在地图上显示
+      let BMap = this.BMap,
+        map = this.map,
+        local = new BMap.LocalSearch(map, {
           renderOptions: {
             map: map,
             autoViewport: true,
@@ -81,34 +94,30 @@ export default {
           },
           pageCapacity: 1
         });
-        local.setSearchCompleteCallback(function(searchResults) {
-          console.log('+++++++');
-          console.log(searchResults);
+      local.setSearchCompleteCallback(function(searchResults) {
+        console.log('+++++++');
+        console.log(searchResults);
 
-          let poi =
-            searchResults.Hr.length > 0
-              ? searchResults.Hr[0]
-              : searchResults.Hr;
-          console.log(poi);
+        let poi =
+          searchResults.Hr.length > 0 ? searchResults.Hr[0] : searchResults.Hr;
+        console.log(poi);
 
-          let marker = new BMap.Marker(
-            new BMap.Point(poi.point.lng, poi.point.lat)
-          );
-          //alert("["+poi.point.lng+","+poi.point.lat+"]");
-          //在地图上添加标识
-          map.addOverlay(marker);
-          //显示标题
-          marker.setTitle(poi.address);
-          //添加点击事件监听
-          marker.addEventListener('click', makerClick);
-        });
-        //查询地址的坐标
-        this.pointList.forEach(element => {
-          console.log(213);
-          local.search(element);
-          return element;
-        });
-      }
+        let marker = new BMap.Marker(
+          new BMap.Point(poi.point.lng, poi.point.lat)
+        );
+        //alert("["+poi.point.lng+","+poi.point.lat+"]");
+        //在地图上添加标识
+        map.addOverlay(marker);
+        //显示标题
+        marker.setTitle(poi.address);
+        //添加点击事件监听
+        marker.addEventListener('click', makerClick);
+      });
+      //查询地址的坐标
+      this.pointList.forEach(element => {
+        local.search(element);
+        return element;
+      });
 
       let makerClick = function() {
         let infoWindow = new BMap.InfoWindow(
@@ -117,16 +126,14 @@ export default {
         this.openInfoWindow(infoWindow);
       };
     },
-    infoWindowClose() {
-      this.show = false;
-    },
-    infoWindowOpen() {
-      this.show = true;
-    },
     goBack() {
-      this.map.setZoom(15);
-      const point = new this.BMap.Point(this.center.lng, this.center.lat);
-      this.map.panTo(point);
+      if (this.pointList && this.pointList.length) {
+        this.markByAddress();
+      } else {
+        this.map.setZoom(15);
+        const point = new this.BMap.Point(this.center.lng, this.center.lat);
+        this.map.panTo(point);
+      }
     }
   }
 };

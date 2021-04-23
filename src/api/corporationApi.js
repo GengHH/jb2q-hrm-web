@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 15:03:13
+ * @LastEditTime: 2021-04-20 09:42:36
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -22,6 +22,9 @@ const doCorporationLogout = params =>
 //获取的登录的基本信息
 const getLogonUser = params =>
   postAction(basePath + '/loginController/getLogonUser', params);
+//检验该单位是不是首次进入系统
+const checkCorpInit = params =>
+  getAction(basePath + '/corp/info/isCorpInit', params);
 //获取单位的基本信息
 const loadCorpInfo = params =>
   getAction(basePath + '/corp/info/loadCorpInfo', params);
@@ -46,6 +49,7 @@ const findPosition = (status, type, params) =>
 export {
   doCorporationLogout,
   getLogonUser,
+  checkCorpInit,
   loadCorpInfo,
   saveCorpInfo,
   findPosition,

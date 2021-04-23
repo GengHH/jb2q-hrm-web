@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 19:41:26
+ * @LastEditTime: 2021-04-21 18:05:16
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->

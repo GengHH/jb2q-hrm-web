@@ -107,9 +107,12 @@ module.exports = {
     ]
   },
   plugins: [
+    //将jquery库暴露成开发和生产环境的三个全局对象（$,jQuery,window.jQuery）
+    //目的是方便使用任何jquery的插件时，插件中引入和使用的这三个对象时不至于报错
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
+      //jquery: 'jquery',
       'window.jQuery': 'jquery'
     })
   ]

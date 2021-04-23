@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-04-09 10:36:43
+ * @LastEditTime: 2021-04-22 15:00:51
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerCenterNavMenu.vue
@@ -12,6 +12,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    :collapse="isCollapse"
   >
     <router-link to="/personalCenter/updatePhoneNum">
       <el-menu-item index="1">
@@ -47,9 +48,30 @@
 export default {
   name: 'PerCenterNavMenu',
   data() {
-    return {};
+    return {
+      isCollapse: false
+    };
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this.changeMenuStyle();
+      });
+    });
   },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.isCollapse = true;
+      } else {
+        this.isCollapse = false;
+      }
+    },
     handleOpen() {
       console.log(1);
     },

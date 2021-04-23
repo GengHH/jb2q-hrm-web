@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-03-16 10:25:54
+ * @LastEditTime: 2021-04-20 11:05:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
@@ -10,10 +10,13 @@
   <div id="indexBody">
     <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable :columns="columns" :list="list">
-      <el-table-column slot="aaa010" label="发布状态" align="center">
+      <el-table-column slot="distictCode" label="管理区" align="center">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.aaa010 == '1' ? true : false">
-          </el-switch>
+          <div v-for="(v, k) in dicOptions.qx" :key="k">
+            <el-tag v-if="v.value == scope.row.distictCode">{{
+              v.label
+            }}</el-tag>
+          </div>
         </template>
       </el-table-column>
 
@@ -31,10 +34,10 @@
     <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :current-page.sync="params.pageIndex"
+      :page-size="pageSize"
       layout="prev, pager, next, jumper"
-      :total="1000"
+      :total="params.total"
     >
     </el-pagination>
     <div style="text-align:right">
@@ -45,6 +48,16 @@
 
 <script>
 import tform from '../common/t_form'; //高级查询
+import {
+  result_query,
+  result_verification,
+  result_enrollment,
+  result_feedback,
+  result_wanted,
+  result_update,
+  result_add
+} from './api/index';
+import { trim } from '@/utils/index';
 import ttable from '../common/t_table';
 export default {
   name: 'result',
@@ -54,29 +67,25 @@ export default {
   },
   data() {
     return {
-      currentPage: 1,
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '测试',
-          aaa004: '测试',
-          aaa005: '测试',
-          aaa006: '测试',
-          aaa007: '1',
-          aaa010: '1'
-        }
-      ],
+      dicOptions: {
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+      },
+      params: {
+        pageIndex: 1,
+        total: 0
+      },
+      pageSize: 10,
+      list: [],
       columns: [
         { title: '序号', type: 'index' },
-        { title: '管理区', prop: 'aaa001' },
-        { title: '是否面向高校毕业生', prop: 'aaa002' },
-        { title: '招聘单位数', prop: 'aaa003' },
-        { title: '招聘职位数', prop: 'aaa004' },
-        { title: '招聘人数', prop: 'aaa005' },
-        { title: '投递简历人次数（线上）', prop: 'aaa006' },
-        { title: '投递简历人次数（线下）', prop: 'aaa007' },
-        { title: '投递简历人数（线上）', prop: 'aaa008' },
+        { title: '管理区', prop: 'distictCode', slot: 'distictCode' },
+        { title: '是否面向高校毕业生', prop: 'forCollegeGraduates' },
+        { title: '招聘单位数', prop: 'corpCount' },
+        { title: '招聘职位数', prop: 'positionCount' },
+        { title: '招聘人数', prop: 'peopleCount' },
+        { title: '投递简历人次数（线上）', prop: 'collegeDeliveryTon' },
+        { title: '投递简历人数（线上）', prop: 'deliveryOnCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       formConfig: {
@@ -89,9 +98,9 @@ export default {
             type: 'input',
             label: '关键字',
             style: { width: '420px' },
-            placeholder: '请输入招聘会名称',
+            placeholder: '请输入关键字',
             rules: [],
-            key: 'name'
+            key: 'meetName'
           }
         ]
       }
@@ -101,6 +110,25 @@ export default {
   methods: {
     onsubmit(e) {
       console.log(e);
+      let data = { ...e };
+      data.pageSize = this.pageSize;
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+      this.dataList = data;
+      result_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     handleChange(e) {
       console.log(e);

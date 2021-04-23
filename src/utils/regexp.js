@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-11 10:51:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-01-11 11:07:27
+ * @LastEditTime: 2021-04-16 13:31:31
  * @Description: 全局公用的各种正则表达式
  * @FilePath: \jb2q-hrm-web\src\utils\regexp.js
  */
@@ -54,3 +54,5 @@ export const wxPattern = /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/;
 export const cPattern = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
 //包含中文正则
 export const cnPattern = /[\u4E00-\u9FA5]/;
+//短信验证码正则(6位数组)
+export const codePattern = /^\d{6}$/;

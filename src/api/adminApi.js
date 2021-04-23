@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-04-09 17:47:07
+ * @LastEditTime: 2021-04-19 13:42:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
@@ -10,9 +10,9 @@ import apiUrlConfig from '../config';
 import { Notification, Loading } from 'element-ui';
 // import { getAction, postAction } from './allActionManage';
 import axios from 'axios';
+import store from '@/store';
 //const basePath = apiUrlConfig.personBasePath;
 const ywBasePath = apiUrlConfig.adminBasePath;
-
 let loading = null;
 
 function startLoading() {
@@ -59,11 +59,29 @@ function postAction(url, params, fn, fnErr) {
     .then(response => {
       endLoading();
       if (response.status == 200) {
+        if (
+          typeof response.data === 'string' &&
+          response.data.indexOf('请重新登录') != -1
+        ) {
+          console.error('捕获登陆异常');
+          Notification({
+            title: '系统提示',
+            message: '很抱歉，登陆超时请重新登录!',
+            duration: 1500,
+            type: 'error',
+            onClose: () => {
+              store.dispatch('admin/logout');
+              window.location.href =
+                apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+            }
+          });
+          return;
+        }
         fn(response.data);
       } else {
         errors(response);
       }
-      //console.log(response);
+      console.log(response);
     })
     .catch(error => {
       endLoading();
@@ -74,7 +92,7 @@ function postAction(url, params, fn, fnErr) {
         type: 'error'
       });
       fnErr(error);
-      //console.log(error);
+      console.log(error);
     });
 }
 function getAction(url, params, fn, fnErr) {

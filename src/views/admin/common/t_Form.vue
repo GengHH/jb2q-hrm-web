@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-15 16:10:45
+ * @LastEditTime: 2021-04-19 14:57:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -42,20 +42,41 @@
         :prop="v.key"
         :rules="v.rules"
       >
-        <el-select
-          :value="v.value"
-          :style="v.style"
-          v-model="value[v.key]"
-          :placeholder="v.placeholder"
-        >
-          <el-option
-            v-for="(item, key) in v.options"
-            :key="key"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
-        </el-select>
+        <template v-if="v.change">
+          <el-select
+            :multiple="v.multiple"
+            :value="v.value"
+            :style="v.style"
+            v-model="value[v.key]"
+            :placeholder="v.placeholder"
+            @change="v.change"
+          >
+            <el-option
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            ></el-option>
+          </el-select>
+        </template>
+        <template v-else>
+          <el-select
+            :multiple="v.multiple"
+            :value="v.value"
+            :style="v.style"
+            v-model="value[v.key]"
+            :placeholder="v.placeholder"
+          >
+            <el-option
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            ></el-option>
+          </el-select>
+        </template>
       </el-form-item>
       <!-- 时间 日 双时间 -->
       <el-form-item

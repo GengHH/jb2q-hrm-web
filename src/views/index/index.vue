@@ -2,7 +2,7 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch></BaseSearch>
+      <BaseSearch showSelect :selectData="selectData"></BaseSearch>
       <!-- <router-view></router-view> -->
       <el-row id="carouselBox" :gutter="20">
         <el-col :sm="24" :md="18" :lg="16" :xl="16">
@@ -19,8 +19,6 @@
               <h2>个人登录</h2>
               <p>账号密码登录</p>
               <p>随申办APP扫码登录</p>
-              <br />
-              <br />
               <a
                 id="perosnLoginBtn"
                 href="#"
@@ -41,7 +39,6 @@
               <p>法人一证通登录</p>
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
-              <br />
               <a
                 id="corpLoginBtn"
                 href="#"
@@ -210,6 +207,14 @@ export default {
           maxSalary: '15000',
           paymentUnit: '元/月'
         }
+      ],
+      selectValue: 'position',
+      selectData: [
+        {
+          label: '单位名称',
+          value: 'corporation'
+        },
+        { label: '职位类型', value: 'position' }
       ]
     };
   },
@@ -310,16 +315,20 @@ export default {
   display: inline-block;
 
   #persLogin {
+    position: relative;
     background-image: url('../../assets/images/pers-login.png');
   }
   #corpLogin {
+    position: relative;
     background-image: url('../../assets/images/corp-login.png');
   }
   .login-btn {
     background-color: #fff;
-    padding: 5px 10px;
+    padding: 8px 20px;
     border-radius: 20px;
     font-size: 14px;
+    position: absolute;
+    bottom: 10px;
   }
   .login-link-one {
     color: #998cfd;

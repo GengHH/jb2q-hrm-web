@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-04-13 19:16:46
+ * @LastEditTime: 2021-04-20 10:10:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { act_add, act_modify } from '../api/index';
+import { act_add, act_modify, act_apply_query } from '../api/index';
 import { trim } from '@/utils/index';
 import tform from '../../common/t_form';
 export default {
@@ -248,6 +248,24 @@ export default {
     }
   },
   mounted() {
+    // let data = { ...this.formConfig.dataList };
+    // data.pageIndex = 0;
+    // data.pageSize = 10;
+    // //报名渠道（1系统推荐 2主动报名）
+    // data.applyType = 1;
+    // console.log(data);
+    // act_apply_query(
+    //   data,
+    //   res => {
+    //     if (res.status == 200) {
+    //       console.log(res);
+    //     }
+    //     console.log(res);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
     setTimeout(() => {
       if (this.type != '3') {
         this.$refs.advancedSearch.value = this.formConfig.dataList;

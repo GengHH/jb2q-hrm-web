@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 19:48:21
+ * @LastEditTime: 2021-04-20 09:41:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -81,11 +81,6 @@ const getCorpbaseInfo = pid => {
   };
 };
 
-// Mock.mock(RegExp('/person/info/loadPersonInfo' + '.*'), 'get', function(
-//   options
-// ) {
-//   return getCorpbaseInfo(options);
-// });
 Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
   return successData;
 });
@@ -174,6 +169,19 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
         domainIdKey: '1',
         organIdKey: '200008010546251'
       }
+    }
+  };
+});
+
+//检验该单位是不是首次进入系统
+Mock.mock(RegExp(basePath + '/corp/info/isCorpInit' + '.*'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: true
     }
   };
 });

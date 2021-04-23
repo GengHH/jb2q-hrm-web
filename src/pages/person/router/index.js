@@ -175,8 +175,7 @@ let router = new Router({
           name: '私信',
           components: {
             personNavMenu: () => import('@/components/person/remindMenu'),
-            default: () =>
-              import('@/views/person/remind/remindCenter')
+            default: () => import('@/views/person/remind/remindCenter')
           }
         }
       ]
@@ -246,14 +245,16 @@ let router = new Router({
 
 //全局路由钩子函数（根据用户的权限判断路由的跳转）
 router.beforeEach((to, from, next) => {
-  if (!store.getters['person/token']) {
+  if (to.path === '/logout') {
+    next();
+  } else if (!store.getters['person/token']) {
     next('/error');
   } else if (
     store.getters['person/first_login'] &&
     to.name !== '个人信息维护' &&
     to.name
   ) {
-    if (!store.getters['person/pid']) {
+    if (store.getters['person/pid']) {
       Vue.prototype.$alert(
         '首次进入本系统，请先维护个人基本信息，以正常使用系统功能！'
       );

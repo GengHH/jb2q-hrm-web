@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-09 14:34:46
+ * @LastEditTime: 2021-04-21 16:57:29
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -9,7 +9,7 @@
 <template>
   <div id="indexHeader">
     <div class="float-log">
-      <img class="logo2" src="@/assets/img/logo2.png" alt="" />
+      <img class="logo2" src="@/assets/img/logo2-1.png" alt="" />
     </div>
     <div id="indexPageHeader">
       <el-row id="index-title">
@@ -42,6 +42,7 @@
             v-for="nvaIndex in navList"
             :key="nvaIndex.id"
             :index="nvaIndex.path"
+            class="bottom-inOutSpread"
           >
             <template v-if="nvaIndex.icon">
               <i class="nva-icon" :class="nvaIndex.iconName"></i>
@@ -174,7 +175,7 @@ export default {
       margin: 0 auto;
       vertical-align: middle;
       height: 50px;
-      margin: 20px 0;
+      margin-top: 3px;
     }
   }
   #indexPageHeader {
@@ -193,15 +194,15 @@ export default {
     //height: 100%;
     img {
       float: left;
-      width: 30px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       position: relative;
       top: 14px;
       display: block;
     }
     img:last-child {
-      width: 194px;
-      height: 32px;
+      width: 160px;
+      height: 24px;
     }
   }
 

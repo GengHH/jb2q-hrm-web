@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-17 16:51:17
+ * @LastEditTime: 2021-04-19 17:22:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -32,7 +32,7 @@
               <el-button
                 size="mini"
                 type="primary"
-                @click="look(scope, 1)"
+                @click="look('1', scope)"
                 plain
               >
                 <i class="el-icon-search"></i> 查看</el-button
@@ -57,6 +57,15 @@
               <el-tag>{{ scope.row.employ == '1' ? '是' : '否' }}</el-tag>
             </template>
           </el-table-column>
+          <el-table-column slot="implementAct" label="实施举措" align="center">
+            <template slot-scope="scope">
+              <div v-for="(v, k) in dicOptions.type" :key="k">
+                <el-tag v-if="v.value == scope.row.implementAct">{{
+                  v.label
+                }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column
             width="200"
             slot="aaa010"
@@ -67,7 +76,7 @@
               <el-button
                 size="mini"
                 type="primary"
-                @click="look(scope, 1)"
+                @click="look('1', scope)"
                 plain
               >
                 <i class="el-icon-search"></i> 查看</el-button
@@ -88,19 +97,22 @@
     </el-tabs>
 
     <div style="text-align:right">
-      <el-button size="mini" type="primary" @click="visible = true">
+      <el-button size="mini" type="primary" @click="look('0')">
         <i class="el-icon-plus"></i> 添加</el-button
       >
     </div>
     <adddetails
       v-if="visible"
       :visible="visible"
+      :detailsData="detailsData"
+      :detailsType="detailsType"
       @onclose="onclose"
     ></adddetails>
   </div>
 </template>
 
 <script>
+import { trim } from '@/utils/index';
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
 import adddetails from './module/addDetails';
@@ -111,16 +123,21 @@ export default {
   components: { ttable, tform, adddetails },
   data() {
     return {
+      detailsData: {},
+      detailsType: '0',
       params: {
         pageIndex: 1,
         total: 0
       },
       params2: {
-        pageIndex2: 1,
-        total2: 0
+        pageIndex: 1,
+        total: 0
       },
       pageSize: 10,
       dataList: null,
+      dicOptions: {
+        type: trim(this.$store.getters['dictionary/recruit_imple_act_type'])
+      },
 
       activeName: '01',
       visible: false,
@@ -173,7 +190,7 @@ export default {
         { title: '指导地点', prop: 'guideAddress' },
         { title: '指导过程', prop: 'guideProcess' },
         { title: '发现的问题和建议', prop: 'problem' },
-        { title: '实施举措', prop: 'implementAct' },
+        { title: '实施举措', prop: 'implementAct', slot: 'implementAct' },
         { title: '是否就业', prop: 'employ', slot: 'employ' },
         { title: '操作', slot: 'aaa010' }
       ],
@@ -239,10 +256,21 @@ export default {
         this.querySpecialized(e);
       }
     },
-    onclose() {
+    onclose(type) {
+      if (type == '1') {
+        this.advancedSearch(this.dataList);
+      }
       this.visible = false;
     },
-    look() {}
+    look(type, e) {
+      //0新增 1查看
+      if (type == 1) {
+        this.detailsData = { ...e.row };
+      }
+      this.detailsType = type;
+
+      this.visible = true;
+    }
   },
   created() {}
 };

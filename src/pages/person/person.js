@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-04-14 18:51:27
+ * @LastEditTime: 2021-04-22 13:48:46
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -12,6 +12,9 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
+import $ from 'jquery';
+window.$ = $;
+import 'jquery.nicescroll';
 import Vue from 'vue';
 import App from './person.vue';
 import router from './router';

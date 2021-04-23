@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 14:50:53
+ * @LastEditTime: 2021-04-22 14:09:08
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -208,6 +208,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob } from '@/api/personApi';
+import { niceScroll } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -215,6 +216,7 @@ export default {
   },
   data() {
     return {
+      actionColWidth: 260,
       activeName: 'unread',
       labelPosition: 'right',
       formLabelWidth: '120px',
@@ -286,6 +288,7 @@ export default {
         {
           label: '投递时间',
           prop: 'createTime',
+          attrs: { showOverflowTooltip: true },
           formatter: 'date',
           slotName: 'createTime'
         },
@@ -301,7 +304,7 @@ export default {
         // },
         {
           label: '操作',
-          attrs: { width: 340 },
+          attrs: { width: this.actionColWidth },
           actions: [
             {
               id: 'action1',
@@ -342,28 +345,46 @@ export default {
             },
             {
               id: 'action4',
-              text: '是否参加面试',
+              text: '参加面试',
               icon: 'el-icon-chat-line-round',
+              confirmType: 'pop',
+              popConfig: () => ({
+                title: '确认参加面试？'
+              }),
+              confirm: ({ row }, done) => {
+                // TODO变成评价按钮
+                row.actions = ['action1', 'action3', 'action6'];
+                done();
+              },
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                console.log(row);
+                //console.log(row);
               },
               hidden: ({ row }, item) => {
                 return !row.actions || !row.actions.find(c => c === item.id);
               }
             },
-            // {
-            //   id: 'action5',
-            //   text: '未参加面试',
-            //   icon: 'el-icon-chat-line-round',
-            //   attrs: { round: true, size: 'small' },
-            //   onClick: ({ row }) => {
-            //     //console.log(row);
-            //   },
-            //   hidden: ({ row }, item) => {
-            //     return !row.actions || !row.actions.find(c => c === item.id);
-            //   }
-            // },
+            {
+              id: 'action5',
+              text: '不参加面试',
+              icon: 'el-icon-chat-line-round',
+              confirmType: 'pop',
+              popConfig: () => ({
+                title: '确认不参加面试？'
+              }),
+              confirm: ({ row }, done) => {
+                // TODO变成评价按钮
+                row.actions = ['action1', 'action3', 'action6'];
+                done();
+              },
+              attrs: { round: true, size: 'small' },
+              onClick: ({ row }) => {
+                //console.log(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row.actions || !row.actions.find(c => c === item.id);
+              }
+            },
             {
               id: 'action6',
               text: '评价',
@@ -399,9 +420,16 @@ export default {
       return this.$refs.dataTable5.multipleSelection;
     }
   },
+  mounted() {
+    niceScroll('.el-table__body-wrapper');
+  },
   methods: {
     handleClick(tab, event) {
-      //console.log(tab, event);
+      if (tab.label === '通知面试') {
+        this.actionColWidth = 420;
+      } else {
+        this.actionColWidth = 280;
+      }
     },
     handleSelectionChange(val) {
       //console.log(val);
@@ -513,7 +541,7 @@ export default {
             break;
           case 'interview':
             _data.forEach(element => {
-              element.actions = ['action1', 'action4', 'action3'];
+              element.actions = ['action1', 'action3', 'action4', 'action5'];
             });
             that.tableData3 = _data;
             break;

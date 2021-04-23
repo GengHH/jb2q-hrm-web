@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-17 17:05:57
+ * @LastEditTime: 2021-04-19 18:04:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -40,10 +40,116 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane label="政策咨询" name="01">
-          <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+          <tform ref="form" :formConfig="formConfig"></tform>
+          <div v-if="this.detailsType != '1'" style="text-align:center">
+            <el-button type="primary" @click="onsubmit">提交</el-button>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="专门指导" name="02">
-          <tform :formConfig="formConfig2" @onsubmit="onsubmit2"></tform>
+          <tform ref="form2" :formConfig="formConfig2"></tform>
+          <el-form
+            :model="form"
+            :disabled="disabled"
+            label-width="140px"
+            style="width: 650px;margin: 0 auto"
+          >
+            <div v-show="show == '1'">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="专家姓名" prop="expertId">
+                    <el-select
+                      v-model="form.expertId"
+                      filterable
+                      remote
+                      reserve-keyword
+                      style="width:210px"
+                      placeholder="请输入关键词"
+                      :remote-method="remoteMethod"
+                      :loading="loading"
+                      @change="expertChange"
+                    >
+                      <el-option
+                        v-for="item in userOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                        <span>{{ item.label }}</span>
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="指导地点" prop="expertGuideAddress">
+                    <el-input
+                      style="width:210px"
+                      v-model="form.expertGuideAddress"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="开始时间" prop="expertGuideStart">
+                    <el-date-picker
+                      v-model="form.expertGuideStart"
+                      type="date"
+                      style="width:210px"
+                      value-format="yyyyMMdd"
+                    >
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="结束时间" prop="expertGuideEnd">
+                    <el-date-picker
+                      v-model="form.expertGuideEnd"
+                      type="date"
+                      style="width:210px"
+                      value-format="yyyyMMdd"
+                    >
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="备注" prop="expertMemo">
+                    <el-input
+                      style="width:532px"
+                      v-model="form.expertMemo"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+            <div v-show="show == '2'">
+              推荐职位暂无接口
+            </div>
+            <div v-show="show == '4'">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="活动名称" prop="acts">
+                    <el-select
+                      :multiple="true"
+                      style="width:210px"
+                      v-model="form.acts"
+                    >
+                      <el-option
+                        v-for="(v, k) in activityList"
+                        :key="k"
+                        :label="v.actName"
+                        :value="v.actId"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+            <div v-if="this.detailsType != '1'" style="text-align:center">
+              <el-button type="primary" @click="onsubmit2">提交</el-button>
+            </div>
+          </el-form>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -54,26 +160,31 @@
 import tform from '../../common/t_form'; //高级查询
 import { trim } from '@/utils/index';
 import { emphasis_keypoint } from '../../serviceManagement/api/index';
+import { synthesize_query } from '../../technocracy/api/index';
+import { act_query } from '../../profession/api/index';
 import { guide_add } from '../api/index';
 export default {
   name: 'addDetails',
   components: { tform },
-  props: ['visible'],
+  props: ['visible', 'detailsType', 'detailsData'],
   data() {
     let comConfig = {
       inline: true,
       size: '',
       labelPosition: 'right',
       labelWidth: '140px',
-      saveBtn: {
-        title: '提交'
-      },
+      disabled: false,
+      isBtn: true,
       style: {
         width: '650px',
         margin: '0 auto'
       }
     };
     return {
+      disabled: false,
+      show: '0',
+      activityList: [],
+      userOptions: [],
       form: { pids: '', pid: '' },
       orgOption: [],
       loading: false,
@@ -179,16 +290,6 @@ export default {
             key: 'problem'
           },
           {
-            type: 'select',
-            label: '实施举措',
-            rules: [],
-            style: { width: '210px' },
-            key: 'implementAct',
-            options: trim(
-              this.$store.getters['dictionary/recruit_imple_act_type']
-            )
-          },
-          {
             type: 'radio',
             label: '是否就业',
             rules: [],
@@ -223,6 +324,20 @@ export default {
             //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
             rules: [],
             key: 'curSituation'
+          },
+          {
+            type: 'select',
+            label: '实施举措',
+            // multiple: true,
+            rules: [],
+            style: { width: '210px' },
+            key: 'implementAct',
+            options: trim(
+              this.$store.getters['dictionary/recruit_imple_act_type']
+            ),
+            change: e => {
+              this.selectChange(e);
+            }
           }
         ],
         ...comConfig
@@ -231,6 +346,41 @@ export default {
   },
   computed: {},
   methods: {
+    expertChange(e) {
+      this.form.expertName = e.label;
+      this.form.expertId = e.value;
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let data = {
+          xm: query,
+          pageIndex: 0,
+          pageSize: 10,
+          valid: 1,
+          districtCode: this.$store.state.admin.userInfo.areaInfo.areaCode
+        };
+        synthesize_query(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.pageresult.data;
+              let list = pageresult.map(e => {
+                return { value: e.expertId, label: e.xm };
+              });
+              this.userOptions = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.options = [];
+      }
+    },
     orgRemoteMethod(query) {
       if (query !== '') {
         this.loading = true;
@@ -269,6 +419,10 @@ export default {
         this.options = [];
       }
     },
+    selectChange(e) {
+      this.show = e;
+      console.log(e);
+    },
     userChange(e) {
       console.log(e);
       this.form.zjhm = e.value;
@@ -288,13 +442,15 @@ export default {
         }
       });
     },
-    onclose() {
-      this.$emit('onclose');
+    onclose(type) {
+      this.$emit('onclose', type || 0);
     },
-    onsubmit(e) {
+    onsubmit() {
+      let e = { ...this.$refs.form.value };
       this.add(e);
     },
-    onsubmit2(e) {
+    onsubmit2() {
+      let e = { ...this.$refs.form2.value };
       this.add(e);
     },
     add(e) {
@@ -304,11 +460,19 @@ export default {
         return;
       }
       let data = { ...e, ...this.form };
+      if (data.acts) {
+        data.acts = data.acts.map(e => {
+          return { acyId: e };
+        });
+      }
       data.guideType = this.activeName;
       console.log(data);
       guide_add(
         data,
         res => {
+          this.message('success', '操作成功', () => {
+            this.onclose('1');
+          });
           console.log(res);
         },
         err => {
@@ -316,6 +480,43 @@ export default {
         }
       );
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      if (this.detailsType == '1') {
+        this.form = { ...this.detailsData };
+        this.$refs.form.value = { ...this.detailsData };
+        this.$refs.form2.value = { ...this.detailsData };
+        this.formConfig.disabled = true;
+        this.formConfig2.disabled = true;
+        // this.show = this.detailsData.implementAct;
+        this.disabled = true;
+      }
+      console.log(this.detailsData);
+    }, 0);
+
+    //获取活动信息
+
+    act_query(
+      {
+        pageIndex: 0,
+        pageSize: 100,
+        actName: ''
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data.data;
+          this.activityList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log('-----------------------------');
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   },
   created() {}
 };
