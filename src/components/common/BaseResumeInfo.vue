@@ -1251,6 +1251,12 @@ export default {
         : [];
     }
   },
+  updated() {
+    // 更新滚动条
+    $('#indexApp')
+      .getNiceScroll()
+      .resize();
+  },
   methods: {
     print() {
       // 打印

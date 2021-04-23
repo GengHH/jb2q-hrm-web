@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-04-22 16:15:13
+ * @LastEditTime: 2021-04-23 17:00:20
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerResumeNavMenu.vue
@@ -149,11 +149,15 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        //监听浏览器窗口大小改变
-        //浏览器变化执行动作
-        this.changeMenuStyle();
-      });
+      window.addEventListener(
+        'resize',
+        this._.throttle(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
     });
   },
   methods: {

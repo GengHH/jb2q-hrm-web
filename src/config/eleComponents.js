@@ -1,7 +1,7 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-04-20 17:15:37
+ * @LastEditTime: 2021-04-23 15:30:14
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
@@ -65,7 +65,10 @@ import {
   Popover,
   Popconfirm,
   Backtop,
-  Icon
+  Icon,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -120,6 +123,9 @@ export default {
     V.use(Popconfirm);
     V.use(Backtop);
     V.use(Icon);
+    V.use(Dropdown);
+    V.use(DropdownMenu);
+    V.use(DropdownItem);
 
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;

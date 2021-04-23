@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-21 16:57:29
+ * @LastEditTime: 2021-04-23 17:03:22
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -13,47 +13,68 @@
     </div>
     <div id="indexPageHeader">
       <el-row id="index-title">
-        <el-col :sm="24" :md="6" :lg="8" :xl="8" class="text-left">
+        <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8" class="text-left">
           上海市人力资源和社会保障局 | 公共服务平台
         </el-col>
-        <el-col :sm="24" :md="18" :lg="16" :xl="16" class="text-right">
+        <el-col :xs="12" :sm="12" :md="12" :lg="16" :xl="16" class="text-right">
           <i class="el-icon-user"></i>
           登录 | 注册
         </el-col>
       </el-row>
     </div>
-    <el-row>
-      <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
-        <img src="@/assets/img/logo.png" alt="" />
-        <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
-        <img class="logo3" src="@/assets/img/logo3.png" alt="" />
-      </el-col>
-      <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple">
-        <el-menu
-          :default-active="$route.path"
-          class="el-menu-demo"
-          mode="horizontal"
-          router
-          background-color="#fff"
-          text-color="#333"
-          @select="handleSelect"
-        >
-          <el-menu-item
-            v-for="nvaIndex in navList"
-            :key="nvaIndex.id"
-            :index="nvaIndex.path"
-            class="bottom-inOutSpread"
+    <div id="indexMenuHeader">
+      <el-row>
+        <el-col :xs="20" :sm="20" :md="6" :lg="8" :xl="8" class="bg-purple">
+          <img src="@/assets/img/logo.png" alt="" />
+          <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
+          <img class="logo3" src="@/assets/img/logo3.png" alt="" />
+        </el-col>
+        <el-col :xs="4" :sm="4" :md="18" :lg="16" :xl="16" class="bg-purple">
+          <!-- 小屏幕下显示的菜单 -->
+          <el-dropdown v-if="showIconMenu" id="showIconMenu" trigger="click">
+            <span class="el-dropdown-link">
+              <el-icon class="el-icon-s-fold"></el-icon>
+            </span>
+            <el-dropdown-menu id="dropdownMenu" slot="dropdown">
+              <el-dropdown-item
+                v-for="nvaIndex in navListReverse"
+                :key="nvaIndex.id"
+                :icon="nvaIndex.iconName"
+              >
+                <router-link :to="nvaIndex.path">
+                  {{ nvaIndex.nvaText }}
+                </router-link>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- 大屏幕下显示的菜单 -->
+          <el-menu
+            v-else
+            :default-active="$route.path"
+            class="el-menu-demo"
+            mode="horizontal"
+            router
+            background-color="#fff"
+            text-color="#333"
+            @select="handleSelect"
           >
-            <template v-if="nvaIndex.icon">
-              <i class="nva-icon" :class="nvaIndex.iconName"></i>
-            </template>
-            <template v-else>
-              {{ nvaIndex.nvaText }}
-            </template>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-    </el-row>
+            <el-menu-item
+              v-for="nvaIndex in navList"
+              :key="nvaIndex.id"
+              :index="nvaIndex.path"
+              class="bottom-inOutSpread"
+            >
+              <template v-if="nvaIndex.icon">
+                <i class="nva-icon" :class="nvaIndex.iconName"></i>
+              </template>
+              <template v-else>
+                {{ nvaIndex.nvaText }}
+              </template>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -77,6 +98,7 @@ export default {
   },
   data() {
     return {
+      showIconMenu: false,
       // activeIndex:
       //   this.$route.path && this.$route.path.length > 1
       //     ? this.$route.path.substr(1)
@@ -94,6 +116,22 @@ export default {
     //   console.log(this.$route.path.length);
     //   return aa;
     // }
+    navListReverse() {
+      return [...this.navList].reverse();
+    }
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this._.throttle(this.changeMenuStyle, 500)
+      );
+    });
   },
   watch: {
     // async $route(to, from) {
@@ -148,6 +186,13 @@ export default {
     // }
   },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 992) {
+        this.showIconMenu = true;
+      } else {
+        this.showIconMenu = false;
+      }
+    },
     handleSelect(index) {
       console.log(this.$route.path);
       this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
@@ -164,6 +209,12 @@ export default {
   z-index: 999;
   background-color: $g-white-color;
   //color: $g-white-color !important;
+  #showIconMenu {
+    font-size: 24px;
+    float: right;
+    margin-top: 18px;
+    color: #fc6f3d;
+  }
   .float-log {
     position: absolute;
     width: 5%;
@@ -181,6 +232,7 @@ export default {
   #indexPageHeader {
     height: 30px;
     width: 100%;
+    padding: 0 5%;
     background-color: $g-mian-color;
   }
   #index-title {
@@ -188,9 +240,11 @@ export default {
     line-height: 30px;
     color: $g-white-color;
   }
+  #indexMenuHeader {
+    padding: 0 5%;
+  }
   .el-row {
     width: 100%;
-    padding: 0 5%;
     //height: 100%;
     img {
       float: left;
@@ -238,6 +292,13 @@ export default {
     .el-menu-item.is-active {
       border-bottom: 2px solid $g-mian-color;
       color: $g-mian-color;
+    }
+  }
+}
+ul.el-dropdown-menu {
+  li {
+    a {
+      color: #606266;
     }
   }
 }

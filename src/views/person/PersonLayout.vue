@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { niceScroll } from '@/utils';
 export default {
   name: 'personLayout',
   data() {
@@ -37,14 +36,20 @@ export default {
     this.changeMenuStyle();
   },
   mounted() {
-    niceScroll('#indexApp');
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        //监听浏览器窗口大小改变
-        //浏览器变化执行动作
-        this.changeMenuStyle();
-      });
+      window.addEventListener(
+        'resize',
+        this._.throttle(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
     });
+  },
+  updated() {
+    console.log('layout----------------update');
   },
   methods: {
     changeMenuStyle() {

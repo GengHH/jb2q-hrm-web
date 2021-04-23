@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-19 16:16:40
+ * @LastEditTime: 2021-04-23 18:05:03
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -17,16 +17,43 @@
       <el-row>
         <!-- <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple"> -->
         <el-col :span="24" class="bg-purple">
-          <!-- <el-breadcrumb separator="">
-          <el-breadcrumb-item
-            v-for="nvaIndex in navList"
-            :key="nvaIndex.id"
-            :to="{ path: nvaIndex.path }"
-          >
-            {{ nvaIndex.nvaText }}
-          </el-breadcrumb-item>
-        </el-breadcrumb> -->
+          <!-- 小屏幕下显示的菜单 -->
+          <el-dropdown v-if="showIconMenu" id="showIconMenu" trigger="click">
+            <span class="el-dropdown-link">
+              <el-icon class="el-icon-s-fold"></el-icon>
+            </span>
+            <el-dropdown-menu id="dropdownMenu" slot="dropdown">
+              <!-- 个人或者单位名称 -->
+              <el-dropdown-item command="e" divided>{{
+                userLogInfo.nvaText
+              }}</el-dropdown-item>
+              <el-dropdown-item divided></el-dropdown-item>
+              <el-dropdown-item
+                v-for="nvaIndex in navListReverse"
+                :key="nvaIndex.id"
+                :icon="nvaIndex.iconName"
+              >
+                <router-link :to="nvaIndex.path">
+                  {{ nvaIndex.nvaText }}
+                </router-link>
+              </el-dropdown-item>
+              <!-- 二级子菜单 -->
+              <template v-if="userLogInfo.subMenu.length > 0">
+                <el-dropdown-item divided></el-dropdown-item>
+                <el-dropdown-item
+                  v-for="nvaIndex in userLogInfo.subMenu"
+                  :key="nvaIndex.id"
+                >
+                  <router-link :to="nvaIndex.id">
+                    {{ nvaIndex.nvaText }}
+                  </router-link>
+                </el-dropdown-item>
+              </template>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- 大屏幕下显示的菜单 -->
           <el-menu
+            v-else
             :default-active="$route.path"
             class="el-menu-demo"
             mode="horizontal"
@@ -45,6 +72,7 @@
                 >{{ nvaIndex.nvaText }}</el-menu-item
               >
             </el-submenu>
+            <!-- 其他正常菜单信息栏 -->
             <el-menu-item
               v-for="nvaIndex in navList"
               :key="nvaIndex.id"
@@ -84,6 +112,7 @@ export default {
   },
   data() {
     return {
+      showIconMenu: true,
       // activeIndex:
       //   this.$route.path && this.$route.path.length > 1
       //     ? this.$route.path.substr(1)
@@ -101,6 +130,22 @@ export default {
     //   console.log(this.$route.path.length);
     //   return aa;
     // }
+    navListReverse() {
+      return [...this.navList].reverse();
+    }
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this._.throttle(this.changeMenuStyle, 500)
+      );
+    });
   },
   watch: {
     async $route(to, from) {
@@ -154,6 +199,16 @@ export default {
     }
   },
   methods: {
+    changeMenuStyle() {
+      if (
+        (isPerson(this) && window.innerWidth < 992) ||
+        (isCorporation(this) && window.innerWidth < 1200)
+      ) {
+        this.showIconMenu = true;
+      } else {
+        this.showIconMenu = false;
+      }
+    },
     goHome() {
       window.location.href = '/ggzp-shrs/index.html';
     },
@@ -196,6 +251,12 @@ export default {
     height: 100%;
   }
 
+  #showIconMenu {
+    font-size: 24px;
+    float: right;
+    margin-top: 18px;
+    color: #fff;
+  }
   .el-row {
     width: 100%;
     height: 100%;
@@ -215,6 +276,13 @@ export default {
     .el-menu-item.is-active {
       border-bottom: 2px solid #ffc107;
       color: #ffc107;
+    }
+  }
+}
+ul.el-dropdown-menu {
+  li {
+    a {
+      color: #606266;
     }
   }
 }

@@ -641,6 +641,13 @@ export default {
           .siblings('.el-icon-caret-bottom')
           .css('transform', 'rotate(180deg)');
       }
+      // TODO更新滚动条样式
+      //console.log($('#indexApp').getNiceScroll());
+      setTimeout(() => {
+        $('#indexApp')
+          .getNiceScroll()
+          .resize();
+      }, 10);
     },
     showJobDetial(arg) {
       //显示岗位详细信息

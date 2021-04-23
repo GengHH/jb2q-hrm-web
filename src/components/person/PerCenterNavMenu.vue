@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-04-22 15:00:51
+ * @LastEditTime: 2021-04-23 16:59:35
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerCenterNavMenu.vue
@@ -57,11 +57,15 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        //监听浏览器窗口大小改变
-        //浏览器变化执行动作
-        this.changeMenuStyle();
-      });
+      window.addEventListener(
+        'resize',
+        this._.throttle(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
     });
   },
   methods: {
