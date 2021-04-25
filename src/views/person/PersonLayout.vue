@@ -7,9 +7,9 @@
       </el-col>
       <el-col :span="rightSpan"></el-col>
     </el-row>
-    <el-row class="person-layout" :gutter="20">
+    <el-row class="person-layout" :gutter="60">
       <el-col class="col-place-holder" :span="leftSpan"> </el-col>
-      <el-col :span="rightSpan">
+      <el-col id="personContentFixed" :span="rightSpan">
         <!-- <transition name="fade"> -->
         <router-view name="default" />
         <!-- </transition> -->
@@ -103,13 +103,16 @@ export default {
       height: 1px;
     }
     #personNavMenuFixed {
-      width: 14.5% !important;
+      //width: 14.5% !important;
       position: fixed;
       z-index: 999;
       height: 100%;
       .el-menu {
         height: 100%;
       }
+    }
+    #personContentFixed {
+      float: right;
     }
   }
   .more-btn {
