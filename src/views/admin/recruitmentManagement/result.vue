@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-20 11:05:29
+ * @LastEditTime: 2021-04-25 14:53:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
@@ -20,12 +20,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="200" slot="aaa009" label="操作" align="center">
+      <el-table-column width="280" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="info" @click="look(scope, 1)" plain>
+          <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
+            <i class="el-icon-plus"></i> 添加</el-button
+          >
+          <el-button size="mini" type="info" @click="look(scope, 2)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
-          <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
+          <el-button size="mini" type="primary" @click="look(scope, 3)" plain>
             <i class="el-icon-edit"></i> 修改</el-button
           >
         </template>
@@ -40,9 +43,12 @@
       :total="params.total"
     >
     </el-pagination>
-    <div style="text-align:right">
-      <el-button type="primary"> <i class="el-icon-plus"></i> 添加</el-button>
-    </div>
+    <resultdetails
+      v-if="visible"
+      :visible="visible"
+      :form="form"
+      @onclose="onclose"
+    ></resultdetails>
   </div>
 </template>
 
@@ -59,14 +65,18 @@ import {
 } from './api/index';
 import { trim } from '@/utils/index';
 import ttable from '../common/t_table';
+import resultdetails from './pages/resultDetails';
 export default {
   name: 'result',
   components: {
     tform,
-    ttable
+    ttable,
+    resultdetails
   },
   data() {
     return {
+      form: {},
+      visible: false,
       dicOptions: {
         //区县
         qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
@@ -108,6 +118,12 @@ export default {
   },
   computed: {},
   methods: {
+    onclose(type) {
+      if (type == '1') {
+        this.advancedSearch(this.dataList);
+      }
+      this.visible = false;
+    },
     onsubmit(e) {
       console.log(e);
       let data = { ...e };
@@ -132,6 +148,10 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+    },
+    look(scope, type) {
+      this.form = { ...scope.row };
+      this.visible = true;
     }
   },
   created() {}

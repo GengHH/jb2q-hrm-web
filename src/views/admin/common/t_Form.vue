@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-19 14:57:46
+ * @LastEditTime: 2021-04-25 14:46:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -48,6 +48,7 @@
             :value="v.value"
             :style="v.style"
             v-model="value[v.key]"
+            :disabled="v.disabled"
             :placeholder="v.placeholder"
             @change="v.change"
           >
@@ -66,6 +67,7 @@
             :value="v.value"
             :style="v.style"
             v-model="value[v.key]"
+            :disabled="v.disabled"
             :placeholder="v.placeholder"
           >
             <el-option

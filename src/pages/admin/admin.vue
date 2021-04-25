@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-15 18:04:25
+ * @LastEditTime: 2021-04-25 10:17:40
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -36,8 +36,9 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="22%">
+        <el-aside :style="{ width: width + 'px' }">
           <el-menu
+            :collapse="isCollapse"
             :default-active="$route.path"
             class="el-menu-vertical-demo"
             :unique-opened="true"
@@ -128,6 +129,8 @@ export default {
   components: {},
   data: () => {
     return {
+      screenWidth: document.documentElement.clientWidth, //屏幕宽度
+      isCollapse: false,
       drawerType: '0',
       drawer: false,
       userName: '超级管理员',
@@ -358,6 +361,15 @@ export default {
     height() {
       let h = document.documentElement.clientHeight;
       return h < 600 ? 600 : h - 112;
+    },
+    width() {
+      let w = document.documentElement.clientWidth;
+      if (w < 1400) {
+        this.isCollapse = true;
+      } else {
+        this.isCollapse = false;
+      }
+      return w < 1400 ? 64 : 300;
     }
   },
   mounted() {

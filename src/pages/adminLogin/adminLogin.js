@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 16:34:24
+ * @LastEditTime: 2021-04-25 10:56:12
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -152,6 +152,10 @@ if (isEmpty(store.getters['dictionary/recruit_employ_type'])) {
 //实施举措
 if (isEmpty(store.getters['dictionary/recruit_imple_act_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_IMPLE_ACT_TYPE');
+}
+//是或否
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
 }
 /* eslint-disable no-new */
 new Vue({
