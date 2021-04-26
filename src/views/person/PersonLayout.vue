@@ -39,7 +39,7 @@ export default {
     this.$nextTick(() => {
       window.addEventListener(
         'resize',
-        this._.throttle(
+        this._.debounce(
           //监听浏览器窗口大小改变
           //浏览器变化执行动作
           this.changeMenuStyle,

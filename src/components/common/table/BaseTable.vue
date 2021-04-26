@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-25 17:26:44
+ * @LastEditTime: 2021-04-26 15:49:37
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->

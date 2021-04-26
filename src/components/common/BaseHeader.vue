@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-23 18:05:03
+ * @LastEditTime: 2021-04-26 15:40:01
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -143,7 +143,7 @@ export default {
         'resize',
         //监听浏览器窗口大小改变
         //浏览器变化执行动作
-        this._.throttle(this.changeMenuStyle, 500)
+        this._.debounce(this.changeMenuStyle, 500)
       );
     });
   },

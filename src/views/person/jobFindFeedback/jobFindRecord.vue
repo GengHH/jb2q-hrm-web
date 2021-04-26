@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-25 17:38:56
+ * @LastEditTime: 2021-04-26 15:49:23
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->

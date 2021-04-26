@@ -478,7 +478,7 @@ export default {
         return;
       }
       if (isNaN(Number(this.queryParams.salaryMin))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.salaryMin = '';
       } else if (
         this.queryParams.salaryMax &&
@@ -499,7 +499,7 @@ export default {
         return;
       }
       if (isNaN(Number(this.queryParams.salaryMax))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.salaryMax = '';
       } else if (
         this.queryParams.salaryMin &&
@@ -520,7 +520,7 @@ export default {
         return;
       }
       if (this.queryParams.ageMin && isNaN(Number(this.queryParams.ageMin))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.ageMin = '';
       } else if (this.queryParams.ageMin < 16) {
         this.$alert('年龄下限不得低于16周岁');
@@ -535,7 +535,7 @@ export default {
         return;
       }
       if (this.queryParams.ageMax && isNaN(Number(this.queryParams.ageMax))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
         this.$alert('年龄上线不得低于16周岁');

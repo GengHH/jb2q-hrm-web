@@ -147,7 +147,7 @@ export default {
   }
 
   button {
-    width: 12rem;
+    width: 10rem;
   }
 }
 .search-box-select {
