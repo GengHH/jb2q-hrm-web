@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-22 14:09:08
+ * @LastEditTime: 2021-04-26 15:49:23
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -29,6 +29,7 @@
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -208,7 +209,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob } from '@/api/personApi';
-import { niceScroll } from '@/utils';
+//import { niceScroll } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -421,7 +422,7 @@ export default {
     }
   },
   mounted() {
-    niceScroll('.el-table__body-wrapper');
+    //niceScroll('.el-table__body-wrapper');
   },
   methods: {
     handleClick(tab, event) {

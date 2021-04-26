@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-11 10:51:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-16 13:31:31
+ * @LastEditTime: 2021-04-26 09:52:01
  * @Description: 全局公用的各种正则表达式
  * @FilePath: \jb2q-hrm-web\src\utils\regexp.js
  */
@@ -56,3 +56,7 @@ export const cPattern = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂�
 export const cnPattern = /[\u4E00-\u9FA5]/;
 //短信验证码正则(6位数组)
 export const codePattern = /^\d{6}$/;
+//年龄范围正则（16-150）
+export const agePattern = /^1[6-9]$|^[2-9]\d{1}$|^1[0-4]\d{1}$|^150$/;
+//薪资范围正则（1000-99999）
+export const salaryPattern = /^\d{4,5}$/;

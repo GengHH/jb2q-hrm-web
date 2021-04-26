@@ -320,3 +320,7 @@ body {
 .bottom-inOutSpread:not(:hover):after {
   transition-delay: 0s;
 }
+
+.requiredSymbol{
+  color:red;
+}

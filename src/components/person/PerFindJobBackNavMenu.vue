@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:41:00
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-22 14:59:42
+ * @LastEditTime: 2021-04-26 15:40:10
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\person\PerFindJobBackNavMenu.vue
 -->
@@ -64,11 +64,15 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        //监听浏览器窗口大小改变
-        //浏览器变化执行动作
-        this.changeMenuStyle();
-      });
+      window.addEventListener(
+        'resize',
+        this._.debounce(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
     });
   },
   methods: {

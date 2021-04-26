@@ -60,7 +60,7 @@
           >编辑</el-button
         >
       </div>
-      <div class="column">
+      <!-- <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item" v-if="industryLikeText"
             ><i class="icon iconfont">&#xe641;</i> {{ industryLikeText }}</span
@@ -80,7 +80,7 @@
             ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
           >
         </p>
-      </div>
+      </div> -->
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
         <el-button
@@ -121,17 +121,17 @@
           </div>
 
           <el-row>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
+              <p class="fourteen-opacity line40">
+                {{ workCarditem.positionName }}
+              </p>
+            </el-col> -->
+            <el-col :span="12">
               <p class="fourteen-opacity line40">
                 {{ workCarditem.positionName }}
               </p>
             </el-col>
-            <el-col :span="8">
-              <p class="fourteen-opacity line40">
-                {{ workCarditem.positionName }}
-              </p>
-            </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <p class="four-opacity line40">
                 {{
                   workCarditem.entryDate
@@ -999,7 +999,7 @@ export default {
               message: '薪酬下限不能为空',
               trigger: 'blur'
             },
-            { type: 'number', message: '请输入数值' },
+            { type: 'number', message: '请输入数字' },
             {
               pattern: /^\d{4,5}$/,
               message: '月薪介于1000和99999',
@@ -1012,7 +1012,7 @@ export default {
               message: '薪酬上限不能为空',
               trigger: 'blur'
             },
-            { type: 'number', message: '请输入数值' },
+            { type: 'number', message: '请输入数字' },
             {
               pattern: /^\d{4,5}$/,
               message: '月薪介于1000和99999',
@@ -1251,7 +1251,25 @@ export default {
         : [];
     }
   },
+  updated() {
+    // 更新滚动条样式
+    if (
+      !this.dialog1 &&
+      !this.dialog2 &&
+      !this.dialog3 &&
+      !this.dialog4 &&
+      !this.dialog5 &&
+      !this.dialog6
+    ) {
+      this.resizeScroll();
+    }
+  },
   methods: {
+    resizeScroll: _.throttle(function() {
+      $('#indexApp')
+        .getNiceScroll()
+        .resize();
+    }, 2000),
     print() {
       // 打印
       this.$print(this.$refs.print);
@@ -1639,7 +1657,6 @@ export default {
     },
     handleClose(done) {
       done();
-      console.log(done);
       this.editStatus = false;
       this.editItemIdex = 0;
       $('#dialog2Btn')
@@ -1665,6 +1682,8 @@ export default {
           type: 'success',
           message: '个人描述保存成功'
         });
+        this.loadPsnlResume();
+        this.dialog6 = false;
       } else {
         this.$message({
           type: 'success',
@@ -1726,7 +1745,7 @@ export default {
         return;
       }
       // if (isNaN(Number(this.jobIntentionForm.salaryMin))) {
-      //   this.$alert('请输入数值');
+      //   this.$alert('请输入数字');
       //   this.jobIntentionForm.salaryMin = '';
       // } else
       if (
@@ -1748,7 +1767,7 @@ export default {
         return;
       }
       // if (isNaN(Number(this.jobIntentionForm.salaryMax))) {
-      //   this.$alert('请输入数值');
+      //   this.$alert('请输入数字');
       //   this.jobIntentionForm.salaryMax = '';
       // } else
       if (
@@ -1767,6 +1786,7 @@ export default {
     }
   },
   mounted() {
+    console.log('1111111111111111111111');
     //初始化加载个人简历基本信息
     this.loadPsnlResume();
   }

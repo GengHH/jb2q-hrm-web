@@ -7,9 +7,9 @@
       </el-col>
       <el-col :span="rightSpan"></el-col>
     </el-row>
-    <el-row class="person-layout" :gutter="20">
+    <el-row class="person-layout" :gutter="60">
       <el-col class="col-place-holder" :span="leftSpan"> </el-col>
-      <el-col :span="rightSpan">
+      <el-col id="personContentFixed" :span="rightSpan">
         <!-- <transition name="fade"> -->
         <router-view name="default" />
         <!-- </transition> -->
@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { niceScroll } from '@/utils';
 export default {
   name: 'personLayout',
   data() {
@@ -37,14 +36,20 @@ export default {
     this.changeMenuStyle();
   },
   mounted() {
-    niceScroll('#indexApp');
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        //监听浏览器窗口大小改变
-        //浏览器变化执行动作
-        this.changeMenuStyle();
-      });
+      window.addEventListener(
+        'resize',
+        this._.debounce(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
     });
+  },
+  updated() {
+    console.log('layout----------------update');
   },
   methods: {
     changeMenuStyle() {
@@ -98,13 +103,16 @@ export default {
       height: 1px;
     }
     #personNavMenuFixed {
-      width: 14.5% !important;
+      //width: 14.5% !important;
       position: fixed;
       z-index: 999;
       height: 100%;
       .el-menu {
         height: 100%;
       }
+    }
+    #personContentFixed {
+      float: right;
     }
   }
   .more-btn {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 17:31:21
+ * @LastEditTime: 2021-04-26 09:47:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -20,7 +20,7 @@
       :model="jobForm"
       :label-position="labelPosition"
       :rules="rules"
-      ref="positionForm"
+      ref="jobForm"
       label-width="0px"
       class="inside-infor clearfix"
     >
@@ -66,20 +66,20 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="radio-group" required>
+        <el-form-item class="radio-group" prop="workNature" required>
           <el-radio-group v-model="jobForm.workNature" size="medium">
-            <el-radio-button label="全职"></el-radio-button>
-            <el-radio-button label="兼职"></el-radio-button>
-            <el-radio-button label="就业见习"></el-radio-button>
+            <el-radio-button label="01">全职</el-radio-button>
+            <el-radio-button label="02">兼职</el-radio-button>
+            <el-radio-button label="03">就业见习</el-radio-button>
           </el-radio-group> </el-form-item
-        ><span class="radio-group-label">（工作性质）</span>
+        ><span class="radio-group-label">（<span class="requiredSymbol">*</span>工作性质）</span>
       </el-col>
       <el-col :span="12">
         <el-col :span="12" class="row-input-one">
           <el-form-item class="input-one" prop="ageMin" required>
             <pl-input
               required
-              v-model="jobForm.ageMin"
+              v-model.number="jobForm.ageMin"
               label="年龄下限"
             ></pl-input>
           </el-form-item>
@@ -88,7 +88,7 @@
           <el-form-item class="input-two" prop="ageMax" required>
             <pl-input
               required
-              v-model="jobForm.ageMax"
+              v-model.number="jobForm.ageMax"
               label="年龄上限"
             ></pl-input>
           </el-form-item>
@@ -97,6 +97,7 @@
       <el-col :span="12" class="clearfix">
         <el-form-item class="input-one" prop="workArea" required>
           <pl-select
+            required
             v-model="jobForm.workArea"
             label="工作区域"
             :optionData="dicGzqyData"
@@ -138,10 +139,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="salaryPayType">
+        <el-form-item>
           <pl-select
             v-model="jobForm.salaryPayType"
-            label="工作支付方式"
+            label="工资支付方式"
             :optionData="dicZffsData"
             class="w-select"
           >
@@ -152,14 +153,14 @@
       <el-col :span="24">
         <el-form-item class="radio-group" prop="workYearNeed" required>
           <el-radio-group v-model="jobForm.workYearNeed" size="medium">
-            <el-radio-button label="无需求"></el-radio-button>
-            <el-radio-button label="1年以下"></el-radio-button>
-            <el-radio-button label="1~2年"></el-radio-button>
-            <el-radio-button label="3~5年"></el-radio-button>
-            <el-radio-button label="6~9年"></el-radio-button>
-            <el-radio-button label="10年以上"></el-radio-button>
+            <el-radio-button label="01">无需求</el-radio-button>
+            <el-radio-button label="02">1年以下</el-radio-button>
+            <el-radio-button label="03">1~2年</el-radio-button>
+            <el-radio-button label="04">3~5年</el-radio-button>
+            <el-radio-button label="05">6~9年</el-radio-button>
+            <el-radio-button label="06">10年以上</el-radio-button>
           </el-radio-group>
-          <span class="radio-group-label">（工作年限要求）</span>
+          <span class="radio-group-label">（<span class="requiredSymbol">*</span>工作年限要求）</span>
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -228,12 +229,12 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="radio-group" prop="recruitType">
+        <el-form-item class="radio-group" prop="recruitType" :rules="isPublic ? rules.recruitType : []">
           <el-radio-group v-model="jobForm.recruitType" size="medium">
-            <el-radio-button label="自主招聘"></el-radio-button>
-            <el-radio-button label="代理招聘"></el-radio-button>
+            <el-radio-button label="1">自主招聘</el-radio-button>
+            <el-radio-button label="2">代理招聘</el-radio-button>
           </el-radio-group>
-          <span class="radio-group-label">（招聘类型）</span>
+          <span class="radio-group-label">（<span v-if="isPublic" class="requiredSymbol">*</span>招聘类型）</span>
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -272,23 +273,24 @@
  * 发布职位
  */
 import { savePosition } from '@/api/corporationApi';
+import { salaryPattern, agePattern } from '@/utils/regexp';
 export default {
   name: 'JobAdd',
   data() {
     return {
       visible: false,
       labelPosition: 'right',
+      isPublic:false,
       rules: {
         corpId: '',
         positionName: [
           {
             required: true,
             message: '请输入职位名称',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         //entrustTyshxym: '',
-        //recruitType: '',
         //tranBaseSymbol: '',
         //agencyRecruit: '',
         entrustCorpName: '',
@@ -296,76 +298,90 @@ export default {
           {
             required: true,
             message: '请选择职位分类',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
-        //workNature: '',
+        workNature: [
+          {
+            required: true,
+            message: '请选择工作性质',
+            trigger: ['blur', 'change']
+          }
+        ],
         workArea: [
           {
             required: true,
             message: '请选择工作区域',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         workAddress: [
           {
             required: true,
             message: '请输入工作详细地址',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         workStreet: [
           {
             required: true,
             message: '请选择工作街镇',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         workYearNeed: [
           {
             required: true,
             message: '请选择工作年限要求',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
         eduRequir: [
           {
             required: true,
             message: '请选择学历要求',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ],
-        salaryPayType: [
-          {
-            required: true,
-            message: '请选择工资支付方式',
-            trigger: 'blur'
-          }
-        ],
+        // salaryPayType: [
+        //   {
+        //     required: true,
+        //     message: '请选择工资支付方式',
+        //     trigger: 'blur'
+        //   }
+        // ],
         special: '',
         describe: [
-          { required: true, message: '请输职位描述', trigger: 'blur' },
+          { required: true, message: '请输职位描述', trigger: ['blur', 'change'] },
           { min: 1000, message: '不得超过1000字符', trigger: 'blur' }
         ],
         ageMin: [
-          { required: true, message: '请输入年龄下限', trigger: 'blur' },
-          { type: 'number', message: '请输入数值', trigger: 'blur' },
-          { min: 16, message: '不得低于16周岁', trigger: 'blur' }
+          { required: true, message: '请输入年龄下限', trigger: ['blur', 'change']},
+          { type: 'number', message: '请输入数字', trigger: 'blur' },
+          {
+            pattern: agePattern,
+            message: '年龄介于16-150周岁',
+            trigger: 'blur'
+          }
         ],
         ageMax: [
-          { required: true, message: '请输入年龄下限', trigger: 'blur' },
-          { type: 'number', message: '请输入数值', trigger: 'blur' },
-          { min: 16, message: '不得低于16周岁', trigger: 'blur' }
+          { required: true, message: '请输入年龄下限', trigger: ['blur', 'change'] },
+          { type: 'number', message: '请输入数字', trigger: 'blur' },
+          {
+            pattern: agePattern,
+            message: '年龄介于16-150周岁',
+            trigger: 'blur'
+          }
         ],
         salaryMin: [
           {
             required: true,
             message: '薪酬下限不能为空',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           },
-          { type: 'number', message: '请输入数值' },
+          { type: 'number', message: '请输入数字' },
           {
-            pattern: /^\d{4,5}$/,
+            pattern: salaryPattern,
             message: '月薪介于1000和99999',
             trigger: 'blur'
           }
@@ -374,25 +390,29 @@ export default {
           {
             required: true,
             message: '薪酬上限不能为空',
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           },
-          { type: 'number', message: '请输入数值' },
+          { type: 'number', message: '请输入数字' },
           {
-            pattern: /^\d{4,5}$/,
+            pattern: salaryPattern,
             message: '月薪介于1000和99999',
             trigger: 'blur'
           }
         ],
-
         recruitNum: [
-          { required: true, message: '请输入招聘人数', trigger: 'blur' },
-          { type: 'number', message: '请输入数值', trigger: 'blur' },
+          { required: true, message: '请输入招聘人数', trigger: ['blur', 'change'] },
+          { type: 'number', message: '请输入数字', trigger: 'blur' },
           {
             pattern: /^\d{1,3}$/,
             message: '最高不超过999人',
             trigger: 'blur'
           }
-        ]
+        ],
+        recruitType: [{
+            required: true,
+            message: '请选择招聘类型',
+            trigger: ['blur', 'change']
+          }]
       },
       jobForm: {
         positionName: '',
@@ -492,55 +512,57 @@ export default {
       // this.$set(this, 'jobForm', xjobForm);
     },
     minSalaryChange() {
-      if (!this.positionForm.salaryMin) {
+      if (!this.jobForm.salaryMin) {
         return;
       }
-      // if (isNaN(Number(this.positionForm.salaryMin))) {
-      //   this.$alert('请输入数值');
-      //   this.positionForm.salaryMin = '';
+      // if (isNaN(Number(this.jobForm.salaryMin))) {
+      //   this.$alert('请输入数字');
+      //   this.jobForm.salaryMin = '';
       // } else
       if (
-        this.positionForm.salaryMax &&
-        this.positionForm.salaryMin > this.positionForm.salaryMax
+        this.jobForm.salaryMax &&
+        this.jobForm.salaryMin > this.jobForm.salaryMax
       ) {
         this.$alert('薪酬下限不得低于薪酬上限');
-        this.positionForm.salaryMin = '';
+        this.jobForm.salaryMin = '';
       } else if (
-        this.positionForm.salaryMax &&
-        this.positionForm.salaryMin * 3 < this.positionForm.salaryMax
+        this.jobForm.salaryMax &&
+        this.jobForm.salaryMin * 3 < this.jobForm.salaryMax
       ) {
         this.$alert('薪酬上限不得超过薪酬下限的三倍');
-        this.positionForm.salaryMax = '';
+        this.jobForm.salaryMax = '';
       }
     },
     maxSalaryChange() {
-      if (!this.positionForm.salaryMax) {
+      if (!this.jobForm.salaryMax) {
         return;
       }
-      // if (isNaN(Number(this.positionForm.salaryMax))) {
-      //   this.$alert('请输入数值');
-      //   this.positionForm.salaryMax = '';
+      // if (isNaN(Number(this.jobForm.salaryMax))) {
+      //   this.$alert('请输入数字');
+      //   this.jobForm.salaryMax = '';
       // } else
       if (
-        this.positionForm.salaryMin &&
-        this.positionForm.salaryMin > this.positionForm.salaryMax
+        this.jobForm.salaryMin &&
+        this.jobForm.salaryMin > this.jobForm.salaryMax
       ) {
         this.$alert('薪酬上限不得高于薪酬下限');
-        this.positionForm.salaryMin = '';
+        this.jobForm.salaryMin = '';
       } else if (
-        this.positionForm.salaryMin &&
-        this.positionForm.salaryMin * 3 < this.positionForm.salaryMax
+        this.jobForm.salaryMin &&
+        this.jobForm.salaryMin * 3 < this.jobForm.salaryMax
       ) {
         this.$alert('薪酬上限不得超过薪酬下限的三倍');
-        this.positionForm.salaryMax = '';
+        this.jobForm.salaryMax = '';
       }
     },
     dialogClear() {
       //清空弹出框
-      this.$refs.positionForm.resetFields();
+      this.isPublic = false;
+      this.$refs.jobForm.resetFields();
     },
     savePosition(done) {
-      this.$refs.positionForm.validate(async valid => {
+      this.isPublic = false;
+      this.$refs.jobForm.validate(async valid => {
         if (valid) {
           this.jobForm.opWay = 'save';
           let saveResult = await savePosition(this.jobForm).catch(() => {
@@ -556,7 +578,8 @@ export default {
       done();
     },
     publicPosition(done) {
-      this.$refs.positionForm.validate(async valid => {
+      this.isPublic = true;
+      this.$refs.jobForm.validate(async valid => {
         if (valid) {
           this.jobForm.opWay = 'release';
           let publicResult = await savePosition(this.jobForm).catch(() => {
