@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-11-25 10:46:16
- * @LastEditTime: 2020-12-30 18:09:52
- * @LastEditors: your name
+ * @LastEditTime: 2021-04-26 15:02:34
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\.eslintrc.js
  */
@@ -10,8 +10,12 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    jquery: true
+    jquery: true,
+    _: true
   },
+  // globals: {
+  //   _: true
+  // },
   extends: ['plugin:vue/essential', 'eslint:recommended'],
   plugins: ['promise'],
   parserOptions: {

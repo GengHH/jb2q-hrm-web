@@ -113,7 +113,8 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       //jquery: 'jquery',
-      'window.jQuery': 'jquery'
+      'window.jQuery': 'jquery',
+      _: 'lodash'
     })
   ]
 };
