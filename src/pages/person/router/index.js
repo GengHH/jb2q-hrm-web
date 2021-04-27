@@ -245,6 +245,7 @@ let router = new Router({
 
 //全局路由钩子函数（根据用户的权限判断路由的跳转）
 router.beforeEach((to, from, next) => {
+  console.log('this is person page');
   if (to.path === '/logout') {
     next();
   } else if (!store.getters['person/token']) {
