@@ -238,7 +238,8 @@ export default {
           pageIndex: 0,
           pageSize: 10,
           valid: 1,
-          districtCode: this.$store.state.admin.userInfo.areaInfo.areaCode
+          districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo
+            .areaCode
         };
         synthesize_query(
           data,

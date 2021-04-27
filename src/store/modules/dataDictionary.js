@@ -3,7 +3,7 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-25 10:43:12
+ * @LastEditTime: 2021-04-25 15:04:27
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */

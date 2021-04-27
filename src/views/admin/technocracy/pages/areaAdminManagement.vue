@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-04-13 10:31:30
+ * @LastEditTime: 2021-04-26 15:54:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -426,7 +426,7 @@ export default {
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
       this.queryData = data;
       //获取当前用户所在区
-      data.districtCode = this.$store.state.admin.userInfo.areaInfo.areaCode;
+      data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
       synthesize_query(
         data,
         res => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-25 14:46:23
+ * @LastEditTime: 2021-04-26 10:09:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -182,6 +182,7 @@
         <el-radio-group
           :style="v.style"
           :value="v.value"
+          :disabled="v.disabled"
           v-model="value[v.key]"
         >
           <el-radio
@@ -265,7 +266,7 @@
 
 <script>
 export default {
-  name: 't_Form',
+  name: 't_form',
   props: ['formConfig'],
   data() {
     return {

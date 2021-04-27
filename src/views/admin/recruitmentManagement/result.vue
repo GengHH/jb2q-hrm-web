@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-25 14:53:28
+ * @LastEditTime: 2021-04-26 10:08:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
@@ -10,6 +10,19 @@
   <div id="indexBody">
     <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable :columns="columns" :list="list">
+      <el-table-column
+        slot="forCollegeGraduates"
+        label="是否面向高校毕业生"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.yesno" :key="k">
+            <el-tag v-if="v.value == scope.row.forCollegeGraduates">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column slot="distictCode" label="管理区" align="center">
         <template slot-scope="scope">
           <div v-for="(v, k) in dicOptions.qx" :key="k">
@@ -46,7 +59,9 @@
     <resultdetails
       v-if="visible"
       :visible="visible"
-      :form="form"
+      :lookList="form"
+      :disabled="disabled"
+      :type="type"
       @onclose="onclose"
     ></resultdetails>
   </div>
@@ -54,15 +69,7 @@
 
 <script>
 import tform from '../common/t_form'; //高级查询
-import {
-  result_query,
-  result_verification,
-  result_enrollment,
-  result_feedback,
-  result_wanted,
-  result_update,
-  result_add
-} from './api/index';
+import { result_query, result_verification } from './api/index';
 import { trim } from '@/utils/index';
 import ttable from '../common/t_table';
 import resultdetails from './pages/resultDetails';
@@ -75,11 +82,15 @@ export default {
   },
   data() {
     return {
+      disabled: false,
+      type: '0',
       form: {},
       visible: false,
       dicOptions: {
         //区县
-        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        //是否
+        yesno: trim(this.$store.getters['dictionary/yesno'])
       },
       params: {
         pageIndex: 1,
@@ -90,7 +101,11 @@ export default {
       columns: [
         { title: '序号', type: 'index' },
         { title: '管理区', prop: 'distictCode', slot: 'distictCode' },
-        { title: '是否面向高校毕业生', prop: 'forCollegeGraduates' },
+        {
+          title: '是否面向高校毕业生',
+          prop: 'forCollegeGraduates',
+          slot: 'forCollegeGraduates'
+        },
         { title: '招聘单位数', prop: 'corpCount' },
         { title: '招聘职位数', prop: 'positionCount' },
         { title: '招聘人数', prop: 'peopleCount' },
@@ -120,7 +135,7 @@ export default {
   methods: {
     onclose(type) {
       if (type == '1') {
-        this.advancedSearch(this.dataList);
+        this.onsubmit(this.dataList);
       }
       this.visible = false;
     },
@@ -151,6 +166,34 @@ export default {
     },
     look(scope, type) {
       this.form = { ...scope.row };
+      this.type = type;
+      //1 添加 2 查看 3 修改)
+      if (type != '2') {
+        this.disabled = false;
+      } else {
+        this.disabled = true;
+      }
+      if (type == '1') {
+        result_verification(
+          this.form,
+          res => {
+            if (res.result.data.result) {
+              this.visible = true;
+            } else {
+              this.$message({
+                message: res.result.data.msg,
+                type: 'warning',
+                duration: 1500
+              });
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        return;
+      }
       this.visible = true;
     }
   },

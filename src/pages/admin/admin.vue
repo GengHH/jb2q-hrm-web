@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-25 10:17:40
+ * @LastEditTime: 2021-04-27 09:58:00
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -27,8 +27,8 @@
                 <i class="nva-icon" :class="v.iconName"></i>
               </div>
               <div class="list">
-                欢迎您！{{ userName }}（{{
-                  $store.state.admin.userInfo.organName
+                欢迎您！{{ $store.state.admin.userInfo.logonUser.userName }}（{{
+                  $store.state.admin.userInfo.logonUser.organName
                 }}）
               </div>
             </el-col>
@@ -36,7 +36,15 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside :style="{ width: width + 'px' }">
+        <el-aside :style="{ width: (isCollapse ? '64' : '300') + 'px' }">
+          <div style="text-align: center;margin-top:5px">
+            <el-button
+              size="mini"
+              :icon="isCollapse ? 'el-icon-caret-right' : 'el-icon-caret-left'"
+              circle
+              @click="isCollapse = !isCollapse"
+            ></el-button>
+          </div>
           <el-menu
             :collapse="isCollapse"
             :default-active="$route.path"
@@ -54,7 +62,7 @@
               >
                 <template slot="title">
                   <i :class="v.iconName"></i>
-                  <span>{{ v.text }}</span>
+                  <span slot="title">{{ v.text }}</span>
                 </template>
                 <el-menu-item
                   v-for="(value, key) in v.childs"
@@ -63,7 +71,7 @@
                   @click="menuClick(value)"
                 >
                   <i :class="value.iconName"></i>
-                  <span>{{ value.text }}</span>
+                  <span slot="title">{{ value.text }}</span>
                 </el-menu-item>
               </el-submenu>
               <el-menu-item
@@ -73,7 +81,7 @@
                 @click="menuClick(v)"
               >
                 <i :class="v.iconName"></i>
-                <span>{{ v.text }}</span>
+                <span slot="title">{{ v.text }}</span>
               </el-menu-item>
             </template>
           </el-menu>
@@ -84,8 +92,6 @@
             <div
               :style="{
                 padding: '10px 5px',
-                overflow: 'scroll',
-                overflowX: 'hidden',
                 height: height + 'px'
               }"
             >
@@ -133,173 +139,7 @@ export default {
       isCollapse: false,
       drawerType: '0',
       drawer: false,
-      userName: '超级管理员',
-      menuList: [
-        {
-          id: '1',
-          path: '/',
-          text: '账号管理',
-          iconName: 'el-icon-setting'
-        },
-        {
-          id: '1-1',
-          path: '/adminRight',
-          text: '账号权限配置',
-          iconName: 'el-icon-setting'
-        },
-        {
-          id: '2',
-          path: '/serviceManagement',
-          text: '重点人群就业服务管理',
-          iconName: 'el-icon-setting'
-        },
-        {
-          id: '3',
-          path: 'technocracy',
-          text: '专家管理',
-          iconName: 'el-icon-setting',
-          childs: [
-            {
-              id: '3-1',
-              path: '/technocracy/management',
-              text: '专家库管理',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '3-6',
-              path: '/technocracy/managementAudit',
-              text: '专家库管理审核',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '3-2',
-              path: '/technocracy/record',
-              text: '专家结对记录',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '3-3',
-              path: '/technocracy/activity',
-              text: '专家活动情况',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '3-4',
-              path: '/technocracy/summary',
-              text: '专家研讨会议纪要',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '3-5',
-              path: '/technocracy/statistics',
-              text: '报表统计',
-              iconName: 'el-icon-setting'
-            }
-          ]
-        },
-        {
-          id: '4',
-          path: '/profession',
-          text: '职业指导',
-          iconName: 'el-icon-setting',
-          childs: [
-            // {
-            //   id: '4-1',
-            //   path: '/profession/makeAnAppointment',
-            //   text: '职业指导预约',
-            //   iconName: 'el-icon-setting'
-            // },
-            // {
-            //   id: '4-2',
-            //   path: '/profession/audit',
-            //   text: '职业指导预约审核',
-            //   iconName: 'el-icon-setting'
-            // },
-            {
-              id: '4-3',
-              path: '/profession/management',
-              text: '特色活动管理',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '4-4',
-              path: '/profession/feedback',
-              text: '实施职业指导',
-              iconName: 'el-icon-setting'
-            }
-          ]
-        },
-        {
-          id: '5',
-          path: '/unitManagement',
-          text: '单位管理',
-          iconName: 'el-icon-setting',
-          childs: [
-            {
-              id: '5-1',
-              path: '/unitManagement/message',
-              text: '查询单位信息',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '5-2',
-              path: '/unitManagement/recruitment',
-              text: '代理招聘',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '5-3',
-              path: '/unitManagement/management',
-              text: '单位账号管理',
-              iconName: 'el-icon-setting'
-            }
-          ]
-        },
-        {
-          id: '6',
-          path: '/recruitmentManagement',
-          text: '招聘会管理',
-          iconName: 'el-icon-setting',
-          childs: [
-            {
-              id: '6-1',
-              path: '/recruitmentManagement/feedback',
-              text: '招聘会管理报告反馈',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '6-2',
-              path: '/recruitmentManagement/management',
-              text: '招聘会排片表管理',
-              iconName: 'el-icon-setting'
-            },
-            {
-              id: '6-3',
-              path: '/recruitmentManagement/result',
-              text: '招聘会反馈结果',
-              iconName: 'el-icon-setting'
-            }
-          ]
-        },
-        {
-          id: '7',
-          path: '/JobEvaluationReview/JobEvaluationReview',
-          text: '职位评价查看',
-          iconName: 'el-icon-setting'
-        },
-        {
-          id: '8',
-          path: '/sensitiveWordManagement/sensitiveWordManagement',
-          text: '敏感词管理',
-          iconName: 'el-icon-setting'
-        },
-        {
-          id: '9',
-          path: '/unitResumeParameterSetting/unitResumeParameterSetting',
-          text: '单位简历参数设置',
-          iconName: 'el-icon-setting'
-        }
-      ],
+      menuList: [],
       navList: [
         {
           id: '1',
@@ -353,9 +193,19 @@ export default {
     menuClick(e) {
       this.$router.push(e.path);
     },
+    treeDataformat(source, id, parentId, children) {
+      let cloneData = JSON.parse(JSON.stringify(source)); // 对源数据深度克隆
+      return cloneData.filter(father => {
+        // 循环所有项，并添加children属性
+        let branchArr = cloneData.filter(
+          child => father[id] == child[parentId]
+        ); // 返回每一项的子级数组
+        branchArr.length > 0 ? (father[children] = branchArr) : ''; //给父级添加一个children属性，并赋值
+        return father[parentId] == 1; // 如果第一层不是parentId=0，请自行修改
+      });
+    },
     handleOpen() {},
-    handleClose() {},
-    testRoute() {}
+    handleClose() {}
   },
   computed: {
     height() {
@@ -364,16 +214,25 @@ export default {
     },
     width() {
       let w = document.documentElement.clientWidth;
-      if (w < 1400) {
-        this.isCollapse = true;
-      } else {
-        this.isCollapse = false;
-      }
-      return w < 1400 ? 64 : 300;
+      return w < 1350 ? 64 : 300;
     }
   },
   mounted() {
-    this.userName = this.$store.state.admin.userInfo.userName;
+    let dataList = this.$store.state.admin.userInfo.menus;
+    dataList.map(e => {
+      e.iconName = e.menuIcon;
+      e.id = e.menuId;
+      e.path = e.menuUrl;
+      e.text = e.menuName;
+      return e;
+    });
+    dataList.push({
+      text: '父级',
+      menuId: '',
+      parentId: 1
+    });
+    let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
+    this.menuList = datas[0].childs;
   },
   created() {
     console.log(this.$store.state);

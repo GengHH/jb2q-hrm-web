@@ -1,15 +1,10 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-04-26 17:50:52
+ * @LastEditTime: 2021-04-26 18:01:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
- */
-//import V from 'V';
-
-/**
- * Create By GengHH On 2020/12/02
  */
 import {
   Message,

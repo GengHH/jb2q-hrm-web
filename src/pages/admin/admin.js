@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-12 10:38:56
+ * @LastEditTime: 2021-04-26 15:50:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -30,6 +30,11 @@ import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
 import PlTable from '@/components/common/table/BaseTable.vue';
 import PlConfig from '@/config/plComponents';
+
+import $ from 'jquery';
+window.$ = $;
+import 'jquery.nicescroll';
+
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -53,7 +58,7 @@ if (config.mock) {
 
 //路由拦截
 router.beforeEach((to, from, next) => {
-  let userInfo = store.state.admin.userInfo;
+  let userInfo = store.state.admin.userInfo.logonUser;
   if (!isEmptyObject(userInfo)) {
     if (userInfo.userName && userInfo.userIdStr && userInfo.roles.length > 0) {
       next();

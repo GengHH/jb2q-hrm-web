@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-13 18:00:31
+ * @LastEditTime: 2021-04-26 15:54:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -298,7 +298,8 @@ export default {
           pageIndex: 0,
           pageSize: 10,
           valid: 1,
-          districtCode: this.$store.state.admin.userInfo.areaInfo.areaCode
+          districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo
+            .areaCode
         };
         synthesize_query(
           data,

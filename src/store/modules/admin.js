@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:42
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-06 12:09:14
+ * @LastEditTime: 2021-04-26 15:48:42
  * @Description: 管理员模块的全局key信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\admin.js
  */
@@ -75,9 +75,10 @@ const mutations = {
 
 const actions = {
   //用户登录
-  setUserInfo({ commit }, userInfo) {
+  setUserInfo({ commit }, userList) {
     let str = '登陆失败：未获取到用户信息';
     return new Promise((resolve, reject) => {
+      let userInfo = userList.logonUser;
       try {
         if (!isEmptyObject(userInfo)) {
           if (
@@ -85,7 +86,7 @@ const actions = {
             userInfo.userIdStr &&
             userInfo.roles.length > 0
           ) {
-            commit('SET_USERINFO', userInfo);
+            commit('SET_USERINFO', userList);
             resolve();
           } else {
             reject(str);

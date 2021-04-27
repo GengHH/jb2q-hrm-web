@@ -3,7 +3,11 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: Please set LastEditors
+<<<<<<< Updated upstream
  * @LastEditTime: 2021-04-26 17:50:42
+=======
+ * @LastEditTime: 2021-04-25 17:34:43
+>>>>>>> Stashed changes
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */

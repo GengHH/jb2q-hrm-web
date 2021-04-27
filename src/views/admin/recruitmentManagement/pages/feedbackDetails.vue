@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-04-14 10:26:45
+ * @LastEditTime: 2021-04-26 10:21:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -199,8 +199,8 @@ export default {
         { title: '职位名称', prop: 'positionName' },
         { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '职位描述', prop: 'workYearNeed' },
-        { title: '操作', slot: 'aaa010' }
+        { title: '职位描述', prop: 'workYearNeed' }
+        // { title: '操作', slot: 'aaa010' }
       ],
       list: []
     };

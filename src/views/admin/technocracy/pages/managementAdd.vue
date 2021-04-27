@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-04-09 15:47:53
+ * @LastEditTime: 2021-04-26 15:17:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -125,7 +125,11 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+              <el-input
+                v-model="form.zjhm"
+                maxlength="18"
+                @input="userIdEdit"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,7 +198,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="联系住址（详细住址）" prop="contactAddress">
-              <el-input v-model="form.contactAddress"></el-input>
+              <el-input maxlength="40" v-model="form.contactAddress"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -205,6 +209,7 @@
                 :autosize="{ minRows: 5, maxRows: 7 }"
                 type="textarea"
                 v-model="form.laborInfo"
+                maxlength="1000"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -215,6 +220,7 @@
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 5, maxRows: 7 }"
+                maxlength="1000"
                 v-model="form.majorResult"
               ></el-input>
             </el-form-item>
@@ -332,6 +338,7 @@
 <script>
 import { joinTeam_add } from '../api/index';
 import { trim } from '@/utils/index';
+import { cP, cP15 } from '@/utils/regexp';
 export default {
   name: 'managementAdd',
   props: ['visible', 'form', 'disabled'],
@@ -377,9 +384,7 @@ export default {
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
         timeday: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
-        bankName: [
-          { required: true, message: '请填写必选项', trigger: 'blur' }
-        ],
+        bankId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         bankaccount: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
@@ -388,6 +393,34 @@ export default {
   },
   computed: {},
   methods: {
+    userIdEdit(e) {
+      console.log(this.$store);
+      let arr = this.getBirthday(e);
+      if (arr.length == 1) {
+        this.form.sexId = arr[0];
+      } else if (arr.length == 2) {
+        this.form.sexId = arr[0];
+        this.form.birthDate = arr[1];
+      }
+    },
+    getBirthday(e) {
+      let arr = [];
+      if (e.length == 15) {
+        if (cP15.test(e) === true) {
+          let s = e.substring(14, 15);
+          arr = [s % 2 == 0 ? '2' : '1'];
+        }
+        return arr;
+      } else if (e.length == 18) {
+        if (cP.test(e) === true) {
+          let b = e.substring(6, 14);
+          let s = e.substring(16, 17);
+          arr = [s % 2 == 0 ? '2' : '1', b];
+        }
+        return arr;
+      }
+      return arr;
+    },
     open() {},
     timedayClick(e) {
       if (e == 'workday') {
@@ -430,10 +463,20 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          if (this.form.timeday == 'otherTime') {
+            if (!this.form.otherTime) {
+              this.$message({
+                message: '请填写其他时间',
+                type: 'warning',
+                duration: 1000
+              });
+              return;
+            }
+          }
           joinTeam_add(
             trim(this.form),
             res => {
-              if (res.status == 200) {
+              if (res.result.data.result) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
@@ -441,6 +484,12 @@ export default {
                   onClose: () => {
                     this.onclose();
                   }
+                });
+              } else {
+                this.$message({
+                  message: res.result.data.msg,
+                  type: 'warning',
+                  duration: 1500
                 });
               }
               console.log(res);
