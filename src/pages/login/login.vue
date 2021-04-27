@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 14:11:32
+ * @LastEditTime: 2021-04-27 16:46:04
  * @Description: file content
 -->
 <template>
@@ -274,6 +274,7 @@ export default {
         '/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     turnYwtb2() {
+      let host = location?.host;
       //单位跳转到一网通办登录
       window.location.href =
         'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://' +
@@ -337,7 +338,7 @@ export default {
               ) {
                 that.$message({
                   type: 'error',
-                  message: '证件号码不存在！'
+                  message: '证件号码不存在或密码错误！'
                 });
               } else if (
                 res.result.reason === '02' &&
@@ -345,7 +346,7 @@ export default {
               ) {
                 that.$message({
                   type: 'error',
-                  message: '密码错误，登录失败！'
+                  message: '证件号码不存在或密码错误！'
                 });
               } else if (
                 res.result.reason === '01' &&
@@ -353,7 +354,7 @@ export default {
               ) {
                 that.$message({
                   type: 'error',
-                  message: '手机号码不存在！'
+                  message: '手机号码不存在或验证码错误！'
                 });
               } else if (
                 res.result.reason === '02' &&
@@ -361,7 +362,7 @@ export default {
               ) {
                 that.$message({
                   type: 'error',
-                  message: '验证码错误，登录失败！'
+                  message: '手机号码不存在或验证码错误！'
                 });
               } else {
                 that.$message({
