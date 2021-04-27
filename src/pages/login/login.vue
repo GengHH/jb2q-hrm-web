@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 17:55:14
+ * @LastEditTime: 2021-04-27 14:11:32
  * @Description: file content
 -->
 <template>
@@ -267,13 +267,18 @@ export default {
     },
     turnYwtb() {
       //个人跳转到一网通办登录
+      let host = location?.host;
       window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://' +
+        host +
+        '/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     turnYwtb2() {
       //单位跳转到一网通办登录
       window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://' +
+        host +
+        '/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     async getMessage(done) {
       //获取短信验证码
