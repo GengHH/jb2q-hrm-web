@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-20 09:41:21
+ * @LastEditTime: 2021-04-27 20:11:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -181,7 +181,13 @@ Mock.mock(RegExp(basePath + '/corp/info/isCorpInit' + '.*'), 'get', function(
     status: 200,
     message: '',
     result: {
-      data: true
+      data: true,
+      humanResourceReg: false,
+      tranBaseSymbol: false,
+      entrustValid: false,
+      keypointCorp: false,
+      specialCorp: false,
+      entrustStatus: false
     }
   };
 });
@@ -196,7 +202,9 @@ Mock.mock(basePath + '/corp/info/saveCorpInfo', 'post', function(options) {
   return successData;
 });
 //变更转移区申请
-Mock.mock(basePath + '/corp/info/updateDistrictCode', 'put', function(options) {
+Mock.mock(basePath + '/corp/info/updateDistrictCode', 'post', function(
+  options
+) {
   return successData;
 });
 //保存或者发布职位信息

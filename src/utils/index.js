@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 13:42:55
+ * @LastEditTime: 2021-04-27 20:38:08
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -302,4 +302,37 @@ export function niceScroll(dom) {
       });
     }
   }
+}
+
+/**
+ *
+ * 判断某个日期是否超过当前日期某些天数
+ * @export
+ * @param {*} date 指定日期（Date,String,null）
+ * @param {*} day
+ */
+export function overDateSomeDays(date, day) {
+  let nowDate = new Date();
+  nowDate.setDate(nowDate.getDate() + (day || 0));
+  let nowDateNum = nowDate
+    ? '' + nowDate.getFullYear() + (nowDate.getMonth() + 1) + nowDate.getDate()
+    : 0;
+
+  let _date = date
+    ? typeof date === 'string'
+      ? new Date(
+          date.length === 8
+            ? date.substring(0, 4) +
+              '-' +
+              date.substring(4, 6) +
+              '-' +
+              date.substring(6, 8)
+            : date
+        )
+      : date
+    : new Date();
+  let tagertDateNum = _date
+    ? '' + _date.getFullYear() + (_date.getMonth() + 1) + _date.getDate()
+    : 0;
+  return tagertDateNum > nowDateNum;
 }

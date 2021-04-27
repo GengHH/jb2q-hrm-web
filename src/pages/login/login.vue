@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 16:46:04
+ * @LastEditTime: 2021-04-27 20:39:05
  * @Description: file content
 -->
 <template>
@@ -268,18 +268,20 @@ export default {
     turnYwtb() {
       //个人跳转到一网通办登录
       let host = location?.host;
-      window.location.href =
+      let href =
         'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://' +
         host +
         '/ggzp-zzjb-shrs/loginController/ywtb-index';
+      window.location.href = href;
     },
     turnYwtb2() {
       let host = location?.host;
       //单位跳转到一网通办登录
-      window.location.href =
+      let href =
         'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://' +
         host +
         '/ggzp-zzjb-shrs/loginController/ywtb-index';
+      window.location.href = href;
     },
     async getMessage(done) {
       //获取短信验证码
