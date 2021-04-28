@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-26 15:40:01
+ * @LastEditTime: 2021-04-28 16:05:56
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -182,7 +182,8 @@ export default {
               .then(res => {
                 this.$alert('退出成功');
                 window.setTimeout(function() {
-                  window.location.href = '/ggzp-shrs/index.html';
+                  // window.location.href = '/ggzp-shrs/index.html';
+                  window.open(window.origin + '/ggzp-shrs/index.html', '_self');
                 }, 2000);
                 return;
               })

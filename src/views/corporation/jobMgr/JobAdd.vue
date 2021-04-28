@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 14:05:29
+ * @LastEditTime: 2021-04-28 16:36:33
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -501,6 +501,11 @@ export default {
   },
   created() {
     //this.getData();
+    console.log(this.$route.query);
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      //! TODO根据url上的参数查询职位信息
+      this.$alert('此功能暂未实现，缺少查询编辑职位的Api');
+    }
   },
   watch: {
     'jobForm.workArea': function() {

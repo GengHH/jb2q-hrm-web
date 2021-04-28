@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 19:57:28
+ * @LastEditTime: 2021-04-28 15:49:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -401,7 +401,7 @@ Mock.mock(
     };
   }
 );
-//删除某种能力或经历信息
+//findRecord
 Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
   options
 ) {
