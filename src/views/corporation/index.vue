@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 17:37:29
+ * @LastEditTime: 2021-04-28 10:28:35
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -87,7 +87,7 @@
       </el-col>
       <el-col :span="12" class="form-item-left">
         <el-form-item prop="districtCode">
-          <el-col :span="18" class="form-item-left">
+          <el-col :span="isSc ? 24 : 18" class="form-item-left">
             <pl-select
               required
               v-model="corporationInfo.districtCode"
@@ -96,7 +96,7 @@
             >
             </pl-select>
           </el-col>
-          <el-col :span="6" class="form-item-rigth text-right">
+          <el-col v-if="!isSc" :span="6" class="form-item-rigth text-right">
             <el-button
               class="orange-btn btn-small-style"
               :auto-loading="true"
@@ -139,12 +139,23 @@
       </el-col>
       <el-col :span="24">
         <el-form-item prop="businessRange">
-          <pl-input
+          <!-- <pl-input
             required
             v-model="corporationInfo.businessRange"
             label="经营范围"
             :disabled="true"
-          ></pl-input>
+          ></pl-input> -->
+          <pl-input
+            required
+            type="textarea"
+            autosize
+            label="经营范围"
+            show-word-limit
+            :rows="12"
+            :disabled="true"
+            v-model="corporationInfo.businessRange"
+          >
+          </pl-input>
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -271,6 +282,7 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
+      isSc: this.$store.getters['corporation/first_login'],
       dialogFormVisible: false,
       corporationInfo: {
         cid: '',
@@ -409,6 +421,9 @@ export default {
               message: '保存成功!',
               type: 'success'
             });
+            //改成非首次登录
+            this.isSc = false;
+            this.$store.commit('corporation/SET_FIRST_LOGIN', false);
           } else {
             done();
             // this.$message({
@@ -438,8 +453,8 @@ export default {
         if (valid) {
           let saveResult = await updateDistrictCode({
             cid: that.$store.getters['corporation/cid'],
-            districtCode: that.corporationInfo.districtCode,
-            content: that.areaForm.changeReason
+            inDistrict: that.corporationInfo.districtCode,
+            transferReason: that.areaForm.changeReason
           }).catch(() => {
             done();
             this.$message({

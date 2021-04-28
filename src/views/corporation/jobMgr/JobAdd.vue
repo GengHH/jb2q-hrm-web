@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-26 09:47:58
+ * @LastEditTime: 2021-04-28 14:05:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -33,7 +33,7 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-if="isHumanResourceReg">
         <el-form-item prop="agencyRecruit">
           <pl-select
             required
@@ -45,7 +45,7 @@
           </pl-select>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-if="isHumanResourceReg">
         <el-form-item prop="entrustCorpName">
           <pl-input
             required
@@ -72,7 +72,9 @@
             <el-radio-button label="02">兼职</el-radio-button>
             <el-radio-button label="03">就业见习</el-radio-button>
           </el-radio-group> </el-form-item
-        ><span class="radio-group-label">（<span class="requiredSymbol">*</span>工作性质）</span>
+        ><span class="radio-group-label"
+          >（<span class="requiredSymbol">*</span>工作性质）</span
+        >
       </el-col>
       <el-col :span="12">
         <el-col :span="12" class="row-input-one">
@@ -107,15 +109,23 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="input-two" prop="workStreet" required>
-          <pl-select
+        <el-form-item class="input-two" prop="workStreet">
+          <el-select
             required
+            multiple
             v-model="jobForm.workStreet"
             label="工作街镇"
             :optionData="dicStreet"
             class="w-select"
           >
-          </pl-select>
+            <el-option
+              v-for="item in dicStreet"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -160,7 +170,9 @@
             <el-radio-button label="05">6~9年</el-radio-button>
             <el-radio-button label="06">10年以上</el-radio-button>
           </el-radio-group>
-          <span class="radio-group-label">（<span class="requiredSymbol">*</span>工作年限要求）</span>
+          <span class="radio-group-label"
+            >（<span class="requiredSymbol">*</span>工作年限要求）</span
+          >
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -229,12 +241,19 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="radio-group" prop="recruitType" :rules="isPublic ? rules.recruitType : []">
+        <el-form-item
+          class="radio-group"
+          prop="recruitType"
+          :rules="isPublic ? rules.recruitType : []"
+        >
           <el-radio-group v-model="jobForm.recruitType" size="medium">
             <el-radio-button label="1">自主招聘</el-radio-button>
             <el-radio-button label="2">代理招聘</el-radio-button>
           </el-radio-group>
-          <span class="radio-group-label">（<span v-if="isPublic" class="requiredSymbol">*</span>招聘类型）</span>
+          <span class="radio-group-label"
+            >（<span v-if="isPublic" class="requiredSymbol">*</span
+            >招聘类型）</span
+          >
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -244,6 +263,8 @@
             type="date"
             value-format="yyyyMMdd"
             label="发布截止日期"
+            :required="isPublic"
+            :picker-options="expireTimeOption"
           >
           </pl-date-picker>
         </el-form-item>
@@ -274,13 +295,14 @@
  */
 import { savePosition } from '@/api/corporationApi';
 import { salaryPattern, agePattern } from '@/utils/regexp';
+import { overDateSomeDays } from '@/utils';
 export default {
   name: 'JobAdd',
   data() {
     return {
       visible: false,
       labelPosition: 'right',
-      isPublic:false,
+      isPublic: false,
       rules: {
         corpId: '',
         positionName: [
@@ -326,7 +348,7 @@ export default {
           {
             required: true,
             message: '请选择工作街镇',
-            trigger: ['blur', 'change']
+            trigger: ['blur']
           }
         ],
         workYearNeed: [
@@ -350,13 +372,21 @@ export default {
         //     trigger: 'blur'
         //   }
         // ],
-        special: '',
+        //special: '',
         describe: [
-          { required: true, message: '请输职位描述', trigger: ['blur', 'change'] },
-          { min: 1000, message: '不得超过1000字符', trigger: 'blur' }
+          {
+            required: true,
+            message: '请输职位描述',
+            trigger: ['blur', 'change']
+          },
+          { max: 1000, message: '不得超过1000字符', trigger: 'blur' }
         ],
         ageMin: [
-          { required: true, message: '请输入年龄下限', trigger: ['blur', 'change']},
+          {
+            required: true,
+            message: '请输入年龄下限',
+            trigger: ['blur', 'change']
+          },
           { type: 'number', message: '请输入数字', trigger: 'blur' },
           {
             pattern: agePattern,
@@ -365,7 +395,11 @@ export default {
           }
         ],
         ageMax: [
-          { required: true, message: '请输入年龄下限', trigger: ['blur', 'change'] },
+          {
+            required: true,
+            message: '请输入年龄下限',
+            trigger: ['blur', 'change']
+          },
           { type: 'number', message: '请输入数字', trigger: 'blur' },
           {
             pattern: agePattern,
@@ -400,7 +434,11 @@ export default {
           }
         ],
         recruitNum: [
-          { required: true, message: '请输入招聘人数', trigger: ['blur', 'change'] },
+          {
+            required: true,
+            message: '请输入招聘人数',
+            trigger: ['blur', 'change']
+          },
           { type: 'number', message: '请输入数字', trigger: 'blur' },
           {
             pattern: /^\d{1,3}$/,
@@ -408,11 +446,13 @@ export default {
             trigger: 'blur'
           }
         ],
-        recruitType: [{
+        recruitType: [
+          {
             required: true,
             message: '请选择招聘类型',
             trigger: ['blur', 'change']
-          }]
+          }
+        ]
       },
       jobForm: {
         positionName: '',
@@ -448,14 +488,22 @@ export default {
       dicZyflData: this.$store.getters['dictionary/recruit_position_f_type'],
       dicData: this.$store.getters['dictionary/yesno'],
       dicXlData: this.$store.getters['dictionary/recruit_edu'],
-      dicZffsData: this.$store.getters['dictionary/recruit_salary_pay_type']
+      dicZffsData: this.$store.getters['dictionary/recruit_salary_pay_type'],
+      isHumanResourceReg: this.$store.getters['corporation/human_resource_reg'],
+      dicStreet: [],
+      expireTimeOption: {
+        disabledDate(date) {
+          //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+          return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        }
+      }
     };
   },
   created() {
     //this.getData();
   },
-  computed: {
-    dicStreet: function() {
+  watch: {
+    'jobForm.workArea': function() {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
         let array = this.$store.getters['dictionary/ggjbxx_street'];
@@ -472,13 +520,36 @@ export default {
           }
         }
         if (!exist) {
-          that.jobForm.workStreet = '';
+          that.jobForm.workStreet = [];
         }
-        return newArray;
+        that.dicStreet = newArray;
       }
-      that.jobForm.workStreet = '';
-      return [];
+      that.jobForm.workStreet = [];
     }
+    // dicStreet: function() {
+    //   let that = this;
+    //   if (this.$store.getters['dictionary/ggjbxx_street']) {
+    //     let array = this.$store.getters['dictionary/ggjbxx_street'];
+    //     let newArray = []; //查找符合条件值并存入新数组
+    //     let exist = false;
+    //     for (let i in array) {
+    //       if (array[i].filter === that.jobForm.workArea) {
+    //         newArray[newArray.length] = array[i];
+    //       }
+    //     }
+    //     for (let s in newArray) {
+    //       if (newArray[s].value === that.jobForm.workStreet) {
+    //         exist = true;
+    //       }
+    //     }
+    //     if (!exist) {
+    //       that.jobForm.workStreet = [];
+    //     }
+    //     return newArray;
+    //   }
+    //   that.jobForm.workStreet = [];
+    //   return [];
+    // }
   },
   methods: {
     elForm() {},
@@ -579,19 +650,35 @@ export default {
     },
     publicPosition(done) {
       this.isPublic = true;
-      this.$refs.jobForm.validate(async valid => {
-        if (valid) {
-          this.jobForm.opWay = 'release';
-          let publicResult = await savePosition(this.jobForm).catch(() => {
-            done();
-          });
-          if (publicResult.status === 200) {
-            this.$message({ type: 'success', message: '发布成功' });
-          } else {
-            this.$message({ type: 'error', message: '发布失败' });
+      if (overDateSomeDays(this.jobForm.publicDate, 30)) {
+        this.$message({
+          type: 'error',
+          message: '发布日期不得超过当前日期30天'
+        });
+      } else {
+        this.$refs.jobForm.validate(async valid => {
+          if (valid) {
+            if (!this.jobForm.publicDate) {
+              this.$message({ type: 'error', message: '发布日期不能为空' });
+            } else if (overDateSomeDays(this.jobForm.publicDate, 30)) {
+              this.$message({
+                type: 'error',
+                message: '发布日期不得超过当前日期30天'
+              });
+            } else {
+              this.jobForm.opWay = 'release';
+              let publicResult = await savePosition(this.jobForm).catch(() => {
+                done();
+              });
+              if (publicResult.status === 200) {
+                this.$message({ type: 'success', message: '发布成功' });
+              } else {
+                this.$message({ type: 'error', message: '发布失败' });
+              }
+            }
           }
-        }
-      });
+        });
+      }
       done();
     }
   }
