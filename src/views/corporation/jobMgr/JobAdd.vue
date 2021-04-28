@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 20:27:42
+ * @LastEditTime: 2021-04-28 14:05:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -109,8 +109,8 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="input-two" prop="workStreet" required>
-          <pl-select
+        <el-form-item class="input-two" prop="workStreet">
+          <el-select
             required
             multiple
             v-model="jobForm.workStreet"
@@ -118,7 +118,14 @@
             :optionData="dicStreet"
             class="w-select"
           >
-          </pl-select>
+            <el-option
+              v-for="item in dicStreet"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="24">
@@ -257,6 +264,7 @@
             value-format="yyyyMMdd"
             label="发布截止日期"
             :required="isPublic"
+            :picker-options="expireTimeOption"
           >
           </pl-date-picker>
         </el-form-item>
@@ -340,7 +348,7 @@ export default {
           {
             required: true,
             message: '请选择工作街镇',
-            trigger: ['blur', 'change']
+            trigger: ['blur']
           }
         ],
         workYearNeed: [
@@ -364,14 +372,14 @@ export default {
         //     trigger: 'blur'
         //   }
         // ],
-        special: '',
+        //special: '',
         describe: [
           {
             required: true,
             message: '请输职位描述',
             trigger: ['blur', 'change']
           },
-          { max: 3, message: '不得超过1000字符', trigger: 'blur' }
+          { max: 1000, message: '不得超过1000字符', trigger: 'blur' }
         ],
         ageMin: [
           {
@@ -481,14 +489,21 @@ export default {
       dicData: this.$store.getters['dictionary/yesno'],
       dicXlData: this.$store.getters['dictionary/recruit_edu'],
       dicZffsData: this.$store.getters['dictionary/recruit_salary_pay_type'],
-      isHumanResourceReg: this.$store.getters['corporation/human_resource_reg']
+      isHumanResourceReg: this.$store.getters['corporation/human_resource_reg'],
+      dicStreet: [],
+      expireTimeOption: {
+        disabledDate(date) {
+          //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+          return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        }
+      }
     };
   },
   created() {
     //this.getData();
   },
-  computed: {
-    dicStreet: function() {
+  watch: {
+    'jobForm.workArea': function() {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
         let array = this.$store.getters['dictionary/ggjbxx_street'];
@@ -505,13 +520,36 @@ export default {
           }
         }
         if (!exist) {
-          that.jobForm.workStreet = '';
+          that.jobForm.workStreet = [];
         }
-        return newArray;
+        that.dicStreet = newArray;
       }
-      that.jobForm.workStreet = '';
-      return [];
+      that.jobForm.workStreet = [];
     }
+    // dicStreet: function() {
+    //   let that = this;
+    //   if (this.$store.getters['dictionary/ggjbxx_street']) {
+    //     let array = this.$store.getters['dictionary/ggjbxx_street'];
+    //     let newArray = []; //查找符合条件值并存入新数组
+    //     let exist = false;
+    //     for (let i in array) {
+    //       if (array[i].filter === that.jobForm.workArea) {
+    //         newArray[newArray.length] = array[i];
+    //       }
+    //     }
+    //     for (let s in newArray) {
+    //       if (newArray[s].value === that.jobForm.workStreet) {
+    //         exist = true;
+    //       }
+    //     }
+    //     if (!exist) {
+    //       that.jobForm.workStreet = [];
+    //     }
+    //     return newArray;
+    //   }
+    //   that.jobForm.workStreet = [];
+    //   return [];
+    // }
   },
   methods: {
     elForm() {},

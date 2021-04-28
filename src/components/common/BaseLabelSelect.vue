@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-08 17:52:32
+ * @LastEditTime: 2021-04-28 11:27:38
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelSelect.vue
 -->
@@ -89,8 +89,12 @@ export default {
   methods: {
     init() {
       let that = this;
-      if (this.value) {
-        if (this.$refs['input']) {
+      if (
+        this.value &&
+        (typeof this.value === 'string' ||
+          (typeof this.value === 'array' && this.value.length > 0))
+      ) {
+        if (this.$refs['select']) {
           $(this.$refs['select'])
             .children('.float-label')
             .removeClass('hidden')

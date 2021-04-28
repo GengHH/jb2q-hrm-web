@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 18:15:00
+ * @LastEditTime: 2021-04-28 10:28:35
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -421,6 +421,9 @@ export default {
               message: '保存成功!',
               type: 'success'
             });
+            //改成非首次登录
+            this.isSc = false;
+            this.$store.commit('corporation/SET_FIRST_LOGIN', false);
           } else {
             done();
             // this.$message({

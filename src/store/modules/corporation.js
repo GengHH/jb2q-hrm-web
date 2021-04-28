@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 20:15:28
+ * @LastEditTime: 2021-04-28 11:14:25
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -201,8 +201,8 @@ const actions = {
             router.push('/error');
           });
           //判断是不是首次进入系统
-          if (checkRes.status === 200 && checkRes.result.data) {
-            commit('SET_FIRST_LOGIN', true);
+          if (checkRes.status === 200) {
+            commit('SET_FIRST_LOGIN', !checkRes.result.data);
             //单位标志
             commit(
               'SET_TRAN_BASE_SYMBOL',
