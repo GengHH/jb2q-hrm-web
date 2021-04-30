@@ -157,7 +157,10 @@ service.interceptors.response.use(response => {
         dangerouslyUseHTMLString: true,
         message: _data
       });
+      //return Promise.reject('genghonghuiggggggggggggggggggggg');
     }
+    // 后台系统抛出异常时候
+    return Promise.reject('genghonghuiggggggggggggggggggggg');
   }
   return _data;
 }, err);
