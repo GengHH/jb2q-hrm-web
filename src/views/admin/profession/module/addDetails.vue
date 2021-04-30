@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-30 09:54:57
+ * @LastEditTime: 2021-04-30 16:07:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -39,13 +39,13 @@
         </div>
       </div>
       <el-tabs v-model="activeName">
-        <el-tab-pane label="政策咨询" name="01" disabled>
+        <el-tab-pane v-if="activeName == '01'" label="政策咨询" name="01">
           <tform ref="form" :formConfig="formConfig"></tform>
           <div v-if="this.detailsType != '1'" style="text-align:center">
             <el-button type="primary" @click="onsubmit">提交</el-button>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="专门指导" name="02" disabled>
+        <el-tab-pane v-if="activeName == '02'" label="专门指导" name="02">
           <tform ref="form2" :formConfig="formConfig2"></tform>
           <el-form
             :model="form"
