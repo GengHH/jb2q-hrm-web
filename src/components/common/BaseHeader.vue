@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-28 16:05:56
+ * @LastEditTime: 2021-04-29 18:53:08
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -89,6 +89,7 @@
         </el-col>
       </el-row>
     </div>
+    <!-- <iframe id="iframe" style="width: 300;height: 500;"></iframe> -->
   </div>
 </template>
 
@@ -96,6 +97,7 @@
 import { doPersonLogout } from '@/api/personApi';
 import { doCorporationLogout } from '@/api/corporationApi';
 import { isNoBody, isPerson, isCorporation } from '@/utils';
+let htmlRgx = /http.*?.html/;
 export default {
   name: 'BaseHeader',
   props: {
@@ -149,6 +151,7 @@ export default {
   },
   watch: {
     async $route(to, from) {
+      let that = this;
       //to:即将要跳转到的页面   from:即将离开的页面
       if (to.path === '/logout' && isNoBody(this)) {
         this.$alert('没有登录！无法退出');
@@ -175,24 +178,57 @@ export default {
           }
         } else if (isCorporation(this)) {
           //单位退出
-          let logoutResult = await doCorporationLogout();
-          if (logoutResult && logoutResult.status === 200) {
-            this.$store
-              .dispatch('corporation/do_logout')
-              .then(res => {
-                this.$alert('退出成功');
-                window.setTimeout(function() {
-                  // window.location.href = '/ggzp-shrs/index.html';
-                  window.open(window.origin + '/ggzp-shrs/index.html', '_self');
-                }, 2000);
-                return;
-              })
-              .catch(err => {
-                this.$alert('退出异常');
-              });
-          } else {
-            this.$alert('退出失败');
+          // let logoutResult = await doCorporationLogout();
+          // if (logoutResult && logoutResult.status === 200) {
+          //   this.$store
+          //     .dispatch('corporation/do_logout')
+          //     .then(res => {
+          //       this.$alert('退出成功');
+          //       window.setTimeout(function() {
+          //         // window.location.href = '/ggzp-shrs/index.html';
+          //         window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+          //       }, 2000);
+          //       return;
+          //     })
+          //     .catch(err => {
+          //       this.$alert('退出异常');
+          //     });
+          // } else {
+          //   this.$alert('退出失败');
+          // }
+          try {
+            console.log('-------1111111111111-----------');
+            let r = await doCorporationLogout();
+            console.log(r);
+            if (r) {
+              let _href = r.match(htmlRgx)?.[0];
+              console.log(_href);
+              //window.location.href = _href;
+              window.open(_href);
+              //let iframe = document.getElementById('iframe');
+              //iframe.src = _href;
+            } else {
+              throw new Error('无法退出');
+            }
+          } catch (err) {
+            console.log('-------222222222222-----------');
+            console.log('退出失败');
+            throw new Error(err);
           }
+          console.log('-------33333333333333-----------');
+          this.$store
+            .dispatch('corporation/do_logout')
+            .then(res => {
+              this.$alert('退出成功');
+              window.setTimeout(function() {
+                window.location.href = '/ggzp-shrs/index.html';
+                //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+              }, 2000);
+              return;
+            })
+            .catch(err => {
+              this.$alert('退出异常');
+            });
         }
         //this.$router.push('/')
         //this.$router.push(from.path);

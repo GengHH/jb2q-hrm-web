@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 20:39:05
+ * @LastEditTime: 2021-04-29 17:31:23
  * @Description: file content
 -->
 <template>
@@ -126,13 +126,15 @@
           <img src="@/assets/images/ca.png" alt="" class="corp-img" />
         </div>
         <div class="text-center">
-          <el-button
+          <!-- <el-button
             :disabled="show"
             class="btn corp-btn"
             type="primary"
             @click="onCorpSubmit()"
             >登录</el-button
-          >
+          > -->
+          <br />
+          <br />
           <div id="corpYwtb" style="height:18px;font-size:14px">
             <span class="download-link" @click="turnYwtb2"
               >一网通办入口登录 ></span
@@ -267,19 +269,19 @@ export default {
     },
     turnYwtb() {
       //个人跳转到一网通办登录
-      let host = location?.host;
+      let origin = location?.origin;
       let href =
-        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=https://' +
-        host +
+        'http://117.184.226.149/uc/login/login.jsp?type=1&redirect_uri=' +
+        origin +
         '/ggzp-zzjb-shrs/loginController/ywtb-index';
       window.location.href = href;
     },
     turnYwtb2() {
-      let host = location?.host;
+      let origin = location?.origin;
       //单位跳转到一网通办登录
       let href =
-        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://' +
-        host +
+        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=' +
+        origin +
         '/ggzp-zzjb-shrs/loginController/ywtb-index';
       window.location.href = href;
     },
