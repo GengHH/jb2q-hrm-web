@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:11:24
- * @LastEditTime: 2021-03-09 15:08:49
+ * @LastEditTime: 2021-04-06 16:55:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\person.vue
@@ -10,79 +10,103 @@
   <div id="indexBody">
     <el-form ref="form" labelPosition="right" :model="form" label-width="110px">
       <el-row class="row">
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="证件类型">
-            <el-input
-              size="small"
-              v-model="form.aaa001"
-              disabled
-            ></el-input> </el-form-item
+            <el-select disabled v-model="form.zjlxId" style="width:100%">
+              <el-option
+                size="small"
+                v-for="(v, k) in dicOptions.zjlx"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+              ></el-option>
+            </el-select> </el-form-item
         ></el-col>
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="证件号码">
             <el-input
               size="small"
-              v-model="form.aaa002"
+              v-model="form.zjhm"
               disabled
             ></el-input> </el-form-item
         ></el-col>
       </el-row>
       <el-row class="row">
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="姓名">
             <el-input
               size="small"
-              v-model="form.aaa003"
+              v-model="form.xm"
               disabled
             ></el-input> </el-form-item
         ></el-col>
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="性别">
-            <el-input
-              size="small"
-              v-model="form.aaa004"
-              disabled
-            ></el-input> </el-form-item
-        ></el-col>
+            <el-select disabled v-model="form.sexId" style="width:100%">
+              <el-option
+                size="small"
+                v-for="(v, k) in dicOptions.sex"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row class="row">
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="出生日期">
             <el-input
               size="small"
-              v-model="form.aaa005"
+              v-model="form.birthDate"
+              value-format="yyyyMMdd"
               disabled
             ></el-input> </el-form-item
         ></el-col>
-        <el-col :md="12" :lg="12" :xl="12"
+        <el-col :span="12"
           ><el-form-item label="手机号">
             <el-input
               size="small"
-              v-model="form.aaa006"
+              v-model="form.contactPhone"
               disabled
             ></el-input> </el-form-item
         ></el-col>
       </el-row>
       <el-row class="row">
-        <el-col :md="6" :lg="6" :xl="6"
+        <el-col :span="12"
           ><el-form-item label="居住区域">
-            <el-input size="small" v-model="form.aaa007" disabled></el-input>
+            <el-select disabled v-model="form.livingArea" style="width:100%">
+              <el-option
+                size="small"
+                v-for="(v, k) in dicOptions.qx"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-        <el-col :md="6" :lg="6" :xl="6"
-          ><el-form-item label="居住区域">
-            <el-input
-              size="small"
-              v-model="form.aaa008"
-              disabled
-            ></el-input> </el-form-item
+        <el-col :span="12"
+          ><el-form-item label="居住街镇">
+            <el-select disabled v-model="form.livingStreet" style="width:100%">
+              <el-option
+                size="small"
+                v-for="(v, k) in dicOptions.street"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+              ></el-option>
+            </el-select> </el-form-item
         ></el-col>
-        <el-col :md="12" :lg="12" :xl="12"
+      </el-row>
+      <el-row class="row">
+        <el-col :span="24"
           ><el-form-item label="居住详细地址">
             <el-input
-              title="Top Left 提示文字"
+              :title="form.livingAddress"
               size="small"
-              v-model="form.aaa009"
+              v-model="form.livingAddress"
               disabled
             ></el-input> </el-form-item
         ></el-col>
@@ -92,21 +116,22 @@
 </template>
 
 <script>
+import { trim } from '@/utils/index';
 export default {
   name: 'person',
+  props: ['form'],
   components: {},
   data() {
     return {
-      form: {
-        aaa001: '身份证',
-        aaa002: '412825199301245789',
-        aaa003: '刘先生',
-        aaa004: '男',
-        aaa005: '1990-03-05',
-        aaa006: '18910684478',
-        aaa007: '浦东新区',
-        aaa008: '陆家嘴街道',
-        aaa009: '花木路119号'
+      dicOptions: {
+        //证件类型
+        zjlx: trim(this.$store.getters['dictionary/ggjbxx_zjlx']),
+        //性别
+        sex: trim(this.$store.getters['dictionary/ggjbxx_sex']),
+        //街镇
+        street: trim(this.$store.getters['dictionary/ggjbxx_street']),
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
       }
     };
   },

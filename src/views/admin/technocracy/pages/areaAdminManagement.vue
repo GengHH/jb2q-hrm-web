@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-03-31 14:02:13
+ * @LastEditTime: 2021-04-29 18:38:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -15,6 +15,27 @@
       :options="tableoptions"
       @handleSelectionChange="e => (selectData = e)"
     >
+      <el-table-column
+        width="110"
+        slot="currStatus"
+        label="复核状态"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.statusthisStatus" :key="k">
+            <el-tag v-if="v.value == scope.row.currStatus">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" slot="eduId" label="学历" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.edu" :key="k">
+            <span v-if="v.value == scope.row.eduId">{{ v.label }}</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column slot="districtCode" label="管理区" align="center">
         <template slot-scope="scope">
           <div v-for="(v, k) in dicOptions.qx" :key="k">
@@ -36,24 +57,29 @@
       <el-table-column width="260" slot="aaa006" label="聘期" align="center">
         <template slot-scope="scope">
           {{ scope.row.startDate ? scope.row.startDate.split(' ')[0] : '' }} -
-          {{ scope.row.startDate ? scope.row.startDate.split(' ')[0] : '' }}
+          {{ scope.row.endDate ? scope.row.endDate.split(' ')[0] : '' }}
         </template>
       </el-table-column>
       <el-table-column
-        width="360"
+        width="220"
         slot="aaa009"
         fixed="right"
         label="操作"
         align="center"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="look(scope, 1)" plain
+          <!-- <el-button size="mini" type="primary" @click="look(scope, 1)" plain
             >修改</el-button
-          >
+          > -->
           <el-button size="mini" type="info" @click="look(scope, 0)" plain
             >查看</el-button
           >
-          <el-popover placement="bottom" width="400" trigger="click">
+          <el-popover
+            v-if="scope.row.statusId != '3' && scope.row.statusId != ''"
+            placement="bottom"
+            width="400"
+            trigger="click"
+          >
             <el-input
               type="textarea"
               :rows="2"
@@ -69,6 +95,7 @@
             >
           </el-popover>
           <el-popover
+            v-if="scope.row.statusId != '3' && scope.row.statusId != ''"
             ref="move_add_pop"
             placement="bottom"
             width="400"
@@ -107,7 +134,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -123,12 +150,12 @@
         "
         ><i class="el-icon-folder-add"></i>入团申请</el-button
       >
-      <el-button
+      <!-- <el-button
         type="danger"
         @click="advancedQuery = !advancedQuery"
         :icon="!advancedQuery ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"
         >审核</el-button
-      >
+      > -->
     </div>
     <transition name="bounce">
       <div v-show="advancedQuery">
@@ -192,13 +219,13 @@ export default {
       columns: [
         { type: 'selection' },
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'registerId' },
+        { title: '专家编号', prop: 'expertId', width: '120' },
         { title: '姓名', prop: 'xm' },
-        { title: '学历', prop: 'eduId' },
+        { title: '学历', prop: 'eduId', slot: 'eduId' },
         { title: '联系电话', prop: 'contactNumber' },
         { title: '专家状态', prop: 'statusId', slot: 'statusId' },
         { title: '聘期', prop: 'aaa006', slot: 'aaa006' },
-        { title: '复核状态', prop: 'verifyResult' },
+        { title: '复核状态', prop: 'currStatus', slot: 'currStatus' },
         { title: '管理区', prop: 'districtCode', slot: 'districtCode' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 400 }
       ],
@@ -210,7 +237,9 @@ export default {
         //专家状态
         status: trim(this.$store.getters['dictionary/recruit_expert_status']),
         //区县
-        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        //学历
+        edu: trim(this.$store.getters['dictionary/recruit_edu'])
       },
       formConfig: {
         inline: true,
@@ -228,7 +257,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入姓名',
             rules: [],
-            key: 'name'
+            key: 'xm'
           },
 
           {
@@ -237,8 +266,15 @@ export default {
             placeholder: '请输入证件号码',
             style: { width: '210px' },
             rules: [],
-            key: 'input'
+            key: 'zjhm'
           }
+          // {
+          //   type: 'select',
+          //   label: '区县',
+          //   rules: [],
+          //   key: 'districtCode',
+          //   options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          // }
         ]
       },
       disabled: false,
@@ -284,8 +320,16 @@ export default {
       this.onsubmit(this.queryData);
     },
     quit_add(scope) {
+      let data = { ...scope.row };
+      if (!data.quitReason) {
+        this.$message({
+          message: '请填写退团理由',
+          type: 'warning'
+        });
+        return;
+      }
       quit_add(
-        scope.row,
+        data,
         res => {
           document.body.click();
           if (res.result.data.result) {
@@ -381,6 +425,8 @@ export default {
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
       this.queryData = data;
+      //获取当前用户所在区
+      data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
       synthesize_query(
         data,
         res => {
@@ -399,16 +445,27 @@ export default {
     },
     look(e, type) {
       this.form = { ...this.initform, ...e.row };
+      if (this.form.workday) {
+        this.form.timeday = 'workday';
+      } else if (e.weekend) {
+        this.form.timeday = 'weekend';
+      } else {
+        this.form.timeday = this.form.otherTime;
+      }
       if (type == '0') {
         this.disabled = true;
       }
       this.visible = true;
     },
     handleChange(e) {
-      console.log(e);
+      let data = { ...this.queryData };
+      data.pageSize = this.pageSize;
+      data.pageIndex = e - 1;
+      this.onsubmit(data);
     }
   },
   created() {
+    console.log(this.$store);
     console.log(this.dicOptions.status);
   }
 };

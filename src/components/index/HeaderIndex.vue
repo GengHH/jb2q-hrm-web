@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-26 15:39:53
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-27 14:47:18
+ * @LastEditors: Please set LastEditors
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
 -->

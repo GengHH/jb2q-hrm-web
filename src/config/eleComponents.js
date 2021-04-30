@@ -1,15 +1,10 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-04-23 15:30:14
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-27 14:49:41
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
- */
-//import V from 'V';
-
-/**
- * Create By GengHH On 2020/12/02
  */
 import {
   Message,
@@ -64,6 +59,9 @@ import {
   Badge,
   Popover,
   Popconfirm,
+  Drawer,
+  InputNumber,
+  Tree,
   Backtop,
   Icon,
   Dropdown,
@@ -121,6 +119,9 @@ export default {
     V.use(Calendar), V.use(TimeSelect), V.use(Badge);
     V.use(Popover);
     V.use(Popconfirm);
+    V.use(Drawer);
+    V.use(InputNumber);
+    V.use(Tree);
     V.use(Backtop);
     V.use(Icon);
     V.use(Dropdown);

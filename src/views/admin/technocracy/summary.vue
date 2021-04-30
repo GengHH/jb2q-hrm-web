@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-01 10:10:12
+ * @LastEditTime: 2021-04-29 17:03:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,6 +20,30 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
+      <el-table-column
+        width="150"
+        slot="expertJoinDatas"
+        label="与会专家"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{ valToString(scope.row.expertJoinDatas) }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        width="150"
+        slot="meetTime"
+        label="会议日期"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{
+            scope.row.meetTime
+              ? scope.row.meetTime.split(' ')[0]
+              : scope.row.meetTime
+          }}
+        </template>
+      </el-table-column>
       <el-table-column width="200" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="opendio(1, scope)" plain>
@@ -36,7 +60,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -93,10 +117,10 @@ export default {
       columns: [
         { type: 'selection' },
         { title: '会议议题', prop: 'meetTheme' },
-        { title: '会议日期', prop: 'meetTime' },
+        { title: '会议日期', prop: 'meetTime', slot: 'meetTime' },
         { title: '会议地点', prop: 'meetAddress' },
         { title: '会议召集人', prop: 'meetCaller' },
-        { title: '会与专家', prop: 'expertJoinDatas' },
+        { title: '会与专家', prop: 'expertJoinDatas', slot: 'expertJoinDatas' },
         { title: '会与其他人员', prop: 'meetOtherPeople' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 200 }
       ]
@@ -104,6 +128,10 @@ export default {
   },
   computed: {},
   methods: {
+    valToString(val) {
+      let a = val.map(e => e.xm).toString();
+      return a;
+    },
     remove(e) {
       let data = { ...e.row };
       summary_remove(
@@ -154,10 +182,17 @@ export default {
     },
     opendio(type, scope) {
       //1 编辑 2 查看 3 新增
+
       if (type == 1) {
         this.type = 1;
         this.disabled = false;
         this.form = { ...scope.row };
+        //格式化多选
+        this.form.expertJoinDatas = this.form.expertJoinDatas.map(e => {
+          return e.expertId;
+        });
+        //格式化时间
+        this.form.meetTime = this.formatTime(this.form.meetTime);
       } else if (type == 2) {
         this.disabled = true;
         this.form = { ...scope.row };
@@ -166,7 +201,21 @@ export default {
         this.disabled = false;
         this.form = { ...this.initform };
       }
+      console.log(this.form);
       this.visible = true;
+    },
+    formatTime(time) {
+      if (time) {
+        if (time.length > 8) {
+          let t = time.split(' ')[0];
+          let tt = t.replace(/-/g, '');
+          return tt;
+        } else {
+          return time;
+        }
+      } else {
+        return '';
+      }
     },
     onclose(type) {
       this.visible = false;

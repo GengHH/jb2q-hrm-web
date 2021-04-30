@@ -1,12 +1,15 @@
 /*
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:42
- * @LastEditors: GengHH
- * @LastEditTime: 2021-03-02 16:54:39
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-04-26 15:48:42
  * @Description: 管理员模块的全局key信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\admin.js
  */
+import { isEmptyObject } from '@/utils/index';
 const state = {
+  //用户信息
+  userInfo: {},
   //用户token
   token: '',
   //用户名
@@ -32,6 +35,9 @@ const state = {
 };
 
 const mutations = {
+  SET_USERINFO: (state, userInfo) => {
+    state.userInfo = userInfo;
+  },
   SET_TOKEN: (state, token) => {
     state.token = token;
   },
@@ -69,43 +75,34 @@ const mutations = {
 
 const actions = {
   //用户登录
-  login({ commit }, userInfo) {
+  setUserInfo({ commit }, userList) {
+    let str = '登陆失败：未获取到用户信息';
     return new Promise((resolve, reject) => {
+      let userInfo = userList.logonUser;
       try {
-        if (userInfo.loginType.length > 0 && userInfo.center.length > 0) {
-          let data = sessionStorage.vuex;
-          let token;
-          if (data && data != 'null' && data != '' && data.length > 0) {
-            data = JSON.parse(data);
-            if (data.webuser) {
-              token = data.webuser.token;
-            }
+        if (!isEmptyObject(userInfo)) {
+          if (
+            userInfo.userName &&
+            userInfo.userIdStr &&
+            userInfo.roles.length > 0
+          ) {
+            commit('SET_USERINFO', userList);
+            resolve();
           } else {
-            reject('登陆失败：未获取到sessionSrorage用户');
+            reject(str);
           }
-          commit('SET_TOKEN', token);
-          commit('SET_LOGINTYPE', userInfo.loginType);
-          commit('SET_CENTER', userInfo.center);
-          commit('SET_LOGINSTATUS', 1);
-          commit('SET_LOGIN_TIME', new Date().getTime());
-          resolve();
         } else {
-          reject('登陆失败：解析loginType和center字段出错');
+          reject(str);
         }
       } catch (error) {
-        reject('登陆失败：解析loginType和center字段出错');
+        reject(str);
       }
     });
   },
   //用户退出
   logout({ commit }) {
     return new Promise(resolve => {
-      commit('SET_TOKEN', '');
-      commit('SET_LOGINTYPE', '');
-      commit('SET_CENTER', '');
-      commit('SET_LOGINSTATUS', 0);
-      commit('SET_LOGIN_TIME', 0);
-      sessionStorage.setItem('vuex', null);
+      commit('SET_USERINFO', {});
       resolve();
     });
   }

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-07 10:08:45
+ * @LastEditTime: 2021-04-29 15:51:09
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -14,22 +14,31 @@ const dic = {
   ],
   //区县
   GGJBXX_QX: [
-    { value: '01', label: '黄浦' },
-    { value: '04', label: '徐汇' },
-    { value: '05', label: '长宁' },
-    { value: '06', label: '静安' },
-    { value: '07', label: '普陀' },
-    { value: '09', label: '虹口' },
-    { value: '10', label: '杨浦' },
-    { value: '12', label: '闵行' },
-    { value: '13', label: '宝山' },
-    { value: '14', label: '嘉定' },
-    { value: '15', label: '浦东' },
-    { value: '16', label: '金山' },
-    { value: '17', label: '松江' },
-    { value: '18', label: '青浦' },
-    { value: '26', label: '奉贤' },
-    { value: '30', label: '崇明' }
+    { value: '00', label: ' 市中心' },
+    { value: '01', label: ' 黄浦' },
+    { value: '02', label: ' 南市' },
+    { value: '03', label: ' 卢湾' },
+    { value: '04', label: ' 徐汇' },
+    { value: '05', label: ' 长宁' },
+    { value: '06', label: ' 静安' },
+    { value: '07', label: ' 普陀' },
+    { value: '08', label: ' 闸北' },
+    { value: '09', label: ' 虹口' },
+    { value: '10', label: ' 杨浦' },
+    { value: '12', label: ' 闵行' },
+    { value: '13', label: ' 宝山' },
+    { value: '14', label: ' 嘉定' },
+    { value: '15', label: ' 浦东' },
+    { value: '16', label: ' 金山' },
+    { value: '17', label: ' 松江' },
+    { value: '18', label: ' 青浦' },
+    { value: '25', label: ' 南汇' },
+    { value: '26', label: ' 奉贤' },
+    { value: '30', label: ' 崇明' },
+    { value: '96', label: ' 外高桥' },
+    { value: '97', label: ' 直属部' },
+    { value: '98', label: ' 外省市' },
+    { value: '99', label: ' 分不出地区' }
   ],
   //单位性质
   RECRUIT_CORP_NATURE: [
@@ -144,7 +153,10 @@ const dic = {
     { value: '05', label: '年' }
   ],
   //招聘类型
-  RECRUIT_TYPE: [],
+  RECRUIT_TYPE: [
+    { value: '1', label: '自主招聘' },
+    { value: '2', label: '代理招聘' }
+  ],
   //审核状态
   RECRUIT_VERIFY_STATUS: [],
   //发布状态
@@ -756,9 +768,23 @@ const dic = {
   //应聘来源
   RECRUIT_APPLYFOR_SOURCE: [],
   //用户角色
-  RECRUIT_USER_ROLE: [],
+  RECRUIT_USER_ROLE: [
+    { value: '01', label: '市管理员' },
+    { value: '02', label: '区超级管理员' },
+    { value: '03', label: '区普通管理员' },
+    { value: '04', label: '街镇管理员' }
+  ],
   //重点人员类型
-  RECRUIT_POINT_TYPE: [],
+  RECRUIT_POINT_TYPE: [
+    { value: '01', label: '就业困难人员' },
+    { value: '02', label: '登记失业人员' },
+    { value: '03', label: '长期失业青年' },
+    { value: '04', label: '退工三个月仍无业人员' },
+    { value: '05', label: '基层排摸无业人员' },
+    { value: '06', label: '退役军人' },
+    { value: '07', label: '高校毕业生' },
+    { value: '08', label: '特别关注人员' }
+  ],
   //专家状态
   RECRUIT_EXPERT_STATUS: [
     { value: '1', label: '新聘' },
@@ -781,15 +807,32 @@ const dic = {
   //职业指导类型
   RECRUIT_GUIDE_TYPE: [],
   //特色活动类型
-  RECRUIT_SPECIAL_ACTIVITY_TYPE: [],
+  RECRUIT_SPECIAL_ACTIVITY_TYPE: [
+    { value: '01', label: '	讲座' },
+    { value: '02', label: '	主题咨询活动' },
+    { value: '03', label: '	集体指导活动' },
+    { value: '04', label: '	其他' }
+  ],
   //实施举措类型
-  RECRUIT_IMPLE_ACT_TYPE: [],
+  RECRUIT_IMPLE_ACT_TYPE: [
+    { value: '1', label: '安排专家指导' },
+    { value: '2', label: '推荐职位' },
+    { value: '3', label: '再次预约指导' },
+    { value: '4', label: '推荐参加专项' }
+  ],
   //就业类型
-  RECRUIT_EMPLOY_TYPE: [],
+  RECRUIT_EMPLOY_TYPE: [
+    { value: '1', label: '	单位就业' },
+    { value: '2', label: '	灵活就业' }
+  ],
   //单位状态
   RECRUIT_CORP_STATUS: [],
   //招聘会类型
-  RECRUIT_MEET_TYPE: [],
+  RECRUIT_MEET_TYPE: [
+    { value: '1', label: '线上' },
+    { value: '2', label: '线上及线下' }
+  ],
+
   //应聘类型
   RECRUIT_APPLYFOR_TYPE: [],
   //推荐类型
@@ -1157,6 +1200,14 @@ const dic = {
     { value: '4	', label: '养老' },
     { value: '5	', label: '农村富余' },
     { value: '6	', label: '农村就业' }
+  ],
+  //评价星级
+  EVALUATION_LEVEL: [
+    { value: '1	', label: '一星' },
+    { value: '2	', label: '二星' },
+    { value: '3	', label: '三星' },
+    { value: '4	', label: '四星' },
+    { value: '5	', label: '五星' }
   ]
 };
 

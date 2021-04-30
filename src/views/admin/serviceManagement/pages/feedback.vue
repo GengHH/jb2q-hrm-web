@@ -23,7 +23,7 @@
       @current-change="handleChange"
       :current-page.sync="currentPage"
       :page-size="100"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="1000"
     >
     </el-pagination>

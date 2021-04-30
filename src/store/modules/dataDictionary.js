@@ -1,9 +1,9 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
+ * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 18:55:26
+ * @LastEditTime: 2021-04-29 16:04:22
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -135,10 +135,41 @@ const getters = {
   ggjbxx_jyzt: state => state.GGJBXX_JYZT,
   recruit_corp_nature: state => state.RECRUIT_CORP_NATURE,
   recruit_special_people: state => state.RECRUIT_SPECIAL_PEOPLE,
+  recruit_special_activity_type: state => state.RECRUIT_SPECIAL_ACTIVITY_TYPE,
   recruit_salary_pay_type: state => state.RECRUIT_SALARY_PAY_TYPE,
-  recruit_work_year: state => state.RECRUIT_WORK_YEAR
+  recruit_type: state => state.RECRUIT_TYPE,
+  recruit_work_year: state => state.RECRUIT_WORK_YEAR,
+  recruit_meet_type: state => state.RECRUIT_MEET_TYPE,
+  recruit_user_role: state => state.RECRUIT_USER_ROLE,
+  recruit_employ_type: state => state.RECRUIT_EMPLOY_TYPE,
+  recruit_imple_act_type: state => state.RECRUIT_IMPLE_ACT_TYPE,
+  recruit_point_type: state => state.RECRUIT_POINT_TYPE
 };
 const mutations = {
+  set_RECRUIT_POINT_TYPE: (state, dictionary) => {
+    state.RECRUIT_POINT_TYPE = dictionary;
+  },
+  set_RECRUIT_IMPLE_ACT_TYPE: (state, dictionary) => {
+    state.RECRUIT_IMPLE_ACT_TYPE = dictionary;
+  },
+  set_RECRUIT_EMPLOY_TYPE: (state, dictionary) => {
+    state.RECRUIT_EMPLOY_TYPE = dictionary;
+  },
+  set_RECRUIT_USER_ROLE: (state, dictionary) => {
+    state.RECRUIT_USER_ROLE = dictionary;
+  },
+  set_RECRUIT_MEET_TYPE: (state, dictionary) => {
+    state.RECRUIT_MEET_TYPE = dictionary;
+  },
+  set_RECRUIT_WORK_YEAR: (state, dictionary) => {
+    state.RECRUIT_WORK_YEAR = dictionary;
+  },
+  set_RECRUIT_TYPE: (state, dictionary) => {
+    state.RECRUIT_TYPE = dictionary;
+  },
+  set_RECRUIT_SPECIAL_ACTIVITY_TYPE: (state, dictionary) => {
+    state.RECRUIT_SPECIAL_ACTIVITY_TYPE = dictionary;
+  },
   set_GGJBXX_JYZT: (state, dictionary) => {
     state.GGJBXX_JYZT = dictionary;
   },
@@ -213,9 +244,6 @@ const mutations = {
   },
   set_RECRUIT_SALARY_PAY_TYPE: (state, dictionary) => {
     state.RECRUIT_SALARY_PAY_TYPE = dictionary;
-  },
-  set_RECRUIT_WORK_YEAR: (state, dictionary) => {
-    state.RECRUIT_WORK_YEAR = dictionary;
   }
 };
 

@@ -1,0 +1,319 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-04-13 17:33:01
+ * @LastEditTime: 2021-04-26 10:21:49
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
+-->
+<template>
+  <el-dialog
+    title="招聘会报名信息"
+    width="850px"
+    :visible="visible"
+    @close="onclose"
+  >
+    <div
+      style="height:500px;overflow: scroll;overflow-x: hidden;padding: 0 10px 0 0;"
+    >
+      <div class="title-style">预约报名信息</div>
+      <el-form size="mini" ref="form" :model="form" label-width="150px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="招聘会名称">
+              <el-input disabled v-model="form.meetName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单位名称">
+              <el-input disabled v-model="form.corpName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="参会联系人">
+              <el-input disabled v-model="form.applyContactName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="参会联系手机">
+              <el-input disabled v-model="form.applyContactPhone"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="报名时间">
+              <el-date-picker
+                v-model="form.applyTime"
+                type="date"
+                style="width:100%"
+                value-format="yyyyMMdd"
+                disabled
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注">
+              <el-input disabled v-model="form.memo"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div class="title-style">单位招聘信息列表</div>
+      <ttable :columns="columns" :list="list">
+        <el-table-column slot="eduRequire" label="学历要求" align="center">
+          <template slot-scope="scope">
+            <template v-for="(v, k) in dicOptions.edu">
+              <div :key="k" v-if="v.value == scope.row.eduRequire">
+                {{ v.label }}
+              </div>
+            </template>
+          </template>
+        </el-table-column>
+        <el-table-column slot="salary" label="薪酬" align="center">
+          <template slot-scope="scope">
+            <div>
+              {{ scope.row.ageMin + '-' + scope.row.ageMax }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column slot="aaa010" label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
+              详情</el-button
+            >
+          </template>
+        </el-table-column>
+      </ttable>
+      <div class="title-style">报名反馈</div>
+      <el-form
+        size="mini"
+        ref="feedbackForm"
+        :model="feedbackForm"
+        label-width="150px"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="参会回执">
+              <el-select
+                :disabled="disabled"
+                v-model="form.applyResult"
+                style="width:100%"
+              >
+                <el-option label="报名成功" value="1"></el-option>
+                <el-option label="报名失败" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入场时间">
+              <el-date-picker
+                v-model="form.admisstionTime"
+                type="date"
+                style="width:100%"
+                value-format="yyyyMMddHHmmss"
+                :disabled="disabled"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="展位号">
+              <el-input :disabled="disabled" v-model="form.boothSeq"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="注意事项">
+              <el-input
+                type="textarea"
+                :rows="4"
+                :disabled="disabled"
+                v-model="form.precautions"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="区或街镇现场联系人">
+              <el-input
+                :disabled="disabled"
+                v-model="form.meetContactName"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="区或街镇现场联系电话">
+              <el-input
+                :disabled="disabled"
+                v-model="form.meetContactPhone"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div v-if="!disabled" style="text-align:center">
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+      </div>
+    </div>
+  </el-dialog>
+</template>
+
+<script>
+import { trim } from '@/utils/index';
+import ttable from '../../common/t_table';
+import {
+  feedback_look,
+  feedback_info_query,
+  feedback_update
+} from '../api/index';
+export default {
+  name: 'feedbackDetails',
+  props: ['visible', 'lookList', 'disabled'],
+  components: { ttable },
+  data() {
+    return {
+      feedbackForm: {},
+      form: {},
+      params: {
+        pageIndex: 1,
+        total: 0
+      },
+      pageSize: 10,
+      fileList: [],
+      dicOptions: {
+        //
+        type: trim(this.$store.getters['dictionary/recruit_meet_type']),
+        //学历
+        edu: trim(this.$store.getters['dictionary/recruit_edu'])
+      },
+      columns: [
+        { title: '序号', type: 'index' },
+        { title: '职位名称', prop: 'positionName' },
+        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
+        { title: '薪酬', prop: 'salary', slot: 'salary' },
+        { title: '职位描述', prop: 'workYearNeed' }
+        // { title: '操作', slot: 'aaa010' }
+      ],
+      list: []
+    };
+  },
+  computed: {},
+  methods: {
+    look() {
+      this.visible = true;
+    },
+    soldOut(scope) {},
+    alteration() {},
+    onSubmit() {
+      let data = { ...this.form };
+      feedback_update(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.onclose();
+              }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    onclose(type) {
+      this.$emit('onclose', type || 0);
+    },
+    formatTime(time) {
+      if (time) {
+        if (time.length > 8) {
+          let t = time.split(' ')[0];
+          let tt = t.replace(/-/g, '');
+          let h = time.split(' ')[1];
+          let hh = h.replace(/:/g, '');
+          return tt + '' + hh;
+        } else {
+          return time;
+        }
+      } else {
+        return '';
+      }
+    }
+  },
+  mounted() {
+    let data = { ...this.lookList };
+    console.log(data);
+    feedback_look(
+      data,
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data;
+          data.admisstionTime = this.formatTime(data.admisstionTime);
+          this.form = { ...data };
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    feedback_info_query(
+      data,
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data;
+          this.list = [...data];
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  },
+  created() {}
+};
+</script>
+<style lang="scss" scoped>
+.el-table--scrollable-x .el-table__body-wrapper {
+  z-index: 1;
+}
+.title-style {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.8);
+  line-height: 40px;
+  border-bottom: 1px solid #e9eef3;
+  text-align: left;
+  padding: 0 30px;
+  box-sizing: border-box;
+  position: relative;
+}
+.title-style::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  background: $g-mian-color;
+}
+</style>

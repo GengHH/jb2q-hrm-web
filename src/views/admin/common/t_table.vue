@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-03-31 15:01:16
+ * @LastEditTime: 2021-04-26 15:22:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -21,6 +21,7 @@
       :load="loadGetData"
       ref="mutipleTable"
       style="width:100%;"
+      max-height="650"
       :width="options.width"
       @row-click="clickRow"
       @row-dblclick="dblclickRow"
@@ -98,6 +99,7 @@
 </template>
 
 <script>
+import { niceScroll } from '@/utils';
 export default {
   props: {
     list: {
@@ -112,7 +114,7 @@ export default {
       type: Object,
       default: function() {
         return {
-          height: '350px', //默认高度-为了表头固定
+          //height: '350px', //默认高度-为了表头固定
           stripe: false, // 是否为斑马纹 table
           highlightCurrentRow: false, // 是否要高亮当前行
           border: false, //是否有纵向边框
@@ -156,11 +158,22 @@ export default {
       multipleSelection: [] // 多行选中
     };
   },
-  mounted() {},
+  updated() {
+    setTimeout(this.resizeScroll()(), 100);
+  },
+  mounted() {
+    niceScroll('.el-table__body-wrapper');
+  },
   watch: {},
   computed: {},
-
   methods: {
+    resizeScroll() {
+      return this._.throttle(() => {
+        $('.el-table__body-wrapper')
+          .getNiceScroll()
+          .resize();
+      }, 300);
+    },
     /**
      * 列表懒加载，必须先开启懒加载
      * */

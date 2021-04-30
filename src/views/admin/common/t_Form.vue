@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-03-30 19:04:07
+ * @LastEditTime: 2021-04-26 10:09:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -10,6 +10,7 @@
     ref="value"
     :inline="formConfig.inline"
     :model="value"
+    :disabled="formConfig.disabled"
     :labelPosition="formConfig.labelPosition"
     :label-width="formConfig.labelWidth"
     :size="formConfig.size"
@@ -28,6 +29,8 @@
           v-model="value[v.key]"
           :placeholder="v.placeholder"
           :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
           :disabled="v.disabled"
         ></el-input>
       </el-form-item>
@@ -39,19 +42,43 @@
         :prop="v.key"
         :rules="v.rules"
       >
-        <el-select
-          :style="v.style"
-          v-model="value[v.key]"
-          :placeholder="v.placeholder"
-        >
-          <el-option
-            v-for="(item, key) in v.options"
-            :key="key"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
-        </el-select>
+        <template v-if="v.change">
+          <el-select
+            :multiple="v.multiple"
+            :value="v.value"
+            :style="v.style"
+            v-model="value[v.key]"
+            :disabled="v.disabled"
+            :placeholder="v.placeholder"
+            @change="v.change"
+          >
+            <el-option
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            ></el-option>
+          </el-select>
+        </template>
+        <template v-else>
+          <el-select
+            :multiple="v.multiple"
+            :value="v.value"
+            :style="v.style"
+            v-model="value[v.key]"
+            :disabled="v.disabled"
+            :placeholder="v.placeholder"
+          >
+            <el-option
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            ></el-option>
+          </el-select>
+        </template>
       </el-form-item>
       <!-- 时间 日 双时间 -->
       <el-form-item
@@ -65,6 +92,7 @@
           :style="v.style"
           v-model="value[v.key]"
           :value-format="v.format"
+          :value="v.value"
           type="daterange"
           range-separator=""
           start-placeholder="开始日期"
@@ -82,7 +110,9 @@
       >
         <el-date-picker
           :style="v.style"
+          :value="v.value"
           v-model="value[v.key]"
+          :value-format="v.format"
           type="monthrange"
           range-separator="至"
           start-placeholder="开始月份"
@@ -101,6 +131,8 @@
       >
         <el-date-picker
           type="date"
+          :value-format="v.format"
+          :value="v.value"
           v-model="value[v.key]"
           :placeholder="v.placeholder"
           :style="v.style"
@@ -147,7 +179,12 @@
         :prop="v.key"
         :rules="v.rules"
       >
-        <el-radio-group :style="v.style" v-model="value[v.key]">
+        <el-radio-group
+          :style="v.style"
+          :value="v.value"
+          :disabled="v.disabled"
+          v-model="value[v.key]"
+        >
           <el-radio
             v-for="(item, key) in v.options"
             :key="key"
@@ -185,6 +222,7 @@
       >
         <el-time-select
           :style="v.style"
+          :value="v.value"
           v-model="value[v.key]"
           :picker-options="v.options"
           :placeholder="v.placeholder"
@@ -228,7 +266,7 @@
 
 <script>
 export default {
-  name: 't_Form',
+  name: 't_form',
   props: ['formConfig'],
   data() {
     return {

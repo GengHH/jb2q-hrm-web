@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-17 10:08:03
- * @LastEditTime: 2021-03-17 13:27:06
+ * @LastEditTime: 2021-04-29 17:05:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\remind\remindCenter.vue
@@ -43,7 +43,7 @@
       @current-change="handleChange"
       :current-page.sync="currentPage"
       :page-size="100"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="1000"
     >
     </el-pagination>
