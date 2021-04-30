@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 10:28:35
+ * @LastEditTime: 2021-04-30 15:04:47
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -413,6 +413,11 @@ export default {
           console.log(formData);
           let reusult = await saveCorpInfo(formData).catch(() => {
             done();
+            this.$message({
+              showClose: true,
+              message: '系统异常，保存失败',
+              type: 'error'
+            });
           });
           if (reusult && reusult.status === 200) {
             done();
@@ -426,20 +431,12 @@ export default {
             this.$store.commit('corporation/SET_FIRST_LOGIN', false);
           } else {
             done();
-            // this.$message({
-            //   showClose: true,
-            //   message: '保存失败',
-            //   type: 'error'
-            // });
+            this.$message({
+              showClose: true,
+              message: '保存失败',
+              type: 'error'
+            });
           }
-        } else {
-          done();
-          this.$message({
-            showClose: true,
-            message: '系统异常，保存失败',
-            type: 'error'
-          });
-          return false;
         }
       });
     },
