@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:14
- * @LastEditTime: 2021-03-10 13:49:42
+ * @LastEditTime: 2021-04-29 17:03:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\socialSecurity.vue
@@ -18,15 +18,15 @@
         </template>
       </el-table-column>
     </ttable>
-    <el-pagination
+    <!-- <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
       :current-page.sync="currentPage"
       :page-size="100"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="1000"
     >
-    </el-pagination>
+    </el-pagination> -->
   </div>
 </template>
 
@@ -35,25 +35,17 @@ import ttable from '../../common/t_table';
 export default {
   name: 'socialSecurity',
   components: { ttable },
+  props: ['list'],
   data() {
     return {
       currentPage: 1,
       columns: [
         { title: '序号', type: 'index' },
-        { title: '缴费单位名称', prop: 'aaa001' },
-        { title: '缴费基数', prop: 'aaa002' },
-        { title: '起始日期', prop: 'aaa003' },
-        { title: '终止日期', prop: 'aaa004' },
-        { title: '单位类型', prop: 'aaa005' }
-      ],
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '2019-05-01',
-          aaa004: '2019-05-01',
-          aaa005: '测试'
-        }
+        { title: '缴费单位名称', prop: 'corpName' },
+        { title: '缴费基数', prop: 'jfjs' },
+        { title: '起始日期', prop: 'ksrq' },
+        { title: '终止日期', prop: 'jsrq' },
+        { title: '单位类型', prop: 'corpType' }
       ]
     };
   },

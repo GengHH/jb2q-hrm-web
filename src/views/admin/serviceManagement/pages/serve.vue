@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:54
- * @LastEditTime: 2021-03-10 17:17:42
+ * @LastEditTime: 2021-04-29 17:03:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\serve.vue
@@ -28,7 +28,7 @@
           @current-change="handleChange"
           :current-page.sync="currentPage"
           :page-size="100"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="1000"
         >
         </el-pagination>
@@ -52,7 +52,7 @@
           @current-change="handleChange"
           :current-page.sync="currentPage2"
           :page-size="100"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="1000"
         >
         </el-pagination>
@@ -72,7 +72,7 @@
           @current-change="handleChange"
           :current-page.sync="currentPage3"
           :page-size="100"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="1000"
         >
         </el-pagination>

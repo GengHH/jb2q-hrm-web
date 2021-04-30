@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-26 17:05:12
+ * @LastEditTime: 2021-04-21 18:38:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\index\ActivityBoxShow.vue
 -->
@@ -10,6 +10,47 @@
   <!--S 特色专栏部分 -->
   <div class="activity-box-module">
     <el-row>
+      <el-col :sm="2" :md="4" :lg="6">
+        <img width="300" :src="activityInfo.propagandaImage" alt="未加载" />
+      </el-col>
+      <el-col class="ul-style" :sm="22" :md="20" :lg="18">
+        <p class="black-font">{{ activityInfo.actName }}</p>
+        <p class="six-hui ellipsis line30">
+          {{ activityInfo.content }}
+        </p>
+        <el-row class="mat-15">
+          <el-col :span="18">
+            <p class="six-hui line30 or-font">
+              <i class="icon iconfont six-hui">&#xe651;</i>
+              {{ activityInfo.applyStartTime }} 至
+              {{ activityInfo.applyEndTime }}
+            </p>
+            <p class="six-hui line30">
+              <i class="icon iconfont">&#xe652;</i> 人数限制 ：{{
+                activityInfo.participants
+              }}
+              人
+            </p>
+            <p class="six-hui line30">
+              <i class="icon iconfont">&#xe650;</i>
+              活动地点：{{
+                activityInfo.districtCode
+              }}区就业促进中心(长宁区武夷路517号)
+            </p>
+          </el-col>
+          <el-col :span="6">
+            <el-button class="release-btn font-size18" type="primary">
+              <i class="icon iconfont font-size20">&#xe653;</i> 去报名
+            </el-button>
+            <p class="six-hui line30">
+              还剩名额：
+              <i class="or-font">8</i> 个
+            </p>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+    <!-- <el-row>
       <el-col :sm="2" :md="4" :lg="6">
         <img width="300" src="../../assets/img/img01.png" alt />
       </el-col>
@@ -43,7 +84,7 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
   <!--E 特色专栏部分 -->
 </template>
@@ -69,7 +110,7 @@ export default {
   }
   img {
     height: 100%;
-    width: 100%;
+    //width: 100%;
   }
   .black-font {
     font-size: 20px;

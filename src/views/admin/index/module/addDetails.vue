@@ -1,32 +1,82 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-03-23 14:31:19
+ * @LastEditTime: 2021-04-15 18:29:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
 -->
 <template>
   <div id="indexBody">
-    <el-dialog width="55%" title="推荐职位" :visible="visible" @close="onclose">
-      <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+    <el-dialog width="750px" title="详情" :visible="visible" @close="onclose">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item style="margin-left:30px" label="姓名">
+              <el-select
+                v-model="form.name"
+                filterable
+                remote
+                reserve-keyword
+                style="width:210px;"
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+                @change="expertChange"
+              >
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item"
+                >
+                  <span>{{ item.label }}</span
+                  >-<span>{{ item.value }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="账号名">
+              <el-input
+                style="width:210px"
+                disabled
+                v-model="form.userName"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <tform ref="form" :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { trim } from '@/utils/index';
 import tform from '../../common/t_form'; //高级查询
+import { user_querySysm, user_edit } from '../api/index';
 export default {
   name: 'addDetails',
   components: { tform },
-  props: ['visible'],
+  props: ['visible', 'type', 'dataList'],
   data() {
     return {
+      loading: false,
+      form: {
+        userName: '',
+        name: ''
+      },
+      userOptions: [],
+      idList: {},
       formConfig: {
         inline: true,
         size: '',
         labelPosition: 'right',
         labelWidth: '100px',
+        saveBtn: {
+          title: '提交'
+        },
         style: {
           width: '650px',
           margin: '0 auto'
@@ -35,53 +85,11 @@ export default {
         formItemList: [
           {
             type: 'input',
-            label: '账号',
-            style: { width: '210px' },
-            placeholder: '请输入账号',
-            rules: [],
-            key: 'xm'
-          },
-          {
-            type: 'input',
-            label: '单位名称',
-            style: { width: '210px' },
-            placeholder: '请输入单位名称',
-            rules: [],
-            key: 'zjhm'
-          },
-          {
-            type: 'input',
-            label: '姓名',
-            style: { width: '210px' },
-            placeholder: '请输入姓名',
-            rules: [],
-            key: 'xm1'
-          },
-          {
-            type: 'radio',
-            label: '性别',
-            rules: [],
-            key: 'radio',
-            options: [
-              {
-                value: '1',
-                label: '男',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '女',
-                disabled: false
-              }
-            ]
-          },
-          {
-            type: 'input',
             label: '部门名称',
             style: { width: '210px' },
             placeholder: '请输入部门名称',
             rules: [],
-            key: 'xm2'
+            key: 'deptName'
           },
           {
             type: 'input',
@@ -89,26 +97,15 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入职位',
             rules: [],
-            key: 'xm3'
+            key: 'positionName'
           },
           {
             type: 'select',
             label: '身份',
             rules: [],
             style: { width: '210px' },
-            key: 'employStatus',
-            options: [
-              {
-                value: '1',
-                label: '市管理员',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '区管理员',
-                disabled: false
-              }
-            ]
+            key: 'roleId',
+            options: trim(this.$store.getters['dictionary/recruit_user_role'])
           },
           {
             type: 'input',
@@ -116,15 +113,16 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入联系电话',
             rules: [],
-            key: 'xm13'
+            key: 'contactNumber'
           },
           {
             type: 'input',
             label: '手机号码',
             style: { width: '210px' },
             placeholder: '请输入联系手机号码',
+            maxlength: 11,
             rules: [],
-            key: 'xm23'
+            key: 'contactPhone'
           },
           {
             type: 'input',
@@ -132,32 +130,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入联系邮箱',
             rules: [],
-            key: 'xm33'
-          },
-          {
-            type: 'checkbox',
-            label: '权限名称',
-            rules: [],
-            key: 'label',
-            data: [],
-            style: { width: '532px' },
-            options: [
-              {
-                value: '1',
-                label: '前台（见习岗位发布与处理）',
-                disabled: false
-              },
-              {
-                value: '2',
-                label: '前台（见习基地管理）',
-                disabled: false
-              },
-              {
-                value: '3',
-                label: '前台（岗位发布）',
-                disabled: false
-              }
-            ]
+            key: 'mail'
           }
         ]
       }
@@ -165,11 +138,82 @@ export default {
   },
   computed: {},
   methods: {
-    onclose() {
-      this.$emit('onclose');
+    expertChange(e) {
+      this.form.userName = e.value;
+      this.form.name = e.label;
+      this.idList = { ...e };
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let data = {
+          name: query,
+          pageIndex: 0,
+          pageSize: 10
+        };
+        user_querySysm(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.pageresult.data;
+              let list = pageresult.map(e => {
+                return {
+                  value: e.userName,
+                  label: e.name,
+                  userId: e.userId,
+                  organId: e.organId,
+                  deptId: e.deptId
+                };
+              });
+              this.userOptions = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
+    },
+    onclose(type) {
+      this.$emit('onclose', type || 0);
     },
     onsubmit(e) {
-      console.log(e);
+      let data = { ...this.form, ...e, ...this.idList };
+      user_edit(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.onclose('1');
+              }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+  },
+  mounted() {
+    if (this.type == '1') {
+      setTimeout(() => {
+        this.$refs.form.value = { ...this.dataList };
+        this.form = { ...this.dataList };
+      }, 0);
     }
   },
   created() {}

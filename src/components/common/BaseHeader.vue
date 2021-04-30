@@ -1,63 +1,95 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-06 19:35:41
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-30 16:06:55
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
 -->
 <template>
-  <div id="indexHeader">
-    <el-row>
-      <el-col :sm="24" :md="4" :lg="6" :xl="8" class="bg-purple">
-        <img src="@/assets/img/logo.png" alt="" />
-        <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
-        <img class="logo3" src="@/assets/img/logo3.png" alt="" />
-      </el-col>
-      <el-col :sm="24" :md="20" :lg="22" :xl="16" class="bg-purple">
-        <!-- <el-breadcrumb separator="">
-          <el-breadcrumb-item
-            v-for="nvaIndex in navList"
-            :key="nvaIndex.id"
-            :to="{ path: nvaIndex.path }"
+  <div id="indexHeader" class="two-column-layout">
+    <div class="left" @click="goHome">
+      <img src="@/assets/img/logo.png" alt="" />
+      <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
+      <img class="logo3" src="@/assets/img/logo3.png" alt="" />
+    </div>
+    <div class="right">
+      <el-row>
+        <!-- <el-col :sm="24" :md="18" :lg="16" :xl="16" class="bg-purple"> -->
+        <el-col :span="24" class="bg-purple">
+          <!-- 小屏幕下显示的菜单 -->
+          <el-dropdown v-if="showIconMenu" id="showIconMenu" trigger="click">
+            <span class="el-dropdown-link">
+              <el-icon class="el-icon-s-fold"></el-icon>
+            </span>
+            <el-dropdown-menu id="dropdownMenu" slot="dropdown">
+              <!-- 个人或者单位名称 -->
+              <el-dropdown-item command="e" divided>{{
+                userLogInfo.nvaText
+              }}</el-dropdown-item>
+              <el-dropdown-item divided></el-dropdown-item>
+              <el-dropdown-item
+                v-for="nvaIndex in navListReverse"
+                :key="nvaIndex.id"
+                :icon="nvaIndex.iconName"
+              >
+                <router-link :to="nvaIndex.path">
+                  {{ nvaIndex.nvaText }}
+                </router-link>
+              </el-dropdown-item>
+              <!-- 二级子菜单 -->
+              <template v-if="userLogInfo.subMenu.length > 0">
+                <el-dropdown-item divided></el-dropdown-item>
+                <el-dropdown-item
+                  v-for="nvaIndex in userLogInfo.subMenu"
+                  :key="nvaIndex.id"
+                >
+                  <router-link :to="nvaIndex.id">
+                    {{ nvaIndex.nvaText }}
+                  </router-link>
+                </el-dropdown-item>
+              </template>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- 大屏幕下显示的菜单 -->
+          <el-menu
+            v-else
+            :default-active="$route.path"
+            class="el-menu-demo"
+            mode="horizontal"
+            router
+            background-color="#fc6f3d"
+            text-color="#fff"
+            @select="handleSelect"
           >
-            {{ nvaIndex.nvaText }}
-          </el-breadcrumb-item>
-        </el-breadcrumb> -->
-        <el-menu
-          :default-active="$route.path"
-          class="el-menu-demo"
-          mode="horizontal"
-          router
-          background-color="#fc6f3d"
-          text-color="#fff"
-          @select="handleSelect"
-        >
-          <!-- 个人or单位信息栏 -->
-          <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
-            <template slot="title">{{ userLogInfo.nvaText }}</template>
+            <!-- 个人or单位信息栏 -->
+            <el-submenu index="otherInfo" v-if="userLogInfo.subMenu.length > 0">
+              <template slot="title">{{ userLogInfo.nvaText }}</template>
+              <el-menu-item
+                v-for="nvaIndex in userLogInfo.subMenu"
+                :key="nvaIndex.id"
+                :index="nvaIndex.id"
+                >{{ nvaIndex.nvaText }}</el-menu-item
+              >
+            </el-submenu>
+            <!-- 其他正常菜单信息栏 -->
             <el-menu-item
-              v-for="nvaIndex in userLogInfo.subMenu"
+              v-for="nvaIndex in navList"
               :key="nvaIndex.id"
-              :index="nvaIndex.id"
-              >{{ nvaIndex.nvaText }}</el-menu-item
+              :index="nvaIndex.path"
             >
-          </el-submenu>
-          <el-menu-item
-            v-for="nvaIndex in navList"
-            :key="nvaIndex.id"
-            :index="nvaIndex.path"
-          >
-            <template v-if="nvaIndex.icon">
-              <i class="nva-icon" :class="nvaIndex.iconName"></i>
-            </template>
-            <template v-else>
-              {{ nvaIndex.nvaText }}
-            </template>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-    </el-row>
+              <template v-if="nvaIndex.icon">
+                <i class="nva-icon" :class="nvaIndex.iconName"></i>
+              </template>
+              <template v-else>
+                {{ nvaIndex.nvaText }}
+              </template>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- <iframe id="iframe" style="width: 300;height: 500;"></iframe> -->
   </div>
 </template>
 
@@ -65,6 +97,7 @@
 import { doPersonLogout } from '@/api/personApi';
 import { doCorporationLogout } from '@/api/corporationApi';
 import { isNoBody, isPerson, isCorporation } from '@/utils';
+let htmlRgx = /http.*?.html/;
 export default {
   name: 'BaseHeader',
   props: {
@@ -81,6 +114,7 @@ export default {
   },
   data() {
     return {
+      showIconMenu: true,
       // activeIndex:
       //   this.$route.path && this.$route.path.length > 1
       //     ? this.$route.path.substr(1)
@@ -98,11 +132,27 @@ export default {
     //   console.log(this.$route.path.length);
     //   return aa;
     // }
+    navListReverse() {
+      return [...this.navList].reverse();
+    }
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        //监听浏览器窗口大小改变
+        //浏览器变化执行动作
+        this._.debounce(this.changeMenuStyle, 500)
+      );
+    });
   },
   watch: {
     async $route(to, from) {
+      let that = this;
       //to:即将要跳转到的页面   from:即将离开的页面
-      //console.log(this);
       if (to.path === '/logout' && isNoBody(this)) {
         this.$alert('没有登录！无法退出');
         this.$router.push(from.path);
@@ -128,33 +178,80 @@ export default {
           }
         } else if (isCorporation(this)) {
           //单位退出
-          let logoutResult = await doCorporationLogout();
-          if (logoutResult && logoutResult.status === 200) {
-            this.$store
-              .dispatch('corporation/do_logout')
-              .then(res => {
-                this.$alert('退出成功');
-                window.setTimeout(function() {
-                  window.location.href = '/ggzp-shrs/index.html';
-                }, 2000);
-                return;
-              })
-              .catch(err => {
-                this.$alert('退出异常');
-              });
-          } else {
-            this.$alert('退出失败');
+          // let logoutResult = await doCorporationLogout();
+          // if (logoutResult && logoutResult.status === 200) {
+          //   this.$store
+          //     .dispatch('corporation/do_logout')
+          //     .then(res => {
+          //       this.$alert('退出成功');
+          //       window.setTimeout(function() {
+          //         // window.location.href = '/ggzp-shrs/index.html';
+          //         window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+          //       }, 2000);
+          //       return;
+          //     })
+          //     .catch(err => {
+          //       this.$alert('退出异常');
+          //     });
+          // } else {
+          //   this.$alert('退出失败');
+          // }
+          try {
+            console.log('-------1111111111111-----------');
+            let r = await doCorporationLogout();
+            console.log(r);
+            if (r) {
+              let _href = r.match(htmlRgx)?.[0];
+              console.log(_href);
+              //window.location.href = _href;
+              window.open(_href);
+              //let iframe = document.getElementById('iframe');
+              //iframe.src = _href;
+            } else {
+              throw new Error('无法退出');
+            }
+          } catch (err) {
+            console.log('-------222222222222-----------');
+            console.log('退出失败');
+            throw new Error(err);
           }
+          console.log('-------33333333333333-----------');
+          this.$store
+            .dispatch('corporation/do_logout')
+            .then(res => {
+              this.$alert('退出成功');
+              window.setTimeout(function() {
+                window.location.href = '/ggzp-shrs/index.html';
+                //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+              }, 2000);
+              return;
+            })
+            .catch(err => {
+              this.$alert('退出异常');
+            });
         }
         //this.$router.push('/')
-        this.$router.push(from.path);
+        //this.$router.push(from.path);
       }
     }
   },
   methods: {
+    changeMenuStyle() {
+      if (
+        (isPerson(this) && window.innerWidth < 992) ||
+        (isCorporation(this) && window.innerWidth < 1200)
+      ) {
+        this.showIconMenu = true;
+      } else {
+        this.showIconMenu = false;
+      }
+    },
+    goHome() {
+      window.location.href = '/ggzp-shrs/index.html';
+    },
     handleSelect(index) {
       console.log(this.$route.path);
-      this.$store.commit('SET_ACTIVE_MENU_INDEX', index);
+      this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
     }
   }
 };
@@ -169,8 +266,9 @@ export default {
   z-index: 999;
   background-color: $g-mian-color;
   color: $g-white-color !important;
-  .el-row {
-    width: 100%;
+  .left {
+    float: left;
+    width: 230px;
     height: 100%;
     img {
       float: left;
@@ -185,37 +283,28 @@ export default {
       height: 32px;
     }
   }
-
-  .bg-purple {
-    //background: #d3dce6;
-  }
-  .bg-purple-light {
-    //background: #e5e9f2;
-  }
-  .el-col {
+  .right {
+    margin-left: 230px;
     height: 100%;
-    // .el-breadcrumb {
-    //   line-height: 60px;
-    //   height: 100%;
-    // }
+  }
 
-    // .el-breadcrumb__item {
-    //   font {
-    //     color: #333;
-    //     size: 16px;
-    //   }
-    //   height: 60px;
-    //   padding: 0 10px;
-    //   float: right;
-    //   text-align: right;
-    // }
-    // .el-breadcrumb__item:hover {
-    //   border-bottom: 2px solid red;
-    // }
-    .nva-icon {
-      color: #fff;
+  #showIconMenu {
+    font-size: 24px;
+    float: right;
+    margin-top: 18px;
+    color: #fff;
+  }
+  .el-row {
+    width: 100%;
+    height: 100%;
+    .el-col {
+      height: 100%;
+      .nva-icon {
+        color: #fff;
+      }
     }
   }
+
   ::v-deep .el-menu--horizontal {
     .el-submenu,
     .el-menu-item {
@@ -224,6 +313,13 @@ export default {
     .el-menu-item.is-active {
       border-bottom: 2px solid #ffc107;
       color: #ffc107;
+    }
+  }
+}
+ul.el-dropdown-menu {
+  li {
+    a {
+      color: #606266;
     }
   }
 }

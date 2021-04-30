@@ -14,11 +14,18 @@
           <el-col :span="22">
             <el-radio-group v-model="queryParams.workYearNeed" size="medium">
               <el-radio-button label="">不限</el-radio-button>
-              <el-radio-button label="1">1年以下</el-radio-button>
-              <el-radio-button label="2">1~2年</el-radio-button>
-              <el-radio-button label="3">3~5年</el-radio-button>
-              <el-radio-button label="4">6~9年</el-radio-button>
-              <el-radio-button label="5">10年及以上</el-radio-button>
+
+              <el-radio-button
+                v-for="index in gznxLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-radio-button
+              >
+              <!-- <el-radio-button label="01">1年以下</el-radio-button>
+              <el-radio-button label="02">1~2年</el-radio-button>
+              <el-radio-button label="03">3~5年</el-radio-button>
+              <el-radio-button label="04">6~9年</el-radio-button>
+              <el-radio-button label="05">10年及以上</el-radio-button> -->
             </el-radio-group>
           </el-col>
         </el-row>
@@ -129,9 +136,15 @@
           <el-col :span="20">
             <el-radio-group v-model="queryParams.workNature" size="medium">
               <el-radio-button label="">不限</el-radio-button>
-              <el-radio-button label="01">全职</el-radio-button>
+              <el-radio-button
+                v-for="index in gzxzLists"
+                :key="index.value"
+                :label="index.value"
+                >{{ index.label }}</el-radio-button
+              >
+              <!-- <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
-              <el-radio-button label="03">就业见习</el-radio-button>
+              <el-radio-button label="03">就业见习</el-radio-button> -->
             </el-radio-group>
           </el-col>
         </el-row>
@@ -213,12 +226,26 @@
                   v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <el-checkbox
+                <!-- <el-checkbox
                   false-label="0"
                   true-label="1"
                   v-model="queryParams.special"
                   >招聘特定人群</el-checkbox
+                > -->
+                <el-select
+                  v-model="queryParams.special"
+                  clearable
+                  placeholder="招聘特定人群"
+                  class="min-size-select"
                 >
+                  <el-option
+                    v-for="item in tpOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+
                 <el-select
                   v-model="queryParams.eduRequire"
                   clearable
@@ -292,7 +319,7 @@
     <el-dialog
       width="75%"
       :visible.sync="detailsDialog"
-      :before-close="handleClose"
+      :before-close="detailsHandleClose"
     >
       <job-details
         :positionData="onePosition"
@@ -308,7 +335,7 @@
     <el-dialog
       class="width75 dialog-content-full-screen"
       :visible.sync="wchatDialog"
-      :before-close="handleClose"
+      :before-close="wchatHandleClose"
     >
       <pl-wchat></pl-wchat>
     </el-dialog>
@@ -350,9 +377,9 @@ export default {
         workYearNeed: '',
         workArea: '',
         eduRequire: '',
-        recruitNum: '3',
+        //recruitNum: '3',
         tranBaseSymbol: '0',
-        special: '0',
+        special: '',
         agencyRecruit: '0',
         salaryMin: '',
         salaryMax: '',
@@ -388,10 +415,13 @@ export default {
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
+      tpOptions: this.$store.getters['dictionary/recruit_special_people'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       wtOptions: this.$store.getters['dictionary/yesno'],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
       bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
+      gznxLists: this.$store.getters['dictionary/recruit_work_year'],
+      gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: []
     };
   },
@@ -448,7 +478,7 @@ export default {
         return;
       }
       if (isNaN(Number(this.queryParams.salaryMin))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.salaryMin = '';
       } else if (
         this.queryParams.salaryMax &&
@@ -469,7 +499,7 @@ export default {
         return;
       }
       if (isNaN(Number(this.queryParams.salaryMax))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.salaryMax = '';
       } else if (
         this.queryParams.salaryMin &&
@@ -490,7 +520,7 @@ export default {
         return;
       }
       if (this.queryParams.ageMin && isNaN(Number(this.queryParams.ageMin))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.ageMin = '';
       } else if (this.queryParams.ageMin < 16) {
         this.$alert('年龄下限不得低于16周岁');
@@ -505,7 +535,7 @@ export default {
         return;
       }
       if (this.queryParams.ageMax && isNaN(Number(this.queryParams.ageMax))) {
-        this.$alert('请输入数值');
+        this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
         this.$alert('年龄上线不得低于16周岁');
@@ -525,10 +555,12 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
+      this.queryParams.tranBaseSymbol = '0';
+      this.queryParams.agencyRecruit = '0';
       this.queryParams.industry = [''];
       this.queryParams.positionTypeList = [''];
-      this.queryParams.workNature = '';
-      this.queryParams.workYearNeed = '';
+      //this.queryParams.workNature = '';
+      //this.queryParams.workYearNeed = '';
     },
     async queryJobs(val) {
       // if (!val) {
@@ -548,6 +580,7 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
+        params.pid = that.$store.getters['person/pid'];
         let result = await queryJobs(params);
         console.log('result', result);
         if (
@@ -583,6 +616,8 @@ export default {
             Number(result.result.pageresult.total) || 0
           );
         } else {
+          this.$set(this, 'queryResult', []);
+          this.$set(this, 'queryResultTotal', 0);
           this.$message({
             type: 'success',
             message: '未查询到信息'
@@ -606,6 +641,13 @@ export default {
           .siblings('.el-icon-caret-bottom')
           .css('transform', 'rotate(180deg)');
       }
+      // TODO更新滚动条样式
+      //console.log($('#indexApp').getNiceScroll());
+      setTimeout(() => {
+        $('#indexApp')
+          .getNiceScroll()
+          .resize();
+      }, 10);
     },
     showJobDetial(arg) {
       //显示岗位详细信息
@@ -670,8 +712,10 @@ export default {
       //! TODO显示聊天框
       this.wchatDialog = true;
     },
-    handleClose() {
+    detailsHandleClose() {
       this.detailsDialog = false;
+    },
+    wchatHandleClose() {
       this.wchatDialog = false;
     },
     industryGroupChange(newVal) {

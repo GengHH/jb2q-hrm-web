@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-17 09:54:08
- * @LastEditTime: 2021-03-17 10:56:24
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-04-09 10:40:19
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\remindMenu.vue
 -->
@@ -60,4 +60,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-submenu {
+  .el-menu-item {
+    padding-right: 0 !important;
+    min-width: auto !important;
+  }
+}
+</style>

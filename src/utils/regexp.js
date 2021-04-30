@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-11 10:51:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-01-11 11:07:27
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-04-27 14:50:12
  * @Description: 全局公用的各种正则表达式
  * @FilePath: \jb2q-hrm-web\src\utils\regexp.js
  */
@@ -36,6 +36,8 @@ export const ePattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,
 export const mPattern = /^1[34578]\d{9}$/;
 //身份证号（18位）正则
 export const cP = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+//身份证号（15位）正则
+export const cP15 = /^[1-9]\d{7}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}$/;
 //URL正则
 export const urlP = /^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 //ipv4地址正则
@@ -54,3 +56,9 @@ export const wxPattern = /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/;
 export const cPattern = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
 //包含中文正则
 export const cnPattern = /[\u4E00-\u9FA5]/;
+//短信验证码正则(6位数组)
+export const codePattern = /^\d{6}$/;
+//年龄范围正则（16-150）
+export const agePattern = /^1[6-9]$|^[2-9]\d{1}$|^1[0-4]\d{1}$|^150$/;
+//薪资范围正则（1000-99999）
+export const salaryPattern = /^\d{4,5}$/;

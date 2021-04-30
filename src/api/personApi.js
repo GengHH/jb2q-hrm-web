@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 16:01:19
+ * @LastEditTime: 2021-04-14 15:28:11
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -20,6 +20,8 @@ const basePath = apiUrlConfig.personBasePath;
  * Created by GengHH on 2020/11/29
  * 配置各个页面上需要调用后台的接口的action
  */
+//个人短息登录方式-发送验证码
+const doSend = params => postAction(basePath + '/psnl/send', params);
 //个人证件号码登录方式
 const doLogin = params => postAction(basePath + '/psnl/login', params);
 //获取人员的登录的基本信息
@@ -104,7 +106,14 @@ const findRecord = (type, params) =>
 const doEvaluateJob = params =>
   putAction(basePath + '/person/feedback/do-evaluate', params);
 
+//发送验证码
+const sendSms = params => postAction(basePath + '/person/info/sendSms', params);
+//修改手机号
+const updatePhoneNum = params =>
+  postAction(basePath + '/person/info/updatePhoneNum', params);
+
 export {
+  doSend,
   doLogin,
   doPersonLogout,
   getLogonUser,
@@ -130,5 +139,7 @@ export {
   queryCorpStarList,
   queryPositionStarList,
   findRecord,
-  doEvaluateJob
+  doEvaluateJob,
+  updatePhoneNum,
+  sendSms
 };

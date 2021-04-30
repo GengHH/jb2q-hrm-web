@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-03-31 18:48:56
+ * @LastEditTime: 2021-04-29 17:48:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,6 +20,15 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
+      <el-table-column slot="actName" label="活动名称" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in activityList" :key="k">
+            <div v-if="v.actId == scope.row.actName">
+              {{ v.actName }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="opendio(1, scope)" plain>
@@ -33,7 +42,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -57,6 +66,7 @@
 import ttable from '../common/t_table';
 import activitydetail from './pages/activityDetail';
 import { activity_query } from './api/index';
+import { act_query } from '../profession/api/index';
 export default {
   name: 'activity',
   components: {
@@ -93,23 +103,27 @@ export default {
       columns: [
         { type: 'index' },
         { title: '专家编号', prop: 'expertId' },
-        { title: '姓名', prop: 'xm' },
-        { title: '活动名称', prop: 'actName' },
-        { title: '参与人员证件号码', prop: 'zjhm' },
-        { title: '参与人员联系电话', prop: 'contactNumber' },
-        { title: '参数人数', prop: 'psnlCount' },
+        { title: '活动时间', prop: 'actDate' },
+        { title: '服务对象姓名', prop: 'xm' },
+        { title: '证件号码', prop: 'zjhm' },
+        { title: '活动名称', prop: 'actName', slot: 'actName' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
-      ]
+      ],
+      activityList: []
     };
   },
   computed: {},
   methods: {
-    message(type, msg) {
+    message(type, msg, fn) {
       this.$message({
         message: msg,
         type: type,
         duration: 1000,
-        onClose: () => {}
+        onClose: () => {
+          if (fn) {
+            fn();
+          }
+        }
       });
     },
     onSubmit() {
@@ -140,6 +154,12 @@ export default {
         this.type = 1;
         this.disabled = false;
         this.form = { ...scope.row };
+
+        this.form.name = this.form.expertName;
+        this.form.pids = this.form.xm;
+        this.form.actName = this.form.actName
+          ? this.form.actName - 0
+          : this.form.actName;
       } else if (type == 2) {
         this.disabled = true;
         this.form = { ...scope.row };
@@ -161,7 +181,30 @@ export default {
       console.log(e);
     }
   },
-  created() {}
+  created() {},
+  mounted() {
+    //获取活动信息
+    act_query(
+      {
+        pageIndex: 0,
+        pageSize: 100,
+        actName: ''
+      },
+      res => {
+        if (res.status == 200) {
+          let data = res.result.data.data;
+          this.activityList = data;
+        } else {
+          this.message('warning', res.result.data.msg);
+        }
+        console.log('-----------------------------');
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 };
 </script>
 

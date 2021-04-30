@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 19:00:29
+ * @LastEditTime: 2021-04-26 15:49:37
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -55,7 +55,7 @@ import {
   removeResizeListener
 } from 'element-ui/lib/utils/resize-event';
 import PlTableColumn from './BaseTableColumn';
-import { getRandomKey } from '@/utils';
+import { getRandomKey, niceScroll } from '@/utils';
 const Item2UIDMap = new WeakMap();
 export default {
   name: 'pl-table',
@@ -138,6 +138,7 @@ export default {
   computed: {
     attrs() {
       return {
+        ...this.$attrs,
         ...this.$PlElement?.tableConfig,
         ...this.tableConfig,
         size: this.size
@@ -220,6 +221,8 @@ export default {
     }
   },
   mounted() {
+    //初始化滚动条样式
+    niceScroll('.el-table__body-wrapper');
     this.$nextTick(() => {
       if (this.autoHeight) {
         addResizeListener(window.document.body, this.setHeight);
@@ -229,6 +232,10 @@ export default {
         this.addListeners();
       }
     });
+  },
+  updated() {
+    // 更新滚动条样式
+    setTimeout(this.resizeScroll()(), 100);
   },
   activated() {
     if (this.keepPosition) {
@@ -256,6 +263,13 @@ export default {
     removeResizeListener(window.document.body, this.setHeight());
   },
   methods: {
+    resizeScroll() {
+      return this._.throttle(() => {
+        $('.el-table__body-wrapper')
+          .getNiceScroll()
+          .resize();
+      }, 300);
+    },
     getRandomKey(item) {
       const persistedUID = Item2UIDMap.get(item);
       if (!persistedUID) {

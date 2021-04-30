@@ -136,12 +136,31 @@ service.interceptors.response.use(response => {
   console.log('response', response);
   let _data = response.data;
   if (_data && typeof _data === 'string' && _data.includes('!DOCTYPE')) {
-    Notification({
-      title: '系统提示',
-      type: 'error',
-      dangerouslyUseHTMLString: true,
-      message: _data
-    });
+    if (_data.includes('请重新登录')) {
+      Notification({
+        title: '系统提示',
+        message: '登录超时，请重新登录',
+        //duration: 4500,
+        type: 'error'
+      });
+      window.setTimeout(function() {
+        window.location.href = '/ggzp-shrs/index.html';
+      }, 2000);
+      // TODO取消后续所有申请
+
+      //清空数据痕迹
+      localStorage.setItem('vuex', null);
+    } else {
+      Notification({
+        title: '系统提示',
+        type: 'error',
+        dangerouslyUseHTMLString: true,
+        message: _data
+      });
+      //return Promise.reject('genghonghuiggggggggggggggggggggg');
+    }
+    // 后台系统抛出异常时候
+    return Promise.reject('genghonghuiggggggggggggggggggggg');
   }
   return _data;
 }, err);

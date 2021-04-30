@@ -2,9 +2,9 @@
  * @Author: GengHH
  * @Date: 2020-12-02 16:57:19
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-31 19:16:44
+ * @LastEditTime: 2021-04-09 12:10:17
  * @Description: 获取登录人的基本信息
- * @FilePath: \jb2q-hrm-web\src\store\getters.js
+ * @FilePath: \jb2q-hrm-web\src\views\index\recruitment\index.vue
  */
 const getters = {
   // sidebar: state => state.app.sidebar,

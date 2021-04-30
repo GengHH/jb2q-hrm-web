@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-25 16:12:56
+ * @LastEditTime: 2021-04-22 13:43:48
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -16,7 +16,7 @@ const state = {
   //证件号码
   zjhm: '',
   //个人标识
-  pid: '',
+  pid: '123',
   //用户名
   name: '',
   //用户头像
@@ -160,24 +160,24 @@ const actions = {
     getLogonUser()
       .then(async res => {
         console.log('个人登录信息', res);
-        if (res.status == 200) {
+        if (res.status == 200 && res.result.pid) {
           commit('SET_PERSONINOF', res.result);
           commit('SET_TOKEN', 'login');
-          //判断是不是首次进入系统
-          if (res.result.pid) {
-            let checkRes = await checkPsnlInit({ pid: res.result.pid }).catch(
-              () => {
-                // 检验人员信息失败，显示系统异常界面
-                router.push('/error');
-              }
-            );
-            if (
-              checkRes.status === 200 &&
-              checkRes.result.data &&
-              checkRes.result.data.isInit === '1'
-            ) {
-              commit('SET_FIRST_LOGIN', false);
+          let checkRes = await checkPsnlInit({ pid: res.result.pid }).catch(
+            () => {
+              // 检验人员信息失败，显示系统异常界面
+              router.push('/error');
             }
+          );
+          //判断是不是首次进入系统
+          if (
+            checkRes.status === 200 &&
+            checkRes.result.data &&
+            checkRes.result.data.isInit === '1'
+          ) {
+            commit('SET_FIRST_LOGIN', false);
+          } else {
+            commit('SET_FIRST_LOGIN', true);
           }
         } else {
           // 登录成功但是获取人员进本信息失败，显示系统异常界面

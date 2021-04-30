@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-24 14:14:05
+ * @LastEditTime: 2021-04-14 16:56:49
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -22,6 +22,7 @@ import _ from 'lodash';
 import { isNoBody, isPerson, isCorporation } from '@/utils';
 import config from '@/config';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
+import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -30,6 +31,7 @@ Vue.use(VueAxios);
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
 Vue.component(BaseLoadingButton.name, BaseLoadingButton);
+Vue.component(BaseLabelInput.name, BaseLabelInput);
 //引入mock配置;
 if (config.mock) {
   require('@/mock/login/index.js');
@@ -46,10 +48,18 @@ const vm = new Vue({
 });
 if (isNoBody(vm)) {
   vm.$mount('#app');
-} else if (isPerson(vm)) {
+} else if (isPerson(vm) && store.getters.priorityLoginType !== 'corporation') {
   window.location.href = '/ggzp-shrs/person.html';
-} else if (isCorporation(vm)) {
+} else if (isCorporation(vm) && store.getters.priorityLoginType !== 'person') {
   window.location.href = '/ggzp-shrs/corporation.html';
 } else {
-  window.location.href = '/ggzp-shrs/index.html';
+  if (store.getters.priorityLoginType === 'corporation') {
+    vm.$alert('已有个人登录本系统，请先退出登录');
+  }
+  if (store.getters.priorityLoginType === 'person') {
+    vm.$alert('已有单位登录本系统，请先退出登录');
+  }
+  setTimeout(() => {
+    window.location.href = '/ggzp-shrs/index.html';
+  }, 2000);
 }

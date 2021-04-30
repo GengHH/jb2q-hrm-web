@@ -1,13 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-03-30 20:14:58
+ * @LastEditTime: 2021-04-26 15:17:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
 -->
 <template>
   <el-dialog
+    :close-on-click-modal="false"
     title="申请"
     width="70%"
     :visible="visible"
@@ -41,8 +42,13 @@
                 :limit="1"
                 :show-file-list="false"
               >
-                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <template v-if="disabled">
+                  <img :src="form.psnlPhotoBase64" class="avatar" />
+                </template>
+                <template v-if="!disabled">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </template>
               </el-upload>
               <div
                 class="userClose"
@@ -72,8 +78,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="民族">
-              <el-select v-model="form.region" style="width:100%">
+            <el-form-item label="民族" prop="nationId">
+              <el-select v-model="form.nationId" style="width:100%">
                 <el-option
                   v-for="(v, k) in dicOptions.nationality"
                   :key="k"
@@ -86,12 +92,8 @@
           <el-col :span="12">
             <el-form-item label="性别" prop="sexId">
               <el-select v-model="form.sexId" style="width:100%">
-                <el-option
-                  v-for="(v, k) in dicOptions.sex"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
+                <el-option label="男" value="1"></el-option>
+                <el-option label="女" value="2"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -123,7 +125,11 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="证件号码" prop="zjhm">
-              <el-input v-model="form.zjhm" maxlength="18"></el-input>
+              <el-input
+                v-model="form.zjhm"
+                maxlength="18"
+                @input="userIdEdit"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -192,7 +198,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="联系住址（详细住址）" prop="contactAddress">
-              <el-input v-model="form.contactAddress"></el-input>
+              <el-input maxlength="40" v-model="form.contactAddress"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -203,6 +209,7 @@
                 :autosize="{ minRows: 5, maxRows: 7 }"
                 type="textarea"
                 v-model="form.laborInfo"
+                maxlength="1000"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -213,13 +220,14 @@
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 5, maxRows: 7 }"
+                maxlength="1000"
                 v-model="form.majorResult"
               ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="可提供服务时间" prop="timeday">
               <el-select
                 v-model="form.timeday"
@@ -239,7 +247,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="管理所属区" prop="districtCode">
               <el-select v-model="form.districtCode" style="width:100%">
                 <el-option
@@ -250,13 +258,13 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-row>
           <el-col :span="12">
             <el-form-item label="银行账号" prop="bankaccount">
-              <el-input v-model="form.bankaccount"></el-input>
+              <el-input v-model="form.bankaccount" maxlength="18"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -271,11 +279,30 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="聘期开始时间">
+              <el-input v-model="form.startDate"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="聘期结束时间">
+              <el-input v-model="form.endDate"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.expertId" :span="12">
+            <el-form-item label="专家编号">
+              <el-input v-model="form.expertId"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="16">
             <el-form-item label="签字后的登记表">
+              <template v-if="disabled">
+                <img :src="form.formImageBase64" class="avatar" />
+              </template>
               <el-upload
+                v-if="!disabled"
                 class="upload-demo"
                 ref="upload"
                 action=""
@@ -311,6 +338,7 @@
 <script>
 import { joinTeam_add } from '../api/index';
 import { trim } from '@/utils/index';
+import { cP, cP15 } from '@/utils/regexp';
 export default {
   name: 'managementAdd',
   props: ['visible', 'form', 'disabled'],
@@ -335,6 +363,9 @@ export default {
         edu: trim(this.$store.getters['dictionary/recruit_edu'])
       },
       rules: {
+        nationId: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
         zjlxId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         xm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
@@ -353,9 +384,7 @@ export default {
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
         timeday: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
-        bankName: [
-          { required: true, message: '请填写必选项', trigger: 'blur' }
-        ],
+        bankId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         bankaccount: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
@@ -364,6 +393,34 @@ export default {
   },
   computed: {},
   methods: {
+    userIdEdit(e) {
+      console.log(this.$store);
+      let arr = this.getBirthday(e);
+      if (arr.length == 1) {
+        this.form.sexId = arr[0];
+      } else if (arr.length == 2) {
+        this.form.sexId = arr[0];
+        this.form.birthDate = arr[1];
+      }
+    },
+    getBirthday(e) {
+      let arr = [];
+      if (e.length == 15) {
+        if (cP15.test(e) === true) {
+          let s = e.substring(14, 15);
+          arr = [s % 2 == 0 ? '2' : '1'];
+        }
+        return arr;
+      } else if (e.length == 18) {
+        if (cP.test(e) === true) {
+          let b = e.substring(6, 14);
+          let s = e.substring(16, 17);
+          arr = [s % 2 == 0 ? '2' : '1', b];
+        }
+        return arr;
+      }
+      return arr;
+    },
     open() {},
     timedayClick(e) {
       if (e == 'workday') {
@@ -382,9 +439,9 @@ export default {
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = function() {
+      reader.onload = () => {
         console.log(reader.result);
-        this[name] = reader.result;
+        this.form[name] = reader.result;
       };
       reader.onerror = function(error) {
         console.log('Error: ', error);
@@ -406,10 +463,20 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          if (this.form.timeday == 'otherTime') {
+            if (!this.form.otherTime) {
+              this.$message({
+                message: '请填写其他时间',
+                type: 'warning',
+                duration: 1000
+              });
+              return;
+            }
+          }
           joinTeam_add(
             trim(this.form),
             res => {
-              if (res.status == 200) {
+              if (res.result.data.result) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
@@ -417,6 +484,12 @@ export default {
                   onClose: () => {
                     this.onclose();
                   }
+                });
+              } else {
+                this.$message({
+                  message: res.result.data.msg,
+                  type: 'warning',
+                  duration: 1500
                 });
               }
               console.log(res);

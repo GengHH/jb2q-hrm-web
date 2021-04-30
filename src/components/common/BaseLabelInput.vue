@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-08 17:29:00
+ * @LastEditTime: 2021-04-08 17:51:46
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelInput.vue
 -->
@@ -11,13 +11,19 @@
   <div class="lable-input-block" ref="input">
     <el-input v-support v-bind="attrs" :value="value" v-on="eventList">
     </el-input>
-    <span class="float-label hidden">{{ label }} </span>
+    <span class="float-label hidden"
+      ><i v-if="required" class="required-symbol">*</i>{{ label }}
+    </span>
   </div>
 </template>
 <script>
 export default {
   name: 'pl-input',
   props: {
+    required: {
+      type: Boolean,
+      default: false
+    },
     label: {
       type: String,
       default: ''
@@ -65,12 +71,24 @@ export default {
   },
   methods: {
     init() {
+      let that = this;
       if (this.value) {
-        $(this.$refs['input'])
-          .children('.float-label')
-          .removeClass('hidden')
-          .animate({ top: '-8px' }, 300);
+        //动态显示label提示标签(UI渲染有时候会有时间延时问题)
+        if (this.$refs['input']) {
+          $(this.$refs['input'])
+            .children('.float-label')
+            .removeClass('hidden')
+            .animate({ top: '-8px' }, 300);
+        } else {
+          setTimeout(function() {
+            $(that.$refs['input'])
+              .children('.float-label')
+              .removeClass('hidden')
+              .animate({ top: '-8px' }, 300);
+          }, 500);
+        }
 
+        //IE9时将自行模拟的placeholder隐藏
         $(this.$refs['input'])
           .children('.el-input')
           .children('.ie-placeholder')
@@ -126,5 +144,12 @@ export default {
   background-color: #fff;
   font-size: 14px;
   line-height: 14px;
+}
+.required-symbol {
+  color: red;
+  margin: 0px 3px 0;
+  /* display: inline-block; */
+  top: 3px;
+  position: relative;
 }
 </style>

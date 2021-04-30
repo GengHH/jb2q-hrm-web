@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 17:12:03
+ * @LastEditTime: 2021-04-22 13:24:19
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -12,6 +12,7 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
+import 'jquery.nicescroll';
 import Vue from 'vue';
 import App from './index.vue';
 import router from './router';
@@ -23,12 +24,17 @@ import _ from 'lodash';
 // 按需引入Element组件
 import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
-
+import BaiduMap from 'vue-baidu-map';
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
 // 使用Element组件
 Vue.use(ElementUI);
+// 使用百度地图插件
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'GanPoYI5lBCc4rQ1hZbevgLyTE46ghkW'
+});
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
 // 使用Element组件

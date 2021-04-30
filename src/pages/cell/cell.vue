@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-02-07 18:00:17
+ * @LastEditTime: 2021-04-29 10:58:05
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\cell\cell.vue
 -->
@@ -10,7 +10,9 @@
   <div id="indexApp">
     <img :src="path" />
     <router-view></router-view>
-    <div id="testjrCss">hahahhahhah</div>
+    <div id="testjrCss"></div>
+    <h1>{{ aa }}</h1>
+    <h1>{{ bb }}</h1>
   </div>
 </template>
 
@@ -19,8 +21,24 @@ export default {
   name: 'app',
   data: () => {
     return {
-      path: require('@/assets/logo.png')
+      path: require('@/assets/logo.png'),
+      aa: 1,
+      bb: {
+        cc: 2
+      }
     };
+  },
+  beforeCreate() {
+    console.log('beforeCreate', this.$data);
+  },
+  created() {
+    console.log('created', this.$data);
+  },
+  beforeMount() {
+    console.log('beforeMount', this.$data);
+  },
+  mounted() {
+    console.log('mounted', this.$data);
   },
   methods: {
     test: () => {

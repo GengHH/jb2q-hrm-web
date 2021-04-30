@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-04-02 15:38:40
+ * @LastEditTime: 2021-04-23 14:48:02
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -224,6 +224,7 @@
     </div>
     <!-- 分页器 -->
     <el-pagination
+      id="jobListpager"
       v-show="showPager"
       v-bind="pageAttrs"
       :class="pagerClass"
@@ -271,6 +272,12 @@ export default {
       currentPage: 0,
       pageSize: 10
     };
+  },
+  updated() {
+    // 更新滚动条
+    $('#indexApp')
+      .getNiceScroll()
+      .resize();
   },
   computed: {
     pageAttrs() {
@@ -421,5 +428,9 @@ export default {
     padding: 3px 10px;
     border-radius: 20px;
   }
+}
+#jobListpager {
+  display: inline-block;
+  width: 100%;
 }
 </style>

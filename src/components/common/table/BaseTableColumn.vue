@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 17:59:42
+ * @LastEditTime: 2021-04-15 17:50:22
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -78,12 +78,14 @@
             ></el-divider>
             <pl-button
               v-if="item.confirmType || item.confirm"
+              type="button"
+              class="tabla-col-btn"
               :key="index"
+              v-bind="item.attrs"
               :confirm-type="item.confirmType || 'pop'"
               :confirm-config="item.confirmConfig && item.confirmConfig(scope)"
               :pop-config="item.popConfig && item.popConfig(scope)"
               fullscreen-loading
-              type="text"
               :icon="item.icon"
               @confirm="done => item.confirm(scope, done, index)"
             >
@@ -92,6 +94,7 @@
             <pl-button
               v-else
               :key="index"
+              class="tabla-col-btn"
               v-bind="item.attrs"
               :icon="item.icon"
               @click="item.onClick(scope)"
@@ -267,4 +270,19 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.tabla-col-btn {
+  padding: 8px 8px !important;
+  font-size: 10px !important;
+  ::v-deep span {
+    margin-left: 0 !important;
+  }
+  ::v-deep button {
+    padding: 8px 8px !important;
+    font-size: 10px !important;
+    span {
+      margin-left: 0 !important;
+    }
+  }
+}
+</style>

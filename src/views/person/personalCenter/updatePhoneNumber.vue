@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-03-22 11:16:24
+ * @LastEditTime: 2021-04-16 13:32:34
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -20,15 +20,15 @@
           ></pl-input>
         </el-col>
         <el-col :span="8">
-          <el-button id="codeBtn" type="primary" @click="getCode" plain
-            >获取验证码</el-button
+          <pl-button id="codeBtn" type="primary" @click="getCode($event)" plain
+            >获取验证码</pl-button
           >
         </el-col>
       </el-row>
     </el-form-item>
     <el-form-item id="submitBtnBox">
-      <el-button id="submitBtn" type="primary" @click="upDateNum"
-        >确认修改</el-button
+      <pl-button id="submitBtn" type="primary" @click="updatePhoneNum($event)"
+        >确认修改</pl-button
       >
     </el-form-item>
   </el-form>
@@ -36,7 +36,8 @@
 
 <script>
 //import plInput from '@/components/common/BaseLabelInput';
-import { phonePattern } from '@/utils/regexp';
+import { phonePattern, codePattern } from '@/utils/regexp';
+import { sendSms, updatePhoneNum } from '@/api/personApi';
 export default {
   name: 'updatePhoneNumber',
   components: {
@@ -58,24 +59,62 @@ export default {
           }
         ],
         verificationCode: [
-          { required: true, message: '请输入短息验证码', trigger: 'blur' }
+          { required: true, message: '短信验证码不能为空', trigger: 'blur' },
+          //{ type: 'number', message: '请输数字', trigger: 'blur' },
+          {
+            pattern: codePattern,
+            message: '请输入六位数字验证码',
+            trigger: ['blur', 'change']
+          }
+          //{ min: 6, max: 6, message: '请输六位验证码', trigger: 'blur' }
         ]
       }
     };
   },
   methods: {
-    getCode() {
-      this.$alert('缺少获取验证码的Api接口，请稍后！');
+    async getCode(done) {
+      let that = this;
+      if (!this.formData.newphoneNum) {
+        this.$alert('手机号不能为空');
+      } else if (!phonePattern.test(this.formData.newphoneNum)) {
+        this.$alert('手机号格式不正确');
+      } else {
+        let smsResult = await sendSms({
+          contactPhone: that.formData.newphoneNum
+        }).catch(() => {
+          done();
+          that.$message({ type: 'error', message: '系统异常，获取验证码失败' });
+        });
+        if (smsResult.status === 200) {
+          that.$message({ type: 'success', message: '获取验证码成功' });
+        } else {
+          that.$message({ type: 'error', message: '获取验证码失败' });
+        }
+      }
+      done();
     },
-    upDateNum() {
-      this.$refs['dataForm'].validate(valid => {
+    updatePhoneNum(done) {
+      let that = this;
+      this.$refs['dataForm'].validate(async valid => {
         if (valid) {
-          this.$message({
-            type: 'error',
-            message: '验证码不正确'
+          let result = await updatePhoneNum({
+            pid: that.$store.getters['person/pid'],
+            contactPhone: that.formData.newphoneNum,
+            verifyCode: that.formData.verificationCode
+          }).catch(() => {
+            done();
+            that.$message({ type: 'error', message: '系统异常，修改失败' });
           });
+          if (result.message) {
+            that.$message({ type: 'error', message: result.message });
+          } else if (result.status === 200) {
+            that.$message({ type: 'success', message: '修改成功' });
+          } else {
+            that.$message({ type: 'error', message: '修改失败' });
+          }
         }
       });
+      done();
     }
   }
 };

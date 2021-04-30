@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 16:33:38
+ * @LastEditTime: 2021-04-12 18:59:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -26,10 +26,10 @@
               label="年龄（小）"
             ></pl-input>
           </el-col>
-          <el-col :span="2" class="text-left no-col-padding">
+          <el-col :span="2" class="text-center no-col-padding">
             <span class="delimiter">-</span>
           </el-col>
-          <el-col :span="11" class="text-left no-col-padding">
+          <el-col :span="11" class="text-right no-col-padding">
             <pl-input
               v-model="queryParam.gjz"
               autocomplete="off"
@@ -117,12 +117,7 @@ export default {
         gjz: ''
       },
       data: [],
-      dicGznx: [
-        {
-          value: '1',
-          label: '不足一年'
-        }
-      ],
+      dicGznx: this.$store.getters['dictionary/recruit_work_year'],
       pickerOptions: {
         shortcuts: [
           {
@@ -251,23 +246,27 @@ export default {
         },
         {
           label: '职位名称',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'positionName',
           rowSpan: 'all'
         },
         {
           label: '简历最近修改时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '账号最近登录时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '收藏时间',
+          attrs: { 'show-overflow-tooltip': true },
           prop: 'date',
           formatter: 'date',
           slotName: 'date'

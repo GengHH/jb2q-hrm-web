@@ -2,14 +2,17 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 19:04:02
+ * @LastEditTime: 2021-04-28 11:14:25
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
-import { getLogonUser } from '@/api/corporationApi';
+import { getLogonUser, checkCorpInit } from '@/api/corporationApi';
+import router from '@/pages/corporation/router';
 const state = {
   //用户token
   token: '',
+  //是否首次进入系统
+  first_login: true,
   //证件号码
   tyshxym: '',
   //单位标识
@@ -33,7 +36,18 @@ const state = {
   //登录状态:1:登录中，0：未登录
   login_status: 0,
   //登录时间，超出半个小时即登录失效
-  login_time: 0
+  login_time: 0,
+
+  //见习基地标志(YESNO)
+  tran_base_symbol: false,
+  //是否人力资源机构(YESNO)
+  human_resource_reg: false,
+  //是否重点企业(YESNO)
+  keypoint_corp: false,
+  //是否特定单位(YESNO)
+  special_corp: false,
+  //是否允许代理招聘(YESNO)
+  entrust_status: false
 };
 
 const mutations = {
@@ -44,6 +58,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_FIRST_LOGIN: (state, first_login) => {
+    state.first_login = first_login;
   },
   SET_DWMC: (state, name) => {
     state.name = name;
@@ -74,6 +91,21 @@ const mutations = {
   },
   SET_LOGIN_TIME: (state, login_time) => {
     state.login_time = login_time;
+  },
+  SET_TRAN_BASE_SYMBOL: (state, tran_base_symbol) => {
+    state.tran_base_symbol = tran_base_symbol;
+  },
+  SET_HUMAN_RESOURCE_REG: (state, human_resource_reg) => {
+    state.human_resource_reg = human_resource_reg;
+  },
+  SET_KEYPOINT_CORP: (state, keypoint_corp) => {
+    state.keypoint_corp = keypoint_corp;
+  },
+  SET_SPECIAL_CORP: (state, special_corp) => {
+    state.special_corp = special_corp;
+  },
+  SET_ENTRUST_STATUS: (state, entrust_status) => {
+    state.entrust_status = entrust_status;
   }
 };
 const getters = {
@@ -81,8 +113,14 @@ const getters = {
   //   return state.name;
   // }
   token: state => state.token,
+  first_login: state => state.first_login,
   username: state => state.dwmc,
-  cid: state => state.cid
+  cid: state => state.cid,
+  tran_base_symbol: state => state.tran_base_symbol,
+  human_resource_reg: state => state.human_resource_reg,
+  keypoint_corp: state => state.keypoint_corp,
+  special_corp: state => state.special_corp,
+  entrust_status: state => state.entrust_status
 };
 const actions = {
   //用户登录
@@ -125,6 +163,7 @@ const actions = {
         }
       });
       commit('SET_TOKEN', 'login');
+      commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -138,6 +177,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_CORPORATIONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
+      commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
@@ -149,12 +189,63 @@ const actions = {
 
   get_corporationInfo({ commit }) {
     getLogonUser()
-      .then(res => {
+      .then(async res => {
         console.log('单位登录信息', res);
-        if (res.status == 200) {
+        if (res.status == 200 && res.result.logonUser?.organIdStr) {
           commit('SET_CORPORATIONINOF', res.result);
           commit('SET_TOKEN', 'login');
+          let checkRes = await checkCorpInit({
+            cid: res.result.logonUser?.organIdStr
+          }).catch(() => {
+            // 检验单位信息失败，显示系统异常界面
+            router.push('/error');
+          });
+          //判断是不是首次进入系统
+          if (checkRes.status === 200) {
+            commit('SET_FIRST_LOGIN', !checkRes.result.data);
+            //单位标志
+            commit(
+              'SET_TRAN_BASE_SYMBOL',
+              (checkRes.result.tranBaseSymbol &&
+                checkRes.result.tranBaseSymbol) === '1'
+                ? true
+                : false
+            );
+            commit(
+              'SET_HUMAN_RESOURCE_REG',
+              (checkRes.result.humanResourceReg &&
+                checkRes.result.humanResourceReg) === '1'
+                ? true
+                : false
+            );
+            commit(
+              'SET_KEYPOINT_CORP',
+              (checkRes.result.keypointCorp && checkRes.result.keypointCorp) ===
+                '1'
+                ? true
+                : false
+            );
+            commit(
+              'SET_SPECIAL_CORP',
+              (checkRes.result.specialCorp && checkRes.result.specialCorp) ===
+                '1'
+                ? true
+                : false
+            );
+            commit(
+              'SET_ENTRUST_STATUS',
+              (checkRes.result.entrustStatus &&
+                checkRes.result.entrustStatus) === '1'
+                ? true
+                : false
+            );
+            //entrustValid
+          } else {
+            commit('SET_FIRST_LOGIN', false);
+          }
         } else {
+          // 登录成功但是获取人员进本信息失败，显示系统异常界面
+          router.push('/error');
           console.log('加载单位登录信息失败：' + res.message);
         }
       })

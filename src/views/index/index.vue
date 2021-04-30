@@ -2,7 +2,7 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch></BaseSearch>
+      <BaseSearch showSelect :selectData="selectData"></BaseSearch>
       <!-- <router-view></router-view> -->
       <el-row id="carouselBox" :gutter="20">
         <el-col :sm="24" :md="18" :lg="16" :xl="16">
@@ -19,9 +19,11 @@
               <h2>个人登录</h2>
               <p>账号密码登录</p>
               <p>随申办APP扫码登录</p>
-              <br />
-              <br />
-              <a href="#" @click="personSignIn" class="login-btn login-link-one"
+              <a
+                id="perosnLoginBtn"
+                href="#"
+                @click="personSignIn"
+                class="login-btn login-link-one"
                 >去登录</a
               >
             </div>
@@ -37,8 +39,11 @@
               <p>法人一证通登录</p>
               <p>随申办APP/微信/支付宝</p>
               <p>扫码登录</p>
-              <br />
-              <a href="#" @click="corpSignIn" class="login-btn  login-link-two"
+              <a
+                id="corpLoginBtn"
+                href="#"
+                @click="corpSignIn"
+                class="login-btn  login-link-two"
                 >去登录</a
               >
             </div>
@@ -124,6 +129,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { testData } from '@pub/mockTestData';
+import { isPerson, isCorporation } from '@/utils';
 export default {
   name: 'indexApp',
   components: {
@@ -201,6 +207,14 @@ export default {
           maxSalary: '15000',
           paymentUnit: '元/月'
         }
+      ],
+      selectValue: 'position',
+      selectData: [
+        {
+          label: '单位名称',
+          value: 'corporation'
+        },
+        { label: '职位类型', value: 'position' }
       ]
     };
   },
@@ -211,7 +225,7 @@ export default {
   },
   methods: {
     personSignIn() {
-      console.log(this.$store);
+      this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'person');
       //this.$alert('个人登录暂时未开放');
       // this.axios
       //   .get('new-corp-api/loginController/ywtb-index')
@@ -221,11 +235,21 @@ export default {
       //   .catch(err => {
       //     throw new Error('调用API失败' + err);
       //   });
-      window.location.href = '/ggzp-shrs/login.html';
+      if (isPerson(this)) {
+        window.location.href = '/ggzp-shrs/person.html';
+      } else {
+        window.location.href = '/ggzp-shrs/login.html';
+      }
     },
     corpSignIn() {
-      window.location.href =
-        'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
+      this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'corporation');
+      if (isCorporation(this)) {
+        window.location.href = '/ggzp-shrs/corporation.html';
+      } else {
+        window.location.href = '/ggzp-shrs/login.html';
+      }
+      // window.location.href =
+      //   'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
     test() {
       this.axios
@@ -248,15 +272,17 @@ export default {
       this.$message('this is more');
     }
   },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+  mounted() {
+    if (isPerson(this)) {
+      $('#perosnLoginBtn').html('已登录');
+    } else {
+      $('#perosnLoginBtn').html('去登录');
+    }
+    if (isCorporation(this)) {
+      $('#corpLoginBtn').html('已登录');
+    } else {
+      $('#corpLoginBtn').html('去登录');
+    }
   }
 };
 </script>
@@ -289,16 +315,20 @@ export default {
   display: inline-block;
 
   #persLogin {
+    position: relative;
     background-image: url('../../assets/images/pers-login.png');
   }
   #corpLogin {
+    position: relative;
     background-image: url('../../assets/images/corp-login.png');
   }
   .login-btn {
     background-color: #fff;
-    padding: 5px 10px;
+    padding: 8px 20px;
     border-radius: 20px;
     font-size: 14px;
+    position: absolute;
+    bottom: 10px;
   }
   .login-link-one {
     color: #998cfd;

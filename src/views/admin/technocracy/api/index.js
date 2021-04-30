@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-25 14:36:30
- * @LastEditTime: 2021-03-31 19:36:52
+ * @LastEditTime: 2021-04-07 16:28:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\api\index.js
@@ -52,6 +52,8 @@ const record_query = (params, fn, fnErr) =>
   postAction(path + 'pair/query', params, fn, fnErr);
 const record_edit = (params, fn, fnErr) =>
   postAction(path + 'pair/modify', params, fn, fnErr);
+const record_queryPsnls = (params, fn, fnErr) =>
+  postAction(path + 'pair/queryPsnls', params, fn, fnErr);
 
 //专家活动情况-------------------------------------------
 const activity_add = (params, fn, fnErr) =>
@@ -84,6 +86,7 @@ export {
   record_add,
   record_remove,
   record_query,
+  record_queryPsnls,
   synthesize_query,
   joinTeam_add,
   joinTeam_query,

@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-02 17:52:44
+ * @LastEditTime: 2021-04-29 16:03:29
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -27,6 +27,7 @@ import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
 import PlTable from '@/components/common/table/BaseTable.vue';
 import PlConfig from '@/config/plComponents';
+import { isNoBody, isPerson, isCorporation } from '@/utils';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -113,12 +114,74 @@ if (isEmpty(store.getters['dictionary/recruit_act_date_type'])) {
 if (isEmpty(store.getters['dictionary/ggjbxx_jyzt'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_JYZT');
 }
+//特色活动状态
+if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
+//单位性质
+if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_CORP_NATURE');
+}
+//行业类别
+if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_INDUSTRY_TYPE');
+}
+//招聘类型
+if (isEmpty(store.getters['dictionary/recruit_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_TYPE');
+}
+//工作年限
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
+}
+//二级行业
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+//招聘会类型
+if (isEmpty(store.getters['dictionary/recruit_meet_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_MEET_TYPE');
+}
+//角色类型
+if (isEmpty(store.getters['dictionary/recruit_user_role'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_USER_ROLE');
+}
+//就业类型
+if (isEmpty(store.getters['dictionary/recruit_employ_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EMPLOY_TYPE');
+}
+//实施举措
+if (isEmpty(store.getters['dictionary/recruit_imple_act_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_IMPLE_ACT_TYPE');
+}
+//是或否
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+//重点类型
+if (isEmpty(store.getters['dictionary/recruit_point_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POINT_TYPE');
+}
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
+const vm = new Vue({
+  //el: '#app',
   store,
   //render: h => h(App)
   template: '<App/>',
   components: { App }
 });
+
+if (isNoBody(vm)) {
+  vm.$mount('#app');
+} else {
+  if (store.getters.priorityLoginType === 'corporation') {
+    vm.$alert('已有个人登录本系统，请先退出登录');
+  }
+  if (store.getters.priorityLoginType === 'person') {
+    vm.$alert('已有单位登录本系统，请先退出登录');
+  }
+  setTimeout(() => {
+    window.location.href = '/ggzp-shrs/index.html';
+  }, 2000);
+}

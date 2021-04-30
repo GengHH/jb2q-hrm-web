@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-01 14:20:31
+ * @LastEditTime: 2021-04-26 15:49:23
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -29,6 +29,7 @@
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -208,6 +209,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob } from '@/api/personApi';
+//import { niceScroll } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -215,6 +217,7 @@ export default {
   },
   data() {
     return {
+      actionColWidth: 260,
       activeName: 'unread',
       labelPosition: 'right',
       formLabelWidth: '120px',
@@ -235,78 +238,6 @@ export default {
         evaluationContent: ''
       },
       rules: {},
-      tableData: [
-        {
-          age: 20,
-          date: '2019-05-01',
-          evaluationLevel: null,
-          corpName: '万达信息股份有限公司',
-          positionName: '软件工程师',
-          salaryScope: '10k',
-          workArea: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1', 'action6']
-        },
-        {
-          age: 20,
-          date: '2019-05-04',
-          evaluationLevel: null,
-          corpName: '万达信息股份有限公司',
-          positionName: '软件工程师',
-          salaryScope: '10k',
-          workArea: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
-          actions: ['action1']
-        },
-        {
-          age: 20,
-          date: '2019-05-03',
-          evaluationLevel: null,
-          corpName: '万达信息股份有限公司',
-          positionName: '软件工程师',
-          salaryScope: '10k',
-          workArea: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          age: 20,
-          date: '2019-05-02',
-          evaluationLevel: null,
-          corpName: '万达信息股份有限公司',
-          positionName: '软件工程师',
-          salaryScope: '10k',
-          workArea: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2', 'action3']
-        },
-        {
-          age: 20,
-          date: '2019-05-05',
-          evaluationLevel: null,
-          corpName: '万达信息股份有限公司',
-          positionName: '软件工程师',
-          salaryScope: '10k',
-          workArea: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2']
-        }
-      ],
       tableData1: [],
       tableData2: [],
       tableData3: [],
@@ -319,8 +250,8 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]
@@ -358,6 +289,7 @@ export default {
         {
           label: '投递时间',
           prop: 'createTime',
+          attrs: { showOverflowTooltip: true },
           formatter: 'date',
           slotName: 'createTime'
         },
@@ -373,7 +305,7 @@ export default {
         // },
         {
           label: '操作',
-          attrs: { width: 340 },
+          attrs: { width: this.actionColWidth },
           actions: [
             {
               id: 'action1',
@@ -416,6 +348,15 @@ export default {
               id: 'action4',
               text: '参加面试',
               icon: 'el-icon-chat-line-round',
+              confirmType: 'pop',
+              popConfig: () => ({
+                title: '确认参加面试？'
+              }),
+              confirm: ({ row }, done) => {
+                // TODO变成评价按钮
+                row.actions = ['action1', 'action3', 'action6'];
+                done();
+              },
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
                 //console.log(row);
@@ -426,8 +367,17 @@ export default {
             },
             {
               id: 'action5',
-              text: '未参加面试',
+              text: '不参加面试',
               icon: 'el-icon-chat-line-round',
+              confirmType: 'pop',
+              popConfig: () => ({
+                title: '确认不参加面试？'
+              }),
+              confirm: ({ row }, done) => {
+                // TODO变成评价按钮
+                row.actions = ['action1', 'action3', 'action6'];
+                done();
+              },
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
                 //console.log(row);
@@ -439,7 +389,7 @@ export default {
             {
               id: 'action6',
               text: '评价',
-              icon: 'el-icon-chat-edit',
+              icon: 'el-icon-connection',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
                 this.jobEvaluationForm.applyforId = row.applyforId;
@@ -471,9 +421,16 @@ export default {
       return this.$refs.dataTable5.multipleSelection;
     }
   },
+  mounted() {
+    //niceScroll('.el-table__body-wrapper');
+  },
   methods: {
     handleClick(tab, event) {
-      //console.log(tab, event);
+      if (tab.label === '通知面试') {
+        this.actionColWidth = 420;
+      } else {
+        this.actionColWidth = 280;
+      }
     },
     handleSelectionChange(val) {
       //console.log(val);
@@ -491,10 +448,10 @@ export default {
       switch (this.activeName) {
         case 'unread':
           if (
-            !this.selection1 ||
-            (this.selection1 && this.selection1.length == 0)
+            !that.selection1 ||
+            (that.selection1 && that.selection1.length == 0)
           ) {
-            this.$alert('请选择一条');
+            that.$alert('请选择一条');
           } else {
             that.tableData1 = that.tableData1.filter(
               obj => !that.selection1.some(i => obj.id === i.id)
@@ -503,10 +460,10 @@ export default {
           break;
         case 'readed':
           if (
-            !this.selection2 ||
-            (this.selection2 && this.selection2.length == 0)
+            !that.selection2 ||
+            (that.selection2 && that.selection2.length == 0)
           ) {
-            this.$alert('请选择一条');
+            that.$alert('请选择一条');
           } else {
             that.tableData2 = that.tableData2.filter(
               obj => !that.selection2.some(i => obj.id === i.id)
@@ -515,10 +472,10 @@ export default {
           break;
         case 'interview':
           if (
-            !this.selection3 ||
-            (this.selection3 && this.selection3.length == 0)
+            !that.selection3 ||
+            (that.selection3 && that.selection3.length == 0)
           ) {
-            this.$alert('请选择一条');
+            that.$alert('请选择一条');
           } else {
             that.tableData3 = that.tableData3.filter(
               obj => !that.selection3.some(i => obj.id === i.id)
@@ -527,10 +484,10 @@ export default {
           break;
         case 'hire':
           if (
-            !this.selection4 ||
-            (this.selection4 && this.selection4.length == 0)
+            !that.selection4 ||
+            (that.selection4 && that.selection4.length == 0)
           ) {
-            this.$alert('请选择一条');
+            that.$alert('请选择一条');
           } else {
             that.tableData4 = that.tableData4.filter(
               obj => !that.selection4.some(i => obj.id === i.id)
@@ -539,10 +496,10 @@ export default {
           break;
         case 'unhire':
           if (
-            !this.selection5 ||
-            (this.selection5 && this.selection5.length == 0)
+            !that.selection5 ||
+            (that.selection5 && that.selection5.length == 0)
           ) {
-            this.$alert('请选择一条');
+            that.$alert('请选择一条');
           } else {
             that.tableData5 = that.tableData5.filter(
               obj => !that.selection5.some(i => obj.id === i.id)
@@ -568,8 +525,8 @@ export default {
         pid: this.pid,
         content: val
       });
-      let _data = queryResult.result.data;
       if (queryResult.status === 200) {
+        let _data = queryResult.result.data;
         switch (this.activeName) {
           case 'unread':
             _data.forEach(element => {
@@ -585,7 +542,7 @@ export default {
             break;
           case 'interview':
             _data.forEach(element => {
-              element.actions = ['action1', 'action6', 'action3'];
+              element.actions = ['action1', 'action3', 'action4', 'action5'];
             });
             that.tableData3 = _data;
             break;

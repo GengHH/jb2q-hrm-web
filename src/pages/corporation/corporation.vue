@@ -1,13 +1,13 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 16:51:00
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-04-23 17:50:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
 <template>
-  <div id="indexApp">
+  <div id="indexApp" class="nice-scroll">
     <!-- Header -->
     <BaseHeader :nav-list="navList" :user-log-info="userLogInfo"></BaseHeader>
     <!-- <transition name="fade">
@@ -22,7 +22,7 @@
  * 公司管理系统入口界面
  */
 import BaseHeader from '@/components/common/BaseHeader.vue';
-import { testData } from '@pub/mockTestData';
+import { niceScroll } from '@/utils';
 export default {
   name: 'app',
   components: {
@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
-      list: testData.list,
       obj: {},
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
@@ -54,7 +53,7 @@ export default {
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },
         { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
-        { id: '1', path: '/', nvaText: '单位信息维护' }
+        { id: '1', path: '/corpInfo', nvaText: '单位信息维护' }
       ],
       userLogInfo: {
         id: 'user',
@@ -93,6 +92,20 @@ export default {
     // }).catch( err=>{
     //   console.log(err)
     // });
+  },
+  mounted() {
+    //niceScroll('#indexApp');
+    niceScroll('#indexApp');
+    // setTimeout(function() {
+    //   niceScroll('#indexApp');
+    // }, 10);
+  },
+  updated() {
+    setTimeout(function() {
+      $('#indexApp')
+        .getNiceScroll()
+        .resize();
+    }, 10);
   }
 };
 </script>
@@ -112,5 +125,9 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+}
+.nice-scroll {
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 </style>

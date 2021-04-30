@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 18:07:06
+ * @LastEditTime: 2021-04-28 17:10:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
 -->
@@ -15,15 +15,15 @@
         <pl-button type="danger" icon="el-icon-close">下架</pl-button>
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryResult($event)"></BaseSearch>
       </el-col>
     </el-row>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="自助招聘" name="first">
+      <el-tab-pane label="自主招聘" name="first">
         <pl-table
-          :data="tableData"
-          ref="serveTable"
+          :data="tableData1"
+          ref="serveTable1"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
@@ -36,8 +36,8 @@
       </el-tab-pane>
       <el-tab-pane label="代理招聘" name="second"
         ><pl-table
-          :data="tableData"
-          ref="serveTable"
+          :data="tableData2"
+          ref="serveTable3"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
@@ -54,6 +54,12 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
+import { findPosition } from '@/api/corporationApi';
+const STATUS_TAG_MAP = {
+  1: { text: '待审核', type: 'info' },
+  2: { text: '审核通过', type: 'success' },
+  3: { text: '驳回', type: 'danger' }
+};
 export default {
   name: 'jobQueryPublished',
   components: {
@@ -63,64 +69,47 @@ export default {
     return {
       activeName: 'first',
       unshowShztColumn: true,
-      tableData: [
+      tableData1: [
         {
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
+          positionId: '4',
+          editId: '',
+          positionName: 'JAVA架构工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
+          statusId: '1',
           actions: ['action1']
         },
         {
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
+          positionId: '3',
+          editId: '',
+          positionName: 'JAVA超高级工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
+          statusId: '1',
+          actions: ['action1']
+        }
+      ],
+      tableData2: [
+        {
+          positionId: '4',
+          editId: '',
+          positionName: 'JAVA架构工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
+          statusId: '1',
           actions: ['action1']
         },
         {
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          date: '2019-05-02',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
+          positionId: '3',
+          editId: '',
+          positionName: 'JAVA超高级工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
+          statusId: '1',
           actions: ['action1']
         }
       ]
@@ -145,26 +134,25 @@ export default {
         },
         {
           label: '薪酬',
-          prop: 'name',
+          prop: 'salaryScope',
           rowSpan: 'all'
         },
         {
           label: '工作地点',
-          prop: 'age',
+          prop: 'workAddress',
           rowSpan: 'all'
         },
-
         {
           label: '操作时间',
-          prop: 'date',
+          prop: 'editId',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '审核状态',
-          prop: 'age',
+          prop: 'statusId',
           unshow: this.unshowShztColumn,
-          rowSpan: 'all'
+          tagMap: STATUS_TAG_MAP
         },
         {
           label: '操作',
@@ -176,7 +164,11 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-edit',
               onClick: ({ row }) => {
-                //console.log(row);
+                //编辑职位信息
+                this.$router.push({
+                  path: '/jobMgr/jobAdd',
+                  query: { positionId: row.positionId }
+                });
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);
@@ -197,6 +189,41 @@ export default {
     },
     handleSelectionChange(val) {
       console.log(val);
+    },
+    async queryResult(val) {
+      let positionResult = await findPosition(
+        'released',
+        this.unshowShztColumn ? 'unagency' : 'agency',
+        {
+          cid: this.$store.getters['corporation/cid'],
+          content: $.trim(val)
+        }
+      ).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '系统异常，查询失败'
+        });
+      });
+      if (positionResult.status == 200) {
+        positionResult.result.data.forEach(element => {
+          element.actions = ['action1'];
+        });
+        if (this.unshowShztColumn) {
+          this.tableData1 = positionResult.result.data;
+        } else {
+          this.tableData2 = positionResult.result.data;
+        }
+      } else {
+        if (this.unshowShztColumn) {
+          this.tableData1 = [];
+        } else {
+          this.tableData2 = [];
+        }
+        this.$message({
+          type: 'error',
+          message: '查询失败'
+        });
+      }
     }
   }
 };

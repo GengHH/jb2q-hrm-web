@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-04 11:10:20
- * @LastEditTime: 2021-03-23 15:11:41
+ * @LastEditTime: 2021-04-07 11:06:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\admin\router\index.js
@@ -23,7 +23,6 @@ try {
 }
 
 Vue.use(Router);
-
 //默认空白的局部组件
 // const BlankComponent = {
 //   template:'<div>暂时空白</div>'
@@ -39,15 +38,26 @@ export default new Router({
       component: () => import('@/views/admin/index/index')
     },
     {
+      path: '/adminRight',
+      name: '账号权限配置',
+      component: () => import('@/views/admin/index/adminRight')
+    },
+    {
       path: '/serviceManagement',
       name: '重点人群就业服务管理',
-      component: () => import('@/views/admin/serviceManagement/serviceManagement')
+      component: () =>
+        import('@/views/admin/serviceManagement/serviceManagement')
     },
     // 专家管理technocracy
     {
       path: '/technocracy/management',
       name: '专家库管理',
       component: () => import('@/views/admin/technocracy/management')
+    },
+    {
+      path: '/technocracy/managementAudit',
+      name: '专家库管理审核',
+      component: () => import('@/views/admin/technocracy/managementAudit')
     },
     {
       path: '/technocracy/record',
@@ -126,19 +136,24 @@ export default new Router({
     {
       path: '/JobEvaluationReview/JobEvaluationReview',
       name: '职位评价查看',
-      component: () => import('@/views/admin/JobEvaluationReview/JobEvaluationReview')
+      component: () =>
+        import('@/views/admin/JobEvaluationReview/JobEvaluationReview')
     },
     // 敏感词管理
     {
       path: '/sensitiveWordManagement/sensitiveWordManagement',
       name: '敏感词管理',
-      component: () => import('@/views/admin/sensitiveWordManagement/sensitiveWordManagement')
+      component: () =>
+        import('@/views/admin/sensitiveWordManagement/sensitiveWordManagement')
     },
-    // 单位简历参数设置 
+    // 单位简历参数设置
     {
       path: '/unitResumeParameterSetting/unitResumeParameterSetting',
       name: '单位简历参数设置',
-      component: () => import('@/views/admin/unitResumeParameterSetting/unitResumeParameterSetting')
+      component: () =>
+        import(
+          '@/views/admin/unitResumeParameterSetting/unitResumeParameterSetting'
+        )
     },
     {
       path: '/*',

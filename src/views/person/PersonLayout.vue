@@ -2,14 +2,14 @@
   <!-- <router-view></router-view> -->
   <div id="indexBody">
     <el-row class="person-layout" :gutter="20">
-      <el-col id="personNavMenuFixed" :span="6">
+      <el-col id="personNavMenuFixed" :span="leftSpan">
         <router-view name="personNavMenu" />
       </el-col>
-      <el-col :span="18"></el-col>
+      <el-col :span="rightSpan"></el-col>
     </el-row>
-    <el-row class="person-layout" :gutter="20">
-      <el-col class="col-place-holder" :span="6"> </el-col>
-      <el-col :span="18">
+    <el-row class="person-layout" :gutter="60">
+      <el-col class="col-place-holder" :span="leftSpan"> </el-col>
+      <el-col id="personContentFixed" :span="rightSpan">
         <!-- <transition name="fade"> -->
         <router-view name="default" />
         <!-- </transition> -->
@@ -22,14 +22,45 @@
 export default {
   name: 'personLayout',
   data() {
-    return {};
+    return {
+      leftSpan: 4,
+      rightSpan: 20
+    };
   },
   computed: {
     jobFaieList: function() {
       return this.showList ? this.showList.slice(0, 3) : [];
     }
   },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        this._.debounce(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
+    });
+  },
+  updated() {
+    console.log('layout----------------update');
+  },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.leftSpan = 2;
+        this.rightSpan = 22;
+      } else {
+        this.leftSpan = 4;
+        this.rightSpan = 20;
+      }
+    },
     jobHandleClick() {
       console.log(1);
     },
@@ -72,13 +103,16 @@ export default {
       height: 1px;
     }
     #personNavMenuFixed {
-      width: 22.5% !important;
+      //width: 14.5% !important;
       position: fixed;
       z-index: 999;
       height: 100%;
       .el-menu {
         height: 100%;
       }
+    }
+    #personContentFixed {
+      float: right;
     }
   }
   .more-btn {
@@ -91,97 +125,21 @@ export default {
   }
 }
 
-// .el-carousel {
-//   height: 300px;
-//   width: 100%;
-//   div {
-//     height: 300px;
-//     width: 100%;
-//   }
-
-//   .el-carousel__item h3 {
-//     color: #475669;
-//     font-size: 14px;
-//     opacity: 0.75;
-//     line-height: 150px;
-//     margin: 0;
-//   }
-
-//   .el-carousel__item:nth-child(2n) {
-//     background-color: #99a9bf;
-//   }
-
-//   .el-carousel__item:nth-child(2n + 1) {
-//     background-color: #1b579c;
-//   }
-// }
-
-// #carouselBox {
-//   margin: 20px 0;
-//   .el-col {
-//     margin: 10px 0;
-//   }
-// }
-
-// .logo-module {
-//   width: 100%;
-//   height: 300px;
-//   background: #ff9954 linear-gradient(to right, #ff9954, #fc6f3d);
-//   border-radius: 3px;
-//   padding: 0 12px;
-//   display: inline-block;
-
-//   .module-logs {
-//     color: #fda749;
-//     background: #fff4ed;
-//     font-size: 24px;
-//     line-height: 120px;
-//     height: 120px;
-//     border-radius: 3px;
-//     margin: 20px 0;
-
-//     & span:first-child {
-//       width: 100px;
-//       height: 100px;
-//       border-radius: 50%;
-//       text-align: center;
-//       line-height: 56px;
-//       display: block;
-//       background: #fff;
-//       float: left;
-//       margin: 10px 20px;
-//     }
-//   }
-//   .or-font {
-//     .or-br-color i {
-//       font-size: 60px;
-//       margin: 20px 0;
-//       display: block;
-//     }
-//   }
-//   .co-font {
-//     .co-br-color i {
-//       font-size: 60px;
-//       margin: 20px 0;
-//       display: block;
-//     }
-//   }
-// }
 .clearfix {
   zoom: 1;
 }
-// 职位信息列表类型
-#jobInfoGloriette {
-  ::v-deep .el-col {
-    color: blue;
-    //height: 100px;
-  }
-}
-// 单位信息列表类型
-#corpInfoGloriette {
-  ::v-deep .el-col {
-    color: red;
-    //height: 100px;
-  }
-}
+// // 职位信息列表类型
+// #jobInfoGloriette {
+//   ::v-deep .el-col {
+//     color: blue;
+//     //height: 100px;
+//   }
+// }
+// // 单位信息列表类型
+// #corpInfoGloriette {
+//   ::v-deep .el-col {
+//     color: red;
+//     //height: 100px;
+//   }
+// }
 </style>

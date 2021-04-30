@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 15:04:00
+ * @LastEditTime: 2021-04-08 14:20:07
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelDatepicker.vue
 -->
@@ -27,13 +27,19 @@
       type="date"
     >
     </el-date-picker>
-    <span class="float-label hidden">{{ label }} </span>
+    <span class="float-label hidden"
+      ><i v-if="required" class="required-symbol">*</i>{{ label }}
+    </span>
   </div>
 </template>
 <script>
 export default {
   name: 'pl-date-picker',
   props: {
+    required: {
+      type: Boolean,
+      default: false
+    },
     label: {
       type: String,
       default: ''
@@ -142,5 +148,12 @@ export default {
 }
 .el-date-editor {
   width: 100%;
+}
+.required-symbol {
+  color: red;
+  margin: 0px 3px 0;
+  /* display: inline-block; */
+  top: 3px;
+  position: relative;
 }
 </style>

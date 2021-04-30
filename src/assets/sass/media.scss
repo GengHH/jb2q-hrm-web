@@ -6,16 +6,27 @@
 @import './variables.scss';
 
 /* At the top level of your code */
-@media screen and (min-width: 1024px) {
+@media screen and (max-width: 992px) {
   body {
-    background-color: $test-body-color1;
-    //background-color: $test-body-color1;
+    .el-menu-item,
+    .el-submenu__title {
+      padding: 0 10px;
+    }
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
   body {
-    background-color: $test-body-color2;
     //background-color: $test-body-color2;
+    .el-menu-item,
+    .el-submenu__title {
+      padding: 0 15px;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  body {
+    background-color: $test-body-color1;
   }
 }

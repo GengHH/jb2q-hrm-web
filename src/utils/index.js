@@ -3,7 +3,6 @@
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-31 16:52:12
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -231,6 +230,17 @@ export function formatTime(date) {
   );
 }
 /**
+ * 判断是否空对象
+ */
+export function isEmptyObject(obj) {
+  var name;
+
+  for (name in obj) {
+    return false;
+  }
+  return true;
+}
+/**
  * 去除空格
  */
 export function trim(data) {
@@ -268,4 +278,71 @@ export function trim(data) {
   } else {
     return '不是一个字符串或者对象';
   }
+}
+
+/**
+ * 使用jquery.nicescroll 自定义样式（兼容IE,全局统一）
+ * @param {*} id
+ */
+export function niceScroll(dom) {
+  if (dom) {
+    let scrollConfig = {
+      cursorcolor: '#aaa', // 改变滚动条颜色，使用16进制颜色值
+      cursoropacitymin: 0, // 当滚动条是隐藏状态时改变透明度, 值范围 1 到 0
+      cursoropacitymax: 1, // 当滚动条是显示状态时改变透明度, 值范围 1 到 0
+      cursorwidth: '7px', // 滚动条的宽度，单位：便素
+      cursorborder: '1px solid #fff', // CSS方式定义滚动条边框
+      cursorborderradius: '5px', // 滚动条圆角（像素）
+      scrollspeed: 60, // 滚动速度
+      mousescrollstep: 40, // 鼠标滚轮的滚动速度 (像素)
+      touchbehavior: false, // 激活拖拽滚动
+      hwacceleration: true, // 激活硬件加速
+      boxzoom: false, // 激活放大box的内容
+      dblclickzoom: true, // (仅当 boxzoom=true时有效)双击box时放大
+      gesturezoom: false, // (仅 boxzoom=true 和触屏设备时有效) 激活变焦当out/in（两个手指外张或收缩）
+      grabcursorenabled: true, // (仅当 touchbehavior=true) 显示“抓住”图标display "grab" icon
+      autohidemode: true // 隐藏滚动条的方式, 可用的值:true or false
+    };
+    let $doms = $(dom);
+    if ($doms.length && $doms.length === 1) {
+      $doms.niceScroll(scrollConfig);
+    } else if ($doms.length && $doms.length > 0) {
+      $doms.each(function() {
+        $(this).niceScroll(scrollConfig);
+      });
+    }
+  }
+}
+
+/**
+ *
+ * 判断某个日期是否超过当前日期某些天数
+ * @export
+ * @param {*} date 指定日期（Date,String,null）
+ * @param {*} day
+ */
+export function overDateSomeDays(date, day) {
+  let nowDate = new Date();
+  nowDate.setDate(nowDate.getDate() + (day || 0));
+  let nowDateNum = nowDate
+    ? '' + nowDate.getFullYear() + (nowDate.getMonth() + 1) + nowDate.getDate()
+    : 0;
+
+  let _date = date
+    ? typeof date === 'string'
+      ? new Date(
+          date.length === 8
+            ? date.substring(0, 4) +
+              '-' +
+              date.substring(4, 6) +
+              '-' +
+              date.substring(6, 8)
+            : date
+        )
+      : date
+    : new Date();
+  let tagertDateNum = _date
+    ? '' + _date.getFullYear() + (_date.getMonth() + 1) + _date.getDate()
+    : 0;
+  return tagertDateNum > nowDateNum;
 }

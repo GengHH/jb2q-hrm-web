@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 20:09:03
+ * @LastEditTime: 2021-04-22 16:23:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -12,6 +12,7 @@
 import 'assets/css/reset.css';
 import 'assets/css/style.css';
 import '@babel/polyfill';
+import 'jquery.nicescroll';
 import Vue from 'vue';
 import App from './corporation.vue';
 import router from './router';
@@ -59,9 +60,9 @@ let isEmpty = function(obj) {
 };
 
 // 开发环境使用mock时候，模拟登录
-// if (config.mock) {
-//   store.dispatch('corporation/do_login');
-// }
+if (config.mock) {
+  store.dispatch('corporation/do_login');
+}
 if (isEmpty(store.getters.cid)) {
   //获取单位登录信息
   store.dispatch('corporation/get_corporationInfo');
@@ -97,6 +98,12 @@ if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_PEOPLE');
+}
+if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
 
 window.setTimeout(function() {

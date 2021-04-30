@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 19:31:40
+ * @LastEditTime: 2021-04-28 16:29:53
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryUnpublished.vue
 -->
@@ -19,7 +19,7 @@
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch></BaseSearch>
+        <BaseSearch @clickButton="queryResult($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
@@ -36,6 +36,7 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
+import { findPosition } from '@/api/corporationApi';
 export default {
   name: 'jobQueryUnpublished',
   components: {
@@ -45,67 +46,21 @@ export default {
     return {
       tableData: [
         {
-          id: '1',
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
+          positionId: '4',
+          editId: '',
+          positionName: 'JAVA架构工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
           actions: ['action1']
         },
         {
-          id: '2',
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
-          actions: ['action1']
-        },
-        {
-          id: '3',
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          id: '4',
-          date: '2019-05-02',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          id: '5',
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
+          positionId: '3',
+          editId: '',
+          positionName: 'JAVA超高级工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          describe: '',
           actions: ['action1']
         }
       ]
@@ -130,17 +85,17 @@ export default {
         },
         {
           label: '薪酬',
-          prop: 'name',
+          prop: 'salaryScope',
           rowSpan: 'all'
         },
         {
           label: '工作地点',
-          prop: 'age',
+          prop: 'workAddress',
           rowSpan: 'all'
         },
         {
           label: '操作时间',
-          prop: 'date',
+          prop: 'editId',
           formatter: 'date',
           slotName: 'date'
         },
@@ -154,7 +109,11 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-edit',
               onClick: ({ row }) => {
-                //console.log(row);
+                //编辑职位信息
+                this.$router.push({
+                  path: '/jobMgr/jobAdd',
+                  query: { positionId: row.positionId }
+                });
               },
               hidden: ({ row }, item) => {
                 return !row.actions.find(c => c === item.id);
@@ -169,6 +128,29 @@ export default {
     }
   },
   methods: {
+    async queryResult(val) {
+      let positionResult = await findPosition('unrelease', '', {
+        cid: this.$store.getters['corporation/cid'],
+        content: val
+      }).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '系统异常，查询失败'
+        });
+      });
+      if (positionResult.status == 200) {
+        positionResult.result.data.forEach(element => {
+          element.actions = ['action1'];
+        });
+        this.tableData = positionResult.result.data;
+      } else {
+        this.tableData = [];
+        this.$message({
+          type: 'error',
+          message: '查询失败'
+        });
+      }
+    },
     deleteJob() {
       let that = this;
       if (this.selection && this.selection.length == 0) {

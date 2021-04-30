@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-06 18:50:23
+ * @LastEditTime: 2021-04-28 17:08:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -41,37 +41,46 @@ const getCorpbaseInfo = pid => {
         businessRange:
           '自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】',
         unitResidence: '上海市普陀区中江路889号804室',
-        specific: '1',
-        corpNature: '02',
-        contactPhone: '13764565977',
-        statusId: '1',
         industryType: '02',
-        contactAddress: '中江路889号804室',
         tranBaseSymbol: '0',
-        introduce:
-          '自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】',
         humanResourceReg: '0',
-        frozen: '0',
         keypointCorp: '0',
         specialCorp: '0',
         entrustStatus: '0',
         entrustValid: '2020-12-08 15:57:25',
+        frozen: '0',
+        districtCode: '01',
+        introduce:
+          '自动化设备开发、制造（限分支）、销售、技术服务。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】',
+        contactAddress: '中江路889号804室',
+        contactPhone: '13764565977',
+        specific: '1',
+        corpNature: '02',
+        //statusId: '1',
         recruitChargeName: 'test',
         recruitChargePhone: '13322114512',
         recruitStaffName1: '刘德坡',
         recruitStaffPhone1: '13764565977',
         recruitStaffName2: '刘德坡',
-        recruitStaffPhone2: '13764565977'
+        recruitStaffPhone2: '13764565977',
+        logo: '',
+        publicityMovie: '',
+        statusId: '1',
+        resumeSearch: '1',
+        searchTotal: 30,
+        resumeDownload: '1',
+        downloadTotal: '',
+        resumeFavor: '1',
+        favorTotal: 50,
+        indexRec: '0',
+        viewTotal: 100,
+        updateOperator: '0000309307',
+        updateTime: '2021-04-01 13:37:08'
       }
     }
   };
 };
 
-// Mock.mock(RegExp('/person/info/loadPersonInfo' + '.*'), 'get', function(
-//   options
-// ) {
-//   return getCorpbaseInfo(options);
-// });
 Mock.mock(basePath + '/loginController/logout', 'post', function(options) {
   return successData;
 });
@@ -164,13 +173,65 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   };
 });
 
+//检验该单位是不是首次进入系统
+Mock.mock(RegExp(basePath + '/corp/info/isCorpInit' + '.*'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: true,
+      humanResourceReg: false,
+      tranBaseSymbol: false,
+      entrustValid: false,
+      keypointCorp: false,
+      specialCorp: false,
+      entrustStatus: false
+    }
+  };
+});
+//获取单位基本信息
 Mock.mock(RegExp(basePath + '/corp/info/loadCorpInfo' + '.*'), 'get', function(
   options
 ) {
   return getCorpbaseInfo(options);
 });
-Mock.mock(basePath + '/person/info/saveCorpInfo', 'post', function(options) {
+//修改单位基本信息
+Mock.mock(basePath + '/corp/info/saveCorpInfo', 'post', function(options) {
+  return successData;
+});
+//变更转移区申请
+Mock.mock(basePath + '/corp/info/updateDistrictCode', 'post', function(
+  options
+) {
+  return successData;
+});
+//保存或者发布职位信息
+Mock.mock(basePath + '/corp/position/saveposition', 'post', function(options) {
   return successData;
 });
 
+//查询各种类型（下架等）的单位职位信息
+Mock.mock(RegExp(basePath + '/corp/position/find-position/.*'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: Mock.mock({
+      'data|1-10': [
+        {
+          positionId: '@string("number", 1)',
+          editId: '', // '@datetime'
+          positionName: 'JAVA超高级工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          'statusId|+1': ['1', '2', '3'],
+          describe: ''
+        }
+      ]
+    })
+  };
+});
 export default Mock;
