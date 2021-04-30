@@ -22,7 +22,7 @@
     "jquery": "^3.6.0",
     "jquery.nicescroll": "^3.7.6",
     "jspdf": "^2.2.0",
-    "jwchat": "file:./src/npmfile/jwchat",
+    "jwchat": "^0.3.9",
     "lodash": "4.13.1",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",

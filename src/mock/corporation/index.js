@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-27 20:11:31
+ * @LastEditTime: 2021-04-28 17:08:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -212,4 +212,26 @@ Mock.mock(basePath + '/corp/position/saveposition', 'post', function(options) {
   return successData;
 });
 
+//查询各种类型（下架等）的单位职位信息
+Mock.mock(RegExp(basePath + '/corp/position/find-position/.*'), 'get', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: Mock.mock({
+      'data|1-10': [
+        {
+          positionId: '@string("number", 1)',
+          editId: '', // '@datetime'
+          positionName: 'JAVA超高级工程师',
+          workAddress: '上海市普陀区中江路889号804室',
+          salaryScope: '20-50(04)',
+          'statusId|+1': ['1', '2', '3'],
+          describe: ''
+        }
+      ]
+    })
+  };
+});
 export default Mock;
