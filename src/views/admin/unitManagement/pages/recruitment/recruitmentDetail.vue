@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-04-14 18:22:58
+ * @LastEditTime: 2021-04-29 17:04:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -97,7 +97,7 @@
             @current-change="handleChange0"
             :current-page.sync="params0.pageIndex"
             :page-size="pageSize"
-            layout="prev, pager, next, jumper"
+            layout="total, prev, pager, next"
             :total="params0.total"
           ></el-pagination>
         </el-tab-pane>
@@ -148,7 +148,7 @@
             @current-change="handleChange1"
             :current-page.sync="params1.pageIndex"
             :page-size="pageSize"
-            layout="prev, pager, next, jumper"
+            layout="total, prev, pager, next"
             :total="params1.total"
           ></el-pagination>
         </el-tab-pane>

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:14
- * @LastEditTime: 2021-04-08 09:13:11
+ * @LastEditTime: 2021-04-29 17:03:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\socialSecurity.vue
@@ -23,7 +23,7 @@
       @current-change="handleChange"
       :current-page.sync="currentPage"
       :page-size="100"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="1000"
     >
     </el-pagination> -->

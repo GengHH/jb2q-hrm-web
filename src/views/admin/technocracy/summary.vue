@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-07 19:28:11
+ * @LastEditTime: 2021-04-29 17:03:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -60,7 +60,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>

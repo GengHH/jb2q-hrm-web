@@ -60,7 +60,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination> -->

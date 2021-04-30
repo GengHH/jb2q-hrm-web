@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-04-09 15:20:20
+ * @LastEditTime: 2021-04-29 18:47:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -96,7 +96,7 @@
           @current-change="handleChange0"
           :current-page.sync="params0.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params0.total"
         ></el-pagination>
       </el-tab-pane>
@@ -142,7 +142,7 @@
           @current-change="handleChange1"
           :current-page.sync="params1.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params1.total"
         ></el-pagination>
       </el-tab-pane>
@@ -180,7 +180,7 @@
           @current-change="handleChange2"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params2.total"
         ></el-pagination>
       </el-tab-pane>
@@ -236,7 +236,7 @@
           @current-change="handleChange3"
           :current-page.sync="params3.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params3.total"
         ></el-pagination>
       </el-tab-pane>
@@ -274,7 +274,7 @@ export default {
       demoUser: false,
       userType: false,
       queryData: {},
-      visible: false,
+      visible: true,
       auditStutas: '1',
       activeName: '3',
       params0: {

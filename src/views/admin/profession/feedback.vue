@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-19 17:22:14
+ * @LastEditTime: 2021-04-29 17:02:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -45,7 +45,7 @@
           @current-change="handleChange"
           :current-page.sync="params.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params.total"
         >
         </el-pagination>
@@ -89,7 +89,7 @@
           @current-change="handleChange"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="params2.total"
         >
         </el-pagination>
@@ -106,6 +106,7 @@
       :visible="visible"
       :detailsData="detailsData"
       :detailsType="detailsType"
+      :activeName="activeName"
       @onclose="onclose"
     ></adddetails>
   </div>
@@ -162,7 +163,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入身份证号',
             rules: [],
-            key: 'xm'
+            key: 'zjhm'
           }
         ]
       },

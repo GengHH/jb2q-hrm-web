@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-25 15:03:47
+ * @LastEditTime: 2021-04-29 16:03:29
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -27,6 +27,7 @@ import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
 import PlTable from '@/components/common/table/BaseTable.vue';
 import PlConfig from '@/config/plComponents';
+import { isNoBody, isPerson, isCorporation } from '@/utils';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -157,12 +158,30 @@ if (isEmpty(store.getters['dictionary/recruit_imple_act_type'])) {
 if (isEmpty(store.getters['dictionary/yesno'])) {
   store.dispatch('dictionary/init_Dictionary', 'YESNO');
 }
+//重点类型
+if (isEmpty(store.getters['dictionary/recruit_point_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POINT_TYPE');
+}
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
+const vm = new Vue({
+  //el: '#app',
   store,
   //render: h => h(App)
   template: '<App/>',
   components: { App }
 });
+
+if (isNoBody(vm)) {
+  vm.$mount('#app');
+} else {
+  if (store.getters.priorityLoginType === 'corporation') {
+    vm.$alert('已有个人登录本系统，请先退出登录');
+  }
+  if (store.getters.priorityLoginType === 'person') {
+    vm.$alert('已有单位登录本系统，请先退出登录');
+  }
+  setTimeout(() => {
+    window.location.href = '/ggzp-shrs/index.html';
+  }, 2000);
+}

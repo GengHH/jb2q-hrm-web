@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-26 15:54:35
+ * @LastEditTime: 2021-04-29 17:47:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue

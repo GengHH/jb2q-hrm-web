@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-25 15:05:17
+ * @LastEditTime: 2021-04-29 17:48:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -23,7 +23,9 @@
       <el-table-column slot="actName" label="活动名称" align="center">
         <template slot-scope="scope">
           <div v-for="(v, k) in activityList" :key="k">
-            <div v-if="v.actId == scope.row.actName">{{ v.actName }}</div>
+            <div v-if="v.actId == scope.row.actName">
+              {{ v.actName }}
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -40,7 +42,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -100,10 +102,11 @@ export default {
       list: [],
       columns: [
         { type: 'index' },
-        { title: '职位名称', prop: 'positionName' },
-        { title: '学历要求', prop: 'eduRequire' },
-        { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '职位描述', prop: 'xm' },
+        { title: '专家编号', prop: 'expertId' },
+        { title: '活动时间', prop: 'actDate' },
+        { title: '服务对象姓名', prop: 'xm' },
+        { title: '证件号码', prop: 'zjhm' },
+        { title: '活动名称', prop: 'actName', slot: 'actName' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       activityList: []
@@ -117,7 +120,9 @@ export default {
         type: type,
         duration: 1000,
         onClose: () => {
-          fn();
+          if (fn) {
+            fn();
+          }
         }
       });
     },
@@ -149,8 +154,12 @@ export default {
         this.type = 1;
         this.disabled = false;
         this.form = { ...scope.row };
+
         this.form.name = this.form.expertName;
         this.form.pids = this.form.xm;
+        this.form.actName = this.form.actName
+          ? this.form.actName - 0
+          : this.form.actName;
       } else if (type == 2) {
         this.disabled = true;
         this.form = { ...scope.row };

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-04-28 14:46:56
+ * @LastEditTime: 2021-04-29 14:10:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -18,40 +18,42 @@
     >
       <div class="title-style">详细信息</div>
       <tform ref="form" :formConfig="formConfig"> </tform>
-      <div v-if="type == '2'">
-        <div class="title-style">招聘会信息</div>
-        <ttable :columns="columns" :list="list"
-          ><el-table-column slot="meetName" label="招聘会名称" align="center">
-            <template slot-scope="scope">
-              <span
-                @click="queryApply(scope)"
-                style="color:blue;cursor: pointer;"
+      <el-form :model="form" label-width="150px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="证件照">
+              <el-upload
+                action=""
+                class="avatar-uploader"
+                :file-list="fileList2"
+                :auto-upload="false"
+                :on-change="uploadUserChange"
+                :before-upload="beforeAvatarUpload"
+                :limit="1"
+                :show-file-list="false"
               >
-                {{ scope.row.meetName }}</span
+                <template v-if="type == '2'">
+                  <img :src="lookList.propagandaImage" class="avatar" />
+                </template>
+                <template v-if="type == '1'">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </template>
+              </el-upload>
+              <div
+                class="userClose"
+                @click="
+                  imageUrl = '';
+                  fileList2 = [];
+                "
               >
-            </template>
-          </el-table-column>
-          <el-table-column slot="meetType" label="招聘会类型" align="center">
-            <template slot-scope="scope">
-              <div v-for="(v, k) in dicOptions.type" :key="k">
-                <el-tag v-if="v.value == scope.row.meetType">{{
-                  v.label
-                }}</el-tag>
+                <i class="el-icon-close"></i>
               </div>
-            </template>
-          </el-table-column></ttable
-        >
-        <el-pagination
-          @size-change="handleChange"
-          @current-change="handleChange"
-          :current-page.sync="params.pageIndex"
-          :page-size="pageSize"
-          layout="prev, pager, next, jumper"
-          :total="params.total"
-        >
-        </el-pagination>
-      </div>
-      <div v-if="type != '2'" style="text-align:center">
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div style="text-align:center">
         <el-button size="mini" type="primary" @click="advancedSearch()">
           提交</el-button
         >
@@ -65,53 +67,34 @@ import { trim } from '@/utils/index';
 import tform from '../../common/t_form';
 import ttable from '../../common/t_table';
 import {
-  result_enrollment,
-  result_feedback,
-  result_wanted,
-  result_update,
-  result_add
+  schedule_query_info,
+  schedule_update,
+  schedule_add
 } from '../api/index';
 export default {
   name: 'managementDetails',
-  props: ['visible', 'lookList', 'disabled', 'type'],
+  props: ['visible', 'lookList', 'type'],
   components: { tform, ttable },
   data() {
     return {
-      params: {
-        pageIndex: 1,
-        total: 0
-      },
-      pageSize: 10,
-      list: [],
-
+      imageUrl: '',
+      fileList2: [],
+      form: {},
       dicOptions: {
+        //招聘会类型
         type: trim(this.$store.getters['dictionary/recruit_meet_type']),
-        //学历
-        edu: trim(this.$store.getters['dictionary/recruit_edu']),
         //区县
         qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
         //是否
-        yesno: trim(this.$store.getters['dictionary/yesno']),
-        //性别
-        sex: trim(this.$store.getters['dictionary/ggjbxx_sex'])
+        yesno: trim(this.$store.getters['dictionary/yesno'])
       },
-      columns: [
-        { title: '序号', type: 'index' },
-        { title: '招聘会名称', prop: 'meetName', slot: 'meetName' },
-        { title: '招聘会类型', prop: 'meetType', slot: 'meetType' },
-        { title: '参会联系人', prop: 'applyContactName' },
-        { title: '参会联系手机', prop: 'applyContactPhone' },
-        { title: '备注', prop: 'memo' }
-      ],
-
       formConfig: {
         inline: true,
         size: 'small',
         labelPosition: 'right',
-        disabled: this.disabled,
-        labelWidth: '320px',
+        labelWidth: '120px',
         style: {
-          width: '650px',
+          width: '700px',
           margin: '0 auto'
         },
         isBtn: true,
@@ -119,108 +102,144 @@ export default {
           {
             type: 'input',
             label: '招聘会名称',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            style: { width: '554px' },
+            placeholder: '请输入招聘会名称',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'meetName'
           },
           {
             type: 'textarea',
             label: '招聘会简介',
-            style: { width: '260px' },
+            style: { width: '554px' },
             placeholder: '请输入招聘会简介',
             //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
             rules: [],
-            key: 'textarea'
+            key: 'meetIntroduce'
           },
           {
             type: 'select',
             label: '招聘会类型',
             rules: [],
-            disabled: true,
-            key: 'distictCode',
-            style: { width: '260px' },
-            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+            key: 'meetType',
+            style: { width: '554px' },
+            options: trim(this.$store.getters['dictionary/recruit_meet_type'])
           },
           {
             type: 'date',
             label: '招聘会召开时间',
             placeholder: '请输入召开时间',
             rules: [],
-            style: { width: '260px' },
-            key: 'date'
+            format: 'yyyy-MM-dd HH:mm:ss',
+            style: { width: '210px' },
+            key: 'startTime'
           },
           {
             type: 'date',
             label: '招聘会结束时间',
             placeholder: '请输入结束时间',
             rules: [],
-            style: { width: '260px' },
-            key: 'date'
+            format: 'yyyy-MM-dd HH:mm:ss',
+            style: { width: '210px' },
+            key: 'endTime'
           },
           {
             type: 'input',
             label: '主办单位',
-            style: { width: '260px' },
+            style: { width: '554px' },
             placeholder: '请输入主办单位',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'mainCorpName'
           },
           {
             type: 'input',
             label: '招聘会地点',
-            style: { width: '260px' },
+            style: { width: '554px' },
             placeholder: '请输入招聘会地点',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'address'
           },
           {
             type: 'input',
             label: '招聘会展位数量',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            style: { width: '554px' },
+            placeholder: '请输入招聘会展位数量',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'boothCount'
           },
           {
             type: 'input',
             label: '附近交通',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            style: { width: '554px' },
+            placeholder: '请输入附近交通',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'traffic'
           },
           {
             type: 'input',
             label: '联系人',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            style: { width: '210px' },
+            placeholder: '请输入联系人',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'contactName'
           },
           {
             type: 'input',
             label: '联系电话',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            style: { width: '210px' },
+            placeholder: '请输入联系电话',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            key: 'contactPhone'
           },
           {
             type: 'radio',
-            label: '联系电话',
-            style: { width: '260px' },
-            placeholder: '请输入招聘单位数',
+            label: '发布状态',
             rules: [],
-            disabled: true,
-            key: 'corpCount'
+            style: { width: '210px' },
+            key: 'releaseStatus',
+            options: [
+              {
+                value: '1',
+                label: '已发布'
+              },
+              {
+                value: '2',
+                label: '已撤销'
+              }
+            ]
+          },
+          {
+            type: 'radio',
+            label: '报名状态',
+            rules: [],
+            key: 'applyStatus',
+            style: { width: '210px' },
+            options: [
+              {
+                value: '1',
+                label: '未截止'
+              },
+              {
+                value: '2',
+                label: '已截止'
+              }
+            ]
+          },
+          {
+            type: 'radio',
+            label: '是否置顶',
+            rules: [],
+            key: 'onTop',
+            style: { width: '210px' },
+            options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'select',
+            label: '报名限制区域',
+            rules: [],
+            multiple: true,
+            style: { width: '210px' },
+            key: 'districtCodeList',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
         ]
       }
@@ -228,55 +247,42 @@ export default {
   },
   computed: {},
   methods: {
-    queryPosition(e) {
-      let data = { ...e.row };
-      data.pageSize = this.pageSize;
-      data.pageIndex = JSON.parse(JSON.stringify(this.params3.pageIndex)) - 1;
-      result_wanted(
-        data,
-        res => {
-          if (res.status == 200) {
-            let pageresult = res.result.pageresult;
-            this.list3 = pageresult.data;
-            this.params3.pageIndex = Number(pageresult.pageIndex) + 1;
-            this.params3.total = pageresult.total;
-          }
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    getBase64(file, name) {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        console.log(reader.result);
+        this.form[name] = reader.result;
+      };
+      reader.onerror = function(error) {
+        console.log('Error: ', error);
+      };
     },
-    queryApply(e) {
-      let data = { ...e.row };
-      data.pageSize = this.pageSize;
-      data.pageIndex = JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1;
-      result_feedback(
-        data,
-        res => {
-          if (res.status == 200) {
-            let pageresult = res.result.pageresult;
-            this.list2 = pageresult.data;
-            this.params2.pageIndex = Number(pageresult.pageIndex) + 1;
-            this.params2.total = pageresult.total;
-          }
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
     },
-    handleChange(e) {
-      console.log(e);
+    //照片base64
+    uploadUserChange(file) {
+      this.getBase64(file.raw, 'propagandaImage');
+      this.imageUrl = URL.createObjectURL(file.raw);
     },
     advancedSearch() {
       console.log(this.type);
       let data = { ...this.$refs.form.value };
-      //1 添加 2 查看 3 修改
+      //1 添加 2 修改
       if (this.type == '1') {
-        result_add(
+        //data.propagandaImage = this.form.propagandaImage;
+        data.propagandaImage = 'MQ==';
+        schedule_add(
           data,
           res => {
             if (res.status == 200) {
@@ -295,8 +301,8 @@ export default {
             console.log(err);
           }
         );
-      } else if (this.type == '3') {
-        result_update(
+      } else if (this.type == '2') {
+        schedule_update(
           data,
           res => {
             if (res.status == 200) {
@@ -322,21 +328,15 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.$refs.form.value = { ...this.lookList };
-    }, 0);
     let data = { ...this.lookList };
+    console.log(data);
     if (this.type == '2') {
-      data.pageSize = this.pageSize;
-      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
-      result_enrollment(
+      schedule_query_info(
         data,
         res => {
           if (res.status == 200) {
-            let pageresult = res.result.pageresult;
-            this.list = pageresult.data;
-            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-            this.params.total = pageresult.total;
+            let pageresult = res.result.data;
+            this.$refs.form.value = { ...pageresult };
           }
           console.log(res);
         },
@@ -350,6 +350,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.userClose {
+  position: absolute;
+  left: 100px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  text-align: center;
+}
 .title-style {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.8);
@@ -359,6 +368,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin-bottom: 10px;
 }
 .title-style::before {
   content: '';
@@ -368,5 +378,26 @@ export default {
   left: 12px;
   top: 13px;
   background: $g-mian-color;
+}
+.avatar-uploader {
+  height: 100px;
+  position: absolute;
+  border: 1px solid #dcdfe6;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
 }
 </style>

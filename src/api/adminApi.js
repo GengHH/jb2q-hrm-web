@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-04-19 13:42:49
+ * @LastEditTime: 2021-04-27 17:01:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
@@ -71,8 +71,7 @@ function postAction(url, params, fn, fnErr) {
             type: 'error',
             onClose: () => {
               store.dispatch('admin/logout');
-              window.location.href =
-                apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+              window.location.href = '/ggzp-shrs/adminLogin.html';
             }
           });
           return;

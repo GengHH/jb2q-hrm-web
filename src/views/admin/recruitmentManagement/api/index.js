@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-26 14:41:47
- * @LastEditTime: 2021-04-20 10:36:03
+ * @LastEditTime: 2021-04-28 13:20:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\api\index.js
@@ -34,7 +34,24 @@ const result_update = (params, fn, fnErr) =>
   postAction(urlStr2 + 'update', params, fn, fnErr);
 const result_add = (params, fn, fnErr) =>
   postAction(urlStr2 + 'add', params, fn, fnErr);
+//招聘会排片表管理
+const urlStr3 = '/admin/meeting/schedule/';
+const schedule_delete = (params, fn, fnErr) =>
+  postAction(urlStr3 + 'deleteMeetingScheduleInfo', params, fn, fnErr);
+const schedule_query = (params, fn, fnErr) =>
+  postAction(urlStr3 + 'querymeetingScheduleList', params, fn, fnErr);
+const schedule_query_info = (params, fn, fnErr) =>
+  postAction(urlStr3 + 'queryMeetingSchedule', params, fn, fnErr);
+const schedule_update = (params, fn, fnErr) =>
+  postAction(urlStr3 + 'updateMeetingScheduleInfo', params, fn, fnErr);
+const schedule_add = (params, fn, fnErr) =>
+  postAction(urlStr3 + 'saveMeetingScheduleInfo', params, fn, fnErr);
 export {
+  schedule_delete,
+  schedule_query,
+  schedule_query_info,
+  schedule_update,
+  schedule_add,
   feedback_query,
   feedback_look,
   feedback_info_query,

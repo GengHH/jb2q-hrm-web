@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-09 13:38:53
+ * @LastEditTime: 2021-04-30 10:08:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -22,10 +22,18 @@
       </el-table-column>
       <el-table-column slot="expertJoin" label="是否专家参与" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.expertJoin" type="success" effect="dark">
+          <el-tag
+            v-if="scope.row.expertJoin == '1'"
+            type="success"
+            effect="dark"
+          >
             是
           </el-tag>
-          <el-tag v-if="!scope.row.expertJoin" type="danger" effect="dark">
+          <el-tag
+            v-if="scope.row.expertJoin == '0'"
+            type="danger"
+            effect="dark"
+          >
             否
           </el-tag>
         </template>
@@ -47,14 +55,26 @@
           <el-button size="mini" type="primary" @click="look(2, scope)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
-          <el-button size="mini" type="primary" @click="look(1, scope)" plain>
-            <i class="el-icon-edit"></i> 编辑</el-button
+          <el-button
+            v-if="scope.row.userId == userId"
+            size="mini"
+            type="primary"
+            @click="look(1, scope)"
+            plain
           >
+            <i class="el-icon-edit"></i> 编辑
+          </el-button>
           <div style="margin-top:5px">
             <el-button @click="look(4, scope)" size="mini" type="info" plain>
               <i class="el-icon-chat-line-square"></i> 反馈</el-button
             >
-            <el-button size="mini" type="danger" @click="remove(scope)" plain>
+            <el-button
+              v-if="scope.row.release != '1'"
+              size="mini"
+              type="danger"
+              @click="remove(scope)"
+              plain
+            >
               <i class="el-icon-close"></i> 删除</el-button
             >
           </div>
@@ -66,7 +86,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="params.pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -96,6 +116,7 @@ export default {
   components: { ttable, tform, managementdetails },
   data() {
     return {
+      userId: this.$store.state.admin.userInfo.logonUser.userIdStr,
       visible: false,
       disabled: false,
       type: 1,
@@ -161,18 +182,15 @@ export default {
             rules: [],
             style: { width: '190px' },
             key: 'expertJoin',
-            options: [
-              {
-                value: '1',
-                label: '是',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '否',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'radio',
+            label: '是否发布',
+            rules: [],
+            style: { width: '190px' },
+            key: 'release',
+            options: trim(this.$store.getters['dictionary/yesno'])
           },
           {
             type: 'input',
@@ -354,6 +372,8 @@ export default {
       );
     },
     handleChange(e) {
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
       console.log(e);
     },
     message(type, msg) {

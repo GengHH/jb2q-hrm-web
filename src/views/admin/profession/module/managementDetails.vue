@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-04-25 15:05:01
+ * @LastEditTime: 2021-04-29 18:24:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -71,13 +71,7 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </template>
             </el-upload>
-            <div
-              class="userClose"
-              @click="
-                imageUrl = '';
-                fileList = [];
-              "
-            >
+            <div class="userClose" @click="urlRemove">
               <i class="el-icon-close"></i>
             </div>
           </el-form-item>
@@ -91,6 +85,10 @@
               v-model="form.systemRecSpecialGuide"
             ></el-input
             >人
+            <span style="color:#fc6f3d;margin-left:40px">人员详细》》</span>
+          </el-form-item>
+          <el-form-item label="个人报名活动人数" prop="selfApply">
+            <el-input style="width:190px" v-model="form.selfApply"></el-input>人
             <span style="color:#fc6f3d;margin-left:40px">人员详细》》</span>
           </el-form-item>
           <div style="text-align:center">
@@ -141,6 +139,13 @@ export default {
   },
   computed: {},
   methods: {
+    urlRemove() {
+      if (this.type == '4') {
+        this.imageUrl = '';
+        this.fileList = [];
+        this.form.propagandaImageBase64 = '';
+      }
+    },
     onSubmitForm() {
       //1编辑 3新增
       let addForm = { ...this.$refs.advancedSearch.value };

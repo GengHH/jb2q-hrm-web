@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-26 15:54:27
+ * @LastEditTime: 2021-04-30 09:54:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
 -->
 <template>
   <div id="indexBody">
-    <el-dialog width="55%" title="添加" :visible="visible" @close="onclose">
+    <el-dialog width="55%" title="" :visible="visible" @close="onclose">
       <div>
         <span>选择人员</span>
         <el-select
@@ -35,17 +35,17 @@
         <div style="margin-top:10px ">
           <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
           <span style="margin-left:15px">身份证号：</span>
-          <span class="fontColor">{{ form.pid }}</span>
+          <span class="fontColor">{{ form.zjhm }}</span>
         </div>
       </div>
       <el-tabs v-model="activeName">
-        <el-tab-pane label="政策咨询" name="01">
+        <el-tab-pane label="政策咨询" name="01" disabled>
           <tform ref="form" :formConfig="formConfig"></tform>
           <div v-if="this.detailsType != '1'" style="text-align:center">
             <el-button type="primary" @click="onsubmit">提交</el-button>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="专门指导" name="02">
+        <el-tab-pane label="专门指导" name="02" disabled>
           <tform ref="form2" :formConfig="formConfig2"></tform>
           <el-form
             :model="form"
@@ -56,9 +56,9 @@
             <div v-show="show == '1'">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="专家姓名" prop="expertId">
+                  <el-form-item label="专家姓名" prop="expertName">
                     <el-select
-                      v-model="form.expertId"
+                      v-model="form.expertName"
                       filterable
                       remote
                       reserve-keyword
@@ -72,7 +72,7 @@
                         v-for="item in userOptions"
                         :key="item.value"
                         :label="item.label"
-                        :value="item.value"
+                        :value="item"
                       >
                         <span>{{ item.label }}</span>
                       </el-option>
@@ -166,7 +166,7 @@ import { guide_add } from '../api/index';
 export default {
   name: 'addDetails',
   components: { tform },
-  props: ['visible', 'detailsType', 'detailsData'],
+  props: ['visible', 'detailsType', 'detailsData', 'activeName'],
   data() {
     let comConfig = {
       inline: true,
@@ -189,7 +189,6 @@ export default {
       orgOption: [],
       loading: false,
       value: '',
-      activeName: '01',
       formConfig: {
         formItemList: [
           {
@@ -347,6 +346,7 @@ export default {
   computed: {},
   methods: {
     expertChange(e) {
+      console.log(e);
       this.form.expertName = e.label;
       this.form.expertId = e.value;
     },
@@ -490,7 +490,7 @@ export default {
         this.$refs.form2.value = { ...this.detailsData };
         this.formConfig.disabled = true;
         this.formConfig2.disabled = true;
-        // this.show = this.detailsData.implementAct;
+        this.show = this.detailsData.implementAct;
         this.disabled = true;
       }
       console.log(this.detailsData);
@@ -507,6 +507,7 @@ export default {
       res => {
         if (res.status == 200) {
           let data = res.result.data.data;
+          data = data.filter(e => e.release == '1');
           this.activityList = data;
         } else {
           this.message('warning', res.result.data.msg);

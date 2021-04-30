@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:40
- * @LastEditTime: 2021-04-08 09:29:24
+ * @LastEditTime: 2021-04-29 17:02:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\comment.vue
@@ -21,7 +21,7 @@
       @current-change="handleChange"
       :current-page.sync="currentPage"
       :page-size="100"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="1000"
     >
     </el-pagination> -->

@@ -1,14 +1,18 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-12 16:00:40
+ * @LastEditTime: 2021-04-30 10:29:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\message.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="form"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <ttable :columns="columns" :list="list">
       <el-table-column slot="districtCode" label="管理区" align="center">
         <template slot-scope="scope">
@@ -32,7 +36,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
@@ -88,15 +92,16 @@ export default {
             placeholder: '请输入单位名称',
             rules: [],
             key: 'corpName'
-          },
-          {
-            type: 'select',
-            label: '管理所属区',
-            rules: [],
-            key: 'districtCode',
-            style: { width: '210px' },
-            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
+          // {
+          //   type: 'select',
+          //   label: '管理所属区',
+          //   rules: [],
+          //   disabled: true,
+          //   key: 'districtCode',
+          //   style: { width: '210px' },
+          //   options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          // }
         ]
       },
       currentPage: 1,
@@ -121,6 +126,8 @@ export default {
       let data = { ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+      //默认选择当前所在区
+      data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
       this.dataList = data;
       unit_query(
         data,

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-06 16:09:50
+ * @LastEditTime: 2021-04-29 16:06:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { trim } from '@/utils/index';
 import querylist from './module/queryList';
 import tform from '../common/t_form'; //高级查询
 import { emphasis_keypoint } from './api/index';
@@ -114,51 +115,10 @@ export default {
             type: 'checkbox',
             label: '身份标签',
             rules: [],
-            key: 'label',
+            key: 'pointTypeList',
             data: [],
             style: { width: '532px' },
-            options: [
-              {
-                value: '1',
-                label: '就业困难人员',
-                disabled: false
-              },
-              {
-                value: '2',
-                label: '登记失业人员',
-                disabled: false
-              },
-              {
-                value: '3',
-                label: '长期失业青年',
-                disabled: false
-              },
-              {
-                value: '4',
-                label: '退工三个月仍无业人员',
-                disabled: false
-              },
-              {
-                value: '5',
-                label: '基层排摸无业人员',
-                disabled: false
-              },
-              {
-                value: '6',
-                label: '退役军人',
-                disabled: false
-              },
-              {
-                value: '7',
-                label: '高校毕业生',
-                disabled: false
-              },
-              {
-                value: '8',
-                label: '特别关注人员',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/recruit_point_type'])
           },
           {
             type: 'select',
@@ -166,18 +126,7 @@ export default {
             rules: [],
             key: 'livingArea',
             style: { width: '210px' },
-            options: [
-              {
-                value: '1',
-                label: '男',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '女',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           },
           {
             type: 'input',
@@ -201,18 +150,7 @@ export default {
             rules: [],
             style: { width: '210px' },
             key: 'employStatus',
-            options: [
-              {
-                value: '1',
-                label: '已就业',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '无业',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/ggjbxx_jyzt'])
           },
           {
             type: 'select',
@@ -220,18 +158,7 @@ export default {
             style: { width: '210px' },
             rules: [],
             key: 'livingAddress',
-            options: [
-              {
-                value: '1',
-                label: '男',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '女',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           },
           {
             type: 'select',
@@ -239,18 +166,7 @@ export default {
             style: { width: '210px' },
             rules: [],
             key: 'houseArea',
-            options: [
-              {
-                value: '1',
-                label: '男',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '女',
-                disabled: false
-              }
-            ]
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           },
           {
             type: 'daterange',
@@ -274,36 +190,15 @@ export default {
       pageList: {
         total: 0,
         pageSize: 5,
-        pageIndex: 0
+        pageIndex: 1
       },
       dicOptions: {
         //区县
-        option1: this.$store.getters['dictionary/ggjbxx_qx'],
-        //工作性质
-        option2: this.$store.getters['dictionary/recruit_work_nature'],
-        //专业（暂时没有）
-        option3: this.$store.getters['dictionary/ggjbxx_qx'],
-        //学历
-        option4: this.$store.getters['dictionary/recruit_edu'],
-        // 语种
-        option5: this.$store.getters['dictionary/recruit_language_type'],
-        // 语言等级
-        option6: this.$store.getters['dictionary/recruit_language_level'],
-        //职位
-        option7: this.$store.getters['dictionary/recruit_position_f_type'],
-        //行业
-        option8: this.$store.getters['dictionary/recruit_position_s_type'],
-        //身份标签
-        option9: [
-          { value: '01', label: '就业困难人员' },
-          { value: '04', label: '登记失业人员' },
-          { value: '05', label: '长期失业青年' },
-          { value: '06', label: '退工三个月仍无业人员' },
-          { value: '07', label: '基层排摸无业人员' },
-          { value: '09', label: '退役军人' },
-          { value: '10', label: '高校毕业生' },
-          { value: '12', label: '特别关注人员' }
-        ]
+        qx: this.$store.getters['dictionary/ggjbxx_qx'],
+        //重点人员类型
+        type: this.$store.getters['dictionary/recruit_point_type'],
+        //就业状态
+        jyzt: this.$store.getters['dictionary/ggjbxx_jyzt']
       },
       dataList: [],
       titleList: [
@@ -321,10 +216,8 @@ export default {
   },
   computed: {},
   methods: {
-    onsubmit(e) {
-      console.log(e);
-    },
     handleChange(e) {
+      console.log(e);
       this.pageList.pageIndex = e;
       this.onSearch();
     },
@@ -342,6 +235,7 @@ export default {
       console.log('------------------');
       let params = { ...this.form };
       params.pageParam = { ...this.pageList };
+      params.pageParam.pageIndex = this.pageList.pageIndex - 1;
       emphasis_keypoint(
         params,
         res => {
@@ -357,7 +251,7 @@ export default {
           this.pageList = {
             total: record.total,
             pageSize: record.pageSize,
-            pageIndex: record.pageIndex
+            pageIndex: Number(record.pageIndex) + 1
           };
 
           if (this.istotal) {

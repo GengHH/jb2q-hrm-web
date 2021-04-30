@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-04-08 09:30:58
+ * @LastEditTime: 2021-04-29 15:36:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -110,7 +110,7 @@ import socialsecurity from '../pages/socialSecurity'; //社保缴费记录
 import { allAction } from '@/api/adminApi';
 export default {
   name: 'pageList',
-  props: ['dialogTableVisible', 'pagelistIndex'],
+  props: ['dialogTableVisible', 'pagelistIndex', 'evList'],
   components: {
     collect,
     comment,
@@ -212,42 +212,43 @@ export default {
   },
   created() {
     this.loading = true;
+    let data = { ...this.evList };
     let path = [
       //个人基本信息
       {
-        url: '/admin/keypoint/show/psnlInfo?pid=200008000237040'
+        url: '/admin/keypoint/show/psnlInfo?pid=' + data.pid
       },
       //简历信息
       {
-        url: '/admin/keypoint/show/resume?pid=200709138518590'
+        url: '/admin/keypoint/show/resume?pid=' + data.pid
       },
       //劳动经历
       {
-        url: '/admin/keypoint/show/labor?pid=201605238646380'
+        url: '/admin/keypoint/show/labor?pid=' + data.pid
       },
       //社保缴费记录
       {
-        url: '/admin/keypoint/show/insur?pid=201605238646380'
+        url: '/admin/keypoint/show/insur?pid=' + data.pid
       },
       //就业见习记录
       {
-        url: '/admin/keypoint/show/trainee?pid=201808077008090'
+        url: '/admin/keypoint/show/trainee?pid=' + data.pid
       },
       //简历投递及反馈记录 --
       {
-        url: '/admin/keypoint/show/employ?pid=200008000237040'
+        url: '/admin/keypoint/show/employ?pid=' + data.pid
       },
       //职位评价记录
       {
-        url: '/admin/keypoint/show/evaluation?pid=201906186258910'
+        url: '/admin/keypoint/show/evaluation?pid=' + data.pid
       },
       //职位收藏记录
       {
-        url: '/admin/keypoint/show/favor?pid=200008000237040'
+        url: '/admin/keypoint/show/favor?pid=' + data.pid
       },
       //就业服务记录
       {
-        url: '/admin/keypoint/show/employ?pid=200008000237040'
+        url: '/admin/keypoint/show/employ?pid=' + data.pid
       }
     ];
     allAction(

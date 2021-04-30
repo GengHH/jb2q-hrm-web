@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-27 14:46:24
+ * @LastEditTime: 2021-04-28 15:34:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -92,7 +92,8 @@
             <div
               :style="{
                 padding: '10px 5px',
-                height: height + 'px'
+                height: height + 'px',
+                overflowX: 'hidden'
               }"
             >
               <keep-alive>
@@ -171,14 +172,12 @@ export default {
         res => {
           console.log(res);
           this.$store.dispatch('admin/logout');
-          window.location.href =
-            apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+          window.location.href = '/ggzp-shrs/adminLogin.html';
         },
         err => {
           console.log(err);
           this.$store.dispatch('admin/logout');
-          window.location.href =
-            apiUrlConfig.loginBasePath + '/ggzp-shrs/adminLogin.html';
+          window.location.href = '/ggzp-shrs/adminLogin.html';
         }
       );
     },

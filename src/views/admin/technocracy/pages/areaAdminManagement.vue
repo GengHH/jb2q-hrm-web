@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-04-26 15:54:43
+ * @LastEditTime: 2021-04-29 18:38:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -134,7 +134,7 @@
       @current-change="handleChange"
       :current-page.sync="params.pageIndex"
       :page-size="pageSize"
-      layout="prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="params.total"
     >
     </el-pagination>
