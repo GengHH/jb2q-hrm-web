@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-30 15:04:47
+ * @LastEditTime: 2021-04-30 17:54:45
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -459,16 +459,18 @@ export default {
               message: '系统异常，保存失败'
             });
           });
-          if (saveResult.status === 200) {
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            });
-          } else {
-            this.$message({
-              type: 'error',
-              message: '保存失败'
-            });
+          if (saveResult) {
+            if (saveResult.status === 200) {
+              this.$message({
+                type: 'success',
+                message: '保存成功'
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: '保存失败'
+              });
+            }
           }
           this.dialogFormVisible = false;
           //this.$alert('暂时没有此Api接口，请稍后！');

@@ -135,6 +135,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(response => {
   console.log('response', response);
   let _data = response.data;
+  //系统抛出异常返回的是html格式
   if (_data && typeof _data === 'string' && _data.includes('!DOCTYPE')) {
     if (_data.includes('请重新登录')) {
       Notification({
@@ -151,16 +152,18 @@ service.interceptors.response.use(response => {
       //清空数据痕迹
       localStorage.setItem('vuex', null);
     } else {
+      //去掉原始样式
+      let newData = _data.replace(/<td[^>]*>/gi, '<td>');
+      let _newData = newData.replace(/<table[^>]*>/gi, '<table>');
       Notification({
         title: '系统提示',
         type: 'error',
         dangerouslyUseHTMLString: true,
-        message: _data
+        message: _newData
       });
-      //return Promise.reject('genghonghuiggggggggggggggggggggg');
     }
-    // 后台系统抛出异常时候
-    return Promise.reject('genghonghuiggggggggggggggggggggg');
+    // 后台系统抛出异常时候终止promise
+    //return Promise.reject(_data);
   }
   return _data;
 }, err);
