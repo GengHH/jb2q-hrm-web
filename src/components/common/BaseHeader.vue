@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-30 16:06:55
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-05 16:30:13
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
 -->
@@ -177,37 +177,19 @@ export default {
             this.$alert('退出失败');
           }
         } else if (isCorporation(this)) {
-          //单位退出
-          // let logoutResult = await doCorporationLogout();
-          // if (logoutResult && logoutResult.status === 200) {
-          //   this.$store
-          //     .dispatch('corporation/do_logout')
-          //     .then(res => {
-          //       this.$alert('退出成功');
-          //       window.setTimeout(function() {
-          //         // window.location.href = '/ggzp-shrs/index.html';
-          //         window.open(window.origin + '/ggzp-shrs/index.html', '_self');
-          //       }, 2000);
-          //       return;
-          //     })
-          //     .catch(err => {
-          //       this.$alert('退出异常');
-          //     });
-          // } else {
-          //   this.$alert('退出失败');
-          // }
+          //单位退出(需要一网通办协助)
           try {
             console.log('-------1111111111111-----------');
             let r = await doCorporationLogout();
             console.log(r);
-            if (r) {
+            if (typeof r === 'string') {
               let _href = r.match(htmlRgx)?.[0];
               console.log(_href);
               //window.location.href = _href;
               window.open(_href);
               //let iframe = document.getElementById('iframe');
               //iframe.src = _href;
-            } else {
+            } else if (typeof r !== 'object') {
               throw new Error('无法退出');
             }
           } catch (err) {

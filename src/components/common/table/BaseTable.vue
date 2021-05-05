@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-26 15:49:37
+ * @LastEditTime: 2021-05-05 17:36:18
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -235,7 +235,9 @@ export default {
   },
   updated() {
     // 更新滚动条样式
-    setTimeout(this.resizeScroll()(), 100);
+    if (this.resizeScroll) {
+      setTimeout(this.resizeScroll()(), 100);
+    }
   },
   activated() {
     if (this.keepPosition) {
@@ -266,8 +268,8 @@ export default {
     resizeScroll() {
       return this._.throttle(() => {
         $('.el-table__body-wrapper')
-          .getNiceScroll()
-          .resize();
+          ?.getNiceScroll()
+          ?.resize();
       }, 300);
     },
     getRandomKey(item) {

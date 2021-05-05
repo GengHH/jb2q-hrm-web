@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-04-27 17:01:00
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-05 14:54:26
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
  */
@@ -86,7 +86,7 @@ function postAction(url, params, fn, fnErr) {
       endLoading();
       Notification({
         title: '系统提示',
-        message: '很抱歉，系统出来点故障，请联系管理员!',
+        message: '很抱歉，系统出现故障，请联系管理员!',
         //duration: 4500,
         type: 'error'
       });

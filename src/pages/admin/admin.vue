@@ -1,14 +1,14 @@
 <!--
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-28 15:34:37
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-05 18:13:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
 <template>
   <div id="app" style="width:100%;height:100%">
-    <el-container style="height:100%">
+    <div style="height:100%">
       <el-header height="60px" style="padding:0">
         <div id="indexHeader">
           <el-row>
@@ -35,7 +35,7 @@
           </el-row>
         </div>
       </el-header>
-      <el-container>
+      <div style="height:100%">
         <el-aside :style="{ width: (isCollapse ? '64' : '300') + 'px' }">
           <div style="text-align: center;margin-top:5px">
             <el-button
@@ -86,7 +86,7 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-container>
+        <el-container id="adminContainer">
           <el-main style="padding:5px">
             <div class="title-style">{{ $route.name }}</div>
             <div
@@ -102,8 +102,8 @@
             </div>
           </el-main>
         </el-container>
-      </el-container>
-    </el-container>
+      </div>
+    </div>
     <el-drawer
       title="操作"
       size="350px"
@@ -131,6 +131,7 @@
  */
 import { loginControlle } from './api/index';
 import apiUrlConfig from '@/config';
+import { niceScroll } from '@/utils';
 export default {
   name: 'app',
   components: {},
@@ -232,14 +233,24 @@ export default {
     });
     let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
     this.menuList = datas[0].childs;
+    niceScroll('.el-aside');
   },
-  created() {
-    console.log(this.$store.state);
-  }
+  created() {}
 };
 </script>
 
 <style lang="scss" scoped>
+#adminContainer {
+  position: absolute;
+  float: right;
+  right: 0px;
+  top: 0px;
+  left: 300px;
+  padding-top: 60px;
+}
+.el-aside {
+  height: 100%;
+}
 .title-style {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.8);

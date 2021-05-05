@@ -15,9 +15,9 @@ import { Notification } from 'element-ui';
 //let apiBaseUrl = 'localhost/ggzp-zzjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-zzjb-shrs';
 //let apiBaseUrl = 'localhost/ggzp-ywjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-ywjb-shrs';
 
-//let apiBaseUrl = 'localhost/new-pers-api'; //  指向---->'http://10.5.102.154:8080/ggzp-sjapp-shrs';
-//let apiBaseUrl = 'localhost/new-corp-api'; //  指向---->'http://10.5.102.154:8080/ggzp-zzjb-shrs';
-//let apiBaseUrl = 'localhost/new-admin-api'; //  指向---->'http://10.5.102.154:8080/ggzp-ywjb-shrs';
+//let apiBaseUrl = 'localhost/dev-pers-api'; //  指向---->'http://10.5.102.154:8080/ggzp-sjapp-shrs';
+//let apiBaseUrl = 'localhost/dev-corp-api'; //  指向---->'http://10.5.102.154:8080/ggzp-zzjb-shrs';
+//let apiBaseUrl = 'localhost/dev-admin-api'; //  指向---->'http://10.5.102.154:8080/ggzp-ywjb-shrs';
 
 //默认指向本地Mock数据服务
 let apiBaseUrl = '';

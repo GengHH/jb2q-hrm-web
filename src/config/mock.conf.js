@@ -18,6 +18,6 @@ const config = {
   commonBasePath: '/mock-common-api',
   personBasePath: '/mock-pers-api',
   corpBasePath: '/mock-corp-api',
-  adminBasePath: '/new-admin-api'
+  adminBasePath: '/dev-admin-api'
 };
 export default config;

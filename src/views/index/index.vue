@@ -228,7 +228,7 @@ export default {
       this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'person');
       //this.$alert('个人登录暂时未开放');
       // this.axios
-      //   .get('new-corp-api/loginController/ywtb-index')
+      //   .get('dev-corp-api/loginController/ywtb-index')
       //   .then(res => {
       //     console.log(res);
       //   })

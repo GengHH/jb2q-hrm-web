@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-04-26 15:22:29
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-05 18:12:11
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
 -->
@@ -21,7 +21,7 @@
       :load="loadGetData"
       ref="mutipleTable"
       style="width:100%;"
-      max-height="650"
+      max-height="600"
       :width="options.width"
       @row-click="clickRow"
       @row-dblclick="dblclickRow"
@@ -159,7 +159,9 @@ export default {
     };
   },
   updated() {
-    setTimeout(this.resizeScroll()(), 100);
+    if (this.resizeScroll) {
+      //setTimeout(this.resizeScroll()(), 100);
+    }
   },
   mounted() {
     niceScroll('.el-table__body-wrapper');
@@ -170,8 +172,8 @@ export default {
     resizeScroll() {
       return this._.throttle(() => {
         $('.el-table__body-wrapper')
-          .getNiceScroll()
-          .resize();
+          ?.getNiceScroll()
+          ?.resize();
       }, 300);
     },
     /**
