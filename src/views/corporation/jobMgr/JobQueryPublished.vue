@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 17:10:47
+ * @LastEditTime: 2021-05-06 18:06:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
 -->
@@ -69,6 +69,8 @@ export default {
     return {
       activeName: 'first',
       unshowShztColumn: true,
+      pageSize: 10,
+      pageIndex: 0,
       tableData1: [
         {
           positionId: '4',
@@ -191,14 +193,16 @@ export default {
       console.log(val);
     },
     async queryResult(val) {
-      let positionResult = await findPosition(
-        'released',
-        this.unshowShztColumn ? 'unagency' : 'agency',
-        {
-          cid: this.$store.getters['corporation/cid'],
-          content: $.trim(val)
+      let positionResult = await findPosition({
+        cid: this.$store.getters['corporation/cid'],
+        status: 'released',
+        agencyRecruit: this.unshowShztColumn ? 'unagency' : 'agency',
+        positionName: $.trim(val),
+        pageParam: {
+          pageSize: this.pageSize,
+          pageIndex: this.pageIndex
         }
-      ).catch(() => {
+      }).catch(() => {
         this.$message({
           type: 'error',
           message: '系统异常，查询失败'

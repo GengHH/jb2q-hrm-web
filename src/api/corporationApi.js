@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 15:09:45
+ * @LastEditTime: 2021-05-06 17:54:50
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -35,16 +35,16 @@ const saveCorpInfo = params =>
 const updateDistrictCode = params =>
   postAction(basePath + '/corp/info/updateDistrictCode', params);
 
-//保存或者发布职位信息
+//保存职位信息
 const savePosition = params =>
-  postAction(basePath + '/corp/position/saveposition', params);
+  postAction(basePath + '/corp/position/save', params);
+//首次发布职位信息
+const releasePosition = params =>
+  postAction(basePath + '/corp/position/release', params);
 
 //单位查询zhiwei信息
-const findPosition = (status, type, params) =>
-  getAction(
-    basePath + '/corp/position/find-position/' + status + '/' + type,
-    params
-  );
+const findPosition = params =>
+  postAction(basePath + '/corp/position/find', params);
 
 export {
   doCorporationLogout,

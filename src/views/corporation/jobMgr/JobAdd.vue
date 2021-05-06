@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 16:36:33
+ * @LastEditTime: 2021-05-06 16:29:28
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -109,11 +109,11 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="input-two" prop="workStreet">
+        <el-form-item class="input-two" prop="workStreetList">
           <el-select
             required
             multiple
-            v-model="jobForm.workStreet"
+            v-model="jobForm.workStreetList"
             label="工作街镇"
             :optionData="dicStreet"
             class="w-select"
@@ -218,10 +218,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="special">
+        <el-form-item prop="specialList">
           <pl-select
             multiple
-            v-model="jobForm.special"
+            v-model="jobForm.specialList"
             label="招聘特定人群"
             class="w-select"
             :optionData="dicTdrqData"
@@ -281,7 +281,7 @@
       <pl-button class="brown-btn btn-style" @click="savePosition($event)"
         >保存</pl-button
       >
-      <pl-button class="orange-btn btn-style" @click="publicPosition($event)"
+      <pl-button class="orange-btn btn-style" @click="releasePosition($event)"
         >发布</pl-button
       >
     </div>
@@ -293,7 +293,7 @@
 /**
  * 发布职位
  */
-import { savePosition } from '@/api/corporationApi';
+import { savePosition, releasePosition } from '@/api/corporationApi';
 import { salaryPattern, agePattern } from '@/utils/regexp';
 import { overDateSomeDays } from '@/utils';
 export default {
@@ -344,7 +344,7 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        workStreet: [
+        workStreetList: [
           {
             required: true,
             message: '请选择工作街镇',
@@ -372,7 +372,7 @@ export default {
         //     trigger: 'blur'
         //   }
         // ],
-        //special: '',
+        //specialList: '',
         describe: [
           {
             required: true,
@@ -455,6 +455,7 @@ export default {
         ]
       },
       jobForm: {
+        editId: '',
         positionName: '',
         recruitType: '',
         tranBaseSymbol: '',
@@ -468,7 +469,7 @@ export default {
         ageMin: '',
         workArea: '',
         workAddress: '',
-        workStreet: [],
+        workStreetList: [],
         workHour: '',
         workYearNeed: '',
         eduRequir: '',
@@ -476,7 +477,7 @@ export default {
         salaryMin: '',
         salaryPayType: '',
         recruitNum: '',
-        special: [],
+        specialList: [],
         describe: '',
         opWay: '',
         publicDate: ''
@@ -520,16 +521,16 @@ export default {
           }
         }
         for (let s in newArray) {
-          if (newArray[s].value === that.jobForm.workStreet) {
+          if (newArray[s].value === that.jobForm.workStreetList) {
             exist = true;
           }
         }
         if (!exist) {
-          that.jobForm.workStreet = [];
+          that.jobForm.workStreetList = [];
         }
         that.dicStreet = newArray;
       }
-      that.jobForm.workStreet = [];
+      that.jobForm.workStreetList = [];
     }
     // dicStreet: function() {
     //   let that = this;
@@ -543,16 +544,16 @@ export default {
     //       }
     //     }
     //     for (let s in newArray) {
-    //       if (newArray[s].value === that.jobForm.workStreet) {
+    //       if (newArray[s].value === that.jobForm.workStreetList) {
     //         exist = true;
     //       }
     //     }
     //     if (!exist) {
-    //       that.jobForm.workStreet = [];
+    //       that.jobForm.workStreetList = [];
     //     }
     //     return newArray;
     //   }
-    //   that.jobForm.workStreet = [];
+    //   that.jobForm.workStreetList = [];
     //   return [];
     // }
   },
@@ -560,6 +561,7 @@ export default {
     elForm() {},
     getData() {
       // var xjobForm = {
+      //   editId: '',
       //   positionName: '职位名称',
       //   recruitType: '1',
       //   tranBaseSymbol: '0',
@@ -573,7 +575,7 @@ export default {
       //   ageMin: 18,
       //   workArea: '01',
       //   workAddress: '工作详细地址',
-      //   workStreet: '',
+      //   workStreetList: '',
       //   workHour: '1',
       //   workYearNeed: '1',
       //   eduRequir: '1',
@@ -581,7 +583,7 @@ export default {
       //   salaryMin: '5000',
       //   salaryPayType: '',
       //   recruitNum: 4,
-      //   special: '1',
+      //   specialList: '1',
       //   describe: '职位描述',
       //   opWay: 'save'
       // };
@@ -644,16 +646,16 @@ export default {
           let saveResult = await savePosition(this.jobForm).catch(() => {
             done();
           });
-          if (saveResult.status === 200) {
+          if (saveResult && saveResult.status === 200) {
             this.$message({ type: 'success', message: '保存成功' });
-          } else {
+          } else if (saveResult) {
             this.$message({ type: 'error', message: '保存失败' });
           }
         }
       });
       done();
     },
-    publicPosition(done) {
+    releasePosition(done) {
       this.isPublic = true;
       if (overDateSomeDays(this.jobForm.publicDate, 30)) {
         this.$message({
@@ -672,12 +674,14 @@ export default {
               });
             } else {
               this.jobForm.opWay = 'release';
-              let publicResult = await savePosition(this.jobForm).catch(() => {
-                done();
-              });
-              if (publicResult.status === 200) {
+              let publicResult = await releasePosition(this.jobForm).catch(
+                () => {
+                  done();
+                }
+              );
+              if (publicResult && publicResult.status === 200) {
                 this.$message({ type: 'success', message: '发布成功' });
-              } else {
+              } else if (publicResult) {
                 this.$message({ type: 'error', message: '发布失败' });
               }
             }

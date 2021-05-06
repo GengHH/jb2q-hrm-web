@@ -155,6 +155,7 @@ service.interceptors.response.use(response => {
       //去掉原始样式
       let newData = _data.replace(/<td[^>]*>/gi, '<td>');
       let _newData = newData.replace(/<table[^>]*>/gi, '<table>');
+      let __newDate = _newData.replace(/操作失败!/gi, '');
       Notification({
         title: '系统提示',
         type: 'error',

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 16:29:53
+ * @LastEditTime: 2021-05-06 18:06:51
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryUnpublished.vue
 -->
@@ -44,6 +44,8 @@ export default {
   },
   data() {
     return {
+      pageSize: 10,
+      pageIndex: 0,
       tableData: [
         {
           positionId: '4',
@@ -129,9 +131,14 @@ export default {
   },
   methods: {
     async queryResult(val) {
-      let positionResult = await findPosition('unrelease', '', {
+      let positionResult = await findPosition({
         cid: this.$store.getters['corporation/cid'],
-        content: val
+        status: 'unrelease',
+        positionName: $.trim(val),
+        pageParam: {
+          pageSize: this.pageSize,
+          pageIndex: this.pageIndex
+        }
       }).catch(() => {
         this.$message({
           type: 'error',

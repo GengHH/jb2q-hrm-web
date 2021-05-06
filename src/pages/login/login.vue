@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-29 17:31:23
+ * @LastEditTime: 2021-05-06 16:54:17
  * @Description: file content
 -->
 <template>
@@ -14,135 +14,137 @@
         <span>欢迎登录</span>
       </div>
     </div>
-    <el-tabs id="typeTabs" v-model="activePath" @tab-click="handleClick">
-      <el-tab-pane label="个人登录" name="person">
-        <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
-          <el-tab-pane label="证件登录" name="first">
-            <el-form
-              ref="zjhmLoginForm"
-              :model="form"
-              :rules="rules"
-              label-width="0px"
-              class="login-box"
-            >
-              <el-form-item style="margin-bottom:25px" prop="zjhm">
-                <pl-input
-                  prefix-icon="el-icon-lock"
-                  type="zjhm"
-                  label="证件号码"
-                  v-model="form.zjhm"
-                />
-              </el-form-item>
-              <el-form-item style="margin-bottom:25px" prop="password">
-                <pl-input
-                  prefix-icon="el-icon-lock"
-                  type="password"
-                  label="密码"
-                  v-model="form.password"
-                />
-              </el-form-item>
-            </el-form>
-            <div class="login-btn-bar">
-              <pl-button
-                :disabled="show"
-                class="btn"
-                type="primary"
-                @click="doLogin($event, 'zjhmLoginForm')"
-                >登录</pl-button
+    <div class="container">
+      <el-tabs id="typeTabs" v-model="activePath" @tab-click="handleClick">
+        <el-tab-pane label="个人登录" name="person">
+          <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
+            <el-tab-pane label="证件登录" name="first">
+              <el-form
+                ref="zjhmLoginForm"
+                :model="form"
+                :rules="rules"
+                label-width="0px"
+                class="login-box"
               >
+                <el-form-item style="margin-bottom:25px" prop="zjhm">
+                  <pl-input
+                    prefix-icon="el-icon-lock"
+                    type="zjhm"
+                    label="证件号码"
+                    v-model="form.zjhm"
+                  />
+                </el-form-item>
+                <el-form-item style="margin-bottom:25px" prop="password">
+                  <pl-input
+                    prefix-icon="el-icon-lock"
+                    type="password"
+                    label="密码"
+                    v-model="form.password"
+                  />
+                </el-form-item>
+              </el-form>
+              <div class="login-btn-bar">
+                <pl-button
+                  :disabled="show"
+                  class="btn"
+                  type="primary"
+                  @click="doLogin($event, 'zjhmLoginForm')"
+                  >登录</pl-button
+                >
 
-              <div class="login-tips">
-                如果您还未注册，请先<span class="download-link"
-                  >下载人社app 注册</span
-                >
+                <div class="login-tips">
+                  如果您还未注册，请先<span class="download-link"
+                    >下载人社app 注册</span
+                  >
+                </div>
               </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="手机登录" name="second">
-            <el-form
-              ref="sjhmLoginForm"
-              :model="phoneForm"
-              :rules="rules"
-              label-width="0px"
-              class="login-box"
-            >
-              <el-form-item style="margin-bottom:25px" prop="phone">
-                <pl-input
-                  prefix-icon="el-icon-lock"
-                  type="zjhm"
-                  placeholder="手机号码"
-                  v-model="phoneForm.phone"
-                />
-              </el-form-item>
-              <el-form-item style="margin-bottom:25px" prop="verifyCode">
-                <el-row :gutter="10">
-                  <el-col :span="14">
-                    <pl-input
-                      prefix-icon="el-icon-lock"
-                      type="message"
-                      label="短信验证码"
-                      v-model="phoneForm.verifyCode"
-                    />
-                  </el-col>
-                  <el-col :span="10" class="text-right">
-                    <pl-button
-                      v-show="verifyCodeShow"
-                      @click="getMessage($event)"
-                    >
-                      发送短信
-                    </pl-button>
-                    <pl-button v-show="!verifyCodeShow" class="count">
-                      {{ count }} s
-                    </pl-button>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-            </el-form>
-            <div class="login-btn-bar">
-              <pl-button
-                :disabled="show"
-                class="btn"
-                type="primary"
-                @click="doLogin($event, 'sjhmLoginForm')"
-                >登录</pl-button
+            </el-tab-pane>
+            <el-tab-pane label="手机登录" name="second">
+              <el-form
+                ref="sjhmLoginForm"
+                :model="phoneForm"
+                :rules="rules"
+                label-width="0px"
+                class="login-box"
               >
-              <br />
-              <div class="login-tips">
-                如果您还未注册，请先<span class="download-link"
-                  >下载人社app 注册</span
+                <el-form-item style="margin-bottom:25px" prop="phone">
+                  <pl-input
+                    prefix-icon="el-icon-lock"
+                    type="zjhm"
+                    placeholder="手机号码"
+                    v-model="phoneForm.phone"
+                  />
+                </el-form-item>
+                <el-form-item style="margin-bottom:25px" prop="verifyCode">
+                  <el-row :gutter="10">
+                    <el-col :span="14">
+                      <pl-input
+                        prefix-icon="el-icon-lock"
+                        type="message"
+                        label="短信验证码"
+                        v-model="phoneForm.verifyCode"
+                      />
+                    </el-col>
+                    <el-col :span="10" class="text-right">
+                      <pl-button
+                        v-show="verifyCodeShow"
+                        @click="getMessage($event)"
+                      >
+                        发送短信
+                      </pl-button>
+                      <pl-button v-show="!verifyCodeShow" class="count">
+                        {{ count }} s
+                      </pl-button>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
+              </el-form>
+              <div class="login-btn-bar">
+                <pl-button
+                  :disabled="show"
+                  class="btn"
+                  type="primary"
+                  @click="doLogin($event, 'sjhmLoginForm')"
+                  >登录</pl-button
                 >
+                <br />
+                <div class="login-tips">
+                  如果您还未注册，请先<span class="download-link"
+                    >下载人社app 注册</span
+                  >
+                </div>
               </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="扫码登录" name="third">
-            <div class="tab-content">
-              跳转中...
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-      </el-tab-pane>
-      <el-tab-pane label="单位登录" name="corporation">
-        <div class="tab-content">
-          <img src="@/assets/images/ca.png" alt="" class="corp-img" />
-        </div>
-        <div class="text-center">
-          <!-- <el-button
+            </el-tab-pane>
+            <el-tab-pane label="扫码登录" name="third">
+              <div class="tab-content">
+                跳转中...
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </el-tab-pane>
+        <el-tab-pane label="单位登录" name="corporation">
+          <div class="tab-content">
+            <img src="@/assets/images/ca.png" alt="" class="corp-img" />
+          </div>
+          <div class="text-center">
+            <!-- <el-button
             :disabled="show"
             class="btn corp-btn"
             type="primary"
             @click="onCorpSubmit()"
             >登录</el-button
           > -->
-          <br />
-          <br />
-          <div id="corpYwtb" style="height:18px;font-size:14px">
-            <span class="download-link" @click="turnYwtb2"
-              >一网通办入口登录 ></span
-            >
+            <br />
+            <br />
+            <div id="corpYwtb" style="height:18px;font-size:14px">
+              <span class="download-link" @click="turnYwtb2"
+                >一网通办入口登录 ></span
+              >
+            </div>
           </div>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
     <div class="footer">
       <el-row>
         <el-col :span="4" class="text-center">
@@ -404,7 +406,6 @@ $headerHeight: 60px;
   background-repeat: round;
   height: 100%;
   width: 100%;
-  padding-top: 15%;
   .herder {
     .title {
       img {
@@ -452,6 +453,11 @@ $headerHeight: 60px;
       margin: 0 auto;
     }
   }
+  .container {
+    position: absolute;
+    right: 20%;
+    bottom: 30%;
+  }
   #typeTabs {
     ::v-deep .el-tabs__header {
       padding: 0px 0 25px;
@@ -487,7 +493,6 @@ $headerHeight: 60px;
   }
   .el-tabs {
     width: 350px;
-    margin: 0px 240px 0 auto;
     background: #fff;
     border-radius: 5px;
     ::v-deep .el-tabs__header {

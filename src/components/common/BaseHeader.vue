@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-05-05 16:30:13
+ * @LastEditTime: 2021-05-06 17:51:53
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -159,58 +159,68 @@ export default {
       } else if (to.path === '/logout') {
         if (isPerson(this)) {
           //个人退出
-          let logoutResult = await doPersonLogout();
-          if (logoutResult && logoutResult.status === 200) {
-            let logout = this.$store.dispatch('person/do_logout');
-            logout
-              .then(res => {
-                this.$alert('退出成功');
-                window.setTimeout(function() {
-                  window.location.href = '/ggzp-shrs/index.html';
-                }, 2000);
-                return;
-              })
-              .catch(err => {
-                this.$alert('退出异常');
-              });
-          } else {
-            this.$alert('退出失败');
+          try {
+            let logoutResult = await doPersonLogout();
+            if (logoutResult && logoutResult.status === 200) {
+              if (!logoutResult.result.loginSelf) {
+                //不是个人证件号码或者短息登录
+                // let _href = logoutResult.match(htmlRgx)?.[0];
+                window.open(
+                  'http://117.184.226.149/uc/country/cancel.do?type=1&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-shrs/index.html'
+                );
+              }
+              let logout = this.$store.dispatch('person/do_logout');
+              logout
+                .then(res => {
+                  this.$alert('退出成功');
+                  window.setTimeout(function() {
+                    window.location.href = '/ggzp-shrs/index.html';
+                  }, 2000);
+                  return;
+                })
+                .catch(err => {
+                  this.$alert('退出异常');
+                });
+            } else {
+              this.$alert('退出失败');
+            }
+          } catch (err) {
+            console.log('退出失败');
+            throw new Error(err);
           }
         } else if (isCorporation(this)) {
           //单位退出(需要一网通办协助)
           try {
-            console.log('-------1111111111111-----------');
-            let r = await doCorporationLogout();
-            console.log(r);
-            if (typeof r === 'string') {
-              let _href = r.match(htmlRgx)?.[0];
-              console.log(_href);
-              //window.location.href = _href;
-              window.open(_href);
-              //let iframe = document.getElementById('iframe');
-              //iframe.src = _href;
-            } else if (typeof r !== 'object') {
-              throw new Error('无法退出');
+            let logoutResult = await doCorporationLogout();
+            if (
+              logoutResult &&
+              logoutResult.status === 200 &&
+              !logoutResult.result.loginSelf
+            ) {
+              //let _href = logoutResult.match(htmlRgx)?.[0];
+              window.open(
+                'http://117.184.226.149/uc/country/cancel.do?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-shrs/index.html'
+              );
+              this.$store
+                .dispatch('corporation/do_logout')
+                .then(res => {
+                  this.$alert('退出成功');
+                  window.setTimeout(function() {
+                    window.location.href = '/ggzp-shrs/index.html';
+                    //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+                  }, 2000);
+                  return;
+                })
+                .catch(err => {
+                  this.$alert('退出异常');
+                });
+            } else {
+              this.$alert('无法退出');
             }
           } catch (err) {
-            console.log('-------222222222222-----------');
             console.log('退出失败');
             throw new Error(err);
           }
-          console.log('-------33333333333333-----------');
-          this.$store
-            .dispatch('corporation/do_logout')
-            .then(res => {
-              this.$alert('退出成功');
-              window.setTimeout(function() {
-                window.location.href = '/ggzp-shrs/index.html';
-                //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
-              }, 2000);
-              return;
-            })
-            .catch(err => {
-              this.$alert('退出异常');
-            });
         }
         //this.$router.push('/')
         //this.$router.push(from.path);

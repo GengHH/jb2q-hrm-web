@@ -69,6 +69,8 @@ export default {
     return {
       activeName: 'first',
       unshowShztColumn: true,
+      pageSize: 10,
+      pageIndex: 0,
       tableData1: [
         {
           positionId: '4',
@@ -191,14 +193,16 @@ export default {
       console.log(val);
     },
     async queryResult(val) {
-      let positionResult = await findPosition(
-        'off',
-        this.unshowShztColumn ? 'unagency' : 'agency',
-        {
-          cid: this.$store.getters['corporation/cid'],
-          content: $.trim(val)
+      let positionResult = await findPosition({
+        cid: this.$store.getters['corporation/cid'],
+        status: 'off',
+        agencyRecruit: this.unshowShztColumn ? 'unagency' : 'agency',
+        positionName: $.trim(val),
+        pageParam: {
+          pageSize: this.pageSize,
+          pageIndex: this.pageIndex
         }
-      ).catch(() => {
+      }).catch(() => {
         this.$message({
           type: 'error',
           message: '系统异常，查询失败'
