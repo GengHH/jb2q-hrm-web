@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 15:23:49
+ * @LastEditTime: 2021-05-08 19:39:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -92,6 +92,14 @@ export default {
     // }).catch( err=>{
     //   console.log(err)
     // });
+    let timer = setInterval(() => {
+      if (this.$store.getters['corporation/username']) {
+        this.userLogInfo.nvaText = this.$store.getters['corporation/username'];
+        if (timer) {
+          clearInterval(timer);
+        }
+      }
+    }, 300);
   },
   mounted() {
     //niceScroll('#indexApp');
