@@ -160,7 +160,7 @@ service.interceptors.response.use(response => {
         title: '系统提示',
         type: 'error',
         dangerouslyUseHTMLString: true,
-        message: _newData
+        message: __newDate
       });
     }
     // 后台系统抛出异常时候终止promise

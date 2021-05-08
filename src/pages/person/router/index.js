@@ -30,7 +30,7 @@ let router = new Router({
     {
       path: '/',
       //name: '个人首页',
-      redirect: '/jobSearch',
+      redirect: '/loadding',
       component: () => import('@/views/person'),
       children: [
         {
@@ -229,6 +229,11 @@ let router = new Router({
       ]
     },
     {
+      path: '/loadding',
+      name: '加载中',
+      component: () => import('@/views/person/personLoadding')
+    },
+    {
       path: '/logout',
       component: BlankComponent
     },
@@ -242,28 +247,28 @@ let router = new Router({
     }
   ]
 });
-
-//全局路由钩子函数（根据用户的权限判断路由的跳转）
-router.beforeEach((to, from, next) => {
-  console.log('this is person page');
-  if (to.path === '/logout') {
-    next();
-  } else if (!store.getters['person/token']) {
-    next('/error');
-  } else if (
-    store.getters['person/first_login'] &&
-    to.name !== '个人信息维护' &&
-    to.name
-  ) {
-    if (store.getters['person/pid']) {
-      Vue.prototype.$alert(
-        '首次进入本系统，请先维护个人基本信息，以正常使用系统功能！'
-      );
+setTimeout(() => {
+  //全局路由钩子函数（根据用户的权限判断路由的跳转）
+  router.beforeEach((to, from, next) => {
+    console.log('this is person page');
+    if (to.path === '/logout') {
+      next();
+    } else if (to.path !== '/logout' && !store.getters['person/token']) {
+      next('/error');
+    } else if (
+      store.getters['person/first_login'] &&
+      to.name !== '个人信息维护' &&
+      to.name
+    ) {
+      if (store.getters['person/pid']) {
+        Vue.prototype.$alert(
+          '首次进入本系统，请先维护个人基本信息，以正常使用系统功能！'
+        );
+      }
+      next('/personInfo');
+    } else {
+      next();
     }
-    next('/personInfo');
-  } else {
-    next();
-  }
-});
-
+  });
+}, 3000);
 export default router;

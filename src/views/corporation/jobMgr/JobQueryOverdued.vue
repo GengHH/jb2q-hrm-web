@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-06 18:05:34
+ * @LastEditTime: 2021-05-08 18:56:44
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOverdued.vue
 -->
@@ -11,11 +11,31 @@
     <div class="title-style">已过期职位</div>
     <el-row>
       <el-col :span="12">
-        <pl-button type="danger" icon="el-icon-delete">删除</pl-button>
-        <pl-button class="orange-btn" icon="el-icon-thumb">重新发布</pl-button>
+        <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
+          >删除</pl-button
+        >
+        <!-- <pl-button class="orange-btn" icon="el-icon-thumb" @click="releaseJob"
+          >发布</pl-button
+        > -->
+        <!-- <pl-button
+          btnClass="red-btn"
+          icon="el-icon-delete"
+          confirmType="pop"
+          :popConfig="popConfig1"
+          @confirm="doDeletePosition($event)"
+          >删除</pl-button
+        >
+        <pl-button
+          btnClass="orange-btn"
+          icon="el-icon-thumb"
+          confirmType="pop"
+          :popConfig="popConfig2"
+          @confirm="doReleasePosition($event)"
+          >重新发布</pl-button
+        > -->
       </el-col>
       <el-col :span="12">
-        <BaseSearch @clickButton="queryResult($event)"></BaseSearch>
+        <BaseSearch @clickButton="queryResultByBtn($event)"></BaseSearch>
       </el-col>
     </el-row>
     <!-- 查询结果Tabs -->
@@ -23,10 +43,13 @@
       <el-tab-pane label="自主招聘" name="first">
         <pl-table
           :data="tableData1"
+          :totalCount="totalCount1"
           ref="serveTable1"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange1"
+          @handleCurrentChangeOnBack="handlePageChange1"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
@@ -37,10 +60,13 @@
       <el-tab-pane label="代理招聘" name="second">
         <pl-table
           :data="tableData2"
+          :totalCount="totalCount2"
           ref="serveTable2"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange2"
+          @handleCurrentChangeOnBack="handlePageChange2"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
@@ -54,7 +80,11 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-import { findPosition } from '@/api/corporationApi';
+import {
+  findPosition,
+  doDeletePosition,
+  doReleaseAgainPosition
+} from '@/api/corporationApi';
 const STATUS_TAG_MAP = {
   1: { text: '待审核', type: 'info' },
   2: { text: '审核通过', type: 'success' },
@@ -69,52 +99,10 @@ export default {
     return {
       activeName: 'first',
       unshowShztColumn: true,
-      pageSize: 10,
-      pageIndex: 0,
-      tableData1: [
-        {
-          positionId: '4',
-          editId: '',
-          positionName: 'JAVA架构工程师',
-          workAddress: '上海市普陀区中江路889号804室',
-          salaryScope: '20-50(04)',
-          describe: '',
-          statusId: '1',
-          actions: ['action1']
-        },
-        {
-          positionId: '3',
-          editId: '',
-          positionName: 'JAVA超高级工程师',
-          workAddress: '上海市普陀区中江路889号804室',
-          salaryScope: '20-50(04)',
-          describe: '',
-          statusId: '1',
-          actions: ['action1']
-        }
-      ],
-      tableData2: [
-        {
-          positionId: '4',
-          editId: '',
-          positionName: 'JAVA架构工程师',
-          workAddress: '上海市普陀区中江路889号804室',
-          salaryScope: '20-50(04)',
-          describe: '',
-          statusId: '1',
-          actions: ['action1']
-        },
-        {
-          positionId: '3',
-          editId: '',
-          positionName: 'JAVA超高级工程师',
-          workAddress: '上海市普陀区中江路889号804室',
-          salaryScope: '20-50(04)',
-          describe: '',
-          statusId: '1',
-          actions: ['action1']
-        }
-      ]
+      totalCount1: 0,
+      totalCount2: 0,
+      tableData1: [],
+      tableData2: []
     };
   },
   computed: {
@@ -147,7 +135,7 @@ export default {
         {
           label: '操作时间',
           prop: 'editId',
-          formatter: 'date',
+          formatter: 'releaseTime',
           slotName: 'date'
         },
         {
@@ -169,7 +157,7 @@ export default {
                 //编辑职位信息
                 this.$router.push({
                   path: '/jobMgr/jobAdd',
-                  query: { positionId: row.positionId }
+                  query: { editId: row.editId, positionId: row.positionId }
                 });
               },
               hidden: ({ row }, item) => {
@@ -179,7 +167,17 @@ export default {
           ]
         }
       ];
+    },
+    selection1() {
+      return this.$refs.serveTable1.multipleSelection;
+    },
+    selection2() {
+      return this.$refs.serveTable2.multipleSelection;
     }
+  },
+  created() {
+    this.queryResult('first');
+    this.queryResult('second');
   },
   methods: {
     handleClick(tab, event) {
@@ -192,15 +190,31 @@ export default {
     handleSelectionChange(val) {
       console.log(val);
     },
-    async queryResult(val) {
+    queryResultByBtn(val) {
+      this.positionName = $.trim(val);
+      this.queryResult('first');
+      this.queryResult('second');
+    },
+    /**
+     * witchTable: first自主招聘； witchTable: second代理招聘
+     */
+    async queryResult(witchTable) {
+      let _pageSize =
+          (witchTable === 'first'
+            ? this.$refs.serveTable1?.pageSize
+            : this.$refs.serveTable2?.pageSize) || 10,
+        _pageIndex =
+          (witchTable === 'first'
+            ? this.$refs.serveTable1?.currentPage - 1
+            : this.$refs.serveTable2?.currentPage - 1) || 0;
       let positionResult = await findPosition({
         cid: this.$store.getters['corporation/cid'],
         status: 'overdue',
-        agencyRecruit: this.unshowShztColumn ? 'unagency' : 'agency',
-        positionName: $.trim(val),
+        agencyRecruit: witchTable === 'first' ? '0' : '1', //0：自主招聘，1：代理招聘
+        positionName: this.positionName,
         pageParam: {
-          pageSize: this.pageSize,
-          pageIndex: this.pageIndex
+          pageSize: _pageSize,
+          pageIndex: _pageIndex
         }
       }).catch(() => {
         this.$message({
@@ -209,25 +223,138 @@ export default {
         });
       });
       if (positionResult.status == 200) {
-        positionResult.result.data.forEach(element => {
+        positionResult.result.pageresult.data.forEach(element => {
           element.actions = ['action1'];
         });
-        if (this.unshowShztColumn) {
-          this.tableData1 = positionResult.result.data;
+        if (witchTable === 'first') {
+          this.tableData1 = positionResult.result.pageresult.data;
+          this.totalCount1 = positionResult.result.pageresult.total || 0;
         } else {
-          this.tableData2 = positionResult.result.data;
+          this.tableData2 = positionResult.result.pageresult.data;
+          this.totalCount2 = positionResult.result.pageresult.total || 0;
         }
       } else {
-        if (this.unshowShztColumn) {
+        if (witchTable === 'first') {
           this.tableData1 = [];
+          this.totalCount1 = 0;
         } else {
           this.tableData2 = [];
+          this.totalCount2 = 0;
         }
         this.$message({
           type: 'error',
           message: '查询失败'
         });
       }
+    },
+    /**
+     * 删除职位
+     */
+    deleteJob() {
+      let that = this;
+      if (
+        (this.activeName === 'first' &&
+          this.selection1 &&
+          this.selection1.length == 0) ||
+        (this.activeName === 'second' &&
+          this.selection2 &&
+          this.selection2.length == 0)
+      ) {
+        this.$alert('请选择一条');
+      } else {
+        // TODO删除数据
+        that
+          .$confirm('确定删除所选职位, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+          .then(() => {
+            //参数
+            let _positionIdList = [];
+            if (this.activeName == 'first') {
+              this.selection1.forEach(i => {
+                _positionIdList.push(i.editId || i.positionId);
+              });
+            } else if (this.activeName == 'second') {
+              this.selection2.forEach(i => {
+                _positionIdList.push(i.editId || i.positionId);
+              });
+            }
+            doDeletePosition({ editIdList: _positionIdList }).then(
+              deleteRes => {
+                if (deleteRes && deleteRes.status === 200) {
+                  that.tableData = that.tableData.filter(
+                    obj => !that.selection.some(i => obj.id === i.id)
+                  );
+                  this.$message({
+                    type: 'success',
+                    message: '发布成功'
+                  });
+                } else if (deleteRes) {
+                  this.$message({
+                    type: 'error',
+                    message: '发布失败'
+                  });
+                }
+              }
+            );
+          });
+      }
+    },
+    /**
+     * 发布职位 TODO
+     */
+    releaseJob() {
+      let that = this;
+      if (
+        (this.activeName === 'first' &&
+          this.selection1 &&
+          this.selection1.length == 0) ||
+        (this.activeName === 'second' &&
+          this.selection2 &&
+          this.selection2.length == 0)
+      ) {
+        this.$alert('请选择一条');
+      } else {
+        // TODO发布数据
+        that
+          .$confirm('确定发布所选职位, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'info'
+          })
+          .then(() => {
+            doReleaseAgainPosition().then(releaseRes => {
+              if (releaseRes && releaseRes.status === 200) {
+                that.tableData = that.tableData.filter(
+                  obj => !that.selection.some(i => obj.id === i.id)
+                );
+                this.$message({
+                  type: 'success',
+                  message: '发布成功'
+                });
+              } else if (releaseRes) {
+                this.$message({
+                  type: 'error',
+                  message: '发布失败'
+                });
+              }
+            });
+          });
+      }
+    },
+    /**
+     *后台分页功能
+     */
+    handlePageChange1() {
+      this.queryResult('first');
+    },
+    /**
+     *后台分页功能
+     */
+    handlePageChange2() {
+      this.queryResult('second');
     }
   }
 };

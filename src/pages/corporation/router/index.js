@@ -29,7 +29,7 @@ let router = new Router({
     {
       path: '/',
       //name: '单位首页',
-      redirect: '/resumeSearch',
+      redirect: '/loadding',
       component: () => import('@/views/corporation'),
       children: [
         {
@@ -189,6 +189,11 @@ let router = new Router({
       ]
     },
     {
+      path: '/loadding',
+      name: '加载中',
+      component: () => import('@/views/corporation/corporationLoadding')
+    },
+    {
       path: '/logout',
       component: BlankComponent
     },
@@ -203,26 +208,29 @@ let router = new Router({
   ]
 });
 
-//全局路由钩子函数（根据用户的权限判断路由的跳转）
-router.beforeEach((to, from, next) => {
-  if (to.path === '/logout') {
-    next();
-  } else if (!store.getters['corporation/token']) {
-    next('/error');
-  } else if (
-    store.getters['corporation/first_login'] &&
-    to.name &&
-    to.name !== '单位信息管理'
-  ) {
-    if (store.getters['corporation/cid']) {
-      Vue.prototype.$alert(
-        '首次进入本系统，请先维护单位基本信息，以正常使用系统功能！'
-      );
+setTimeout(() => {
+  //全局路由钩子函数（根据用户的权限判断路由的跳转）
+  router.beforeEach((to, from, next) => {
+    console.log(from);
+    if (to.path === '/logout') {
+      next();
+    } else if (to.path !== '/error' && !store.getters['corporation/token']) {
+      next('/error');
+    } else if (
+      store.getters['corporation/first_login'] &&
+      to.name &&
+      to.name !== '单位信息管理'
+    ) {
+      if (store.getters['corporation/cid']) {
+        Vue.prototype.$alert(
+          '首次进入本系统，请先维护单位基本信息，以正常使用系统功能！'
+        );
+      }
+      next('/corpinfo');
+    } else {
+      next();
     }
-    next('/corpinfo');
-  } else {
-    next();
-  }
-});
+  });
+}, 3000);
 
 export default router;

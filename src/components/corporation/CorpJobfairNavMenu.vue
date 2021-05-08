@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-04-12 18:39:08
+ * @LastEditTime: 2021-05-07 19:41:04
  * @LastEditors: GengHH
  * @Description: 单位模块招聘会子菜单
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpJobfairNavMenu.vue
@@ -12,6 +12,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    :collapse="isCollapse"
   >
     <router-link to="/jobFair/jobFairApply">
       <el-menu-item index="1">
@@ -48,9 +49,34 @@
 export default {
   name: 'CorpNavMenu',
   data() {
-    return {};
+    return {
+      isCollapse: false
+    };
+  },
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        this._.debounce(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
+    });
   },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.isCollapse = true;
+      } else {
+        this.isCollapse = false;
+      }
+    },
     handleOpen() {
       console.log(1);
     },

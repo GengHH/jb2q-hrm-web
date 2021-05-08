@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-22 16:23:24
+ * @LastEditTime: 2021-05-08 17:35:33
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -32,7 +32,7 @@ import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
 import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
 import PlConfig from '@/config/plComponents';
-
+import { isCorporation } from '@/utils';
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
@@ -64,8 +64,10 @@ if (config.mock) {
   store.dispatch('corporation/do_login');
 }
 if (isEmpty(store.getters.cid)) {
-  //获取单位登录信息
+  //获取单位登录信息并判断是不是首次登录
+  // setTimeout(() => {
   store.dispatch('corporation/get_corporationInfo');
+  // }, 4000);
 }
 
 //初始化字典表;
@@ -105,15 +107,25 @@ if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
 if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
-
-window.setTimeout(function() {
-  /* eslint-disable no-new */
-  new Vue({
-    el: '#app',
-    store,
-    router,
-    //render: h => h(App)
-    template: '<App/>',
-    components: { App }
-  });
-}, 1000);
+if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
+}
+let vm = new Vue({
+  el: '#app',
+  store,
+  router,
+  //render: h => h(App)
+  template: '<App/>',
+  components: { App }
+});
+// setTimeout(() => {
+//   if (isCorporation(vm)) {
+//     window.setTimeout(function() {
+//       vm.$mount('#app');
+//     }, 500);
+//   } else {
+//     setTimeout(() => {
+//       window.location.href = '/ggzp-shrs/index.html';
+//     }, 2000);
+//   }
+// }, 1000);

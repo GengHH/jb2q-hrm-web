@@ -243,6 +243,11 @@ body {
   background-color: #fff !important;
   border-color: #ff9954 !important;
 }
+.red-btn {
+  color: #fff !important;
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
+}
 .brown-btn {
   color: #fff !important;
   background: #ab8a76 linear-gradient(to right, #d1b29c, #86614f) !important;
@@ -321,6 +326,6 @@ body {
   transition-delay: 0s;
 }
 
-.requiredSymbol{
-  color:red;
+.requiredSymbol {
+  color: red;
 }

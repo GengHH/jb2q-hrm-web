@@ -60,7 +60,7 @@
           >编辑</el-button
         >
       </div>
-      <!-- <div class="column">
+      <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item" v-if="industryLikeText"
             ><i class="icon iconfont">&#xe641;</i> {{ industryLikeText }}</span
@@ -80,7 +80,7 @@
             ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
           >
         </p>
-      </div> -->
+      </div>
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
         <el-button

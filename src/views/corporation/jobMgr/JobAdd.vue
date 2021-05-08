@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-06 16:29:28
+ * @LastEditTime: 2021-05-08 09:36:33
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -176,9 +176,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="eduRequir" required>
+        <el-form-item prop="eduRequire" required>
           <pl-select
-            v-model="jobForm.eduRequir"
+            v-model="jobForm.eduRequire"
             label="学历要求"
             :optionData="dicXlData"
             class="w-select"
@@ -293,7 +293,11 @@
 /**
  * 发布职位
  */
-import { savePosition, releasePosition } from '@/api/corporationApi';
+import {
+  savePosition,
+  releasePosition,
+  findPositionDetail
+} from '@/api/corporationApi';
 import { salaryPattern, agePattern } from '@/utils/regexp';
 import { overDateSomeDays } from '@/utils';
 export default {
@@ -358,7 +362,7 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        eduRequir: [
+        eduRequire: [
           {
             required: true,
             message: '请选择学历要求',
@@ -454,12 +458,13 @@ export default {
           }
         ]
       },
+      query: {},
       jobForm: {
         editId: '',
         positionName: '',
         recruitType: '',
         tranBaseSymbol: '',
-        agencyRecruit: '',
+        agencyRecruit: '0',
         entrustTyshxym: '',
         entrustCorpName: '',
         corpId: '',
@@ -472,7 +477,7 @@ export default {
         workStreetList: [],
         workHour: '',
         workYearNeed: '',
-        eduRequir: '',
+        eduRequire: '',
         salaryMax: '',
         salaryMin: '',
         salaryPayType: '',
@@ -505,7 +510,11 @@ export default {
     console.log(this.$route.query);
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       //! TODO根据url上的参数查询职位信息
-      this.$alert('此功能暂未实现，缺少查询编辑职位的Api');
+      this.query = this.$route.query;
+      //this.$alert('此功能暂未实现，缺少查询编辑职位的Api');
+      this.findPositionDetail();
+    } else {
+      this.query = {};
     }
   },
   watch: {
@@ -578,7 +587,7 @@ export default {
       //   workStreetList: '',
       //   workHour: '1',
       //   workYearNeed: '1',
-      //   eduRequir: '1',
+      //   eduRequire: '1',
       //   salaryMax: '9000',
       //   salaryMin: '5000',
       //   salaryPayType: '',
@@ -643,6 +652,7 @@ export default {
       this.$refs.jobForm.validate(async valid => {
         if (valid) {
           this.jobForm.opWay = 'save';
+          this.jobForm.agencyRecruit = '0';
           let saveResult = await savePosition(this.jobForm).catch(() => {
             done();
           });
@@ -674,6 +684,7 @@ export default {
               });
             } else {
               this.jobForm.opWay = 'release';
+              this.jobForm.agencyRecruit = '0';
               let publicResult = await releasePosition(this.jobForm).catch(
                 () => {
                   done();
@@ -689,6 +700,17 @@ export default {
         });
       }
       done();
+    },
+    /**
+     * 根据职位编号，查询呢职位详细信息
+     */
+    async findPositionDetail() {
+      let queryResult = await findPositionDetail(this.query || {});
+      if (queryResult && queryResult.status === 200) {
+        this.jobForm = queryResult.result.data;
+      } else if (queryResult) {
+        this.$message({ type: 'error', message: '未查询到职位详细信息' });
+      }
     }
   }
 };

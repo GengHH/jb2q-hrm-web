@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 17:50:21
+ * @LastEditTime: 2021-05-08 15:23:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -85,7 +85,7 @@ export default {
   },
   created() {
     // console.log("index begin creating");
-    console.log(this.$store);
+    //console.log(this.$store);
     // console.log(this.$data);
     // this.axios.get('/admin/index').then(res =>{
     //   this.$set(this.obj,'siet',res.data)

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-06 17:55:45
+ * @LastEditTime: 2021-05-08 18:10:55
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -173,7 +173,7 @@ Mock.mock(basePath + '/loginController/getLogonUser', 'post', function(
   };
 });
 
-//检验该单位是不是首次进入系统
+//检验该单位是不是首次进入系统( data: true 非首次， data: false 首次)
 Mock.mock(RegExp(basePath + '/corp/info/isCorpInit' + '.*'), 'get', function(
   options
 ) {
@@ -221,19 +221,92 @@ Mock.mock(basePath + '/corp/position/find', 'post', function(options) {
   return {
     status: 200,
     message: '',
-    result: Mock.mock({
-      'data|1-10': [
-        {
-          positionId: '@string("number", 1)',
-          editId: '', // '@datetime'
-          positionName: 'JAVA超高级工程师',
-          workAddress: '上海市普陀区中江路889号804室',
-          salaryScope: '20-50(04)',
-          'statusId|+1': ['1', '2', '3'],
-          describe: ''
-        }
-      ]
-    })
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            positionId: '@string("number", 1)',
+            editId: '', // '@datetime'
+            positionName: 'JAVA超高级工程师',
+            workAddress: '上海市普陀区中江路889号804室',
+            salaryScope: '20-50(04)',
+            'statusId|+1': ['1', '2', '3'],
+            describe: ''
+          }
+        ]
+      })
+    }
   };
+});
+//查询各种类型（下架等）的单位职位信息
+Mock.mock(basePath + '/corp/position/detail', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        editId: '',
+        positionId: 15,
+        positionCode: '2021null00000009',
+        positionName: '职位名称',
+        recruitType: '1',
+        tranBaseSymbol: '0',
+        agencyRecruit: '0',
+        entrustTyshxym: '',
+        entrustCorpName: '',
+        corpId: '200008010546251',
+        positionType: '1   ',
+        workNature: '01',
+        ageMax: 40,
+        ageMin: 20,
+        workArea: '01',
+        workAddress: '上海市长宁区天山路100号',
+        workHour: '',
+        workYearNeed: '03',
+        eduRequire: '07',
+        salaryMax: 90000,
+        salaryMin: 30000,
+        salaryPayType: '',
+        recruitNum: 10,
+        special: '01,02,03',
+        describe: '职位描述',
+        workStreet: '01,02',
+        onTop: '0',
+        endDate: '20210605',
+        statusId: '',
+        verifyUserId: '',
+        verifyTime: '',
+        verifyMemo: '',
+        releaseStatusId: '2',
+        releaseUserId: '-1        ',
+        releaseTime: '2021-05-06 10:31:51',
+        offShelf: '0',
+        offTime: '',
+        offReason: '',
+        offUserId: '',
+        specialList: ['01', '02', '03'],
+        workStreetList: ['01', '02']
+      }
+    }
+  };
+});
+// 删除职位信息
+Mock.mock(basePath + '/corp/position/delete', 'post', function(options) {
+  return successData;
+});
+// 置顶职位信息
+Mock.mock(basePath + '/corp/position/top', 'post', function(options) {
+  return successData;
+});
+// 下架职位信息
+Mock.mock(basePath + '/corp/position/off', 'post', function(options) {
+  return successData;
+});
+// 重新发布职位
+Mock.mock(basePath + '/corp/position/released-again', 'post', function(
+  options
+) {
+  return successData;
 });
 export default Mock;

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-04-22 13:48:46
+ * @LastEditTime: 2021-05-08 16:13:29
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -39,6 +39,7 @@ import BaseWChat from '@/components/common/BaseWChat';
 import PlConfig from '@/config/plComponents';
 import BaiduMap from 'vue-baidu-map';
 import Chat from 'jwchat';
+import { isPerson } from '@/utils';
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);
@@ -85,7 +86,9 @@ if (config.mock) {
 }
 if (isEmpty(store.getters.zjhm)) {
   //获取个人登录信息
+  //setTimeout(() => {
   store.dispatch('person/get_personInfo');
+  //}, 4000);
 }
 //初始化字典表;
 if (isEmpty(store.getters['dictionary/yesno'])) {
@@ -128,15 +131,25 @@ if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
 
-window.setTimeout(function() {
-  //console.log('定时器-模拟能获取人员的登录信息');
-  /* eslint-disable no-new */
-  new Vue({
-    el: '#app',
-    store,
-    router,
-    //render: h => h(App)
-    template: '<App/>',
-    components: { App }
-  });
-}, 1000);
+let vm = new Vue({
+  el: '#app',
+  store,
+  router,
+  //render: h => h(App)
+  template: '<App/>',
+  components: { App }
+});
+// setTimeout(() => {
+//   if (isPerson(vm)) {
+//     window.setTimeout(function() {
+//       //console.log('定时器-模拟能获取人员的登录信息');
+//       /* eslint-disable no-new */
+//       vm.$mount('#app');
+//     }, 500);
+//   } else {
+//     vm.$alert('请从首页登录');
+//     setTimeout(() => {
+//       window.location.href = '/ggzp-shrs/index.html';
+//     }, 2000);
+//   }
+// }, 1000);

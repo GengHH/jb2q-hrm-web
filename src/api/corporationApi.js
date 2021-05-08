@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-06 17:54:50
+ * @LastEditTime: 2021-05-07 16:32:50
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -42,9 +42,23 @@ const savePosition = params =>
 const releasePosition = params =>
   postAction(basePath + '/corp/position/release', params);
 
-//单位查询zhiwei信息
+//单位查询职位信息
 const findPosition = params =>
   postAction(basePath + '/corp/position/find', params);
+const findPositionDetail = params =>
+  postAction(basePath + '/corp/position/detail', params);
+// 删除职位信息
+const doDeletePosition = params =>
+  postAction(basePath + '/corp/position/delete', params);
+// 置顶职位信息
+const doTopPosition = params =>
+  postAction(basePath + '/corp/position/top', params);
+// 下架职位信息
+const doOffPosition = params =>
+  postAction(basePath + '/corp/position/off', params);
+// 重新发布职位
+const doReleaseAgainPosition = params =>
+  postAction(basePath + '/corp/position/released-again', params);
 
 export {
   doCorporationLogout,
@@ -52,7 +66,13 @@ export {
   checkCorpInit,
   loadCorpInfo,
   saveCorpInfo,
+  releasePosition,
   findPosition,
+  findPositionDetail,
   savePosition,
-  updateDistrictCode
+  updateDistrictCode,
+  doDeletePosition,
+  doTopPosition,
+  doOffPosition,
+  doReleaseAgainPosition
 };
