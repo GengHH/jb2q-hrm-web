@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-10 15:32:26
+ * @LastEditTime: 2021-05-13 10:38:16
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -138,6 +138,7 @@
 import { loginControlle } from './api/index';
 import apiUrlConfig from '@/config';
 import { niceScroll } from '@/utils';
+import { removeWatermark, setWaterMark } from '@/utils/watermark';
 export default {
   name: 'app',
   components: {},
@@ -251,8 +252,17 @@ export default {
     let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
     this.menuList = datas[0].childs;
     niceScroll('.el-aside');
+    //添加水印
+    setWaterMark(
+      this.$store.state.admin.userInfo.logonUser.userIdStr,
+      this.$store.state.admin.userInfo.logonUser.userName
+    );
   },
-  created() {}
+  created() {},
+  destroyed() {
+    //消除水印
+    removeWatermark();
+  }
 };
 </script>
 
