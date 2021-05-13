@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 14:49:54
+ * @LastEditTime: 2021-05-12 15:32:50
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -49,7 +49,9 @@ const state = {
   //是否特定单位(YESNO)
   special_corp: false,
   //是否允许代理招聘(YESNO)
-  entrust_status: false
+  entrust_status: false,
+  //未读信息数据数量
+  message_count: 0
 };
 
 const mutations = {
@@ -111,6 +113,9 @@ const mutations = {
   },
   SET_ENTRUST_STATUS: (state, entrust_status) => {
     state.entrust_status = entrust_status;
+  },
+  SET_MESSAGE_COUNT: (state, message_count) => {
+    state.message_count = message_count;
   }
 };
 const getters = {
@@ -126,7 +131,8 @@ const getters = {
   human_resource_reg: state => state.human_resource_reg,
   keypoint_corp: state => state.keypoint_corp,
   special_corp: state => state.special_corp,
-  entrust_status: state => state.entrust_status
+  entrust_status: state => state.entrust_status,
+  message_count: state => state.message_count
 };
 const actions = {
   //用户登录

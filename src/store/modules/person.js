@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 16:21:58
+ * @LastEditTime: 2021-05-12 15:33:43
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -38,7 +38,9 @@ const state = {
   //登录状态:1:登录中，0：未登录
   login_status: 0,
   //登录时间，超出半个小时即登录失效
-  login_time: 0
+  login_time: 0,
+  // 未读信息数据数量
+  message_count: 0
 };
 
 const mutations = {
@@ -85,6 +87,9 @@ const mutations = {
   },
   SET_LOGIN_TIME: (state, login_time) => {
     state.login_time = login_time;
+  },
+  SET_MESSAGE_COUNT: (state, message_count) => {
+    state.message_count = message_count;
   }
 };
 const getters = {
@@ -95,7 +100,8 @@ const getters = {
   first_check: state => state.first_check,
   first_login: state => state.first_login,
   username: state => state.name,
-  pid: state => state.pid
+  pid: state => state.pid,
+  message_count: state => state.message_count
 };
 const actions = {
   //用户登录

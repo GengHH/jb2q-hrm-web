@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 09:36:33
+ * @LastEditTime: 2021-05-11 15:48:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -17,6 +17,7 @@
 
     <!--S 发布职位内容部分 -->
     <el-form
+      :disabled="formDisabled"
       :model="jobForm"
       :label-position="labelPosition"
       :rules="rules"
@@ -274,7 +275,7 @@
     <!--E 发布职位内容部分 -->
 
     <!-- S demo4按钮部分 -->
-    <div id="demo4" class="form-btns">
+    <div id="demo4" class="form-btns" v-if="!formDisabled">
       <el-button class="white-btn btn-style" @click="dialogClear"
         >清空重置</el-button
       >
@@ -304,7 +305,7 @@ export default {
   name: 'JobAdd',
   data() {
     return {
-      visible: false,
+      formDisabled: false,
       labelPosition: 'right',
       isPublic: false,
       rules: {
@@ -487,6 +488,8 @@ export default {
         opWay: '',
         publicDate: ''
       },
+      isDefaultStreet: false,
+      showWorkStreetList: [],
       dicGzqyData: this.$store.getters['dictionary/ggjbxx_qx'],
       //dicGzjzData: this.$store.getters['dictionary/ggjbxx_street'],
       dicBsData: this.$store.getters['dictionary/recruit_work_hour'],
@@ -506,15 +509,15 @@ export default {
     };
   },
   created() {
-    //this.getData();
+    //根据url上的参数查询职位信息
     console.log(this.$route.query);
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
-      //! TODO根据url上的参数查询职位信息
       this.query = this.$route.query;
-      //this.$alert('此功能暂未实现，缺少查询编辑职位的Api');
       this.findPositionDetail();
+      this.formDisabled = this.$route.query.disabled === 'true';
     } else {
       this.query = {};
+      this.formDisabled = false;
     }
   },
   watch: {
@@ -539,7 +542,11 @@ export default {
         }
         that.dicStreet = newArray;
       }
-      that.jobForm.workStreetList = [];
+      //如果是首次编辑职位信息时，使用查询出来的默认的街道数据，编辑过程中，如果区县变化，则街道置为空
+      that.jobForm.workStreetList = this.isDefaultStreet
+        ? this.showWorkStreetList
+        : [];
+      this.isDefaultStreet = false;
     }
     // dicStreet: function() {
     //   let that = this;
@@ -568,36 +575,6 @@ export default {
   },
   methods: {
     elForm() {},
-    getData() {
-      // var xjobForm = {
-      //   editId: '',
-      //   positionName: '职位名称',
-      //   recruitType: '1',
-      //   tranBaseSymbol: '0',
-      //   agencyRecruit: '0',
-      //   entrustTyshxym: '',
-      //   entrustCorpName: '',
-      //   corpId: '1',
-      //   positionType: '1',
-      //   workNature: '1',
-      //   ageMax: 50,
-      //   ageMin: 18,
-      //   workArea: '01',
-      //   workAddress: '工作详细地址',
-      //   workStreetList: '',
-      //   workHour: '1',
-      //   workYearNeed: '1',
-      //   eduRequire: '1',
-      //   salaryMax: '9000',
-      //   salaryMin: '5000',
-      //   salaryPayType: '',
-      //   recruitNum: 4,
-      //   specialList: '1',
-      //   describe: '职位描述',
-      //   opWay: 'save'
-      // };
-      // this.$set(this, 'jobForm', xjobForm);
-    },
     minSalaryChange() {
       if (!this.jobForm.salaryMin) {
         return;
@@ -707,7 +684,10 @@ export default {
     async findPositionDetail() {
       let queryResult = await findPositionDetail(this.query || {});
       if (queryResult && queryResult.status === 200) {
-        this.jobForm = queryResult.result.data;
+        this.jobForm = { ...queryResult.result.data };
+        //临时存储一下街道数据
+        this.isDefaultStreet = true;
+        this.showWorkStreetList = queryResult.result.data.workStreetList;
       } else if (queryResult) {
         this.$message({ type: 'error', message: '未查询到职位详细信息' });
       }

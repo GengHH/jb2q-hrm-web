@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-11 18:13:16
+ * @LastEditTime: 2021-05-12 14:31:49
  * @Description: 各模块都可调用的功能接口，如：获取字典表
  * @FilePath: \jb2q-hrm-web\src\api\common.js
  */
@@ -37,6 +37,16 @@ const getRecruitEdu = () => getAction(basePath + '/common/dic/getRecruitEdu');
 const getPsnlResume = params =>
   getAction(basePath + '/person/resume/loadPsnlResume', params);
 
+/******聊天专用接口*********/
+//查询未读信息的详细信息
+const querySession = params => postAction(basePath + '/session/query', params);
+//发送信息
+const sendSession = params => postAction(basePath + '/session/send', params);
+//打开回话页面查询聊天记录
+const openSession = params => postAction(basePath + '/session/open', params);
+
+/**********end*************/
+
 export {
   queryDicData,
   getGzxz,
@@ -44,5 +54,8 @@ export {
   getLanguageType,
   getLanguageLevel,
   getRecruitEdu,
-  getPsnlResume
+  getPsnlResume,
+  querySession,
+  sendSession,
+  openSession
 };

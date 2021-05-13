@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-05-08 16:13:29
+ * @LastEditTime: 2021-05-12 11:01:34
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -130,7 +130,9 @@ if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
 if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
-
+if (isEmpty(store.getters['dictionary/recruit_applyfor_source'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_APPLYFOR_SOURCE');
+}
 let vm = new Vue({
   el: '#app',
   store,

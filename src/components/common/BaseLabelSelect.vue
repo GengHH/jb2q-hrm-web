@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 11:27:38
+ * @LastEditTime: 2021-05-12 11:35:59
  * @Description: 二次封装el-button成实现float label 的input
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLabelSelect.vue
 -->
@@ -17,8 +17,8 @@
       v-on="eventList"
     >
       <el-option
-        v-for="item in optionData"
-        :key="item.value"
+        v-for="(item, index) in optionData"
+        :key="index"
         :label="item.label"
         :value="item.value"
       >

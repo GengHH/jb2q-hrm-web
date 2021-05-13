@@ -292,6 +292,9 @@ body {
   border-bottom: 0 !important;
 }
 
+.el-popconfirm__main {
+  margin: 10px 0;
+}
 /* .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
   outline: 0;

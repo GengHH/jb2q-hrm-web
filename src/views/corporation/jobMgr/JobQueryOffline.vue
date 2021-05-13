@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 18:44:40
+ * @LastEditTime: 2021-05-11 15:22:32
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOffline.vue
 -->
@@ -53,7 +53,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.offTime }}</span>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -164,7 +164,7 @@ export default {
                 });
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
@@ -287,17 +287,25 @@ export default {
             doDeletePosition({ editIdList: _positionIdList }).then(
               deleteRes => {
                 if (deleteRes && deleteRes.status === 200) {
-                  that.tableData = that.tableData.filter(
-                    obj => !that.selection.some(i => obj.id === i.id)
-                  );
+                  // if (that.witchTable === 'first') {
+                  //   that.tableData1 = that.tableData1.filter(
+                  //     obj => !that.selection1.some(i => obj.id === i.id)
+                  //   );
+                  // } else {
+                  //   that.tableData2 = that.tableData2.filter(
+                  //     obj => !that.selection2.some(i => obj.id === i.id)
+                  //   );
+                  // }
+                  //回显数据
+                  this.queryResult(this.witchTable);
                   this.$message({
                     type: 'success',
-                    message: '发布成功'
+                    message: '删除成功'
                   });
                 } else if (deleteRes) {
                   this.$message({
                     type: 'error',
-                    message: '发布失败'
+                    message: '删除失败'
                   });
                 }
               }
@@ -330,9 +338,8 @@ export default {
           .then(() => {
             doReleaseAgainPosition().then(releaseRes => {
               if (releaseRes && releaseRes.status === 200) {
-                that.tableData = that.tableData.filter(
-                  obj => !that.selection.some(i => obj.id === i.id)
-                );
+                //回显数据
+                this.queryResult(this.witchTable);
                 this.$message({
                   type: 'success',
                   message: '重新发布成功'

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 18:10:55
+ * @LastEditTime: 2021-05-12 17:10:32
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -286,7 +286,7 @@ Mock.mock(basePath + '/corp/position/detail', 'post', function(options) {
         offReason: '',
         offUserId: '',
         specialList: ['01', '02', '03'],
-        workStreetList: ['01', '02']
+        workStreetList: ['0101', '0102']
       }
     }
   };
@@ -307,6 +307,276 @@ Mock.mock(basePath + '/corp/position/off', 'post', function(options) {
 Mock.mock(basePath + '/corp/position/released-again', 'post', function(
   options
 ) {
+  return successData;
+});
+
+//获取已经收到的简历信息
+Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            applyforId: '@string("number", 1)',
+            age: 20,
+            createTime: '2019-05-01 18:04:07',
+            xm: '王小虎',
+            pid: '11111111',
+            positionName: '软件工程师',
+            eduLevel: '本科',
+            workYear: '1年'
+            //actions: ['action1']
+          }
+        ]
+      })
+    }
+  };
+});
+//获取已经收到的简历详细信息
+Mock.mock(basePath + '/corp/manage/resume/detail', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        applyforId: 1,
+        resumeId: 6,
+        positionId: 6,
+        source: '01',
+        pid: '200008000009380',
+        zjlxId: '01',
+        zjhm: '310111193709290027',
+        xm: '张秀定',
+        sexId: '2',
+        salaryMax: 99999,
+        salaryMin: 50000,
+        workNature: '01',
+        likeArea: '00',
+        evaluate: 'jcjcjcjcjc',
+        verifyUserId: '',
+        verifyTime: '',
+        verifyResult: '',
+        verifyMemo: '',
+        recId: '',
+        meetId: '',
+        createTime: '2021-04-30 18:04:07',
+        feedbackStatus: '03',
+        feedbackTime: '2021-05-10 14:56:28',
+        feedbackSource: '1',
+        reply: '',
+        reason: '',
+        noticeInterview: '',
+        interviewDate: '',
+        interviewTime: '',
+        interviewContactName: '',
+        interviewContactPhone: '',
+        interviewAddress: '',
+        interviewRemarks: '',
+        reportDate: '',
+        reportTime: '',
+        reportContactName: '',
+        reportContactPhone: '',
+        reportAddress: '',
+        reportRemarks: '',
+        evaluationLevel: '',
+        evaluationContent: '',
+        evaluationTime: '',
+        eduExp: [
+          {
+            applyforEduId: 21,
+            applyforId: 1,
+            pid: '200709138518590',
+            collegesName: '东华大学',
+            majorName: '软件工程',
+            eduLevel: '07',
+            admissionDate: '20040901',
+            graduateDate: '20080630',
+            certNum: '',
+            sourceOuter: ''
+          },
+          {
+            applyforEduId: 22,
+            applyforId: 1,
+            pid: '200709138518590',
+            collegesName: '东华大学',
+            majorName: '软件工程',
+            eduLevel: '07',
+            admissionDate: '20040901',
+            graduateDate: '20080630',
+            certNum: '',
+            sourceOuter: ''
+          },
+          {
+            applyforEduId: 2,
+            applyforId: 1,
+            pid: '200008000009380',
+            collegesName: 'jkcxjjc',
+            majorName: 'xxx',
+            eduLevel: '02',
+            admissionDate: '20210331',
+            graduateDate: '20210415',
+            certNum: '',
+            sourceOuter: ''
+          },
+          {
+            applyforEduId: 3,
+            applyforId: 1,
+            pid: '200008000009380',
+            collegesName: 'jkcxjjcxxx',
+            majorName: 'xxxvv',
+            eduLevel: '02',
+            admissionDate: '20210331',
+            graduateDate: '20210415',
+            certNum: '',
+            sourceOuter: ''
+          }
+        ],
+        laborExp: [
+          {
+            applyforExpId: 22,
+            applyforId: 1,
+            pid: '200709138518590',
+            corpName: '万达信息股份有限公司',
+            positionName: '测试',
+            entryDate: '20090701',
+            quitDate: '20210425',
+            workDescribe: '软件开发，项目管理'
+          },
+          {
+            applyforExpId: 23,
+            applyforId: 1,
+            pid: '200709138518590',
+            corpName: '万达信息股份有限公司',
+            positionName: '测试',
+            entryDate: '20090701',
+            quitDate: '20210425',
+            workDescribe: '软件开发，项目管理'
+          },
+          {
+            applyforExpId: 2,
+            applyforId: 1,
+            pid: '200008000009380',
+            corpName: 'djdjjd',
+            positionName: 'lkzxlkz',
+            entryDate: '20210405',
+            quitDate: '20210408',
+            workDescribe: 'jcjcjcjjc'
+          }
+        ],
+        psnlLanguage: [
+          {
+            applyforLanguageId: 11,
+            applyforId: 1,
+            pid: '200008000009380',
+            languageType: '02',
+            languageLevel: '2'
+          },
+          {
+            applyforLanguageId: 12,
+            applyforId: 1,
+            pid: '200008000009380',
+            languageType: '03',
+            languageLevel: '2'
+          }
+        ],
+        psnlSkillcert: [
+          {
+            applyforCertId: 1,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '电工',
+            certLevel: '初级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 2,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '车工',
+            certLevel: '高级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 21,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '电工',
+            certLevel: '初级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 22,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '车工',
+            certLevel: '高级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 23,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '电工',
+            certLevel: '初级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 24,
+            applyforId: 1,
+            pid: '200709138518590',
+            certName: '车工',
+            certLevel: '高级',
+            receiveTime: '202101'
+          },
+          {
+            applyforCertId: 3,
+            applyforId: 1,
+            pid: '200008000009380',
+            certName: 'drfeww',
+            certLevel: 'ccc',
+            receiveTime: '202102'
+          },
+          {
+            applyforCertId: 4,
+            applyforId: 1,
+            pid: '200008000009380',
+            certName: 'drfewwggbb',
+            certLevel: 'ccccccc',
+            receiveTime: '202107'
+          }
+        ],
+        positionApplyforDataList: [
+          {
+            applyforLikeId: '',
+            applyforId: 1,
+            pid: '200709138518590',
+            likeType: '',
+            likeTarget: ''
+          },
+          {
+            applyforLikeId: '',
+            applyforId: 1,
+            pid: '200709138518590',
+            likeType: '',
+            likeTarget: ''
+          },
+          {
+            applyforLikeId: '',
+            applyforId: 1,
+            pid: '200008000009380',
+            likeType: '',
+            likeTarget: ''
+          }
+        ]
+      }
+    }
+  };
+});
+// 单位反馈
+Mock.mock(basePath + '/corp/manage/feedBack', 'post', function(options) {
   return successData;
 });
 export default Mock;

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 15:28:11
+ * @LastEditTime: 2021-05-12 19:14:00
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -42,6 +42,9 @@ const updatePersonBaseInfo = params =>
 //搜索数据库中的已经发布的职位列表信息
 const queryJobs = params =>
   postAction(basePath + '/person/manage/find/position', params);
+// 更新工作年限
+const saveWorkYear = params =>
+  postAction(basePath + '/person/resume/save/workyear', params);
 //加载个人权限信息
 const loadPsnlPermissionsInfo = params =>
   getAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
@@ -100,11 +103,19 @@ const queryPositionStarList = params =>
   getAction(basePath + '/person/feedback/position/findFavorRecord', params);
 
 //根据不同状态获取简历投递记录
-const findRecord = (type, params) =>
-  getAction(basePath + '/person/feedback/' + type + '/findRecord', params);
+// const findRecord = (type, params) =>
+//   getAction(basePath + '/person/feedback/' + type + '/findRecord', params);
+const findRecord = params =>
+  postAction(basePath + '/person/feedback/find/applyfor', params);
+//反馈
+const doFeedBack = params =>
+  postAction(basePath + '/person/feedback/do-interView', params);
 //评价职位
 const doEvaluateJob = params =>
-  putAction(basePath + '/person/feedback/do-evaluate', params);
+  postAction(basePath + '/person/feedback/do-evaluate', params);
+//查询职位评价内容
+const queryEvaluateList = params =>
+  postAction(basePath + '/person/feedback/query-evaluation', params);
 
 //发送验证码
 const sendSms = params => postAction(basePath + '/person/info/sendSms', params);
@@ -139,7 +150,10 @@ export {
   queryCorpStarList,
   queryPositionStarList,
   findRecord,
+  doFeedBack,
   doEvaluateJob,
+  queryEvaluateList,
   updatePhoneNum,
-  sendSms
+  sendSms,
+  saveWorkYear
 };

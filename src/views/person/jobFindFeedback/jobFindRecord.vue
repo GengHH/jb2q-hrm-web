@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-26 15:49:23
+ * @LastEditTime: 2021-05-13 09:56:45
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -15,20 +15,32 @@
         <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
           >删除</pl-button
         >
+        <pl-button
+          v-if="activeName === '02' || activeName === '03'"
+          class="orange-btn"
+          icon="el-icon-edit"
+          @click="bulkFeedback($event)"
+          >批量反馈</pl-button
+        >
       </el-col>
       <el-col :span="12">
-        <BaseSearch @clickButton="queryJobRecordList($event)"></BaseSearch>
+        <BaseSearch
+          @clickButton="queryJobRecordList('all', $event)"
+        ></BaseSearch>
       </el-col>
     </el-row>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="未查看" name="unread">
+      <el-tab-pane label="未查看" name="01">
         <pl-table
-          :data="tableData1"
-          ref="dataTable1"
+          :data="tableData01"
+          :totalCount="totalCount01"
+          ref="serveTable01"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
           max-height="600"
         >
           <template #createTime="{row}">
@@ -37,13 +49,16 @@
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="readed"
+      <el-tab-pane label="待处理" name="02"
         ><pl-table
-          :data="tableData2"
-          ref="dataTable2"
+          :data="tableData02"
+          :totalCount="totalCount02"
+          ref="serveTable02"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -51,13 +66,16 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知面试" name="interview"
+      <el-tab-pane label="通知面试" name="03"
         ><pl-table
-          :data="tableData3"
-          ref="dataTable3"
+          :data="tableData03"
+          :totalCount="totalCount03"
+          ref="serveTable03"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -65,13 +83,16 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知录用" name="hire"
+      <el-tab-pane label="通知录用" name="04"
         ><pl-table
-          :data="tableData4"
-          ref="dataTable4"
+          :data="tableData04"
+          :totalCount="totalCount04"
+          ref="serveTable04"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -79,13 +100,16 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知不录用" name="unhire"
+      <el-tab-pane label="通知不录用" name="05"
         ><pl-table
-          :data="tableData5"
-          ref="dataTable5"
+          :data="tableData05"
+          :totalCount="totalCount05"
+          ref="serveTable05"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -195,20 +219,47 @@
         >
       </div>
     </el-dialog>
+    <!----------------------->
+    <!-- 不参见面试弹框 -->
+    <!----------------------->
+    <el-dialog title="原因" :visible.sync="dialog2">
+      <pl-input
+        type="textarea"
+        label="请输入不参加面试原因（1000字符）"
+        v-model="reason"
+      ></pl-input>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialog2 = false">取 消</el-button>
+        <el-button type="primary" @click="dontInterView">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!----------------------->
+    <!-- 详情弹框 ----->
+    <!----------------------->
+    <el-dialog title="详情" :visible.sync="dialog3">
+      <div>{{ currentRow.corpName }}</div>
+    </el-dialog>
+    <!----------------------->
     <!-- 聊天弹框 -->
+    <!----------------------->
     <el-dialog
+      v-if="wchatDialog"
       class="width75 dialog-content-full-screen"
       :visible.sync="wchatDialog"
       :before-close="wchatHandleClose"
     >
-      <pl-wchat></pl-wchat>
+      <pl-wchat
+        :targetObjId="targetObjId"
+        :targetObjName="targetObjName"
+      ></pl-wchat>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-import { findRecord, doEvaluateJob } from '@/api/personApi';
+import { findRecord, doEvaluateJob, doFeedBack } from '@/api/personApi';
 //import { niceScroll } from '@/utils';
 export default {
   name: 'jobFindRecord',
@@ -217,18 +268,30 @@ export default {
   },
   data() {
     return {
-      actionColWidth: 260,
-      activeName: 'unread',
+      actionColWidth: 240,
+      activeName: '01',
       labelPosition: 'right',
       formLabelWidth: '120px',
       dialog1: false,
+      dialog2: false,
+      dialog3: false,
       wchatDialog: false,
+      batch: false,
+      selects: [],
+      reason: '',
       pid: this.$store.getters['person/pid'],
       evaluationLevelText: this.$store.getters[
         'dictionary/common_evaluationLeveltext'
       ],
       queryParam: {
-        gjz: ''
+        gjz: '',
+        feedbackStatus: '',
+        corpName: '',
+        positionName: '',
+        pageParam: {
+          pageSize: 10,
+          pageIndex: 0
+        }
       },
       jobEvaluationForm: {
         applyforId: '',
@@ -238,11 +301,19 @@ export default {
         evaluationContent: ''
       },
       rules: {},
-      tableData1: [],
-      tableData2: [],
-      tableData3: [],
-      tableData4: [],
-      tableData5: []
+      tableData01: [],
+      totalCount01: 0,
+      tableData02: [],
+      totalCount02: 0,
+      tableData03: [],
+      totalCount03: 0,
+      tableData04: [],
+      totalCount04: 0,
+      tableData05: [],
+      totalCount05: 0,
+      currentRow: {},
+      targetObjId: '',
+      targetObjName: ''
     };
   },
   computed: {
@@ -293,7 +364,30 @@ export default {
           formatter: 'date',
           slotName: 'createTime'
         },
-        { label: '类别', prop: 'type' },
+        {
+          label: '应聘来源',
+          prop: 'source',
+          rowSpan: 'all',
+          customerRenderText: ({ row }) => {
+            const { source } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_applyfor_source'] || [];
+            return (
+              data.find(element => (element.value = source)).label || source
+            );
+          }
+        },
+        {
+          label: '是否参见面试',
+          prop: 'reply',
+          rowSpan: 'all',
+          customerRenderText: ({ row }) => {
+            const { reply } = row;
+            const data = this.$store.getters['dictionary/yesno'] || [];
+            return data.find(element => (element.value = reply)).label || reply;
+          }
+        },
+        // { label: '类别', prop: 'type' },
         // {
         //   label: '地址',
         //   attrs: { showOverflowTooltip: true },
@@ -313,10 +407,15 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
-                //console.log(row);
+                if (row.applyforId) {
+                  this.currentRow = row;
+                  this.dialog3 = true;
+                } else {
+                  this.$alert('没有可查看的数据');
+                }
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -328,7 +427,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -337,11 +436,14 @@ export default {
               icon: 'el-icon-chat-line-round',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                //console.log(row);
+                console.log(row);
+                // TODO
+                this.targetObjId = row.cid || '';
+                this.targetObjName = row.corpName || '';
                 this.wchatDialog = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -353,8 +455,13 @@ export default {
                 title: '确认参加面试？'
               }),
               confirm: ({ row }, done) => {
-                // TODO变成评价按钮
-                row.actions = ['action1', 'action3', 'action6'];
+                if (row.applyforId) {
+                  this.currentRow = row;
+                  this.doInterView();
+                } else {
+                  this.$alert('没有可查看的数据');
+                }
+                //row.actions = ['action1', 'action3', 'action6'];
                 done();
               },
               attrs: { round: true, size: 'small' },
@@ -362,7 +469,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -375,7 +482,9 @@ export default {
               }),
               confirm: ({ row }, done) => {
                 // TODO变成评价按钮
-                row.actions = ['action1', 'action3', 'action6'];
+                this.dialog2 = true;
+                this.currentRow = row;
+                // row.actions = ['action1', 'action3', 'action6'];
                 done();
               },
               attrs: { round: true, size: 'small' },
@@ -383,7 +492,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -398,28 +507,31 @@ export default {
                 this.dialog1 = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions || !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
         }
       ];
-    },
-    selection1() {
-      return this.$refs.dataTable1.multipleSelection;
-    },
-    selection2() {
-      return this.$refs.dataTable2.multipleSelection;
-    },
-    selection3() {
-      return this.$refs.dataTable3.multipleSelection;
-    },
-    selection4() {
-      return this.$refs.dataTable4.multipleSelection;
-    },
-    selection5() {
-      return this.$refs.dataTable5.multipleSelection;
     }
+    // selection1() {
+    //   return this.$refs.serveTable01.multipleSelection;
+    // },
+    // selection2() {
+    //   return this.$refs.serveTable02.multipleSelection;
+    // },
+    // selection3() {
+    //   return this.$refs.serveTable03.multipleSelection;
+    // },
+    // selection4() {
+    //   return this.$refs.serveTable04.multipleSelection;
+    // },
+    // selection5() {
+    //   return this.$refs.serveTable05.multipleSelection;
+    // }
+  },
+  created() {
+    this.queryJobRecordList('all');
   },
   mounted() {
     //niceScroll('.el-table__body-wrapper');
@@ -445,122 +557,199 @@ export default {
       let that = this;
 
       // TODO 删除数据
-      switch (this.activeName) {
-        case 'unread':
-          if (
-            !that.selection1 ||
-            (that.selection1 && that.selection1.length == 0)
-          ) {
-            that.$alert('请选择一条');
-          } else {
-            that.tableData1 = that.tableData1.filter(
-              obj => !that.selection1.some(i => obj.id === i.id)
-            );
-          }
-          break;
-        case 'readed':
-          if (
-            !that.selection2 ||
-            (that.selection2 && that.selection2.length == 0)
-          ) {
-            that.$alert('请选择一条');
-          } else {
-            that.tableData2 = that.tableData2.filter(
-              obj => !that.selection2.some(i => obj.id === i.id)
-            );
-          }
-          break;
-        case 'interview':
-          if (
-            !that.selection3 ||
-            (that.selection3 && that.selection3.length == 0)
-          ) {
-            that.$alert('请选择一条');
-          } else {
-            that.tableData3 = that.tableData3.filter(
-              obj => !that.selection3.some(i => obj.id === i.id)
-            );
-          }
-          break;
-        case 'hire':
-          if (
-            !that.selection4 ||
-            (that.selection4 && that.selection4.length == 0)
-          ) {
-            that.$alert('请选择一条');
-          } else {
-            that.tableData4 = that.tableData4.filter(
-              obj => !that.selection4.some(i => obj.id === i.id)
-            );
-          }
-          break;
-        case 'unhire':
-          if (
-            !that.selection5 ||
-            (that.selection5 && that.selection5.length == 0)
-          ) {
-            that.$alert('请选择一条');
-          } else {
-            that.tableData5 = that.tableData5.filter(
-              obj => !that.selection5.some(i => obj.id === i.id)
-            );
-          }
-          break;
+      // switch (this.activeName) {
+      //   // unread
+      //   case '01':
+      //     if (
+      //       !that.selection1 ||
+      //       (that.selection1 && that.selection1.length == 0)
+      //     ) {
+      //       that.$alert('请选择一条');
+      //     } else {
+      //       that.tableData01 = that.tableData01.filter(
+      //         obj => !that.selection1.some(i => obj.id === i.id)
+      //       );
+      //     }
+      //     break;
+      //   //case 'readed':
+      //   case '02':
+      //     if (
+      //       !that.selection2 ||
+      //       (that.selection2 && that.selection2.length == 0)
+      //     ) {
+      //       that.$alert('请选择一条');
+      //     } else {
+      //       that.tableData02 = that.tableData02.filter(
+      //         obj => !that.selection2.some(i => obj.id === i.id)
+      //       );
+      //     }
+      //     break;
+      //   // case 'interview':
+      //   case '03':
+      //     if (
+      //       !that.selection3 ||
+      //       (that.selection3 && that.selection3.length == 0)
+      //     ) {
+      //       that.$alert('请选择一条');
+      //     } else {
+      //       that.tableData03 = that.tableData03.filter(
+      //         obj => !that.selection3.some(i => obj.id === i.id)
+      //       );
+      //     }
+      //     break;
+      //   // case 'hire':
+      //   case '04':
+      //     if (
+      //       !that.selection4 ||
+      //       (that.selection4 && that.selection4.length == 0)
+      //     ) {
+      //       that.$alert('请选择一条');
+      //     } else {
+      //       that.tableData04 = that.tableData04.filter(
+      //         obj => !that.selection4.some(i => obj.id === i.id)
+      //       );
+      //     }
+      //     break;
+      //   //case 'unhire':
+      //   case '05':
+      //     if (
+      //       !that.selection5 ||
+      //       (that.selection5 && that.selection5.length == 0)
+      //     ) {
+      //       that.$alert('请选择一条');
+      //     } else {
+      //       that.tableData05 = that.tableData05.filter(
+      //         obj => !that.selection5.some(i => obj.id === i.id)
+      //       );
+      //     }
+      //     break;
+      // }
+      //判断是不是有选中的数据
+      this.selects = this.$refs[
+        'serveTable' + this.activeName
+      ].multipleSelection;
+      if (this.selects && this.selects.length) {
+        // this.batch = true;
+        this.$confirm('此操作将删除该所属记录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            // TODO批量删除数据
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+      } else {
+        // this.batch = false;
+        this.$alert('请选择数据');
       }
-    },
-    bindEnter(val) {
-      console.log(val);
     },
     /**
-     * unread : 未读
-     * readed ：已读
-     * interview ： 面试邀请
-     * hire ： 雇佣
-     * unhire ： 未雇佣
+     * 01 unread : 未读
+     * 02 readed ：已读
+     * 03 interview ： 面试邀请
+     * 04 hire ： 雇佣
+     * 05 unhire ： 未雇佣
      */
-    async queryJobRecordList(val) {
-      // this.$alert('暂时没有此Api接口，请稍后！');
+    async queryJobRecordList(witchTable, val) {
+      this.queryParam.gjz = val;
       let that = this;
-      let queryResult = await findRecord(this.activeName, {
-        pid: this.pid,
-        content: val
-      });
-      if (queryResult.status === 200) {
-        let _data = queryResult.result.data;
-        switch (this.activeName) {
-          case 'unread':
-            _data.forEach(element => {
-              element.actions = ['action1', 'action2', 'action3'];
-            });
-            that.tableData1 = _data;
-            break;
-          case 'readed':
-            _data.forEach(element => {
-              element.actions = ['action1', 'action2', 'action3'];
-            });
-            that.tableData2 = _data;
-            break;
-          case 'interview':
-            _data.forEach(element => {
-              element.actions = ['action1', 'action3', 'action4', 'action5'];
-            });
-            that.tableData3 = _data;
-            break;
-          case 'hire':
-            _data.forEach(element => {
-              element.actions = ['action1', 'action4', 'action3'];
-            });
-            that.tableData4 = _data;
-            break;
-          case 'unhire':
-            _data.forEach(element => {
-              element.actions = ['action1', 'action2', 'action3'];
-            });
-            that.tableData5 = _data;
-            break;
+      if (witchTable === 'all') {
+        // 分别查询5种状态的数据
+        this.queryParam.pageParam.pageSize = 10;
+        this.queryParam.pageParam.pageIndex = 0;
+        for (let i = 1; i < 6; i++) {
+          let params = { ...this.queryParam };
+          params.feedbackStatus = '0' + i;
+          findRecord(params).then(queryRes => {
+            if (queryRes && queryRes.status === 200) {
+              this['tableData0' + i] = queryRes.result.pageresult.data || [];
+              this['totalCount0' + i] = queryRes.result.pageresult.total || 0;
+              this['tableData0' + i].forEach(element => {
+                switch (i) {
+                  case 1:
+                    element.actions = ['action1', 'action3'];
+                    break;
+                  case 2:
+                    element.actions = ['action1', 'action3'];
+                    break;
+                  case 3:
+                    element.actions = [
+                      'action5',
+                      'action3',
+                      'action4',
+                      'action1'
+                    ];
+                    break;
+                  case 4:
+                    element.actions = ['action1', 'action3', 'action6'];
+                    break;
+                  case 5:
+                    element.actions = ['action1', 'action3'];
+                    break;
+                }
+              });
+            }
+          });
         }
+      } else {
+        //单独查询一种类型
+        let _pageSize = this.$refs['serveTable' + witchTable]?.pageSize || 10,
+          _pageIndex =
+            this.$refs['serveTable' + witchTable]?.currentPage - 1 || 0;
+        let params = { ...this.queryParam };
+        params.feedbackStatus = witchTable;
+        params.pageParam.pageSize = _pageSize;
+        params.pageParam.pageIndex = _pageIndex;
+        findRecord(params).then(queryRes => {
+          if (queryRes && queryRes.status == 200) {
+            this.$message({ type: 'success', message: '查询成功' });
+            this['tableData' + witchTable] =
+              queryRes.result.pageresult.data || [];
+            this['totalCount' + witchTable] =
+              queryRes.result.pageresult.total || 0;
+            this['tableData' + witchTable].forEach(element => {
+              switch (witchTable) {
+                case '01':
+                  element.actions = ['action1', 'action3'];
+                  break;
+                case '02':
+                  element.actions = ['action1', 'action3'];
+                  break;
+                case '03':
+                  element.actions = [
+                    'action5',
+                    'action3',
+                    'action4',
+                    'action1'
+                  ];
+                  break;
+                case '04':
+                  element.actions = ['action1', 'action3', 'action6'];
+                  break;
+                case '05':
+                  element.actions = ['action1', 'action3'];
+                  break;
+              }
+            });
+          } else if (queryRes) {
+            this.$message({ type: 'error', message: '查询失败' });
+          }
+        });
       }
     },
+    /**
+     *评价职位
+     */
     doEvaluateJob(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
@@ -574,6 +763,71 @@ export default {
           }
         }
       });
+    },
+    /**
+     * 后端分页
+     */
+    handlePageChange() {
+      this.queryJobRecordList(this.activeName);
+    },
+    /**
+     * 参加面试
+     */
+    doInterView() {
+      doFeedBack({
+        applyforId: this.currentRow.applyforId,
+        reply: '1'
+      }).then(backRes => {
+        if (backRes && backRes.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '反馈成功'
+          });
+          //this.queryJobRecordList(this.activeName);
+          // TODO
+          this.currentRow.actions = ['action1', 'action3'];
+          this.dialog2 = false;
+          this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
+        } else if (backRes) {
+          this.$message({
+            type: 'error',
+            message: '反馈失败'
+          });
+        }
+      });
+    },
+    /**
+     * 不参加面试
+     */
+    dontInterView() {
+      if (!this.reason) {
+        this.$alert('请输入不参见面试原因');
+      } else {
+        doFeedBack({
+          applyforId: this.currentRow.applyforId,
+          reply: '0',
+          reason: this.reason
+        }).then(backRes => {
+          if (backRes && backRes.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '反馈成功'
+            });
+            //this.queryJobRecordList(this.activeName);
+            // TODO
+            console.log(this.currentRow);
+            this.currentRow.actions = ['action1', 'action3'];
+            console.log(this.currentRow);
+            this.dialog2 = false;
+            this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
+          } else if (backRes) {
+            this.$message({
+              type: 'error',
+              message: '反馈失败'
+            });
+          }
+        });
+      }
     }
   }
 };

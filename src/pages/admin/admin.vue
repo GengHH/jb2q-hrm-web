@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-05 18:13:24
+ * @LastEditTime: 2021-05-10 15:32:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -36,13 +36,16 @@
         </div>
       </el-header>
       <div style="height:100%">
-        <el-aside :style="{ width: (isCollapse ? '64' : '300') + 'px' }">
+        <el-aside
+          calss="menu-transition"
+          :style="{ width: (isCollapseTemp ? '64' : '300') + 'px' }"
+        >
           <div style="text-align: center;margin-top:5px">
             <el-button
               size="mini"
               :icon="isCollapse ? 'el-icon-caret-right' : 'el-icon-caret-left'"
               circle
-              @click="isCollapse = !isCollapse"
+              @click="collapseMenu"
             ></el-button>
           </div>
           <el-menu
@@ -86,7 +89,10 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-container id="adminContainer">
+        <el-container
+          id="adminContainer"
+          :style="{ left: (isCollapse ? '64' : '300') + 'px' }"
+        >
           <el-main style="padding:5px">
             <div class="title-style">{{ $route.name }}</div>
             <div
@@ -139,6 +145,7 @@ export default {
     return {
       screenWidth: document.documentElement.clientWidth, //屏幕宽度
       isCollapse: false,
+      isCollapseTemp: false,
       drawerType: '0',
       drawer: false,
       menuList: [],
@@ -205,7 +212,17 @@ export default {
       });
     },
     handleOpen() {},
-    handleClose() {}
+    handleClose() {},
+    collapseMenu() {
+      this.isCollapseTemp = !this.isCollapse;
+      if (!this.isCollapse) {
+        setTimeout(() => {
+          this.isCollapse = !this.isCollapse;
+        }, 500);
+      } else {
+        this.isCollapse = !this.isCollapse;
+      }
+    }
   },
   computed: {
     height() {
@@ -245,11 +262,12 @@ export default {
   float: right;
   right: 0px;
   top: 0px;
-  left: 300px;
+  //left: 300px;
   padding-top: 60px;
 }
 .el-aside {
   height: 100%;
+  transition: width 1s ease-out;
 }
 .title-style {
   font-size: 16px;

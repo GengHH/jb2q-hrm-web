@@ -6,6 +6,7 @@
       <div id="baseInfo" class="title-style font-or font-bold">
         基本信息
         <!-- <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -27,6 +28,42 @@
             class="el-icon-female sixteen-opacity"
             v-else-if="resume.sex === '女'"
           ></i>
+          <span class="sixteen-opacity"
+            >工作经验
+            <span
+              v-if="
+                resume.workYear !== null &&
+                  resume.workYear !== undefined &&
+                  resume.workYear !== ''
+              "
+            >
+              {{ resume.workYear }}
+            </span>
+            <span v-else>?</span>
+            年
+            <!-- <i class="el-icon-edit-outline" @click=""></i> -->
+            <el-popover
+              placement="right"
+              width="100"
+              trigger="hover"
+              @show="openPop"
+              @hide="hidePop"
+            >
+              <el-input-number
+                v-model="workYear"
+                :min="0"
+                :max="100"
+                size="mini"
+                label="描述文字"
+              ></el-input-number>
+              <!-- <el-button slot="reference">click 激活</el-button> -->
+              <i
+                slot="reference"
+                style="color:#35e835"
+                class="el-icon-edit-outline"
+              ></i>
+            </el-popover>
+          </span>
         </p>
         <p class="fourteen-opacity mat-15">
           <span v-if="resume.contactPhone"
@@ -53,6 +90,7 @@
       <div id="jobIntention" class="title-style font-or font-bold">
         求职意向
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -84,6 +122,7 @@
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -103,6 +142,7 @@
               workCarditem.corpName
             }}</span>
             <el-button
+              v-if="notConsotResume"
               type="danger"
               icon="el-icon-delete"
               circle
@@ -111,6 +151,7 @@
               @click="deleteCard('dialog2', index, workCarditem.expId)"
             ></el-button>
             <el-button
+              v-if="notConsotResume"
               type="primary"
               icon="el-icon-edit"
               circle
@@ -183,6 +224,7 @@
       <div id="educationExperience" class="title-style font-or font-bold">
         教育经历
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -202,6 +244,7 @@
               eduCarditem.collegesName
             }}</span>
             <el-button
+              v-if="notConsotResume"
               type="danger"
               icon="el-icon-delete"
               circle
@@ -210,6 +253,7 @@
               @click="deleteCard('dialog3', index, eduCarditem.eduId)"
             ></el-button>
             <el-button
+              v-if="notConsotResume"
               type="primary"
               icon="el-icon-edit"
               circle
@@ -259,6 +303,7 @@
       <div id="languageSkills" class="title-style font-or font-bold">
         外语能力
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -269,7 +314,7 @@
       <div class="column">
         <el-tag
           size="medium"
-          closable
+          :closable="notConsotResume"
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
           @close="languageTagClose(index, languageItem.languageId)"
@@ -279,6 +324,7 @@
       <div id="skillsCertificate" class="title-style font-or font-bold">
         技能证书
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -295,7 +341,7 @@
           <el-tag
             class="tag-card-item"
             size="medium"
-            closable
+            :closable="notConsotResume"
             @close="skillTagClose(index, skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
@@ -308,6 +354,7 @@
       <div id="selfEvaluation" class="title-style font-or font-bold">
         自我评价
         <el-button
+          v-if="notConsotResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -905,7 +952,8 @@ import {
   saveEduExp,
   saveLanguageLevel,
   saveSkillCert,
-  deleteSomeResume
+  deleteSomeResume,
+  saveWorkYear
 } from '@/api/personApi';
 import { getDicText } from '@/utils/index';
 /**
@@ -913,6 +961,15 @@ import { getDicText } from '@/utils/index';
  */
 export default {
   name: 'BaseResumeInfo',
+  props: {
+    resumeData: {
+      type: Object,
+      //default: () => {}
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       editStatus: false,
@@ -921,6 +978,7 @@ export default {
       formLabelWidth: '150px',
       applyForId: '',
       resumeId: '',
+      workYear: 1,
       pid: this.$store.getters['person/pid'],
       // xm: '',
       // age: 0,
@@ -1137,6 +1195,9 @@ export default {
     };
   },
   computed: {
+    notConsotResume: function() {
+      return JSON.stringify(this.resumeData) == '{}';
+    },
     workNatureText: function() {
       if (
         this.$store.getters['dictionary/recruit_work_nature'] &&
@@ -1330,21 +1391,25 @@ export default {
         });
     },
     //初始化加载个人基本信息
-    async getPersonInfo() {
-      try {
-        let result = await getPersonBaseInfo({
-          pid: this.$store.getters['person/pid'] || ''
-        });
-        console.log('result', result);
-        if (result.status === 200)
-          this.$set(this, 'personInfo', result.result.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async getPersonInfo() {
+    //   try {
+    //     let result = await getPersonBaseInfo({
+    //       pid: this.$store.getters['person/pid'] || ''
+    //     });
+    //     console.log('result', result);
+    //     if (result.status === 200)
+    //       this.$set(this, 'personInfo', result.result.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
+      if (!this.$store.getters['person/pid']) {
+        console.log('缺少个人标识');
+        return;
+      }
       getPsnlResume({ pid: this.$store.getters['person/pid'] } || '')
         .then(function(res) {
           console.log('个人简历信息', res);
@@ -1783,12 +1848,39 @@ export default {
         this.$alert('薪酬上限不得超过薪酬下限的三倍');
         this.jobIntentionForm.salaryMax = '';
       }
+    },
+    openPop() {
+      this.workYear = this.resume.workYear;
+    },
+    hidePop() {
+      console.log(this.workYear);
+      console.log(this.resume.workYear);
+      if (this.workYear == this.resume.workYear) {
+        return;
+      }
+      //保存工作年限
+      saveWorkYear({
+        pid: this.$store.getters['person/pid'],
+        workYear: this.workYear
+      }).then(saveRes => {
+        if (saveRes && saveRes.status === 200) {
+          this.resume.workYear = this.workYear;
+          this.$message({ type: 'success', message: '工作年限修改成功' });
+        } else if (saveRes) {
+          this.$message({ type: 'error', message: '工作年限修改失败' });
+        }
+      });
     }
   },
-  mounted() {
-    console.log('1111111111111111111111');
-    //初始化加载个人简历基本信息
-    this.loadPsnlResume();
+  created() {
+    var arr = Object.keys(this.$props.resumeData);
+    if (arr.length === 0) {
+      //初始化加载个人简历基本信息
+      this.loadPsnlResume();
+    } else {
+      //使用传入的简历信息
+      this.$set(this, 'resume', { ...this.$props.resumeData });
+    }
   }
 };
 </script>
@@ -1826,7 +1918,7 @@ export default {
     top: 13px;
   }
   .column {
-    padding: 20px 120px 40px 25px;
+    padding: 20px 20px 40px 25px;
     box-sizing: border-box;
     .el-tag {
       background-color: #f6f6f6;

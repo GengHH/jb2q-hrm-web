@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-18 16:37:09
+ * @LastEditTime: 2021-05-13 09:54:36
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -21,9 +21,10 @@
         <el-col :span="8">
           <el-col :span="11" class="text-left no-col-padding">
             <pl-input
-              v-model="queryParam.gjz"
+              v-model.number="queryParam.ageMin"
               autocomplete="off"
               label="年龄（小）"
+              @change="minAgeChange"
             ></pl-input>
           </el-col>
           <el-col :span="2" class="text-center no-col-padding">
@@ -31,15 +32,16 @@
           </el-col>
           <el-col :span="11" class="text-right no-col-padding">
             <pl-input
-              v-model="queryParam.gjz"
+              v-model.number="queryParam.ageMax"
               autocomplete="off"
               label="年龄（大）"
+              @change="maxAgeChange"
             ></pl-input>
           </el-col>
         </el-col>
         <el-col :span="8">
           <pl-input
-            v-model="queryParam.gjz"
+            v-model="queryParam.positionName"
             autocomplete="off"
             label="职位名称"
           ></pl-input>
@@ -48,7 +50,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <pl-select
-            v-model="queryParam.gjz"
+            v-model="queryParam.workYear"
             :optionData="dicGznx"
             label="工作年限"
           >
@@ -56,7 +58,7 @@
         </el-col>
         <el-col :span="8">
           <pl-select
-            v-model="queryParam.gjz"
+            v-model="queryParam.eduLevel"
             :optionData="$store.getters['dictionary/recruit_edu']"
             label="学历"
           >
@@ -67,134 +69,562 @@
 
       <el-row :gutter="20">
         <el-col :span="8">
-          <pl-button class="orange-btn" icon="el-icon-edit">批量操作</pl-button>
+          <pl-button
+            v-if="activeName === '02' || activeName === '03'"
+            class="orange-btn"
+            icon="el-icon-edit"
+            @click="bulkFeedback($event)"
+            >批量反馈</pl-button
+          >
         </el-col>
         <el-col :span="8"> </el-col>
         <el-col :span="8">
           <el-col :span="8" class="no-col-padding text-left">
-            <pl-button class="orange-btn" icon="el-icon-search">搜索</pl-button>
+            <pl-button
+              class="orange-btn"
+              icon="el-icon-search"
+              @click="queryResumes('all')"
+              >搜索</pl-button
+            >
           </el-col>
           <el-col :span="8" class="no-col-padding text-center">
-            <pl-button>清空</pl-button>
+            <pl-button @click="clearQueryParam">清空</pl-button>
           </el-col>
           <el-col :span="8" class="no-col-padding text-right">
-            <pl-button>高级搜索</pl-button>
+            <pl-button @click="advancedSearch($event)">高级搜索</pl-button>
           </el-col>
         </el-col>
       </el-row>
     </el-form>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="未查看" name="first">
+      <el-tab-pane label="未查看" name="01">
         <pl-table
-          :data="tableData"
-          ref="serveTable"
+          :data="tableData01"
+          :totalCount="totalCount01"
+          ref="serveTable01"
           :columns="columns"
           show-pager
           @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
           <template #star="{row}">
             <el-rate v-model="row.star"></el-rate>
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="second">待处理</el-tab-pane>
-      <el-tab-pane label="通知面试" name="third">通知面试</el-tab-pane>
-      <el-tab-pane label="通知录用" name="fourth">通知录用</el-tab-pane>
-      <el-tab-pane label="通知不录用" name="fifth">通知不录用</el-tab-pane>
+      <el-tab-pane label="待处理" name="02">
+        <pl-table
+          :data="tableData02"
+          :totalCount="totalCount02"
+          ref="serveTable02"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
+          </template>
+          <template #star="{row}">
+            <el-rate v-model="row.star"></el-rate>
+          </template>
+        </pl-table>
+      </el-tab-pane>
+      <el-tab-pane label="通知面试" name="03">
+        <pl-table
+          :data="tableData03"
+          :totalCount="totalCount03"
+          ref="serveTable03"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
+          </template>
+          <template #star="{row}">
+            <el-rate v-model="row.star"></el-rate>
+          </template>
+        </pl-table>
+      </el-tab-pane>
+      <el-tab-pane label="通知录用" name="04">
+        <pl-table
+          :data="tableData04"
+          :totalCount="totalCount04"
+          ref="serveTable04"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
+          </template>
+          <template #star="{row}">
+            <el-rate v-model="row.star"></el-rate>
+          </template>
+        </pl-table>
+      </el-tab-pane>
+      <el-tab-pane label="通知不录用" name="05">
+        <pl-table
+          :data="tableData05"
+          :totalCount="totalCount05"
+          ref="serveTable05"
+          :columns="columns"
+          show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange"
+          @handleCurrentChangeOnBack="handlePageChange"
+        >
+          <template #date="{row}">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ row.createTime }}</span>
+          </template>
+          <template #star="{row}">
+            <el-rate v-model="row.star"></el-rate>
+          </template>
+        </pl-table>
+      </el-tab-pane>
     </el-tabs>
+    <!-- 简历信息弹窗部分 -->
+    <el-dialog
+      v-if="dialog1"
+      class="width75"
+      :visible.sync="dialog1"
+      :before-close="handleClose"
+    >
+      <BaseResumeInfo :resumeData="resumeData"></BaseResumeInfo>
+    </el-dialog>
+
+    <!-- 反馈功能弹窗部分 -->
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog2"
+      :before-close="handleClose"
+    >
+      <!-- <div class="pup-btn">
+        <p class="pup-tit"><i class="icon iconfont ico-no">&#xe648;</i>反馈</p>
+      </div> -->
+      <!-- 面试信息 -->
+      <el-form
+        v-if="!feedback.feedbackStatus || feedback.feedbackStatus === '03'"
+        class="width70"
+        :model="feedback"
+        ref="feedback"
+        :label-position="labelPosition"
+        :rules="rules.feedback"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item
+              class="input-one"
+              label="面试日期"
+              :label-width="formLabelWidth"
+              prop="interviewDate"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="面试日期"
+                v-model="feedback.interviewDate"
+                value-format="yyyyMMdd"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              class="input-two"
+              label="面试时间"
+              :label-width="formLabelWidth"
+              prop="interviewTime"
+            >
+              <el-time-picker
+                placeholder="任意时间点"
+                v-model="feedback.interviewTime"
+                value-format="HHmmss"
+              ></el-time-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item
+          label="面试联系人"
+          prop="interviewContactName"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="feedback.interviewContactName"
+            autocomplete="off"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="面试联系电话"
+          prop="interviewContactPhone"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="feedback.interviewContactPhone"
+            autocomplete="off"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="面试地址"
+          prop="interviewAddress"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            placeholder="请输入（1000字符）"
+            v-model="feedback.interviewAddress"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="反馈结果"
+          prop="feedbackStatus"
+          :label-width="formLabelWidth"
+        >
+          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
+            <el-radio-button v-if="activeName === '02'" label="03"
+              >通知面试</el-radio-button
+            >
+            <el-radio-button label="04">意向录用</el-radio-button>
+            <el-radio-button label="05">通知不录用</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="备注"
+          prop="interviewRemarks"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            placeholder="请输入（1000字符）"
+            v-model="feedback.interviewRemarks"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- --------  -->
+      <!-- 报到信息  -->
+      <!-- --------  -->
+      <el-form
+        v-else-if="feedback.feedbackStatus === '04'"
+        class="width70"
+        :model="feedback"
+        ref="feedback"
+        :label-position="labelPosition"
+        :rules="rules.feedback"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item
+              class="input-one"
+              label="报到日期"
+              :label-width="formLabelWidth"
+              prop="reportDate"
+            >
+              <el-date-picker
+                type="date"
+                placeholder="报到日期"
+                v-model="feedback.reportDate"
+                value-format="yyyyMMdd"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item
+              class="input-two"
+              label="报到时间"
+              :label-width="formLabelWidth"
+              prop="reportTime"
+            >
+              <el-time-picker
+                placeholder="任意时间点"
+                v-model="feedback.reportTime"
+                value-format="HHmmss"
+              ></el-time-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item
+          label="报到联系人"
+          prop="reportContactName"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="feedback.reportContactName"
+            autocomplete="off"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="报到联系电话"
+          prop="reportContactPhone"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="feedback.reportContactPhone"
+            autocomplete="off"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="报到地址"
+          prop="reportAddress"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            placeholder="请输入（1000字符）"
+            v-model="feedback.reportAddress"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="反馈结果"
+          prop="feedbackStatus"
+          :label-width="formLabelWidth"
+        >
+          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
+            <el-radio-button v-if="activeName === '02'" label="03"
+              >通知面试</el-radio-button
+            >
+            <el-radio-button label="04">意向录用</el-radio-button>
+            <el-radio-button label="05">通知不录用</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="备注"
+          prop="reportRemarks"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="textarea"
+            placeholder="请输入（1000字符）"
+            v-model="feedback.reportRemarks"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- ----------  -->
+      <!-- 不录用信息  -->
+      <!-- ----------  -->
+      <el-form
+        v-else
+        class="width70"
+        :model="feedback"
+        ref="feedback"
+        :label-position="labelPosition"
+        :rules="rules.feedback"
+      >
+        <el-form-item
+          label="反馈结果"
+          prop="feedbackStatus"
+          :label-width="formLabelWidth"
+        >
+          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
+            <el-radio-button v-if="activeName === '02'" label="03"
+              >通知面试</el-radio-button
+            >
+            <el-radio-button label="04">意向录用</el-radio-button>
+            <el-radio-button label="05">通知不录用</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button
+          v-show="feedback.feedbackStatus !== '05'"
+          id="dialog2Btn"
+          @click="dialogClear('feedback')"
+          class="white-btn btn-style"
+          >还 原</el-button
+        >
+        <el-button
+          type="primary"
+          @click="doFeedback()"
+          class="orange-btn btn-style"
+          >反 馈</el-button
+        >
+      </div>
+    </el-dialog>
+    <!-- 聊天框 弹窗部分 -->
+    <el-dialog
+      v-if="dialog3"
+      class="width75 dialog-content-full-screen"
+      :visible.sync="dialog3"
+      :before-close="handleClose"
+    >
+      <pl-wchat
+        :targetObjId="targetObjId"
+        :targetObjName="targetObjName"
+      ></pl-wchat>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import BaseResumeInfo from '@/components/common/BaseResumeInfo';
+import JwChat from '@/components/common/BaseWChat';
+import {
+  queryReceiveResume,
+  queryResumeInfo,
+  doFeedBack
+} from '@/api/corporationApi';
+import { phonePattern } from '@/utils/regexp';
+import BaseLabelSelectVue from '@/components/common/BaseLabelSelect.vue';
 export default {
   name: 'resumeReceived',
+  components: {
+    BaseResumeInfo,
+    JwChat
+  },
   data() {
     return {
-      activeName: 'first',
-      queryParam: {
-        gjz: ''
+      yes: true,
+      dialog1: false,
+      dialog2: false,
+      dialog3: false,
+      labelPosition: 'right',
+      formLabelWidth: '150px',
+      activeName: '01',
+      batch: false,
+      selects: [],
+      rules: {
+        feedback: {
+          interviewDate: [
+            { required: true, message: '请输入面试日期', trigger: 'blur' }
+          ],
+          interviewTime: [
+            { required: true, message: '请输入面试时间', trigger: 'blur' }
+          ],
+          interviewContactName: [
+            { required: true, message: '请输入面试联系人', trigger: 'blur' }
+          ],
+          interviewContactPhone: [
+            { required: true, message: '请输面试联系电话', trigger: 'blur' },
+            {
+              pattern: phonePattern,
+              message: '请输入正确格式的手机号',
+              trigger: ['blur', 'change']
+            }
+          ],
+          interviewAddress: [
+            { required: true, message: '面试地址', trigger: 'blur' },
+            {
+              max: 1000,
+              message: '最长不可超过1000字符',
+              trigger: ['blur', 'change']
+            }
+          ],
+          feedbackStatus: [
+            { required: true, message: '反馈结果', trigger: 'blur' }
+          ],
+          interviewRemarks: [
+            { required: true, message: '备注', trigger: 'blur' },
+            {
+              max: 1000,
+              message: '最长不可超过1000字符',
+              trigger: ['blur', 'change']
+            }
+          ],
+          reportDate: [
+            { required: true, message: '请输入报到日期', trigger: 'blur' }
+          ],
+          reportTime: [
+            { required: true, message: '请输入报到时间', trigger: 'blur' }
+          ],
+          reportContactName: [
+            { required: true, message: '请输入报到联系人', trigger: 'blur' }
+          ],
+          reportContactPhone: [
+            { required: true, message: '请输报到联系电话', trigger: 'blur' },
+            {
+              pattern: phonePattern,
+              message: '请输入正确格式的手机号',
+              trigger: ['blur', 'change']
+            }
+          ],
+          reportAddress: [
+            { required: true, message: '报到地址', trigger: 'blur' },
+            {
+              max: 1000,
+              message: '最长不可超过1000字符',
+              trigger: ['blur', 'change']
+            }
+          ],
+          reportRemarks: [
+            { required: true, message: '备注', trigger: 'blur' },
+            {
+              max: 1000,
+              message: '最长不可超过1000字符',
+              trigger: ['blur', 'change']
+            }
+          ]
+        }
       },
-      data: [],
-      dicGznx: [
-        {
-          value: '1',
-          label: '不足一年'
+      queryParam: {
+        feedBackStatus: '',
+        gjz: '',
+        ageMin: '',
+        ageMax: '',
+        positionName: '',
+        workYear: '',
+        eduLevel: '',
+        pageParam: {
+          pageSize: 10,
+          pageIndex: 0
         }
-      ],
-      tableData: [
-        {
-          age: 20,
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          age: 20,
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
-          actions: ['action1']
-        },
-        {
-          age: 20,
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          age: 20,
-          date: '2019-05-02',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2', 'action3']
-        },
-        {
-          age: 20,
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1', 'action2']
-        }
-      ]
+      },
+      dicGznx: this.$store.getters['dictionary/recruit_work_year'],
+      tableData01: [],
+      totalCount01: 0,
+      tableData02: [],
+      totalCount02: 0,
+      tableData03: [],
+      totalCount03: 0,
+      tableData04: [],
+      totalCount04: 0,
+      tableData05: [],
+      totalCount05: 0,
+      resumeData: {},
+      feedback: {
+        applyforIdList: [],
+        applyforId: '',
+        feedbackStatus: '',
+        interviewDate: '',
+        interviewTime: '',
+        interviewContactName: '',
+        interviewContactPhone: '',
+        interviewAddress: '',
+        interviewRemarks: '',
+        reportDate: '',
+        reportTime: '',
+        reportContactName: '',
+        reportContactPhone: '',
+        reportAddress: '',
+        reportRemarks: ''
+      },
+      targetObjId: '',
+      targetObjName: ''
     };
   },
   computed: {
+    /**
+     *根据按钮的多少判断列宽
+     */
+    colwidth() {
+      return this.activeName === '02' || this.activeName === '03' ? 100 : 0;
+    },
     columns() {
       return [
         { attrs: { type: 'selection' } },
@@ -208,12 +638,12 @@ export default {
         },
         {
           label: '姓名',
-          prop: 'name',
-          rowSpan: 'all'
+          prop: 'xm',
+          rowSpan: 'all' //tranBaseSymbol
         },
         {
           label: '职位名称',
-          prop: 'name',
+          prop: 'positionName',
           rowSpan: 'all'
         },
         {
@@ -223,17 +653,17 @@ export default {
         },
         {
           label: '工作年限',
-          prop: 'province',
+          prop: 'workYear',
           rowSpan: 'all'
         },
         {
           label: '学历',
-          prop: 'city',
+          prop: 'eduLevel',
           rowSpan: 'all'
         },
         {
           label: '投递时间',
-          prop: 'date',
+          prop: 'createTime',
           formatter: 'date',
           slotName: 'date'
         },
@@ -249,7 +679,7 @@ export default {
         // },
         {
           label: '操作',
-          attrs: { width: 340 },
+          attrs: { width: 240 + Number(this.colwidth) }, //340
           actions: [
             {
               id: 'action1',
@@ -258,9 +688,15 @@ export default {
               icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
+                if (row.applyforId) {
+                  this.queryResumesInfo(row.applyforId);
+                } else {
+                  //无法获取简历信息
+                  this.$message({ type: 'error', message: '无法获取简历信息' });
+                }
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -269,10 +705,17 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-edit-outline',
               onClick: ({ row }) => {
-                //console.log(row);
+                if (row.applyforId) {
+                  //非批量
+                  this.batch = false;
+                  this.dialog2 = true;
+                  this.feedback.applyforId = row.applyforId;
+                } else {
+                  this.$message({ type: 'error', message: '无法反馈信息' });
+                }
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             },
             {
@@ -281,10 +724,13 @@ export default {
               icon: 'el-icon-chat-line-round',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                //console.log(row);
+                console.log(row);
+                this.targetObjId = row.pid || '';
+                this.targetObjName = row.xm || '';
+                this.dialog3 = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
@@ -292,12 +738,219 @@ export default {
       ];
     }
   },
+  created() {
+    this.queryResumes('all');
+  },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      //console.log(tab, event);
     },
     handleSelectionChange(val) {
-      console.log(val);
+      //console.log(val);
+    },
+    handleClose() {
+      this.dialog1 = false;
+      this.dialog2 = false;
+      this.dialog3 = false;
+    },
+    dialogClear(formName) {
+      //清空弹出框
+      this.$refs[formName].resetFields();
+    },
+    /**
+     *搜索简历信息列表
+     */
+    queryResumes(witchTable) {
+      if (witchTable === 'all') {
+        // 分别查询5种状态的数据
+        this.queryParam.pageParam.pageSize = 10;
+        this.queryParam.pageParam.pageIndex = 0;
+        for (let i = 1; i < 6; i++) {
+          let params = { ...this.queryParam };
+          params.feedBackStatus = '0' + i;
+          queryReceiveResume(params).then(queryRes => {
+            if (queryRes && queryRes.status == 200) {
+              this['tableData0' + i] = queryRes.result.pageresult.data || [];
+              this['totalCount0' + i] = queryRes.result.pageresult.total || 0;
+              this['tableData0' + i].forEach(element => {
+                if (i === 1) {
+                  element.actions = ['action1', 'action3'];
+                } else if (i === 2 || i === 3) {
+                  element.actions = ['action1', 'action2', 'action3'];
+                } else {
+                  element.actions = ['action1', 'action3'];
+                }
+              });
+            } else if (queryRes) {
+              this.$message({ type: 'error', message: '查询失败' });
+            }
+          });
+        }
+      } else {
+        //单独查询一种类型
+        let _pageSize = this.$refs['serveTable' + witchTable]?.pageSize || 10,
+          _pageIndex =
+            this.$refs['serveTable' + witchTable]?.currentPage - 1 || 0;
+        let params = { ...this.queryParam };
+        params.feedBackStatus = witchTable;
+        params.pageParam.pageSize = _pageSize;
+        params.pageParam.pageIndex = _pageIndex;
+        queryReceiveResume(params).then(queryRes => {
+          if (queryRes && queryRes.status == 200) {
+            this.$message({ type: 'success', message: '查询成功' });
+            this['tableData' + witchTable] =
+              queryRes.result.pageresult.data || [];
+            this['totalCount' + witchTable] =
+              queryRes.result.pageresult.total || 0;
+            this['tableData' + witchTable].forEach(element => {
+              if (witchTable === 1) {
+                element.actions = ['action1', 'action3'];
+              } else if (witchTable === 2 || witchTable === 3) {
+                element.actions = ['action1', 'action2', 'action3'];
+              } else {
+                element.actions = ['action1', 'action3'];
+              }
+            });
+          } else if (queryRes) {
+            this.$message({ type: 'error', message: '查询失败' });
+          }
+        });
+      }
+    },
+    /**
+     *搜索简历详细信息
+     */
+    async queryResumesInfo(applyforId) {
+      let getRes = await queryResumeInfo({
+        applyforId: applyforId
+      });
+      if (getRes && getRes.status == 200) {
+        this.$set(this, 'resumeData', getRes.result.data || {});
+        this.dialog1 = true;
+        //回显数据
+        this.queryResumes('all');
+      } else if (getRes) {
+        this.$message({ type: 'error', message: '简历查询失败' });
+      }
+    },
+    /**
+     * 后端分页
+     */
+    handlePageChange() {
+      this.queryResumes(this.activeName);
+    },
+    /**
+     * 反馈 (batch:true 批量反馈; selects:选中的数据)
+     */
+    doFeedback() {
+      this.$refs.feedback.validate(valid => {
+        if (valid) {
+          if (this.batch && Array.isArray(this.selects)) {
+            //批量数据
+            this.selects.forEach(i => {
+              if (i.applyforId) this.feedback.applyforIdList.push(i.applyforId);
+            });
+          } else if (this.feedback.applyforId) {
+            // 单个数据
+            this.feedback.applyforIdList.push(this.feedback.applyforId);
+          } else {
+            this.$alert('没有需要反馈的信息');
+            return;
+          }
+          //去重
+          this.feedback.applyforIdList = [
+            ...new Set(this.feedback.applyforIdList)
+          ];
+          doFeedBack(this.feedback).then(backRes => {
+            if (backRes && backRes.status === 200) {
+              //回显数据
+              this.queryResumes('all');
+              this.$message({
+                type: 'success',
+                message: '反馈成功'
+              });
+              this.dialog2 = false;
+            } else if (backRes) {
+              this.$message({
+                type: 'error',
+                message: '反馈失败'
+              });
+            }
+          });
+        }
+      });
+    },
+    /**
+     * 批量反馈
+     */
+    bulkFeedback() {
+      //判断是不是有选中的数据
+      let selects = this.$refs['serveTable' + this.activeName]
+        .multipleSelection;
+      if (selects && selects.length) {
+        this.batch = true;
+        this.dialog2 = true;
+        this.selects = selects;
+      } else {
+        this.$alert('请选择数据');
+      }
+    },
+    minAgeChange() {
+      if (!this.queryParam.ageMin) {
+        return;
+      }
+      if (this.queryParam.ageMin && isNaN(Number(this.queryParam.ageMin))) {
+        this.$alert('请输入数字');
+        this.queryParam.ageMin = '';
+      } else if (this.queryParam.ageMin < 16) {
+        this.$alert('年龄下限不得低于16周岁');
+        this.queryParam.ageMin = '';
+      }
+      // else if (this.queryParam.ageMin > 60) {
+      //   this.$alert('年龄下限不得超过60周岁');
+      //   this.queryParam.ageMin = '';
+      // }
+    },
+    maxAgeChange() {
+      if (!this.queryParam.ageMax) {
+        return;
+      }
+      if (this.queryParam.ageMax && isNaN(Number(this.queryParam.ageMax))) {
+        this.$alert('请输入数字');
+        this.queryParam.ageMax = '';
+      } else if (this.queryParam.ageMax < 16) {
+        this.$alert('年龄上线不得低于16周岁');
+        this.queryParam.ageMax = '';
+      }
+      // else if (this.queryParam.ageMax > 60) {
+      //   this.$alert('年龄下线不得超过60周岁');
+      //   this.queryParam.ageMax = '';
+      // } else if (
+      //   this.queryParam.ageMin &&
+      //   this.queryParam.ageMin * 3 < this.queryParam.ageMax
+      // ) {
+      //   this.$alert('年龄上限不得超过年龄下限的三倍');
+      //   this.queryParam.ageMax = '';
+      // }
+    },
+    clearQueryParam() {
+      this.queryParam = {
+        feedBackStatus: '',
+        gjz: '',
+        ageMin: '',
+        ageMax: '',
+        positionName: '',
+        workYear: '',
+        eduLevel: '',
+        pageParam: {
+          pageSize: 10,
+          pageIndex: 0
+        }
+      };
+    },
+    advancedSearch(done) {
+      this.$alert('此功能暂时未开放');
+      done();
     }
   }
 };
@@ -337,6 +990,9 @@ export default {
         width: 100px;
       }
     }
+  }
+  .el-date-editor {
+    width: 100%;
   }
 }
 </style>

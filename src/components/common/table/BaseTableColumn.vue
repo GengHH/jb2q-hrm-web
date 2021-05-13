@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-15 17:50:22
+ * @LastEditTime: 2021-05-12 10:42:26
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -45,6 +45,7 @@
     <!--自定义列 -->
     <template v-if="showSlot(col)" v-slot="scope">
       <slot :name="col.slotName" v-bind="scope"></slot>
+      <!-- 显示标签 -->
       <template v-if="col.tagMap">
         <template
           v-if="
@@ -65,9 +66,11 @@
           v-bind="{ ...scope, startIndex, virtualScroll }"
         ></slot>
       </template>
+      <!-- 显示字典表 -->
       <template v-if="col.customerRenderText">
         {{ col.customerRenderText(scope) }}
       </template>
+      <!-- 显示操作按钮 -->
       <template v-if="col.actions && col.actions.length">
         <template v-for="(item, index) in col.actions">
           <template v-if="!(item.hidden && item.hidden(scope, item))">
@@ -104,7 +107,9 @@
           </template>
         </template>
       </template>
+      <!-- 显示用户自定义的列 -->
       <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)" />
+      <!-- 显示多选框列 -->
       <template v-if="col.type === 'selection'">
         <el-checkbox
           v-model="scope.row.selected"
@@ -284,5 +289,8 @@ export default {
       margin-left: 0 !important;
     }
   }
+}
+span.tabla-col-btn {
+  padding: 0px !important;
 }
 </style>

@@ -16,10 +16,10 @@
               <el-radio-button label="">不限</el-radio-button>
 
               <el-radio-button
-                v-for="index in gznxLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-radio-button
+                v-for="(item, index) in gznxLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-radio-button
               >
               <!-- <el-radio-button label="01">1年以下</el-radio-button>
               <el-radio-button label="02">1~2年</el-radio-button>
@@ -43,10 +43,10 @@
             >
               <el-checkbox-button label="">不限</el-checkbox-button>
               <el-checkbox-button
-                v-for="index in hyLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-checkbox-button
+                v-for="(item, index) in hyLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-checkbox-button
               >
             </el-checkbox-group>
           </el-col>
@@ -83,17 +83,17 @@
               > -->
               <el-popover
                 v-for="(item, index) in zyLists"
-                :key="item.value"
+                :key="index"
                 placement="bottom"
                 width="600"
                 trigger="click"
                 popper-class="position-popover"
               >
                 <el-checkbox-button
-                  v-for="idx in zyListsTwo[index]"
-                  :key="idx.value"
-                  :label="idx.value"
-                  >{{ idx.label }}</el-checkbox-button
+                  v-for="(item, idx) in zyListsTwo[index]"
+                  :key="idx"
+                  :label="item.value"
+                  >{{ item.label }}</el-checkbox-button
                 >
                 <el-button
                   class="show-popover-button"
@@ -137,10 +137,10 @@
             <el-radio-group v-model="queryParams.workNature" size="medium">
               <el-radio-button label="">不限</el-radio-button>
               <el-radio-button
-                v-for="index in gzxzLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-radio-button
+                v-for="(item, index) in gzxzLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-radio-button
               >
               <!-- <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
@@ -239,8 +239,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in tpOptions"
-                    :key="item.value"
+                    v-for="(item, index) in tpOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -253,8 +253,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in xlOptions"
-                    :key="item.value"
+                    v-for="(item, index) in xlOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -266,8 +266,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in qxOptions"
-                    :key="item.value"
+                    v-for="(item, index) in qxOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -279,8 +279,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in bsOptions"
-                    :key="item.value"
+                    v-for="(item, index) in bsOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -337,7 +337,7 @@
       :visible.sync="wchatDialog"
       :before-close="wchatHandleClose"
     >
-      <pl-wchat></pl-wchat>
+      <pl-wchat :targetObjId="targetObjId"></pl-wchat>
     </el-dialog>
   </div>
 </template>
@@ -422,7 +422,8 @@ export default {
       bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       gznxLists: this.$store.getters['dictionary/recruit_work_year'],
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
-      jobList: []
+      jobList: [],
+      targetObjId: ''
     };
   },
   computed: {

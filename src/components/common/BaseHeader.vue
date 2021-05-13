@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-05-06 17:51:53
+ * @LastEditTime: 2021-05-12 19:24:20
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -35,6 +35,12 @@
               >
                 <router-link :to="nvaIndex.path">
                   {{ nvaIndex.nvaText }}
+                  <el-badge
+                    v-if="nvaIndex.type === 'badge' && messageCount"
+                    :value="messageCount"
+                    :max="maxCount"
+                    class="mark"
+                  />
                 </router-link>
               </el-dropdown-item>
               <!-- 二级子菜单 -->
@@ -79,6 +85,13 @@
               :index="nvaIndex.path"
             >
               <template v-if="nvaIndex.icon">
+                <el-badge
+                  v-if="nvaIndex.type === 'badge' && messageCount"
+                  :value="messageCount"
+                  :max="maxCount"
+                  class="badge-item"
+                >
+                </el-badge>
                 <i class="nva-icon" :class="nvaIndex.iconName"></i>
               </template>
               <template v-else>
@@ -115,6 +128,7 @@ export default {
   data() {
     return {
       showIconMenu: true,
+      maxCount: 99,
       // activeIndex:
       //   this.$route.path && this.$route.path.length > 1
       //     ? this.$route.path.substr(1)
@@ -123,6 +137,17 @@ export default {
     };
   },
   computed: {
+    //显示未读信息的数量
+    messageCount() {
+      if (isPerson(this)) {
+        return this.$store.getters['person/message-count'] || 0;
+      } else if (isCorporation(this)) {
+        return this.$store.getters['corporation/message-count'] || 0;
+      } else {
+        return 0;
+      }
+    },
+
     // path() {
     //   console.log(this.$route.path);
     //   var aa =
@@ -313,6 +338,17 @@ ul.el-dropdown-menu {
     a {
       color: #606266;
     }
+  }
+}
+.badge-item {
+  position: absolute;
+  right: 5px;
+  top: -10px;
+  ::v-deep .el-badge__content {
+    background-color: #fff;
+    color: #666;
+    padding: 0 5px;
+    line-height: 16px;
   }
 }
 </style>

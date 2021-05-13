@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 15:49:27
+ * @LastEditTime: 2021-05-12 19:15:23
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -181,6 +181,10 @@ Mock.mock(basePath + '/person/info/updatePsnlPermissionsInfo', 'post', function(
 });
 //维护个人基本信息
 Mock.mock(basePath + '/person/info/savePersonInfo', 'post', function(options) {
+  return successData;
+});
+//更新工作年限
+Mock.mock(basePath + '/person/resume/save/workyear', 'post', function(options) {
   return successData;
 });
 //新增或修改个人技能证书信息
@@ -401,44 +405,71 @@ Mock.mock(
     };
   }
 );
-//findRecord
-Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
+//查询求职信息列表
+// Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
+//   options
+// ) {
+//   return {
+//     status: 200,
+//     message: '',
+//     result: Mock.mock({
+//       'data|1-10': [
+//         {
+//           'applyforId|+1': '@string("number", 5)', //'49',
+//           resumeId: '@string("number", 1)', //'1',
+//           source: '01',
+//           positionName: 'JAVA架构工程师',
+//           tranBaseSymbol: '',
+//           laborYear: '',
+//           xm: '',
+//           contactPhone: '',
+//           pid: '',
+//           age: '',
+//           edu: '',
+//           graduateSchool: '',
+//           'sex|+1': ['1', '2'],
+//           corpName: '上海新移力自动化科技有限公司',
+//           'positionId|+1': '@string("number", 5)',
+//           releaseUserId: '0000941012',
+//           salaryScope: '10000-50000',
+//           workArea: '06',
+//           interviewDate: '',
+//           reply: '1',
+//           evaluateLevel: '',
+//           evaluateContent: '',
+//           createTime: '@datetime', //'2020-12-23 16:23:15',
+//           recId: '',
+//           meetId: ''
+//         }
+//       ]
+//     })
+//   };
+// });
+// 根据不同状态获取简历投递记录
+Mock.mock(basePath + '/person/feedback/find/applyfor', 'post', function(
   options
 ) {
   return {
     status: 200,
     message: '',
-    result: Mock.mock({
-      'data|1-10': [
-        {
-          'applyforId|+1': '@string("number", 5)', //'49',
-          resumeId: '@string("number", 1)', //'1',
-          source: '01',
-          positionName: 'JAVA架构工程师',
-          tranBaseSymbol: '',
-          laborYear: '',
-          xm: '',
-          contactPhone: '',
-          pid: '',
-          age: '',
-          edu: '',
-          graduateSchool: '',
-          'sex|+1': ['1', '2'],
-          corpName: '上海新移力自动化科技有限公司',
-          'positionId|+1': '@string("number", 5)',
-          releaseUserId: '0000941012',
-          salaryScope: '10000-50000',
-          workArea: '06',
-          interviewDate: '',
-          reply: '1',
-          evaluateLevel: '',
-          evaluateContent: '',
-          createTime: '@datetime', //'2020-12-23 16:23:15',
-          recId: '',
-          meetId: ''
-        }
-      ]
-    })
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            applyforId: '@string("number", 5)',
+            corpName: '上海市数字证书认证中心有限公司',
+            positionName: 'UI绘图',
+            salaryScope: '1000-5000',
+            workArea: '05',
+            createTime: '2021-05-07 13:35:02',
+            source: '01',
+            reply: '0',
+            pid: '11111111'
+          }
+        ]
+      })
+    }
   };
 });
 
@@ -446,7 +477,32 @@ Mock.mock(RegExp(basePath + '/person/feedback/.*/findRecord'), 'get', function(
 Mock.mock(basePath + '/person/feedback/do-evaluate', 'post', function(options) {
   return successData;
 });
-
+// 查询职位评价信息列表
+Mock.mock(basePath + '/person/feedback/query-evaluation', 'post', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            // applyforId: '@string("number", 5)',
+            corpName: '上海市数字证书认证中心有限公司',
+            cid: '22222222',
+            positionName: 'UI绘图',
+            evaluationLevel: 1,
+            evaluationContent:
+              'asdfasdfasddfqerwtqwetqwetqwertqwertwertwertwertwer',
+            evaluationTime: '2021-05-07 13:35:02'
+          }
+        ]
+      })
+    }
+  };
+});
 //发送验证码
 Mock.mock(basePath + '/person/info/sendSms', 'post', function(options) {
   return successData;
@@ -454,6 +510,13 @@ Mock.mock(basePath + '/person/info/sendSms', 'post', function(options) {
 
 //更新手机号
 Mock.mock(basePath + '/person/info/updatePhoneNum', 'post', function(options) {
+  return successData;
+});
+
+//个人反馈
+Mock.mock(basePath + '/person/feedback/do-interView', 'post', function(
+  options
+) {
   return successData;
 });
 export default Mock;

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-07 16:32:50
+ * @LastEditTime: 2021-05-10 19:41:35
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -60,6 +60,16 @@ const doOffPosition = params =>
 const doReleaseAgainPosition = params =>
   postAction(basePath + '/corp/position/released-again', params);
 
+// 获取已经收到的简历信息
+const queryReceiveResume = params =>
+  postAction(basePath + '/corp/manage/find/receive', params);
+// 获取已经收到的简历的详细信息
+const queryResumeInfo = params =>
+  postAction(basePath + '/corp/manage/resume/detail', params);
+// 获取已经收到的简历的详细信息
+const doFeedBack = params =>
+  postAction(basePath + '/corp/manage/feedBack', params);
+
 export {
   doCorporationLogout,
   getLogonUser,
@@ -74,5 +84,8 @@ export {
   doDeletePosition,
   doTopPosition,
   doOffPosition,
-  doReleaseAgainPosition
+  doReleaseAgainPosition,
+  queryReceiveResume,
+  queryResumeInfo,
+  doFeedBack
 };

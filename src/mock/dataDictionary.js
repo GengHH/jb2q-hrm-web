@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-29 15:51:09
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-12 10:44:37
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -766,7 +766,12 @@ const dic = {
     { value: '09', label: '博士及以上' }
   ],
   //应聘来源
-  RECRUIT_APPLYFOR_SOURCE: [],
+  RECRUIT_APPLYFOR_SOURCE: [
+    { value: '01', label: '直接投递' },
+    { value: '02', label: '招聘会投递' },
+    { value: '03', label: '管理员推荐' },
+    { value: '04', label: '邀约应聘' }
+  ],
   //用户角色
   RECRUIT_USER_ROLE: [
     { value: '01', label: '市管理员' },

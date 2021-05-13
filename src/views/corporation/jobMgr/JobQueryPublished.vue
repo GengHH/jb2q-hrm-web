@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 19:07:02
+ * @LastEditTime: 2021-05-13 09:44:44
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
 -->
@@ -54,11 +54,27 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.releaseTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
     </el-tabs>
+
+    <!----------------------->
+    <!-- 不参见面试弹框 -->
+    <!----------------------->
+    <el-dialog title="原因" :visible.sync="dialog2">
+      <pl-input
+        type="textarea"
+        label="请输入下架原因（1000字符）"
+        v-model="offReason"
+      ></pl-input>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialog2 = false">取 消</el-button>
+        <el-button type="primary" @click="offJobs">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -85,6 +101,8 @@ export default {
       unshowShztColumn: true,
       totalCount1: 0,
       totalCount2: 0,
+      dialog2: false,
+      offReason: '',
       tableData1: [],
       tableData2: []
     };
@@ -134,18 +152,18 @@ export default {
           actions: [
             {
               id: 'action1',
-              text: '编辑',
+              text: '查看',
               attrs: { round: true, size: 'small' },
-              icon: 'el-icon-edit',
+              icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //编辑职位信息
                 this.$router.push({
                   path: '/jobMgr/jobAdd',
-                  query: { positionId: row.positionId }
+                  query: { positionId: row.positionId, disabled: true }
                 });
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
@@ -269,17 +287,17 @@ export default {
               positionIdList: _positionIdList
             }).then(deleteRes => {
               if (deleteRes && deleteRes.status === 200) {
-                that.tableData = that.tableData.filter(
-                  obj => !that.selection.some(i => obj.id === i.id)
-                );
+                // that.tableData = that.tableData.filter(
+                //   obj => !that.selection.some(i => obj.id === i.id)
+                // );
                 this.$message({
                   type: 'success',
-                  message: '发布成功'
+                  message: '置顶成功'
                 });
               } else if (deleteRes) {
                 this.$message({
                   type: 'error',
-                  message: '发布失败'
+                  message: '置顶失败'
                 });
               }
             });
@@ -291,7 +309,14 @@ export default {
      */
     offJob() {
       let that = this;
-      if (this.selection && this.selection.length == 0) {
+      if (
+        (this.activeName === 'first' &&
+          this.selection1 &&
+          this.selection1.length == 0) ||
+        (this.activeName === 'second' &&
+          this.selection2 &&
+          this.selection2.length == 0)
+      ) {
         this.$alert('请选择一条');
       } else {
         // TODO发布数据
@@ -302,24 +327,44 @@ export default {
             type: 'warning'
           })
           .then(() => {
-            doOffPosition().then(releaseRes => {
-              if (releaseRes && releaseRes.status === 200) {
-                that.tableData = that.tableData.filter(
-                  obj => !that.selection.some(i => obj.id === i.id)
-                );
-                this.$message({
-                  type: 'success',
-                  message: '发布成功'
-                });
-              } else if (releaseRes) {
-                this.$message({
-                  type: 'error',
-                  message: '发布失败'
-                });
-              }
-            });
+            this.dialog2 = true;
           });
       }
+    },
+    offJobs() {
+      if (!this.offReason) {
+        this.$alert('请输入下架原因');
+      }
+      let positionIdList = [];
+      if (this.activeName === 'first') {
+        this.selection1.forEach(i => {
+          positionIdList.push(i.positionId);
+        });
+      } else if (this.activeName === 'second') {
+        this.selection2.forEach(i => {
+          positionIdList.push(i.positionId);
+        });
+      }
+      let _positionIdList = [...new Set(positionIdList)];
+      doOffPosition({
+        positionIdList: _positionIdList,
+        offReason: this.offReason
+      }).then(releaseRes => {
+        if (releaseRes && releaseRes.status === 200) {
+          // that.tableData = that.tableData.filter(
+          //   obj => !that.selection.some(i => obj.id === i.id)
+          // );
+          this.$message({
+            type: 'success',
+            message: '下架成功'
+          });
+        } else if (releaseRes) {
+          this.$message({
+            type: 'error',
+            message: '下架失败'
+          });
+        }
+      });
     },
     /**
      *后台分页功能

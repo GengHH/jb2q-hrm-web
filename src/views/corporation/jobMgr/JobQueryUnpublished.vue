@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 18:41:10
+ * @LastEditTime: 2021-05-11 15:24:59
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryUnpublished.vue
 -->
@@ -50,7 +50,7 @@
     >
       <template #date="{row}">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ row.date }}</span>
+        <span style="margin-left: 10px">{{ row.editTime }}</span>
       </template>
       <template #star="{row}">
         <el-rate v-model="row.star"></el-rate>
@@ -129,7 +129,7 @@ export default {
                 });
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
@@ -205,12 +205,12 @@ export default {
                 );
                 this.$message({
                   type: 'success',
-                  message: '发布成功'
+                  message: '删除成功'
                 });
               } else if (deleteRes) {
                 this.$message({
                   type: 'error',
-                  message: '发布失败'
+                  message: '删除失败'
                 });
               }
             });
@@ -235,9 +235,9 @@ export default {
           .then(() => {
             releasePosition().then(releaseRes => {
               if (releaseRes && releaseRes.status === 200) {
-                that.tableData = that.tableData.filter(
-                  obj => !that.selection.some(i => obj.id === i.id)
-                );
+                // that.tableData = that.tableData.filter(
+                //   obj => !that.selection.some(i => obj.id === i.id)
+                // );
                 this.$message({
                   type: 'success',
                   message: '发布成功'

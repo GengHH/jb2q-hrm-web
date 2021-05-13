@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 15:07:17
+ * @LastEditTime: 2021-05-12 15:37:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -51,6 +51,7 @@ export default {
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
+          type: 'badge',
           iconName: 'el-icon-bell'
         },
         { id: '5', path: '/personInfo', nvaText: '个人信息维护' },
@@ -85,13 +86,14 @@ export default {
     }
   },
   created() {
-    this.getUserName();
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+    let timer = setInterval(() => {
+      if (this.$store.getters['person/username']) {
+        this.userLogInfo.nvaText = this.$store.getters['person/username'];
+        if (timer) {
+          clearInterval(timer);
+        }
+      }
+    }, 300);
   },
   mounted() {
     //niceScroll('#indexApp');

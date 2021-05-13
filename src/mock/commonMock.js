@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-26 13:26:51
+ * @LastEditTime: 2021-05-12 18:43:16
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -77,6 +77,8 @@ const resumeMockData = function(req) {
         age: 24,
         sex: '男',
         contactPhone: '13122272095',
+        workYear: 0,
+        eduId: '05',
         livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
         workNature: '01',
         industryLike: '15',
@@ -84,89 +86,89 @@ const resumeMockData = function(req) {
         workArea: '05',
         positionLike: '1501-1502',
         laborExp: [
-          // {
-          //   expId: '1',
-          //   pid: '',
-          //   corpName: '万达信息股份有限公司',
-          //   positionName: '开发',
-          //   entryDate: '20190611',
-          //   quitDate: '',
-          //   workDescribe: '搬砖'
-          // },
-          // {
-          //   expId: '2',
-          //   pid: '',
-          //   corpName: '北京电影学院',
-          //   positionName: '表演',
-          //   entryDate: '20110601',
-          //   quitDate: '20080101',
-          //   workDescribe: '表演\n唱歌\n跳舞'
-          // }
+          {
+            expId: '1',
+            pid: '',
+            corpName: '万达信息股份有限公司',
+            positionName: '开发',
+            entryDate: '20190611',
+            quitDate: '',
+            workDescribe: '搬砖'
+          },
+          {
+            expId: '2',
+            pid: '',
+            corpName: '北京电影学院',
+            positionName: '表演',
+            entryDate: '20110601',
+            quitDate: '20080101',
+            workDescribe: '表演\n唱歌\n跳舞'
+          }
         ],
         eduExp: [
-          // {
-          //   eduId: '3',
-          //   pid: '',
-          //   collegesName: '复旦大学',
-          //   majorName: '英语',
-          //   eduLevel: '大学本科',
-          //   admissionDate: '20140910',
-          //   graduateDate: '20180630',
-          //   sourceOuter: '1',
-          //   certNum: ''
-          // }
+          {
+            eduId: '3',
+            pid: '',
+            collegesName: '复旦大学',
+            majorName: '英语',
+            eduLevel: '大学本科',
+            admissionDate: '20140910',
+            graduateDate: '20180630',
+            sourceOuter: '1',
+            certNum: ''
+          }
         ],
         psnlLanguage: [
-          // {
-          //   languageId: '1',
-          //   pid: '',
-          //   languageType: '01',
-          //   languageLevel: '1'
-          // },
-          // {
-          //   languageId: '2',
-          //   pid: '',
-          //   languageType: '02',
-          //   languageLevel: '2'
-          // },
-          // {
-          //   languageId: '3',
-          //   pid: '',
-          //   languageType: '03',
-          //   languageLevel: '3'
-          // }
+          {
+            languageId: '1',
+            pid: '',
+            languageType: '01',
+            languageLevel: '1'
+          },
+          {
+            languageId: '2',
+            pid: '',
+            languageType: '02',
+            languageLevel: '2'
+          },
+          {
+            languageId: '3',
+            pid: '',
+            languageType: '03',
+            languageLevel: '3'
+          }
         ],
         psnlSkillcert: [
-          // {
-          //   certId: '1',
-          //   pid: '',
-          //   certName: '信息系统项目管理师证书',
-          //   certLevel: '一级',
-          //   receiveTime: '2020-10-11'
-          // },
-          // {
-          //   certId: '2',
-          //   pid: '',
-          //   certName: '计算机二级国家证书',
-          //   certLevel: '二级',
-          //   receiveTime: '2019-05-09'
-          // },
-          // {
-          //   certId: '3',
-          //   pid: '',
-          //   certName: 'CISP注册信息安全专业人员',
-          //   certLevel: '三级',
-          //   receiveTime: '2020-01-01'
-          // },
-          // {
-          //   certId: '4',
-          //   pid: '',
-          //   certName: '英语专业等级证书',
-          //   certLevel: '六级',
-          //   receiveTime: '2018-09-19'
-          // }
-        ]
-        //evaluate: '本人就是搬砖厉害！'
+          {
+            certId: '1',
+            pid: '',
+            certName: '信息系统项目管理师证书',
+            certLevel: '一级',
+            receiveTime: '2020-10-11'
+          },
+          {
+            certId: '2',
+            pid: '',
+            certName: '计算机二级国家证书',
+            certLevel: '二级',
+            receiveTime: '2019-05-09'
+          },
+          {
+            certId: '3',
+            pid: '',
+            certName: 'CISP注册信息安全专业人员',
+            certLevel: '三级',
+            receiveTime: '2020-01-01'
+          },
+          {
+            certId: '4',
+            pid: '',
+            certName: '英语专业等级证书',
+            certLevel: '六级',
+            receiveTime: '2018-09-19'
+          }
+        ],
+        evaluate: '本人就是搬砖厉害！'
       }
     }
   };
@@ -205,4 +207,89 @@ Mock.mock(
   resumeMockData
 );
 
+/************聊天信息**************/
+Mock.mock(basePath + '/session/query', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageCount: 43,
+      total: 67,
+      pageIndex: 94,
+      summary: {
+        total: 57
+      },
+      pageSize: 78,
+      size: 7,
+      data: [
+        {
+          sendName: '山花交',
+          content: 'esse voluptate',
+          msgs: ['dolore dolor ut'],
+          createType: 'tempor mollit Duis',
+          sessionType: 'enim dolore consequat',
+          createTime: '2009-10-23 09:00:34',
+          sessionId: 79,
+          deleteStatus: 'minim do'
+        },
+        {
+          sendName: '方列部直',
+          content: 'dolore non elit magna',
+          deleteStatus: 'Ut',
+          createType: 'sit in',
+          createTime: '1976-10-11 18:43:59',
+          msgs: [
+            'pariatur consequat sit',
+            'dolor commodo exercitation',
+            'Ut enim pariatur esse sit'
+          ],
+          sessionId: 52,
+          sessionType: 'deserunt nostrud'
+        }
+      ]
+    }
+  };
+});
+Mock.mock(basePath + '/session/send', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        result: false,
+        msg: 'dolor sed cupidatat'
+      }
+    }
+  };
+});
+Mock.mock(basePath + '/session/open', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      sessionInfo: {
+        sessionId: 3,
+        createType: 'sed voluptate',
+        sessionType: 'minim et adipisicing irure',
+        createTime: '1983-11-03 10:54:01',
+        deleteStatus: 'fugiat eiusmod',
+        msgs: [
+          {
+            msgId: 66,
+            sessionId: 65,
+            msgSeq: 77,
+            createId: '31',
+            mine: false,
+            sendName: '斗现状易才料以',
+            content: 'mollit ut amet adipisicing sed',
+            createTime: '2020-04-12 11:58:24',
+            readStatus: 'consectetur mollit irure exercitation'
+          }
+        ]
+      }
+    }
+  };
+});
+
+/*********************************/
 export default Mock;
