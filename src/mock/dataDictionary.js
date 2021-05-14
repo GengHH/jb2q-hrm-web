@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 10:44:37
+ * @LastEditTime: 2021-05-14 15:39:08
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -813,10 +813,10 @@ const dic = {
   RECRUIT_GUIDE_TYPE: [],
   //特色活动类型
   RECRUIT_SPECIAL_ACTIVITY_TYPE: [
-    { value: '01', label: '	讲座' },
-    { value: '02', label: '	主题咨询活动' },
-    { value: '03', label: '	集体指导活动' },
-    { value: '04', label: '	其他' }
+    { value: '01', label: '讲座' },
+    { value: '02', label: '主题咨询活动' },
+    { value: '03', label: '集体指导活动' },
+    { value: '04', label: '其他' }
   ],
   //实施举措类型
   RECRUIT_IMPLE_ACT_TYPE: [

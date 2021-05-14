@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 19:15:23
+ * @LastEditTime: 2021-05-14 16:53:39
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -464,8 +464,28 @@ Mock.mock(basePath + '/person/feedback/find/applyfor', 'post', function(
             workArea: '05',
             createTime: '2021-05-07 13:35:02',
             source: '01',
-            reply: '0',
-            pid: '11111111'
+            'reply|1': ['0', '1'],
+            cid: '200008010219711',
+            feedbackStatus: '05',
+            feedbackTime: '2021-05-11 16:14:42',
+            feedbackSource: '1',
+            reason: '1234512341234',
+            noticeInterview: '2021-05-11 16:13:37',
+            interviewDate: '20210511',
+            interviewTime: '181200',
+            interviewContactName: '1111111111111111111',
+            interviewContactPhone: '13800009999',
+            interviewAddress: '111111111',
+            interviewRemarks: '111',
+            reportDate: '20210512',
+            reportTime: '161237',
+            reportContactName: '888',
+            reportContactPhone: '13899990000',
+            reportAddress: 'address',
+            reportRemarks: '77777',
+            'evaluationLevel|1': [0, 1, 2, 3, 4, 5],
+            evaluationContent: '评价内容',
+            evaluationTime: '2021-05-10 18:08:07'
           }
         ]
       })

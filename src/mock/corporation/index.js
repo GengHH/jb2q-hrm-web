@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 17:10:32
+ * @LastEditTime: 2021-05-14 16:06:28
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -317,17 +317,39 @@ Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
     message: '',
     result: {
       pageresult: Mock.mock({
-        'total|1-10': 1,
-        'data|1-10': [
+        total: 1,
+        data: [
           {
             applyforId: '@string("number", 1)',
-            age: 20,
-            createTime: '2019-05-01 18:04:07',
-            xm: '王小虎',
-            pid: '11111111',
-            positionName: '软件工程师',
-            eduLevel: '本科',
-            workYear: '1年'
+            // 'workYear|1': ['01', '02', '03', '04', '05', '06'],
+            workYear: '03',
+            pid: '200008000009380',
+            xm: '张秀定',
+            positionName: '前端开发工程师',
+            tranBaseSymbol: '0',
+            age: 18,
+            'eduLevel|1': ['01', '02', '03', '04', '05', '06'],
+            collegesName: '',
+            createTime: '2021-04-30 18:04:07',
+            'reply|1': ['0', '1'],
+            reason: '123412341234123szdasdASDasdsafasdfggsadggdasgfas4',
+            noticeInterview: '2021-05-10 20:51:02',
+            interviewDate: '20210809',
+            interviewTime: '130000',
+            interviewContactName: '福禄娃',
+            interviewContactPhone: '18536251258',
+            interviewAddress: '面试地址',
+            interviewRemarks: '面试备注',
+            reportDate: '',
+            reportTime: '',
+            reportContactName: '',
+            reportContactPhone: '',
+            reportAddress: '',
+            reportRemarks: '',
+            'evaluationLevel|1': [0, 1, 2, 3, 4, 5],
+            evaluationContent: '评价内容',
+            evaluationTime: '2021-05-10 18:08:07',
+            birthDate: '19370929'
             //actions: ['action1']
           }
         ]
@@ -335,6 +357,7 @@ Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
     }
   };
 });
+
 //获取已经收到的简历详细信息
 Mock.mock(basePath + '/corp/manage/resume/detail', 'post', function(options) {
   return {

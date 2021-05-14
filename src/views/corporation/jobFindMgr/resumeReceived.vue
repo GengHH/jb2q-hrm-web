@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 17:33:04
+ * @LastEditTime: 2021-05-14 16:46:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -111,7 +111,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
           <template #star="{row}">
             <el-rate v-model="row.star"></el-rate>
@@ -131,7 +131,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
           <template #star="{row}">
             <el-rate v-model="row.star"></el-rate>
@@ -151,10 +151,16 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate v-model="row.star"></el-rate>
+          <template #reply="{row}">
+            <span v-if="row.reply === '1'">是</span>
+            <el-popover v-else trigger="hover" placement="top">
+              <p>原因: {{ row.reason }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">否</el-tag>
+              </div>
+            </el-popover>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -171,10 +177,20 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate v-model="row.star"></el-rate>
+          <template #evaluationLevel="{row}">
+            <span v-if="!row.evaluationLevel">暂未评价</span>
+            <el-popover v-else trigger="hover" placement="top">
+              <p>内容: {{ row.evaluationContent }}</p>
+              <br />
+              <p style="color:#999">时间: {{ row.evaluationTime }}</p>
+              <el-rate
+                slot="reference"
+                v-model="row.evaluationLevel"
+                disabled
+              ></el-rate>
+            </el-popover>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -191,14 +207,25 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate v-model="row.star"></el-rate>
+          <template #evaluationLevel="{row}">
+            <span v-if="!row.evaluationLevel">暂未评价</span>
+            <el-popover v-else trigger="hover" placement="top">
+              <p>内容: {{ row.evaluationContent }}</p>
+              <br />
+              <p style="color:#999">时间: {{ row.evaluationTime }}</p>
+              <el-rate
+                slot="reference"
+                v-model="row.evaluationLevel"
+                disabled
+              ></el-rate>
+            </el-popover>
           </template>
         </pl-table>
       </el-tab-pane>
     </el-tabs>
+
     <!-- 简历信息弹窗部分 -->
     <el-dialog
       v-if="dialog1"
@@ -457,6 +484,7 @@
         >
       </div>
     </el-dialog>
+
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
       v-if="dialog3"
@@ -499,6 +527,8 @@ export default {
       activeName: '01',
       batch: false,
       selects: [],
+      unshowCjmsColumn: true,
+      unshowPjColumn: true,
       rules: {
         feedback: {
           interviewDate: [
@@ -644,6 +674,7 @@ export default {
         {
           label: '职位名称',
           prop: 'positionName',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
         {
@@ -654,20 +685,47 @@ export default {
         {
           label: '工作年限',
           prop: 'workYear',
+          customerRenderText: ({ row }) => {
+            const { workYear } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_work_year'] || [];
+            return (
+              data.find(element => (element.value = workYear)).label || workYear
+            );
+          },
           rowSpan: 'all'
         },
         {
           label: '学历',
           prop: 'eduLevel',
+          customerRenderText: ({ row }) => {
+            const { eduLevel } = row;
+            const data = this.$store.getters['dictionary/recruit_edu'] || [];
+            return (
+              data.find(element => (element.value = eduLevel)).label || eduLevel
+            );
+          },
           rowSpan: 'all'
         },
         {
           label: '投递时间',
           prop: 'createTime',
+          attrs: { showOverflowTooltip: true },
           formatter: 'date',
           slotName: 'date'
         },
-        // { label: '评分', prop: 'star', slotName: 'star' },
+        {
+          label: '是否参加面试',
+          prop: 'reply',
+          slotName: 'reply',
+          unshow: this.unshowCjmsColumn
+        },
+        {
+          label: '评分',
+          prop: 'evaluationLevel',
+          slotName: 'evaluationLevel',
+          unshow: this.unshowPjColumn
+        },
         // {
         //   label: '地址',
         //   attrs: { showOverflowTooltip: true },
@@ -743,7 +801,17 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      //console.log(tab, event);
+      // 动态显示列
+      if (tab.name === '03') {
+        this.unshowCjmsColumn = false;
+        this.unshowPjColumn = true;
+      } else if (tab.name === '04' || tab.name === '05') {
+        this.unshowPjColumn = false;
+        this.unshowCjmsColumn = true;
+      } else {
+        this.unshowCjmsColumn = true;
+        this.unshowPjColumn = true;
+      }
     },
     handleSelectionChange(val) {
       //console.log(val);

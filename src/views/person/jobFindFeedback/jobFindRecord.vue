@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 09:56:45
+ * @LastEditTime: 2021-05-14 18:17:47
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -222,7 +222,7 @@
     <!----------------------->
     <!-- 不参见面试弹框 -->
     <!----------------------->
-    <el-dialog title="原因" :visible.sync="dialog2">
+    <el-dialog title="原因" :visible.sync="dialog2" :before-close="handleClose">
       <pl-input
         type="textarea"
         label="请输入不参加面试原因（1000字符）"
@@ -235,10 +235,45 @@
       </div>
     </el-dialog>
     <!----------------------->
-    <!-- 详情弹框 ----->
+    <!-- 面试详情弹框 ----->
     <!----------------------->
-    <el-dialog title="详情" :visible.sync="dialog3">
-      <div>{{ currentRow.corpName }}</div>
+    <el-dialog
+      class="info-dialog"
+      width="40%"
+      title="面试详情"
+      :visible.sync="dialog3"
+      :before-close="handleClose"
+    >
+      <div><span>单位名称：</span>{{ currentRow.corpName }}</div>
+      <div><span>职位名称：</span>{{ currentRow.positionName }}</div>
+      <div><span>通知面试时间：</span>{{ currentRow.noticeInterview }}</div>
+      <div><span>面试日期：</span>{{ currentRow.interviewDate }}</div>
+      <div><span>面试时间：</span>{{ currentRow.interviewTime }}</div>
+      <div><span>面试地址：</span>{{ currentRow.interviewAddress }}</div>
+      <div><span>面试联系人：</span>{{ currentRow.interviewContactName }}</div>
+      <div>
+        <span>面试联系电话：</span>{{ currentRow.interviewContactPhone }}
+      </div>
+      <div><span>面试备注：</span>{{ currentRow.interviewRemarks }}</div>
+    </el-dialog>
+    <!----------------------->
+    <!-- 报到详情弹框 ----->
+    <!----------------------->
+    <el-dialog
+      class="info-dialog"
+      width="40%"
+      title="报到详情"
+      :visible.sync="dialog4"
+      :before-close="handleClose"
+    >
+      <div><span>单位名称：</span>{{ currentRow.corpName }}</div>
+      <div><span>职位名称：</span>{{ currentRow.positionName }}</div>
+      <div><span>报到日期：</span>{{ currentRow.reportDate }}</div>
+      <div><span>面试地址：</span>{{ currentRow.reportAddress }}</div>
+      <div><span>报到时间：</span>{{ currentRow.reportTime }}</div>
+      <div><span>报到联系人：</span>{{ currentRow.reportContactName }}</div>
+      <div><span>报到联系电话：</span>{{ currentRow.reportContactPhone }}</div>
+      <div><span>报到备注：</span>{{ currentRow.reportRemarks }}</div>
     </el-dialog>
     <!----------------------->
     <!-- 聊天弹框 -->
@@ -275,10 +310,12 @@ export default {
       dialog1: false,
       dialog2: false,
       dialog3: false,
+      dialog4: false,
       wchatDialog: false,
       batch: false,
       selects: [],
       reason: '',
+      unshowCjmsColumn: true,
       pid: this.$store.getters['person/pid'],
       evaluationLevelText: this.$store.getters[
         'dictionary/common_evaluationLeveltext'
@@ -381,6 +418,7 @@ export default {
           label: '是否参见面试',
           prop: 'reply',
           rowSpan: 'all',
+          unshow: this.unshowCjmsColumn,
           customerRenderText: ({ row }) => {
             const { reply } = row;
             const data = this.$store.getters['dictionary/yesno'] || [];
@@ -409,7 +447,11 @@ export default {
               onClick: ({ row }) => {
                 if (row.applyforId) {
                   this.currentRow = row;
-                  this.dialog3 = true;
+                  if (this.activeName == '03') {
+                    this.dialog3 = true;
+                  } else if (this.activeName == '04') {
+                    this.dialog4 = true;
+                  }
                 } else {
                   this.$alert('没有可查看的数据');
                 }
@@ -501,6 +543,7 @@ export default {
               icon: 'el-icon-connection',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
+                this.currentRow = row;
                 this.jobEvaluationForm.applyforId = row.applyforId;
                 this.jobEvaluationForm.corpName = row.corpName;
                 this.jobEvaluationForm.positionName = row.positionName;
@@ -549,6 +592,9 @@ export default {
     },
     handleClose() {
       this.dialog1 = false;
+      this.dialog2 = false;
+      this.dialog3 = false;
+      this.dialog4 = false;
     },
     wchatHandleClose() {
       this.wchatDialog = false;
@@ -757,6 +803,9 @@ export default {
           params.pid = this.pid;
           let result = await doEvaluateJob(params);
           if (result.status == 200) {
+            this.currentRow.actions = ['action1', 'action3'];
+            this.dialog1 = false;
+            this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
             this.$message({ type: 'success', message: '评价成功' });
           } else {
             this.$message({ type: 'error', message: '评价失败' });
@@ -779,15 +828,18 @@ export default {
         reply: '1'
       }).then(backRes => {
         if (backRes && backRes.status === 200) {
+          //this.queryJobRecordList(this.activeName);
+          // 更新按钮
+          this.currentRow.actions = ['action1', 'action3'];
+          // this.dialog2 = false;
+          // this.$refs[
+          //   'serveTable' + this.activeName
+          // ].$refs.table.toggleRowSelection(this.currentRow, false);
+          this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
           this.$message({
             type: 'success',
             message: '反馈成功'
           });
-          //this.queryJobRecordList(this.activeName);
-          // TODO
-          this.currentRow.actions = ['action1', 'action3'];
-          this.dialog2 = false;
-          this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
         } else if (backRes) {
           this.$message({
             type: 'error',
@@ -809,17 +861,15 @@ export default {
           reason: this.reason
         }).then(backRes => {
           if (backRes && backRes.status === 200) {
+            //this.queryJobRecordList(this.activeName);
+            // 更新按钮
+            this.currentRow.actions = ['action1', 'action3'];
+            this.dialog2 = false;
+            this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
             this.$message({
               type: 'success',
               message: '反馈成功'
             });
-            //this.queryJobRecordList(this.activeName);
-            // TODO
-            console.log(this.currentRow);
-            this.currentRow.actions = ['action1', 'action3'];
-            console.log(this.currentRow);
-            this.dialog2 = false;
-            this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
           } else if (backRes) {
             this.$message({
               type: 'error',
@@ -913,6 +963,14 @@ export default {
   ::v-deep .evaluationLevel-textarea {
     textarea {
       height: 150px !important;
+    }
+  }
+}
+.info-dialog {
+  .el-dialog__body {
+    & > div {
+      font-size: 16px;
+      margin: 10px 0;
     }
   }
 }

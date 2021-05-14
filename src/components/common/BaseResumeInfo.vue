@@ -1078,7 +1078,7 @@ export default {
         eduLevel: '',
         admissionDate: '',
         graduateDate: '',
-        sourceOuter: '',
+        sourceOuter: '0',
         certNum: ''
       },
       languageSkillsForm: {

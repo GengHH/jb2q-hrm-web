@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 09:49:27
+ * @LastEditTime: 2021-05-14 14:22:28
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
@@ -46,7 +46,7 @@ export default {
         //   text: { text: '起床不' },
         //   mine: false,
         //   name: '留恋人间不羡仙',
-        //   img: require('@/assets/images/cover.png')
+        //   img: require('@/assets/images/female.png')
         // },
         // {
         //   date: '2020/04/25 21:19:07',
@@ -55,14 +55,14 @@ export default {
         //   },
         //   mine: false,
         //   name: '只盼流星不盼雨',
-        //   img: require('@/assets/images/cover.png')
+        //   img: require('@/assets/images/female.png')
         // },
         // {
         //   date: '2020/04/25 21:19:07',
         //   text: { text: 'hahaha' },
         //   mine: false,
         //   name: '只盼流星不盼雨',
-        //   img: require('@/assets/images/cover.png')
+        //   img: require('@/assets/images/female.png')
         // },
         // {
         //   date: '2020/04/16 21:19:07',
@@ -71,13 +71,13 @@ export default {
         //   },
         //   mine: true,
         //   name: 'JwChat',
-        //   img: require('@/assets/images/cover.png')
+        //   img: require('@/assets/images/female.png')
         // },
         // {
         //   date: '2021/03/02 13:14:21',
         //   mine: false,
         //   name: '留恋人间不羡仙',
-        //   img: require('@/assets/images/cover.png'),
+        //   img: require('@/assets/images/female.png'),
         //   text: {
         //     system: {
         //       title: '在接入人工前，智能助手将为您首次应答。',
@@ -108,7 +108,7 @@ export default {
         callback: this.toolEvent
       },
       config: {
-        img: require('@/assets/images/cover.png'),
+        img: require('@/assets/images/female.png'),
         name: this.targetObjName, //'JwChat',
         dept: '最简单、最便捷',
         callback: this.bindCover,
@@ -131,7 +131,7 @@ export default {
         // list: [
         //   {
         //     id: 'win00',
-        //     img: '..//image/cover.png',
+        //     img: '..//image/female.png',
         //     name: 'JwChat',
         //     dept: '最简单、最便捷',
         //     readNum: 99
@@ -199,7 +199,7 @@ export default {
             text: { text: msg },
             mine: true,
             name: 'JwChat',
-            img: require('@/assets/images/cover.png')
+            img: require('@/assets/images/female.png')
           };
           this.taleList.push(msgObj);
         } else if (sendRes) {
@@ -267,6 +267,7 @@ export default {
       console.log(this.targetObjId);
       if (isPerson(this)) {
         //个人发给单位
+        this.config.img = require('@/assets/images/corp.jpg');
         this.sendName = this.$store.getters['person/username'];
         this.createId = queryParams.openId = this.$store.getters['person/pid'];
         queryParams.openType = '1';
@@ -274,6 +275,7 @@ export default {
         queryParams.targetType = '2';
       } else {
         //单位发给个人
+        //TODO头像识别
         this.sendName = this.$store.getters['corporation/username'];
         this.createId = queryParams.openId = this.$store.getters[
           'corporation/cid'
@@ -306,7 +308,7 @@ export default {
           _obj.text = {
             text: msg.content || ''
           };
-          _obj.img = require('@/assets/images/cover.png');
+          _obj.img = require('@/assets/images/female.png');
           return _obj;
         });
       }
