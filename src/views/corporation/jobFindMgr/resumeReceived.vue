@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 09:54:36
+ * @LastEditTime: 2021-05-13 17:33:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -481,7 +481,7 @@ import {
   doFeedBack
 } from '@/api/corporationApi';
 import { phonePattern } from '@/utils/regexp';
-import BaseLabelSelectVue from '@/components/common/BaseLabelSelect.vue';
+import { niceScroll } from '@/utils';
 export default {
   name: 'resumeReceived',
   components: {
@@ -952,6 +952,16 @@ export default {
       this.$alert('此功能暂时未开放');
       done();
     }
+  },
+  mounted() {
+    niceScroll('#indexApp');
+  },
+  updated() {
+    setTimeout(function() {
+      $('#indexApp')
+        .getNiceScroll()
+        .resize();
+    }, 10);
   }
 };
 </script>

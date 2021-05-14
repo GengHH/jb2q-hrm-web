@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 09:44:44
+ * @LastEditTime: 2021-05-13 16:38:12
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
 -->
@@ -37,7 +37,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.releaseTime }}</span>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -290,6 +290,7 @@ export default {
                 // that.tableData = that.tableData.filter(
                 //   obj => !that.selection.some(i => obj.id === i.id)
                 // );
+                this.queryResult(this.activeName);
                 this.$message({
                   type: 'success',
                   message: '置顶成功'

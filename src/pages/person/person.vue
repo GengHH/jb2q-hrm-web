@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 15:37:21
+ * @LastEditTime: 2021-05-13 17:16:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -96,6 +96,7 @@ export default {
     }, 300);
   },
   mounted() {
+    console.log(11111111);
     //niceScroll('#indexApp');
     niceScroll('#indexApp');
     // setTimeout(function() {
@@ -103,6 +104,7 @@ export default {
     // }, 10);
   },
   updated() {
+    console.log(22222222);
     setTimeout(function() {
       $('#indexApp')
         .getNiceScroll()

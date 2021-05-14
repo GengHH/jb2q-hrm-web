@@ -248,9 +248,8 @@ export default {
             window.location.href = '/ggzp-shrs/index.html';
           }, 2000);
         }
-        // TODO 更换pid this.$store.getters['person/pid']
         let result = await getPersonBaseInfo({
-          pid: this.$store.getters['person/pid'] || '201906186258910'
+          pid: this.$store.getters['person/pid'] || ''
         });
         console.log('result', result);
         if (result.status === 200 && result.result.data.pid)

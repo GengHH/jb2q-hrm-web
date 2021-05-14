@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 18:43:16
+ * @LastEditTime: 2021-05-13 15:55:01
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -205,6 +205,43 @@ Mock.mock(
   RegExp(basePath + '/person/resume/loadPsnlResume' + '.*'),
   'get',
   resumeMockData
+);
+//获取个人的基本简历信息(学信网)
+Mock.mock(
+  RegExp(basePath + '/person/resume/getEduExpFromChsi'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            eduId: '123',
+            pid: '201608111877450',
+            collegesName: '东北大学',
+            majorName: '通信工程',
+            eduLevel: '本科',
+            admissionDate: '20120901',
+            graduateDate: '20160620',
+            sourceOuter: '1',
+            certNum: '*'
+          },
+          {
+            eduId: '456',
+            pid: '201608111877450',
+            collegesName: '山东大学',
+            majorName: '通信工程',
+            eduLevel: '本科',
+            admissionDate: '20120901',
+            graduateDate: '20160620',
+            sourceOuter: '1',
+            certNum: '*'
+          }
+        ]
+      }
+    };
+  }
 );
 
 /************聊天信息**************/

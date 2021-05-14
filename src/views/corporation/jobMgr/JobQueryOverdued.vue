@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-11 15:23:29
+ * @LastEditTime: 2021-05-13 16:38:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOverdued.vue
 -->
@@ -53,7 +53,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.releaseTime }}</span>
           </template>
         </pl-table>
       </el-tab-pane>

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-11 15:22:32
+ * @LastEditTime: 2021-05-13 16:38:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOffline.vue
 -->
@@ -70,7 +70,7 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.offTime }}</span>
           </template>
         </pl-table></el-tab-pane
       >
