@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-30 17:54:45
+ * @LastEditTime: 2021-05-17 16:47:44
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -346,7 +346,7 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        livingAddress: [
+        contactAddress: [
           { required: true, message: '请输入联系地址', trigger: 'blur' }
         ]
       },

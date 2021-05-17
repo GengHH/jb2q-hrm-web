@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-14 18:17:47
+ * @LastEditTime: 2021-05-17 16:32:57
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -49,7 +49,7 @@
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="02"
+      <el-tab-pane label="已查看" name="02"
         ><pl-table
           :data="tableData02"
           :totalCount="totalCount02"
@@ -81,6 +81,19 @@
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
+          <template #reply="{row}">
+            <span v-if="row.reply === '1'" style="color:green">是</span>
+            <el-popover
+              v-else-if="row.reply === '0'"
+              trigger="hover"
+              placement="top"
+            >
+              <p><span style="color:red">原因</span>: {{ row.reason }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">否</el-tag>
+              </div>
+            </el-popover>
+          </template>
         </pl-table></el-tab-pane
       >
       <el-tab-pane label="通知录用" name="04"
@@ -98,8 +111,20 @@
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
           </template>
-        </pl-table></el-tab-pane
-      >
+          <template #evaluationLevel="{row}">
+            <span v-if="!row.evaluationLevel">暂未评价</span>
+            <el-popover v-else trigger="hover" placement="top">
+              <p>内容: {{ row.evaluationContent }}</p>
+              <br />
+              <p style="color:#999">时间: {{ row.evaluationTime }}</p>
+              <el-rate
+                slot="reference"
+                v-model="row.evaluationLevel"
+                disabled
+              ></el-rate>
+            </el-popover>
+          </template> </pl-table
+      ></el-tab-pane>
       <el-tab-pane label="通知不录用" name="05"
         ><pl-table
           :data="tableData05"
@@ -222,7 +247,7 @@
     <!----------------------->
     <!-- 不参见面试弹框 -->
     <!----------------------->
-    <el-dialog title="原因" :visible.sync="dialog2" :before-close="handleClose">
+    <el-dialog title="" :visible.sync="dialog2" :before-close="handleClose">
       <pl-input
         type="textarea"
         label="请输入不参加面试原因（1000字符）"
@@ -244,17 +269,54 @@
       :visible.sync="dialog3"
       :before-close="handleClose"
     >
-      <div><span>单位名称：</span>{{ currentRow.corpName }}</div>
-      <div><span>职位名称：</span>{{ currentRow.positionName }}</div>
-      <div><span>通知面试时间：</span>{{ currentRow.noticeInterview }}</div>
-      <div><span>面试日期：</span>{{ currentRow.interviewDate }}</div>
-      <div><span>面试时间：</span>{{ currentRow.interviewTime }}</div>
-      <div><span>面试地址：</span>{{ currentRow.interviewAddress }}</div>
-      <div><span>面试联系人：</span>{{ currentRow.interviewContactName }}</div>
       <div>
-        <span>面试联系电话：</span>{{ currentRow.interviewContactPhone }}
+        <span class="info-dialog-label">单位名称：</span
+        >{{ currentRow.corpName }}
       </div>
-      <div><span>面试备注：</span>{{ currentRow.interviewRemarks }}</div>
+      <div>
+        <span class="info-dialog-label">职位名称：</span
+        >{{ currentRow.positionName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">通知面试时间：</span
+        >{{ currentRow.noticeInterview }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试日期：</span
+        >{{
+          currentRow.interviewDate.substr(0, 4) +
+            '-' +
+            currentRow.interviewDate.substr(4, 2) +
+            '-' +
+            currentRow.interviewDate.substr(6, 2)
+        }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试时间：</span
+        >{{
+          currentRow.interviewTime.substr(0, 2) +
+            ':' +
+            currentRow.interviewTime.substr(2, 2) +
+            ':' +
+            currentRow.interviewTime.substr(4, 2)
+        }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试地址：</span
+        >{{ currentRow.interviewAddress }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试联系人：</span
+        >{{ currentRow.interviewContactName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试联系电话：</span
+        >{{ currentRow.interviewContactPhone }}
+      </div>
+      <div>
+        <span class="info-dialog-label">面试备注：</span
+        >{{ currentRow.interviewRemarks }}
+      </div>
     </el-dialog>
     <!----------------------->
     <!-- 报到详情弹框 ----->
@@ -266,14 +328,50 @@
       :visible.sync="dialog4"
       :before-close="handleClose"
     >
-      <div><span>单位名称：</span>{{ currentRow.corpName }}</div>
-      <div><span>职位名称：</span>{{ currentRow.positionName }}</div>
-      <div><span>报到日期：</span>{{ currentRow.reportDate }}</div>
-      <div><span>面试地址：</span>{{ currentRow.reportAddress }}</div>
-      <div><span>报到时间：</span>{{ currentRow.reportTime }}</div>
-      <div><span>报到联系人：</span>{{ currentRow.reportContactName }}</div>
-      <div><span>报到联系电话：</span>{{ currentRow.reportContactPhone }}</div>
-      <div><span>报到备注：</span>{{ currentRow.reportRemarks }}</div>
+      <div>
+        <span class="info-dialog-label">单位名称：</span
+        >{{ currentRow.corpName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">职位名称：</span
+        >{{ currentRow.positionName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到日期：</span>
+        {{
+          currentRow.reportDate.substr(0, 4) +
+            '-' +
+            currentRow.reportDate.substr(4, 2) +
+            '-' +
+            currentRow.reportDate.substr(6, 2)
+        }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到时间：</span>
+        {{
+          currentRow.reportTime.substr(0, 2) +
+            ':' +
+            currentRow.reportTime.substr(2, 2) +
+            ':' +
+            currentRow.reportTime.substr(4, 2)
+        }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到地址：</span
+        >{{ currentRow.reportAddress }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到联系人：</span
+        >{{ currentRow.reportContactName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到联系电话：</span
+        >{{ currentRow.reportContactPhone }}
+      </div>
+      <div>
+        <span class="info-dialog-label">报到备注：</span
+        >{{ currentRow.reportRemarks }}
+      </div>
     </el-dialog>
     <!----------------------->
     <!-- 聊天弹框 -->
@@ -295,7 +393,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob, doFeedBack } from '@/api/personApi';
-//import { niceScroll } from '@/utils';
+import { getCurrentTime } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -316,6 +414,7 @@ export default {
       selects: [],
       reason: '',
       unshowCjmsColumn: true,
+      unshowPjColumn: true,
       pid: this.$store.getters['person/pid'],
       evaluationLevelText: this.$store.getters[
         'dictionary/common_evaluationLeveltext'
@@ -348,7 +447,12 @@ export default {
       totalCount04: 0,
       tableData05: [],
       totalCount05: 0,
-      currentRow: {},
+      currentRow: {
+        interviewDate: '00000000',
+        interviewTime: '000000',
+        reportDate: '00000000',
+        reportTime: '000000'
+      },
       targetObjId: '',
       targetObjName: ''
     };
@@ -390,7 +494,8 @@ export default {
             const { workArea } = row;
             const data = this.$store.getters['dictionary/ggjbxx_qx'] || [];
             return (
-              data.find(element => (element.value = workArea)).label || workArea
+              data.find(element => element.value === workArea)?.label ||
+              workArea
             );
           }
         },
@@ -410,20 +515,28 @@ export default {
             const data =
               this.$store.getters['dictionary/recruit_applyfor_source'] || [];
             return (
-              data.find(element => (element.value = source)).label || source
+              data.find(element => element.value === source)?.label || source
             );
           }
         },
         {
           label: '是否参见面试',
           prop: 'reply',
-          rowSpan: 'all',
-          unshow: this.unshowCjmsColumn,
-          customerRenderText: ({ row }) => {
-            const { reply } = row;
-            const data = this.$store.getters['dictionary/yesno'] || [];
-            return data.find(element => (element.value = reply)).label || reply;
-          }
+          slotName: 'reply',
+          unshow: this.unshowCjmsColumn
+          // customerRenderText: ({ row }) => {
+          //   const { reply } = row;
+          //   const data = this.$store.getters['dictionary/yesno'] || [];
+          //   return (
+          //     data.find(element => element.value === reply)?.label || reply
+          //   );
+          // }
+        },
+        {
+          label: '评分',
+          prop: 'evaluationLevel',
+          slotName: 'evaluationLevel',
+          unshow: this.unshowPjColumn
         },
         // { label: '类别', prop: 'type' },
         // {
@@ -475,6 +588,7 @@ export default {
             {
               id: 'action3',
               text: '聊天',
+              needBadge: true,
               icon: 'el-icon-chat-line-round',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
@@ -483,6 +597,7 @@ export default {
                 this.targetObjId = row.cid || '';
                 this.targetObjName = row.corpName || '';
                 this.wchatDialog = true;
+                row.notReadCount = '0';
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -581,10 +696,17 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      if (tab.label === '通知面试') {
+      if (tab.name === '03') {
         this.actionColWidth = 420;
+        this.unshowCjmsColumn = false;
+        this.unshowPjColumn = true;
+      } else if (tab.name === '04') {
+        this.unshowPjColumn = false;
+        this.unshowCjmsColumn = true;
       } else {
         this.actionColWidth = 280;
+        this.unshowPjColumn = true;
+        this.unshowCjmsColumn = true;
       }
     },
     handleSelectionChange(val) {
@@ -729,15 +851,23 @@ export default {
                     element.actions = ['action1', 'action3'];
                     break;
                   case 3:
-                    element.actions = [
-                      'action5',
-                      'action3',
-                      'action4',
-                      'action1'
-                    ];
+                    if (element.reply) {
+                      element.actions = ['action3', 'action1'];
+                    } else {
+                      element.actions = [
+                        'action5',
+                        'action3',
+                        'action4',
+                        'action1'
+                      ];
+                    }
                     break;
                   case 4:
-                    element.actions = ['action1', 'action3', 'action6'];
+                    if (element.evaluationTime) {
+                      element.actions = ['action1', 'action3'];
+                    } else {
+                      element.actions = ['action1', 'action3', 'action6'];
+                    }
                     break;
                   case 5:
                     element.actions = ['action1', 'action3'];
@@ -772,15 +902,23 @@ export default {
                   element.actions = ['action1', 'action3'];
                   break;
                 case '03':
-                  element.actions = [
-                    'action5',
-                    'action3',
-                    'action4',
-                    'action1'
-                  ];
+                  if (element.reply) {
+                    element.actions = ['action3', 'action1'];
+                  } else {
+                    element.actions = [
+                      'action5',
+                      'action3',
+                      'action4',
+                      'action1'
+                    ];
+                  }
                   break;
                 case '04':
-                  element.actions = ['action1', 'action3', 'action6'];
+                  if (element.evaluationTime) {
+                    element.actions = ['action1', 'action3'];
+                  } else {
+                    element.actions = ['action1', 'action3', 'action6'];
+                  }
                   break;
                 case '05':
                   element.actions = ['action1', 'action3'];
@@ -804,6 +942,9 @@ export default {
           let result = await doEvaluateJob(params);
           if (result.status == 200) {
             this.currentRow.actions = ['action1', 'action3'];
+            this.currentRow.evaluationLevel = params.evaluationLevel;
+            this.currentRow.evaluationContent = params.evaluationContent;
+            this.currentRow.evaluationTime = getCurrentTime();
             this.dialog1 = false;
             this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
             this.$message({ type: 'success', message: '评价成功' });
@@ -831,15 +972,18 @@ export default {
           //this.queryJobRecordList(this.activeName);
           // 更新按钮
           this.currentRow.actions = ['action1', 'action3'];
+          this.currentRow.reply = '1';
           // this.dialog2 = false;
           // this.$refs[
           //   'serveTable' + this.activeName
           // ].$refs.table.toggleRowSelection(this.currentRow, false);
           this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
-          this.$message({
-            type: 'success',
-            message: '反馈成功'
-          });
+          this.$alert('反馈成功');
+
+          // this.$message({
+          //   type: 'success',
+          //   message: '反馈成功'
+          // });
         } else if (backRes) {
           this.$message({
             type: 'error',
@@ -864,6 +1008,8 @@ export default {
             //this.queryJobRecordList(this.activeName);
             // 更新按钮
             this.currentRow.actions = ['action1', 'action3'];
+            this.currentRow.reply = '0';
+            this.currentRow.reason = this.reason;
             this.dialog2 = false;
             this.$refs['serveTable' + this.activeName].$refs.table.doLayout();
             this.$message({
@@ -878,6 +1024,9 @@ export default {
           }
         });
       }
+    },
+    bulkFeedback() {
+      this.$alert('此功能暂未开通！');
     }
   }
 };
@@ -968,10 +1117,14 @@ export default {
 }
 .info-dialog {
   .el-dialog__body {
+    padding-top: 5px;
     & > div {
       font-size: 16px;
-      margin: 10px 0;
+      margin: 20px 0;
     }
+  }
+  .info-dialog-label {
+    color: #999;
   }
 }
 </style>

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-14 16:06:28
+ * @LastEditTime: 2021-05-17 17:37:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -228,6 +228,7 @@ Mock.mock(basePath + '/corp/position/find', 'post', function(options) {
           {
             positionId: '@string("number", 1)',
             editId: '', // '@datetime'
+            positionCode: '123123',
             positionName: 'JAVA超高级工程师',
             workAddress: '上海市普陀区中江路889号804室',
             salaryScope: '20-50(04)',
@@ -317,12 +318,11 @@ Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
     message: '',
     result: {
       pageresult: Mock.mock({
-        total: 1,
-        data: [
+        'total|1-10': 1,
+        'data|1-10': [
           {
             applyforId: '@string("number", 1)',
-            // 'workYear|1': ['01', '02', '03', '04', '05', '06'],
-            workYear: '03',
+            'workYear|1': ['01', '02', '03', '04', '05', '06'],
             pid: '200008000009380',
             xm: '张秀定',
             positionName: '前端开发工程师',
@@ -349,7 +349,8 @@ Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
             'evaluationLevel|1': [0, 1, 2, 3, 4, 5],
             evaluationContent: '评价内容',
             evaluationTime: '2021-05-10 18:08:07',
-            birthDate: '19370929'
+            birthDate: '19370929',
+            'notReadCount|1': ['0', '1', '2', '13', '4', '125', '99']
             //actions: ['action1']
           }
         ]
@@ -602,4 +603,171 @@ Mock.mock(basePath + '/corp/manage/resume/detail', 'post', function(options) {
 Mock.mock(basePath + '/corp/manage/feedBack', 'post', function(options) {
   return successData;
 });
+
+/*********招聘会**********/
+// 查询招聘会list
+Mock.mock(basePath + '/corp/meeting/find/listk', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: {
+        total: 3,
+        data: [
+          {
+            meetId: '3',
+            meetName: '招聘会名称测试12222',
+            meetIntroduce: '招聘会名称',
+            meetType: '1',
+            startTime: '2021-04-25 00:00:00',
+            endTime: '2021-04-30 00:00:00',
+            address: '天山路1800号',
+            boothCount: '60',
+            traffic: '地铁2，3，4，15号线',
+            mainCorpName: '万达信息',
+            contactName: '令狐冲',
+            contactPhone: '123123122312',
+            propagandaImage: 'MQ==',
+            districtCode: '06,09',
+            districtCodeList: ['06', '09'],
+            onTop: '1',
+            releaseStatus: '1',
+            applyStatus: '1',
+            userId: '-1        ',
+            releaseTime: '2021-04-28 15:13:27',
+            endApplyTime: '',
+            meetIdList: []
+          },
+          {
+            meetId: '6',
+            meetName: '测试111111',
+            meetIntroduce: '测试测试0000',
+            meetType: '1',
+            startTime: '2021-04-01 00:00:00',
+            endTime: '2021-04-30 00:00:00',
+            address: '测试111',
+            boothCount: '12',
+            traffic: '附近',
+            mainCorpName: '测试123',
+            contactName: '武器大师',
+            contactPhone: '18910570087',
+            propagandaImage: 'MQ==',
+            districtCode: '00,01,02,03',
+            districtCodeList: ['00', '01', '02', '03'],
+            onTop: '0',
+            releaseStatus: '1',
+            applyStatus: '1',
+            userId: '0000309307',
+            releaseTime: '2021-04-29 14:06:27',
+            endApplyTime: '',
+            meetIdList: []
+          },
+          {
+            meetId: '22',
+            meetName: 'wert',
+            meetIntroduce: '23411',
+            meetType: '1',
+            startTime: '2021-05-11 00:00:00',
+            endTime: '2021-05-29 00:00:00',
+            address: '1234',
+            boothCount: '1234',
+            traffic: '123',
+            mainCorpName: '1234',
+            contactName: '12341',
+            contactPhone: '18818881888',
+            propagandaImage: 'MQ==',
+            districtCode: '05',
+            districtCodeList: ['05'],
+            onTop: '0',
+            releaseStatus: '1',
+            applyStatus: '1',
+            userId: '9000003910',
+            releaseTime: '2021-05-05 15:55:58',
+            endApplyTime: '',
+            meetIdList: []
+          }
+        ]
+      }
+    }
+  };
+});
+// 招聘会职位信息
+Mock.mock(basePath + '/corp/meeting/find/positionInfo', 'post', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: [
+        {
+          positionId: '13',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '16',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '21',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '22',
+          positionName: 'CEO'
+        },
+        {
+          positionId: '23',
+          positionName: 'CEO'
+        },
+        {
+          positionId: '33',
+          positionName: 'test2'
+        },
+        {
+          positionId: '12',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '18',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '19',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '20',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '14',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '15',
+          positionName: '职位名称'
+        },
+        {
+          positionId: '17',
+          positionName: '职位名称'
+        }
+      ]
+    }
+  };
+});
+// 报名招聘会
+Mock.mock(basePath + '/corp/meeting/save', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        result: true,
+        msg: '已报名！'
+      }
+    }
+  };
+});
+
 export default Mock;

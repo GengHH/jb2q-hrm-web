@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-10 19:41:35
+ * @LastEditTime: 2021-05-17 17:29:49
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -70,6 +70,18 @@ const queryResumeInfo = params =>
 const doFeedBack = params =>
   postAction(basePath + '/corp/manage/feedBack', params);
 
+/*********招聘会**********/
+// 查询招聘会listt
+const queryJobFairList = params =>
+  postAction(basePath + '/corp/meeting/find/list', params);
+// 招聘会职位信息
+const queryJobFairPositionInfo = params =>
+  postAction(basePath + '/corp/meeting/find/positionInfo', params);
+// 报名招聘会
+const applyJobFair = params =>
+  postAction(basePath + '/corp/meeting/save', params);
+/**********end***********/
+
 export {
   doCorporationLogout,
   getLogonUser,
@@ -87,5 +99,8 @@ export {
   doReleaseAgainPosition,
   queryReceiveResume,
   queryResumeInfo,
-  doFeedBack
+  doFeedBack,
+  queryJobFairList,
+  queryJobFairPositionInfo,
+  applyJobFair
 };

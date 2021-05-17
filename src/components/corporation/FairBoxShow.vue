@@ -13,6 +13,68 @@
       </el-col>
       <el-col class="ul-style" :sm="22" :md="20" :lg="18">
         <p class="black-font">
+          {{ meetName }}
+          <span v-if="meetType === '1' || meetType === '2'" class="span-line"
+            >线上</span
+          >
+          <span v-if="meetType === '1'" class="span-line2">线下</span>
+        </p>
+        <el-row class="mat-15 details-info">
+          <el-col :span="18">
+            <p class="  line30 or-font">
+              <i class="icon iconfont ">&#xe651;</i>{{ startTime }} 至
+              {{ endTime }}
+            </p>
+            <p class="  line30 mat-15">
+              <i class="icon iconfont">&#xe652;</i> 剩余展位 ：<i
+                class="or-font"
+                >{{ boothCount }}</i
+              >
+              人
+            </p>
+            <p class="  line30">
+              <i class="icon iconfont">&#xe650;</i>
+              招聘地点：{{ address }}
+              <el-link class="blue-font" :underline="false">
+                <i class="icon iconfont">&#xe654;</i>
+                <span @click="showMap">附近交通</span></el-link
+              >
+            </p>
+          </el-col>
+          <el-col :span="6" class="text-right">
+            <el-button
+              class="release-btn font-size18 mat-15"
+              type="primary"
+              @click="applyFair"
+              ><i class="icon iconfont font-size20">&#xe653;</i>
+              单位报名</el-button
+            >
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+    <!-- 地图弹框 -->
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="mapDialog"
+      :before-close="mapHandleClose"
+    >
+      <pl-map :pointList="pointList"></pl-map>
+    </el-dialog>
+  </div>
+  <!-- <div class="activity-box-module">
+    <el-row>
+      <el-col :sm="2" :md="4" :lg="6" class="pr">
+        <img src="../../assets/img/img04.png" alt="" />
+        <div v-if="online" class="float-div">
+          <i class="circle-sty"></i> 进行中
+        </div>
+        <div v-if="offline" class="float-div2">
+          <i class="circle-sty"></i> 未开始
+        </div>
+      </el-col>
+      <el-col class="ul-style" :sm="22" :md="20" :lg="18">
+        <p class="black-font">
           “助跑就业，青春有梦”——2020年长宁区高校毕业生专场招聘会
           <span v-if="online" class="span-line">线上</span>
           <span v-if="offline" class="span-line2">线下</span>
@@ -48,7 +110,6 @@
         </el-row>
       </el-col>
     </el-row>
-    <!-- 地图弹框 -->
     <el-dialog
       class="width75 dialog-content-full-screen"
       :visible.sync="mapDialog"
@@ -56,19 +117,20 @@
     >
       <pl-map :pointList="pointList"></pl-map>
     </el-dialog>
-  </div>
+  </div> -->
   <!--E 特色专栏部分 -->
 </template>
 
 <script>
 import PlMap from '@/components/common/BaseMap';
+import { applyJobFair } from '@/api/corporationApi';
 export default {
   name: 'ActivityBoxShow',
   components: {
     PlMap
   },
   props: {
-    activityInfo: Object
+    fairInfo: Object
   },
   data() {
     return {
@@ -82,6 +144,22 @@ export default {
     showMap() {
       console.log(123);
       this.mapDialog = true;
+    },
+    applyFair() {
+      //报名
+      applyJobFair.then(saveRes => {
+        if (saveRes && saveRes.status === 200) {
+          this.$message({
+            type: 'error',
+            message: '报名成功'
+          });
+        } else if (saveRes) {
+          this.$message({
+            type: 'error',
+            message: '报名失败'
+          });
+        }
+      });
     },
     mapHandleClose() {
       this.mapDialog = false;

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-11 15:48:47
+ * @LastEditTime: 2021-05-17 14:28:43
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -258,9 +258,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item class="date-picker" prop="publicDate">
+        <el-form-item class="date-picker" prop="endDate">
           <pl-date-picker
-            v-model="jobForm.publicDate"
+            v-model="jobForm.endDate"
             type="date"
             value-format="yyyyMMdd"
             label="发布截止日期"
@@ -486,7 +486,7 @@ export default {
         specialList: [],
         describe: '',
         opWay: '',
-        publicDate: ''
+        endDate: ''
       },
       isDefaultStreet: false,
       showWorkStreetList: [],
@@ -644,7 +644,7 @@ export default {
     },
     releasePosition(done) {
       this.isPublic = true;
-      if (overDateSomeDays(this.jobForm.publicDate, 30)) {
+      if (overDateSomeDays(this.jobForm.endDate, 30)) {
         this.$message({
           type: 'error',
           message: '发布日期不得超过当前日期30天'
@@ -652,9 +652,9 @@ export default {
       } else {
         this.$refs.jobForm.validate(async valid => {
           if (valid) {
-            if (!this.jobForm.publicDate) {
+            if (!this.jobForm.endDate) {
               this.$message({ type: 'error', message: '发布日期不能为空' });
-            } else if (overDateSomeDays(this.jobForm.publicDate, 30)) {
+            } else if (overDateSomeDays(this.jobForm.endDate, 30)) {
               this.$message({
                 type: 'error',
                 message: '发布日期不得超过当前日期30天'

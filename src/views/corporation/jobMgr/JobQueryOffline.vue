@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 16:38:45
+ * @LastEditTime: 2021-05-17 17:13:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOffline.vue
 -->
@@ -213,7 +213,7 @@ export default {
       let positionResult = await findPosition({
         cid: this.$store.getters['corporation/cid'],
         status: 'off',
-        agencyRecruit: witchTable === 'first' ? '0' : '1', //0：自主招聘，1：代理招聘
+        recruitType: witchTable === 'first' ? '1' : '2', //1：自主招聘，2：代理招聘
         positionName: this.positionName,
         pageParam: {
           pageSize: _pageSize,

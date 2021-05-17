@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 10:42:26
+ * @LastEditTime: 2021-05-17 17:07:40
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -79,6 +79,7 @@
               :key="index"
               direction="vertical"
             ></el-divider>
+            <!-- 显示confirm的按钮 -->
             <pl-button
               v-if="item.confirmType || item.confirm"
               type="button"
@@ -94,6 +95,27 @@
             >
               {{ item.text || item.actionText(scope) }}
             </pl-button>
+            <!-- 显示带有badge的按钮 -->
+            <pl-button
+              v-else-if="item.needBadge"
+              :key="index"
+              class="tabla-col-btn"
+              v-bind="item.attrs"
+              :icon="item.icon"
+              @click="item.onClick(scope)"
+            >
+              {{ item.text || item.actionText(scope) }}
+              <el-badge
+                v-if="
+                  scope.row.notReadCount && Number(scope.row.notReadCount) > 0
+                "
+                :value="Number(scope.row.notReadCount)"
+                :max="99"
+                class="badge-item"
+              >
+              </el-badge>
+            </pl-button>
+            <!-- 显示普通的按钮 -->
             <pl-button
               v-else
               :key="index"
@@ -279,6 +301,7 @@ export default {
 .tabla-col-btn {
   padding: 8px 8px !important;
   font-size: 10px !important;
+  height: 30px !important;
   ::v-deep span {
     margin-left: 0 !important;
   }

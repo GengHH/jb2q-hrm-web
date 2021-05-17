@@ -32,7 +32,7 @@
  * 单位招聘会报名界面
  */
 import FairBoxShow from '@/components/corporation/FairBoxShow';
-
+import { queryJobFairList } from '@/api/corporationApi';
 export default {
   name: 'jobFairApply',
   components: {
@@ -108,17 +108,24 @@ export default {
     };
   },
   computed: {
-    jobFaieList: function() {
-      return this.showList ? this.showList.slice(0, 3) : [];
-    }
+    // jobFaieList: function() {
+    //   return this.showList ? this.showList.slice(0, 3) : [];
+    // }
   },
   methods: {
     query(done) {
-      this.$alert('暂时没有此Api接口，请稍后');
+      queryJobFairList().then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this.showList = queryRes.result.pageresult.data || [];
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
+      //this.$alert('暂时没有此Api接口，请稍后');
       done();
     },
     handleClick(tab, event) {
-      console.log(tab, event);
+      //console.log(tab, event);
     }
   },
   created() {}

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-14 16:46:30
+ * @LastEditTime: 2021-05-17 15:38:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -118,7 +118,7 @@
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="待处理" name="02">
+      <el-tab-pane label="已查看" name="02">
         <pl-table
           :data="tableData02"
           :totalCount="totalCount02"
@@ -154,9 +154,9 @@
             <span style="margin-left: 5px">{{ row.createTime }}</span>
           </template>
           <template #reply="{row}">
-            <span v-if="row.reply === '1'">是</span>
+            <span v-if="row.reply === '1'" style="color:green">是</span>
             <el-popover v-else trigger="hover" placement="top">
-              <p>原因: {{ row.reason }}</p>
+              <p><span style="color:red">原因</span>: {{ row.reason }}</p>
               <div slot="reference" class="name-wrapper">
                 <el-tag size="medium">否</el-tag>
               </div>
@@ -254,6 +254,19 @@
         :label-position="labelPosition"
         :rules="rules.feedback"
       >
+        <el-form-item
+          label="反馈结果"
+          prop="feedbackStatus"
+          :label-width="formLabelWidth"
+        >
+          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
+            <el-radio-button v-if="activeName === '02'" label="03"
+              >通知面试</el-radio-button
+            >
+            <el-radio-button label="04">意向录用</el-radio-button>
+            <el-radio-button label="05">通知不录用</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-row>
           <el-col :span="12">
             <el-form-item
@@ -278,7 +291,7 @@
               prop="interviewTime"
             >
               <el-time-picker
-                placeholder="任意时间点"
+                placeholder="面试时间"
                 v-model="feedback.interviewTime"
                 value-format="HHmmss"
               ></el-time-picker>
@@ -314,22 +327,9 @@
         >
           <el-input
             type="textarea"
-            placeholder="请输入（1000字符）"
+            placeholder="请输入（40字符）"
             v-model="feedback.interviewAddress"
           ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="反馈结果"
-          prop="feedbackStatus"
-          :label-width="formLabelWidth"
-        >
-          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
-            <el-radio-button v-if="activeName === '02'" label="03"
-              >通知面试</el-radio-button
-            >
-            <el-radio-button label="04">意向录用</el-radio-button>
-            <el-radio-button label="05">通知不录用</el-radio-button>
-          </el-radio-group>
         </el-form-item>
         <el-form-item
           label="备注"
@@ -338,7 +338,7 @@
         >
           <el-input
             type="textarea"
-            placeholder="请输入（1000字符）"
+            placeholder="请输入（2000字符）"
             v-model="feedback.interviewRemarks"
           ></el-input>
         </el-form-item>
@@ -354,6 +354,19 @@
         :label-position="labelPosition"
         :rules="rules.feedback"
       >
+        <el-form-item
+          label="反馈结果"
+          prop="feedbackStatus"
+          :label-width="formLabelWidth"
+        >
+          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
+            <el-radio-button v-if="activeName === '02'" label="03"
+              >通知面试</el-radio-button
+            >
+            <el-radio-button label="04">意向录用</el-radio-button>
+            <el-radio-button label="05">通知不录用</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-row>
           <el-col :span="12">
             <el-form-item
@@ -378,7 +391,7 @@
               prop="reportTime"
             >
               <el-time-picker
-                placeholder="任意时间点"
+                placeholder="报到时间"
                 v-model="feedback.reportTime"
                 value-format="HHmmss"
               ></el-time-picker>
@@ -414,22 +427,9 @@
         >
           <el-input
             type="textarea"
-            placeholder="请输入（1000字符）"
+            placeholder="请输入（40字符）"
             v-model="feedback.reportAddress"
           ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="反馈结果"
-          prop="feedbackStatus"
-          :label-width="formLabelWidth"
-        >
-          <el-radio-group v-model="feedback.feedbackStatus" size="medium">
-            <el-radio-button v-if="activeName === '02'" label="03"
-              >通知面试</el-radio-button
-            >
-            <el-radio-button label="04">意向录用</el-radio-button>
-            <el-radio-button label="05">通知不录用</el-radio-button>
-          </el-radio-group>
         </el-form-item>
         <el-form-item
           label="备注"
@@ -438,7 +438,7 @@
         >
           <el-input
             type="textarea"
-            placeholder="请输入（1000字符）"
+            placeholder="请输入（2000字符）"
             v-model="feedback.reportRemarks"
           ></el-input>
         </el-form-item>
@@ -551,8 +551,8 @@ export default {
           interviewAddress: [
             { required: true, message: '面试地址', trigger: 'blur' },
             {
-              max: 1000,
-              message: '最长不可超过1000字符',
+              max: 40,
+              message: '最长不可超过40字符',
               trigger: ['blur', 'change']
             }
           ],
@@ -560,10 +560,10 @@ export default {
             { required: true, message: '反馈结果', trigger: 'blur' }
           ],
           interviewRemarks: [
-            { required: true, message: '备注', trigger: 'blur' },
+            // { required: true, message: '备注', trigger: 'blur' },
             {
-              max: 1000,
-              message: '最长不可超过1000字符',
+              max: 2000,
+              message: '最长不可超过2000字符',
               trigger: ['blur', 'change']
             }
           ],
@@ -587,16 +587,16 @@ export default {
           reportAddress: [
             { required: true, message: '报到地址', trigger: 'blur' },
             {
-              max: 1000,
-              message: '最长不可超过1000字符',
+              max: 40,
+              message: '最长不可超过40字符',
               trigger: ['blur', 'change']
             }
           ],
           reportRemarks: [
-            { required: true, message: '备注', trigger: 'blur' },
+            // { required: true, message: '备注', trigger: 'blur' },
             {
-              max: 1000,
-              message: '最长不可超过1000字符',
+              max: 2000,
+              message: '最长不可超过2000字符',
               trigger: ['blur', 'change']
             }
           ]
@@ -690,7 +690,8 @@ export default {
             const data =
               this.$store.getters['dictionary/recruit_work_year'] || [];
             return (
-              data.find(element => (element.value = workYear)).label || workYear
+              data.find(element => element.value === workYear)?.label ||
+              workYear
             );
           },
           rowSpan: 'all'
@@ -702,7 +703,8 @@ export default {
             const { eduLevel } = row;
             const data = this.$store.getters['dictionary/recruit_edu'] || [];
             return (
-              data.find(element => (element.value = eduLevel)).label || eduLevel
+              data.find(element => element.value === eduLevel)?.label ||
+              eduLevel
             );
           },
           rowSpan: 'all'
@@ -768,6 +770,13 @@ export default {
                   this.batch = false;
                   this.dialog2 = true;
                   this.feedback.applyforId = row.applyforId;
+                  if (this.activeName === '02') {
+                    this.feedback.feedbackStatus = '03';
+                  } else if (this.activeName === '03') {
+                    this.feedback.feedbackStatus = '04';
+                  } else {
+                    this.feedback.feedbackStatus = '';
+                  }
                 } else {
                   this.$message({ type: 'error', message: '无法反馈信息' });
                 }
@@ -779,6 +788,7 @@ export default {
             {
               id: 'action3',
               text: '聊天',
+              needBadge: true,
               icon: 'el-icon-chat-line-round',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
@@ -786,6 +796,7 @@ export default {
                 this.targetObjId = row.pid || '';
                 this.targetObjName = row.xm || '';
                 this.dialog3 = true;
+                row.notReadCount = '0';
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
