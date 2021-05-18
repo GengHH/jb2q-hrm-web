@@ -313,6 +313,20 @@ export function niceScroll(dom) {
     }
   }
 }
+/**
+ * 使用jquery.nicescroll 更新滚动条样式（兼容IE,全局统一）
+ * @param {*} id
+ */
+export function niceScrollUpdate(dom) {
+  if (dom) {
+    $(dom)
+      ?.getNiceScroll()
+      ?.resize();
+  }
+  $('#indexApp')
+    ?.getNiceScroll()
+    ?.resize();
+}
 
 /**
  *

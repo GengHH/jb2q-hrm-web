@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 17:16:58
+ * @LastEditTime: 2021-05-18 10:01:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -20,7 +20,7 @@
 /**
  * 个人管理系统入口界面
  */
-import { niceScroll } from '@/utils';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 import BaseHeader from '@/components/common/BaseHeader.vue';
 export default {
   name: 'app',
@@ -97,7 +97,6 @@ export default {
   },
   mounted() {
     console.log(11111111);
-    //niceScroll('#indexApp');
     niceScroll('#indexApp');
     // setTimeout(function() {
     //   niceScroll('#indexApp');
@@ -105,11 +104,7 @@ export default {
   },
   updated() {
     console.log(22222222);
-    setTimeout(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
-    }, 10);
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

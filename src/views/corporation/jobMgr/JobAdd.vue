@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 14:28:43
+ * @LastEditTime: 2021-05-18 17:28:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -659,6 +659,36 @@ export default {
                 type: 'error',
                 message: '发布日期不得超过当前日期30天'
               });
+            } else if (this.jobForm.workNature === '03') {
+              this.$confirm(
+                '发布就业见习职位，需管理人员确认, 是否继续?',
+                '提示',
+                {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }
+              )
+                .then(async () => {
+                  this.jobForm.opWay = 'release';
+                  this.jobForm.agencyRecruit = '0';
+                  let publicResult = await releasePosition(this.jobForm).catch(
+                    () => {
+                      done();
+                    }
+                  );
+                  if (publicResult && publicResult.status === 200) {
+                    this.$message({ type: 'success', message: '发布成功' });
+                  } else if (publicResult) {
+                    this.$message({ type: 'error', message: '发布失败' });
+                  }
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消发布'
+                  });
+                });
             } else {
               this.jobForm.opWay = 'release';
               this.jobForm.agencyRecruit = '0';

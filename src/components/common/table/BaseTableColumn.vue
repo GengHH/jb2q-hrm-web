@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 17:07:40
+ * @LastEditTime: 2021-05-18 09:40:00
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -311,6 +311,13 @@ export default {
     span {
       margin-left: 0 !important;
     }
+  }
+  ::v-deep .el-badge__content {
+    border-radius: 7px;
+    font-size: 12px;
+    height: 14px;
+    line-height: 12px;
+    padding: 0px 5px;
   }
 }
 span.tabla-col-btn {

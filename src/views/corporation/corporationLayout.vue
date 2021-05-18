@@ -2,10 +2,10 @@
   <!-- <router-view></router-view> -->
   <div id="indexBody">
     <el-row :gutter="20">
-      <el-col :span="4" id="leftNav">
+      <el-col :span="leftSpan" id="leftNav">
         <router-view name="corpNavMenu" />
       </el-col>
-      <el-col :span="20">
+      <el-col :span="rightSpan">
         <!-- <transition name="fade"> -->
         <router-view name="default" />
         <!-- </transition> -->
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { testData } from '@pub/mockTestData';
 export default {
   name: 'corporationLayout',
   components: {
@@ -26,82 +25,37 @@ export default {
   },
   data() {
     return {
-      path: require('@/assets/logo.png'),
-      list: testData.list,
-      obj: {},
-      colRowGutter: 40,
-      jobActiveName: 'jobRecommended',
-      corpActiveName: 'corpRecommended',
-      showList: [
-        {
-          id: '6',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '5',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '4',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '3',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '2',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '1',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        }
-      ]
+      leftSpan: 4,
+      rightSpan: 20
     };
   },
-  computed: {
-    jobFaieList: function() {
-      return this.showList ? this.showList.slice(0, 3) : [];
-    }
+  computed: {},
+  created() {
+    this.changeMenuStyle();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener(
+        'resize',
+        this._.debounce(
+          //监听浏览器窗口大小改变
+          //浏览器变化执行动作
+          this.changeMenuStyle,
+          500
+        )
+      );
+    });
   },
   methods: {
+    changeMenuStyle() {
+      if (window.innerWidth < 1350) {
+        this.leftSpan = 2;
+        this.rightSpan = 22;
+      } else {
+        this.leftSpan = 4;
+        this.rightSpan = 20;
+      }
+    },
     jobHandleClick() {
       console.log(1);
     },
@@ -111,16 +65,6 @@ export default {
     showMore() {
       this.$message('this is more');
     }
-  },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
   }
 };
 </script>

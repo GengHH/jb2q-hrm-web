@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 16:15:17
+ * @LastEditTime: 2021-05-18 17:59:28
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -228,13 +228,13 @@ Mock.mock(
               cid: '201002025628331',
               workYearNeed: '05',
               releaseTime: '@datetime', //'2021-12-10 10:44:36',
-              tranBaseSymbol: '0',
-              agencyRecruit: '0',
+              'tranBaseSymbol|1': ['0', '1'],
+              'agencyRecruit|1': ['0', '1'],
               entrustCorpName: '',
               releaseUserId: '0000941012',
               type: '1',
               'favor|+1': [false, true],
-              recruitType: '1',
+              'recruitType|1': ['1', '2'],
               entrustTyshxym: '',
               corpId: '201002025628331',
               positionType: '0201',

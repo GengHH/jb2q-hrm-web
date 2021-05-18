@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 16:32:57
+ * @LastEditTime: 2021-05-18 10:00:12
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -59,6 +59,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -76,6 +77,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -106,6 +108,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -135,6 +138,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          max-height="600"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -393,7 +397,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { findRecord, doEvaluateJob, doFeedBack } from '@/api/personApi';
-import { getCurrentTime } from '@/utils';
+import { niceScroll, niceScrollUpdate, getCurrentTime } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -693,6 +697,9 @@ export default {
   },
   mounted() {
     //niceScroll('.el-table__body-wrapper');
+  },
+  updated() {
+    this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
     handleClick(tab, event) {

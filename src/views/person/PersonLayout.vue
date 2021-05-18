@@ -27,11 +27,7 @@ export default {
       rightSpan: 20
     };
   },
-  computed: {
-    jobFaieList: function() {
-      return this.showList ? this.showList.slice(0, 3) : [];
-    }
-  },
+  computed: {},
   created() {
     this.changeMenuStyle();
   },

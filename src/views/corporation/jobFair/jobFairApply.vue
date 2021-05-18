@@ -3,27 +3,55 @@
   <div id="jobFairApply">
     <div class="title-style">单位招聘会报名</div>
     <el-row id="selectBar" :gutter="20">
-      <el-col :span="6">
-        <pl-input label="时间" v-model="date"></pl-input>
+      <el-col :span="5">
+        <pl-date-picker
+          v-model="date"
+          type="date"
+          value-format="yyyyMMdd"
+          label="日期"
+        >
+        </pl-date-picker>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="5">
         <pl-input label="地点" v-model="address"></pl-input>
       </el-col>
-      <el-col :span="6">
-        <pl-input label="招聘类型" v-model="type"></pl-input>
+      <el-col :span="10">
+        <el-radio-group v-model="type" size="medium">
+          <el-radio-button label="">全部</el-radio-button>
+          <el-radio-button label="1">线上</el-radio-button>
+          <el-radio-button label="2">线上及线下</el-radio-button>
+        </el-radio-group>
       </el-col>
-      <el-col :span="6" class="text-right">
+      <el-col :span="4" class="text-right">
         <pl-button
           @click="query($event)"
           class="orange-btn"
           icon="el-icon-search"
           >搜索</pl-button
         >
+        <!-- <BaseSearch
+          showSelect
+          :selectData="selectData"
+          placeholder="招聘类型"
+          @clickButton="query(arguments)"
+        ></BaseSearch> -->
       </el-col>
     </el-row>
     <!-- 职位展示位 -->
-
-    <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow>
+    <FairBoxShow
+      v-for="item in showList"
+      :key="item.id"
+      :fairInfo="item"
+    ></FairBoxShow>
+    <!-- S 分页部分 -->
+    <div id="demo5" class="page-box tac">
+      <BasePagination
+        ref="page"
+        :showPager="totalCount > 0"
+        :totalCount="totalCount"
+        @changePage="changePage"
+      ></BasePagination>
+    </div>
   </div>
 </template>
 
@@ -32,103 +60,63 @@
  * 单位招聘会报名界面
  */
 import FairBoxShow from '@/components/corporation/FairBoxShow';
+import BaseSearch from '@/components/common/BaseSearch';
+import BasePagination from '@/components/common/BasePagination';
 import { queryJobFairList } from '@/api/corporationApi';
 export default {
   name: 'jobFairApply',
   components: {
-    FairBoxShow
+    FairBoxShow,
+    BasePagination,
+    BaseSearch
   },
   data() {
     return {
       date: '',
       address: '',
       type: '',
-      showList: [
-        {
-          id: '6',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '5',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '4',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '3',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '2',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '1',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        }
-      ]
+      totalCount: 0,
+      showList: []
     };
   },
-  computed: {
-    // jobFaieList: function() {
-    //   return this.showList ? this.showList.slice(0, 3) : [];
-    // }
+  computed: {},
+  mounted() {
+    this.query($.noop);
   },
   methods: {
     query(done) {
-      queryJobFairList().then(queryRes => {
+      let params = {
+        pageIndex: this.$refs.page.currentPage - 1 || 0,
+        pageSize: this.$refs.page.pageSize,
+        date: this.date,
+        address: this.address,
+        type: this.type
+      };
+      queryJobFairList(params).then(queryRes => {
+        console.log(queryRes);
         if (queryRes && queryRes.status === 200) {
+          this.totalCount = queryRes.result.pageresult.total || 0;
           this.showList = queryRes.result.pageresult.data || [];
+          if (
+            !this.totalCount ||
+            (this.totalCount && Number(this.totalCount) === 0)
+          ) {
+            this.$message({ type: 'success', message: '未查询到结果' });
+          }
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
       });
-      //this.$alert('暂时没有此Api接口，请稍后');
       done();
     },
-    handleClick(tab, event) {
-      //console.log(tab, event);
+
+    /**
+     * 后台分页
+     */
+    changePage() {
+      this.query($.noop);
     }
-  },
-  created() {}
+  }
 };
 </script>
 
@@ -140,7 +128,7 @@ export default {
   margin: 0 auto;
   #selectBar {
     width: 100%;
-    margin-top: 20px;
+    margin: 20px 0;
   }
   .more-btn {
     margin: 20px auto 0;

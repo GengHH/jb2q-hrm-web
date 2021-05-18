@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 17:37:08
+ * @LastEditTime: 2021-05-18 17:30:11
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -606,7 +606,7 @@ Mock.mock(basePath + '/corp/manage/feedBack', 'post', function(options) {
 
 /*********招聘会**********/
 // 查询招聘会list
-Mock.mock(basePath + '/corp/meeting/find/listk', 'post', function(options) {
+Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
   return {
     status: 200,
     message: '',
@@ -723,34 +723,6 @@ Mock.mock(basePath + '/corp/meeting/find/positionInfo', 'post', function(
         {
           positionId: '33',
           positionName: 'test2'
-        },
-        {
-          positionId: '12',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '18',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '19',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '20',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '14',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '15',
-          positionName: '职位名称'
-        },
-        {
-          positionId: '17',
-          positionName: '职位名称'
         }
       ]
     }
