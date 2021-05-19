@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 17:59:28
+ * @LastEditTime: 2021-05-19 09:59:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -230,7 +230,7 @@ Mock.mock(
               releaseTime: '@datetime', //'2021-12-10 10:44:36',
               'tranBaseSymbol|1': ['0', '1'],
               'agencyRecruit|1': ['0', '1'],
-              entrustCorpName: '',
+              entrustCorpName: '上海新移力自动化科技有限公司',
               releaseUserId: '0000941012',
               type: '1',
               'favor|+1': [false, true],

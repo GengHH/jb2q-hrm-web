@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-18 18:07:16
+ * @LastEditTime: 2021-05-19 10:03:15
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -224,10 +224,22 @@
       </el-row>
       <div class="foot-span">
         <el-col :span="1"> </el-col>
-        <el-col :span="18">
+        <el-col :span="10">
           <span class="fourteen-opacity marl-65"
             >招聘人数 <i>{{ jobItem.recruitNum }}</i
             >人</span
+          >
+        </el-col>
+        <el-col :span="8">
+          <span
+            v-if="jobItem.recruitType === '2'"
+            class="fourteen-opacity jz-font-style"
+            >发布机构：<i>{{ jobItem.workAreaText }}就业促进中心</i></span
+          >
+          <span
+            v-if="jobItem.agencyRecruit === '1'"
+            class="fourteen-opacity rl-font-style"
+            >委托代招：<i>{{ jobItem.entrustCorpName }}</i></span
           >
         </el-col>
         <el-col :span="5" class="text-right">
@@ -421,6 +433,12 @@ export default {
   }
   .rl-style {
     background-color: #03a9f4;
+  }
+  .jz-font-style {
+    color: #3f51b5;
+  }
+  .rl-font-style {
+    color: #03a9f4;
   }
 }
 .bg-gray {

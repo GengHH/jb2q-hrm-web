@@ -1024,6 +1024,10 @@ import { getDicText } from '@/utils/index';
 export default {
   name: 'BaseResumeInfo',
   props: {
+    queryPid: {
+      type: String,
+      default: ''
+    },
     resumeData: {
       type: Object,
       //default: () => {}
@@ -1261,8 +1265,9 @@ export default {
     };
   },
   computed: {
+    // 判断是不是不能修改的情况
     notConstResume: function() {
-      return JSON.stringify(this.resumeData) == '{}';
+      return JSON.stringify(this.resumeData) == '{}' && !this.queryPid;
     },
     workNatureText: function() {
       if (
@@ -1472,11 +1477,14 @@ export default {
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
-      if (!this.$store.getters['person/pid']) {
+      if (!this.$store.getters['person/pid'] && !this.queryPid) {
         console.log('缺少个人标识');
         return;
       }
-      getPsnlResume({ pid: this.$store.getters['person/pid'] } || '')
+      // 默认先按照传入的pid查询，再按照登录的人员查询
+      getPsnlResume(
+        { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
+      )
         .then(function(res) {
           console.log('个人简历信息', res);
           if (res.status == 200) {

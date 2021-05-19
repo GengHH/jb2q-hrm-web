@@ -124,23 +124,14 @@
 </template>
 
 <script>
-//import { Notification } from 'element-ui';
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
-import { phonePattern } from '@/utils/regexp';
-// import plButton from '@/components/common/BaseLoadingButton';
-// import plInput from '@/components/common/BaseLabelInput';
-// import plSelect from '@/components/common/BaseLabelSelect';
-// import plDatePicker from '@/components/common/BaseLabelDatepicker';
+// import { phonePattern } from '@/utils/regexp';
 export default {
   name: 'personApp',
-  components: {
-    // plInput,
-    // plSelect,
-    // plButton,
-    // plDatePicker
-  },
+  components: {},
   data() {
     return {
+      isFlipped: false,
       personInfo: {
         birthDate: '',
         contactPhone: '',

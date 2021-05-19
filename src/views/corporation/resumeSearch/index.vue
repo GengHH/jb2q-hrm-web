@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 10:25:23
+ * @LastEditTime: 2021-05-19 19:02:38
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -10,7 +10,7 @@
   <div id="indexBody">
     <el-row>
       <el-col :span="16">
-        <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
+        <BaseSearch @clickButton="queryResumes($event)"></BaseSearch>
       </el-col>
       <el-col :span="4" class="search-tip">
         剩余的搜索次数<span class="orange font-20">52</span
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.positionTypeList"
+              v-model="queryParams.industryList"
               size="medium"
               id="positionsRadios"
               class="radio-list-bar"
@@ -78,7 +78,7 @@
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.industry"
+              v-model="queryParams.industryList"
               size="medium"
               id="industryRadios"
               class="radio-list-bar"
@@ -196,7 +196,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.language"
+                  v-model="queryParams.languageType"
                   clearable
                   placeholder="外语语种"
                 >
@@ -208,7 +208,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.certificate"
+                  v-model="queryParams.certName"
                   clearable
                   placeholder="技能证书"
                 >
@@ -233,10 +233,10 @@
     </div>
 
     <!-- E 筛选部分 -->
-    <!-- 查询结果 -->
-    <per-search-job
+    <!-- 查询结果old -->
+    <!-- <per-search-job
       v-if="queryResult.length"
-      ref="searchJobList"
+      ref="searchResumeList"
       :jobData="queryResult"
       :total="queryResultTotal"
       showPager
@@ -245,9 +245,9 @@
       @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
     ></per-search-job>
-    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <BaseLoadingSvg v-else></BaseLoadingSvg> -->
     <!-- 职位详细信息 弹窗部分 -->
-    <el-dialog
+    <!-- <el-dialog
       width="75%"
       :visible.sync="detailsDialog"
       :before-close="handleClose"
@@ -261,28 +261,57 @@
         @favorJob="favorJob(arguments)"
         @callPositionCorp="callPositionCorp(arguments)"
       ></job-details>
+    </el-dialog> -->
+    <!-- old -->
+    <!-- 查询结果new-->
+    <CorpSearchResume
+      v-if="queryResult.length"
+      ref="searchResumeList"
+      :jobData="queryResult"
+      :total="queryResultTotal"
+      showPager
+      @deliveryResume="deliveryResume(arguments)"
+      @favorResume="favorResume(arguments)"
+      @showResumeDetials="showResumeDetials(arguments)"
+      @callPositionCorp="callPositionCorp(arguments)"
+    ></CorpSearchResume>
+    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <!-- 简历详细信息 弹窗部分 -->
+    <el-dialog
+      v-if="detailsDialog"
+      width="75%"
+      :visible.sync="detailsDialog"
+      :before-close="handleClose"
+    >
+      <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
     </el-dialog>
+    <!-- old -->
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
-import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+// import PerSearchJob from '@/components/person/PerSearchJob.vue';
+// import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import CorpSearchResume from '@/components/corporation/CorpSearchResume.vue';
+import BaseResumeInfo from '@/components/common/BaseResumeInfo.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText } from '@/utils';
 import {
   queryJobs,
-  doDeliveryResume,
-  doFavorJobs,
-  doUnfavorJobs
+  doDeliveryResume
+  // doFavorJobs,
+  // doUnfavorJobs
 } from '@/api/personApi';
+import { queryResumeList } from '@/api/corporationApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
-    PerSearchJob,
-    JobDetails,
+    // PerSearchJob,
+    // JobDetails,
+    CorpSearchResume,
+    BaseResumeInfo,
     BaseLoadingSvg
   },
   data() {
@@ -290,28 +319,43 @@ export default {
       detailsIndex: null,
       detailsDialog: false,
       wchatDialog: false,
-      positionDetailsId: '',
-      queryParams: {
-        cid: this.$store.getters['corporation/cid'],
-        industry: [''],
-        positionTypeList: [''],
-        workNature: '',
-        workYearNeed: '',
-        workArea: '',
+      queryParams1: {
+        // cid: this.$store.getters['corporation/cid'],
+        // industry: [''],
+        // positionTypeList: [''],
+        // workNature: '',
+        // //workYearNeed: '',
+        // workArea: '',
         eduRequire: '',
         tranBaseSymbol: '0',
-        special: '',
+        // //special: '',
         agencyRecruit: '0',
-        salaryMin: '',
-        salaryMax: '',
+        // salaryMin: '',
+        // salaryMax: '',
         ageMin: '',
-        ageMax: '',
-        workHour: '',
-        positionName: '',
-        corpName: '',
+        ageMax: ''
+        ////workHour: '',
+        //content: '',
+        ////corpName: '',
+        // languageType: '',
+        // certName: ''
+      },
+      queryParams: {
+        cid: this.$store.getters['corporation/cid'],
+        content: '',
+        positionList: [''],
+        industryList: [''],
+        workNature: '',
+        salaryMax: '',
+        salaryMin: '',
+        workArea: '',
+        eduLevel: '',
+        majorName: '',
+        languageType: '',
+        certName: '',
 
-        language: '',
-        certificate: ''
+        ageMin: '',
+        ageMax: ''
       },
       options: [],
       tableData: [],
@@ -320,14 +364,15 @@ export default {
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
-      tpOptions: this.$store.getters['dictionary/recruit_special_people'],
+      // tpOptions: this.$store.getters['dictionary/recruit_special_people'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       //wtOptions: this.$store.getters['dictionary/yesno'],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
       wyOptions: this.$store.getters['dictionary/recruit_language_type'],
       //bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       zsOptions: [],
-      jobList: []
+      queryPid: '',
+      resumeIdDetailsId: ''
     };
   },
   computed: {
@@ -343,18 +388,18 @@ export default {
         );
       }
       return [];
-    },
-    onePosition() {
-      let that = this;
-      return this.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
     }
+    // onePosition() {
+    //   let that = this;
+    //   return this.positionDetailsId
+    //     ? this.queryResult.find(function(i) {
+    //         return i.positionId === that.positionDetailsId;
+    //       })
+    //     : {};
+    // }
   },
   watch: {
-    'queryParams.positionTypeList': function(val, oldVal) {
+    'queryParams.industryList': function(val, oldVal) {
       //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
       this._.throttle(() => {
         //监听选中的选项-修改样式
@@ -374,8 +419,8 @@ export default {
       }, 500)();
     }
   },
-  created() {
-    //this.queryJobs();
+  mounted() {
+    this.queryResumes();
   },
   methods: {
     minSalaryChange() {
@@ -460,33 +505,35 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.tranBaseSymbol = '0';
-      this.queryParams.agencyRecruit = '0';
-      this.queryParams.industry = [''];
-      this.queryParams.positionTypeList = [''];
+      //this.queryParams.tranBaseSymbol = '0';
+      //this.queryParams.agencyRecruit = '0';
+      this.queryParams.industryList = [''];
+      this.queryParams.industryList = [''];
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
-    async queryJobs(val) {
+    /**
+     * 简历搜索
+     */
+    async queryResumes(val) {
       // if (!val) {
       //   this.$alert('请输入查询条件');
       //   return;
       // }
-
       let that = this;
       let params = this.$refs['queryJobFrom']?.model
         ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
         : this.queryParams;
-      params.positionName = $.trim(val);
-      that.queryParams.positionName = $.trim(val);
+      params.content = $.trim(val);
+      that.queryParams.content = $.trim(val);
       params.pageParam = {
         total: 0,
-        pageSize: that.$refs.searchJobList?.pageSize || 10,
-        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+        pageSize: that.$refs.searchResumeList?.pageSize || 10,
+        pageIndex: that.$refs.searchResumeList?.currentPage - 1 || 0
       };
       try {
         params.cid = that.$store.getters['corporation/cid'];
-        let result = await queryJobs(params);
+        let result = await queryResumeList(params);
         console.log('result', result);
         if (
           result.status === 200 &&
@@ -501,12 +548,12 @@ export default {
                 item.workArea
               );
             }
-            if (item.eduRequire) {
-              item.eduRequireText = getDicText(
-                that.$store.getters['dictionary/recruit_edu'],
-                item.eduRequire
-              );
-            }
+            // if (item.eduRequire) {
+            //   item.eduRequireText = getDicText(
+            //     that.$store.getters['dictionary/recruit_edu'],
+            //     item.eduRequire
+            //   );
+            // }
             if (item.workNature) {
               item.workNatureText = getDicText(
                 that.$store.getters['dictionary/recruit_work_nature'],
@@ -547,14 +594,23 @@ export default {
           .css('transform', 'rotate(180deg)');
       }
     },
-    showJobDetial(arg) {
-      //显示岗位详细信息
+    /**
+     * 显示简历详情
+     */
+    showResumeDetials(arg) {
       let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
+      let resumeId = (arg && arg[1]) || '';
+      let queryPid = (arg && arg[2]) || '';
       this.detailsIndex = index;
       this.detailsDialog = true;
-      this.positionDetailsId = positionId;
+      this.resumeIdDetailsId = resumeId;
+      //查询简历信息，并显示
+      this.queryPid = queryPid;
+      console.log(`queryPid:${queryPid}`);
     },
+    /**
+     * 投递简历 TODO (是不是换成邀请人员)
+     */
     async deliveryResume(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
@@ -574,37 +630,46 @@ export default {
         });
       }
     },
-    async favorJob(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let orginFavorType = arg[2];
-      if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
-          id: positionId,
-          cid: this.$store.getters['corporation/cid']
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          this.queryResult[index].favor = true;
-          this.$message({ type: 'success', message: '收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '收藏职位失败' });
-        }
-      } else {
-        //取消收藏职位
-        let res = await doUnfavorJobs({
-          id: positionId,
-          cid: this.$store.getters['corporation/cid']
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          this.queryResult[index].favor = false;
-          this.$message({ type: 'success', message: '取消收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '取消收藏职位失败' });
-        }
-      }
+    /**
+     * 收藏简历 TODO
+     */
+    async favorResume(arg) {
+      this.$alert('此功能暂未开放，请稍后');
+      return;
+
+      // let index = arg[0];
+      // let positionId = (arg && arg[1]) || '';
+      // let orginFavorType = arg[2];
+      // if (!orginFavorType) {
+      //   let res = await doFavorJobs('2', {
+      //     id: positionId,
+      //     cid: this.$store.getters['corporation/cid']
+      //   });
+      //   if (res.status === 200) {
+      //     // 修改按钮状态
+      //     this.queryResult[index].favor = true;
+      //     this.$message({ type: 'success', message: '收藏职位成功' });
+      //   } else {
+      //     this.$message({ type: 'error', message: '收藏职位失败' });
+      //   }
+      // } else {
+      //   //取消收藏职位
+      //   let res = await doUnfavorJobs({
+      //     id: positionId,
+      //     cid: this.$store.getters['corporation/cid']
+      //   });
+      //   if (res.status === 200) {
+      //     // 修改按钮状态
+      //     this.queryResult[index].favor = false;
+      //     this.$message({ type: 'success', message: '取消收藏职位成功' });
+      //   } else {
+      //     this.$message({ type: 'error', message: '取消收藏职位失败' });
+      //   }
+      // }
     },
+    /**
+     * 聊天 TODO
+     */
     callPositionCorp(arg) {
       console.log(arg);
       //! TODO显示聊天框
@@ -616,32 +681,24 @@ export default {
     },
     industryGroupChange(newVal) {
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
-        this.queryParams.industry = [''];
+        this.queryParams.industryList = [''];
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
-        this.queryParams.industry = newVal.filter(item => item !== '');
+        this.queryParams.industryList = newVal.filter(item => item !== '');
       }
     },
     positionGroupChange(val) {
       let newVal = val;
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
-        this.queryParams.positionTypeList = [''];
+        this.queryParams.industryList = [''];
       } else if (newVal && newVal.length && newVal.length > 10) {
         this.$alert('最多只可选择10种职位');
         newVal.pop();
-        this.queryParams.positionTypeList = newVal;
+        this.queryParams.industryList = newVal;
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
-        this.queryParams.positionTypeList = newVal.filter(item => item !== '');
+        this.queryParams.industryList = newVal.filter(item => item !== '');
       } else if (!newVal.length) {
-        this.queryParams.positionTypeList = [''];
+        this.queryParams.industryList = [''];
       }
-    },
-    perfectResume() {
-      //完善简历
-      this.$router.push('/personInfo');
-    },
-    uploadResume() {
-      //上传简历
-      this.$alert('此功能暂时未开放，请稍候！');
     }
   }
 };

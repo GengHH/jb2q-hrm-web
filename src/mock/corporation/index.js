@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 17:30:11
+ * @LastEditTime: 2021-05-19 18:41:03
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -742,4 +742,65 @@ Mock.mock(basePath + '/corp/meeting/save', 'post', function(options) {
   };
 });
 
+//查询招聘会反馈结果
+Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            meetId: '@string("number", 1)',
+            applyId: '1',
+            meetName: '上海市浦东电工职业招聘会',
+            meetType: '2',
+            corpName: '丽颖传媒有限公司',
+            applyContactName: '赵丽颖',
+            applyContactPhone: '13512112112',
+            memo: 'emm',
+            applyTime: '2021-04-13 00:00:00',
+            feedbackTime: '2021-04-13 00:00:00',
+            'applyResult|1': ['', '0', '1'],
+            applyMemo: '123412341'
+          }
+        ]
+      })
+    }
+  };
+});
+//简历搜素
+Mock.mock(basePath + '/corp/resume/find', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            resumeId: '@string("number", 1)',
+            pid: '200507136765230',
+            xm: '王强',
+            positionName:
+              '销售主管|客户经理、主管|区域销售经理、主管|业务拓展(BD)经理',
+            industryName: '互联网/电子商务',
+            workYear: '',
+            age: 38,
+            salaryMax: 5000,
+            salaryMin: 3000,
+            workNature: '01',
+            workArea: '00',
+            updateTime: '2021-05-06 09:37:44',
+            'favor|1': [false, true],
+            positionList: ['0103', '0104', '0105', '0107'],
+            industryList: ['04'],
+            birthDate: '19821125'
+          }
+        ]
+      })
+    }
+  };
+});
 export default Mock;
