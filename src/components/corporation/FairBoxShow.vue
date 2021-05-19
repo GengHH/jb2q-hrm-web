@@ -265,8 +265,8 @@ export default {
             cid: this.$store.getters['corporation/cid'],
             corpName: this.$store.getters['corporation/username'],
             meetId: this.fairInfo.meetId,
-            applyContactName: this.form.contactName,
-            applyContactPhone: this.form.contactPhone,
+            applyContactName: this.form.applyContactName,
+            applyContactPhone: this.form.applyContactPhone,
             memo: this.form.memo,
             positsionId: this.positsionId
           };

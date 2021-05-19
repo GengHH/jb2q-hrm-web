@@ -1,11 +1,28 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-11 10:51:54
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-27 14:50:12
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-19 11:05:44
  * @Description: 全局公用的各种正则表达式
  * @FilePath: \jb2q-hrm-web\src\utils\regexp.js
  */
+
+/**
+ * Curries a predicate function to check if value matches pattern.
+ * @param {RegExp} pattern
+ * @returns {(value: string) => boolean}
+ */
+const isPattern = pattern => value => pattern.test(value);
+/**
+ * Check if value is a CSS Length. css尺寸
+ */
+export const isCSSLength = isPattern(
+  /^\+?(\d*\.)?\d+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/i
+);
+/**
+ * Check if value is a CSS Time.  css时间值
+ */
+export const isCSSTime = isPattern(/^\+?(\d*\.)?\d+(ms|s)$/i);
 
 //手机号
 export const phonePattern = /^0?(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])[0-9]{8}$/;

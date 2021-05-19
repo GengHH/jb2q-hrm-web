@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-03-26 17:05:30
+ * @LastEditTime: 2021-05-19 18:59:34
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
@@ -9,7 +9,7 @@
 <template>
   <!-- S demo3信息部分 -->
   <div id="demo3">
-    <div class="div-box bg-gray">
+    <!-- <div class="div-box bg-gray">
       <el-checkbox
         :indeterminate="isIndeterminate"
         v-model="checkAll"
@@ -17,174 +17,85 @@
         >全选</el-checkbox
       >
       <span class="favorite"><i class="el-icon-star-on"></i>收藏</span>
-    </div>
-    <div class="div-box">
-      <el-row>
-        <el-col :span="1" class="mat-15">
+    </div> -->
+    <div class="div-box" v-for="(resumeItem, index) in jobData" :key="index">
+      <el-row :gutter="20">
+        <!-- <el-col :span="1" class="mat-15">
           <el-checkbox
             :indeterminate="isIndeterminate"
             v-model="checkAll"
             @change="handleCheckAllChange"
           ></el-checkbox>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <el-col :span="7">
           <div class="infor-module">
-            <p class="name-infor">李先生 <span>人力资源总监</span></p>
+            <p
+              class="name-infor  font-or"
+              @click="
+                showResumeDetial(index, resumeItem.resumeId, resumeItem.pid)
+              "
+            >
+              <span class="personName">{{ resumeItem.xm }}</span>
+              <!-- <span>人力资源总监</span>  -->
+            </p>
             <p class="span-infor">
-              <span>上海</span>
+              <span>{{ resumeItem.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>40岁</span>
+              <span>{{ resumeItem.age }}岁</span>
               <el-divider direction="vertical"></el-divider>
-              <span>16年</span>
+              <span>工作经验{{ resumeItem.workYear }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>大学本科</span>
+              <span>大学本科TODO</span>
             </p>
           </div>
         </el-col>
-        <el-col :span="5" class="mat-15">
-          <span class="career">计算机业 / 6k-11k</span>
+        <el-col :span="6" class="mat-15" style="text-align:left">
+          <span class="career">{{ resumeItem.positionName }}</span>
+          <p class="money-p">
+            <span>期望薪资：</span> {{ resumeItem.salaryMin }}-{{
+              resumeItem.salaryMax
+            }}
+          </p>
         </el-col>
-        <el-col :span="7">
-          <p class="time-p">修改时间：2020-10-10 15:34:22</p>
+        <el-col :span="6" style="text-align:right">
+          <p class="time-p">修改时间：{{ resumeItem.updateTime }}</p>
           <p class="time-p">最近登录：2020-10-10 15:34:22</p>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="5" style="text-align:right">
           <el-button
             type="primary"
             class="look-btn"
-            @click="dialogFormVisible = true"
-            ><i class="el-icon-view"></i> 查看</el-button
+            @click="
+              showResumeDetial(index, resumeItem.resumeId, resumeItem.pid)
+            "
+            ><i class="el-icon-view"></i>查 看</el-button
           >
-          <el-button type="primary" class="release-btn">
-            <i class="el-icon-star-on"></i> 收藏</el-button
+          <el-button
+            type="primary"
+            class="release-btn"
+            style="width:100px"
+            @click="favorResume(resumeItem.favor, index, resumeItem.resumeId)"
           >
+            <i v-if="resumeItem.favor" class="el-icon-star-on">已收藏</i>
+            <i v-else class="el-icon-star-off">收 藏</i>
+          </el-button>
         </el-col>
       </el-row>
     </div>
-
-    <div class="div-box padd0">
-      <el-row>
-        <el-col :span="1" class="mat-15">
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
-          ></el-checkbox>
-        </el-col>
-        <el-col :span="10">
-          <div class="infor-module">
-            <p class="name-infor font-or">
-              项目经理 <i class="i-style">介</i> <span>12k-18k</span>
-            </p>
-            <p class="span-infor">
-              <span>上海</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
-              <el-button type="primary" class="gray-btn"
-                ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-              >
-            </p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <p class="time-p sixteen-opacity">
-            万达信息股份有限公司
-            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
-          </p>
-          <p class="span-infor">
-            <span>移动互联网</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>股份</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>10000人以上</span>
-          </p>
-        </el-col>
-        <el-col :span="5">
-          <el-button type="primary" class="release-btn">
-            <i class="el-icon-position"></i>投递</el-button
-          >
-          <el-button type="primary" class="white-btn"
-            ><i class="el-icon-star-off"></i> 收藏</el-button
-          >
-        </el-col>
-      </el-row>
-      <div class="foot-span">
-        <el-col :span="11">
-          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="fourteen-opacity"
-            >发布机构：上海某某职业代理有限公司</span
-          >
-        </el-col>
-        <el-col :span="5">
-          <span class="fourteen-opacity">发布时间：2020-11-06</span>
-        </el-col>
-      </div>
-    </div>
-    <div class="div-box padd0">
-      <el-row>
-        <el-col :span="1" class="mat-15">
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
-          ></el-checkbox>
-        </el-col>
-        <el-col :span="10">
-          <div class="infor-module">
-            <p class="name-infor font-or">
-              项目经理 <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
-            </p>
-            <p class="span-infor">
-              <span>上海</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
-              <el-button type="primary" class="gray-btn"
-                ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-              >
-            </p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <p class="time-p sixteen-opacity">
-            万达信息股份有限公司
-            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
-          </p>
-          <p class="span-infor">
-            <span>移动互联网</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>股份</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>10000人以上</span>
-          </p>
-        </el-col>
-        <el-col :span="5">
-          <el-button type="primary" class="release-btn">
-            <i class="el-icon-position"></i>投递</el-button
-          >
-          <el-button type="primary" class="white-btn"
-            ><i class="el-icon-star-off"></i> 收藏</el-button
-          >
-        </el-col>
-      </el-row>
-      <div class="foot-span">
-        <el-col :span="19">
-          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
-        </el-col>
-        <el-col :span="5">
-          <span class="fourteen-opacity">发布时间：2020-11-06</span>
-        </el-col>
-      </div>
-    </div>
+    <!-- 分页器 -->
+    <el-pagination
+      id="jobListpager"
+      v-show="showPager"
+      v-bind="pageAttrs"
+      :class="pagerClass"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      @prev-click="handlePrevClick"
+      @next-click="handleNextClick"
+      :current-page="currentPage"
+      :total="totalCount"
+    >
+    </el-pagination>
   </div>
   <!-- E demo3信息部分 -->
 </template>
@@ -196,15 +107,124 @@
 export default {
   name: 'PerSearchJob',
   props: {
-    JobData: {
-      type: Object,
-      default: () => {}
+    showPager: {
+      type: Boolean,
+      default: false
+    },
+    pagerClass: {
+      type: String,
+      default: 'peger-center'
+    },
+    jobData: {
+      type: Array,
+      default: () => []
+    },
+    total: {
+      type: Number,
+      default: 0
     }
   },
   data() {
-    return {};
+    return {
+      checkAll: false,
+      isIndeterminate: true,
+      currentPage: 0,
+      pageSize: 10
+    };
   },
-  methods: {}
+  updated() {
+    // 更新滚动条
+    $('#indexApp')
+      .getNiceScroll()
+      .resize();
+  },
+  computed: {
+    pageAttrs() {
+      return {
+        ...this.$PlElement?.pageConfig,
+        ...this.pageConfig
+      };
+    },
+    pageTableData() {
+      //前端分页实现逻辑
+      return this.showPager
+        ? this.jobData.slice(
+            (this.currentPage - 1) * this.pageSize,
+            this.currentPage * this.pageSize
+          )
+        : this.jobData;
+    },
+    totalCount() {
+      return this.total ? this.total : this.jobData.length;
+    }
+  },
+  methods: {
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.$parent.queryResumes) {
+        this.$parent.queryResumes(this.$parent.queryParams.positionName);
+      }
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+      if (this.$parent.queryResumes) {
+        this.$parent.queryResumes(this.$parent.queryParams.positionName);
+      }
+    },
+    handlePrevClick(currentPage) {
+      this.currentPage = currentPage;
+      if (this.$parent.queryResumes) {
+        this.$parent.queryResumes(this.$parent.queryParams.positionName);
+      }
+    },
+    handleNextClick(currentPage) {
+      this.currentPage = currentPage;
+      if (this.$parent.queryResumes) {
+        this.$parent.queryResumes(this.$parent.queryParams.positionName);
+      }
+    },
+    // selectJob(index, resumeId) {
+    //   //投递简历
+    //   this.$confirm('确认向该职位投递简历？')
+    //     .then(() => {
+    //       this.$emit('deliveryResume', index, resumeId); //通知父组件改变。
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // },
+    /**
+     * 收藏简历
+     */
+    favorResume(favor, index, resumeId) {
+      //收藏或者取消收藏职位
+      let str = favor ? '确认取消收藏该简历？' : '确认收藏该简历？';
+      this.$confirm(str)
+        .then(() => {
+          this.$emit('favorResume', index, resumeId, favor);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    /**
+     * 全部收藏
+     */
+    // allStarAction(event) {
+    //   console.log(event);
+    // },
+    handleCheckAllChange() {},
+    /**
+     * 显示详细简历信息
+     */
+    showResumeDetial(index, resumeId, pid) {
+      this.$emit('showResumeDetials', index, resumeId, pid);
+    }
+    // callPositionCorp(index, resumeId) {
+    //   this.$emit('callPositionCorp', index, resumeId);
+    //   this.$alert('暂时无法进行沟通');
+    // }
+  }
 };
 </script>
 
@@ -239,6 +259,10 @@ export default {
     background-color: #8b614d;
   }
 }
+.name-infor {
+  font-size: 20p;
+  margin-bottom: 20px;
+}
 .bg-gray {
   background: #f7f7f7;
   margin-top: 16px;
@@ -251,5 +275,29 @@ export default {
 }
 .marl-65 {
   margin-left: 65px;
+}
+.ico_rz {
+  display: inline-block;
+}
+.span-infor {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: 15px;
+  .gray-btn,
+  .gray-btn:hover {
+    color: #fc6f3d;
+    background-color: transparent;
+    border-color: #d1d1d1;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+}
+.money-p {
+  color: #aaa;
+  margin: 20px 0 10px;
+}
+.time-p {
+  color: #aaa;
+  margin: 10px 0;
 }
 </style>

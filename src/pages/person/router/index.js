@@ -229,6 +229,23 @@ let router = new Router({
       ]
     },
     {
+      path: '/jobFair',
+      name: '招聘会',
+      component: () => import('@/views/person/jobFair'),
+      children: [
+        {
+          path: '/jobFair/jobFairs',
+          name: '招聘会详情',
+          components: {
+            personNavMenu: () =>
+              import('@/components/person/PerFindJobBackNavMenu'),
+            default: () =>
+              import('@/views/person/jobFindFeedback/jobFindRecord')
+          }
+        }
+      ]
+    },
+    {
       path: '/loadding',
       name: '加载中',
       component: () => import('@/views/person/personLoadding')
