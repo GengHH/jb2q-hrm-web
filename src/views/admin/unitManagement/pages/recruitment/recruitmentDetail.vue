@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-04-29 17:04:24
+ * @LastEditTime: 2021-05-19 11:17:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -88,6 +88,26 @@
                   @click="positionAudit('0', scope)"
                   plain
                   >查看</el-button
+                >
+                <el-button
+                  style="margin-top:5px"
+                  v-if="auditStutas != '1'"
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-user-solid"
+                  @click="positionAudit('0', scope)"
+                  plain
+                  >精准推荐</el-button
+                >
+                <el-button
+                  style="margin-top:5px"
+                  v-if="auditStutas != '1'"
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-user"
+                  @click="positionAudit('0', scope)"
+                  plain
+                  >自主推荐</el-button
                 >
               </template>
             </el-table-column>
@@ -211,8 +231,6 @@ export default {
         { title: '薪酬', prop: 'salary', slot: 'salary' },
         { title: '学历要求', prop: 'eduRequir', slot: 'eduRequir' },
         { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
-        { title: '工作地点', prop: 'workAddress' },
-        { title: '发布时间', prop: 'releaseTime' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns1: [

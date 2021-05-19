@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:02:14
+ * @LastEditTime: 2021-05-17 17:14:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -81,6 +81,46 @@
               >
                 <i class="el-icon-search"></i> 查看</el-button
               >
+              <el-popover
+                v-if="scope.row.statusId != '3' && scope.row.statusId != ''"
+                ref="move_add_pop"
+                placement="bottom"
+                width="400"
+                trigger="click"
+              >
+                <el-radio-group v-model="maintain.employ">
+                  <el-radio
+                    v-for="(v, k) in dicOptions.yesno"
+                    :key="k"
+                    :label="v.label"
+                    :value="v.value"
+                  ></el-radio>
+                </el-radio-group>
+                <el-select v-model="maintain.employType" placeholder="就业类型">
+                  <el-option
+                    v-for="(v, k) in dicOptions.jobType"
+                    :key="k"
+                    :label="v.label"
+                    :value="v.value"
+                  ></el-option>
+                </el-select>
+                <el-input
+                  type="textarea"
+                  :rows="2"
+                  placeholder="当时情况"
+                  v-model="maintain.curSituation"
+                >
+                </el-input>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="maintain_add(scope)"
+                  >确定修改</el-button
+                >
+                <el-button size="mini" slot="reference" type="danger" plain
+                  >跟踪维护</el-button
+                >
+              </el-popover>
             </template>
           </el-table-column>
         </ttable>
@@ -117,13 +157,18 @@ import { trim } from '@/utils/index';
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
 import adddetails from './module/addDetails';
-import { guide_query } from './api/index';
+import { guide_query, guide_add } from './api/index';
 
 export default {
   name: 'feedback',
   components: { ttable, tform, adddetails },
   data() {
     return {
+      maintain: {
+        jobType: '',
+        curSituation: '',
+        employ: ''
+      },
       detailsData: {},
       detailsType: '0',
       params: {
@@ -137,7 +182,9 @@ export default {
       pageSize: 10,
       dataList: null,
       dicOptions: {
-        type: trim(this.$store.getters['dictionary/recruit_imple_act_type'])
+        type: trim(this.$store.getters['dictionary/recruit_imple_act_type']),
+        yesno: trim(this.$store.getters['dictionary/yesno']),
+        jobType: trim(this.$store.getters['dictionary/recruit_employ_type'])
       },
 
       activeName: '01',
@@ -200,6 +247,40 @@ export default {
   },
   computed: {},
   methods: {
+    message(type, msg, fn) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {
+          if (fn) {
+            fn();
+          }
+        }
+      });
+    },
+    maintain_add(e) {
+      let data = { ...e.row, ...this.maintain };
+      console.log(data);
+      guide_add(
+        data,
+        res => {
+          document.body.click();
+          this.message('success', '操作成功', () => {
+            this.advancedSearch(this.dataList);
+          });
+          this.maintain = {
+            jobType: '',
+            curSituation: '',
+            employ: ''
+          };
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     handleChange(e) {
       console.log(e);
     },

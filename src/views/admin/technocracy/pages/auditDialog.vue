@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 13:59:30
- * @LastEditTime: 2021-04-29 18:49:07
+ * @LastEditTime: 2021-05-18 19:42:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\auditDialog.vue
@@ -260,6 +260,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

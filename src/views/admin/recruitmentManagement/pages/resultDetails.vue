@@ -562,6 +562,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

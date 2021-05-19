@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-10 15:35:57
- * @LastEditTime: 2021-04-12 18:37:29
+ * @LastEditTime: 2021-05-19 17:02:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\messagedetails.vue
@@ -519,7 +519,6 @@ export default {
     queryAgency() {
       console.log(this.dicOptions.recType);
       let data = { ...this.form };
-      data.cid = '201002025628331';
       //recruitType 招聘类型 1自主 2代理
       data.recruitType = 1;
       //1未审核 2审核通过 3审核不通过 这里默认传2
@@ -655,7 +654,6 @@ export default {
     this.queryAgency();
 
     let data2 = { ...this.form };
-    data2.cid = '201002025628331';
     //recruitType 招聘类型 1自主 2代理
     data2.recruitType = 2;
     data2.type = 2;

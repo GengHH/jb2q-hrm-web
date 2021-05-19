@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-04-30 16:07:27
+ * @LastEditTime: 2021-05-19 17:52:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -351,6 +351,7 @@ export default {
   margin-bottom: 10px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

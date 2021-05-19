@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-29 17:47:56
+ * @LastEditTime: 2021-05-19 20:32:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -216,7 +216,7 @@
             <img
               width="600px"
               v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
+              :src="'data:image/png;base64,' + form.pairImageBase64"
               alt="记录表"
             />
           </el-col>
@@ -394,6 +394,9 @@ export default {
           //   });
           //   return;
           // }
+          data.recordImageBase64 = data.recordImageBase64
+            ? data.recordImageBase64.split(',')[1].toString()
+            : '';
           if (this.type == 3) {
             activity_add(
               data,

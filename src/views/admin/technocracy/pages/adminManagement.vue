@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-04-29 18:47:17
+ * @LastEditTime: 2021-05-19 20:39:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -270,11 +270,11 @@ export default {
   },
   data() {
     return {
-      isAudit: true,
+      isAudit: false,
       demoUser: false,
       userType: false,
       queryData: {},
-      visible: true,
+      visible: false,
       auditStutas: '1',
       activeName: '3',
       params0: {

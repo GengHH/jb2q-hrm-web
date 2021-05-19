@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-05-05 17:06:41
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-17 17:34:15
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
@@ -406,6 +406,12 @@ export default {
       }
     },
     resetForm(formName) {
+      let option = this.formConfig.formItemList;
+      for (let i = 0; i < option.length; i++) {
+        if (option[i].type == 'checkbox') {
+          option[i].data = [];
+        }
+      }
       this.$refs.value.resetFields();
     }
   },

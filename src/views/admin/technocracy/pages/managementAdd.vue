@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-04-26 15:17:57
+ * @LastEditTime: 2021-05-19 20:29:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -43,7 +43,10 @@
                 :show-file-list="false"
               >
                 <template v-if="disabled">
-                  <img :src="form.psnlPhotoBase64" class="avatar" />
+                  <img
+                    :src="'data:image/png;base64,' + form.psnlPhotoBase64"
+                    class="avatar"
+                  />
                 </template>
                 <template v-if="!disabled">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -299,7 +302,10 @@
           <el-col :span="16">
             <el-form-item label="签字后的登记表">
               <template v-if="disabled">
-                <img :src="form.formImageBase64" class="avatar" />
+                <img
+                  :src="'data:image/png;base64,' + form.formImageBase64"
+                  class="avatar"
+                />
               </template>
               <el-upload
                 v-if="!disabled"
@@ -473,8 +479,16 @@ export default {
               return;
             }
           }
+          let data = { ...this.form };
+          data.psnlPhotoBase64 = data.psnlPhotoBase64
+            ? data.psnlPhotoBase64.split(',')[1].toString()
+            : '';
+          data.formImageBase64 = data.formImageBase64
+            ? data.formImageBase64.split(',')[1].toString()
+            : '';
           joinTeam_add(
-            trim(this.form),
+            data,
+
             res => {
               if (res.result.data.result) {
                 this.$message({

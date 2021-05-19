@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-13 13:58:24
+ * @LastEditTime: 2021-05-19 20:42:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -148,7 +148,7 @@
             <img
               width="600px"
               v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
+              :src="'data:image/png;base64,' + form.pairImageBase64"
               alt="协议书"
             />
           </el-col>
@@ -330,6 +330,9 @@ export default {
           //   });
           //   return;
           // }
+          data.pairImageBase64 = data.pairImageBase64
+            ? data.pairImageBase64.split(',')[1].toString()
+            : '';
           if (this.type == 3) {
             record_add(
               data,

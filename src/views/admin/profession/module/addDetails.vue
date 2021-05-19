@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-30 16:07:11
+ * @LastEditTime: 2021-05-19 10:20:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -32,6 +32,7 @@
             >-<span>{{ item.value }}</span>
           </el-option>
         </el-select>
+        <div style="color:red">!!!加上预约记录带入输入框</div>
         <div style="margin-top:10px ">
           <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
           <span style="margin-left:15px">身份证号：</span>
@@ -293,6 +294,7 @@ export default {
             label: '是否就业',
             rules: [],
             key: 'employ',
+            disabled: true,
             options: [
               {
                 value: '1',
@@ -309,6 +311,7 @@ export default {
           {
             type: 'select',
             label: '就业类型',
+            disabled: true,
             rules: [],
             style: { width: '210px' },
             key: 'employType',
@@ -317,6 +320,7 @@ export default {
           {
             type: 'textarea',
             label: '当时情况',
+            disabled: true,
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入当时情况',
@@ -486,8 +490,13 @@ export default {
     setTimeout(() => {
       if (this.detailsType == '1') {
         this.form = { ...this.detailsData };
-        this.$refs.form.value = { ...this.detailsData };
-        this.$refs.form2.value = { ...this.detailsData };
+        //01政策  02专门
+        if (this.activeName == '01') {
+          this.$refs.form.value = { ...this.detailsData };
+        } else if (this.activeName == '02') {
+          this.$refs.form2.value = { ...this.detailsData };
+        }
+
         this.formConfig.disabled = true;
         this.formConfig2.disabled = true;
         this.show = this.detailsData.implementAct;

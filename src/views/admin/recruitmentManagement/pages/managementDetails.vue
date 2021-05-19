@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-04-29 14:10:47
+ * @LastEditTime: 2021-05-19 20:17:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -16,12 +16,14 @@
     <div
       style="height:500px;overflow: scroll;overflow-x: hidden;padding: 0 10px 0 0;"
     >
-      <div class="title-style">详细信息</div>
+      <div class="title-style">
+        详细信息
+      </div>
       <tform ref="form" :formConfig="formConfig"> </tform>
       <el-form :model="form" label-width="150px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="证件照">
+            <el-form-item label="招聘会宣传图片">
               <el-upload
                 action=""
                 class="avatar-uploader"
@@ -33,7 +35,7 @@
                 :show-file-list="false"
               >
                 <template v-if="type == '2'">
-                  <img :src="lookList.propagandaImage" class="avatar" />
+                  <img :src="lookList.propagandaImageBase64" class="avatar" />
                 </template>
                 <template v-if="type == '1'">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -272,7 +274,7 @@ export default {
     },
     //照片base64
     uploadUserChange(file) {
-      this.getBase64(file.raw, 'propagandaImage');
+      this.getBase64(file.raw, 'propagandaImageBase64');
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     advancedSearch() {
@@ -280,8 +282,9 @@ export default {
       let data = { ...this.$refs.form.value };
       //1 添加 2 修改
       if (this.type == '1') {
-        //data.propagandaImage = this.form.propagandaImage;
-        data.propagandaImage = 'MQ==';
+        data.propagandaImageBase64 = this.form.propagandaImageBase64
+          ? this.form.propagandaImageBase64.split(',')[1].toString()
+          : '';
         schedule_add(
           data,
           res => {
@@ -329,21 +332,12 @@ export default {
   },
   mounted() {
     let data = { ...this.lookList };
-    console.log(data);
     if (this.type == '2') {
-      schedule_query_info(
-        data,
-        res => {
-          if (res.status == 200) {
-            let pageresult = res.result.data;
-            this.$refs.form.value = { ...pageresult };
-          }
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+      setTimeout(() => {
+        this.$refs.form.value = { ...data };
+      }, 0);
+      this.lookList.propagandaImageBase64 =
+        'data:image/png;base64,' + data.propagandaImageBase64;
     }
   },
   created() {}

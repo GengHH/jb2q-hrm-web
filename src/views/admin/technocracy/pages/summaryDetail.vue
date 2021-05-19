@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-12 10:49:46
+ * @LastEditTime: 2021-05-19 20:35:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\summaryDetail.vue
@@ -111,7 +111,7 @@
             <img
               width="600px"
               v-if="disabled && form.meetImageBase64 != ''"
-              :src="form.meetImageBase64"
+              :src="'data:image/png;base64,' + form.meetImageBase64"
               alt="签字记录"
             />
           </el-col>
@@ -176,13 +176,11 @@ export default {
 
     onSubmit() {
       let data = { ...this.form };
-      console.log(data);
       data.expertJoinDatas = data.expertJoinDatas.map(e => {
         return { expertId: e };
       });
       this.$refs.form.validate(valid => {
         if (valid) {
-          data.expertJoinDatas = [{ expertId: '0052103001' }];
           // if (!data.meetImageBase64) {
           //   this.$message({
           //     message: '请上传签字记录',
@@ -190,6 +188,9 @@ export default {
           //   });
           //   return;
           // }
+          data.meetImageBase64 = data.meetImageBase64
+            ? data.meetImageBase64.split(',')[1].toString()
+            : '';
           if (this.type == 3) {
             summary_add(
               data,

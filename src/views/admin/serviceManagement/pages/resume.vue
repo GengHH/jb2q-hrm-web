@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:14:04
- * @LastEditTime: 2021-04-12 19:42:01
+ * @LastEditTime: 2021-05-18 19:42:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\resume.vue
@@ -212,6 +212,7 @@ export default {
     padding: 0 30px;
     box-sizing: border-box;
     position: relative;
+    margin: 0 0 15px 0;
   }
   .title-style::before {
     content: '';

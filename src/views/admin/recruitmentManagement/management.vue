@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-29 17:02:25
+ * @LastEditTime: 2021-05-19 20:16:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -83,7 +83,12 @@ import tform from '../common/t_form'; //高级查询
 import ttable from '../common/t_table';
 import managementdetails from './pages/managementDetails';
 import { trim } from '@/utils/index';
-import { schedule_delete, schedule_query, schedule_update } from './api/index';
+import {
+  schedule_delete,
+  schedule_query,
+  schedule_update,
+  schedule_query_info
+} from './api/index';
 export default {
   name: 'management',
   components: {
@@ -184,13 +189,28 @@ export default {
       );
     },
     look(type, scope) {
-      if (type == '2') {
-        this.form = { ...scope.row };
-      }
-
       this.type = type;
-      //1 添加 2 修改)
-      this.visible = true;
+      if (type == '2') {
+        let data = { ...scope.row };
+        schedule_query_info(
+          data,
+          res => {
+            if (res.status == 200) {
+              let pageresult = res.result.data;
+              this.form = { ...pageresult };
+              //1 添加 2 修改)
+              this.visible = true;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        //1 添加 2 修改)
+        this.visible = true;
+      }
     },
     onclose(type) {
       if (type == '1') {
@@ -209,7 +229,7 @@ export default {
     },
     onsubmit(e) {
       console.log('------------------');
-      let params = { ...this.form };
+      let params = { ...e.row };
       params.pageParam = {
         pageSize: this.pageListData.pageSize,
         pageIndex: JSON.parse(JSON.stringify(this.pageListData.pageIndex)) - 1

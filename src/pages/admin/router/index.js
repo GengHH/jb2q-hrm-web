@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-04 11:10:20
- * @LastEditTime: 2021-04-07 11:06:18
+ * @LastEditTime: 2021-05-18 19:30:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\admin\router\index.js
@@ -116,10 +116,15 @@ export default new Router({
       name: '单位账号管理',
       component: () => import('@/views/admin/unitManagement/management')
     },
+    {
+      path: '/unitManagement/audit',
+      name: '转出入审批',
+      component: () => import('@/views/admin/unitManagement/audit')
+    },
     // 招聘会管理recruitmentManagement
     {
       path: '/recruitmentManagement/feedback',
-      name: '招聘会管理报告反馈',
+      name: '招聘会报名反馈',
       component: () => import('@/views/admin/recruitmentManagement/feedback')
     },
     {
@@ -153,6 +158,33 @@ export default new Router({
       component: () =>
         import(
           '@/views/admin/unitResumeParameterSetting/unitResumeParameterSetting'
+        )
+    },
+
+    // 人力资源旗舰店
+    {
+      path: '/HRAudit/HRAudit',
+      name: '人力资源旗舰店',
+      component: () => import('@/views/admin/HRAudit/HRAudit')
+    },
+    // 用工余缺调剂管理
+    {
+      path: '/workManagement/gap',
+      name: '用工缺口',
+      component: () => import('@/views/admin/workManagement/gap')
+    },
+    {
+      path: '/workManagement/surplus',
+      name: '用工剩余',
+      component: () => import('@/views/admin/workManagement/surplus')
+    },
+    // 职位投诉管理
+    {
+      path: '/positionComplainManagement/positionComplainManagement',
+      name: '职位投诉管理',
+      component: () =>
+        import(
+          '@/views/admin/positionComplainManagement/positionComplainManagement'
         )
     },
     {

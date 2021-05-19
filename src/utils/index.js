@@ -2,7 +2,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: GengHH
+ * @LastEditors: Please set LastEditors
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */

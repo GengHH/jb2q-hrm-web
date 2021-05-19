@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-04-26 10:21:49
+ * @LastEditTime: 2021-05-18 19:41:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -306,6 +306,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

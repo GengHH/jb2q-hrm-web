@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-04-13 14:22:52
+ * @LastEditTime: 2021-05-19 20:36:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -29,7 +29,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="单位状态" prop="meetTime">
+            <el-form-item label="单位状态" prop="frozen">
               <el-select
                 :disabled="disabled"
                 v-model="form.frozen"
@@ -161,7 +161,7 @@
             <img
               width="600px"
               v-if="disabled && form.meetImageBase64 != ''"
-              :src="form.meetImageBase64"
+              :src="'data:image/png;base64,' + form.meetImageBase64"
               alt="logo"
             />
           </el-col>
@@ -262,6 +262,9 @@ export default {
           //   });
           //   return;
           // }
+          data.meetImageBase64 = data.meetImageBase64
+            ? data.meetImageBase64.split(',')[1].toString()
+            : '';
           management_edit(
             data,
             res => {
