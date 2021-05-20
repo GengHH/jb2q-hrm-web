@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 09:40:00
+ * @LastEditTime: 2021-05-20 18:38:03
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->
@@ -75,7 +75,7 @@
         <template v-for="(item, index) in col.actions">
           <template v-if="!(item.hidden && item.hidden(scope, item))">
             <el-divider
-              v-if="index > 0"
+              v-if="index > 0 && scope.row.actions.length > 1"
               :key="index"
               direction="vertical"
             ></el-divider>

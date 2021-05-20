@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 10:43:15
+ * @LastEditTime: 2021-05-20 18:38:49
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -711,7 +711,11 @@ export default {
         this.unshowPjColumn = false;
         this.unshowCjmsColumn = true;
       } else {
-        this.actionColWidth = 280;
+        if (tab.name === '01') {
+          this.actionColWidth = 150;
+        } else {
+          this.actionColWidth = 280;
+        }
         this.unshowPjColumn = true;
         this.unshowCjmsColumn = true;
       }
@@ -852,7 +856,7 @@ export default {
               this['tableData0' + i].forEach(element => {
                 switch (i) {
                   case 1:
-                    element.actions = ['action1', 'action3'];
+                    element.actions = ['action3'];
                     break;
                   case 2:
                     element.actions = ['action1', 'action3'];

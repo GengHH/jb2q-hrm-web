@@ -63,6 +63,7 @@ import FairBoxShow from '@/components/corporation/FairBoxShow';
 import BaseSearch from '@/components/common/BaseSearch';
 import BasePagination from '@/components/common/BasePagination';
 import { queryJobFairList } from '@/api/corporationApi';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'jobFairApply',
   components: {
@@ -82,6 +83,11 @@ export default {
   computed: {},
   mounted() {
     this.query($.noop);
+    niceScroll();
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
     query(done) {

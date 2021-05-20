@@ -67,14 +67,13 @@
           </span>
         </p>
         <p class="fourteen-opacity mat-15">
-          <span v-if="resume.contactPhone"
+          <!-- <span v-if="resume.contactPhone"
             ><i class="icon iconfont">&#xe63d;</i>
             {{ resume.contactPhone }}年毕业</span
           >
-          <el-divider direction="vertical"></el-divider>
-          <span v-if="resume.contactPhone"
-            ><i class="icon iconfont">&#xe641;</i>
-            {{ resume.contactPhone }}</span
+          <el-divider direction="vertical"></el-divider> -->
+          <span v-if="resume.eduLevel"
+            ><i class="icon iconfont">&#xe641;</i> {{ highEduLevel }}</span
           >
           <el-divider direction="vertical"></el-divider>
           <span v-if="resume.contactPhone"
@@ -469,6 +468,7 @@
             v-model="jobIntentionForm.positionLike"
             multiple
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option7"
@@ -488,6 +488,7 @@
             filterable
             v-model="jobIntentionForm.industryLike"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option8"
@@ -509,6 +510,7 @@
                 v-model.number="jobIntentionForm.salaryMin"
                 autocomplete="off"
                 @change="minSalaryChange"
+                style="width:100%"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
@@ -521,6 +523,7 @@
                 v-model.number="jobIntentionForm.salaryMax"
                 autocomplete="off"
                 @change="maxSalaryChange"
+                style="width:100%"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -534,6 +537,7 @@
             filterable
             v-model="jobIntentionForm.workArea"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option1"
@@ -553,6 +557,7 @@
             filterable
             v-model="jobIntentionForm.workNature"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option2"
@@ -627,6 +632,7 @@
                 placeholder="选择日期"
                 v-model="workExperienceForm.entryDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -642,6 +648,7 @@
                 placeholder="选择日期"
                 v-model="workExperienceForm.quitDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -748,6 +755,7 @@
             filterable
             v-model="educationExperienceForm.eduLevel"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option4"
@@ -771,6 +779,7 @@
                 placeholder="选择日期"
                 v-model="educationExperienceForm.admissionDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -786,6 +795,7 @@
                 placeholder="选择日期"
                 v-model="educationExperienceForm.graduateDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -834,6 +844,7 @@
             filterable
             v-model="languageSkillsForm.languageType"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option5"
@@ -854,6 +865,7 @@
             filterable
             v-model="languageSkillsForm.languageLevel"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option6"
@@ -908,6 +920,7 @@
             v-model="skillsCertificateForm.certName"
             autocomplete="off"
             placeholder="请输入"
+            style="width:100%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -919,6 +932,7 @@
             v-model="skillsCertificateForm.certLevel"
             autocomplete="off"
             placeholder="请输入"
+            style="width:100%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -931,8 +945,8 @@
             type="month"
             placeholder="请选择"
             v-model="skillsCertificateForm.receiveTime"
-            style="width: 70%;"
             value-format="yyyyMM"
+            style="width: 100%;"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -1370,6 +1384,9 @@ export default {
         return [];
       }
     },
+    /**
+     * 将学历（教育经历）字典转成文字
+     */
     eduExpTransformed() {
       let dictionary = this.$store.getters['dictionary/recruit_edu'];
       return this.resume.eduExp
@@ -1381,6 +1398,16 @@ export default {
             return item;
           })
         : [];
+    },
+    /**
+     * 将最高学历字典转成文字
+     */
+    highEduLevel() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      let dic = dictionary.find(i => {
+        return i.value === this.resume.eduLevel;
+      });
+      return dic ? dic.label : this.resume.eduLevel;
     }
   },
   updated() {
@@ -1582,7 +1609,8 @@ export default {
                 this.resume.eduExp.find(
                   element =>
                     element.collegesName ===
-                    this.educationExperienceForm.collegesName
+                      this.educationExperienceForm.collegesName &&
+                    element.sourceOuter !== '1'
                 )
               ) {
                 this.$message({
@@ -2181,5 +2209,12 @@ export default {
 #selectEudBtn {
   margin-top: 10px;
   float: right;
+}
+::v-deep .el-dialog__body {
+  .pup-btn {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 </style>
