@@ -1,5 +1,35 @@
 <template>
   <div id="indexBody">
+    <!-- 区县 -->
+    <el-row>
+      <el-col :sm="2" :md="2" :lg="1" :xl="1" style="padding: 10px;">
+        区县：</el-col
+      >
+      <el-col :sm="22" :md="22" :lg="23" :xl="23">
+        <el-radio-group v-model="qx" size="medium">
+          <el-radio-button
+            :label="item.value"
+            v-for="(item, index) in dicQx"
+            :key="index"
+            >{{ item.label }}</el-radio-button
+          >
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <!-- 排序 -->
+    <el-row>
+      <el-col :sm="2" :md="2" :lg="1" :xl="1" style="padding: 10px;">
+        排序：</el-col
+      >
+      <el-col :sm="22" :md="22" :lg="23" :xl="23">
+        <el-radio-group v-model="order" size="medium">
+          <el-radio-button label="1">默认</el-radio-button>
+          <el-radio-button label="2">最新</el-radio-button>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+
+    <!-- 展示栏 -->
     <el-row :gutter="20">
       <el-col
         :sm="24"
@@ -16,15 +46,20 @@
           :flipped="item.isFlipped"
           @mouseenter="item.isFlipped = !item.isFlipped"
           @mouseleave="item.isFlipped = !item.isFlipped"
+          @click="showFairInfo(item.id)"
         >
-          <div class="Card__face" slot="front">
+          <div class="Card__pattern" slot="front">
+            <img
+              class="fair-img"
+              src="../../../assets/img/img04.png"
+              alt="未加载"
+            />
+            <span>{{ item.id }}</span>
+          </div>
+          <div class="Card__face" slot="back">
             <span class="Card__value Card__value--top">10</span>
             <span class="Card__center">♣</span>
             <span class="Card__value Card__value--bottom">10</span>
-          </div>
-
-          <div class="Card__pattern" slot="back">
-            <span>{{ item.id }}</span>
           </div>
         </pl-flipper>
       </el-col>
@@ -42,6 +77,8 @@ export default {
   },
   data() {
     return {
+      qx: '',
+      order: '1',
       fairInfo: [
         {
           id: '1',
@@ -101,7 +138,11 @@ export default {
       return this.showList ? this.showList.slice(0, 3) : [];
     }
   },
-  methods: {},
+  methods: {
+    showFairInfo(meetId) {
+      console.log(meetId);
+    }
+  },
   created() {}
 };
 </script>
@@ -119,7 +160,10 @@ export default {
   left: 5%;
   background-color: $g-white-color;
   .el-col {
-    margin: 20px 0;
+    margin: 10px 0;
+  }
+  .fair-img {
+    width: 100%;
   }
 }
 </style>
@@ -134,11 +178,6 @@ export default {
     box-shadow: 0 5px 15px rgba(rgb(61, 61, 61), 0.35);
     cursor: pointer;
   }
-
-  /* &__pattern {
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNjAiIGhlaWdodD0iMzAiPgo8ZGVmcz4KPHJlY3QgaWQ9InIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIxNSIgZmlsbD0iI2JiMDg1ZiIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZT0iIzdhMDU0ZCI+PC9yZWN0Pgo8ZyBpZD0icCI+Cjx1c2UgeGxpbms6aHJlZj0iI3IiPjwvdXNlPgo8dXNlIHk9IjE1IiB4bGluazpocmVmPSIjciI+PC91c2U+Cjx1c2UgeT0iMzAiIHhsaW5rOmhyZWY9IiNyIj48L3VzZT4KPHVzZSB5PSI0NSIgeGxpbms6aHJlZj0iI3IiPjwvdXNlPgo8L2c+CjwvZGVmcz4KPHVzZSB4bGluazpocmVmPSIjcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMjUpIHNrZXdZKDQwKSI+PC91c2U+Cjx1c2UgeGxpbms6aHJlZj0iI3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwIDApIHNrZXdZKC00MCkiPjwvdXNlPgo8L3N2Zz4=');
-  } */
-
   &__face {
     display: flex;
     flex-direction: column;
