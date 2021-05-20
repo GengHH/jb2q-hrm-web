@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 15:26:13
+ * @LastEditTime: 2021-05-20 19:01:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -22,7 +22,7 @@
  * 公司管理系统入口界面
  */
 import BaseHeader from '@/components/common/BaseHeader.vue';
-import { niceScroll } from '@/utils';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'app',
   components: {
@@ -103,18 +103,11 @@ export default {
     }, 300);
   },
   mounted() {
-    //niceScroll('#indexApp');
     niceScroll('#indexApp');
-    // setTimeout(function() {
-    //   niceScroll('#indexApp');
-    // }, 10);
   },
   updated() {
-    setTimeout(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
-    }, 10);
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

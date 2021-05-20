@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-19 18:59:34
+ * @LastEditTime: 2021-05-20 18:52:17
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
@@ -45,7 +45,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>工作经验{{ resumeItem.workYear }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>大学本科TODO</span>
+              <span>{{ highEduLevel(resumeItem) }}</span>
             </p>
           </div>
         </el-col>
@@ -59,7 +59,7 @@
         </el-col>
         <el-col :span="6" style="text-align:right">
           <p class="time-p">修改时间：{{ resumeItem.updateTime }}</p>
-          <p class="time-p">最近登录：2020-10-10 15:34:22</p>
+          <p class="time-p">最近登录：{{ resumeItem.loginTime }}</p>
         </el-col>
         <el-col :span="5" style="text-align:right">
           <el-button
@@ -104,6 +104,7 @@
 /**
  * 个人简历界面-子菜单显示组件
  */
+import { niceScrollUpdate } from '@/utils/index';
 export default {
   name: 'PerSearchJob',
   props: {
@@ -134,9 +135,7 @@ export default {
   },
   updated() {
     // 更新滚动条
-    $('#indexApp')
-      .getNiceScroll()
-      .resize();
+    this._.throttle(niceScrollUpdate, 500)();
   },
   computed: {
     pageAttrs() {
@@ -159,6 +158,16 @@ export default {
     }
   },
   methods: {
+    /**
+     * 将最高学历字典转成文字
+     */
+    highEduLevel(item) {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      let dic = dictionary.find(i => {
+        return i.value === item.eduLevel;
+      });
+      return dic ? dic.label : item.eduLevel;
+    },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       if (this.$parent.queryResumes) {

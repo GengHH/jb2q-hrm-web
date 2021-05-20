@@ -4,7 +4,10 @@
     <el-row>
       <el-col :sm="2" :md="4" :lg="6" class="pr">
         <!-- <img src="../../assets/img/img04.png" alt="" /> -->
-        <img :src="fairInfo.propagandaImage" alt="" />
+        <img
+          :src="'data:image/jpg;base64,' + fairInfo.propagandaImage"
+          alt="未加载"
+        />
         <div v-if="online" class="float-div">
           <i class="circle-sty"></i> 进行中
         </div>

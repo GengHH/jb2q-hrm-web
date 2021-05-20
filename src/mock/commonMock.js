@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 15:55:01
+ * @LastEditTime: 2021-05-20 17:40:41
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -78,6 +78,7 @@ const resumeMockData = function(req) {
         sex: '男',
         contactPhone: '13122272095',
         workYear: 0,
+        eduLevel: '03',
         eduId: '05',
         livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
         workNature: '01',

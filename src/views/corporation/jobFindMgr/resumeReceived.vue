@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 15:38:21
+ * @LastEditTime: 2021-05-20 18:55:39
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -509,7 +509,7 @@ import {
   doFeedBack
 } from '@/api/corporationApi';
 import { phonePattern } from '@/utils/regexp';
-import { niceScroll } from '@/utils';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'resumeReceived',
   components: {
@@ -1036,11 +1036,8 @@ export default {
     niceScroll('#indexApp');
   },
   updated() {
-    setTimeout(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
-    }, 10);
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>
