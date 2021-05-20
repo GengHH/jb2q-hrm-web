@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-26 14:41:47
- * @LastEditTime: 2021-04-14 18:27:22
+ * @LastEditTime: 2021-05-20 13:33:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\api\index.js
@@ -41,6 +41,8 @@ const management_query = (params, fn, fnErr) =>
   postAction(urlStr + 'query/all', params, fn, fnErr);
 const management_edit = (params, fn, fnErr) =>
   postAction(urlStr + 'modify', params, fn, fnErr);
+const management_frozen = (params, fn, fnErr) =>
+  postAction(urlStr + 'frozen', params, fn, fnErr);
 
 export {
   agency_query,
@@ -56,5 +58,6 @@ export {
   unit_edit,
   unit_out,
   management_query,
-  management_edit
+  management_edit,
+  management_frozen
 };

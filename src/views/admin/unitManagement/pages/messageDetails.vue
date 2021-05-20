@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-10 15:35:57
- * @LastEditTime: 2021-05-19 17:02:55
+ * @LastEditTime: 2021-05-20 14:11:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\messagedetails.vue
@@ -238,10 +238,12 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequir" label="学历要求" align="center">
+            <el-table-column slot="eduRequire" label="学历要求" align="center">
               <template slot-scope="scope">
                 <div v-for="(v, k) in dicOptions.edu" :key="k">
-                  <div v-if="v.value == scope.row.eduRequir">{{ v.label }}</div>
+                  <div v-if="v.value == scope.row.eduRequire">
+                    {{ v.label }}
+                  </div>
                 </div>
               </template>
             </el-table-column>
@@ -320,8 +322,8 @@
         <el-tab-pane label="代理招聘" name="second">
           <ttable
             :options="{ loading: loading2 }"
-            :columns="columns"
-            :list="list"
+            :columns="columns2"
+            :list="list2"
           >
             <el-table-column
               slot="salary"
@@ -342,10 +344,12 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequir" label="学历要求" align="center">
+            <el-table-column slot="eduRequire" label="学历要求" align="center">
               <template slot-scope="scope">
                 <div v-for="(v, k) in dicOptions.edu" :key="k">
-                  <div v-if="v.value == scope.row.eduRequir">{{ v.label }}</div>
+                  <div v-if="v.value == scope.row.eduRequire">
+                    {{ v.label }}
+                  </div>
                 </div>
               </template>
             </el-table-column>
@@ -484,7 +488,7 @@ export default {
         { title: '职位名称', prop: 'positionName', width: 150 },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
         { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
-        { title: '学历要求', prop: 'eduRequir', slot: 'eduRequir' },
+        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
         { title: '工作性质', prop: 'workNature', slot: 'workNature' },
         { title: '招聘人数', prop: 'recruitNum' },
@@ -492,21 +496,21 @@ export default {
         { title: '发布时间', prop: 'releaseTime', width: 120 },
         { title: '操作', slot: 'aaa010' }
       ],
-      // columns2: [
-      //   { title: '序号', type: 'index' },
-      //   { title: '职位名称', prop: 'positionName' },
-      //   { title: '薪酬', prop: 'salary', slot: 'salary' },
-      //   { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
-      //   { title: '学历要求', prop: 'eduRequir', slot: 'eduRequir' },
-      //   { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
-      //   { title: '工作性质', prop: 'workNature', slot: 'workNature' },
-      //   { title: '招聘人数', prop: 'recruitNum' },
-      //   { title: '工作地点', prop: 'workArea', slot: 'workArea' },
-      //   { title: '发布时间', prop: 'releaseTime', width: 120 },
-      //   { title: '操作', slot: 'aaa010' }
-      // ],
-      list: [],
-      list2: []
+      columns2: [
+        { title: '序号', type: 'index' },
+        { title: '职位名称', prop: 'positionName' },
+        { title: '薪酬', prop: 'salary', slot: 'salary' },
+        { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
+        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
+        { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
+        { title: '工作性质', prop: 'workNature', slot: 'workNature' },
+        { title: '招聘人数', prop: 'recruitNum' },
+        { title: '工作地点', prop: 'workArea', slot: 'workArea' },
+        { title: '发布时间', prop: 'releaseTime', width: 120 },
+        { title: '操作', slot: 'aaa010' }
+      ],
+      list: [{}],
+      list2: [{}]
     };
   },
   computed: {},
@@ -518,23 +522,21 @@ export default {
     },
     queryAgency() {
       console.log(this.dicOptions.recType);
-      let data = { ...this.form };
+      let data2 = { ...this.form };
       //recruitType 招聘类型 1自主 2代理
-      data.recruitType = 1;
-      //1未审核 2审核通过 3审核不通过 这里默认传2
-      data.type = 2;
-      data.pageSize = this.pageSize;
-      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
-
+      data2.recruitType = 2;
+      data2.type = 2;
+      data2.pageSize = this.pageSize2;
+      data2.pageIndex = JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1;
       unit_query_agency(
-        data,
+        data2,
         res => {
           if (res.status == 200) {
             let pageresult = res.result.pageresult;
-            this.list = pageresult.data;
-            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-            this.params.total = pageresult.total;
-            this.loading = false;
+            this.list2 = pageresult.data;
+            this.params2.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params2.total = pageresult.total;
+            this.loading2 = false;
           }
           console.log(res);
         },
@@ -548,9 +550,6 @@ export default {
       this.visibleEdit = true;
     },
     oncloseQuery(type) {
-      if (type == '1') {
-        this.queryAgency(this.dataList);
-      }
       this.visibleQuery = false;
     },
     oncloseEdit(type) {
@@ -652,22 +651,23 @@ export default {
   },
   mounted() {
     this.queryAgency();
-
-    let data2 = { ...this.form };
+    let data = { ...this.form };
     //recruitType 招聘类型 1自主 2代理
-    data2.recruitType = 2;
-    data2.type = 2;
-    data2.pageSize = this.pageSize2;
-    data2.pageIndex = JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1;
+    data.recruitType = 1;
+    //1未审核 2审核通过 3审核不通过 这里默认传2
+    data.type = 2;
+    data.pageSize = this.pageSize;
+    data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+
     unit_query_agency(
-      data2,
+      data,
       res => {
         if (res.status == 200) {
           let pageresult = res.result.pageresult;
-          this.list2 = pageresult.data;
-          this.params2.pageIndex = Number(pageresult.pageIndex) + 1;
-          this.params2.total = pageresult.total;
-          this.loading2 = false;
+          this.list = pageresult.data;
+          this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+          this.params.total = pageresult.total;
+          this.loading = false;
         }
         console.log(res);
       },

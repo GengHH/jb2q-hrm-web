@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-05-19 20:36:36
+ * @LastEditTime: 2021-05-20 13:57:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -23,28 +23,19 @@
         label-width="150px"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :span="11">
             <el-form-item label="单位名称" prop="meetTheme">
-              <el-input v-model="form.corpName"></el-input>
+              <el-input
+                :title="form.corpName"
+                disabled
+                v-model="form.corpName"
+              ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="单位状态" prop="frozen">
-              <el-select
-                :disabled="disabled"
-                v-model="form.frozen"
-                style="width:100%"
-              >
-                <el-option label="冻结" value="1"></el-option>
-                <el-option label="正常" value="0"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
+          <el-col :span="9">
             <el-form-item label="冻结/解冻时间" prop="meetAddress">
               <el-date-picker
+                disabled
                 v-model="form.frozenTime"
                 type="date"
                 style="width:100%"
@@ -54,10 +45,27 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <div style="color:#fc6f3d;height: 28px;line-height: 28px;">
+            <span style="color:#fc6f3d;height: 28px;line-height: 28px;">
               查看详情>>
-            </div>
+            </span>
           </el-col>
+        </el-row>
+        <div class="title-style">状态</div>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="单位状态" prop="frozen">
+              <el-select
+                :disabled="disabled"
+                @change="isFreeze"
+                v-model="form.frozen"
+                style="width:100%"
+              >
+                <el-option label="冻结" value="1"></el-option>
+                <el-option label="正常" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <!-- <el-col :span="12">
             <el-form-item label="会议召集人" prop="meetCaller">
               <el-input v-model="form.meetCaller"></el-input>
@@ -85,6 +93,7 @@
             </el-form-item>
           </el-col> -->
         </el-row>
+        <div class="title-style">详情</div>
         <el-row>
           <el-col :span="24">
             <el-form-item label="单位标签" prop="meetOtherPeople">
@@ -160,8 +169,8 @@
 
             <img
               width="600px"
-              v-if="disabled && form.meetImageBase64 != ''"
-              :src="'data:image/png;base64,' + form.meetImageBase64"
+              v-if="disabled && form.logoBase64 != ''"
+              :src="'data:image/png;base64,' + form.logoBase64"
               alt="logo"
             />
           </el-col>
@@ -175,7 +184,7 @@
 </template>
 
 <script>
-import { management_edit } from '../api/index';
+import { management_edit, management_frozen } from '../api/index';
 import { trim } from '@/utils/index';
 export default {
   name: 'managementDetail',
@@ -212,6 +221,44 @@ export default {
   },
   computed: {},
   methods: {
+    isFreeze(e) {
+      console.log(e);
+      //冻结1 解冻0 备注冻结时必填
+      let data = { ...this.form };
+      if (data.frozen == '1') {
+        if (!data.frozenReason) {
+          this.$message({
+            message: '请填写冻结原因',
+            type: 'warning',
+            duration: 1000
+          });
+          this.form.frozen = '0';
+          return;
+        }
+      }
+      management_frozen(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -262,8 +309,8 @@ export default {
           //   });
           //   return;
           // }
-          data.meetImageBase64 = data.meetImageBase64
-            ? data.meetImageBase64.split(',')[1].toString()
+          data.logoBase64 = data.logoBase64
+            ? data.logoBase64.split(',')[1].toString()
             : '';
           management_edit(
             data,
@@ -335,5 +382,25 @@ export default {
   width: 100px;
   height: 100px;
   display: block;
+}
+.title-style {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.8);
+  line-height: 40px;
+  border-bottom: 1px solid #e9eef3;
+  text-align: left;
+  padding: 0 30px;
+  box-sizing: border-box;
+  position: relative;
+  margin: 0 0 15px 0;
+}
+.title-style::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  background: $g-mian-color;
 }
 </style>

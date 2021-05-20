@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-19 17:12:32
+ * @LastEditTime: 2021-05-19 21:05:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
@@ -263,6 +263,18 @@ export default {
     },
     submitAdd(e) {
       let data = e.row;
+      if (data.time) {
+        data.startEntrust = data.time[0];
+        data.endEntrust = data.time[1];
+      } else {
+        this.$message({
+          message: '请填写有效时间',
+          type: 'warning',
+          duration: 1000
+        });
+        return;
+      }
+
       document.body.click();
       agency_add(
         data,
