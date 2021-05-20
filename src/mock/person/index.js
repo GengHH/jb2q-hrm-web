@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 09:59:34
+ * @LastEditTime: 2021-05-20 10:26:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -454,8 +454,10 @@ Mock.mock(basePath + '/person/feedback/find/applyfor', 'post', function(
     message: '',
     result: {
       pageresult: Mock.mock({
-        'total|1-10': 1,
-        'data|1-10': [
+        // 'total|1-10': 1,
+        // 'data|1-10': [
+        total: 30,
+        'data|10': [
           {
             applyforId: '@string("number", 5)',
             corpName: '上海市数字证书认证中心有限公司',

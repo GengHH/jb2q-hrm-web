@@ -3,7 +3,8 @@
   <div class="activity-box-module">
     <el-row>
       <el-col :sm="2" :md="4" :lg="6" class="pr">
-        <img src="../../assets/img/img04.png" alt="" />
+        <!-- <img src="../../assets/img/img04.png" alt="" /> -->
+        <img :src="fairInfo.propagandaImage" alt="" />
         <div v-if="online" class="float-div">
           <i class="circle-sty"></i> 进行中
         </div>

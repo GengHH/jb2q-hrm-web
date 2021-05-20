@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 10:00:12
+ * @LastEditTime: 2021-05-20 10:43:15
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -41,7 +41,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          max-height="600"
+          max-height="620"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -59,7 +59,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          max-height="600"
+          max-height="620"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -77,7 +77,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          max-height="600"
+          max-height="620"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -108,7 +108,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          max-height="600"
+          max-height="620"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
@@ -138,7 +138,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          max-height="600"
+          max-height="620"
         >
           <template #createTime="{row}">
             <i class="el-icon-time"></i>

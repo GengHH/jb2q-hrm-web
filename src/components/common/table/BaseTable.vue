@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 19:12:35
+ * @LastEditTime: 2021-05-20 10:41:04
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -10,7 +10,7 @@
   <div class="pl-table-container">
     <el-table
       ref="table"
-      :data="pageTableData"
+      :data="pageOnFront ? pageTableData : data"
       v-bind="attrs"
       :height="autoHeight ? '500px' : $attrs.height"
       v-on="{ ...$listeners, ...events }"
