@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-05-19 21:33:01
+ * @LastEditTime: 2021-05-20 17:11:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -46,10 +46,10 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequir" label="学历要求" align="center">
+            <el-table-column slot="eduRequire" label="学历要求" align="center">
               <template slot-scope="scope">
                 <template v-for="(v, k) in dicOptions.edu">
-                  <div :key="k" v-if="v.value == scope.row.eduRequir">
+                  <div :key="k" v-if="v.value == scope.row.eduRequire">
                     {{ v.label }}
                   </div>
                 </template>
@@ -105,7 +105,7 @@
                   size="mini"
                   type="primary"
                   icon="el-icon-user"
-                  @click="positionAudit('0', scope)"
+                  @click="autonomously('0', scope)"
                   plain
                   >自主推荐</el-button
                 >
@@ -188,6 +188,13 @@
       :type="type"
       @onclose="positionClose"
     ></position>
+    <autonomously
+      v-if="autoVisible"
+      :data="autoData"
+      :resVisible="autoVisible"
+      :type="type"
+      @onclose="autoClose"
+    ></autonomously>
   </el-dialog>
 </template>
 
@@ -196,11 +203,12 @@ import { agency_resume, unit_query_agency } from '../../api/index';
 import { trim } from '@/utils/index';
 import ttable from '../../../common/t_table';
 import position from './position';
+import autonomously from './autonomously';
 import resume from './resume';
 export default {
   name: 'recruitmentDetail',
   props: ['visible', 'form'],
-  components: { ttable, resume, position },
+  components: { ttable, resume, position, autonomously },
   data() {
     return {
       type: '',
@@ -208,6 +216,7 @@ export default {
       positionData: [],
       resVisible: false,
       positionVisible: false,
+      autoVisible: false,
       auditStutas: '1',
       activeName: '0',
       params0: {
@@ -229,7 +238,7 @@ export default {
         { title: '序号', type: 'index' },
         { title: '职位名称', prop: 'positionName' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '学历要求', prop: 'eduRequir', slot: 'eduRequir' },
+        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
@@ -248,6 +257,11 @@ export default {
   },
   computed: {},
   methods: {
+    autonomously(type, e) {
+      this.type = type;
+      this.autoData = { ...e.row };
+      this.autoVisible = true;
+    },
     positionAudit(type, e) {
       this.type = type;
       this.positionData = { ...e.row };
@@ -287,6 +301,9 @@ export default {
     },
     handleChange1(e) {
       console.log(e);
+    },
+    autoClose(type) {
+      this.autoVisible = false;
     },
     positionClose(type) {
       if (type == '1') {

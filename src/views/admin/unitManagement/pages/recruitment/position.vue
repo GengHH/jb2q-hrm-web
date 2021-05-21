@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-04-15 10:23:55
+ * @LastEditTime: 2021-05-20 17:12:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\position.vue
@@ -103,7 +103,7 @@ export default {
             label: '学历要求',
             rules: [],
             style: { width: '210px' },
-            key: 'eduRequir',
+            key: 'eduRequire',
             options: trim(this.$store.getters['dictionary/recruit_edu'])
           },
           {

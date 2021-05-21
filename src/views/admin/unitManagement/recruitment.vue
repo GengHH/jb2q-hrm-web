@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-19 21:05:36
+ * @LastEditTime: 2021-05-20 15:18:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
@@ -96,8 +96,9 @@
               trigger="click"
             >
               <el-date-picker
-                v-model="scope.row.time"
+                v-model="scope.row.entrustValid"
                 type="date"
+                value-format="yyyyMMdd"
                 placeholder="请输入代理有效期"
               >
               </el-date-picker>
@@ -263,10 +264,7 @@ export default {
     },
     submitAdd(e) {
       let data = e.row;
-      if (data.time) {
-        data.startEntrust = data.time[0];
-        data.endEntrust = data.time[1];
-      } else {
+      if (!data.entrustValid) {
         this.$message({
           message: '请填写有效时间',
           type: 'warning',

@@ -229,6 +229,7 @@ export function formatTime(date) {
     [hour, minute, second].map(formatNumber).join(':')
   );
 }
+
 /**
  * 判断是否空对象
  */

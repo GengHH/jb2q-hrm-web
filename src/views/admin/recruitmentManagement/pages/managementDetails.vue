@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-05-19 20:17:08
+ * @LastEditTime: 2021-05-20 17:43:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
 -->
 <template>
   <el-dialog
-    title="招聘会反馈结果"
+    title="招聘会新增"
     width="850px"
     :visible="visible"
     @close="onclose"
@@ -233,6 +233,15 @@ export default {
             key: 'onTop',
             style: { width: '210px' },
             options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'date',
+            label: '截止时间',
+            placeholder: '请输入截止时间',
+            rules: [],
+            format: 'yyyy-MM-dd HH:mm:ss',
+            style: { width: '210px' },
+            key: 'endApplyTime'
           },
           {
             type: 'select',

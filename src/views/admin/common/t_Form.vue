@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-05-17 17:34:15
+ * @LastEditTime: 2021-05-20 16:07:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -17,6 +17,34 @@
     :style="formConfig.style"
   >
     <template v-for="(v, k) in formConfig.formItemList">
+      <!-- 最大值和最小值 -->
+      <el-form-item
+        v-if="v.type == 'max'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-input-number
+          v-model="value['max' + v.key]"
+          :placeholder="v.maxplaceholder"
+          :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
+          :disabled="v.disabled"
+          controls-position="right"
+        ></el-input-number>
+        -
+        <el-input-number
+          v-model="value['min' + v.key]"
+          :placeholder="v.minplaceholder"
+          :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
+          :disabled="v.disabled"
+          controls-position="right"
+        ></el-input-number>
+      </el-form-item>
       <!-- 输入框 -->
       <el-form-item
         v-if="v.type == 'input'"

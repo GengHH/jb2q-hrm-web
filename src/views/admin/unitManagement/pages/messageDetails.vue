@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-10 15:35:57
- * @LastEditTime: 2021-05-20 14:11:28
+ * @LastEditTime: 2021-05-20 17:33:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\messagedetails.vue
@@ -308,7 +308,10 @@
                     v-model="scope.row.offReason"
                   >
                   </el-input>
-                  <el-button size="mini" type="danger" @click="soldOut(scope)"
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="soldOut(scope, '1')"
                     >确定下架</el-button
                   >
                   <el-button size="mini" slot="reference" type="warning" plain
@@ -332,7 +335,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.salaryMax }}-{{ scope.row.salaryMin }}</div>
+                <div>{{ scope.row.salaryMin }}-{{ scope.row.salaryMax }}</div>
               </template>
             </el-table-column>
             <el-table-column slot="recruitType" label="招聘类型" align="center">
@@ -409,6 +412,29 @@
                 >
                   修改</el-button
                 >
+                <el-popover
+                  v-if="scope.row.offShelf != '1'"
+                  placement="bottom"
+                  width="400"
+                  trigger="click"
+                >
+                  <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入下架理由"
+                    v-model="scope.row.offReason"
+                  >
+                  </el-input>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="soldOut(scope, '2')"
+                    >确定下架</el-button
+                  >
+                  <el-button size="mini" slot="reference" type="warning" plain
+                    >下架</el-button
+                  >
+                </el-popover>
               </template>
             </el-table-column>
           </ttable>
@@ -509,8 +535,8 @@ export default {
         { title: '发布时间', prop: 'releaseTime', width: 120 },
         { title: '操作', slot: 'aaa010' }
       ],
-      list: [{}],
-      list2: [{}]
+      list: [],
+      list2: []
     };
   },
   computed: {},
@@ -519,6 +545,32 @@ export default {
       this.formQuery = { ...e.row };
       console.log(this.formQuery);
       this.visibleQuery = true;
+    },
+    queryAutonomously() {
+      let data = { ...this.form };
+      //recruitType 招聘类型 1自主 2代理
+      data.recruitType = 1;
+      //1未审核 2审核通过 3审核不通过 这里默认传2
+      data.type = 2;
+      data.pageSize = this.pageSize;
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+
+      unit_query_agency(
+        data,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+            this.loading = false;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     queryAgency() {
       console.log(this.dicOptions.recType);
@@ -558,7 +610,7 @@ export default {
       }
       this.visibleEdit = false;
     },
-    soldOut(scope) {
+    soldOut(scope, type) {
       console.log(scope.row);
       let data = { ...scope.row };
       unit_out(
@@ -571,7 +623,12 @@ export default {
               type: 'success',
               duration: 1000,
               onClose: () => {
-                this.onclose(1);
+                //1自主  2代理
+                if (type == '1') {
+                  this.queryAutonomously();
+                } else {
+                  this.queryAgency();
+                }
               }
             });
           }
@@ -651,30 +708,7 @@ export default {
   },
   mounted() {
     this.queryAgency();
-    let data = { ...this.form };
-    //recruitType 招聘类型 1自主 2代理
-    data.recruitType = 1;
-    //1未审核 2审核通过 3审核不通过 这里默认传2
-    data.type = 2;
-    data.pageSize = this.pageSize;
-    data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
-
-    unit_query_agency(
-      data,
-      res => {
-        if (res.status == 200) {
-          let pageresult = res.result.pageresult;
-          this.list = pageresult.data;
-          this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-          this.params.total = pageresult.total;
-          this.loading = false;
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.queryAutonomously();
   },
   created() {}
 };

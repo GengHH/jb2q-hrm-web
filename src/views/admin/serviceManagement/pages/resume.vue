@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:14:04
- * @LastEditTime: 2021-05-18 19:42:06
+ * @LastEditTime: 2021-05-20 19:18:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\resume.vue
@@ -30,18 +30,27 @@
         <span>{{ form.livingAddress }}</span>
       </div>
     </div>
-    <div class="title-style">
-      求职意向
-    </div>
-    <div class="box">
-      <div>
-        <span>{{ setDicOptions(form.positionLike, 'positionType') }}</span>
-        <el-divider direction="vertical"></el-divider>
-        <span>{{ form.salaryScope }}</span>
-        <el-divider direction="vertical"></el-divider>
-        <span>{{ setDicOptions(form.industryLike, 'type') }}</span>
-        <el-divider direction="vertical"></el-divider>
-        <span>{{ setDicOptions(form.workArea, 'qx') }}</span>
+    <div
+      v-if="
+        form.salaryScope ||
+          form.positionLike ||
+          form.industryLike ||
+          form.workArea
+      "
+    >
+      <div class="title-style">
+        求职意向
+      </div>
+      <div class="box">
+        <div>
+          <span>{{ setDicOptions(form.positionLike, 'positionType') }}</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>{{ form.salaryScope }}</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>{{ setDicOptions(form.industryLike, 'type') }}</span>
+          <el-divider direction="vertical"></el-divider>
+          <span>{{ setDicOptions(form.workArea, 'qx') }}</span>
+        </div>
       </div>
     </div>
     <div class="title-style">
@@ -55,8 +64,7 @@
         >
       </div>
       <div class="marginTop">
-        <span>社保事业部</span>
-        <span class="marginLeft">{{ v.positionName }}</span>
+        <span class="marginLeft">{{ v.positionName || v.posiTionName }}</span>
       </div>
       <div class="marginTop">
         <span style="color:#fd9273">工作内容</span>
@@ -65,60 +73,70 @@
         {{ v.workDescribe }}
       </div>
     </div>
-    <div class="title-style">
-      教育经历
-    </div>
-    <div class="box" v-for="(v, k) in form.eduExp" :key="k + 'c'">
-      <div style="padding:25px 0">
-        <div>
-          <span class="h2SizeColor">{{ v.collegesName }}</span>
-          <span class="sizeColor marginLeft"
-            >{{ formatTime(v.admissionDate) }}-{{
-              formatTime(v.graduateDate)
-            }}</span
-          >
-        </div>
-        <div class="marginTop">
-          <span>{{ v.majorName }}</span>
-          <span class="marginLeft">{{ setDicOptions(v.eduLevel, 'edu') }}</span>
+    <div v-if="form.eduExp ? form.eduExp.length : false">
+      <div class="title-style">
+        教育经历
+      </div>
+      <div class="box" v-for="(v, k) in form.eduExp" :key="k + 'c'">
+        <div style="padding:25px 0">
+          <div>
+            <span class="h2SizeColor">{{ v.collegesName }}</span>
+            <span class="sizeColor marginLeft"
+              >{{ formatTime(v.admissionDate) }}-{{
+                formatTime(v.graduateDate)
+              }}</span
+            >
+          </div>
+          <div class="marginTop">
+            <span>{{ v.majorName }}</span>
+            <span class="marginLeft">{{
+              setDicOptions(v.eduLevel, 'edu')
+            }}</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="title-style">
-      外语能力
+    <div v-if="form.psnlLanguage ? form.psnlLanguage.length : false">
+      <div class="title-style">
+        外语能力
+      </div>
+      <div class="box">
+        <el-tag
+          type="warning"
+          style="margin-right:10px"
+          v-for="(v, k) in form.psnlLanguage"
+          :key="k + 'b'"
+        >
+          {{
+            setDicOptions(v.languageType, 'languageType') +
+              setDicOptions(v.languageLevel, 'level')
+          }}
+        </el-tag>
+      </div>
     </div>
-    <div class="box">
-      <el-tag
-        type="warning"
-        style="margin-right:10px"
-        v-for="(v, k) in form.psnlLanguage"
-        :key="k + 'b'"
-      >
-        {{
-          setDicOptions(v.languageType, 'languageType') +
-            setDicOptions(v.languageLevel, 'level')
-        }}
-      </el-tag>
+    <div v-if="form.psnlSkillcert ? form.psnlSkillcert.length : false">
+      <div class="title-style">
+        技能证书
+      </div>
+      <div class="box">
+        <el-tag
+          type="warning"
+          style="margin-right:10px"
+          v-for="(v, k) in form.psnlSkillcert"
+          :key="k + 'a'"
+        >
+          {{ v.certLevel + ' - ' + v.certName }}
+        </el-tag>
+      </div>
     </div>
-    <div class="title-style">
-      技能证书
-    </div>
-    <div class="box">
-      <el-tag
-        type="warning"
-        style="margin-right:10px"
-        v-for="(v, k) in form.psnlSkillcert"
-        :key="k + 'a'"
-      >
-        {{ v.certLevel + ' - ' + v.certName }}
-      </el-tag>
-    </div>
-    <div class="title-style">
-      自我评价
-    </div>
-    <div class="box">
-      <div>
-        {{ form.evaluate }}
+    <div v-if="form.evaluate">
+      <div class="title-style">
+        自我评价
+      </div>
+      <div class="box">
+        <div>
+          {{ form.evaluate }}
+        </div>
       </div>
     </div>
   </div>

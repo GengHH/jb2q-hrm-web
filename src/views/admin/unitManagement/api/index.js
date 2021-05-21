@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-26 14:41:47
- * @LastEditTime: 2021-05-20 13:33:05
+ * @LastEditTime: 2021-05-20 15:07:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\api\index.js
@@ -35,6 +35,8 @@ const agency_resume = (params, fn, fnErr) =>
   postAction(urlStr + 'position/resume/queryBycid', params, fn, fnErr);
 const agency_resume_verify = (params, fn, fnErr) =>
   postAction(urlStr + 'position/resume/verify', params, fn, fnErr);
+const agency_resume_query = (params, fn, fnErr) =>
+  postAction(urlStr + 'position/resume/recommend/query', params, fn, fnErr);
 
 //单位账号管理
 const management_query = (params, fn, fnErr) =>
@@ -52,6 +54,7 @@ export {
   agency_position_verify,
   agency_resume_verify,
   agency_resume,
+  agency_resume_query,
   unit_query,
   unit_query_agency,
   unit_query_resume,

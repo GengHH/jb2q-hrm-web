@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:43
- * @LastEditTime: 2021-04-15 10:12:21
+ * @LastEditTime: 2021-05-20 19:20:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\resume.vue
@@ -48,7 +48,7 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { agency_resume_verify } from '../../api/index';
+import { agency_resume_verify, unit_query_resume } from '../../api/index';
 import userresume from '../../../serviceManagement/pages/resume';
 export default {
   name: 'resume',
@@ -111,9 +111,25 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.resumeList = { ...this.data };
-    }, 0);
+    let data = { ...this.data };
+    unit_query_resume(
+      data,
+      res => {
+        if (res.result.data.result) {
+          console.log(res);
+        } else {
+          this.$message({
+            message: res.result.data.msg,
+            type: 'warning',
+            duration: 2000
+          });
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   },
   created() {}
 };
@@ -128,6 +144,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

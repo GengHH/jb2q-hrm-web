@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-14 10:13:03
+ * @LastEditTime: 2021-05-20 18:02:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -120,6 +120,10 @@ export default {
       //1查看  2反馈
       this.disabled = type == '1' ? true : false;
       this.lookList = { ...e.row };
+      this.lookList.applyTime = this.lookList.applyTime
+        ? this.lookList.applyTime.split(' ')[0]
+        : '';
+      this.lookList.applyTime = '2019-01-02';
       this.visible = true;
     },
     onsubmit(e) {
