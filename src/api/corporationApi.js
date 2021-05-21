@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-21 13:43:06
+ * @LastEditTime: 2021-05-21 18:37:30
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -105,7 +105,7 @@ const queryResumeList = params =>
 
 /*********开店**********/
 const queryShop = params =>
-  postAction(basePath + '/corp/shop/query/detail', params);
+  postAction(basePath + '/corp/shop/query/list', params);
 
 const saveShop = params => postAction(basePath + '/corp/shop/save', params);
 
