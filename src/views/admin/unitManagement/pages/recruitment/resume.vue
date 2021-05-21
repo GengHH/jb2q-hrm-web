@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:43
- * @LastEditTime: 2021-05-20 19:20:29
+ * @LastEditTime: 2021-05-21 18:46:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\resume.vue

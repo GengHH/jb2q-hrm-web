@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 19:30:23
+ * @LastEditTime: 2021-05-21 18:36:54
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -74,7 +74,7 @@
                   />
                 </el-col>
                 <el-col :span="20">
-                  <div class="jxcorp-title">万达信息有限公司</div>
+                  <div class="jxcorp-title">{{ jdmc }}</div>
                   <div class="jxcorp-info gray-font">
                     <span>上市公司</span>| <span>软件服务</span>|
                     <span>1995年</span>|
@@ -103,6 +103,54 @@
             </div>
           </el-col>
         </el-row>
+        <!-- <el-row :gutter="20">
+          <el-col
+            :sm="24"
+            :md="12"
+            :lg="8"
+            :xl="6"
+            v-for="(item, index) in showList"
+            :key="index"
+          >
+            <div class="jxcorp-box">
+              <el-row class="jxcorp-header">
+                <el-col :span="4">
+                  <img
+                    class="jxcorp-img"
+                    src="../../../assets/images/logos.png"
+                    alt="未加载"
+                  />
+                </el-col>
+                <el-col :span="20">
+                  <div class="jxcorp-title">万达信息有限公司</div>
+                  <div class="jxcorp-info gray-font">
+                    <span>上市公司</span>| <span>软件服务</span>|
+                    <span>1995年</span>|
+                    <span>其他</span>
+                  </div>
+                </el-col>
+              </el-row>
+              <div class="jxcorp-list">
+                <span class="jxcorp-list-name">123412</span>
+                <span class="gray-font">岗位：8人</span>
+                <span class="gray-font">在岗：10人</span>
+                <span class="gray-font">招聘：10人</span>
+              </div>
+              <div class="jxcorp-list">
+                <span class="jxcorp-list-name">123412</span>
+                <span class="gray-font">岗位：8人</span>
+                <span class="gray-font">在岗：10人</span>
+                <span class="gray-font">招聘：10人</span>
+              </div>
+              <div class="jxcorp-list">
+                <span class="jxcorp-list-name">123412</span>
+                <span class="gray-font">岗位：8人</span>
+                <span class="gray-font">在岗：10人</span>
+                <span class="gray-font">招聘：10人</span>
+              </div>
+            </div>
+          </el-col>
+        </el-row> -->
       </div>
     </div>
   </div>

@@ -173,6 +173,11 @@ let router = new Router({
       ]
     },
     {
+      path: '/onlineShop',
+      name: '在线开店',
+      component: () => import('@/views/corporation/onlineShop')
+    },
+    {
       path: '/remind',
       name: '提醒',
       redirect: '/remind/remind',
