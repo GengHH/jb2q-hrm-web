@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-05-20 17:21:34
+ * @LastEditTime: 2021-05-21 17:58:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\autonomously.vue
@@ -111,11 +111,11 @@ export default {
         formItemList: [
           {
             type: 'input',
-            label: '简历名称',
+            label: '姓名',
             style: { width: '210px' },
             placeholder: '',
             rules: [],
-            key: 'content'
+            key: 'xm'
           },
 
           {
@@ -166,7 +166,6 @@ export default {
     advancedSearch(e) {
       let data = {
         cid: this.data.corpId,
-        positionList: [trim(this.data.positionType)],
         pageParam: this.pageParam,
         ...e
       };
