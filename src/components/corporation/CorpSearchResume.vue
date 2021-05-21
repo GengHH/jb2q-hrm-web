@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-20 18:52:17
+ * @LastEditTime: 2021-05-21 09:50:25
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
@@ -71,13 +71,23 @@
             ><i class="el-icon-view"></i>查 看</el-button
           >
           <el-button
+            v-if="resumeItem.favor"
+            type="primary"
+            class="white-btn"
+            style="width:100px"
+            @click="favorResume(resumeItem.favor, index, resumeItem.resumeId)"
+          >
+            <i class="el-icon-star-on">已收藏</i>
+          </el-button>
+          <el-button
+            v-else
             type="primary"
             class="release-btn"
             style="width:100px"
             @click="favorResume(resumeItem.favor, index, resumeItem.resumeId)"
           >
-            <i v-if="resumeItem.favor" class="el-icon-star-on">已收藏</i>
-            <i v-else class="el-icon-star-off">收 藏</i>
+            <!-- <i v-if="resumeItem.favor" class="el-icon-star-on">已收藏</i> -->
+            <i class="el-icon-star-off">收 藏</i>
           </el-button>
         </el-col>
       </el-row>

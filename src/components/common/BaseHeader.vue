@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-05-12 19:24:20
+ * @LastEditTime: 2021-05-21 13:29:21
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -28,21 +28,23 @@
                 userLogInfo.nvaText
               }}</el-dropdown-item>
               <el-dropdown-item divided></el-dropdown-item>
-              <el-dropdown-item
-                v-for="nvaIndex in navListReverse"
-                :key="nvaIndex.id"
-                :icon="nvaIndex.iconName"
-              >
-                <router-link :to="nvaIndex.path">
-                  {{ nvaIndex.nvaText }}
-                  <el-badge
-                    v-if="nvaIndex.type === 'badge' && messageCount"
-                    :value="messageCount"
-                    :max="maxCount"
-                    class="mark"
-                  />
-                </router-link>
-              </el-dropdown-item>
+              <template v-for="nvaIndex in navListReverse">
+                <el-dropdown-item
+                  v-if="nvaIndex.path !== '/blank'"
+                  :key="nvaIndex.id"
+                  :icon="nvaIndex.iconName"
+                >
+                  <router-link :to="nvaIndex.path">
+                    {{ nvaIndex.nvaText }}
+                    <el-badge
+                      v-if="nvaIndex.type === 'badge' && messageCount"
+                      :value="messageCount"
+                      :max="maxCount"
+                      class="mark"
+                    />
+                  </router-link>
+                </el-dropdown-item>
+              </template>
               <!-- 二级子菜单 -->
               <template v-if="userLogInfo.subMenu.length > 0">
                 <el-dropdown-item divided></el-dropdown-item>
@@ -79,25 +81,27 @@
               >
             </el-submenu>
             <!-- 其他正常菜单信息栏 -->
-            <el-menu-item
-              v-for="nvaIndex in navList"
-              :key="nvaIndex.id"
-              :index="nvaIndex.path"
-            >
-              <template v-if="nvaIndex.icon">
-                <el-badge
-                  v-if="nvaIndex.type === 'badge' && messageCount"
-                  :value="messageCount"
-                  :max="maxCount"
-                  class="badge-item"
-                >
-                </el-badge>
-                <i class="nva-icon" :class="nvaIndex.iconName"></i>
-              </template>
-              <template v-else>
-                {{ nvaIndex.nvaText }}
-              </template>
-            </el-menu-item>
+            <template v-for="nvaIndex in navList">
+              <el-menu-item
+                v-if="nvaIndex.path !== '/blank'"
+                :key="nvaIndex.id"
+                :index="nvaIndex.path"
+              >
+                <template v-if="nvaIndex.icon">
+                  <el-badge
+                    v-if="nvaIndex.type === 'badge' && messageCount"
+                    :value="messageCount"
+                    :max="maxCount"
+                    class="badge-item"
+                  >
+                  </el-badge>
+                  <i class="nva-icon" :class="nvaIndex.iconName"></i>
+                </template>
+                <template v-else>
+                  {{ nvaIndex.nvaText }}
+                </template>
+              </el-menu-item>
+            </template>
           </el-menu>
         </el-col>
       </el-row>

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 19:01:58
+ * @LastEditTime: 2021-05-21 11:29:40
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -36,19 +36,26 @@ export default {
       corpActiveName: 'corpRecommended',
       navList: [
         {
-          id: '7',
-          path: '/blak1',
+          id: '8',
+          path: '/blank',
           nvaText: '时钟',
           icon: true,
           iconName: 'el-icon-time'
         },
         {
-          id: '6',
+          id: '7',
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
           type: 'badge',
           iconName: 'el-icon-bell'
+        },
+        {
+          id: '6',
+          path: this.$store.getters['dictionary/human_resource_reg']
+            ? '/blank'
+            : '/onlineShop',
+          nvaText: '在线开店'
         },
         { id: '5', path: '/jobFair', nvaText: '招聘会' },
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },

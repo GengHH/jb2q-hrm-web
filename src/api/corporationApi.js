@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 17:18:13
+ * @LastEditTime: 2021-05-21 13:43:06
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -103,6 +103,18 @@ const queryResumeList = params =>
 //   postAction(basePath + '/corp/meeting/save', params);
 /**********end***********/
 
+/*********开店**********/
+const queryShop = params =>
+  postAction(basePath + '/corp/shop/query/detail', params);
+
+const saveShop = params => postAction(basePath + '/corp/shop/save', params);
+
+const updateShop = params => postAction(basePath + '/corp/shop/update', params);
+
+const deleteShop = params => postAction(basePath + '/corp/shop/delete', params);
+
+/**********end***********/
+
 export {
   doCorporationLogout,
   getLogonUser,
@@ -125,5 +137,9 @@ export {
   queryJobFairPositionInfo,
   applyJobFair,
   queryFairResult,
-  queryResumeList
+  queryResumeList,
+  queryShop,
+  saveShop,
+  updateShop,
+  deleteShop
 };
