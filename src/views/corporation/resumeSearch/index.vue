@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 19:02:38
+ * @LastEditTime: 2021-05-24 17:50:19
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -508,7 +508,7 @@ export default {
       //this.queryParams.tranBaseSymbol = '0';
       //this.queryParams.agencyRecruit = '0';
       this.queryParams.industryList = [''];
-      this.queryParams.industryList = [''];
+      // this.queryParams.industryList = [''];
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-21 18:39:09
+ * @LastEditTime: 2021-05-24 17:30:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -824,11 +824,11 @@ Mock.mock(basePath + '/corp/shop/query/list', 'post', function(options) {
           applyUserId: '0001564698',
           applyTime: '2021-05-20 17:49:45',
           verifyUserId: '0001564698',
-          verifyResult: '1',
+          verifyResult: '',
           verifyTime: '2021-05-21 13:33:43',
           verifyMemo: '测试',
           channelNo: '',
-          deleteStatus: '',
+          deleteStatus: '1',
           deleteTime: '',
           deleteUserId: '',
           deleteMemo: ''
@@ -844,11 +844,31 @@ Mock.mock(basePath + '/corp/shop/query/list', 'post', function(options) {
           applyUserId: '0001564698',
           applyTime: '2021-05-20 17:49:45',
           verifyUserId: '0001564698',
-          verifyResult: '1',
+          verifyResult: '',
           verifyTime: '2021-05-21 13:33:43',
           verifyMemo: '测试',
           channelNo: '',
-          deleteStatus: '',
+          deleteStatus: '1',
+          deleteTime: '',
+          deleteUserId: '',
+          deleteMemo: ''
+        },
+        {
+          applyId: 1,
+          cid: '200008010784151',
+          corpName: '万达信息股份有限公司',
+          tyshxydm: '91310000132653687M',
+          contactName: '福禄娃一号',
+          contactPhone: '18321460953',
+          applyMemo: '其他说明',
+          applyUserId: '0001564698',
+          applyTime: '2021-05-20 17:49:45',
+          verifyUserId: '0001564698',
+          verifyResult: '',
+          verifyTime: '2021-05-21 13:33:43',
+          verifyMemo: '测试',
+          channelNo: '',
+          deleteStatus: '1',
           deleteTime: '',
           deleteUserId: '',
           deleteMemo: ''
@@ -865,8 +885,844 @@ Mock.mock(basePath + '/corp/shop/save', 'post', function(options) {
 Mock.mock(basePath + '/corp/shop/update', 'post', function(options) {
   return successData;
 });
+/****end****/
 
-Mock.mock(basePath + '/corp/shop/delete', 'post', function(options) {
-  return successData;
-});
+/****就业见习职位****/
+Mock.mock(
+  basePath + '/corp/position/query-jyjxJdInfo-positionPublishing',
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: {
+          jdlx: '2',
+          jdmc: '上海庆圆投资有限公司',
+          jdbh: '2017D10232',
+          baseComDataList: [
+            {
+              dwmc: '上海兴国宾馆',
+              cid: '200101010041021',
+              positionDataList: [
+                {
+                  gwbh: '1912023415',
+                  gwbm: '酒店管理专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海噢开新媒体科技有限公司',
+              cid: '201911273972621',
+              positionDataList: [
+                {
+                  gwbh: '1912313555',
+                  gwbm: '市场策划员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海艾佩克文化传播有限公司',
+              cid: '201911213957661',
+              positionDataList: [
+                {
+                  gwbh: '2004273904',
+                  gwbm: '文员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海大自鸣钟房地产开发有限公司',
+              cid: '201306287885951',
+              positionDataList: [
+                {
+                  gwbh: '2007244080',
+                  gwbm: '市场推广专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海东冠通信建设有限公司',
+              cid: '200301230676591',
+              positionDataList: [
+                {
+                  gwbh: '1710260229',
+                  gwbm: '数据库管理人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海易贝电脑科技有限公司',
+              cid: '200008010717921',
+              positionDataList: [
+                {
+                  gwbh: '1711280458',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海通政通讯科技发展有限公司',
+              cid: '200404191224741',
+              positionDataList: [
+                {
+                  gwbh: '1807301773',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海松江民生村镇银行股份有限公司',
+              cid: '201003045656911',
+              positionDataList: [
+                {
+                  gwbh: '1911293411',
+                  gwbm: '客户经理'
+                }
+              ]
+            },
+            {
+              dwmc: '上海全满国际商贸有限公司',
+              cid: '201511059702591',
+              positionDataList: [
+                {
+                  gwbh: '1912033422',
+                  gwbm: '平面设计'
+                },
+                {
+                  gwbh: '1912033423',
+                  gwbm: '文员'
+                },
+                {
+                  gwbh: '1912033424',
+                  gwbm: '市场推广'
+                }
+              ]
+            },
+            {
+              dwmc: '上海天保健康管理有限公司',
+              cid: '202006054529171',
+              positionDataList: [
+                {
+                  gwbh: '2007154044',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海皇桥教育科技有限公司',
+              cid: '201603240056971',
+              positionDataList: [
+                {
+                  gwbh: '1912023418',
+                  gwbm: '商务助理'
+                }
+              ]
+            },
+            {
+              dwmc: '上海大新华运通国际旅行社有限公司',
+              cid: '200511082606411',
+              positionDataList: [
+                {
+                  gwbh: '2007144038',
+                  gwbm: '文员'
+                },
+                {
+                  gwbh: '2007144039',
+                  gwbm: '市场策划员'
+                }
+              ]
+            },
+            {
+              dwmc: '宁波革力物流有限公司上海分公司',
+              cid: '201912053977291',
+              positionDataList: [
+                {
+                  gwbh: '2007224070',
+                  gwbm: '物流管理人员'
+                },
+                {
+                  gwbh: '2007224071',
+                  gwbm: '财务助理'
+                }
+              ]
+            },
+            {
+              dwmc: '耀沃生物科技（上海）有限公司',
+              cid: '202008114813891',
+              positionDataList: [
+                {
+                  gwbh: '2009294395',
+                  gwbm: '外贸员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海沐丞教育科技有限公司',
+              cid: '201803151920921',
+              positionDataList: [
+                {
+                  gwbh: '1908303144',
+                  gwbm: '市场策划员'
+                },
+                {
+                  gwbh: '1908303143',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海志松国际物流有限公司',
+              cid: '201807102259781',
+              positionDataList: [
+                {
+                  gwbh: '2007244078',
+                  gwbm: '行政前台'
+                },
+                {
+                  gwbh: '2007244079',
+                  gwbm: '运营客服专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海弓迈新材料科技有限公司',
+              cid: '201808222407331',
+              positionDataList: [
+                {
+                  gwbh: '2006193966',
+                  gwbm: '销售助理'
+                }
+              ]
+            },
+            {
+              dwmc: '柏佩欧（上海）网络科技有限公司',
+              cid: '201411198943321',
+              positionDataList: [
+                {
+                  gwbh: '1711140327',
+                  gwbm: '文员'
+                },
+                {
+                  gwbh: '1711140329',
+                  gwbm: '客户服务技术'
+                },
+                {
+                  gwbh: '1903292732',
+                  gwbm: '课程顾问'
+                }
+              ]
+            },
+            {
+              dwmc: '臻惠网络科技（上海）有限公司',
+              cid: '201412199017361',
+              positionDataList: [
+                {
+                  gwbh: '2008264163',
+                  gwbm: '财务助理'
+                }
+              ]
+            },
+            {
+              dwmc: '上海昱仪网络科技有限公司',
+              cid: '201908063609651',
+              positionDataList: [
+                {
+                  gwbh: '1912313556',
+                  gwbm: '市场策划员'
+                },
+                {
+                  gwbh: '1912313557',
+                  gwbm: '新媒体运营专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海细流文化传媒有限公司',
+              cid: '201903083106921',
+              positionDataList: [
+                {
+                  gwbh: '1912273505',
+                  gwbm: '财务助理'
+                },
+                {
+                  gwbh: '1903282723',
+                  gwbm: '网络运营'
+                },
+                {
+                  gwbh: '1903282724',
+                  gwbm: '文员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海瑾缘商务咨询有限公司',
+              cid: '201901172963991',
+              positionDataList: [
+                {
+                  gwbh: '2009224370',
+                  gwbm: '新媒体运营人员'
+                },
+                {
+                  gwbh: '1901232646',
+                  gwbm: '市场策划员'
+                }
+              ]
+            },
+            {
+              dwmc: '不老莓（上海）商务服务有限公司',
+              cid: '202004074282951',
+              positionDataList: [
+                {
+                  gwbh: '2008274179',
+                  gwbm: '销售专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海满好日用品有限公司',
+              cid: '200008010435071',
+              positionDataList: [
+                {
+                  gwbh: '1812282552',
+                  gwbm: '行政办公人员'
+                },
+                {
+                  gwbh: '1812282553',
+                  gwbm: '市场营销人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海超越汽车销售服务有限公司',
+              cid: '200908315380011',
+              positionDataList: [
+                {
+                  gwbh: '1801260915',
+                  gwbm: '汽车配件管理员'
+                },
+                {
+                  gwbh: '1801260916',
+                  gwbm: '汽车维修技术员'
+                },
+                {
+                  gwbh: '1801260914',
+                  gwbm: '汽车维修接待员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海珏趣文化传播有限公司',
+              cid: '201908083625211',
+              positionDataList: [
+                {
+                  gwbh: '1909273250',
+                  gwbm: '助教'
+                },
+                {
+                  gwbh: '1909273251',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '文兮（上海）广告文化传播有限责任公司',
+              cid: '201908143644481',
+              positionDataList: [
+                {
+                  gwbh: '2006183964',
+                  gwbm: '市场推广专员'
+                },
+                {
+                  gwbh: '2006183965',
+                  gwbm: '财务助理'
+                },
+                {
+                  gwbh: '2007274086',
+                  gwbm: '平面设计师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海隆古建筑装饰工程有限公司',
+              cid: '200408111446881',
+              positionDataList: []
+            },
+            {
+              dwmc: '上海希映文化传播有限公司',
+              cid: '201602059915761',
+              positionDataList: []
+            },
+            {
+              dwmc: '上海俊儒文化传媒有限公司',
+              cid: '201802231842961',
+              positionDataList: [
+                {
+                  gwbh: '2009104251',
+                  gwbm: '影视后期人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海昉晅电子商务有限公司',
+              cid: '201911083899961',
+              positionDataList: [
+                {
+                  gwbh: '2009284389',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海露森信息科技有限公司',
+              cid: '202008104808981',
+              positionDataList: [
+                {
+                  gwbh: '2009284390',
+                  gwbm: '助教'
+                }
+              ]
+            },
+            {
+              dwmc: '富悦（上海）酒店管理有限公司',
+              cid: '201509239619811',
+              positionDataList: [
+                {
+                  gwbh: '1810292243',
+                  gwbm: '酒店管理专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海沪腾文化传媒有限公司',
+              cid: '201909253799051',
+              positionDataList: [
+                {
+                  gwbh: '1910253299',
+                  gwbm: '助教'
+                }
+              ]
+            },
+            {
+              dwmc: '上海漠狐信息科技有限公司',
+              cid: '201909243787961',
+              positionDataList: [
+                {
+                  gwbh: '1910293311',
+                  gwbm: '市场推广专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海蔚宁实业有限公司',
+              cid: '201809062439841',
+              positionDataList: [
+                {
+                  gwbh: '1911293409',
+                  gwbm: '行政办公人员'
+                },
+                {
+                  gwbh: '1911293408',
+                  gwbm: '网络运营专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海劲橙商贸有限公司',
+              cid: '201804262052271',
+              positionDataList: [
+                {
+                  gwbh: '1912033428',
+                  gwbm: '设计师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海慧卡智贸易有限公司',
+              cid: '201903263191501',
+              positionDataList: []
+            },
+            {
+              dwmc: '群思科技（北京）有限公司上海分公司',
+              cid: '201408138728501',
+              positionDataList: [
+                {
+                  gwbh: '1912033419',
+                  gwbm: '网络运营'
+                },
+                {
+                  gwbh: '1912033420',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海庆圆投资有限公司',
+              cid: '201005125781301',
+              positionDataList: []
+            },
+            {
+              dwmc: '上海禾燕实业有限公司',
+              cid: '201408228753651',
+              positionDataList: [
+                {
+                  gwbh: '2001063618',
+                  gwbm: '平面设计师'
+                }
+              ]
+            },
+            {
+              dwmc: '仕程卫教信息科技（上海）有限公司',
+              cid: '201710191531001',
+              positionDataList: [
+                {
+                  gwbh: '2009114255',
+                  gwbm: '文员'
+                },
+                {
+                  gwbh: '2009114256',
+                  gwbm: '技术工程师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海绪飞工程项目管理有限公司',
+              cid: '201709081428491',
+              positionDataList: [
+                {
+                  gwbh: '1907303013',
+                  gwbm: '造价员'
+                },
+                {
+                  gwbh: '1907303015',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海瑾拓企业管理咨询有限公司',
+              cid: '201701060778481',
+              positionDataList: [
+                {
+                  gwbh: '2008274178',
+                  gwbm: '人事专员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海昊海生物科技股份有限公司',
+              cid: '200706283778501',
+              positionDataList: [
+                {
+                  gwbh: '1911293403',
+                  gwbm: '生产技术'
+                },
+                {
+                  gwbh: '1906292893',
+                  gwbm: '质量管理'
+                }
+              ]
+            },
+            {
+              dwmc: '瑞必科净化设备（上海）有限公司',
+              cid: '200806034641361',
+              positionDataList: []
+            },
+            {
+              dwmc: '上海亚盛汽车销售服务有限公司',
+              cid: '201204097053341',
+              positionDataList: [
+                {
+                  gwbh: '2005153916',
+                  gwbm: '展厅销售'
+                }
+              ]
+            },
+            {
+              dwmc: '上海润迅商凯电话商务有限公司',
+              cid: '201012176187051',
+              positionDataList: [
+                {
+                  gwbh: '1901232648',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海仁彩印务有限公司',
+              cid: '200212040611971',
+              positionDataList: [
+                {
+                  gwbh: '2009184364',
+                  gwbm: '行政办公人员'
+                },
+                {
+                  gwbh: '2009184365',
+                  gwbm: '数据统计人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海佰程建设项目管理有限公司',
+              cid: '201806142196351',
+              positionDataList: [
+                {
+                  gwbh: '2005253931',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海竹源水业有限公司',
+              cid: '201909203774341',
+              positionDataList: [
+                {
+                  gwbh: '1910293308',
+                  gwbm: '销售助理'
+                },
+                {
+                  gwbh: '1910293307',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海清赞数据科技有限公司',
+              cid: '201808162382801',
+              positionDataList: [
+                {
+                  gwbh: '2001063619',
+                  gwbm: '新媒体运营人员'
+                },
+                {
+                  gwbh: '2007174055',
+                  gwbm: '社群运营人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海冉逊环境科技有限公司',
+              cid: '201710091493731',
+              positionDataList: [
+                {
+                  gwbh: '1912313563',
+                  gwbm: '环保工程师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海捷鹰实业发展有限公司',
+              cid: '200801084327271',
+              positionDataList: [
+                {
+                  gwbh: '1712140631',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海天莫企业咨询服务有限公司',
+              cid: '201702090842281',
+              positionDataList: [
+                {
+                  gwbh: '1802271019',
+                  gwbm: '市场策划员'
+                },
+                {
+                  gwbh: '2007174054',
+                  gwbm: '招聘助理'
+                },
+                {
+                  gwbh: '1810292245',
+                  gwbm: '平面设计师'
+                },
+                {
+                  gwbh: '1712270708',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海铂立营销策划有限公司',
+              cid: '201007205912181',
+              positionDataList: [
+                {
+                  gwbh: '1905282830',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海松江区博音雅艺文化艺术专修学校',
+              cid: '201903263190461',
+              positionDataList: [
+                {
+                  gwbh: '2001143663',
+                  gwbm: '教务老师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海启跳体育管理咨询有限公司',
+              cid: '201609140517621',
+              positionDataList: [
+                {
+                  gwbh: '2001143664',
+                  gwbm: '助教'
+                },
+                {
+                  gwbh: '2004273905',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海松江开天教育培训中心',
+              cid: '201804192025821',
+              positionDataList: [
+                {
+                  gwbh: '2001143665',
+                  gwbm: '教师'
+                },
+                {
+                  gwbh: '2009224371',
+                  gwbm: '班主任'
+                }
+              ]
+            },
+            {
+              dwmc: '伍之舍（上海）文化传播有限公司',
+              cid: '201611250694211',
+              positionDataList: [
+                {
+                  gwbh: '2001203682',
+                  gwbm: '业务受理员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海东联北松汽车销售服务有限公司',
+              cid: '201302167611391',
+              positionDataList: [
+                {
+                  gwbh: '2001203683',
+                  gwbm: '行政客服'
+                },
+                {
+                  gwbh: '2001203684',
+                  gwbm: '展厅销售'
+                }
+              ]
+            },
+            {
+              dwmc: '上海东联松奥汽车销售服务有限公司',
+              cid: '201207237251111',
+              positionDataList: [
+                {
+                  gwbh: '2001203685',
+                  gwbm: '展厅销售'
+                }
+              ]
+            },
+            {
+              dwmc: '上海徐汇区成功管理进修学校',
+              cid: '201009085999581',
+              positionDataList: [
+                {
+                  gwbh: '2007274084',
+                  gwbm: '助教'
+                }
+              ]
+            },
+            {
+              dwmc: '上海先丰工程建设发展有限公司',
+              cid: '200707133804821',
+              positionDataList: [
+                {
+                  gwbh: '2007274085',
+                  gwbm: '3D建模设计'
+                }
+              ]
+            },
+            {
+              dwmc: '上海云集培训学校有限公司',
+              cid: '202003164219801',
+              positionDataList: [
+                {
+                  gwbh: '2007154049',
+                  gwbm: '行政办公人员'
+                }
+              ]
+            },
+            {
+              dwmc: '上海小玖影视传媒有限公司',
+              cid: '202006194605711',
+              positionDataList: [
+                {
+                  gwbh: '2008294182',
+                  gwbm: '新媒体运营'
+                },
+                {
+                  gwbh: '2008294183',
+                  gwbm: '平面设计师'
+                }
+              ]
+            },
+            {
+              dwmc: '上海龙之梦酒店管理有限公司龙之梦万丽酒店',
+              cid: '200710114013851',
+              positionDataList: [
+                {
+                  gwbh: '2009154257',
+                  gwbm: '文员'
+                },
+                {
+                  gwbh: '2009154258',
+                  gwbm: '前厅部实习生'
+                },
+                {
+                  gwbh: '2009154259',
+                  gwbm: '餐饮部实习生'
+                },
+                {
+                  gwbh: '2009154260',
+                  gwbm: '厨房部实习生'
+                }
+              ]
+            },
+            {
+              dwmc: '上海优游国际旅行社有限公司',
+              cid: '200908195364601',
+              positionDataList: [
+                {
+                  gwbh: '2008284181',
+                  gwbm: '门市接待'
+                },
+                {
+                  gwbh: '1907293012',
+                  gwbm: '行政办公人员'
+                },
+                {
+                  gwbh: '1907293011',
+                  gwbm: '业务拓展'
+                }
+              ]
+            },
+            {
+              dwmc: '上海振渠腾通信科技发展有限公司',
+              cid: '200709073913651',
+              positionDataList: [
+                {
+                  gwbh: '1710250213',
+                  gwbm: '业务受理员'
+                }
+              ]
+            }
+          ]
+        }
+      }
+    };
+  }
+);
+/****end****/
 export default Mock;

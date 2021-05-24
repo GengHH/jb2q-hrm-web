@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-05-07 19:44:28
+ * @LastEditTime: 2021-05-24 14:55:46
  * @LastEditors: GengHH
  * @Description: 单位模块子菜单
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpJobmgrNavMenu.vue
@@ -24,7 +24,7 @@
     </router-link>
     <router-link to="/jobMgr/unpublishJobQuery">
       <el-menu-item index="/jobMgr/unpublishJobQuery">
-        <i class="el-icon-menu"></i>
+        <i class="el-icon-edit-outline"></i>
         <span slot="title">
           未发布职位
         </span>
@@ -32,7 +32,7 @@
     </router-link>
     <router-link to="/jobMgr/publishJobQuery">
       <el-menu-item index="/jobMgr/publishJobQuery">
-        <i class="el-icon-document"></i>
+        <i class="el-icon-menu"></i>
         <span slot="title">
           已发布职位
         </span>
@@ -40,7 +40,7 @@
     </router-link>
     <router-link to="/jobMgr/overdueJobQuery">
       <el-menu-item index="/jobMgr/overdueJobQuery">
-        <i class="el-icon-document"></i>
+        <i class="el-icon-folder-delete"></i>
         <span slot="title">
           已过期职位
         </span>
@@ -48,7 +48,7 @@
     </router-link>
     <router-link to="/jobMgr/offJobQuery">
       <el-menu-item index="/jobMgr/offJobQuery">
-        <i class="el-icon-document"></i>
+        <i class="el-icon-c-scale-to-original"></i>
         <span slot="title">
           已下架职位
         </span>

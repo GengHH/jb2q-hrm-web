@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-21 18:37:30
+ * @LastEditTime: 2021-05-24 16:14:42
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -35,13 +35,18 @@ const saveCorpInfo = params =>
 const updateDistrictCode = params =>
   postAction(basePath + '/corp/info/updateDistrictCode', params);
 
+//查询就业见习职位列表
+const queryJyjxJdInfo = params =>
+  postAction(
+    basePath + '/corp/position/query-jyjxJdInfo-positionPublishing',
+    params
+  );
 //保存职位信息
 const savePosition = params =>
   postAction(basePath + '/corp/position/save', params);
 //首次发布职位信息
 const releasePosition = params =>
   postAction(basePath + '/corp/position/release', params);
-
 //单位查询职位信息
 const findPosition = params =>
   postAction(basePath + '/corp/position/find', params);
@@ -124,6 +129,7 @@ export {
   releasePosition,
   findPosition,
   findPositionDetail,
+  queryJyjxJdInfo,
   savePosition,
   updateDistrictCode,
   doDeletePosition,

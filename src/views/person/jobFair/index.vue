@@ -277,6 +277,7 @@ export default {
     padding: 20px 10px;
     line-height: 30px;
     b {
+      font-family: 宋体, Arial, Verdana, sans-serif;
       font-size: 20px;
       font-weight: 800;
     }
