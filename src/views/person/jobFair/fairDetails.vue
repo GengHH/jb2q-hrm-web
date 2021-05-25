@@ -60,28 +60,28 @@
     >
       <el-tab-pane label="招聘公司" name="corporation">
         <!-- <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow> -->
-        招聘公司
         <el-input
           placeholder="请输入公司名称进行检索"
           prefix-icon="el-icon-search"
           v-model="input1"
         >
         </el-input>
+        <div class="no-data">暂无数据</div>
       </el-tab-pane>
       <el-tab-pane label="招聘职位" name="position">
         <!-- <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow> -->
-        招聘职位
         <el-input
           placeholder="请输入职位名称进行检索"
           prefix-icon="el-icon-search"
           v-model="input2"
         >
         </el-input>
+        <div class="no-data">暂无数据</div>
       </el-tab-pane>
     </el-tabs>
-    <el-button id="listMore" class="more-btn white-btn" @click="showMore"
+    <!-- <el-button id="listMore" class="more-btn white-btn" @click="showMore"
       >加载更多</el-button
-    >
+    > -->
     <!-- 地图弹框 -->
     <el-dialog
       class="width75 dialog-content-full-screen"
@@ -237,7 +237,7 @@ export default {
     //min-height: 300px;
     margin-bottom: 20px;
     .el-col {
-      //min-height: 300px;
+      height: 300px;
       //margin: 10px 0;
       height: 100%;
     }
@@ -298,6 +298,7 @@ export default {
 
   #listMore {
     //width: 100%;
+    display: block;
     margin: 20px auto;
   }
   .orange-font {
@@ -309,5 +310,10 @@ export default {
   .line30 {
     line-height: 30px;
   }
+}
+.no-data {
+  width: 100%;
+  margin: 100px 0;
+  text-align: center;
 }
 </style>
