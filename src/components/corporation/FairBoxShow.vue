@@ -6,6 +6,7 @@
         <!-- <img src="../../assets/img/img04.png" alt="" /> -->
         <img
           :src="'data:image/jpg;base64,' + fairInfo.propagandaImage"
+          @error="defImg"
           alt="未加载"
         />
         <div v-if="online" class="float-div">
@@ -193,6 +194,7 @@ export default {
   },
   data() {
     return {
+      defaultImg: require('@/assets/images/break-img.svg'),
       online: true,
       offline: false,
       mapDialog: false,
@@ -306,6 +308,14 @@ export default {
     },
     hadApply() {
       this.$alert('已经报名，无法再次报名');
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
     }
   }
 };

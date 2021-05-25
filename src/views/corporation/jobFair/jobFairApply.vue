@@ -37,7 +37,7 @@
         ></BaseSearch> -->
       </el-col>
     </el-row>
-    <!-- 职位展示位 -->
+    <!-- 招聘会展示位 -->
     <FairBoxShow
       v-for="item in showList"
       :key="item.id"

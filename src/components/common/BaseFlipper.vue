@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-05-19 11:06:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 14:48:14
+ * @LastEditTime: 2021-05-25 13:39:06
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseFlipper.vue
 -->
@@ -38,6 +38,11 @@ export default {
       default: '100%',
       validator: isCSSLength
     },
+    minHeight: {
+      type: String,
+      default: '100%',
+      validator: isCSSLength
+    },
     duration: {
       type: String,
       default: '0.5s',
@@ -51,7 +56,11 @@ export default {
   computed: {
     styles() {
       return {
-        wrapper: { width: this.width, height: this.height },
+        wrapper: {
+          width: this.width,
+          height: this.height,
+          minHeight: this.minHeight
+        },
         face: {
           transitionDuration: this.duration,
           transitionTimingFunction: this.transition

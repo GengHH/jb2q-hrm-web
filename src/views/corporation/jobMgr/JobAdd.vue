@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-24 19:14:58
+ * @LastEditTime: 2021-05-25 15:49:25
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -70,8 +70,12 @@
             </el-col>
           </el-row>
         </div>
-        <div v-if="!jyjxList.length" style="text-align:center;">
-          无数据
+        <div
+          v-if="!jyjxList.length"
+          class="jx-wrap jx-wrap-body"
+          style="text-align:center;padding:20px"
+        >
+          无职位数据
         </div>
         <div v-else class="jx-wrap jx-wrap-body">
           <!-- 委托单位或者见习职位列表 -->
@@ -91,13 +95,12 @@
                       :key="idx.gwbh"
                       :label="idx.gwbh"
                       >{{ idx.gwbm }}
-                      <span :id="idx.gwbh" :class="jdItem.cid"></span
-                    ></el-radio-button>
+                    </el-radio-button>
                   </template>
                   <!-- 综合基地--显示委托外派单位信息 -->
                   <template v-else>
                     <el-popover
-                      v-for="(jdItem, index) in jyjxList[item - 1]"
+                      v-for="(wpdwItem, index) in jyjxList[item - 1]"
                       :key="index"
                       placement="bottom"
                       width="700"
@@ -105,22 +108,28 @@
                       popper-class="position-popover"
                     >
                       <el-radio-button
-                        v-for="idx in jdItem.positionDataList"
+                        v-for="idx in wpdwItem.positionDataList"
                         :key="idx.gwbh"
                         :label="idx.gwbh"
                       >
                         <span
                           :id="idx.gwbh"
-                          :class="jdItem.cid"
-                          @click="radioGroupChange(idx.gwbm)"
+                          :class="wpdwItem.cid"
+                          @click="
+                            radioGroupChange(
+                              idx.gwbm,
+                              wpdwItem.cid,
+                              wpdwItem.dwmc
+                            )
+                          "
                           >{{ idx.gwbm }}</span
                         >
                       </el-radio-button>
                       <el-button
                         class="show-popover-button"
-                        :btnIndex="jdItem.cid"
+                        :btnIndex="wpdwItem.cid"
                         slot="reference"
-                        >{{ jdItem.dwmc }}</el-button
+                        >{{ wpdwItem.dwmc }}</el-button
                       >
                     </el-popover>
                   </template>
@@ -593,7 +602,9 @@ export default {
         describe: '',
         opWay: '',
         endDate: '',
-        tranPositionCode: '' //见习职位编号
+        tranPositionCode: '', //见习职位编号
+        tranCorpId: '', //内网就业见习单位标识
+        tranCorpName: '' //内网就业见习单位名称
       },
       isDefaultStreet: false,
       showWorkStreetList: [],
@@ -734,6 +745,10 @@ export default {
             backgroundColor: '#fff1ec',
             color: '#fc6f3d'
           });
+        } else {
+          //无选中职位时候-外派单位信息清空
+          this.jobForm.tranCorpId = '';
+          this.jobForm.tranCorpName = '';
         }
       }, 500)();
     }
@@ -893,7 +908,7 @@ export default {
     async queryJxPosition(val) {
       let queryRes = await queryJyjxJdInfo({
         cid: this.$store.getters['corporation/cid'],
-        position: $.trim(val)
+        zymc: $.trim(val) ? $.trim(val) : null
       }).catch(() => {
         this.loading = false;
       });
@@ -926,10 +941,12 @@ export default {
         this.showJxPosition = false;
       }
     },
-    radioGroupChange(name) {
-      console.log(name);
+    radioGroupChange(name, wpdwCid, wpdwDwmc) {
       // this.jxzwname = name;
       this.jobForm.positionName = name;
+      // 见习职位-对应的外派单位信息
+      this.jobForm.tranCorpId = wpdwCid;
+      this.jobForm.tranCorpName = wpdwDwmc;
     }
   }
 };

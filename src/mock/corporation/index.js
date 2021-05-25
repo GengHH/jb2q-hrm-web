@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-24 17:30:04
+ * @LastEditTime: 2021-05-25 17:07:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -652,7 +652,7 @@ Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
             mainCorpName: '测试123',
             contactName: '武器大师',
             contactPhone: '18910570087',
-            propagandaImage: 'MQ==',
+            propagandaImage: '',
             districtCode: '00,01,02,03',
             districtCodeList: ['00', '01', '02', '03'],
             onTop: '0',
@@ -771,6 +771,7 @@ Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
     }
   };
 });
+/****在线开店****/
 //简历搜素
 Mock.mock(basePath + '/corp/resume/find', 'post', function(options) {
   return {
@@ -806,6 +807,26 @@ Mock.mock(basePath + '/corp/resume/find', 'post', function(options) {
     }
   };
 });
+//获取人员的联系方式
+Mock.mock(basePath + '/corp/shop/query/list', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        xm: '李珍',
+        contactPhone: '15921900607',
+        livingArea: '05',
+        livingStreet: '0507'
+      }
+    }
+  };
+});
+//单位邀约人员
+Mock.mock(basePath + '/corp/resume/invite', 'post', function(options) {
+  return successData;
+});
+
 /****在线开店****/
 Mock.mock(basePath + '/corp/shop/query/list', 'post', function(options) {
   return {

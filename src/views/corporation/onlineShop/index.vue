@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-24 11:00:08
+ * @LastEditTime: 2021-05-25 13:19:32
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
@@ -132,7 +132,6 @@
                 <el-col :span="6" style="text-align:right">
                   <span
                     class="shop-edit-btn"
-                    href="#"
                     v-if="!item.verifyResult && item.deleteStatus !== '1'"
                     @click="editShop(item)"
                     ><i class="el-icon-edit"></i>编辑</span
