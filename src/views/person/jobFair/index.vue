@@ -42,17 +42,27 @@
         <pl-flipper
           class="card"
           width="100%"
-          height="300px"
+          minHeight="270px"
           :flipped="item.isFlipped"
           @mouseenter="item.isFlipped = !item.isFlipped"
           @mouseleave="item.isFlipped = !item.isFlipped"
         >
           <div class="card__pattern" slot="front">
             <img
+              v-if="item.propagandaImage || item.propagandaImage === ''"
+              class="fair-img"
+              :src="'data:image/jpg;base64,' + item.propagandaImage"
+              @error="defImg"
+              alt="未加载"
+            />
+            <!-- <div v-else class="unload-img">
+              <i  class="el-icon-picture-outline"></i>
+            </div> -->
+            <!-- <img
               class="fair-img"
               src="../../../assets/img/img04.png"
               alt="未加载"
-            />
+            /> -->
           </div>
           <div class="card__face" slot="back">
             <!-- <b class="fair-title">2020高校毕业生全国网络联合招聘 </b> -->
@@ -66,21 +76,49 @@
               <span v-if="item.meetType === '2'" class="span-line2">线下</span>
             </p>
             <p class="line30">
-              <span class="gray-font"> 主办单位：</span>{{ item.mainCorpName }}
+              <span class="orange-font"> <i class="el-icon-time"></i></span>
+              {{ item.startTime }}
+              至
+              {{ item.endTime }}
             </p>
             <p class="line30">
-              <span class="gray-font"> 联系人：</span>{{ item.contactName }}
+              <span class="gray-font"
+                ><i class="el-icon-office-building"></i> 主办单位：</span
+              >{{ item.mainCorpName }}
             </p>
             <p class="line30">
-              <span class="gray-font"> 联系电话：</span>{{ item.contactPhone }}
+              <span class="gray-font">
+                <i class="el-icon-user"></i> 联系人：</span
+              >{{ item.contactName }}
             </p>
             <p class="line30">
-              <span class="gray-font"> 招聘地点：</span>{{ item.address }}
+              <span class="gray-font"
+                ><i class="el-icon-phone-outline"></i> 联系电话：</span
+              >{{ item.contactPhone }}
+            </p>
+            <p class="line30">
+              <span class="gray-font">
+                <i class="el-icon-location-outline"></i> 招聘地点：</span
+              >{{ item.address }}
               <span class="blue-font" style="color:#7386f1">
                 <i class="icon iconfont">&#xe654;</i>
                 <span @click="showMap">附近交通</span></span
               >
             </p>
+            <el-divider class="back-divider"></el-divider>
+            <div class="back-detail-btn">
+              <el-row>
+                <!-- <el-col :span="18" class="gray-font" title="开店申请时间"
+                  ><i class="el-icon-time"></i
+                  >{{ item.applyTime ? item.applyTime : '无' }}</el-col
+                > -->
+                <el-col :span="24" style="text-align:center">
+                  <span class="shop-edit-btn" @click="showFairDetails(item)"
+                    ><i class="el-icon-view"></i>查看详情</span
+                  >
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </pl-flipper>
       </el-col>
@@ -98,7 +136,8 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
-import { queryJobFairList } from '@/api/personApi';
+// import { queryJobFairList } from '@/api/personApi';
+import { queryJobFairList } from '@/api/corporationApi';
 import plFlipper from '@/components/common/BaseFlipper.vue';
 export default {
   name: 'personApp',
@@ -108,87 +147,29 @@ export default {
   },
   data() {
     return {
+      defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       order: '1',
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
       totalCount: 0,
-      fairInfo: [
-        {
-          id: '1',
-          isFlipped: false,
-          mainCorpName: '中国是大法官到时sdfsdfsdfsdf代光华a',
-          contactName: '张三',
-          contactPhone: '13333343434',
-          address: '中国是大法官到时代光华a（防守打法胜多负少）',
-          meetType: '1'
-        },
-        {
-          id: '2',
-
-          isFlipped: false
-        },
-        {
-          id: '11',
-          isFlipped: false
-        },
-        {
-          id: '12',
-
-          isFlipped: false
-        },
-        {
-          id: '21',
-          isFlipped: false
-        },
-        {
-          id: '22',
-
-          isFlipped: false
-        }
-      ],
-      rules: {
-        livingArea: [
-          { required: true, message: '请输入居住区域', trigger: 'blur' }
-        ],
-        livingStreet: [
-          { required: true, message: '请输入居住街镇', trigger: 'blur' }
-        ],
-        livingAddress: [
-          { required: true, message: '请输入联系地址', trigger: 'blur' }
-        ],
-        livingAddressTest: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' }
-        ]
-      },
-      dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
-      dicXb: [
-        { value: '1', label: '男' },
-        { value: '2', label: '女' }
-      ],
-      dicZjlx: [
-        { value: '01', label: '身份证' },
-        { value: '02', label: '护照' }
-      ]
+      fairInfo: [],
+      dicQx: this.$store.getters['dictionary/ggjbxx_qx']
     };
   },
-  computed: {
-    // jobFaieList: function() {
-    //   return this.fairInfo ? this.fairInfo.slice(0, 3) : [];
-    // }
-  },
+  computed: {},
   created() {
+    //初始化查询招聘会信息
     this.query();
   },
   methods: {
-    showFairInfo(meetId) {
-      console.log(meetId);
-    },
     /**
      *  查询招聘会信息
      */
     query() {
       let params = {
+        pageIndex: 0,
+        pageSize: 12
         //pageIndex: this.$refs.page.currentPage - 1 || 0,
         //pageSize: this.$refs.page.pageSize,
         //date: this.date,
@@ -224,6 +205,23 @@ export default {
     },
     mapHandleClose() {
       this.mapDialog = false;
+    },
+    /**
+     * 查看招聘会详情
+     */
+    showFairDetails(item) {
+      this.$router.push({
+        path: '/fairDetails',
+        query: { meetId: item.meetId }
+      });
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
     }
   }
 };
@@ -246,6 +244,36 @@ export default {
   }
   ::v-deep .el-radio-button__inner {
     border: 0px;
+  }
+  .unload-img {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(187, 187, 187, 0.4);
+    position: relative;
+    .el-icon-picture-outline:before {
+      font-size: 10rem;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: #efefef;
+    }
+  }
+  .back-divider {
+    width: 100%;
+    margin: 10px 0;
+    position: absolute;
+    bottom: 30px;
+  }
+  .back-detail-btn {
+    position: absolute;
+    display: block;
+    width: 100%;
+    bottom: 0;
+    color: #999;
+    &:hover {
+      color: #fc7a43;
+    }
   }
 }
 </style>
@@ -277,6 +305,7 @@ export default {
     padding: 20px 10px;
     line-height: 30px;
     b {
+      font-family: 宋体, Arial, Verdana, sans-serif;
       font-size: 20px;
       font-weight: 800;
     }
@@ -293,6 +322,9 @@ export default {
     .span-line2 {
       background-color: #4766a4;
     }
+  }
+  .orange-font {
+    color: #fc7a43;
   }
   .gray-font {
     color: #999;

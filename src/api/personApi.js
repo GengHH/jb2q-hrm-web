@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 14:44:16
+ * @LastEditTime: 2021-05-25 09:33:35
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -124,7 +124,7 @@ const updatePhoneNum = params =>
   postAction(basePath + '/person/info/updatePhoneNum', params);
 
 /*********招聘会**********/
-// 查询招聘会listt
+// TODO 查询招聘会list (使用的是/corp/meeting/find/list)
 const queryJobFairList = params =>
   postAction(basePath + '/person/meeting/find/list', params);
 /*********end**********/

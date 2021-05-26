@@ -2,13 +2,13 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 17:28:45
+ * @LastEditTime: 2021-05-25 15:49:25
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
 <template>
   <!--S demo2职位管理右侧内容部分 -->
-  <div class="shadow-left">
+  <div class="shadow-left" v-loading="loading">
     <!--S 公共标题部分 -->
     <div class="title-style">
       发布职位
@@ -17,6 +17,7 @@
 
     <!--S 发布职位内容部分 -->
     <el-form
+      id="addForm"
       :disabled="formDisabled"
       :model="jobForm"
       :label-position="labelPosition"
@@ -26,14 +27,119 @@
       class="inside-infor clearfix"
     >
       <el-col :span="12">
+        <el-form-item class="radio-group" prop="workNature" required>
+          <el-radio-group
+            v-model="jobForm.workNature"
+            size="medium"
+            @change="workNatureChange"
+          >
+            <el-radio-button label="01">全职</el-radio-button>
+            <el-radio-button label="02">兼职</el-radio-button>
+            <el-radio-button label="03" v-if="isTranBaseSymbol"
+              >就业见习</el-radio-button
+            >
+          </el-radio-group> </el-form-item
+        ><span class="radio-group-label"
+          >（<span class="requiredSymbol">*</span>工作性质）</span
+        >
+      </el-col>
+      <el-col :span="12">
+        <!-- 见习职位名称 / 手动输入职位名称-->
         <el-form-item prop="positionName" required>
           <pl-input
             required
             v-model="jobForm.positionName"
             label="职位名称"
+            :disabled="disabledZwmc"
           ></pl-input>
         </el-form-item>
       </el-col>
+
+      <!-- 显示岗位名称 -->
+      <el-col :span="24" v-if="showJxPosition">
+        <div class="jx-wrap jx-wrap-header">
+          <el-row :gutter="20">
+            <el-col :span="12" class="jx-wrap-header-title">
+              见习职位信息<i class="header-icon el-icon-info"></i>
+            </el-col>
+            <el-col :span="12">
+              <BaseSearch
+                placeholder="请输入职位名称"
+                @clickButton="queryJxPosition($event)"
+              ></BaseSearch>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          v-if="!jyjxList.length"
+          class="jx-wrap jx-wrap-body"
+          style="text-align:center;padding:20px"
+        >
+          无职位数据
+        </div>
+        <div v-else class="jx-wrap jx-wrap-body">
+          <!-- 委托单位或者见习职位列表 -->
+          <el-carousel indicator-position="outside" :autoplay="autoplay">
+            <el-carousel-item v-for="item in carouselPageCount" :key="item">
+              <div class="jx-carousel">
+                <el-radio-group
+                  v-model="jobForm.tranPositionCode"
+                  size="medium"
+                  id="positionsRadios"
+                  class="radio-list-bar"
+                >
+                  <!-- 一般基地--直接显示职位信息 -->
+                  <template v-if="jxjdData.jdlx === '1'">
+                    <el-radio-button
+                      v-for="idx in jyjxList[item - 1]"
+                      :key="idx.gwbh"
+                      :label="idx.gwbh"
+                      >{{ idx.gwbm }}
+                    </el-radio-button>
+                  </template>
+                  <!-- 综合基地--显示委托外派单位信息 -->
+                  <template v-else>
+                    <el-popover
+                      v-for="(wpdwItem, index) in jyjxList[item - 1]"
+                      :key="index"
+                      placement="bottom"
+                      width="700"
+                      trigger="click"
+                      popper-class="position-popover"
+                    >
+                      <el-radio-button
+                        v-for="idx in wpdwItem.positionDataList"
+                        :key="idx.gwbh"
+                        :label="idx.gwbh"
+                      >
+                        <span
+                          :id="idx.gwbh"
+                          :class="wpdwItem.cid"
+                          @click="
+                            radioGroupChange(
+                              idx.gwbm,
+                              wpdwItem.cid,
+                              wpdwItem.dwmc
+                            )
+                          "
+                          >{{ idx.gwbm }}</span
+                        >
+                      </el-radio-button>
+                      <el-button
+                        class="show-popover-button"
+                        :btnIndex="wpdwItem.cid"
+                        slot="reference"
+                        >{{ wpdwItem.dwmc }}</el-button
+                      >
+                    </el-popover>
+                  </template>
+                </el-radio-group>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-col>
+      <!-- end -->
       <el-col :span="12" v-if="isHumanResourceReg">
         <el-form-item prop="agencyRecruit">
           <pl-select
@@ -65,17 +171,6 @@
           >
           </pl-select>
         </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item class="radio-group" prop="workNature" required>
-          <el-radio-group v-model="jobForm.workNature" size="medium">
-            <el-radio-button label="01">全职</el-radio-button>
-            <el-radio-button label="02">兼职</el-radio-button>
-            <el-radio-button label="03">就业见习</el-radio-button>
-          </el-radio-group> </el-form-item
-        ><span class="radio-group-label"
-          >（<span class="requiredSymbol">*</span>工作性质）</span
-        >
       </el-col>
       <el-col :span="12">
         <el-col :span="12" class="row-input-one">
@@ -164,12 +259,18 @@
       <el-col :span="24">
         <el-form-item class="radio-group" prop="workYearNeed" required>
           <el-radio-group v-model="jobForm.workYearNeed" size="medium">
-            <el-radio-button label="01">无需求</el-radio-button>
+            <el-radio-button
+              v-for="(item, index) in dicGznxData"
+              :key="index"
+              label="item.value"
+              >{{ item.label }}</el-radio-button
+            >
+            <!-- <el-radio-button label="01">无需求</el-radio-button>
             <el-radio-button label="02">1年以下</el-radio-button>
             <el-radio-button label="03">1~2年</el-radio-button>
             <el-radio-button label="04">3~5年</el-radio-button>
             <el-radio-button label="05">6~9年</el-radio-button>
-            <el-radio-button label="06">10年以上</el-radio-button>
+            <el-radio-button label="06">10年以上</el-radio-button> -->
           </el-radio-group>
           <span class="radio-group-label"
             >（<span class="requiredSymbol">*</span>工作年限要求）</span
@@ -297,17 +398,31 @@
 import {
   savePosition,
   releasePosition,
-  findPositionDetail
+  findPositionDetail,
+  queryJyjxJdInfo
 } from '@/api/corporationApi';
 import { salaryPattern, agePattern } from '@/utils/regexp';
-import { overDateSomeDays } from '@/utils';
+import BaseSearch from '@/components/common/BaseSearch.vue';
+import { overDateSomeDays, niceScrollUpdate } from '@/utils';
 export default {
   name: 'JobAdd',
+  components: {
+    BaseSearch
+  },
   data() {
     return {
+      loading: false,
       formDisabled: false,
       labelPosition: 'right',
       isPublic: false,
+      activeNames: ['1'],
+      autoplay: false,
+      showJxPosition: false,
+      disabledZwmc: false,
+      jxjdData: {},
+      jyjxList: [],
+      // zwbh: '', //见习职位编号
+      // jxzwname: '', //见习职位名称
       rules: {
         corpId: '',
         positionName: [
@@ -486,7 +601,10 @@ export default {
         specialList: [],
         describe: '',
         opWay: '',
-        endDate: ''
+        endDate: '',
+        tranPositionCode: '', //见习职位编号
+        tranCorpId: '', //内网就业见习单位标识
+        tranCorpName: '' //内网就业见习单位名称
       },
       isDefaultStreet: false,
       showWorkStreetList: [],
@@ -498,7 +616,9 @@ export default {
       dicData: this.$store.getters['dictionary/yesno'],
       dicXlData: this.$store.getters['dictionary/recruit_edu'],
       dicZffsData: this.$store.getters['dictionary/recruit_salary_pay_type'],
+      dicGznxData: this.$store.getters['dictionary/recruit_work_year'],
       isHumanResourceReg: this.$store.getters['corporation/human_resource_reg'],
+      isTranBaseSymbol: this.$store.getters['corporation/tran_base_symbol'],
       dicStreet: [],
       expireTimeOption: {
         disabledDate(date) {
@@ -518,6 +638,45 @@ export default {
     } else {
       this.query = {};
       this.formDisabled = false;
+    }
+  },
+  updated() {
+    this._.throttle(niceScrollUpdate, 500)();
+  },
+  computed: {
+    dicZyflDataTwo() {
+      let _data = this.$store.getters['dictionary/recruit_position_s_type'];
+      if (_data && _data.length) {
+        return Object.values(
+          _data.reduce((res, item) => {
+            let _code = '' + Number(item.value.substring(0, 2));
+            res[_code] ? res[_code].push(item) : (res[_code] = [item]);
+            return res;
+          }, {})
+        );
+      }
+      return [];
+    },
+    /**
+     * 职位信息或者委托单位信息分页
+     */
+    carouselPageCount() {
+      if (this.jxjdData?.baseComDataList?.length) {
+        this.jyjxList = [];
+        let pageCount =
+          Math.floor(this.jxjdData.baseComDataList.length / 20) +
+          (this.jxjdData.baseComDataList.length % 20 > 0 ? 1 : 0);
+        for (let i = 1; i <= pageCount; i++) {
+          this.jyjxList.push(
+            this.jxjdData.baseComDataList.slice((i - 1) * 20, i * 20)
+          );
+        }
+        console.log(this.jyjxList);
+        return pageCount;
+      } else {
+        this.jyjxList = [];
+        return 1;
+      }
     }
   },
   watch: {
@@ -547,7 +706,7 @@ export default {
         ? this.showWorkStreetList
         : [];
       this.isDefaultStreet = false;
-    }
+    },
     // dicStreet: function() {
     //   let that = this;
     //   if (this.$store.getters['dictionary/ggjbxx_street']) {
@@ -572,6 +731,27 @@ export default {
     //   that.jobForm.workStreetList = [];
     //   return [];
     // }
+    'jobForm.tranPositionCode': function(val, oldVal) {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (val) {
+          $('.show-popover-button').css({
+            backgroundColor: '#f4f4f4',
+            color: '#333'
+          });
+          let styleIndex = $('#' + val).attr('class');
+          $('.show-popover-button[btnIndex="' + styleIndex + '"]').css({
+            backgroundColor: '#fff1ec',
+            color: '#fc6f3d'
+          });
+        } else {
+          //无选中职位时候-外派单位信息清空
+          this.jobForm.tranCorpId = '';
+          this.jobForm.tranCorpName = '';
+        }
+      }, 500)();
+    }
   },
   methods: {
     elForm() {},
@@ -721,6 +901,52 @@ export default {
       } else if (queryResult) {
         this.$message({ type: 'error', message: '未查询到职位详细信息' });
       }
+    },
+    /**
+     * 查询单位见习职位信息
+     */
+    async queryJxPosition(val) {
+      let queryRes = await queryJyjxJdInfo({
+        cid: this.$store.getters['corporation/cid'],
+        zymc: $.trim(val) ? $.trim(val) : null
+      }).catch(() => {
+        this.loading = false;
+      });
+      if (queryRes && queryRes.status === 200) {
+        this.jxjdData = queryRes.result.data || {};
+      } else if (queryRes) {
+        this.jxjdData = {};
+        this.$message({ type: 'error', message: '查询就业见习职位信息失败' });
+      }
+      this.loading = false;
+    },
+    /**
+     * 单位性质发生变化时，如果是见习单位
+     */
+    workNatureChange() {
+      if (this.jobForm.workNature === '03') {
+        this.disabledZwmc = true;
+        this.showJxPosition = true;
+        //已经查询过数据，不需要再次查询
+        if (!this.jxjdData?.baseComDataList?.length) {
+          this.loading = true;
+          //查询见习岗位名称
+          this.queryJxPosition();
+        }
+      } else {
+        this.disabledZwmc = false;
+        //需要重新选择
+        this.jobForm.tranPositionCode = '';
+        this.jobForm.positionName = '';
+        this.showJxPosition = false;
+      }
+    },
+    radioGroupChange(name, wpdwCid, wpdwDwmc) {
+      // this.jxzwname = name;
+      this.jobForm.positionName = name;
+      // 见习职位-对应的外派单位信息
+      this.jobForm.tranCorpId = wpdwCid;
+      this.jobForm.tranCorpName = wpdwDwmc;
     }
   }
 };
@@ -731,7 +957,7 @@ export default {
   background-color: #ffffff;
   //box-shadow: rgba(0, 0, 0, 0.1) -5px 0 5px -5px;
   //padding-right: 50px;
-  .el-col {
+  #addForm > .el-col {
     min-height: 80px;
   }
   .title-style {
@@ -779,6 +1005,24 @@ export default {
     font-size: 14px;
     color: #acacac;
   }
+  .jx-wrap-header {
+    padding: 0 60px;
+    background-color: #f9f9f9;
+    &-title {
+      line-height: 75px;
+      color: #999;
+    }
+  }
+  .jx-wrap-body {
+    background-color: #f6f6f6;
+    margin-bottom: 20px;
+  }
+  .el-carousel__item {
+    .jx-carousel {
+      margin: 0;
+      padding: 10px 60px 0;
+    }
+  }
 }
 #jobTextarea {
   //min-height: 100px !important;
@@ -790,5 +1034,22 @@ export default {
 }
 ::v-deep textarea {
   min-height: 150px !important;
+}
+
+::v-deep .el-popover__reference-wrapper {
+  button {
+    background-color: #f4f4f4;
+    border: 0;
+  }
+}
+</style>
+<style lang="scss">
+.position-popover {
+  label > span {
+    border: 0;
+  }
+  .el-radio-button:first-child .el-radio-button__inner {
+    border-left: 0;
+  }
 }
 </style>

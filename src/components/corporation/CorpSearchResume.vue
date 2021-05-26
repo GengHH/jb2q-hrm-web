@@ -32,7 +32,12 @@
             <p
               class="name-infor  font-or"
               @click="
-                showResumeDetial(index, resumeItem.resumeId, resumeItem.pid)
+                showResumeDetial(
+                  index,
+                  resumeItem.resumeId,
+                  resumeItem.pid,
+                  resumeItem.favor
+                )
               "
             >
               <span class="personName">{{ resumeItem.xm }}</span>
@@ -66,7 +71,12 @@
             type="primary"
             class="look-btn"
             @click="
-              showResumeDetial(index, resumeItem.resumeId, resumeItem.pid)
+              showResumeDetial(
+                index,
+                resumeItem.resumeId,
+                resumeItem.pid,
+                resumeItem.favor
+              )
             "
             ><i class="el-icon-view"></i>查 看</el-button
           >
@@ -236,8 +246,8 @@ export default {
     /**
      * 显示详细简历信息
      */
-    showResumeDetial(index, resumeId, pid) {
-      this.$emit('showResumeDetials', index, resumeId, pid);
+    showResumeDetial(index, resumeId, pid, favor) {
+      this.$emit('showResumeDetials', index, resumeId, pid, favor);
     }
     // callPositionCorp(index, resumeId) {
     //   this.$emit('callPositionCorp', index, resumeId);
@@ -279,8 +289,11 @@ export default {
   }
 }
 .name-infor {
-  font-size: 20p;
+  font-size: 20px;
   margin-bottom: 20px;
+}
+.personName:hover {
+  cursor: pointer;
 }
 .bg-gray {
   background: #f7f7f7;

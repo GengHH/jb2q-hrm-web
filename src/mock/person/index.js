@@ -591,7 +591,7 @@ Mock.mock(basePath + '/person/meeting/find/list', 'post', function(options) {
             mainCorpName: '测试123',
             contactName: '武器大师',
             contactPhone: '18910570087',
-            propagandaImage: 'MQ==',
+            propagandaImage: '',
             districtCode: '00,01,02,03',
             districtCodeList: ['00', '01', '02', '03'],
             onTop: '0',

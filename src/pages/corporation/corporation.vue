@@ -59,7 +59,13 @@ export default {
         },
         { id: '5', path: '/jobFair', nvaText: '招聘会' },
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },
-        { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },
+        {
+          id: '3',
+          path: this.$store.getters['corporation/special_corp']
+            ? '/resumeSearch'
+            : '/blank',
+          nvaText: '简历搜索'
+        },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
         { id: '1', path: '/corpInfo', nvaText: '单位信息维护' }
       ],

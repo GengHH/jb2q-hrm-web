@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 19:02:38
+ * @LastEditTime: 2021-05-25 17:54:58
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -283,6 +283,20 @@
       :visible.sync="detailsDialog"
       :before-close="handleClose"
     >
+      <div class="operate-resume-header">
+        <el-button size="small" round
+          ><i class="el-icon-star-on" v-if="queryFavor">已收藏</i>
+          <i class="el-icon-star-off" v-else>收藏</i> </el-button
+        ><el-button size="small" round
+          ><i class="el-icon-download">下载</i></el-button
+        ><el-button size="small" round
+          ><i class="el-icon-user">获取联系方式</i></el-button
+        ><el-button size="small" round
+          ><i class="el-icon-el-icon-tickets" @click="invite"
+            >邀约</i
+          ></el-button
+        >
+      </div>
       <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
     </el-dialog>
     <!-- old -->
@@ -303,7 +317,11 @@ import {
   // doFavorJobs,
   // doUnfavorJobs
 } from '@/api/personApi';
-import { queryResumeList } from '@/api/corporationApi';
+import {
+  queryResumeList,
+  doInvite,
+  getPersonContact
+} from '@/api/corporationApi';
 export default {
   name: 'JobSearch',
   components: {
@@ -372,6 +390,7 @@ export default {
       //bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       zsOptions: [],
       queryPid: '',
+      queryFavor: false,
       resumeIdDetailsId: ''
     };
   },
@@ -508,7 +527,7 @@ export default {
       //this.queryParams.tranBaseSymbol = '0';
       //this.queryParams.agencyRecruit = '0';
       this.queryParams.industryList = [''];
-      this.queryParams.industryList = [''];
+      // this.queryParams.industryList = [''];
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
@@ -599,37 +618,59 @@ export default {
      */
     showResumeDetials(arg) {
       let index = arg[0];
+      //本条记录的简历编号
       let resumeId = (arg && arg[1]) || '';
+      //本条记录的pid
       let queryPid = (arg && arg[2]) || '';
+      //本条记录是不是已经收藏
+      let queryFavor = (arg && arg[3]) || false;
       this.detailsIndex = index;
       this.detailsDialog = true;
       this.resumeIdDetailsId = resumeId;
       //查询简历信息，并显示
       this.queryPid = queryPid;
+      this.queryFavor = queryFavor;
       console.log(`queryPid:${queryPid}`);
+    },
+    /**
+     * 邀约
+     */
+    async invite() {
+      let inviteRes = await doInvite({
+        cid: this.queryParams.cid,
+        positionId: ''
+      });
+      if (inviteRes && inviteRes.status === 200) {
+        this.$message({ type: 'success', message: '邀约成功' });
+      } else if (inviteRes) {
+        this.$message({
+          type: 'error',
+          message: '邀约失败'
+        });
+      }
     },
     /**
      * 投递简历 TODO (是不是换成邀请人员)
      */
-    async deliveryResume(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      //投递简历
-      let res = await doDeliveryResume({
-        positionId: positionId,
-        cid: this.$store.getters['corporation/cid']
-      });
-      if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.queryResult.splice(index, 1);
-        this.$message({ type: 'success', message: '简历投递成功' });
-      } else {
-        this.$message({
-          type: 'error',
-          message: '简历投递失败'
-        });
-      }
-    },
+    // async deliveryResume(arg) {
+    //   let index = arg[0];
+    //   let positionId = (arg && arg[1]) || '';
+    //   //投递简历
+    //   let res = await doDeliveryResume({
+    //     positionId: positionId,
+    //     cid: this.$store.getters['corporation/cid']
+    //   });
+    //   if (res && res.status === 200) {
+    //     // TODO 不显示本条数据
+    //     this.queryResult.splice(index, 1);
+    //     this.$message({ type: 'success', message: '简历投递成功' });
+    //   } else if (res) {
+    //     this.$message({
+    //       type: 'error',
+    //       message: '简历投递失败'
+    //     });
+    //   }
+    // },
     /**
      * 收藏简历 TODO
      */
@@ -858,5 +899,11 @@ export default {
   .el-checkbox-button:first-child .el-checkbox-button__inner {
     border-left: 0;
   }
+}
+.operate-resume-header {
+  width: 100%;
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 14px 0;
 }
 </style>

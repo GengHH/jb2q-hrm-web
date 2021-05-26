@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-21 18:55:43
+ * @LastEditTime: 2021-05-26 14:42:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -652,7 +652,7 @@ Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
             mainCorpName: '测试123',
             contactName: '武器大师',
             contactPhone: '18910570087',
-            propagandaImage: 'MQ==',
+            propagandaImage: '',
             districtCode: '00,01,02,03',
             districtCodeList: ['00', '01', '02', '03'],
             onTop: '0',
@@ -771,6 +771,7 @@ Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
     }
   };
 });
+/****在线开店****/
 //简历搜素
 Mock.mock(basePath + '/corp/resume/find', 'post', function(options) {
   return {

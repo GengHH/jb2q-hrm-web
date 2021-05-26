@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-08 15:35:55
+ * @LastEditTime: 2021-05-25 18:16:28
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\corporationLoadding.vue
 -->
@@ -44,7 +44,13 @@ export default {
             this.$router.push('/corpinfo');
           } else {
             //非首次登录跳转到查询界面
-            this.$router.push('/resumeSearch');
+            if (this.$store.getters['corporation/special_corp']) {
+              //特定单位跳转到简历搜索界面
+              this.$router.push('/resumeSearch');
+            } else {
+              //非特定单位跳转到职位管理界面
+              this.$router.push('/jobMgr');
+            }
           }
         }
       }, 100);

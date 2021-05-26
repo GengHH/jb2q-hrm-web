@@ -69,6 +69,7 @@ Vue.use(PlConfig, {});
 // 引入mock配置
 if (config.mock) {
   require('@/mock/person/index.js');
+  require('@/mock/corporation/index.js');
   //console.log('++++++++++成功引入mock数据+++++++');
 }
 //判断是不是已经登录

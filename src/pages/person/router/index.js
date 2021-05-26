@@ -231,7 +231,12 @@ let router = new Router({
     {
       path: '/jobFair',
       name: '招聘会',
-      component: () => import('@/views/person/jobFair'),
+      component: () => import('@/views/person/jobFair')
+    },
+    {
+      path: '/fairDetails',
+      name: '招聘会详情',
+      component: () => import('@/views/person/jobFair/fairDetails'),
       children: [
         {
           path: '/jobFair/jobFairs',
