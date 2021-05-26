@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-25 17:21:17
+ * @LastEditTime: 2021-05-26 17:13:57
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
@@ -71,14 +71,14 @@
             type="primary"
             class="look-btn"
             @click="
-              showResumeDetial(
+              inviteDetial(
                 index,
                 resumeItem.resumeId,
                 resumeItem.pid,
                 resumeItem.favor
               )
             "
-            ><i class="el-icon-view"></i>查 看</el-button
+            ><i class="el-icon-view"></i>邀 约</el-button
           >
           <el-button
             v-if="resumeItem.favor"
@@ -248,6 +248,12 @@ export default {
      */
     showResumeDetial(index, resumeId, pid, favor) {
       this.$emit('showResumeDetials', index, resumeId, pid, favor);
+    },
+    /**
+     * 邀约
+     */
+    inviteDetial(index, resumeId, pid, favor) {
+      this.$emit('inviteDetials', index, resumeId, pid, favor);
     }
     // callPositionCorp(index, resumeId) {
     //   this.$emit('callPositionCorp', index, resumeId);

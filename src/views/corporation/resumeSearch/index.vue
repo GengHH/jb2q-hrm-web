@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 17:54:58
+ * @LastEditTime: 2021-05-26 17:30:47
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -274,6 +274,7 @@
       @favorResume="favorResume(arguments)"
       @showResumeDetials="showResumeDetials(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
+      @inviteDetials="inviteDetials(arguments)"
     ></CorpSearchResume>
     <BaseLoadingSvg v-else></BaseLoadingSvg>
     <!-- 简历详细信息 弹窗部分 -->
@@ -299,7 +300,93 @@
       </div>
       <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
     </el-dialog>
-    <!-- old -->
+    <!-- end -->
+
+    <!-- 邀约 弹窗部分 -->
+    <el-dialog
+      width="75%"
+      :visible.sync="inviteDialog"
+      :before-close="handleClose"
+    >
+      <!-- 显示职位名称 -->
+      <div class="jx-wrap jx-wrap-header" style="width:100%">
+        <el-row :gutter="40" style="margin:0">
+          <el-col :span="12" class="jx-wrap-header-title">
+            职位列表信息<i class="header-icon el-icon-info"></i>
+          </el-col>
+          <el-col :span="12">
+            <BaseSearch
+              placeholder="请输入职位名称"
+              @clickButton="queryJxPosition($event)"
+            ></BaseSearch>
+          </el-col>
+        </el-row>
+      </div>
+      <div
+        v-if="!jyjxList.length"
+        class="jx-wrap jx-wrap-body"
+        style="text-align:center;padding:20px"
+      >
+        无职位数据
+      </div>
+      <div v-else class="jx-wrap jx-wrap-body">
+        <!-- 委托单位或者见习职位列表 -->
+        <el-carousel indicator-position="outside" :autoplay="false">
+          <el-carousel-item v-for="item in carouselPageCount" :key="item">
+            <div class="jx-carousel">
+              <el-radio-group
+                v-model="positionCode"
+                size="medium"
+                id="positionsRadios"
+                class="radio-list-bar"
+              >
+                <el-popover
+                  ref="popoverRef"
+                  v-for="(wpdwItem, index) in jyjxList[item - 1]"
+                  :key="index"
+                  placement="bottom"
+                  width="600"
+                  trigger="click"
+                  :append-to-body="false"
+                  popper-class="position-popover"
+                >
+                  <el-radio-button
+                    v-for="idx in wpdwItem.positionDataList"
+                    :key="idx.gwbh"
+                    :label="idx.gwbh"
+                  >
+                    <span
+                      :id="idx.gwbh"
+                      :class="wpdwItem.cid"
+                      @click="
+                        radioGroupChange(idx.gwbm, wpdwItem.cid, wpdwItem.dwmc)
+                      "
+                      >{{ idx.gwbm }}</span
+                    >
+                  </el-radio-button>
+                  <el-button
+                    class="show-popover-button"
+                    :btnIndex="wpdwItem.cid"
+                    slot="reference"
+                    >{{ wpdwItem.dwmc }}</el-button
+                  >
+                </el-popover>
+              </el-radio-group>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
+      <!-- end -->
+      <div class="operate-resume-header">
+        <el-button size="small"
+          ><i class="el-icon-el-icon-tickets" @click="invite"
+            >邀约</i
+          ></el-button
+        >
+      </div>
+    </el-dialog>
+    <!-- end -->
   </div>
 </template>
 
@@ -336,6 +423,7 @@ export default {
     return {
       detailsIndex: null,
       detailsDialog: false,
+      inviteDialog: false,
       wchatDialog: false,
       queryParams1: {
         // cid: this.$store.getters['corporation/cid'],
@@ -391,7 +479,21 @@ export default {
       zsOptions: [],
       queryPid: '',
       queryFavor: false,
-      resumeIdDetailsId: ''
+      resumeIdDetailsId: '',
+      positionCode: '',
+      carouselPageCount: 1,
+      jyjxList: [
+        {
+          cid: '12311234',
+          dwmc: '1231',
+          positionDataList: [
+            {
+              gwbh: '123',
+              gwbm: '1234'
+            }
+          ]
+        }
+      ]
     };
   },
   computed: {
@@ -635,20 +737,30 @@ export default {
     /**
      * 邀约
      */
-    async invite() {
-      let inviteRes = await doInvite({
-        cid: this.queryParams.cid,
-        positionId: ''
-      });
-      if (inviteRes && inviteRes.status === 200) {
-        this.$message({ type: 'success', message: '邀约成功' });
-      } else if (inviteRes) {
-        this.$message({
-          type: 'error',
-          message: '邀约失败'
-        });
-      }
+    async invite(arg) {},
+    inviteDetials(arg) {
+      let index = arg[0];
+      //本条记录的简历编号
+      let resumeId = (arg && arg[1]) || '';
+      //本条记录的pid
+      let queryPid = (arg && arg[2]) || '';
+      //本条记录是不是已经收藏
+      let queryFavor = (arg && arg[3]) || false;
+      this.inviteDialog = true;
+      // let inviteRes = await doInvite({
+      //   cid: this.queryParams.cid,
+      //   positionId: ''
+      // });
+      // if (inviteRes && inviteRes.status === 200) {
+      //   this.$message({ type: 'success', message: '邀约成功' });
+      // } else if (inviteRes) {
+      //   this.$message({
+      //     type: 'error',
+      //     message: '邀约失败'
+      //   });
+      // }
     },
+
     /**
      * 投递简历 TODO (是不是换成邀请人员)
      */

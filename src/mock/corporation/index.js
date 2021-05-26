@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 17:07:58
+ * @LastEditTime: 2021-05-26 17:52:23
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -918,9 +918,10 @@ Mock.mock(
       message: '',
       result: {
         data: {
-          jdlx: '2',
+          jdlx: '1',
           jdmc: '上海庆圆投资有限公司',
           jdbh: '2017D10232',
+          qszdgz: '2496',
           baseComDataList: [
             {
               dwmc: '上海兴国宾馆',
@@ -1738,6 +1739,16 @@ Mock.mock(
                   gwbm: '业务受理员'
                 }
               ]
+            }
+          ],
+          positionDataList: [
+            {
+              gwbh: '1912313555',
+              gwbm: '市场策划员'
+            },
+            {
+              gwbh: '2004273904',
+              gwbm: '文员'
             }
           ]
         }
