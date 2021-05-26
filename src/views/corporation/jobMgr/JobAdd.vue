@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 15:49:25
+ * @LastEditTime: 2021-05-26 13:56:02
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -421,6 +421,7 @@ export default {
       disabledZwmc: false,
       jxjdData: {},
       jyjxList: [],
+      carouselPageCount: 0,
       // zwbh: '', //见习职位编号
       // jxzwname: '', //见习职位名称
       rules: {
@@ -656,28 +657,30 @@ export default {
         );
       }
       return [];
-    },
+    }
     /**
      * 职位信息或者委托单位信息分页
      */
-    carouselPageCount() {
-      if (this.jxjdData?.baseComDataList?.length) {
-        this.jyjxList = [];
-        let pageCount =
-          Math.floor(this.jxjdData.baseComDataList.length / 20) +
-          (this.jxjdData.baseComDataList.length % 20 > 0 ? 1 : 0);
-        for (let i = 1; i <= pageCount; i++) {
-          this.jyjxList.push(
-            this.jxjdData.baseComDataList.slice((i - 1) * 20, i * 20)
-          );
-        }
-        console.log(this.jyjxList);
-        return pageCount;
-      } else {
-        this.jyjxList = [];
-        return 1;
-      }
-    }
+    // carouselPageCount() {
+    //   console.log(123123123123);
+    //   let _jxjdData = { ...this.jxjdData };
+    //   if (this.jxjdData?.baseComDataList?.length) {
+    //     this.jyjxList = [];
+    //     let pageCount =
+    //       Math.floor(this.jxjdData.baseComDataList.length / 20) +
+    //       (this.jxjdData.baseComDataList.length % 20 > 0 ? 1 : 0);
+    //     for (let i = 1; i <= pageCount; i++) {
+    //       this.jyjxList.push(
+    //         this.jxjdData.baseComDataList.slice((i - 1) * 20, i * 20)
+    //       );
+    //     }
+    //     console.log(this.jyjxList);
+    //     return pageCount;
+    //   } else {
+    //     this.jyjxList = [];
+    //     return 1;
+    //   }
+    // }
   },
   watch: {
     'jobForm.workArea': function() {
@@ -749,6 +752,31 @@ export default {
           //无选中职位时候-外派单位信息清空
           this.jobForm.tranCorpId = '';
           this.jobForm.tranCorpName = '';
+        }
+      }, 500)();
+    },
+    /**
+     * 职位信息或者委托单位信息分页
+     */
+    jxjdData: function() {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (this.jxjdData?.baseComDataList?.length) {
+          this.jyjxList = [];
+          let pageCount =
+            Math.floor(this.jxjdData.baseComDataList.length / 20) +
+            (this.jxjdData.baseComDataList.length % 20 > 0 ? 1 : 0);
+          for (let i = 1; i <= pageCount; i++) {
+            this.jyjxList.push(
+              this.jxjdData.baseComDataList.slice((i - 1) * 20, i * 20)
+            );
+          }
+          console.log(this.jyjxList);
+          this.carouselPageCount = pageCount;
+        } else {
+          this.jyjxList = [];
+          this.carouselPageCount = 1;
         }
       }, 500)();
     }
