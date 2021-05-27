@@ -1,11 +1,11 @@
 <template>
   <div id="indexBody">
-    <el-row :gutter="40" class="fair-box">
+    <el-row :gutter="40" class="fair-box" style="height:240px">
       <el-col :span="12" style="padding: 10px;" class="img-box">
         <img
-          v-if="item.propagandaImage || item.propagandaImage === ''"
+          v-if="fairItem.propagandaImage || fairItem.propagandaImage === ''"
           class="fair-img"
-          :src="'data:image/jpg;base64,' + item.propagandaImage"
+          :src="'data:image/jpg;base64,' + fairItem.propagandaImage"
           @error="defImg"
           alt="未加载"
         />
@@ -13,38 +13,38 @@
       <el-col :span="12">
         <!-- <b class="fair-title">2020高校毕业生全国网络联合招聘 </b> -->
         <p class="fair-title">
-          <b>{{ item.meetName }}</b>
+          <b>{{ fairItem.meetName }}</b>
           <span
-            v-if="item.meetType === '1' || item.meetType === '2'"
+            v-if="fairItem.meetType === '1' || fairItem.meetType === '2'"
             class="span-line"
             >线上</span
           >
-          <span v-if="item.meetType === '2'" class="span-line2">线下</span>
+          <span v-if="fairItem.meetType === '2'" class="span-line2">线下</span>
         </p>
         <p class="line30">
           <span class="orange-font"> <i class="el-icon-time"></i></span>
-          {{ item.startTime }}
+          {{ fairItem.startTime }}
           至
-          {{ item.endTime }}
+          {{ fairItem.endTime }}
         </p>
         <p class="line30">
           <span class="gray-font"
             ><i class="el-icon-office-building"></i> 主办单位：</span
-          >{{ item.mainCorpName }}
+          >{{ fairItem.mainCorpName }}
         </p>
         <p class="line30">
           <span class="gray-font"> <i class="el-icon-user"></i> 联系人：</span
-          >{{ item.contactName }}
+          >{{ fairItem.contactName }}
         </p>
         <p class="line30">
           <span class="gray-font"
             ><i class="el-icon-phone-outline"></i> 联系电话：</span
-          >{{ item.contactPhone }}
+          >{{ fairItem.contactPhone }}
         </p>
         <p class="line30">
           <span class="gray-font">
             <i class="el-icon-location-outline"></i> 招聘地点：</span
-          >{{ item.address }}
+          >{{ fairItem.address }}
           <span class="blue-font" style="color:#7386f1">
             <i class="icon iconfont">&#xe654;</i>
             <span @click="showMap">附近交通</span></span
@@ -58,30 +58,117 @@
       v-model="activeName"
       @tab-click="jobHandleClick"
     >
-      <el-tab-pane label="招聘公司" name="corporation">
+      <el-tab-pane :label="paneCorp" name="corporation">
         <!-- <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow> -->
         <el-input
           placeholder="请输入公司名称进行检索"
           prefix-icon="el-icon-search"
           v-model="input1"
+          @keyup.enter.native="queryCorporations"
         >
         </el-input>
-        <div class="no-data">暂无数据</div>
+        <div class="no-data" v-if="!corporations.length">暂无数据</div>
+        <!-- 展示栏 -->
+        <el-row :gutter="20" v-else style="padding: 20px 5px;">
+          <el-col
+            :sm="24"
+            :md="12"
+            :lg="8"
+            :xl="6"
+            v-for="(item, index) in corporations"
+            :key="index"
+          >
+            <div class="corp-box">
+              <h2>{{ item.corpName }}</h2>
+              <p>
+                <span class="gray-font"
+                  ><i class="el-icon-school"></i>{{ item.cid }}</span
+                >
+              </p>
+              <div class="corp-info">
+                <p class="corp-info-tag gray-font">
+                  <span>{{
+                    item.industryTypeText ? item.industryTypeText : '无'
+                  }}</span>
+                  <span>{{
+                    item.districtCodeText ? item.districtCodeText : '无'
+                  }}</span>
+                  <span>{{
+                    item.corpNatureText ? item.corpNatureText : '无'
+                  }}</span>
+                </p>
+                <p>
+                  <span class="gray-font">
+                    <i class="el-icon-location-outline">{{
+                      item.unitResidence ? item.unitResidence : '无'
+                    }}</i>
+                  </span>
+                </p>
+                <el-row class="corp-info-count">
+                  <el-col :span="18">
+                    <span class="count orange-font">
+                      {{ item.positionCount ? item.positionCount : '0' }} </span
+                    >个在招职位
+                  </el-col>
+                  <el-col :span="6" style="text-align:right">
+                    <p class="gray-font corp-detials-btn">
+                      <i class="el-icon-view" @click="showCorpDetails(item.cid)"
+                        >详情</i
+                      >
+                    </p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
       </el-tab-pane>
-      <el-tab-pane label="招聘职位" name="position">
+      <el-tab-pane :label="panePosition" name="position">
         <!-- <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow> -->
         <el-input
           placeholder="请输入职位名称进行检索"
           prefix-icon="el-icon-search"
           v-model="input2"
+          @keyup.enter.native="queryPositions"
         >
         </el-input>
-        <div class="no-data">暂无数据</div>
+        <div class="no-data" v-if="!positions.length">暂无数据</div>
+        <div style="padding: 20px 0;" v-else>
+          <PerSearchJob
+            :jobData="positions"
+            @deliveryResume="deliveryResume(arguments)"
+            @showJobDetials="showJobDetial(arguments)"
+          ></PerSearchJob>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <!-- <el-button id="listMore" class="more-btn white-btn" @click="showMore"
       >加载更多</el-button
     > -->
+
+    <!-- 职位详细信息 弹窗部分 -->
+    <el-dialog
+      width="75%"
+      :visible.sync="detailsDialog"
+      :before-close="detailsHandleClose"
+    >
+      <job-details
+        :positionData="onePosition"
+        :index="detailsIndex"
+        @uploadResume="uploadResume"
+        @perfectResume="perfectResume"
+        @deliveryResume="deliveryResume(arguments)"
+      ></job-details>
+      <!-- <job-details
+        :positionData="onePosition"
+        :index="detailsIndex"
+        @perfectResume="perfectResume"
+        @uploadResume="uploadResume"
+        @deliveryResume="deliveryResume(arguments)"
+        @favorJob="favorJob(arguments)"
+        @callPositionCorp="callPositionCorp(arguments)"
+      ></job-details> -->
+    </el-dialog>
     <!-- 地图弹框 -->
     <el-dialog
       class="width75 dialog-content-full-screen"
@@ -95,21 +182,33 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
-// import { queryJobFairList } from '@/api/personApi';
-import { queryJobFairList } from '@/api/corporationApi';
+import PerSearchJob from '@/components/person/PerSearchJob';
+import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import { getDicText, niceScrollUpdate } from '@/utils';
+import {
+  queryMeetingSchedule,
+  queryMeetingCorporationList,
+  queryMeetingPositionList,
+  queryCorporationPositionInfo,
+  doApplyFor
+} from '@/api/personApi';
 export default {
   name: 'personApp',
   components: {
-    PlMap
+    PlMap,
+    PerSearchJob,
+    JobDetails
   },
   data() {
     return {
+      meetId: '',
+      fairItem: {},
       defaultImg: require('@/assets/images/break-img.svg'),
       activeName: 'corporation',
       input1: '',
       input2: '',
-      qx: '',
-      order: '1',
+      qx1: '',
+      qx2: '',
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
       totalCount: 0,
@@ -147,20 +246,54 @@ export default {
         endApplyTime: '',
         meetIdList: []
       },
-      dicQx: this.$store.getters['dictionary/ggjbxx_qx']
+      dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
+      corporations: [],
+      positions: [],
+      detailsIndex: '',
+      detailsDialog: false,
+      positionDetailsId: ''
     };
   },
-  computed: {},
-  created() {
-    //根据url上的参数查询职位信息
-    console.log(this.$route.query);
-    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
-      let query = this.$route.query;
-      this.findFairDetail();
+  computed: {
+    paneCorp() {
+      return this.corporations.length
+        ? '招聘公司（' + this.corporations.length + '）'
+        : '招聘公司';
+    },
+    panePosition() {
+      return this.positions.length
+        ? '招聘职位（' + this.positions.length + '）'
+        : '招聘职位';
+    },
+    /**
+     *当前操作的职位信息
+     */
+    onePosition() {
+      let that = this;
+      return this.positionDetailsId
+        ? this.positions.find(function(i) {
+            return i.positionId === that.positionDetailsId;
+          })
+        : {};
     }
   },
+  created() {
+    //根据url上的参数查询职位信息
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      this.meetId = this.$route.query.meetId || '';
+      this.queryFairDetail();
+      this.queryCorporations();
+      this.queryPositions();
+    }
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
+  },
   methods: {
-    jobHandleClick() {},
+    jobHandleClick(tab) {
+      console.log(tab);
+    },
     /**
      *  懒加载信息
      */
@@ -168,35 +301,140 @@ export default {
     /**
      *  查询指定的某个招聘会具体信息
      */
-    findFairDetail() {
-      return;
+    queryFairDetail() {
       let params = {
-        pageIndex: 0,
-        pageSize: 12
-        //pageIndex: this.$refs.page.currentPage - 1 || 0,
-        //pageSize: this.$refs.page.pageSize,
-        //date: this.date,
-        //address: this.address,
-        //type: this.type
+        meetId: this.meetId
       };
-      queryJobFairList(params).then(queryRes => {
-        console.log(queryRes);
+      queryMeetingSchedule(params).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
-          this.totalCount = queryRes.result.pageresult.total || 0;
-          queryRes.result.pageresult.data.forEach(i => {
-            i.isFlipped = false;
-          });
-          this.fairInfo = queryRes.result.pageresult.data || [];
-          if (
-            !this.totalCount ||
-            (this.totalCount && Number(this.totalCount) === 0)
-          ) {
-            this.$message({ type: 'success', message: '未查询到结果' });
+          this.fairItem = queryRes.result.data || {};
+        }
+      });
+    },
+    /**
+     *  查询所有单位信息
+     */
+    queryCorporations() {
+      let params = {
+        meetId: this.meetId,
+        positionName: this.input1,
+        districtCode: ''
+      };
+      queryMeetingCorporationList(params).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this.corporations = queryRes.result.data || [];
+          if (queryRes.result.data.length === 0) {
+            // this.$message({ type: 'success', message: '未查询到结果' });
+          } else {
+            this.corporations.forEach(item => {
+              // 转换字典
+              if (item.districtCode) {
+                item.districtCodeText = getDicText(
+                  this.$store.getters['dictionary/ggjbxx_qx'],
+                  item.districtCode
+                );
+              }
+              if (item.industryType) {
+                item.industryTypeText = getDicText(
+                  this.$store.getters['dictionary/recruit_industry_type'],
+                  item.industryType
+                );
+              }
+              if (item.corpNature) {
+                item.corpNatureText = getDicText(
+                  this.$store.getters['dictionary/recruit_work_nature'],
+                  item.corpNature
+                );
+              }
+            });
           }
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
       });
+    },
+    /**
+     *  查询所有职位信息
+     */
+    queryPositions() {
+      let params = {
+        meetId: this.meetId,
+        positionName: this.input2
+      };
+      queryMeetingPositionList(params).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this.positions = queryRes.result.data || [];
+          if (queryRes.result.data.length === 0) {
+            // this.$message({ type: 'success', message: '未查询到结果' });
+          } else {
+            this.positions.forEach(item => {
+              // 转换字典
+              if (item.workArea) {
+                item.workAreaText = getDicText(
+                  this.$store.getters['dictionary/ggjbxx_qx'],
+                  item.workArea
+                );
+              }
+              if (item.eduRequire) {
+                item.eduRequireText = getDicText(
+                  this.$store.getters['dictionary/recruit_edu'],
+                  item.eduRequire
+                );
+              }
+              if (item.workNature) {
+                item.workNatureText = getDicText(
+                  this.$store.getters['dictionary/recruit_work_nature'],
+                  item.workNature
+                );
+              }
+            });
+          }
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
+    },
+    /**
+     * 投递简历
+     */
+    async deliveryResume(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) + '' || '';
+      //投递简历
+      let res = await doApplyFor({
+        meetId: this.meetId,
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      });
+      if (res.status === 200) {
+        // TODO 不显示本条数据
+        this.positions.splice(index, 1);
+        this.$message({ type: 'success', message: '简历投递成功' });
+      } else {
+        this.$message({
+          type: 'error',
+          message: '简历投递失败'
+        });
+      }
+    },
+    /**
+     * 展示职位详情
+     */
+    showJobDetial(arg) {
+      //显示岗位详细信息
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      this.detailsIndex = index;
+      this.detailsDialog = true;
+      this.positionDetailsId = positionId;
+    },
+    perfectResume() {
+      //完善简历
+      this.$router.push('/personInfo');
+    },
+    uploadResume() {
+      //上传简历
+      this.$alert('此功能暂时未开放，请稍候！');
     },
     /**
      * 展示地图
@@ -220,6 +458,18 @@ export default {
       let img = event.target;
       img.src = this.defaultImg;
       img.onerror = null; //防止闪图
+    },
+    detailsHandleClose() {
+      this.detailsDialog = false;
+    },
+    /**
+     *显示单位详情
+     */
+    showCorpDetails(cid) {
+      this.$router.push({
+        path: '/corpDetails',
+        query: { id: cid }
+      });
     }
   }
 };
@@ -293,6 +543,62 @@ export default {
     }
     .span-line2 {
       background-color: #4766a4;
+    }
+  }
+
+  .corp-box {
+    width: 100%;
+    min-height: 180px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(rgb(61, 61, 61), 0.35);
+    &:hover {
+      border: 1px solid #fc7a43;
+    }
+    h2 {
+      margin: 10px 0 5px 0;
+      font-family: 宋体, Arial, Verdana, sans-serif;
+    }
+    .corp-info {
+      width: 100%;
+      font-size: 14px;
+      margin-top: 15px;
+      line-height: 24px;
+    }
+    .corp-info-tag {
+      span {
+        display: inline-block;
+        padding: 5px 8px;
+        margin: 0 3px;
+        border-radius: 15px;
+        background-color: #f4f4f4;
+      }
+    }
+    .corp-info-count {
+      margin: 10px 0;
+      span.count {
+        display: inline-block;
+        padding: 5px 8px;
+        margin: 0 3px;
+        border-radius: 50%;
+        background-color: #f4f4f4;
+      }
+      // &:after {
+      //   content: '';
+      //   height: 0;
+      //   line-height: 0;
+      //   display: block;
+      //   visibility: hidden;
+      //   clear: both;
+      // }
+    }
+    .corp-detials-btn {
+      padding: 5px 0;
+    }
+    .corp-detials-btn:hover {
+      color: #20c997;
+      //color: #333;
+      cursor: pointer;
     }
   }
 

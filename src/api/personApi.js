@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 09:33:35
+ * @LastEditTime: 2021-05-27 17:18:33
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -124,9 +124,25 @@ const updatePhoneNum = params =>
   postAction(basePath + '/person/info/updatePhoneNum', params);
 
 /*********招聘会**********/
-// TODO 查询招聘会list (使用的是/corp/meeting/find/list)
-const queryJobFairList = params =>
-  postAction(basePath + '/person/meeting/find/list', params);
+// 查询招聘会list
+const queryMeetingList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingList', params);
+// 查询某个招聘会详细信息
+const queryMeetingSchedule = params =>
+  postAction(basePath + '/person/meeting/queryMeetingSchedule', params);
+//招聘会下所有的单位信息
+const queryMeetingCorporationList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingCorporationList', params);
+//招聘会下所有的职位信息
+const queryMeetingPositionList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingPositionList', params);
+//查询招聘会职位明细信息
+const queryCorporationPositionInfo = params =>
+  postAction(basePath + '/person/meeting/queryCorporationPositionInfo', params);
+//个人投递招聘会下的职位
+const doApplyFor = params =>
+  postAction(basePath + '/person/meeting/doApplyFor', params);
+
 /*********end**********/
 export {
   doSend,
@@ -161,5 +177,10 @@ export {
   updatePhoneNum,
   sendSms,
   saveWorkYear,
-  queryJobFairList
+  queryMeetingList,
+  queryMeetingSchedule,
+  queryMeetingCorporationList,
+  queryMeetingPositionList,
+  queryCorporationPositionInfo,
+  doApplyFor
 };

@@ -136,9 +136,9 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
-// import { queryJobFairList } from '@/api/personApi';
-import { queryJobFairList } from '@/api/corporationApi';
+import { queryMeetingList } from '@/api/personApi';
 import plFlipper from '@/components/common/BaseFlipper.vue';
+import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
   name: 'personApp',
   components: {
@@ -162,21 +162,28 @@ export default {
     //初始化查询招聘会信息
     this.query();
   },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
+  },
   methods: {
     /**
      *  查询招聘会信息
      */
     query() {
       let params = {
-        pageIndex: 0,
-        pageSize: 12
+        pageParam: {
+          pageIndex: 0,
+          pageSize: 12
+        },
+        districtCode: this.qx
         //pageIndex: this.$refs.page.currentPage - 1 || 0,
         //pageSize: this.$refs.page.pageSize,
         //date: this.date,
         //address: this.address,
         //type: this.type
       };
-      queryJobFairList(params).then(queryRes => {
+      queryMeetingList(params).then(queryRes => {
         console.log(queryRes);
         if (queryRes && queryRes.status === 200) {
           this.totalCount = queryRes.result.pageresult.total || 0;
