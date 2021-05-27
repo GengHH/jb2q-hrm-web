@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:14:04
- * @LastEditTime: 2021-05-20 19:18:00
+ * @LastEditTime: 2021-05-21 10:34:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\resume.vue
@@ -15,7 +15,7 @@
       <div>
         <span style="font-size:22px">{{ form.xm }}</span>
         <span style="padding:0 35px">{{ form.age }}岁</span>
-        <span>{{ form.sex }}</span
+        <span>{{ setDicOptions(form.sexId, 'sex') }}</span
         ><!--  el-icon-male -->
         <span style="margin-left:40px;color:#4766a4">就业服务难度系数</span>
         <span style="color:#fc7a43;font-size:20px">5.0</span>
@@ -151,6 +151,8 @@ export default {
   data() {
     return {
       dicOptions: {
+        //性别
+        sex: trim(this.$store.getters['dictionary/ggjbxx_sex']),
         //语言等级
         level: trim(this.$store.getters['dictionary/recruit_language_level']),
         //语言

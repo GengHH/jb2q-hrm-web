@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-29 17:04:08
+ * @LastEditTime: 2021-05-27 15:08:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -17,18 +17,18 @@
           <el-tag v-if="scope.row.humanResourceReg == '1'" type="success"
             >人力资源机构</el-tag
           >
-          <el-tag v-if="scope.row.tranBaseSymbol == '1'" type="success"
+          <!-- <el-tag v-if="scope.row.tranBaseSymbol == '1'" type="success"
             >就业见习基地</el-tag
-          >
+          > -->
           <el-tag v-if="scope.row.keypointCorp == '1'" type="success"
             >重点企业</el-tag
           >
           <el-tag v-if="scope.row.specialCorp == '1'" type="success"
             >特定企业</el-tag
           >
-          <el-tag v-if="scope.row.entrustStatus == '1'" type="success"
+          <!-- <el-tag v-if="scope.row.entrustStatus == '1'" type="success"
             >代理招聘</el-tag
-          >
+          > -->
         </template>
       </el-table-column>
       <el-table-column slot="frozen" label="单位状态" align="center">

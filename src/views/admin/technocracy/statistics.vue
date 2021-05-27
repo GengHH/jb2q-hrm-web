@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-13 10:48:35
+ * @LastEditTime: 2021-05-24 16:19:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -33,14 +33,11 @@
           </el-form-item>
         </el-col>
       </el-row>
-
-      <el-form-item>
-        <div style="text-align:center">
-          <el-button type="primary" icon="el-icon-search" @click="onSubmit"
-            >搜索</el-button
-          >
-        </div>
-      </el-form-item>
+      <div style="text-align:center">
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit"
+          >搜索</el-button
+        >
+      </div>
     </el-form>
     <div ref="print">
       <ttable :columns="columns" :list="list">

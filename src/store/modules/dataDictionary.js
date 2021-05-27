@@ -1,9 +1,9 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
+ * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 10:46:15
+ * @LastEditTime: 2021-05-26 19:35:55
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -144,9 +144,17 @@ const getters = {
   recruit_employ_type: state => state.RECRUIT_EMPLOY_TYPE,
   recruit_imple_act_type: state => state.RECRUIT_IMPLE_ACT_TYPE,
   recruit_point_type: state => state.RECRUIT_POINT_TYPE,
-  recruit_applyfor_source: state => state.RECRUIT_APPLYFOR_SOURCE
+  recruit_applyfor_source: state => state.RECRUIT_APPLYFOR_SOURCE,
+  recruit_feedback_status: state => state.RECRUIT_FEEDBACK_STATUS,
+  recruit_feedback_source: state => state.RECRUIT_FEEDBACK_SOURCE
 };
 const mutations = {
+  set_RECRUIT_FEEDBACK_SOURCE: (state, dictionary) => {
+    state.RECRUIT_FEEDBACK_SOURCE = dictionary;
+  },
+  set_RECRUIT_FEEDBACK_STATUS: (state, dictionary) => {
+    state.RECRUIT_FEEDBACK_STATUS = dictionary;
+  },
   set_RECRUIT_POINT_TYPE: (state, dictionary) => {
     state.RECRUIT_POINT_TYPE = dictionary;
   },

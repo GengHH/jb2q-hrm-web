@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-05-19 20:29:09
+ * @LastEditTime: 2021-05-27 09:17:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -38,7 +38,6 @@
                 :file-list="fileList2"
                 :auto-upload="false"
                 :on-change="uploadUserChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
                 :show-file-list="false"
               >
@@ -316,7 +315,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -455,12 +453,16 @@ export default {
     },
     //登记表base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'formImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'formImageBase64');
+      }
     },
     //照片base64
     uploadUserChange(file) {
-      this.getBase64(file.raw, 'psnlPhotoBase64');
-      this.imageUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'psnlPhotoBase64');
+        this.imageUrl = URL.createObjectURL(file.raw);
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -526,12 +528,14 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('招聘会宣传图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('招聘会宣传图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   created() {}

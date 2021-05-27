@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:43
- * @LastEditTime: 2021-05-21 18:46:50
+ * @LastEditTime: 2021-05-24 10:52:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\resume.vue
@@ -48,7 +48,11 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { agency_resume_verify, unit_query_resume } from '../../api/index';
+import {
+  agency_resume_verify,
+  unit_query_resume,
+  agency_resume_detail
+} from '../../api/index';
 import userresume from '../../../serviceManagement/pages/resume';
 export default {
   name: 'resume',
@@ -112,11 +116,11 @@ export default {
   },
   mounted() {
     let data = { ...this.data };
-    unit_query_resume(
+    agency_resume_detail(
       data,
       res => {
-        if (res.result.data.result) {
-          console.log(res);
+        if (res.status == 200) {
+          this.resumeList = res.result.data;
         } else {
           this.$message({
             message: res.result.data.msg,

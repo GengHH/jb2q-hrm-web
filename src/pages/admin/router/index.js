@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-04 11:10:20
- * @LastEditTime: 2021-05-18 19:30:03
+ * @LastEditTime: 2021-05-24 16:21:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\admin\router\index.js
@@ -97,7 +97,7 @@ export default new Router({
     },
     {
       path: '/profession/feedback',
-      name: '职业指导回馈',
+      name: '实施职业指导',
       component: () => import('@/views/admin/profession/feedback')
     },
     // 单位管理unitManagement

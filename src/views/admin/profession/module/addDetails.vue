@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-05-19 20:48:58
+ * @LastEditTime: 2021-05-27 20:17:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -15,8 +15,8 @@
           v-model="form.pids"
           filterable
           remote
+          size="small"
           reserve-keyword
-          style="width:350px"
           placeholder="请输入关键词"
           :remote-method="orgRemoteMethod"
           :loading="loading"
@@ -32,7 +32,22 @@
             >-<span>{{ item.value }}</span>
           </el-option>
         </el-select>
-        <div style="color:red">!!!加上预约记录带入输入框</div>
+        <span style="margin-left:20px" v-if="isrecord">预约记录</span>
+        <el-select
+          size="small"
+          v-model="recordValue"
+          v-if="isrecord"
+          @change="recordListClick"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in recordList"
+            :key="item.value"
+            :label="item.label"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
         <div style="margin-top:10px ">
           <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
           <span style="margin-left:15px">身份证号：</span>
@@ -49,6 +64,7 @@
         <el-tab-pane v-if="activeName == '02'" label="专门指导" name="02">
           <tform ref="form2" :formConfig="formConfig2"></tform>
           <el-form
+            size="small"
             :model="form"
             :disabled="disabled"
             label-width="140px"
@@ -127,6 +143,15 @@
             <div v-show="show == '2'">
               推荐职位暂无接口
             </div>
+            <div v-show="show == '3'">
+              <el-button
+                style="margin-left:22%"
+                type="primary"
+                size="mini"
+                @click="openServe"
+                >预约</el-button
+              >
+            </div>
             <div v-show="show == '4'">
               <el-row>
                 <el-col :span="12">
@@ -154,6 +179,12 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
+    <servedetails
+      v-if="servevisible"
+      :visible="servevisible"
+      :serveData="serveData"
+      @onclose="serveonclose"
+    ></servedetails>
   </div>
 </template>
 
@@ -163,15 +194,16 @@ import { trim } from '@/utils/index';
 import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { synthesize_query } from '../../technocracy/api/index';
 import { act_query } from '../../profession/api/index';
-import { guide_add } from '../api/index';
+import { guide_add, serve_record } from '../api/index';
+import servedetails from './serveDetails';
 export default {
   name: 'addDetails',
-  components: { tform },
+  components: { tform, servedetails },
   props: ['visible', 'detailsType', 'detailsData', 'activeName'],
   data() {
     let comConfig = {
       inline: true,
-      size: '',
+      size: 'small',
       labelPosition: 'right',
       labelWidth: '140px',
       disabled: false,
@@ -182,6 +214,10 @@ export default {
       }
     };
     return {
+      isrecord: false,
+      recordValue: '',
+      recordList: [],
+      servevisible: false,
       disabled: false,
       show: '0',
       activityList: [],
@@ -349,6 +385,26 @@ export default {
   },
   computed: {},
   methods: {
+    recordListClick(e) {
+      this.$refs.form2.value = {
+        guideTime: e.yyrq,
+        guideAddress: e.yydz,
+        problem: e.zysx
+      };
+      console.log(e);
+    },
+    serveonclose() {
+      this.servevisible = false;
+    },
+    openServe() {
+      if (!this.form.pid) {
+        this.message('warning', '请选择人员');
+        return;
+      }
+      this.serveData = { ...this.form };
+
+      this.servevisible = true;
+    },
     expertChange(e) {
       console.log(e);
       this.form.expertName = e.label;
@@ -434,6 +490,26 @@ export default {
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
       this.form.xm = e.label;
+      this.isrecord = true;
+      serve_record(
+        { pid: e.pid },
+        res => {
+          if (res.status == '200') {
+            let data = res.result.data;
+            if (data) {
+              for (let i = 0; i < data.length; i++) {
+                data[i].label = data[i].yyrq + ' ' + data[i].zdsd;
+                data[i].value = i;
+              }
+              this.recordList = data;
+            }
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     message(type, msg, fn) {
       this.$message({
@@ -511,7 +587,8 @@ export default {
       {
         pageIndex: 0,
         pageSize: 100,
-        actName: ''
+        actName: '',
+        valid: '1'
       },
       res => {
         if (res.status == 200) {

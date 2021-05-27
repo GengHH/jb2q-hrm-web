@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-05-19 20:48:51
+ * @LastEditTime: 2021-05-27 09:16:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -34,7 +34,6 @@
               :file-list="proFileList"
               :auto-upload="false"
               :on-change="proUploadUserChange"
-              :before-upload="beforeAvatarUpload"
               :limit="1"
               :show-file-list="false"
             >
@@ -91,7 +90,6 @@
               :file-list="fileList"
               :auto-upload="false"
               :on-change="uploadUserChange"
-              :before-upload="beforeAvatarUpload"
               :limit="1"
               :show-file-list="false"
             >
@@ -190,6 +188,12 @@ export default {
     onSubmitForm() {
       //1编辑 3新增
       let addForm = { ...this.$refs.advancedSearch.value, ...this.proForm };
+      addForm.actStartTime = addForm.acttime[0];
+      addForm.actEndTime = addForm.acttime[1];
+
+      addForm.applyStartTime = addForm.applytime[0];
+      addForm.applyEndTime = addForm.applytime[1];
+
       if (this.type == '1') {
         act_modify(
           addForm,
@@ -211,6 +215,12 @@ export default {
           }
         );
       } else if (this.type == '3') {
+        if (addForm.propagandaImageBase64) {
+          addForm.propagandaImageBase64 = addForm.propagandaImageBase64
+            .split(',')[1]
+            .toString();
+        }
+
         act_add(
           addForm,
           res => {
@@ -254,12 +264,16 @@ export default {
     },
     //照片base64
     uploadUserChange(file) {
-      this.getBase64(file.raw, 'sceneImageBase64');
-      this.imageUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'sceneImageBase64');
+        this.imageUrl = URL.createObjectURL(file.raw);
+      }
     },
     proUploadUserChange(file) {
-      this.proGetBase64(file.raw, 'propagandaImageBase64');
-      this.propagandaUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file)) {
+        this.proGetBase64(file.raw, 'propagandaImageBase64');
+        this.propagandaUrl = URL.createObjectURL(file.raw);
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -269,16 +283,21 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     },
     open() {},
     onSubmit() {
       let data = { ...this.formConfig.dataList, ...this.form };
+      if (data.sceneImageBase64) {
+        data.sceneImageBase64 = data.sceneImageBase64.split(',')[1].toString();
+      }
       act_modify(
         data,
         res => {
@@ -330,8 +349,13 @@ export default {
         this.$refs.advancedSearch.value = this.formConfig.dataList;
         if (this.type == '2') {
           this.form = { ...this.formConfig.dataList };
+          this.form.sceneImageBase64 =
+            'data:image/png;base64,' + this.form.sceneImageBase64;
         }
         this.proForm = { ...this.formConfig.dataList };
+        this.proForm.propagandaImageBase64 =
+          'data:image/png;base64,' + this.proForm.propagandaImageBase64;
+        console.log(this.proForm);
       } else {
         this.$refs.advancedSearch.value = {};
       }

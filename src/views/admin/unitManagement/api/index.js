@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-26 14:41:47
- * @LastEditTime: 2021-05-20 15:07:35
+ * @LastEditTime: 2021-05-27 15:56:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\api\index.js
@@ -37,6 +37,10 @@ const agency_resume_verify = (params, fn, fnErr) =>
   postAction(urlStr + 'position/resume/verify', params, fn, fnErr);
 const agency_resume_query = (params, fn, fnErr) =>
   postAction(urlStr + 'position/resume/recommend/query', params, fn, fnErr);
+const agency_resume_detail = (params, fn, fnErr) =>
+  postAction(urlStr + 'position/resume/detail', params, fn, fnErr);
+const agency_rec = (params, fn, fnErr) =>
+  postAction(urlStr + 'position/resume/rec', params, fn, fnErr);
 
 //单位账号管理
 const management_query = (params, fn, fnErr) =>
@@ -45,7 +49,14 @@ const management_edit = (params, fn, fnErr) =>
   postAction(urlStr + 'modify', params, fn, fnErr);
 const management_frozen = (params, fn, fnErr) =>
   postAction(urlStr + 'frozen', params, fn, fnErr);
-
+//转出入审核
+const move_query = (params, fn, fnErr) =>
+  postAction(urlStr + 'transfer/query', params, fn, fnErr);
+const move_audit = (params, fn, fnErr) =>
+  postAction(urlStr + 'transfer/verify', params, fn, fnErr);
+//精准查询
+const accurate_info = (params, fn, fnErr) =>
+  postAction('/admin/algorithm/user/getUserInfo', params, fn, fnErr);
 export {
   agency_query,
   agency_add,
@@ -55,6 +66,8 @@ export {
   agency_resume_verify,
   agency_resume,
   agency_resume_query,
+  agency_resume_detail,
+  agency_rec,
   unit_query,
   unit_query_agency,
   unit_query_resume,
@@ -62,5 +75,8 @@ export {
   unit_out,
   management_query,
   management_edit,
-  management_frozen
+  management_frozen,
+  move_query,
+  move_audit,
+  accurate_info
 };

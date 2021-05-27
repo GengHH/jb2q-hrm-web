@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-05-20 13:57:50
+ * @LastEditTime: 2021-05-27 15:09:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -97,18 +97,18 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="单位标签" prop="meetOtherPeople">
-              <el-checkbox
+              <!-- <el-checkbox
                 v-model="form.tranBaseSymbol"
                 label="就业见习基地"
-              ></el-checkbox>
+              ></el-checkbox> -->
               <el-checkbox
                 v-model="form.humanResourceReg"
                 label="人力资源机构"
               ></el-checkbox>
-              <el-checkbox
+              <!-- <el-checkbox
                 v-model="form.entrustStatus"
                 label="代理招聘企业"
-              ></el-checkbox>
+              ></el-checkbox> -->
               <el-checkbox
                 v-model="form.keypointCorp"
                 label="重点企业"
@@ -151,7 +151,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -272,7 +271,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'meetImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'meetImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -350,12 +351,14 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   created() {}

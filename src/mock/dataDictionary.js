@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-14 15:39:08
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-26 19:35:11
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -750,9 +750,18 @@ const dic = {
     { value: '4908', label: '家禽养殖', filter: '49' }
   ],
   //反馈来源
-  RECRUIT_FEEDBACK_SOURCE: [],
+  RECRUIT_FEEDBACK_SOURCE: [
+    { value: '1', label: '单位反馈' },
+    { value: '2', label: '系统反馈' }
+  ],
   //应聘反馈状态
-  RECRUIT_FEEDBACK_STATUS: [],
+  RECRUIT_FEEDBACK_STATUS: [
+    { value: '01', label: '未查看' },
+    { value: '02', label: '已查看' },
+    { value: '03', label: '通知面试' },
+    { value: '04', label: '意向录用' },
+    { value: '05', label: '通知不录用' }
+  ],
   //学历
   RECRUIT_EDU: [
     { value: '01', label: '初中及以下' },

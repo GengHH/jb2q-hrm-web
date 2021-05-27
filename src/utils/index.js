@@ -242,6 +242,15 @@ export function isEmptyObject(obj) {
   return true;
 }
 /**
+ * 获取错误信息
+ */
+export function getHtml(data) {
+  let result = data.match(/<td(.*?)<\/td>/g).map(function(val) {
+    return val.replace(/<\/?td>/g, '');
+  });
+  return result[1].split('>')[1];
+}
+/**
  * 去除空格
  */
 export function trim(data) {

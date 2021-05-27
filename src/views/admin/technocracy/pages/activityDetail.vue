@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-05-19 20:32:21
+ * @LastEditTime: 2021-05-27 09:23:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -197,7 +197,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -377,7 +376,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'recordImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'recordImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -452,12 +453,14 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   mounted() {

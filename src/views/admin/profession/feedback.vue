@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-05-17 17:14:07
+ * @LastEditTime: 2021-05-27 17:48:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -88,14 +88,17 @@
                 width="400"
                 trigger="click"
               >
-                <el-radio-group v-model="maintain.employ">
+                <div>
+                  是否就业：
                   <el-radio
+                    v-model="maintain.employ"
                     v-for="(v, k) in dicOptions.yesno"
                     :key="k"
-                    :label="v.label"
-                    :value="v.value"
-                  ></el-radio>
-                </el-radio-group>
+                    :label="v.value"
+                    >{{ v.label }}</el-radio
+                  >
+                </div>
+
                 <el-select v-model="maintain.employType" placeholder="就业类型">
                   <el-option
                     v-for="(v, k) in dicOptions.jobType"
@@ -247,6 +250,21 @@ export default {
   },
   computed: {},
   methods: {
+    formatTime(time) {
+      if (time) {
+        if (time.length > 8) {
+          let t = time.split(' ')[0];
+          let tt = t.replace(/-/g, '');
+          let h = time.split(' ')[1];
+          let hh = h.replace(/:/g, '');
+          return tt + '' + hh;
+        } else {
+          return time;
+        }
+      } else {
+        return '';
+      }
+    },
     message(type, msg, fn) {
       this.$message({
         message: msg,
@@ -261,7 +279,10 @@ export default {
     },
     maintain_add(e) {
       let data = { ...e.row, ...this.maintain };
-      console.log(data);
+      data.expertGuideEnd = this.formatTime(data.expertGuideEnd);
+      data.expertGuideStart = this.formatTime(data.expertGuideStart);
+      data.guideTime = this.formatTime(data.guideTime);
+      data.recordTime = this.formatTime(data.recordTime);
       guide_add(
         data,
         res => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-05-19 20:35:39
+ * @LastEditTime: 2021-05-27 09:20:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\summaryDetail.vue
@@ -79,6 +79,18 @@
               <el-input v-model="form.meetOtherPeople"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="活动日期类型" prop="actDateType">
+              <el-select v-model="form.actDateType" style="width:100%">
+                <el-option
+                  v-for="(v, k) in dicOptions.date_type"
+                  :key="k"
+                  :label="v.label"
+                  :value="v.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row>
@@ -92,7 +104,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -125,6 +136,7 @@
 </template>
 
 <script>
+import { trim } from '@/utils/index';
 import { summary_add, summary_edit, synthesize_query } from '../api/index';
 export default {
   name: 'summaryDetail',
@@ -132,6 +144,10 @@ export default {
   components: {},
   data() {
     return {
+      dicOptions: {
+        //日期类型
+        date_type: trim(this.$store.getters['dictionary/recruit_act_date_type'])
+      },
       rules: {
         pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         expertId: [
@@ -168,7 +184,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'meetImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'meetImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -246,12 +264,14 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   created() {

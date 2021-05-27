@@ -1,22 +1,22 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-05-18 18:09:18
+ * @LastEditTime: 2021-05-21 13:43:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\hrdetails.vue
 -->
 <template>
   <div id="indexBody">
     <el-dialog
       width="750px"
-      :title="type == '1' ? '查看' : '审核开店申请'"
+      title="审核开店申请"
       :visible="visible"
       @close="onclose"
     >
       <div class="title-style">开店申请信息</div>
       <tform ref="form" :formConfig="formConfig"></tform>
-      <div v-if="type == '2'">
+      <div>
         <div class="title-style">审核</div>
         <el-form
           style="width: 650px;margin:0 auto"
@@ -27,11 +27,11 @@
           <el-form-item label="审核状态">
             <el-select
               style="width:210px"
-              v-model="form.statusId"
+              v-model="form.verifyResult"
               placeholder="请选择审核状态"
             >
-              <el-option label="通过" value="2"></el-option>
-              <el-option label="不通过" value="3"></el-option>
+              <el-option label="通过" value="1"></el-option>
+              <el-option label="不通过" value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="理由">
@@ -53,20 +53,17 @@
 <script>
 import { trim } from '@/utils/index';
 import tform from '../../common/t_form'; //高级查询
-import { user_querySysm, user_edit } from '../api/index';
+import { hr_verify } from '../api/index';
 export default {
-  name: 'details',
+  name: 'hrdetails',
   components: { tform },
-  props: ['visible', 'type', 'dataList'],
+  props: ['visible', 'dataList'],
   data() {
     return {
-      loading: false,
       form: {
-        userName: '',
-        name: ''
+        verifyResult: '1',
+        verifyMemo: ''
       },
-      userOptions: [],
-      idList: {},
       formConfig: {
         inline: true,
         size: 'mini',
@@ -78,7 +75,6 @@ export default {
           width: '650px',
           margin: '0 auto'
         },
-
         formItemList: [
           {
             type: 'input',
@@ -86,7 +82,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入单位名称',
             rules: [],
-            key: 'deptName'
+            key: 'corpName'
           },
           {
             type: 'input',
@@ -94,7 +90,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入社会信用代码',
             rules: [],
-            key: 'deptName'
+            key: 'tyshxydm'
           },
           {
             type: 'input',
@@ -102,7 +98,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入联系人',
             rules: [],
-            key: 'deptName'
+            key: 'contactName'
           },
           {
             type: 'input',
@@ -110,7 +106,7 @@ export default {
             style: { width: '210px' },
             placeholder: '请输入联系电话',
             rules: [],
-            key: 'deptName'
+            key: 'contactPhone'
           },
           {
             type: 'textarea',
@@ -118,7 +114,7 @@ export default {
             style: { width: '535px' },
             placeholder: '请输入其他说明',
             rules: [],
-            key: 'deptName'
+            key: 'applyMemo'
           }
         ]
       }
@@ -126,50 +122,22 @@ export default {
   },
   computed: {},
   methods: {
-    expertChange(e) {
-      this.form.userName = e.value;
-      this.form.name = e.label;
-      this.idList = { ...e };
-    },
-    remoteMethod(query) {
-      if (query !== '') {
-        this.loading = true;
-        let data = {
-          name: query,
-          pageIndex: 0,
-          pageSize: 10
-        };
-        user_querySysm(
-          data,
-          res => {
-            if (res.status == 200) {
-              this.loading = false;
-              let pageresult = res.result.pageresult.data;
-              let list = pageresult.map(e => {
-                return {
-                  value: e.userName,
-                  label: e.name,
-                  userId: e.userId,
-                  organId: e.organId,
-                  deptId: e.deptId
-                };
-              });
-              this.userOptions = list;
-            }
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        );
-      }
-    },
     onclose(type) {
       this.$emit('onclose', type || 0);
     },
     onSubmit(e) {
-      let data = { ...this.form, ...e, ...this.idList };
-      user_edit(
+      let data = { ...this.dataList, ...e, ...this.form };
+      if (data.verifyResult == '2') {
+        if (!data.verifyMemo) {
+          this.$message({
+            message: '请填写理由',
+            type: 'warning',
+            duration: 1000
+          });
+          return;
+        }
+      }
+      hr_verify(
         data,
         res => {
           if (res.result.data.result) {

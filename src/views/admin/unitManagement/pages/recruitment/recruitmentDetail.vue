@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-05-20 17:11:38
+ * @LastEditTime: 2021-05-27 15:31:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -95,7 +95,7 @@
                   size="mini"
                   type="primary"
                   icon="el-icon-user-solid"
-                  @click="positionAudit('0', scope)"
+                  @click="autonomously('1', scope)"
                   plain
                   >精准推荐</el-button
                 >
@@ -192,9 +192,14 @@
       v-if="autoVisible"
       :data="autoData"
       :resVisible="autoVisible"
-      :type="type"
       @onclose="autoClose"
     ></autonomously>
+    <accurate
+      v-if="accurateVisible"
+      :data="accurateData"
+      :resVisible="accurateVisible"
+      @onclose="accurateClose"
+    ></accurate>
   </el-dialog>
 </template>
 
@@ -204,11 +209,12 @@ import { trim } from '@/utils/index';
 import ttable from '../../../common/t_table';
 import position from './position';
 import autonomously from './autonomously';
+import accurate from './accurate';
 import resume from './resume';
 export default {
   name: 'recruitmentDetail',
   props: ['visible', 'form'],
-  components: { ttable, resume, position, autonomously },
+  components: { ttable, resume, position, autonomously, accurate },
   data() {
     return {
       type: '',
@@ -217,6 +223,7 @@ export default {
       resVisible: false,
       positionVisible: false,
       autoVisible: false,
+      accurateVisible: false,
       auditStutas: '1',
       activeName: '0',
       params0: {
@@ -259,8 +266,14 @@ export default {
   methods: {
     autonomously(type, e) {
       this.type = type;
-      this.autoData = { ...e.row };
-      this.autoVisible = true;
+      console.log(type);
+      if (type == '0') {
+        this.autoData = { ...e.row };
+        this.autoVisible = true;
+      } else {
+        this.accurateData = { ...e.row };
+        this.accurateVisible = true;
+      }
     },
     positionAudit(type, e) {
       this.type = type;
@@ -301,6 +314,9 @@ export default {
     },
     handleChange1(e) {
       console.log(e);
+    },
+    accurateClose(type) {
+      this.accurateVisible = false;
     },
     autoClose(type) {
       this.autoVisible = false;

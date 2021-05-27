@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-30 10:08:56
+ * @LastEditTime: 2021-05-26 20:23:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -158,38 +158,40 @@ export default {
             rules: [],
             key: 'actName'
           },
+
           {
-            type: 'date',
+            type: 'daterange',
             label: '活动开始时间',
-            style: { width: '190px' },
+            style: { width: '553px' },
             placeholder: '请输入开始时间',
             rules: [],
             format: 'yyyyMMdd',
-            key: 'actStartTime'
+            key: 'acttime'
           },
-          {
-            type: 'date',
-            label: '活动结束时间',
-            style: { width: '190px' },
-            placeholder: '请输入结束时间',
-            rules: [],
-            format: 'yyyyMMdd',
-            key: 'actEndTime'
-          },
+          // {
+          //   type: 'date',
+          //   label: '活动开始时间',
+          //   style: { width: '190px' },
+          //   placeholder: '请输入开始时间',
+          //   rules: [],
+          //   format: 'yyyyMMdd',
+          //   key: 'actStartTime'
+          // },
+          // {
+          //   type: 'date',
+          //   label: '活动结束时间',
+          //   style: { width: '190px' },
+          //   placeholder: '请输入结束时间',
+          //   rules: [],
+          //   format: 'yyyyMMdd',
+          //   key: 'actEndTime'
+          // },
           {
             type: 'radio',
             label: '是否专家参与',
             rules: [],
             style: { width: '190px' },
             key: 'expertJoin',
-            options: trim(this.$store.getters['dictionary/yesno'])
-          },
-          {
-            type: 'radio',
-            label: '是否发布',
-            rules: [],
-            style: { width: '190px' },
-            key: 'release',
             options: trim(this.$store.getters['dictionary/yesno'])
           },
           {
@@ -211,23 +213,32 @@ export default {
             key: 'content'
           },
           {
-            type: 'date',
+            type: 'daterange',
             label: '报名开始时间',
-            format: 'yyyyMMdd',
-            style: { width: '190px' },
+            style: { width: '553px' },
             placeholder: '请输入开始时间',
             rules: [],
-            key: 'applyStartTime'
-          },
-          {
-            type: 'date',
-            label: '报名结束时间',
             format: 'yyyyMMdd',
-            style: { width: '190px' },
-            placeholder: '请输入结束时间',
-            rules: [],
-            key: 'applyEndTime'
+            key: 'applytime'
           },
+          // {
+          //   type: 'date',
+          //   label: '报名开始时间',
+          //   format: 'yyyyMMdd',
+          //   style: { width: '190px' },
+          //   placeholder: '请输入开始时间',
+          //   rules: [],
+          //   key: 'applyStartTime'
+          // },
+          // {
+          //   type: 'date',
+          //   label: '报名结束时间',
+          //   format: 'yyyyMMdd',
+          //   style: { width: '190px' },
+          //   placeholder: '请输入结束时间',
+          //   rules: [],
+          //   key: 'applyEndTime'
+          // },
           {
             type: 'input',
             label: '最大自主报名人数',
@@ -311,7 +322,11 @@ export default {
           if (res.result.data.result) {
             this.$message({
               message: '操作成功',
-              type: 'success'
+              type: 'success',
+              duration: 1000,
+              close: () => {
+                this.advancedSearch(this.dataList);
+              }
             });
           } else {
             console.log(res.result.data.msg);
@@ -437,13 +452,16 @@ export default {
       console.log(type);
       //把数据合并到表单里面
       if (type != '3') {
-        scope.row.applyStartTime = this.formattime(scope.row.applyStartTime);
-        scope.row.applyEndTime = this.formattime(scope.row.applyEndTime);
-        scope.row.actStartTime = this.formattime(scope.row.actStartTime);
-        scope.row.actEndTime = this.formattime(scope.row.actEndTime);
+        scope.row.applytime = [
+          this.formattime(scope.row.applyStartTime),
+          this.formattime(scope.row.applyEndTime)
+        ];
+        scope.row.acttime = [
+          this.formattime(scope.row.actStartTime),
+          this.formattime(scope.row.actEndTime)
+        ];
         this.detailsFormConfig.dataList = scope.row;
       }
-
       this.visible = true;
     }
   },
