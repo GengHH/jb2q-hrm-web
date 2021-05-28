@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 14:40:55
+ * @LastEditTime: 2021-05-28 13:16:19
  * @Description: 各模块都可调用的功能接口，如：获取字典表
  * @FilePath: \jb2q-hrm-web\src\api\common.js
  */
@@ -40,6 +40,9 @@ const getPsnlResume = params =>
 // 获取个人简历信息（学信网）
 const getEduExpFromChsi = params =>
   postAction(basePath + '/person/resume/getEduExpFromChsi', params);
+// 获取个人证书信息（鉴定内网）
+const getCertInfo = params =>
+  postAction(basePath + '/common/person/query-certInfo', params);
 
 /******聊天专用接口*********/
 //查询未读信息的详细信息
@@ -62,5 +65,6 @@ export {
   getEduExpFromChsi,
   querySession,
   sendSession,
-  openSession
+  openSession,
+  getCertInfo
 };

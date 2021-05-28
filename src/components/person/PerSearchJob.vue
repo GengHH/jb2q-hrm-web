@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-19 10:03:15
+ * @LastEditTime: 2021-05-28 16:35:53
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -197,28 +197,47 @@
             <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
           </p>
           <p class="span-infor">
-            <span>A移动互联网</span>
+            <span>{{ jobItem.industryTypeText }}</span>
             <el-divider direction="vertical"></el-divider>
-            <span>A股份</span>
+            <span>{{ jobItem.corpNatureText }}</span>
             <!-- <el-divider direction="vertical"></el-divider>
             <span>A10000人以上</span> -->
           </p>
         </el-col>
         <el-col :span="5" class="text-right">
+          <!-- 投递按钮 -->
           <el-button
+            v-if="jobItem.applyFor"
             type="primary"
-            class="release-btn"
-            @click="selectJob(index, jobItem.positionId)"
+            class="white-btn job-bar-btn"
+            @click="selectJob(jobItem.applyFor, index, jobItem.positionId)"
           >
-            <i class="el-icon-position"></i>投递</el-button
+            <i class="el-icon-position">已投递</i></el-button
           >
           <el-button
+            v-if="!jobItem.applyFor"
+            type="primary"
+            class="release-btn job-bar-btn"
+            @click="selectJob(jobItem.applyFor, index, jobItem.positionId)"
+          >
+            <i class="el-icon-position">投递</i></el-button
+          >
+          <!-- 收藏按钮 -->
+          <el-button
+            v-if="jobItem.favor"
             type="primary"
             class="white-btn job-bar-btn"
             @click="favorJob(jobItem.favor, index, jobItem.positionId)"
           >
-            <i v-if="jobItem.favor" class="el-icon-star-on">已收藏</i>
-            <i v-else class="el-icon-star-off">收藏</i>
+            <i class="el-icon-star-on">已收藏</i>
+          </el-button>
+          <el-button
+            v-if="!jobItem.favor"
+            type="primary"
+            class="release-btn job-bar-btn"
+            @click="favorJob(jobItem.favor, index, jobItem.positionId)"
+          >
+            <i class="el-icon-star-off">收藏</i>
           </el-button>
         </el-col>
       </el-row>
@@ -351,7 +370,11 @@ export default {
         this.$parent.queryJobs(this.$parent.queryParams.positionName);
       }
     },
-    selectJob(index, positionId) {
+    selectJob(applyFor, index, positionId) {
+      if (applyFor) {
+        this.$alert('已向改职位投递过简历，无法再次投递');
+        return;
+      }
       //投递简历
       this.$confirm('确认向该职位投递简历？')
         .then(() => {

@@ -496,6 +496,18 @@ export default {
                 item.workNature
               );
             }
+            if (item.corpNature) {
+              item.corpNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_corp_nature'],
+                item.corpNature
+              );
+            }
+            if (item.industryType) {
+              item.industryTypeText = getDicText(
+                that.$store.getters['dictionary/recruit_industry_type'],
+                item.industryType
+              );
+            }
           });
           this.$set(this, 'queryResult', result.result.data);
         }

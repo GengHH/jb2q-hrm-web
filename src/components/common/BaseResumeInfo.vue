@@ -242,7 +242,7 @@
         >
           <el-table
             ref="multipleEduTable"
-            :data="eduTtableData"
+            :data="eduTableData"
             tooltip-effect="dark"
             style="width: 100%"
             @selection-change="handleSelectionChange"
@@ -391,6 +391,59 @@
           @click="dialog5 = true"
           >添加</el-button
         >
+        <el-divider class="vertical-divider" direction="vertical"></el-divider>
+        <!-- 鉴定内网  -->
+        <el-popover
+          v-if="notConstResume"
+          placement="left"
+          width="700"
+          @show="openSkillPop"
+          trigger="click"
+        >
+          <el-table
+            ref="multipleSkillTable"
+            :data="skillTableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange2"
+          >
+            <el-table-column type="selection" width="50"> </el-table-column>
+            <el-table-column
+              prop="certID"
+              label="证书编号"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="certName"
+              label="证书名称"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="certLevel"
+              label="证书等级"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column label="认证日期" width="120">
+              <template slot-scope="scope">{{
+                scope.row.receiveTime
+              }}</template>
+            </el-table-column>
+          </el-table>
+          <el-button id="selectSkillBtn" size="small" @click="addSkillFromJd()"
+            >确认选择</el-button
+          >
+          <!-- <el-button slot="reference">click 激活</el-button> -->
+          <el-button
+            class="tab-btn"
+            type="edit"
+            icon="el-icon-circle-plus-outline"
+            slot="reference"
+            >从已获取证书中添加</el-button
+          >
+        </el-popover>
       </div>
       <div class="column">
         <span
@@ -1018,7 +1071,8 @@ import {
   // getLanguageLevel,
   // getRecruitEdu,
   getPsnlResume,
-  getEduExpFromChsi
+  getEduExpFromChsi,
+  getCertInfo
 } from '@/api/common';
 import {
   getPersonBaseInfo,
@@ -1274,8 +1328,10 @@ export default {
         // workYear:0,
         // eduId:''
       },
-      eduTtableData: [],
-      multipleSelection: []
+      eduTableData: [],
+      multipleSelection: [],
+      skillTableData: [],
+      multipleSelection2: []
     };
   },
   computed: {
@@ -1451,6 +1507,9 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    handleSelectionChange2(val) {
+      this.multipleSelection2 = val;
     },
     //handleSizeChange(val) {},
     //handleCurrentChange(val) {},
@@ -1974,6 +2033,9 @@ export default {
         }
       });
     },
+    /**
+     * 显示学信网教育经历数据
+     */
     openEduPop() {
       // TODO 查询教育经历信息
       getEduExpFromChsi({
@@ -1981,13 +2043,30 @@ export default {
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
           // this.$message({ type: 'success', message: '查询成功' });
-          this.eduTtableData = queryRes.result.data || [];
+          this.eduTableData = queryRes.result.data || [];
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
       });
     },
     hideEduPop() {},
+    /**
+     * 显示技能鉴定证书数据
+     */
+    openSkillPop() {
+      // TODO 查询教育经历信息
+      getCertInfo({
+        pid: this.$store.getters['person/pid']
+      }).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          // this.$message({ type: 'success', message: '查询成功' });
+          this.skillTableData = queryRes.result.data || [];
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
+    },
+    hideSkillPop() {},
     /**
      *添加教育经历从学信网(可以批量)
      */
@@ -2006,8 +2085,39 @@ export default {
             //回显数据
             this.loadPsnlResume();
             // TODO删掉已经选过的数据
-            this.eduTtableData = this.eduTtableData.filter(
+            this.eduTableData = this.eduTableData.filter(
               obj => !this.multipleSelection.some(i => obj.eduId === i.eduId)
+            );
+          } else if (queryRes) {
+            this.$message({ type: 'error', message: '保存失败' });
+          }
+        });
+      } else {
+        this.$message({ type: 'warning', message: '请选择数据' });
+      }
+    },
+    /**
+     *添加技能证书从鉴定网(可以批量)
+     */
+    addSkillFromJd() {
+      this.$alert('暂时没有此Api接口，请稍后！');
+      return;
+      if (this.multipleSelection2 && this.multipleSelection2.length) {
+        console.log(this.multipleSelection2);
+        let params = this.multipleSelection2.map(i => {
+          let obj = { ...i };
+          obj.pid = this.pid;
+          obj.sourceOuter = '1';
+          return obj;
+        });
+        saveEduExp({ eduExpList: params }).then(queryRes => {
+          if (queryRes && queryRes.status === 200) {
+            this.$message({ type: 'success', message: '保存成功' });
+            //回显数据
+            this.loadPsnlResume();
+            // TODO删掉已经选过的数据
+            this.eduTableData = this.eduTableData.filter(
+              obj => !this.multipleSelection2.some(i => obj.eduId === i.eduId)
             );
           } else if (queryRes) {
             this.$message({ type: 'error', message: '保存失败' });
@@ -2207,6 +2317,10 @@ export default {
   }
 }
 #selectEudBtn {
+  margin-top: 10px;
+  float: right;
+}
+#selectSkillBtn {
   margin-top: 10px;
   float: right;
 }
