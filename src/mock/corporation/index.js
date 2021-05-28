@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-26 20:30:50
+ * @LastEditTime: 2021-05-28 20:05:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -743,6 +743,30 @@ Mock.mock(basePath + '/corp/meeting/save', 'post', function(options) {
   };
 });
 
+//获取已经收到的简历信息
+Mock.mock(basePath + '/corp/meeting/find/resume', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            meetName: '测试',
+            applyforId: '@string("number", 1)',
+            pid: '200709138518590',
+            xm: '张三',
+            positionName: '软件开发',
+            age: 36,
+            createTime: '2021-05-20 17:48:46',
+            'notReadCount|1': ['0', '1', '2', '13', '4', '125', '99']
+          }
+        ]
+      })
+    }
+  };
+});
 //查询招聘会反馈结果
 Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
   return {

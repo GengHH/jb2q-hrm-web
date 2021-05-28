@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-26 14:42:08
+ * @LastEditTime: 2021-05-28 20:05:26
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -85,6 +85,10 @@ const queryJobFairPositionInfo = params =>
 // 报名招聘会
 const applyJobFair = params =>
   postAction(basePath + '/corp/meeting/save', params);
+// 招聘会获取已经收到的简历信息
+const queryMeetingReceiveResume = params =>
+  postAction(basePath + '/corp/meeting/find/resume', params);
+
 /**********end***********/
 /*********招聘会反馈查询**********/
 const queryFairResult = params =>
@@ -103,6 +107,9 @@ const queryResumeList = params =>
 //获取联系方式
 const getPersonContact = params =>
   postAction(basePath + '/corp/resume/get/contact', params);
+//邀约时获取职位信息
+const queryPositionList = params =>
+  postAction(basePath + '/corp/resume/queryPositionListNoPage', params);
 //邀约
 const doInvite = params => postAction(basePath + '/corp/resume/invite', params);
 
@@ -150,6 +157,7 @@ export {
   applyJobFair,
   queryFairResult,
   queryResumeList,
+  queryMeetingReceiveResume,
   queryShop,
   saveShop,
   updateShop,

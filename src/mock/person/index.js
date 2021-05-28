@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-27 17:23:29
+ * @LastEditTime: 2021-05-28 16:38:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -233,7 +233,8 @@ Mock.mock(
               entrustCorpName: '上海新移力自动化科技有限公司',
               releaseUserId: '0000941012',
               type: '1',
-              'favor|+1': [false, true],
+              'favor|1': [false, true],
+              'applyFor|1': [false, true],
               'recruitType|1': ['1', '2'],
               entrustTyshxym: '',
               corpId: '201002025628331',
@@ -248,7 +249,9 @@ Mock.mock(
               special: '0',
               describe: '嘴皮子溜，脸皮子厚',
               onTop: '0',
-              releaseStatusId: '2'
+              releaseStatusId: '2',
+              'corpNature|1': ['01', '02'],
+              'industryType|1': ['01', '02']
             }
           ]
         })

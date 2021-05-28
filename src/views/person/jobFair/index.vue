@@ -248,6 +248,7 @@ export default {
   .fair-img {
     width: 100%;
     height: 100%;
+    border-radius: 10px;
   }
   ::v-deep .el-radio-button__inner {
     border: 0px;

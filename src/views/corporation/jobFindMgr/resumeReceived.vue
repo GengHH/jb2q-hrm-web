@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 18:55:39
+ * @LastEditTime: 2021-05-28 17:37:55
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -882,9 +882,9 @@ export default {
             this['totalCount' + witchTable] =
               queryRes.result.pageresult.total || 0;
             this['tableData' + witchTable].forEach(element => {
-              if (witchTable === 1) {
+              if (witchTable === '01') {
                 element.actions = ['action1', 'action3'];
-              } else if (witchTable === 2 || witchTable === 3) {
+              } else if (witchTable === '02' || witchTable === '03') {
                 element.actions = ['action1', 'action2', 'action3'];
               } else {
                 element.actions = ['action1', 'action3'];

@@ -609,6 +609,18 @@ export default {
                 item.workNature
               );
             }
+            if (item.corpNature) {
+              item.corpNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_corp_nature'],
+                item.corpNature
+              );
+            }
+            if (item.industryType) {
+              item.industryTypeText = getDicText(
+                that.$store.getters['dictionary/recruit_industry_type'],
+                item.industryType
+              );
+            }
           });
           this.$set(this, 'queryResult', result.result.pageresult.data);
           this.$set(
@@ -642,13 +654,6 @@ export default {
           .siblings('.el-icon-caret-bottom')
           .css('transform', 'rotate(180deg)');
       }
-      // TODO更新滚动条样式
-      //console.log($('#indexApp').getNiceScroll());
-      setTimeout(() => {
-        $('#indexApp')
-          .getNiceScroll()
-          .resize();
-      }, 10);
     },
     showJobDetial(arg) {
       //显示岗位详细信息
@@ -667,8 +672,9 @@ export default {
         pid: this.$store.getters['person/pid']
       });
       if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.queryResult.splice(index, 1);
+        // 更换按钮
+        // this.queryResult.splice(index, 1);
+        this.queryResult[index].applyFor = true;
         this.$message({ type: 'success', message: '简历投递成功' });
       } else {
         this.$message({

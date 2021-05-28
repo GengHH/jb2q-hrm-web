@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-26 17:30:47
+ * @LastEditTime: 2021-05-28 18:23:39
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -122,7 +122,7 @@
           </el-col>
           <el-col :span="22">
             <div class="grid-content bg-purple filter-select">
-              <el-row>
+              <el-row style="border-bottom:0">
                 <el-col :span="4">
                   <el-input
                     id="minSalary"
@@ -292,11 +292,12 @@
           ><i class="el-icon-download">下载</i></el-button
         ><el-button size="small" round
           ><i class="el-icon-user">获取联系方式</i></el-button
-        ><el-button size="small" round
+        >
+        <!-- <el-button size="small" round
           ><i class="el-icon-el-icon-tickets" @click="invite"
             >邀约</i
           ></el-button
-        >
+        > -->
       </div>
       <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
     </el-dialog>
@@ -308,83 +309,90 @@
       :visible.sync="inviteDialog"
       :before-close="handleClose"
     >
-      <!-- 显示职位名称 -->
-      <div class="jx-wrap jx-wrap-header" style="width:100%">
-        <el-row :gutter="40" style="margin:0">
-          <el-col :span="12" class="jx-wrap-header-title">
-            职位列表信息<i class="header-icon el-icon-info"></i>
-          </el-col>
-          <el-col :span="12">
-            <BaseSearch
-              placeholder="请输入职位名称"
-              @clickButton="queryJxPosition($event)"
-            ></BaseSearch>
-          </el-col>
-        </el-row>
-      </div>
-      <div
-        v-if="!jyjxList.length"
-        class="jx-wrap jx-wrap-body"
-        style="text-align:center;padding:20px"
-      >
-        无职位数据
-      </div>
-      <div v-else class="jx-wrap jx-wrap-body">
-        <!-- 委托单位或者见习职位列表 -->
-        <el-carousel indicator-position="outside" :autoplay="false">
-          <el-carousel-item v-for="item in carouselPageCount" :key="item">
-            <div class="jx-carousel">
-              <el-radio-group
-                v-model="positionCode"
-                size="medium"
-                id="positionsRadios"
-                class="radio-list-bar"
-              >
-                <el-popover
-                  ref="popoverRef"
-                  v-for="(wpdwItem, index) in jyjxList[item - 1]"
-                  :key="index"
-                  placement="bottom"
-                  width="600"
-                  trigger="click"
-                  :append-to-body="false"
-                  popper-class="position-popover"
-                >
-                  <el-radio-button
-                    v-for="idx in wpdwItem.positionDataList"
-                    :key="idx.gwbh"
-                    :label="idx.gwbh"
-                  >
-                    <span
-                      :id="idx.gwbh"
-                      :class="wpdwItem.cid"
-                      @click="
-                        radioGroupChange(idx.gwbm, wpdwItem.cid, wpdwItem.dwmc)
-                      "
-                      >{{ idx.gwbm }}</span
-                    >
-                  </el-radio-button>
-                  <el-button
-                    class="show-popover-button"
-                    :btnIndex="wpdwItem.cid"
-                    slot="reference"
-                    >{{ wpdwItem.dwmc }}</el-button
-                  >
-                </el-popover>
-              </el-radio-group>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-
-      <!-- end -->
-      <div class="operate-resume-header">
-        <el-button size="small"
-          ><i class="el-icon-el-icon-tickets" @click="invite"
-            >邀约</i
-          ></el-button
+      <div v-loading="inviteLoading">
+        <!-- 显示职位名称 -->
+        <div class="zw-wrap zw-wrap-header" style="width:100%">
+          <el-row :gutter="40" style="margin:0">
+            <el-col
+              :span="12"
+              class="zw-wrap-header-title"
+              style="line-height: 70px;"
+            >
+              职位列表信息<i class="header-icon el-icon-info"></i>
+            </el-col>
+            <el-col :span="12">
+              <BaseSearch
+                placeholder="请输入职位名称"
+                @clickButton="queryInvitePosition($event)"
+              ></BaseSearch>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          v-if="!invitePositionList.length"
+          class="zw-wrap zw-wrap-body"
+          style="text-align:center;padding:20px"
         >
+          无职位数据
+        </div>
+        <div v-else class="zw-wrap zw-wrap-body">
+          <!-- 委托单位或者见习职位列表 -->
+          <el-carousel indicator-position="outside" :autoplay="false">
+            <el-carousel-item v-for="item in carouselPageCount" :key="item">
+              <div class="zw-carousel">
+                <el-radio-group
+                  v-model="invitePosition"
+                  size="medium"
+                  id="positionsRadios"
+                  class="radio-list-bar"
+                >
+                  <el-popover
+                    ref="popoverRef"
+                    v-for="(positionItem, index) in invitePositionPageList[
+                      item - 1
+                    ]"
+                    :key="index"
+                    placement="bottom"
+                    width="600"
+                    trigger="click"
+                    :append-to-body="false"
+                    popper-class="invite-position-popover"
+                  >
+                    <el-radio-button
+                      class="zw-radio-button"
+                      :key="positionItem.positionId"
+                      :label="positionItem.positionId"
+                      slot="reference"
+                    >
+                      {{ positionItem.positionName }}
+                      <!-- <span
+                        :id="positionItem.gwbh"
+                        :class="positionItem.cid"
+                        slot="reference"
+                        @click="
+                          radioGroupChange(
+                            positionItem.gwbm,
+                            positionItem.cid,
+                            positionItem.dwmc
+                          )">{{ positionItem.zwmc }}</span
+                      > -->
+                    </el-radio-button>
+                  </el-popover>
+                </el-radio-group>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+
+        <div class="operate-resume-header">
+          <el-button size="small"
+            ><i class="el-icon-el-icon-tickets" @click="invite"
+              >邀约</i
+            ></el-button
+          >
+        </div>
       </div>
+      <!-- end -->
     </el-dialog>
     <!-- end -->
   </div>
@@ -406,6 +414,7 @@ import {
 } from '@/api/personApi';
 import {
   queryResumeList,
+  queryPositionList,
   doInvite,
   getPersonContact
 } from '@/api/corporationApi';
@@ -449,7 +458,7 @@ export default {
       queryParams: {
         cid: this.$store.getters['corporation/cid'],
         content: '',
-        positionList: [''],
+        invitePositionList: [''],
         industryList: [''],
         workNature: '',
         salaryMax: '',
@@ -480,20 +489,17 @@ export default {
       queryPid: '',
       queryFavor: false,
       resumeIdDetailsId: '',
-      positionCode: '',
-      carouselPageCount: 1,
-      jyjxList: [
+      inviteLoading: false,
+      invitePosition: '',
+      carouselPageCount: 0,
+      invitePositionList: [
         {
           cid: '12311234',
-          dwmc: '1231',
-          positionDataList: [
-            {
-              gwbh: '123',
-              gwbm: '1234'
-            }
-          ]
+          zwmc: '哈哈',
+          positionId: '1234123'
         }
-      ]
+      ],
+      invitePositionPageList: []
     };
   },
   computed: {
@@ -536,6 +542,32 @@ export default {
               color: '#fc6f3d'
             });
           });
+        }
+      }, 500)();
+    },
+    /**
+     * 职位信息分页
+     */
+    invitePositionList: function() {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (this.invitePositionList.length) {
+          this.invitePositionPageList = [];
+          let pageCount =
+            Math.floor(this.invitePositionList.length / 20) +
+            (this.invitePositionList.length % 20 > 0 ? 1 : 0);
+          for (let i = 1; i <= pageCount; i++) {
+            this.invitePositionPageList.push(
+              this.invitePositionList.slice((i - 1) * 20, i * 20)
+            );
+          }
+          console.log(this.invitePositionPageList);
+          this.carouselPageCount = pageCount;
+        } else {
+          //没有职位信息
+          this.invitePositionPageList = [];
+          this.carouselPageCount = 0;
         }
       }, 500)();
     }
@@ -737,30 +769,53 @@ export default {
     /**
      * 邀约
      */
-    async invite(arg) {},
     inviteDetials(arg) {
       let index = arg[0];
       //本条记录的简历编号
       let resumeId = (arg && arg[1]) || '';
       //本条记录的pid
       let queryPid = (arg && arg[2]) || '';
+      this.queryPid = queryPid;
       //本条记录是不是已经收藏
       let queryFavor = (arg && arg[3]) || false;
       this.inviteDialog = true;
-      // let inviteRes = await doInvite({
-      //   cid: this.queryParams.cid,
-      //   positionId: ''
-      // });
-      // if (inviteRes && inviteRes.status === 200) {
-      //   this.$message({ type: 'success', message: '邀约成功' });
-      // } else if (inviteRes) {
-      //   this.$message({
-      //     type: 'error',
-      //     message: '邀约失败'
-      //   });
-      // }
+      //只需首次查询所有职位信息
+      if (this.invitePositionList.length) {
+        this.inviteLoading = true;
+        this.queryInvitePosition();
+      }
     },
-
+    async queryInvitePosition(val) {
+      //查询职位信息
+      let queryRes = await queryPositionList({
+        cid: this.$store.getters['corporation/cid'],
+        positionName: val ? $.trim(val) : ''
+      });
+      if (queryRes && queryRes.status === 200) {
+        this.invitePositionList = queryRes.result.data || [];
+      } else if (queryRes) {
+        this.$message({ type: 'error', message: '无法获取职位信息' });
+      }
+      this.inviteLoading = false;
+    },
+    async invite(arg) {
+      if (!this.invitePosition) {
+        this.$alert('请选择一个职位');
+        return;
+      }
+      let inviteRes = await doInvite({
+        pid: this.queryPid,
+        positionId: this.invitePosition
+      });
+      if (inviteRes && inviteRes.status === 200) {
+        this.$message({ type: 'success', message: '邀约成功' });
+        this.inviteDialog = false;
+        //TODO 按钮重置
+        //  this.queryResult[index].invite = true;
+      } else if (inviteRes) {
+        this.$message({ type: 'error', message: '邀约失败' });
+      }
+    },
     /**
      * 投递简历 TODO (是不是换成邀请人员)
      */
@@ -831,6 +886,7 @@ export default {
     handleClose() {
       this.detailsDialog = false;
       this.wchatDialog = false;
+      this.inviteDialog = false;
     },
     industryGroupChange(newVal) {
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
@@ -1017,5 +1073,19 @@ export default {
   background-color: #f4f4f4;
   text-align: center;
   padding: 14px 0;
+}
+.zw-radio-button {
+  span {
+    border: 0;
+  }
+  &:first-child .el-radio-button__inner {
+    border-left: 0;
+  }
+}
+.el-carousel__item {
+  .zw-carousel {
+    margin: 0;
+    padding: 10px 60px 0;
+  }
 }
 </style>
