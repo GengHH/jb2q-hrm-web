@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 18:23:39
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-31 16:33:48
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -385,10 +385,8 @@
         </div>
 
         <div class="operate-resume-header">
-          <el-button size="small"
-            ><i class="el-icon-el-icon-tickets" @click="invite"
-              >邀约</i
-            ></el-button
+          <el-button size="small" @click="invite()"
+            ><i class="el-icon-el-icon-tickets">邀约</i></el-button
           >
         </div>
       </div>
