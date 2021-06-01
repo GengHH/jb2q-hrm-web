@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-27 17:18:33
+ * @LastEditTime: 2021-06-01 17:42:19
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -39,9 +39,17 @@ const getPersonBaseInfo = params =>
 //修改个人基本信息
 const updatePersonBaseInfo = params =>
   postAction(basePath + '/person/info/savePersonInfo', params);
+
 //搜索数据库中的已经发布的职位列表信息
 const queryJobs = params =>
   postAction(basePath + '/person/manage/find/position', params);
+//查询管理员推荐职位
+const queryRecommendJobs = params =>
+  postAction(basePath + '/person/recommend/queryRecommendList', params);
+//个人投递招聘会下的职位
+const queryRecommendDetai = params =>
+  postAction(basePath + '/person/recommend/doQueryRecommendDetail', params);
+
 // 更新工作年限
 const saveWorkYear = params =>
   postAction(basePath + '/person/resume/save/workyear', params);
@@ -78,6 +86,9 @@ const deleteSomeResume = params =>
 //个人投递简历
 const doDeliveryResume = params =>
   postAction(basePath + '/person/feedback/do-applyFor', params);
+//个人投递简历
+const doDeliveryResumeRecommend = params =>
+  postAction(basePath + '/person/recommend/doApplyFor', params);
 //个人收藏单位or职位
 const doFavorJobs = (type, params) =>
   postAction(basePath + '/person/manage/find/do-favor/' + type, params);
@@ -144,6 +155,23 @@ const doApplyFor = params =>
   postAction(basePath + '/person/meeting/doApplyFor', params);
 
 /*********end**********/
+/*********招聘会**********/
+// 查询招聘会list
+const queryActivityList = params =>
+  postAction(
+    basePath + '/person/activity/queryPersonSpecialActivityList',
+    params
+  );
+//个人投递招聘会下的职位
+const doApplyActivity = params =>
+  postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
+
+/*********end**********/
+
+//个人投递招聘会下的职位
+const queryPositionDetials = params =>
+  postAction(basePath + '/person/recommend/doQueryRecommendDetail', params);
+
 export {
   doSend,
   doLogin,
@@ -161,10 +189,13 @@ export {
   savePsnlEvaluate,
   deleteSomeResume,
   queryJobs,
+  queryRecommendJobs,
+  queryRecommendDetai,
   updatePersonalPermissions,
   doFavorJobs,
   doUnfavorJobs,
   doDeliveryResume,
+  doDeliveryResumeRecommend,
   queryShieldList,
   doShieldCorp,
   doCancelShield,
@@ -182,5 +213,7 @@ export {
   queryMeetingCorporationList,
   queryMeetingPositionList,
   queryCorporationPositionInfo,
-  doApplyFor
+  doApplyFor,
+  queryActivityList,
+  doApplyActivity
 };

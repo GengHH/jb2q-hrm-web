@@ -6,38 +6,36 @@
         <el-row>
           <el-col :span="19">
             <div class="job-title">
-              {{ positionData.positionName }}
+              {{ realData.positionName }}
               <i
-                v-if="positionData.tranBaseSymbol === '1'"
+                v-if="realData.tranBaseSymbol === '1'"
                 class="bl-bg i-style font-size16"
                 >见习</i
               >
               <span class="font-size24 font-or"
-                >{{ positionData.salaryMin }}-{{ positionData.salaryMax }}</span
+                >{{ realData.salaryMin }}-{{ realData.salaryMax }}</span
               >
             </div>
             <div class="sixteen-opacity mat-15">
-              <span>上海{{ positionData.workAreaText }}</span>
+              <span>上海{{ realData.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ positionData.eduRequireText }}</span>
+              <span>{{ realData.eduRequireText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ positionData.workNatureText }}</span>
+              <span>{{ realData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验{{ Number(positionData.workYearNeed) }}年</span>
+              <span>经验{{ Number(realData.workYearNeed) }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘{{ Number(positionData.recruitNum) }}人</span>
+              <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              {{ positionData.corpName }}
+              {{ realData.corpName }}
               <img
                 src="../../../assets/images/ico_rz.png"
                 alt=""
                 class="ico_rz"
               />
             </p>
-            <p class="four-opacity mat-15">
-              更新于 {{ positionData.releaseTime }}
-            </p>
+            <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
           <el-col :span="5" class="padd-l">
             <el-row :gutter="20">
@@ -46,11 +44,14 @@
                   type="primary"
                   class="white-btn mat-15"
                   @click="
-                    favorJob(positionData.favor, index, positionData.positionId)
+                    favorJob(
+                      realData.favor,
+                      index,
+                      realData.positionId,
+                      realData.recId
+                    )
                   "
-                  ><i v-if="positionData.favor" class="el-icon-star-on"
-                    >已收藏</i
-                  >
+                  ><i v-if="realData.favor" class="el-icon-star-on">已收藏</i>
                   <i v-else class="el-icon-star-off">收藏</i></el-button
                 >
               </el-col>
@@ -60,9 +61,10 @@
                   class="release-btn mat-15"
                   @click="
                     deliveryResume(
-                      positionData.favor,
+                      realData.favor,
                       index,
-                      positionData.positionId
+                      realData.positionId,
+                      realData.recId
                     )
                   "
                 >
@@ -92,10 +94,10 @@
             </el-row>
 
             <p
-              v-if="positionData.tranBaseSymbol === '0'"
+              v-if="realData.tranBaseSymbol === '0'"
               class="four-opacity mat-50"
             >
-              发布机构:{{ positionData.corpName }}
+              发布机构:{{ realData.corpName }}
             </p>
           </el-col>
         </el-row>
@@ -137,7 +139,7 @@
         <div class="title-border mat-15">公司介绍</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
-            {{ positionData.describe }}
+            {{ realData.describe }}
           </p>
           <!-- <p class="introduce little-tit">
             金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
@@ -203,13 +205,13 @@
           />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
-              {{ positionData.releaseUserId }}
+              {{ realData.releaseUserId }}
               <span class="dqzx-span">当前在线</span>
             </p>
             <el-button
               type="primary"
               class="gray-btn or-br mat-15"
-              @click="callPositionCorp(positionData.positionId)"
+              @click="callPositionCorp(realData.positionId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
             >
           </div>
@@ -220,7 +222,7 @@
             src="../../../assets/images/logos.png"
             alt=""
           />
-          <p class="font-sixteen font-or name-p">{{ positionData.corpName }}</p>
+          <p class="font-sixteen font-or name-p">{{ realData.corpName }}</p>
         </div>
         <div class="module1">
           <p class="four-opacity">
@@ -279,6 +281,7 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
+import { queryRecommendDetai } from '@/api/personApi';
 export default {
   name: 'JobSearchIndex',
   props: {
@@ -295,11 +298,21 @@ export default {
     PlMap
   },
   data() {
-    return {};
+    return {
+      realData: {}
+    };
   },
   computed: {
     describeList() {
-      return this.positionData.describe.split('\n');
+      return this.realData.describe.split('\n');
+    }
+  },
+  created() {
+    //如果是推荐的职位
+    if (this.realData.recId) {
+      this.queryPositionDetials(this.realData.recId);
+    } else {
+      this.realData = { ...positionData };
     }
   },
   methods: {
@@ -309,22 +322,22 @@ export default {
     uploadResume() {
       this.$emit('uploadResume');
     },
-    deliveryResume(favor, index, positionId) {
+    deliveryResume(favor, index, positionId, recId) {
       //投递简历
       this.$confirm('确认向该职位投递简历？')
         .then(() => {
-          this.$emit('deliveryResume', index, positionId); //通知父组件改变。
+          this.$emit('deliveryResume', index, positionId, recId); //通知父组件改变。
         })
         .catch(err => {
           console.log(err);
         });
     },
-    favorJob(favor, index, positionId) {
+    favorJob(favor, index, positionId, recId) {
       //收藏或者取消收藏职位
       let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
       this.$confirm(str)
         .then(() => {
-          this.$emit('favorJob', index, positionId, favor);
+          this.$emit('favorJob', index, positionId, favor, recId);
         })
         .catch(err => {
           console.log(err);
@@ -332,6 +345,18 @@ export default {
     },
     callPositionCorp(positionId) {
       this.$emit('callPositionCorp', positionId);
+    },
+    /**
+     * 查询推荐的职位的详细信息
+     */
+    async queryPositionDetials(recId) {
+      let res = await queryRecommendDetai({
+        recId: recId
+      });
+      if (res && res.status === 200) {
+        console.log(res.result.data);
+        this.realData = res.result.data;
+      }
     }
   }
 };

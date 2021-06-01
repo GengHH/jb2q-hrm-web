@@ -36,70 +36,98 @@
         :md="12"
         :lg="8"
         :xl="6"
-        v-for="(item, index) in fairInfo"
+        v-for="(item, index) in activityInfo"
         :key="index"
       >
         <pl-flipper
           class="card"
           width="100%"
-          minHeight="270px"
+          minHeight="340px"
           :flipped="item.isFlipped"
           @mouseenter="item.isFlipped = !item.isFlipped"
           @mouseleave="item.isFlipped = !item.isFlipped"
         >
           <div class="card__pattern" slot="front">
+            <p class="activity-type activity-one">
+              <span v-if="item.actType === '01'" class="span-line">讲座</span>
+            </p>
+            <p class="activity-type activity-two">
+              <span v-if="item.actType === '02'" class="span-line2"
+                >主题咨询活动</span
+              >
+            </p>
+            <p class="activity-type activity-three">
+              <span v-if="item.actType === '03'" class="span-line2"
+                >集体指导活动</span
+              >
+            </p>
+            <p class="activity-type activity-four">
+              <span v-if="item.actType === '04'" class="span-line2">其他</span>
+            </p>
             <img
               v-if="item.propagandaImage || item.propagandaImage === ''"
-              class="fair-img"
+              class="activity-img"
               :src="'data:image/jpg;base64,' + item.propagandaImage"
               @error="defImg"
               alt="未加载"
             />
-            <!-- <div v-else class="unload-img">
-              <i  class="el-icon-picture-outline"></i>
-            </div> -->
-            <!-- <img
-              class="fair-img"
-              src="../../../assets/img/img04.png"
-              alt="未加载"
-            /> -->
           </div>
           <div class="card__face" slot="back">
-            <!-- <b class="fair-title">2020高校毕业生全国网络联合招聘 </b> -->
-            <p class="fair-title">
-              <b>{{ item.meetName }}</b>
-              <span
-                v-if="item.meetType === '1' || item.meetType === '2'"
-                class="span-line"
-                >线上</span
+            <!-- <b class="activity-title">2020高校毕业生全国网络联合招聘 </b> -->
+            <p class="activity-title">
+              <b>{{ item.actName }}</b>
+              <span v-if="item.expertJoin" class="span-line">{{
+                item.expertJoin === '1' ? '专家' : '非专家'
+              }}</span>
+              <!-- <span v-if="item.actType === '01'" class="span-line">讲座</span>
+              <span v-if="item.actType === '02'" class="span-line2"
+                >主题咨询活动</span
               >
-              <span v-if="item.meetType === '2'" class="span-line2">线下</span>
-            </p>
-            <p class="line30">
-              <span class="orange-font"> <i class="el-icon-time"></i></span>
-              {{ item.startTime }}
-              至
-              {{ item.endTime }}
+              <span v-if="item.actType === '03'" class="span-line2"
+                >集体指导活动</span
+              >
+              <span v-if="item.actType === '04'" class="span-line2">其他</span> -->
             </p>
             <p class="line30">
               <span class="gray-font"
-                ><i class="el-icon-office-building"></i> 主办单位：</span
-              >{{ item.mainCorpName }}
+                ><i class="el-icon-office-building"></i> 区县：</span
+              >{{ item.districtCodeText }}
             </p>
-            <p class="line30">
-              <span class="gray-font">
-                <i class="el-icon-user"></i> 联系人：</span
-              >{{ item.contactName }}
+            <p class="line30" title="活动起止时间">
+              <span class="orange-font">
+                <i class="el-icon-time"></i>
+                {{ item.actStartTime }}
+                至
+                {{ item.actEndTime }}
+              </span>
             </p>
             <p class="line30">
               <span class="gray-font"
-                ><i class="el-icon-phone-outline"></i> 联系电话：</span
-              >{{ item.contactPhone }}
+                ><i class="el-icon-user"></i> 最大自主报名人数：</span
+              >{{ item.selfApplyMax }}
             </p>
             <p class="line30">
               <span class="gray-font">
-                <i class="el-icon-location-outline"></i> 招聘地点：</span
-              >{{ item.address }}
+                <i class="el-icon-user"></i> 最大推荐报名人数：</span
+              >{{ item.recApplyMax }}
+            </p>
+            <p class="line30" title="报名起止时间">
+              <span class="orange-font">
+                <i class="el-icon-time"></i>
+                {{ item.applyStartTime }}
+                至
+                {{ item.applyEndTime }}
+              </span>
+            </p>
+            <p class="line30 long-text" :title="item.content">
+              <span class="gray-font"
+                ><i class="el-icon-tickets"></i> 主要内容：</span
+              >{{ item.content }}
+            </p>
+            <p class="line30">
+              <span class="gray-font">
+                <i class="el-icon-location-outline"></i> 活动地点：</span
+              >{{ item.actAddress }}
               <span class="blue-font" style="color:#7386f1">
                 <i class="icon iconfont">&#xe654;</i>
                 <span @click="showMap(item)">附近交通</span></span
@@ -113,8 +141,8 @@
                   >{{ item.applyTime ? item.applyTime : '无' }}</el-col
                 > -->
                 <el-col :span="24" style="text-align:center">
-                  <span class="shop-edit-btn" @click="showFairDetails(item)"
-                    ><i class="el-icon-view"></i>查看详情</span
+                  <span class="shop-edit-btn" @click="applyActivity(item)"
+                    ><i class="el-icon-view"></i>报名参加</span
                   >
                 </el-col>
               </el-row>
@@ -136,7 +164,7 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
-import { queryMeetingList } from '@/api/personApi';
+import { queryActivityList, doApplyActivity } from '@/api/personApi';
 import plFlipper from '@/components/common/BaseFlipper.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
@@ -153,7 +181,7 @@ export default {
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
       totalCount: 0,
-      fairInfo: [],
+      activityInfo: [],
       dicQx: this.$store.getters['dictionary/ggjbxx_qx']
     };
   },
@@ -172,6 +200,7 @@ export default {
      */
     query() {
       let params = {
+        pid: this.$store.getters['person/pid'],
         pageParam: {
           pageIndex: 0,
           pageSize: 120
@@ -183,14 +212,18 @@ export default {
         //address: this.address,
         //type: this.type
       };
-      queryMeetingList(params).then(queryRes => {
+      queryActivityList(params).then(queryRes => {
         console.log(queryRes);
         if (queryRes && queryRes.status === 200) {
           this.totalCount = queryRes.result.pageresult.total || 0;
           queryRes.result.pageresult.data.forEach(i => {
+            i.districtCodeText = getDicText(
+              this.$store.getters['dictionary/ggjbxx_qx'],
+              i.districtCode
+            );
             i.isFlipped = false;
           });
-          this.fairInfo = queryRes.result.pageresult.data || [];
+          this.activityInfo = queryRes.result.pageresult.data || [];
           if (
             !this.totalCount ||
             (this.totalCount && Number(this.totalCount) === 0)
@@ -207,20 +240,25 @@ export default {
      */
     showMap(item) {
       this.pointList = [];
-      this.pointList.push(item.address);
+      this.pointList.push(item.actAddress);
       this.mapDialog = true;
     },
     mapHandleClose() {
       this.mapDialog = false;
     },
     /**
-     * 查看招聘会详情
+     * 报名参加特色活动
      */
-    showFairDetails(item) {
-      this.$router.push({
-        path: '/fairDetails',
-        query: { meetId: item.meetId }
+    async applyActivity(item) {
+      let applyRes = await doApplyActivity({
+        pid: this.$store.getters['person/pid'],
+        actId: item.actId
       });
+      if (applyRes && applyRes.status == 200) {
+        this.$message({ type: 'success', message: '报名成功' });
+      } else if (applyRes) {
+        this.$message({ type: 'error', message: '报名失败' });
+      }
     },
     /**
      * 定义加载不到图片时显示默认图片
@@ -245,10 +283,10 @@ export default {
   .el-col {
     margin: 10px 0;
   }
-  .fair-img {
+  .activity-img {
     width: 100%;
     height: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
   }
   ::v-deep .el-radio-button__inner {
     border: 0px;
@@ -306,7 +344,27 @@ export default {
   p {
     padding: 0px 10px;
   }
-  .fair-title {
+  .activity-type {
+    position: absolute;
+    top: 10px;
+
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 0 16px 16px 0;
+    &-one {
+      background: rgba(255, 152, 0, 0.6);
+    }
+    &-two {
+      background: rgba(3, 169, 244, 0.6);
+    }
+    &-three {
+      background: rgba(0, 150, 136, 0.6);
+    }
+    &-four {
+      background: rgba(153, 153, 153, 0.6);
+    }
+  }
+  .activity-title {
     font-size: 16px;
     font-weight: 800;
     // margin: 20px 0;
@@ -330,6 +388,13 @@ export default {
     .span-line2 {
       background-color: #4766a4;
     }
+  }
+  .long-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    word-break: break-all;
+    overflow: hidden;
   }
   .orange-font {
     color: #fc7a43;

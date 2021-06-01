@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 17:51:10
+ * @LastEditTime: 2021-06-01 15:57:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -795,7 +795,6 @@ Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
     }
   };
 });
-/****在线开店****/
 //简历搜素
 Mock.mock(basePath + '/corp/resume/find', 'post', function(options) {
   return {

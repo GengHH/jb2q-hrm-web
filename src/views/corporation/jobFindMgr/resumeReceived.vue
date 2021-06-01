@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 17:37:55
+ * @LastEditTime: 2021-06-01 16:51:59
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -931,6 +931,7 @@ export default {
             });
           } else if (this.feedback.applyforId) {
             // 单个数据
+            this.feedback.applyforIdList = [];
             this.feedback.applyforIdList.push(this.feedback.applyforId);
           } else {
             this.$alert('没有需要反馈的信息');

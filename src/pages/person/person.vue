@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 18:12:35
+ * @LastEditTime: 2021-06-01 14:44:12
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -40,20 +40,21 @@ export default {
         //   nvaText: this.$store.getters.name || '临时工'
         // },
         {
-          id: '8',
-          path: '/blak1',
+          id: '9',
+          path: '/blank',
           nvaText: '时钟',
           icon: true,
           iconName: 'el-icon-time'
         },
         {
-          id: '7',
+          id: '8',
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
           type: 'badge',
           iconName: 'el-icon-bell'
         },
+        { id: '7', path: '/activity', nvaText: '特色活动' },
         { id: '6', path: '/jobFair', nvaText: '招聘会' },
         { id: '5', path: '/personInfo', nvaText: '个人信息维护' },
         { id: '4', path: '/jobFindFeedback', nvaText: '求职反馈' },
