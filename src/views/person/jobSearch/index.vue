@@ -709,6 +709,7 @@ export default {
     async queryDefaultJobs(val) {
       let that = this;
       try {
+        this.activeName = 'default';
         let result = await queryRecommendJobs({
           pid: that.$store.getters['person/pid'],
           pageParam: {
@@ -762,6 +763,7 @@ export default {
             Number(result.result.pageresult.total) || 0
           );
         } else {
+          this.activeName = 'search';
           this.$set(this, 'queryDefaultResult', []);
           this.$set(this, 'queryDefaultResultTotal', 0);
           this.$message({
@@ -830,7 +832,7 @@ export default {
         if (res.status === 200) {
           // 更换按钮
           // this.queryResult.splice(index, 1);
-          this.queryResult[index].applyFor = true;
+          this.queryDefaultResult[index].applyFor = true;
           this.$message({ type: 'success', message: '简历投递成功' });
         } else {
           this.$message({

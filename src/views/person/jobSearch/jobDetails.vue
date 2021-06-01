@@ -309,10 +309,10 @@ export default {
   },
   created() {
     //如果是推荐的职位
-    if (this.realData.recId) {
+    if (this.positionData.recId) {
       this.queryPositionDetials(this.realData.recId);
     } else {
-      this.realData = { ...positionData };
+      this.realData = { ...this.positionData };
     }
   },
   methods: {
