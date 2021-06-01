@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-28 16:35:53
+ * @LastEditTime: 2021-06-01 18:29:34
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -153,7 +153,7 @@
           <div class="infor-module">
             <p
               class="name-infor font-or"
-              @click="showJobDetial(index, jobItem.positionId)"
+              @click="showJobDetial(index, jobItem.positionId, jobItem.recId)"
             >
               <span class="positionName"> {{ jobItem.positionName }} </span>
               <!-- <i class="bl-bg i-style" v-if="jobItem.workNature === '03'">见习</i> -->
@@ -210,7 +210,14 @@
             v-if="jobItem.applyFor"
             type="primary"
             class="white-btn job-bar-btn"
-            @click="selectJob(jobItem.applyFor, index, jobItem.positionId)"
+            @click="
+              selectJob(
+                jobItem.applyFor,
+                index,
+                jobItem.positionId,
+                jobItem.recId
+              )
+            "
           >
             <i class="el-icon-position">已投递</i></el-button
           >
@@ -218,7 +225,14 @@
             v-if="!jobItem.applyFor"
             type="primary"
             class="release-btn job-bar-btn"
-            @click="selectJob(jobItem.applyFor, index, jobItem.positionId)"
+            @click="
+              selectJob(
+                jobItem.applyFor,
+                index,
+                jobItem.positionId,
+                jobItem.recId
+              )
+            "
           >
             <i class="el-icon-position">投递</i></el-button
           >
@@ -227,7 +241,9 @@
             v-if="jobItem.favor"
             type="primary"
             class="white-btn job-bar-btn"
-            @click="favorJob(jobItem.favor, index, jobItem.positionId)"
+            @click="
+              favorJob(jobItem.favor, index, jobItem.positionId, jobItem.recId)
+            "
           >
             <i class="el-icon-star-on">已收藏</i>
           </el-button>
@@ -235,7 +251,9 @@
             v-if="!jobItem.favor"
             type="primary"
             class="release-btn job-bar-btn"
-            @click="favorJob(jobItem.favor, index, jobItem.positionId)"
+            @click="
+              favorJob(jobItem.favor, index, jobItem.positionId, jobItem.recId)
+            "
           >
             <i class="el-icon-star-off">收藏</i>
           </el-button>
@@ -261,7 +279,20 @@
             >委托代招：<i>{{ jobItem.entrustCorpName }}</i></span
           >
         </el-col>
-        <el-col :span="5" class="text-right">
+        <el-col
+          v-if="
+            jobItem.tranBaseSymbol === '1' ||
+              jobItem.recruitType === '2' ||
+              jobItem.agencyRecruit === '1'
+          "
+          :span="5"
+          class="text-right"
+        >
+          <span class="fourteen-opacity"
+            >发布时间：{{ jobItem.releaseTime }}</span
+          >
+        </el-col>
+        <el-col v-else :span="5">
           <span class="fourteen-opacity"
             >发布时间：{{ jobItem.releaseTime }}</span
           >
@@ -370,7 +401,7 @@ export default {
         this.$parent.queryJobs(this.$parent.queryParams.positionName);
       }
     },
-    selectJob(applyFor, index, positionId) {
+    selectJob(applyFor, index, positionId, recId) {
       if (applyFor) {
         this.$alert('已向改职位投递过简历，无法再次投递');
         return;
@@ -378,18 +409,18 @@ export default {
       //投递简历
       this.$confirm('确认向该职位投递简历？')
         .then(() => {
-          this.$emit('deliveryResume', index, positionId); //通知父组件改变。
+          this.$emit('deliveryResume', index, positionId, recId); //通知父组件改变。
         })
         .catch(err => {
           console.log(err);
         });
     },
-    favorJob(favor, index, positionId) {
+    favorJob(favor, index, positionId, recId) {
       //收藏或者取消收藏职位
       let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
       this.$confirm(str)
         .then(() => {
-          this.$emit('favorJob', index, positionId, favor);
+          this.$emit('favorJob', index, positionId, favor, recId);
         })
         .catch(err => {
           console.log(err);
@@ -399,12 +430,12 @@ export default {
       console.log(event);
     },
     handleCheckAllChange() {},
-    showJobDetial(index, positionId) {
-      this.$emit('showJobDetials', index, positionId);
+    showJobDetial(index, positionId, recId) {
+      this.$emit('showJobDetials', index, positionId, recId);
     },
     callPositionCorp(index, positionId) {
+      // TODO this.$alert('暂时无法进行沟通') 需要cid;
       this.$emit('callPositionCorp', index, positionId);
-      this.$alert('暂时无法进行沟通');
     }
   }
 };

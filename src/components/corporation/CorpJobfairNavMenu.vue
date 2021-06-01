@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-05-07 19:41:04
+ * @LastEditTime: 2021-06-01 18:40:50
  * @LastEditors: GengHH
  * @Description: 单位模块招聘会子菜单
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpJobfairNavMenu.vue
@@ -30,15 +30,14 @@
         </span>
       </el-menu-item>
     </router-link>
-    <router-link to="/jobFair/jobFairResume">
+    <!-- <router-link to="/jobFair/jobFairResume">
       <el-menu-item index="3">
         <i class="el-icon-menu"></i>
         <span slot="title">
           收到招聘会简历
         </span>
       </el-menu-item>
-    </router-link>
-    </router-link>
+    </router-link> -->
   </el-menu>
 </template>
 

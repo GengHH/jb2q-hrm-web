@@ -234,21 +234,14 @@ let router = new Router({
       component: () => import('@/views/person/jobFair')
     },
     {
+      path: '/activity',
+      name: '特色活动',
+      component: () => import('@/views/person/activity')
+    },
+    {
       path: '/fairDetails',
       name: '招聘会详情',
-      component: () => import('@/views/person/jobFair/fairDetails'),
-      children: [
-        {
-          path: '/jobFair/jobFairs',
-          name: '招聘会详情',
-          components: {
-            personNavMenu: () =>
-              import('@/components/person/PerFindJobBackNavMenu'),
-            default: () =>
-              import('@/views/person/jobFindFeedback/jobFindRecord')
-          }
-        }
-      ]
+      component: () => import('@/views/person/jobFair/fairDetails')
     },
     {
       path: '/corpDetails',
@@ -261,6 +254,11 @@ let router = new Router({
       //     component: () => import('@/views/person/jobSearch/jobDetails')
       //   }
       // ]
+    },
+    {
+      path: '/activity',
+      name: '特色活动',
+      component: () => import('@/views/person/activity')
     },
     {
       path: '/loadding',

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-26 19:35:11
+ * @LastEditTime: 2021-05-28 16:19:05
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -1222,6 +1222,13 @@ const dic = {
     { value: '3	', label: '三星' },
     { value: '4	', label: '四星' },
     { value: '5	', label: '五星' }
+  ],
+  //困惑
+  ZYJS_ZYZDZYKH: [
+    { value: '1	', label: '简历制作、面试辅导等求职技巧' },
+    { value: '2	', label: '职场定位、职业选择、转型等职业规划' },
+    { value: '3	', label: '职场适应、求职障碍等职场心理' },
+    { value: '4	', label: '其他求职（职业）困惑问题' }
   ]
 };
 

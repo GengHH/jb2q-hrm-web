@@ -11,7 +11,7 @@
         <ActivityBoxShow
           v-for="activityInfo in showList"
           :key="activityInfo.id"
-          :activity-info="activityInfo"
+          :activity="activityInfo"
           @click.native="activityBoxClick(activityInfo)"
         ></ActivityBoxShow>
       </div>
@@ -41,7 +41,7 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       total: 0,
-      showList: []
+      showList: [{ id: 12 }]
     };
   },
   computed: {

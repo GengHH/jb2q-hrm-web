@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:24
- * @LastEditTime: 2021-04-29 17:03:03
+ * @LastEditTime: 2021-05-28 11:14:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\getAJob.vue
@@ -41,10 +41,10 @@ export default {
       currentPage: 1,
       columns: [
         { title: '序号', type: 'index' },
-        { title: '起始年月', prop: 'ksrq' },
-        { title: '终止年月', prop: 'jsrq' },
-        { title: '见习基地名称', prop: 'jdmc' },
-        { title: '见习岗位名称', prop: 'gwmc' }
+        { title: '起始年月', prop: 'startDate' },
+        { title: '终止年月', prop: 'endDate' },
+        { title: '见习基地名称', prop: 'baseName' },
+        { title: '见习岗位名称', prop: 'positionName' }
       ]
     };
   },

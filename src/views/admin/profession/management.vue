@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-26 20:23:49
+ * @LastEditTime: 2021-06-01 19:00:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -160,12 +160,12 @@ export default {
           },
 
           {
-            type: 'daterange',
+            type: 'datetimerange',
             label: '活动开始时间',
             style: { width: '553px' },
             placeholder: '请输入开始时间',
             rules: [],
-            format: 'yyyyMMdd',
+            format: 'yyyy-MM-dd HH:mm:ss',
             key: 'acttime'
           },
           // {
@@ -213,12 +213,12 @@ export default {
             key: 'content'
           },
           {
-            type: 'daterange',
+            type: 'datetimerange',
             label: '报名开始时间',
             style: { width: '553px' },
             placeholder: '请输入开始时间',
             rules: [],
-            format: 'yyyyMMdd',
+            format: 'yyyy-MM-dd HH:mm:ss',
             key: 'applytime'
           },
           // {
@@ -453,13 +453,11 @@ export default {
       //把数据合并到表单里面
       if (type != '3') {
         scope.row.applytime = [
-          this.formattime(scope.row.applyStartTime),
-          this.formattime(scope.row.applyEndTime)
+          scope.row.applyStartTime,
+          scope.row.applyEndTime
         ];
-        scope.row.acttime = [
-          this.formattime(scope.row.actStartTime),
-          this.formattime(scope.row.actEndTime)
-        ];
+        scope.row.acttime = [scope.row.actStartTime, scope.row.actEndTime];
+
         this.detailsFormConfig.dataList = scope.row;
       }
       this.visible = true;

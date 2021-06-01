@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-04-29 15:36:47
+ * @LastEditTime: 2021-05-28 14:56:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -213,42 +213,53 @@ export default {
   created() {
     this.loading = true;
     let data = { ...this.evList };
+
     let path = [
       //个人基本信息
       {
-        url: '/admin/keypoint/show/psnlInfo?pid=' + data.pid
+        url: '/admin/keypoint/show/psnlInfo',
+        data: data
       },
       //简历信息
       {
-        url: '/admin/keypoint/show/resume?pid=' + data.pid
+        url: '/admin/keypoint/show/resume',
+        data: data
       },
       //劳动经历
       {
-        url: '/admin/keypoint/show/labor?pid=' + data.pid
+        url: '/admin/keypoint/show/labor',
+        data: data
       },
       //社保缴费记录
       {
-        url: '/admin/keypoint/show/insur?pid=' + data.pid
+        url: '/admin/keypoint/show/insur',
+        data: data
       },
       //就业见习记录
       {
-        url: '/admin/keypoint/show/trainee?pid=' + data.pid
+        url: '/common/person/query-jyjxRecordInfo',
+        data: data
+        //url: '/common/person/query-jyjxRecordInfo?pid=201304119008900'
       },
       //简历投递及反馈记录 --
       {
-        url: '/admin/keypoint/show/employ?pid=' + data.pid
+        url: '/admin/keypoint/show/employ',
+        data: data
       },
       //职位评价记录
       {
-        url: '/admin/keypoint/show/evaluation?pid=' + data.pid
+        url: '/admin/keypoint/show/evaluation',
+        data: data
       },
       //职位收藏记录
       {
-        url: '/admin/keypoint/show/favor?pid=' + data.pid
+        url: '/admin/keypoint/show/favor',
+        data: data
       },
       //就业服务记录
       {
-        url: '/admin/keypoint/show/employ?pid=' + data.pid
+        url: '/admin/keypoint/show/employ',
+        data: data
       }
     ];
     allAction(

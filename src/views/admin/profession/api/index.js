@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-25 14:36:30
- * @LastEditTime: 2021-05-27 14:25:44
+ * @LastEditTime: 2021-06-01 09:53:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\api\index.js
@@ -38,6 +38,9 @@ const serve_save = (params, fn, fnErr) =>
   postAction(serve + 'save', params, fn, fnErr);
 const serve_area = (params, fn, fnErr) =>
   postAction(serve + 'query/area', params, fn, fnErr);
+const serve_check = (params, fn, fnErr) =>
+  postAction(serve + 'check', params, fn, fnErr);
+
 export {
   guide_query,
   guide_add,
@@ -50,5 +53,6 @@ export {
   serve_info,
   serve_record,
   serve_save,
-  serve_area
+  serve_area,
+  serve_check
 };

@@ -303,21 +303,40 @@
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job
-      v-if="queryResult.length"
-      ref="searchJobList"
-      :jobData="queryResult"
-      :total="queryResultTotal"
-      showPager
-      @deliveryResume="deliveryResume(arguments)"
-      @favorJob="favorJob(arguments)"
-      @showJobDetials="showJobDetial(arguments)"
-      @callPositionCorp="callPositionCorp(arguments)"
-    ></per-search-job>
-    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <el-tabs id="jobInfoGloriette" v-model="activeName">
+      <el-tab-pane label="默认推荐" name="default">
+        <per-search-job
+          v-if="queryDefaultResult.length"
+          ref="searchDefaultJobList"
+          :jobData="queryDefaultResult"
+          :total="queryDefaultResultTotal"
+          showPager
+          @deliveryResume="deliveryResume(arguments)"
+          @favorJob="favorJob(arguments)"
+          @showJobDetials="showJobDetial(arguments)"
+          @callPositionCorp="callPositionCorp(arguments)"
+        ></per-search-job>
+        <BaseLoadingSvg v-else></BaseLoadingSvg>
+      </el-tab-pane>
+      <el-tab-pane label="自行检索" name="search">
+        <per-search-job
+          v-if="queryResult.length"
+          ref="searchJobList"
+          :jobData="queryResult"
+          :total="queryResultTotal"
+          showPager
+          @deliveryResume="deliveryResume(arguments)"
+          @favorJob="favorJob(arguments)"
+          @showJobDetials="showJobDetial(arguments)"
+          @callPositionCorp="callPositionCorp(arguments)"
+        ></per-search-job>
+        <BaseLoadingSvg v-else></BaseLoadingSvg>
+      </el-tab-pane>
+    </el-tabs>
     <!-- 职位详细信息 弹窗部分 -->
     <el-dialog
       width="75%"
+      v-if="detailsDialog"
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"
     >
@@ -347,10 +366,12 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
-import { getDicText } from '@/utils';
+import { getDicText, niceScrollUpdate } from '@/utils';
 import {
   queryJobs,
+  queryRecommendJobs,
   doDeliveryResume,
+  doDeliveryResumeRecommend,
   doFavorJobs,
   doUnfavorJobs
 } from '@/api/personApi';
@@ -364,10 +385,12 @@ export default {
   },
   data() {
     return {
+      activeName: 'default',
       detailsIndex: null,
       detailsDialog: false,
       wchatDialog: false,
       positionDetailsId: '',
+      positionDetailsRecId: '',
       queryParams: {
         pid: this.$store.getters['person/pid'],
         age: '',
@@ -412,6 +435,8 @@ export default {
       tableData: [],
       queryResult: [],
       queryResultTotal: 0,
+      queryDefaultResult: [],
+      queryDefaultResultTotal: 0,
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -423,7 +448,8 @@ export default {
       gznxLists: this.$store.getters['dictionary/recruit_work_year'],
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: [],
-      targetObjId: ''
+      targetObjId: '',
+      onePosition: {}
     };
   },
   computed: {
@@ -439,15 +465,25 @@ export default {
         );
       }
       return [];
-    },
-    onePosition() {
-      let that = this;
-      return this.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
     }
+    // onePosition() {
+    //   let that = this;
+    //   if (this.activeName === 'search') {
+    //     //系统搜索职位
+    //     return this.positionDetailsId
+    //       ? this.queryResult.find(function(i) {
+    //           return i.positionId === that.positionDetailsId;
+    //         })
+    //       : {};
+    //   } else {
+    //     //推荐职位
+    //     return this.positionDetailsRecId
+    //       ? this.queryDefaultResult.find(function(i) {
+    //           return i.recId === that.positionDetailsRecId;
+    //         })
+    //       : {};
+    //   }
+    // }
   },
   watch: {
     'queryParams.positionTypeList': function(val, oldVal) {
@@ -468,10 +504,33 @@ export default {
           });
         }
       }, 500)();
+    },
+    positionDetailsId: function(val, oldVal) {
+      //系统搜索职位
+      let that = this;
+      this.onePosition = that.positionDetailsId
+        ? this.queryResult.find(function(i) {
+            return i.positionId === that.positionDetailsId;
+          })
+        : {};
+    },
+    positionDetailsRecId: function(val, oldVal) {
+      let that = this;
+      //系统搜索职位
+      this.onePosition = that.positionDetailsRecId
+        ? this.queryDefaultResult.find(function(i) {
+            return i.recId === that.positionDetailsRecId;
+          })
+        : {};
     }
   },
   created() {
     this.queryJobs();
+    this.queryDefaultJobs();
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
     minSalaryChange() {
@@ -563,6 +622,9 @@ export default {
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
+    /**
+     * 根据条件查询职位
+     */
     async queryJobs(val) {
       // if (!val) {
       //   this.$alert('请输入查询条件');
@@ -581,6 +643,7 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
+        this.activeName = 'search';
         params.pid = that.$store.getters['person/pid'];
         let result = await queryJobs(params);
         console.log('result', result);
@@ -640,6 +703,76 @@ export default {
         console.log(error);
       }
     },
+    /**
+     * 查询系统默认推荐的职位
+     */
+    async queryDefaultJobs(val) {
+      let that = this;
+      try {
+        let result = await queryRecommendJobs({
+          pid: that.$store.getters['person/pid'],
+          pageParam: {
+            pageSize: that.$refs.searchDefaultJobList?.pageSize || 10,
+            pageIndex: that.$refs.searchDefaultJobList?.currentPage - 1 || 0
+          }
+        });
+        console.log('defaultResult', result);
+        if (
+          result.status === 200 &&
+          result.result.pageresult &&
+          result.result.pageresult.total
+        ) {
+          result.result.pageresult.data.forEach(item => {
+            // 转换字典
+            if (item.workArea) {
+              item.workAreaText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.workArea
+              );
+            }
+            if (item.eduRequire) {
+              item.eduRequireText = getDicText(
+                that.$store.getters['dictionary/recruit_edu'],
+                item.eduRequire
+              );
+            }
+            if (item.workNature) {
+              item.workNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_work_nature'],
+                item.workNature
+              );
+            }
+            if (item.corpNature) {
+              item.corpNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_corp_nature'],
+                item.corpNature
+              );
+            }
+            if (item.industryType) {
+              item.industryTypeText = getDicText(
+                that.$store.getters['dictionary/recruit_industry_type'],
+                item.industryType
+              );
+            }
+          });
+          this.$set(this, 'queryDefaultResult', result.result.pageresult.data);
+          this.$set(
+            this,
+            'queryDefaultResultTotal',
+            Number(result.result.pageresult.total) || 0
+          );
+        } else {
+          this.$set(this, 'queryDefaultResult', []);
+          this.$set(this, 'queryDefaultResultTotal', 0);
+          this.$message({
+            type: 'success',
+            message: '未查询到信息'
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     showMoreRadios(event, radiosIndex) {
       let dom = $('#' + radiosIndex);
       let $this = $(event.target);
@@ -656,31 +789,55 @@ export default {
       }
     },
     showJobDetial(arg) {
+      console.log(arg);
       //显示岗位详细信息
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
+      let recId = (arg && arg[2]) || '';
       this.detailsIndex = index;
       this.detailsDialog = true;
       this.positionDetailsId = positionId;
+      this.positionDetailsRecId = recId;
     },
     async deliveryResume(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
-      //投递简历
-      let res = await doDeliveryResume({
-        positionId: positionId,
-        pid: this.$store.getters['person/pid']
-      });
-      if (res.status === 200) {
-        // 更换按钮
-        // this.queryResult.splice(index, 1);
-        this.queryResult[index].applyFor = true;
-        this.$message({ type: 'success', message: '简历投递成功' });
-      } else {
-        this.$message({
-          type: 'error',
-          message: '简历投递失败'
+      let recId = (arg && arg[2]) || '';
+      if (!recId) {
+        //向自己搜索的职位投递简历
+        let res = await doDeliveryResume({
+          positionId: positionId,
+          pid: this.$store.getters['person/pid']
         });
+        if (res.status === 200) {
+          // 更换按钮
+          // this.queryResult.splice(index, 1);
+          this.queryResult[index].applyFor = true;
+          this.$message({ type: 'success', message: '简历投递成功' });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '简历投递失败'
+          });
+        }
+      } else {
+        //向推荐职位投递简历
+        let res = await doDeliveryResumeRecommend({
+          recId: recId,
+          positionId: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 更换按钮
+          // this.queryResult.splice(index, 1);
+          this.queryResult[index].applyFor = true;
+          this.$message({ type: 'success', message: '简历投递成功' });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '简历投递失败'
+          });
+        }
       }
     },
     async favorJob(arg) {
@@ -716,7 +873,8 @@ export default {
     },
     callPositionCorp(arg) {
       console.log(arg);
-      //! TODO显示聊天框
+      //! TODO显示聊天框 缺少cid
+      this.targetObjId = '';
       this.wchatDialog = true;
     },
     detailsHandleClose() {

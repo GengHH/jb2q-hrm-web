@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-05-27 09:22:21
+ * @LastEditTime: 2021-05-28 10:13:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -327,7 +327,7 @@ export default {
     advancedSearch() {
       this.$refs.form.$refs.value.validate(valid => {
         if (valid) {
-          let data = { ...this.$refs.form.value };
+          let data = { ...this.$refs.form.value, ...this.form };
           if (!data.propagandaImageBase64) {
             this.$message.error('请上传招聘会宣传图片');
             return;

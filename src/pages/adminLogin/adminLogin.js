@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-26 19:36:23
+ * @LastEditTime: 2021-05-28 16:20:19
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -169,6 +169,10 @@ if (isEmpty(store.getters['dictionary/recruit_feedback_status'])) {
 //应聘反馈
 if (isEmpty(store.getters['dictionary/recruit_feedback_source'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_FEEDBACK_SOURCE');
+}
+//困惑
+if (isEmpty(store.getters['dictionary/zyjs_zyzdzykh'])) {
+  store.dispatch('dictionary/init_Dictionary', 'ZYJS_ZYZDZYKH');
 }
 
 /* eslint-disable no-new */

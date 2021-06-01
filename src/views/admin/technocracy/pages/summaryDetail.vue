@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-05-27 09:20:05
+ * @LastEditTime: 2021-05-31 13:55:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\summaryDetail.vue
@@ -81,7 +81,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="活动日期类型" prop="actDateType">
-              <el-select v-model="form.actDateType" style="width:100%">
+              <el-select v-model="form.meetDateType" style="width:100%">
                 <el-option
                   v-for="(v, k) in dicOptions.date_type"
                   :key="k"

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-05-27 09:16:00
+ * @LastEditTime: 2021-06-01 16:48:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -344,6 +344,7 @@ export default {
     //     console.log(err);
     //   }
     // );
+
     setTimeout(() => {
       if (this.type != '3') {
         this.$refs.advancedSearch.value = this.formConfig.dataList;

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-05-20 18:26:46
+ * @LastEditTime: 2021-06-01 18:27:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -108,7 +108,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col if="form.meetType == '2'" :span="12">
+          <el-col v-if="lookList.meetType == '2'" :span="12">
             <el-form-item label="入场时间">
               <el-date-picker
                 v-model="form.admisstionTime"
@@ -122,7 +122,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col if="form.meetType == '2'" :span="12">
+          <el-col v-if="lookList.meetType == '2'" :span="12">
             <el-form-item label="展位号">
               <el-input :disabled="disabled" v-model="form.boothSeq"></el-input>
             </el-form-item>
@@ -188,7 +188,6 @@ export default {
       pageSize: 10,
       fileList: [],
       dicOptions: {
-        //
         type: trim(this.$store.getters['dictionary/recruit_meet_type']),
         //学历
         edu: trim(this.$store.getters['dictionary/recruit_edu'])

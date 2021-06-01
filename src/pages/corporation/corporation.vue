@@ -106,8 +106,25 @@ export default {
     // }).catch( err=>{
     //   console.log(err)
     // });
+    //由于登录（是否首次进入系统接口）为异步，根据其返回的结来判断顶部菜单数据
     let timer = setInterval(() => {
-      if (this.$store.getters['corporation/username']) {
+      if (
+        this.$store.getters['corporation/username'] ||
+        this.$store.getters['corporation/first_check']
+      ) {
+        //是不是特定单位
+        if (this.$store.getters['corporation/username']) {
+          this.navList.forEach(i => {
+            if (i.nvaText === '简历搜索') i.path = '/resumeSearch';
+          });
+        }
+        //是不是人力资源单位
+        if (this.$store.getters['dictionary/human_resource_reg']) {
+          this.navList.forEach(i => {
+            if (i.nvaText === '在线开店') i.path = '/onlineShop';
+          });
+        }
+        //登录人名称
         this.userLogInfo.nvaText = this.$store.getters['corporation/username'];
         if (timer) {
           clearInterval(timer);

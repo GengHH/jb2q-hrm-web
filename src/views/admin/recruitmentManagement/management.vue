@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-19 20:16:47
+ * @LastEditTime: 2021-06-01 17:11:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -15,6 +15,15 @@
       @selectAll="selectClick"
       @select="selectClick"
     >
+      <el-table-column slot="releaseDistrict" label="发布区县" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.qx" :key="k">
+            <el-tag v-if="v.value == scope.row.releaseDistrict">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         slot="districtCodeList"
         label="报名限制区域"
@@ -116,7 +125,7 @@ export default {
         { title: '招聘会类型', prop: 'meetType', slot: 'meetType' },
         { title: '招聘会召开时间', prop: 'startTime' },
         { title: '招聘会结束时间', prop: 'endTime' },
-        { title: '招聘会地点', prop: 'address' },
+        { title: '发布区县', prop: 'releaseDistrict', slot: 'releaseDistrict' },
         { title: '展位数量', prop: 'boothCount' },
         {
           title: '报名限制区域',

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-20 18:02:00
+ * @LastEditTime: 2021-06-01 18:26:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -65,6 +65,8 @@ export default {
       type: '',
       visible: false,
       dicOptions: {
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
         type: trim(this.$store.getters['dictionary/recruit_meet_type'])
       },
       params: {
@@ -123,7 +125,6 @@ export default {
       this.lookList.applyTime = this.lookList.applyTime
         ? this.lookList.applyTime.split(' ')[0]
         : '';
-      this.lookList.applyTime = '2019-01-02';
       this.visible = true;
     },
     onsubmit(e) {

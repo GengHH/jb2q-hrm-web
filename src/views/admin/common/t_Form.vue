@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-05-20 16:07:47
+ * @LastEditTime: 2021-06-01 18:50:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -108,7 +108,28 @@
           </el-select>
         </template>
       </el-form-item>
+      <!-- 日期和时间 -->
+      <el-form-item
+        v-if="v.type == 'datetimerange'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-date-picker
+          :style="v.style"
+          v-model="value[v.key]"
+          :value-format="v.format"
+          :value="v.value"
+          type="datetimerange"
+          range-separator=""
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
+      </el-form-item>
       <!-- 时间 日 双时间 -->
+
       <el-form-item
         v-if="v.type == 'daterange'"
         :key="k"

@@ -1,6 +1,6 @@
 <template>
   <!--S 特色专栏部分 -->
-  <div class="activity-box-module">
+  <div class="fair-box-module">
     <el-row>
       <el-col :sm="2" :md="4" :lg="6" class="pr">
         <!-- <img src="../../assets/img/img04.png" alt="" /> -->
@@ -161,7 +161,7 @@ import PlMap from '@/components/common/BaseMap';
 import { phonePattern } from '@/utils/regexp';
 import { queryJobFairPositionInfo, applyJobFair } from '@/api/corporationApi';
 export default {
-  name: 'ActivityBoxShow',
+  name: 'fairBoxShow',
   components: {
     PlMap
   },
@@ -322,7 +322,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.activity-box-module {
+.fair-box-module {
   background-color: #ffffff;
   border-bottom: 1px solid #ededed;
   height: 250px;

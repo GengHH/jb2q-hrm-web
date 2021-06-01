@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:42
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 10:46:40
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-01 10:33:12
  * @Description: 管理员模块的全局key信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\admin.js
  */

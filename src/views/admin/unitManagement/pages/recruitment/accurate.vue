@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-05-27 16:04:20
+ * @LastEditTime: 2021-05-28 15:42:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\accurate.vue
@@ -156,6 +156,8 @@ export default {
       console.log(this.data);
       console.log(e.row);
       return;
+      //'1', '推荐简历  2', '推荐职位
+      data.recType = '1';
       agency_rec(
         data,
         res => {

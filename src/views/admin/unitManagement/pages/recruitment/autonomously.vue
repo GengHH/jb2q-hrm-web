@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-05-27 17:30:05
+ * @LastEditTime: 2021-05-28 15:41:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\autonomously.vue
@@ -273,6 +273,8 @@ export default {
     audit(e) {
       let data = { ...e.row, ...this.data };
       data.cid = data.corpId;
+      //'1', '推荐简历  2', '推荐职位
+      data.recType = '1';
       agency_rec(
         data,
         res => {
