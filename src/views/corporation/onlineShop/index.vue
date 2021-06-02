@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-25 13:19:32
+ * @LastEditTime: 2021-06-02 11:51:39
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
@@ -323,7 +323,7 @@ import { phonePattern } from '@/utils/regexp';
 import { queryShop, saveShop, updateShop } from '@/api/corporationApi';
 import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
-  name: 'corporationApp',
+  name: 'shopApp',
   components: {},
   data() {
     return {
