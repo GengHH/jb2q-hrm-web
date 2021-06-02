@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-26 14:43:39
+ * @LastEditTime: 2021-06-02 12:19:29
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
@@ -239,7 +239,7 @@
 import { phonePattern } from '@/utils/regexp';
 import { queryShop, saveShop, updateShop } from '@/api/corporationApi';
 export default {
-  name: 'corporationApp',
+  name: 'shopApp',
   components: {},
   data() {
     return {
@@ -253,17 +253,17 @@ export default {
       shopInfo: {
         applyId: null,
         cid: this.$store.getters['corporation/cid'],
-        corpName: '万达信息股份有限公司',
-        tyshxydm: '91310000132653687M',
-        contactName: '福禄娃一号',
-        contactPhone: '18321460953',
-        applyMemo: '其他说明',
-        applyUserId: '0001564698',
-        applyTime: '2021-05-20 17:49:45',
-        verifyUserId: '0001564698',
+        corpName: '',
+        tyshxydm: '',
+        contactName: '',
+        contactPhone: '',
+        applyMemo: '',
+        applyUserId: '',
+        applyTime: '',
+        verifyUserId: '',
         verifyResult: '',
-        verifyTime: '2021-05-21 13:33:43',
-        verifyMemo: '测试',
+        verifyTime: '',
+        verifyMemo: '',
         channelNo: '',
         deleteStatus: '',
         deleteTime: '',

@@ -874,9 +874,9 @@ export default {
       }
     },
     callPositionCorp(arg) {
-      console.log(arg);
-      //! TODO显示聊天框 缺少cid
-      this.targetObjId = '';
+      let index = arg[0];
+      let corpId = (arg && arg[1]) || '';
+      this.targetObjId = corpId;
       this.wchatDialog = true;
     },
     detailsHandleClose() {

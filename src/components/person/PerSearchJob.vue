@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-01 18:29:34
+ * @LastEditTime: 2021-06-02 11:18:31
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -185,7 +185,7 @@
               <el-button
                 type="primary"
                 class="gray-btn"
-                @click="callPositionCorp(jobItem.positionId)"
+                @click="callPositionCorp(index, jobItem.corpId)"
                 ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
               >
             </p>
@@ -433,9 +433,9 @@ export default {
     showJobDetial(index, positionId, recId) {
       this.$emit('showJobDetials', index, positionId, recId);
     },
-    callPositionCorp(index, positionId) {
-      // TODO this.$alert('暂时无法进行沟通') 需要cid;
-      this.$emit('callPositionCorp', index, positionId);
+    callPositionCorp(index, corpId) {
+      //和单位聊天
+      this.$emit('callPositionCorp', index, corpId);
     }
   }
 };
