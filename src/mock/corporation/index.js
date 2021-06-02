@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-01 15:57:47
+ * @LastEditTime: 2021-06-02 14:46:59
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -917,65 +917,66 @@ Mock.mock(basePath + '/corp/shop/query/list', 'post', function(options) {
     result: {
       data: [
         {
-          applyId: 1,
-          cid: '200008010784151',
-          corpName: '万达信息股份有限公司dfd',
-          tyshxydm: '91310000132653687M',
-          contactName: '福禄娃一号',
-          contactPhone: '18321460953',
-          applyMemo: '其他说明',
-          applyUserId: '0001564698',
-          applyTime: '2021-05-20 17:49:45',
-          verifyUserId: '0001564698',
-          verifyResult: '',
-          verifyTime: '2021-05-21 13:33:43',
-          verifyMemo: '测试',
+          applyId: 3,
+          cid: '200008010001941',
+          corpName: '上海市客运轮船有限公司',
+          tyshxydm: '91310113133445783N',
+          applyDistrict: '05',
+          contactName: '李小姐',
+          contactPhone: '15921900607',
+          applyMemo: '申请开店',
+          applyUserId: '0001564801',
+          applyTime: '2021-06-02 14:03:57',
+          verifyUserId: '0000002039',
+          verifyResult: '0',
+          verifyTime: '2021-06-02 13:59:04',
+          verifyMemo: '不同意',
           channelNo: '',
-          deleteStatus: '1',
-          deleteTime: '',
-          deleteUserId: '',
-          deleteMemo: ''
-        },
-        {
-          applyId: 1,
-          cid: '200008010784151',
-          corpName: '万达信息股份有限公司',
-          tyshxydm: '91310000132653687M',
-          contactName: '福禄娃一号',
-          contactPhone: '18321460953',
-          applyMemo: '其他说明',
-          applyUserId: '0001564698',
-          applyTime: '2021-05-20 17:49:45',
-          verifyUserId: '0001564698',
-          verifyResult: '',
-          verifyTime: '2021-05-21 13:33:43',
-          verifyMemo: '测试',
-          channelNo: '',
-          deleteStatus: '1',
-          deleteTime: '',
-          deleteUserId: '',
-          deleteMemo: ''
-        },
-        {
-          applyId: 1,
-          cid: '200008010784151',
-          corpName: '万达信息股份有限公司',
-          tyshxydm: '91310000132653687M',
-          contactName: '福禄娃一号',
-          contactPhone: '18321460953',
-          applyMemo: '其他说明',
-          applyUserId: '0001564698',
-          applyTime: '2021-05-20 17:49:45',
-          verifyUserId: '0001564698',
-          verifyResult: '',
-          verifyTime: '2021-05-21 13:33:43',
-          verifyMemo: '测试',
-          channelNo: '',
-          deleteStatus: '1',
+          deleteStatus: '',
           deleteTime: '',
           deleteUserId: '',
           deleteMemo: ''
         }
+        // {
+        //   applyId: 1,
+        //   cid: '200008010784151',
+        //   corpName: '万达信息股份有限公司',
+        //   tyshxydm: '91310000132653687M',
+        //   contactName: '福禄娃一号',
+        //   contactPhone: '18321460953',
+        //   applyMemo: '其他说明',
+        //   applyUserId: '0001564698',
+        //   applyTime: '2021-05-20 17:49:45',
+        //   verifyUserId: '0001564698',
+        //   verifyResult: '',
+        //   verifyTime: '2021-05-21 13:33:43',
+        //   verifyMemo: '测试',
+        //   channelNo: '',
+        //   deleteStatus: '1',
+        //   deleteTime: '',
+        //   deleteUserId: '',
+        //   deleteMemo: ''
+        // },
+        // {
+        //   applyId: 1,
+        //   cid: '200008010784151',
+        //   corpName: '万达信息股份有限公司',
+        //   tyshxydm: '91310000132653687M',
+        //   contactName: '福禄娃一号',
+        //   contactPhone: '18321460953',
+        //   applyMemo: '其他说明',
+        //   applyUserId: '0001564698',
+        //   applyTime: '2021-05-20 17:49:45',
+        //   verifyUserId: '0001564698',
+        //   verifyResult: '',
+        //   verifyTime: '2021-05-21 13:33:43',
+        //   verifyMemo: '测试',
+        //   channelNo: '',
+        //   deleteStatus: '1',
+        //   deleteTime: '',
+        //   deleteUserId: '',
+        //   deleteMemo: ''
+        // }
       ]
     }
   };

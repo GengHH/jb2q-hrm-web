@@ -626,11 +626,6 @@ export default {
      * 根据条件查询职位
      */
     async queryJobs(val) {
-      // if (!val) {
-      //   this.$alert('请输入查询条件');
-      //   return;
-      // }
-
       let that = this;
       let params = this.$refs['queryJobFrom']?.model
         ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))

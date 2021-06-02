@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-01 16:51:59
+ * @LastEditTime: 2021-06-02 15:58:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -155,7 +155,11 @@
           </template>
           <template #reply="{row}">
             <span v-if="row.reply === '1'" style="color:green">是</span>
-            <el-popover v-else trigger="hover" placement="top">
+            <el-popover
+              v-else-if="row.reply === '0'"
+              trigger="hover"
+              placement="top"
+            >
               <p><span style="color:red">原因</span>: {{ row.reason }}</p>
               <div slot="reference" class="name-wrapper">
                 <el-tag size="medium">否</el-tag>
