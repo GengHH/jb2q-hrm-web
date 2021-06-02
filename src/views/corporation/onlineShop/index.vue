@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-02 12:19:29
+ * @LastEditTime: 2021-06-02 14:33:41
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
@@ -253,7 +253,7 @@ export default {
       shopInfo: {
         applyId: null,
         cid: this.$store.getters['corporation/cid'],
-        corpName: '',
+        corpName: this.$store.getters['corporation/username'],
         tyshxydm: '',
         contactName: '',
         contactPhone: '',
@@ -331,25 +331,35 @@ export default {
       });
       console.log('result', result);
       if (result.status === 200 && result.result.data) {
+        let rightCount = 0; //审核中,同过的数量和
         let deleteCount = 0;
         let failCount = 0;
         if (result.result.data.length) {
           result.result.data.forEach(element => {
             if (element.deleteStatus === '1') {
               deleteCount++;
-            }
-            if (element.verifyResult === '0') {
+            } else if (element.verifyResult === '0') {
               failCount++;
               // this.showEditForm = true;
+            } else {
+              rightCount++;
             }
           });
-          if (
-            deleteCount === result.result.data.length ||
-            failCount === result.result.data.length
-          ) {
-            //全部是已删除或者全部不通过
-            this.showEditForm = true;
+
+          if (rightCount > 0) {
+            this.showEditBtn = false;
+          } else {
+            this.showEditBtn = true;
           }
+          this.showEditForm = false;
+          // if (
+          //   deleteCount === result.result.data.length ||
+          //   failCount === result.result.data.length
+          // ) {
+          //   //全部是已删除或者全部不通过
+          //   this.showEditBtn = true;
+          //   this.showEditForm = false;
+          // }
         } else {
           //没有历史数据时直接可以添加
           this.showEditForm = true;
@@ -425,8 +435,9 @@ export default {
               });
             });
             if (result && result.status === 200) {
-              //更新信息
-              this.historyList.push(this.shopInfo);
+              //更新数据
+              this.getShop();
+              //this.historyList.push({ ...this.shopInfo });
               this.$message({
                 showClose: true,
                 message: '开店成功!',
