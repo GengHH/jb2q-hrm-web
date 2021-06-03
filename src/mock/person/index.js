@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-01 18:53:18
+ * @LastEditTime: 2021-06-03 16:06:43
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -835,6 +835,62 @@ Mock.mock(
             positionCount: 2
           }
         ]
+      }
+    };
+  }
+);
+//招聘会下单位的所有职位信息
+Mock.mock(
+  basePath + '/person/meeting/doSearchCorpPositionList',
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              positionId: '4',
+              positionCode: '20213000000004',
+              positionName: '中级审计师',
+              recruitType: '1',
+              tranBaseSymbol: '0',
+              agencyRecruit: '0',
+              entrustTyshxym: '',
+              entrustCorpName: '',
+              corpId: '200008010049481',
+              positionType: '10  ',
+              workNature: '01',
+              ageMax: '40',
+              ageMin: '20',
+              workArea: '05',
+              workAddress: '福禄娃路999号',
+              workHour: '005',
+              workYearNeed: '04',
+              eduRequire: '07',
+              salaryMax: '99999',
+              salaryMin: '50000',
+              salaryPayType: '04',
+              recruitNum: '5',
+              special: '',
+              describe:
+                '初级审计师，要厉害的那种。\n有建筑工程项目审计经验的优先。\n熟悉建筑工程法律法规的优先。',
+              onTop: '0',
+              releaseStatusId: '2',
+              releaseUserId: '0001564639',
+              releaseTime: '2021-05-20 18:16:04',
+              corpName: '上海金亚计算机有限公司',
+              favorTmp: '0',
+              applyForTmp: '1',
+              corpNature: '15',
+              industryType: '09',
+              favor: false,
+              applyFor: true
+            }
+          ]
+        })
       }
     };
   }

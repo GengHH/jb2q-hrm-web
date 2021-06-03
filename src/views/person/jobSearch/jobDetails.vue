@@ -28,11 +28,12 @@
               <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              {{ realData.corpName }}
+              <span style="display:inline-block;">{{ realData.corpName }}</span>
               <img
                 src="../../../assets/images/ico_rz.png"
                 alt=""
                 class="ico_rz"
+                style="height: .9em;"
               />
             </p>
             <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
@@ -106,7 +107,7 @@
     <!--E  职位详情上半部分-->
     <el-row id="jobSearchBox">
       <el-col :span="19" class="middle-box padd-lr bor-r">
-        <div class="title-border">职位描述</div>
+        <!-- <div class="title-border">职位描述</div>
         <p class="mat-15 little-tit">岗位职责 TODO：</p>
         <p class="little-tit">
           1、负责公司房产的营销推广，并做好相应的渠道开拓，并维护好渠道及客户关系；
@@ -135,8 +136,9 @@
         </p>
         <p class="little-tit">待遇：</p>
         <p class="little-tit">底薪5k+业绩提成+满勤+公司福利 做六休一</p>
-        <p class="little-tit">固定团建，弹性工作</p>
-        <div class="title-border mat-15">公司介绍</div>
+        <p class="little-tit">固定团建，弹性工作</p> 
+        <div class="title-border mat-15">公司介绍</div>-->
+        <div class="title-border mat-15">职位描述</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
             {{ realData.describe }}
@@ -156,7 +158,7 @@
         <div class="title-border mat-30">工作地址</div>
         <div class="map-box">
           <!-- <img src="../../../assets/images/map.png" alt="" /> -->
-          <pl-map></pl-map>
+          <pl-map :pointList="pointList"></pl-map>
         </div>
         <div class="title-border mat-15">
           看过该职位的人还看了 TODO
@@ -282,6 +284,7 @@
 <script>
 import PlMap from '@/components/common/BaseMap';
 import { queryRecommendDetai } from '@/api/personApi';
+import { getDicText } from '@/utils';
 export default {
   name: 'JobSearchIndex',
   props: {
@@ -305,12 +308,20 @@ export default {
   computed: {
     describeList() {
       return this.realData.describe.split('\n');
+    },
+    pointList() {
+      return this.positionData?.workAddress
+        ? [this.positionData.workAddress]
+        : [];
     }
   },
   created() {
     //如果是推荐的职位
     if (this.positionData.recId) {
-      this.queryPositionDetials(this.realData.recId);
+      this.queryPositionDetials(
+        this.positionData.recId,
+        this.positionData.positionId
+      );
     } else {
       this.realData = { ...this.positionData };
     }
@@ -349,13 +360,49 @@ export default {
     /**
      * 查询推荐的职位的详细信息
      */
-    async queryPositionDetials(recId) {
+    async queryPositionDetials(recId, positionId) {
+      let that = this;
       let res = await queryRecommendDetai({
-        recId: recId
+        recId: recId,
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
       });
       if (res && res.status === 200) {
-        console.log(res.result.data);
-        this.realData = res.result.data;
+        let item = res.result.data;
+        // 转换字典
+        if (item.workArea) {
+          item.workAreaText = getDicText(
+            that.$store.getters['dictionary/ggjbxx_qx'],
+            item.workArea
+          );
+        }
+        if (item.eduRequire) {
+          item.eduRequireText = getDicText(
+            that.$store.getters['dictionary/recruit_edu'],
+            item.eduRequire
+          );
+        }
+        if (item.workNature) {
+          item.workNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_work_nature'],
+            item.workNature
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            that.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+        this.realData = item;
+      } else if (res) {
+        this.$message({ type: 'error', message: '无法获取详细信息' });
       }
     }
   }

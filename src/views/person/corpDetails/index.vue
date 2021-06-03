@@ -241,22 +241,73 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="panePosition" name="panePosition">
-        123
+        <per-search-job
+          v-if="queryResult.length"
+          ref="searchJobList"
+          :jobData="queryResult"
+          :total="queryResultTotal"
+          showPager
+          @deliveryResume="deliveryResume(arguments)"
+          @favorJob="favorJob(arguments)"
+          @showJobDetials="showJobDetial(arguments)"
+          @callPositionCorp="callPositionCorp(arguments)"
+        ></per-search-job>
       </el-tab-pane>
     </el-tabs>
+    <!-- 职位详细信息 弹窗部分 -->
+    <el-dialog
+      width="75%"
+      v-if="detailsDialog"
+      :visible.sync="detailsDialog"
+      :before-close="detailsHandleClose"
+    >
+      <job-details
+        :positionData="onePosition"
+        :index="detailsIndex"
+        @perfectResume="perfectResume"
+        @uploadResume="uploadResume"
+        @deliveryResume="deliveryResume(arguments)"
+        @favorJob="favorJob(arguments)"
+        @callPositionCorp="callPositionCorp(arguments)"
+      ></job-details>
+    </el-dialog>
+    <!-- 聊天框 弹窗部分 -->
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="wchatDialog"
+      :before-close="wchatHandleClose"
+    >
+      <pl-wchat :targetObjId="targetObjId"></pl-wchat>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import PerSearchJob from '@/components/person/PerSearchJob.vue';
+import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import { loadCorpInfo } from '@/api/corporationApi';
+import { queryCorpPositionList } from '@/api/personApi';
+import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
-  name: 'JobSearchIndex',
+  name: 'CorpDetails',
+  components: {
+    PerSearchJob,
+    JobDetails
+  },
   data() {
     return {
       cid: '',
       activeName: 'corporation',
       corpInfo: {},
-      positions: []
+      positions: [],
+      wchatDialog: false,
+      targetObjId: '',
+      queryResult: [],
+      queryResultTotal: 0,
+      detailsIndex: '',
+      detailsDialog: false,
+      positionDetailsId: '',
+      positionDetailsRecId: ''
     };
   },
   created() {
@@ -265,7 +316,12 @@ export default {
       this.cid = this.$route.query;
       //查询单位信息
       this.loadCorpInfo();
+      this.queryCorpPositionList();
     }
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   },
   computed: {
     panePosition() {
@@ -276,17 +332,161 @@ export default {
   },
   methods: {
     jobHandleClick() {},
+    /**
+     * 查询单位信息 （使用的是单位模块下的接口）
+     * TODO
+     */
     async loadCorpInfo() {
       let queryRes = await loadCorpInfo({ cid: this.cid });
       if (queryRes && queryRes.status === 200) {
         this.corpInfo = queryRes.result.data;
-      } else {
+      } else if (queryRes) {
         this.$message({
           showClose: true,
-          message: '查询信息失败',
+          message: '查询单位信息失败',
           type: 'error'
         });
       }
+    },
+    /**
+     * 查询职位信息列表
+     */
+    async queryCorpPositionList() {
+      let that = this;
+      let queryRes = await queryCorpPositionList({
+        cid: this.cid,
+        pid: this.$store.getters['person/pid'],
+        pageParam: {
+          pageSize: that.$refs.searchJobList?.pageSize || 10,
+          pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+        }
+      });
+      if (queryRes && queryRes.status === 200) {
+        queryRes.result.pageresult.data.forEach(item => {
+          // 转换字典
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              that.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              that.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workNature) {
+            item.workNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_work_nature'],
+              item.workNature
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              that.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.$set(this, 'queryResult', queryRes.result.pageresult.data);
+        this.$set(
+          this,
+          'queryResultTotal',
+          Number(queryRes.result.pageresult.total) || 0
+        );
+      } else if (queryRes) {
+        this.$set(this, 'queryResult', []);
+        this.$set(this, 'queryResultTotal', 0);
+        this.$message({
+          showClose: true,
+          message: '查询职位信息失败',
+          type: 'error'
+        });
+      }
+    },
+    showJobDetial(arg) {
+      console.log(arg);
+      //显示岗位详细信息
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      let recId = (arg && arg[2]) || '';
+      this.detailsIndex = index;
+      this.detailsDialog = true;
+      this.positionDetailsId = positionId;
+      this.positionDetailsRecId = recId;
+    },
+    async deliveryResume(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+
+      //向职位投递简历
+      let res = await doDeliveryResume({
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      });
+      if (res.status === 200) {
+        // 更换按钮
+        // this.queryResult.splice(index, 1);
+        this.queryResult[index].applyFor = true;
+        this.$message({ type: 'success', message: '简历投递成功' });
+      } else {
+        this.$message({
+          type: 'error',
+          message: '简历投递失败'
+        });
+      }
+    },
+    async favorJob(arg) {
+      let index = arg[0];
+      let positionId = (arg && arg[1]) || '';
+      let orginFavorType = arg[2];
+      let recId = arg[3] || '';
+      if (!orginFavorType) {
+        let res = await doFavorJobs('2', {
+          id: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+
+          this.queryResult[index].favor = true;
+
+          this.$message({ type: 'success', message: '收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '收藏职位失败' });
+        }
+      } else {
+        //取消收藏职位
+        let res = await doUnfavorJobs({
+          id: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+
+          this.queryResult[index].favor = false;
+
+          this.$message({ type: 'success', message: '取消收藏职位成功' });
+        } else {
+          this.$message({ type: 'error', message: '取消收藏职位失败' });
+        }
+      }
+    },
+    callPositionCorp(arg) {
+      let index = arg[0];
+      let corpId = (arg && arg[1]) || '';
+      this.targetObjId = corpId;
+      this.wchatDialog = true;
+    },
+    wchatHandleClose() {
+      this.wchatDialog = false;
     }
   }
 };
