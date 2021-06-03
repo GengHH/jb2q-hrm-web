@@ -2,14 +2,22 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-03 09:36:03
+ * @LastEditTime: 2021-06-03 09:40:54
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
 <template>
   <!-- <router-view></router-view> -->
   <div id="indexBody">
-    <div class="title-style">在线开店</div>
+    <div class="title-style">
+      在线开店
+      <pl-button
+        id="addShopBtn"
+        v-if="showEditBtn"
+        @click="dialogFormVisible = !dialogFormVisible"
+        ><i class="el-icon-circle-plus-outline">点击新增店铺</i></pl-button
+      >
+    </div>
     <!-- 历史信息展示 -->
     <el-row :gutter="20" style="margin-top:40px;">
       <!-- <el-col :sm="24" :md="24" :lg="12" :xl="8" class="shop-card">
@@ -89,33 +97,41 @@
           <div class="shop-box">
             <h2>{{ item.corpName }}</h2>
             <p>
-              <span class="gray-font">{{ item.tyshxydm }}</span>
+              <span class="gray-font"
+                ><i class="el-icon-school"></i>{{ item.tyshxydm }}</span
+              >
             </p>
             <div class="shop-info">
               <p>
-                <span class="gray-font">联系人：</span>{{ item.contactName }}
+                <span class="gray-font">联系人：</span
+                >{{ item.contactName ? item.contactName : '无' }}
                 <span class="gray-font" style="margin-left:30px;"
                   >联系电话：</span
-                >{{ item.contactPhone }}
+                >{{ item.contactPhone ? item.contactPhone : '无' }}
               </p>
               <p>
-                <span class="gray-font">其他说明：</span>{{ item.applyMemo }}
+                <span class="gray-font">其他说明：</span
+                >{{ item.applyMemo ? item.applyMemo : '无' }}
               </p>
               <p>
-                <span class="gray-font">操作时间：</span>{{ item.verifyTime }}
+                <span class="gray-font">操作时间：</span
+                >{{ item.verifyTime ? item.verifyTime : '无' }}
               </p>
-              <p><span class="gray-font">原因：</span>{{ item.verifyMemo }}</p>
+              <p>
+                <span class="gray-font">原因：</span
+                >{{ item.verifyMemo ? item.verifyMemo : '无' }}
+              </p>
             </div>
             <el-divider style="width:100%;margin:10px 0;"></el-divider>
             <div>
               <el-row>
-                <el-col :span="18" class="gray-font"
-                  ><i class="el-icon-time"></i>{{ item.applyTime }}</el-col
+                <el-col :span="18" class="gray-font" title="开店申请时间"
+                  ><i class="el-icon-time"></i
+                  >{{ item.applyTime ? item.applyTime : '无' }}</el-col
                 >
                 <el-col :span="6" style="text-align:right">
                   <span
                     class="shop-edit-btn"
-                    href="#"
                     v-if="!item.verifyResult && item.deleteStatus !== '1'"
                     @click="editShop(item)"
                     ><i class="el-icon-edit"></i>编辑</span
@@ -190,19 +206,18 @@
         </el-form-item>
       </el-col>
       <div class="form-btns">
-        <pl-button class="white-btn btn-style" @click="unEditShop($event)"
-          >取消</pl-button
+        <pl-button class="white-btn btn-style" @click="clearEditShop($event)"
+          >清空</pl-button
         >
-        <pl-button
+        <!-- <pl-button
           v-if="updateShop"
           class="orange-btn btn-style"
           :auto-loading="true"
           @click="submitForm($event, 'shopInfo')"
         >
           修改
-        </pl-button>
+        </pl-button> -->
         <pl-button
-          v-else
           class="orange-btn btn-style"
           :auto-loading="true"
           @click="submitForm($event, 'shopInfo')"
@@ -211,33 +226,102 @@
         </pl-button>
       </div>
     </el-form>
-    <!-- 
-    <el-dialog title="变更原因" :visible.sync="dialogFormVisible">
-      <el-form :model="areaForm" ref="reasonForm" :rules="arearules">
-        <el-form-item prop="changeReason">
-          <el-input
-            type="textarea"
-            autosize
-            placeholder="（不超过1000字符）"
-            maxlength="1000"
-            show-word-limit
-            :rows="12"
-            v-model="areaForm.changeReason"
+    <!-- 开店弹出框 -->
+    <el-dialog
+      title="在线开店"
+      v-if="dialogFormVisible"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form
+        :model="shopInfo"
+        :rules="rules"
+        ref="shopInfo"
+        label-width="0px"
+        class="clearfix"
+      >
+        <el-col :span="12" class="form-item-left">
+          <el-form-item prop="tyshxydm">
+            <pl-input
+              required
+              v-model="shopInfo.tyshxydm"
+              label="社会信用代码"
+              :disabled="disabledEditForm"
+            ></pl-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="form-item-right">
+          <el-form-item prop="corpName">
+            <pl-input
+              required
+              v-model="shopInfo.corpName"
+              label="单位名称"
+              :disabled="disabledEditForm"
+            ></pl-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="form-item-left">
+          <el-form-item required prop="contactName">
+            <pl-input
+              required
+              v-model="shopInfo.contactName"
+              label="联系人"
+            ></pl-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="form-item-right">
+          <el-form-item prop="contactPhone">
+            <pl-input
+              required
+              v-model="shopInfo.contactPhone"
+              label="联系人电话"
+            ></pl-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item prop="applyMemo">
+            <pl-input
+              required
+              type="textarea"
+              autosize
+              label="其他说明（不超过2000字符）"
+              maxlength="2000"
+              show-word-limit
+              :rows="12"
+              v-model="shopInfo.applyMemo"
+            >
+            </pl-input>
+          </el-form-item>
+        </el-col>
+        <div class="form-btns">
+          <pl-button class="white-btn btn-style" @click="unEditShop($event)"
+            >取消</pl-button
           >
-          </el-input>
-        </el-form-item>
+          <pl-button
+            v-if="updateShop"
+            class="orange-btn btn-style"
+            :auto-loading="true"
+            @click="submitForm($event, 'shopInfo')"
+          >
+            修改
+          </pl-button>
+          <pl-button
+            v-else
+            class="orange-btn btn-style"
+            :auto-loading="true"
+            @click="submitForm($event, 'shopInfo')"
+          >
+            开店
+          </pl-button>
+        </div>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <pl-button type="primary" @click="doChangeQx($event)">确 定</pl-button>
-      </div>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { phonePattern } from '@/utils/regexp';
 import { queryShop, saveShop, updateShop } from '@/api/corporationApi';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'shopApp',
   components: {},
@@ -247,6 +331,7 @@ export default {
       isSc: this.$store.getters['corporation/first_login'],
       dialogFormVisible: false,
       disabledEditForm: false,
+      showEditBtn: false,
       showEditForm: false,
       updateShop: false,
       historyList: [],
@@ -364,6 +449,7 @@ export default {
           // }
         } else {
           //没有历史数据时直接可以添加
+          this.showEditBtn = false;
           this.showEditForm = true;
         }
         //历史信息
@@ -379,8 +465,9 @@ export default {
      * 编辑店面
      */
     editShop(data) {
-      this.showEditForm = true;
       this.shopInfo = data;
+      this.dialogFormVisible = true;
+      //this.showEditForm = true;
       this.disabledEditForm = true;
       this.updateShop = true;
     },
@@ -388,7 +475,8 @@ export default {
      * 取消编辑编辑店面
      */
     unEditShop() {
-      this.showEditForm = false;
+      this.dialogFormVisible = false;
+      //this.showEditForm = false;
       this.disabledEditForm = false;
     },
     /**
@@ -399,10 +487,15 @@ export default {
         if (valid) {
           //let formData = JSON.parse(JSON.stringify(this.shopInfo));
           let formData = this.$refs[formName].model;
-          console.log(formData);
           // 更新信息
           if (this.updateShop) {
-            let result = await updateShop(formData).catch(() => {
+            let params = {
+              applyId: formData.applyId,
+              contactName: formData.contactName,
+              contactPhone: formData.contactPhone,
+              applyMemo: formData.applyMemo
+            };
+            let result = await updateShop(params).catch(() => {
               done();
               this.$message({
                 showClose: true,
@@ -411,13 +504,14 @@ export default {
               });
             });
             if (result && result.status === 200) {
-              // 更新信息
+              // 更新数据
               this.getShop();
               this.$message({
                 showClose: true,
                 message: '修改成功!',
                 type: 'success'
               });
+              this.dialogFormVisible = false;
             } else if (result) {
               this.$message({
                 showClose: true,
@@ -428,7 +522,15 @@ export default {
             }
           } else {
             // 新增信息
-            let result = await saveShop(formData).catch(() => {
+            let params = {
+              cid: formData.cid,
+              corpName: formData.corpName,
+              tyshxydm: formData.tyshxydm,
+              contactName: formData.contactName,
+              contactPhone: formData.contactPhone,
+              applyMemo: formData.applyMemo
+            };
+            let result = await saveShop(params).catch(() => {
               done();
               this.$message({
                 showClose: true,
@@ -445,6 +547,8 @@ export default {
                 message: '开店成功!',
                 type: 'success'
               });
+              this.dialogFormVisible = false;
+              this.showEditForm = false;
             } else if (result) {
               this.$message({
                 showClose: true,
@@ -457,14 +561,21 @@ export default {
         }
       });
     },
-    dialogClear(done) {
-      //清空弹出框
-      //this.$refs.shopInfo.resetFields();
+    clearEditShop(done) {
+      //清空表格
+      this.$refs.shopInfo.resetFields();
       //this.shopInfo(done);
     }
   },
   created() {
     this.getShop();
+  },
+  mounted() {
+    niceScroll();
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>
@@ -474,7 +585,7 @@ export default {
   width: 90%;
   //min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto;
   padding-top: 60px;
   background-color: $g-white-color;
   .title-style {
@@ -497,12 +608,19 @@ export default {
     left: 12px;
     top: 13px;
   }
+  #addShopBtn {
+    padding: 8px 10px;
+    color: #fc7a43;
+    border-radius: 20px;
+    border-color: #fc7a43;
+  }
   .shopCardCenter {
     transform: translateX(-50%);
     left: 50%;
   }
   .shop-card {
     position: relative;
+    margin-bottom: 30px;
     .shop-box-status {
       width: 100px;
       padding: 10px;
@@ -525,9 +643,9 @@ export default {
     }
     .shop-box {
       width: 100%;
-      min-height: 300px;
+      min-height: 240px;
       // border: 1px solid #333;
-      padding: 30px;
+      padding: 15px 30px;
       border-radius: 5px;
       box-shadow: 0 5px 15px rgba(rgb(61, 61, 61), 0.35);
       h2 {
@@ -578,6 +696,10 @@ export default {
   }
   .gray-font {
     color: #999;
+  }
+
+  ::v-deep .el-divider--horizontal {
+    margin: 15px 0;
   }
 }
 </style>
