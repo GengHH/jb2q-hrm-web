@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-02 14:46:59
+ * @LastEditTime: 2021-06-03 16:54:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -852,8 +852,8 @@ Mock.mock(basePath + '/corp/resume/queryPositionListNoPage', 'post', function(
   return {
     status: 200,
     message: '',
-    result: {
-      data: [
+    result: Mock.mock({
+      'data|30': [
         {
           positionId: 9,
           positionCode: '20211700000009',
@@ -901,7 +901,7 @@ Mock.mock(basePath + '/corp/resume/queryPositionListNoPage', 'post', function(
           workStreetList: ['0502']
         }
       ]
-    }
+    })
   };
 });
 //单位邀约人员
