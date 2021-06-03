@@ -532,6 +532,7 @@ export default {
     this.queryDefaultJobs();
   },
   updated() {
+    console.log(1234);
     // 更新滚动条
     this._.throttle(niceScrollUpdate, 500)();
   },
@@ -787,6 +788,8 @@ export default {
           .siblings('.el-icon-caret-bottom')
           .css('transform', 'rotate(180deg)');
       }
+      // 更新滚动条
+      this._.throttle(niceScrollUpdate, 500)();
     },
     showJobDetial(arg) {
       console.log(arg);
