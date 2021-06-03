@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-05-26 09:48:48
+ * @LastEditTime: 2021-06-03 18:08:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -10,9 +10,6 @@
   <div id="indexBody">
     <div class="queryList">
       <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
-      <el-button size="mini" @click="triggerUser((demoUser = !demoUser))"
-        >管理员切换</el-button
-      >
       <el-button-group>
         <el-button
           @click="
@@ -270,7 +267,7 @@ export default {
   },
   data() {
     return {
-      isAudit: false,
+      isAudit: true,
       demoUser: false,
       userType: false,
       queryData: {},
@@ -588,6 +585,14 @@ export default {
         this.userType = false;
         this.activeName = '3';
       }
+    }
+  },
+  mounted() {
+    let qx = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
+    if (qx == '00') {
+      this.demoUser = true;
+    } else {
+      this.demoUser = false;
     }
   },
   created() {}

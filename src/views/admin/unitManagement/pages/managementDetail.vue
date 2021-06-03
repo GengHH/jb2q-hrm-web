@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-05-28 17:47:07
+ * @LastEditTime: 2021-06-03 17:50:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -50,7 +50,7 @@
             </span>
           </el-col>
         </el-row>
-        <div class="title-style">状态</div>
+        <!-- <div class="title-style">状态</div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="单位状态" prop="frozen">
@@ -65,12 +65,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
-          <!-- <el-col :span="12">
-            <el-form-item label="会议召集人" prop="meetCaller">
-              <el-input v-model="form.meetCaller"></el-input>
-            </el-form-item>
-          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="20">
@@ -87,12 +81,7 @@
               查看详情>>
             </div>
           </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="与会其他人员" prop="meetOtherPeople">
-              <el-input v-model="form.meetOtherPeople"></el-input>
-            </el-form-item>
-          </el-col> -->
-        </el-row>
+        </el-row> -->
         <div class="title-style">详情</div>
         <el-row>
           <el-col :span="24">

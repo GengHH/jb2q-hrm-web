@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-04 11:10:20
- * @LastEditTime: 2021-05-24 16:21:42
+ * @LastEditTime: 2021-06-03 17:04:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\admin\router\index.js
@@ -76,7 +76,7 @@ export default new Router({
     },
     {
       path: '/technocracy/statistics',
-      name: '报表统计',
+      name: '经费统计',
       component: () => import('@/views/admin/technocracy/statistics')
     },
     // 职业指导profession

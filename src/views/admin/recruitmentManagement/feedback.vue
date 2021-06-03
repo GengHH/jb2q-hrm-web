@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-01 18:26:32
+ * @LastEditTime: 2021-06-03 16:31:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -150,7 +150,8 @@ export default {
       );
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.onsubmit(this.dataList);
     }
   },
   created() {}

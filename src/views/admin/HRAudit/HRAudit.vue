@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-05-21 15:27:23
+ * @LastEditTime: 2021-06-03 16:27:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -177,7 +177,8 @@ export default {
       //1查看 2审核
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     onclose(type) {
       if (type == '1') {

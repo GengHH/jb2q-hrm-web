@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 16:20:19
+ * @LastEditTime: 2021-06-03 16:52:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -102,7 +102,8 @@ export default {
         { title: '结对开始时间', prop: 'pairStartTime' },
         { title: '服务次数', prop: 'serviceCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 200 }
-      ]
+      ],
+      dataList: {}
     };
   },
   computed: {},
@@ -136,6 +137,7 @@ export default {
     onSubmit() {
       let data = { ...this.params };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      this.dataList = data;
       record_query(
         data,
         res => {
@@ -182,6 +184,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.onSubmit(this.dataList);
     }
   },
   created() {}

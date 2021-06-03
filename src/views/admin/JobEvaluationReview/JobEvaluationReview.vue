@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:01:24
+ * @LastEditTime: 2021-06-03 16:29:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -141,13 +141,16 @@ export default {
         { title: '评价人', prop: 'xm' },
         { title: '操作', slot: 'aaa010' }
       ],
-      list: []
+      list: [],
+      dataList: {}
     };
   },
   computed: {},
   methods: {
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     message(type, msg) {
       this.$message({
@@ -160,6 +163,7 @@ export default {
     advancedSearch(e) {
       let data = { ...e, ...this.params };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      this.dataList = data;
       query(
         data,
         res => {

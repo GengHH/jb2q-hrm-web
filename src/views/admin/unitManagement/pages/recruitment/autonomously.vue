@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-05-28 15:41:55
+ * @LastEditTime: 2021-06-03 16:41:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\autonomously.vue
@@ -180,6 +180,7 @@ export default {
   components: { tform, ttable },
   data() {
     return {
+      dataList: {},
       queryForm: {},
       initQueryForm: {
         salaryMin: undefined,
@@ -314,12 +315,13 @@ export default {
       console.log(e);
     },
     handleChange(e) {
-      console.log(e);
+      this.pageParam.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     onclose(type) {
       this.$emit('onclose', type);
     },
-    advancedSearch(e) {
+    advancedSearch() {
       console.log(this.queryForm);
       let data = {
         cid: this.data.corpId,
@@ -328,7 +330,7 @@ export default {
       };
       data.pageParam.pageIndex =
         JSON.parse(JSON.stringify(this.pageParam.pageIndex)) - 1;
-
+      this.dataList = data;
       agency_resume_query(
         data,
         res => {

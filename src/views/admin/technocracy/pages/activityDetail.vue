@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-06-03 14:54:42
+ * @LastEditTime: 2021-06-03 17:39:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -257,9 +257,10 @@
             </el-form-item>
 
             <img
-              width="600px"
-              v-if="disabled && form.pairImageBase64 != ''"
-              :src="'data:image/png;base64,' + form.pairImageBase64"
+              width="300px"
+              style="margin:0 auto"
+              v-if="disabled && form.recordImageBase64 != ''"
+              :src="'data:image/png;base64,' + form.recordImageBase64"
               alt="记录表"
             />
           </el-col>
@@ -284,10 +285,11 @@ import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { act_query } from '../../profession/api/index';
 export default {
   name: 'activityDetail',
-  props: ['visible', 'disabled', 'form', 'type'],
+  props: ['visible', 'form', 'type'],
   components: {},
   data() {
     return {
+      disabled: false,
       userOptions: [],
       orgOption: [],
       actOption: [],
@@ -553,8 +555,12 @@ export default {
     }
   },
   mounted() {
+    if (this.type == '2') {
+      setTimeout(() => {
+        this.disabled = true;
+      }, 0);
+    }
     //获取活动信息
-
     act_query(
       {
         pageIndex: 0,

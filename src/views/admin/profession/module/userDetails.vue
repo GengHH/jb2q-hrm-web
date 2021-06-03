@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:12:37
- * @LastEditTime: 2021-06-03 16:20:10
+ * @LastEditTime: 2021-06-03 17:00:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\userDetails.vue
@@ -64,7 +64,8 @@ export default {
         { title: '证件号码', prop: 'zjhm' },
         { title: '是否到场', prop: 'isApply', slot: 'isApply' }
       ],
-      list: []
+      list: [],
+      queryData: {}
     };
   },
   computed: {},
@@ -105,6 +106,33 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.queryList(this.queryData);
+    },
+    queryList(data) {
+      act_apply_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.data;
+            pageresult.data = pageresult.data.map(e => {
+              if (e.attendStatus == '1') {
+                e.isApply = true;
+              } else {
+                e.isApply = false;
+              }
+              return e;
+            });
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     onclose() {
       this.$emit('onclose');
@@ -117,31 +145,8 @@ export default {
       pageSize: this.pageSize,
       applyType: this.dataList.userType
     };
-
-    data.actId = '21';
-    act_apply_query(
-      data,
-      res => {
-        if (res.status == 200) {
-          let pageresult = res.result.data;
-          pageresult.data = pageresult.data.map(e => {
-            if (e.attendStatus == '1') {
-              e.isApply = true;
-            } else {
-              e.isApply = false;
-            }
-            return e;
-          });
-          this.list = pageresult.data;
-          this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-          this.params.total = pageresult.total;
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.queryData = data;
+    this.queryList(data);
     console.log(this.dataList);
   },
   created() {}

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 14:33:41
+ * @LastEditTime: 2021-06-03 17:35:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,8 +20,16 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
-      <el-table-column slot="aaa009" label="操作" align="center">
+      <el-table-column width="180" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="opendio(2, scope)"
+            plain
+          >
+            <i class="el-icon-search"></i> 查看</el-button
+          >
           <el-button size="mini" @click="opendio(1, scope)" plain>
             <i class="el-icon-edit"></i> 编辑</el-button
           >
@@ -44,7 +52,6 @@
     </div>
     <activitydetail
       v-if="visible"
-      :disabled="disabled"
       :visible="visible"
       :form="form"
       :type="type"
@@ -81,7 +88,6 @@ export default {
         psnlCount: '',
         recordImageBase64: ''
       },
-      disabled: false,
       visible: false,
       params: {
         pageIndex: 1,
@@ -98,10 +104,11 @@ export default {
         { title: '活动时间', prop: 'actDate' },
         { title: '服务对象姓名', prop: 'xm' },
         { title: '证件号码', prop: 'zjhm' },
-        { title: '活动名称', prop: 'actTypems' },
+        { title: '活动类型', prop: 'actTypems' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
-      activityList: []
+      activityList: [],
+      dataList: {}
     };
   },
   computed: {},
@@ -121,6 +128,7 @@ export default {
     onSubmit() {
       let data = { ...this.params };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      this.dataList = data;
       activity_query(
         data,
         res => {
@@ -142,24 +150,17 @@ export default {
     },
     opendio(type, scope) {
       //1 编辑 2 查看 3 新增
-      if (type == 1) {
-        this.type = 1;
-        this.disabled = false;
+      if (type == 1 || type == 2) {
         this.form = { ...scope.row };
-
         this.form.name = this.form.expertName;
         this.form.pids = this.form.xm;
         this.form.actName = this.form.actName
           ? this.form.actName - 0
           : this.form.actName;
-      } else if (type == 2) {
-        this.disabled = true;
-        this.form = { ...scope.row };
       } else {
-        this.type = 3;
-        this.disabled = false;
         this.form = { ...this.initform };
       }
+      this.type = type;
       this.visible = true;
     },
     onclose(type) {
@@ -171,6 +172,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.onSubmit(this.dataList);
     }
   },
   created() {},

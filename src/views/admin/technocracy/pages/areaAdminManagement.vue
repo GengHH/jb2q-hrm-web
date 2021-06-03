@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-06-03 13:40:14
+ * @LastEditTime: 2021-06-03 16:49:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -310,7 +310,8 @@ export default {
         weekend: '',
         otherTime: '',
         bankId: ''
-      }
+      },
+      dataList: {}
     };
   },
   computed: {},
@@ -434,6 +435,8 @@ export default {
       this.queryData = data;
       //获取当前用户所在区
       data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
+
+      this.dataList = data;
       synthesize_query(
         data,
         res => {
@@ -465,10 +468,8 @@ export default {
       this.visible = true;
     },
     handleChange(e) {
-      let data = { ...this.queryData };
-      data.pageSize = this.pageSize;
-      data.pageIndex = e - 1;
-      this.onsubmit(data);
+      this.params.pageIndex = e;
+      this.onsubmit(this.dataList);
     }
   },
   created() {

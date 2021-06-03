@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-29 17:02:06
+ * @LastEditTime: 2021-06-03 16:28:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -172,6 +172,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     message(type, msg) {
       this.$message({

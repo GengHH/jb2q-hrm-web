@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-12 16:38:40
- * @LastEditTime: 2021-05-26 20:03:23
+ * @LastEditTime: 2021-06-03 17:29:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\message\query.vue
@@ -233,7 +233,8 @@ export default {
         { title: '姓名', prop: 'xm' },
         { title: '证件号码', prop: 'zjhm' },
         { title: '操作', slot: 'aaa010' }
-      ]
+      ],
+      dataList: {}
     };
   },
   computed: {},
@@ -245,9 +246,29 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.query(this.dataList);
     },
     onclose() {
       this.$emit('onclose');
+    },
+    query(data) {
+      unit_query_resume(
+        data,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params.total = pageresult.total;
+            this.loading = false;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
   },
   mounted() {
@@ -256,22 +277,8 @@ export default {
     console.log(data);
     data.pageSize = this.pageSize;
     data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
-    unit_query_resume(
-      data,
-      res => {
-        if (res.status == 200) {
-          let pageresult = res.result.pageresult;
-          this.list = pageresult.data;
-          this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-          this.params.total = pageresult.total;
-          this.loading = false;
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.dataList = data;
+    this.query(data);
   },
   created() {}
 };
