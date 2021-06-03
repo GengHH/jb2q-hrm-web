@@ -316,7 +316,10 @@
           @showJobDetials="showJobDetial(arguments)"
           @callPositionCorp="callPositionCorp(arguments)"
         ></per-search-job>
-        <BaseLoadingSvg v-else></BaseLoadingSvg>
+        <div v-else style="text-align:center;margin-top:100px;color:#999;">
+          暂时没有推荐职位信息
+        </div>
+        <!-- <BaseLoadingSvg ></BaseLoadingSvg> -->
       </el-tab-pane>
       <el-tab-pane label="自行检索" name="search">
         <per-search-job
@@ -506,22 +509,21 @@ export default {
       }, 500)();
     },
     positionDetailsId: function(val, oldVal) {
-      //系统搜索职位
       let that = this;
-      this.onePosition = that.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
-    },
-    positionDetailsRecId: function(val, oldVal) {
-      let that = this;
-      //系统搜索职位
-      this.onePosition = that.positionDetailsRecId
-        ? this.queryDefaultResult.find(function(i) {
-            return i.recId === that.positionDetailsRecId;
-          })
-        : {};
+      if (this.activeName === 'search') {
+        //自行搜索职位
+        this.onePosition = that.positionDetailsId
+          ? this.queryResult.find(function(i) {
+              return i.positionId === that.positionDetailsId;
+            })
+          : {};
+      } else {
+        this.onePosition = that.positionDetailsRecId
+          ? this.queryDefaultResult.find(function(i) {
+              return i.recId === that.positionDetailsRecId;
+            })
+          : {};
+      }
     }
   },
   created() {
@@ -841,6 +843,7 @@ export default {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
       let orginFavorType = arg[2];
+      let recId = arg[3] || '';
       if (!orginFavorType) {
         let res = await doFavorJobs('2', {
           id: positionId,
@@ -848,7 +851,11 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = true;
+          if (!recId) {
+            this.queryResult[index].favor = true;
+          } else {
+            this.queryDefaultResult[index].favor = true;
+          }
           this.$message({ type: 'success', message: '收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '收藏职位失败' });
@@ -861,7 +868,11 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = false;
+          if (!recId) {
+            this.queryResult[index].favor = false;
+          } else {
+            this.queryDefaultResult[index].favor = false;
+          }
           this.$message({ type: 'success', message: '取消收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '取消收藏职位失败' });

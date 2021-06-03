@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-31 16:33:48
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-03 15:26:09
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -331,7 +331,7 @@
         <div
           v-if="!invitePositionList.length"
           class="zw-wrap zw-wrap-body"
-          style="text-align:center;padding:20px"
+          style="text-align:center;padding:80px;color:#999;"
         >
           无职位数据
         </div>
@@ -382,9 +382,108 @@
               </div>
             </el-carousel-item>
           </el-carousel>
+          <el-divider></el-divider>
+          <!-- 面试信息 -->
+          <el-form
+            class="width70"
+            :model="interview"
+            ref="interview"
+            :label-position="labelPosition"
+            :rules="rules.interview"
+          >
+            <!-- <el-form-item
+              label="反馈结果"
+              prop="interviewStatus"
+              :label-width="formLabelWidth"
+            >
+              <el-radio-group v-model="interview.interviewStatus" size="medium">
+                <el-radio-button >通知面试</el-radio-button
+                >
+                <el-radio-button label="04">意向录用</el-radio-button>
+                <el-radio-button label="05">通知不录用</el-radio-button>
+              </el-radio-group>
+            </el-form-item> -->
+            <el-row>
+              <el-col :span="12">
+                <el-form-item
+                  class="input-one"
+                  label="面试日期"
+                  :label-width="formLabelWidth"
+                  prop="interviewDate"
+                >
+                  <el-date-picker
+                    type="date"
+                    placeholder="面试日期"
+                    v-model="interview.interviewDate"
+                    value-format="yyyyMMdd"
+                    style="width: 100%;"
+                  ></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  class="input-two"
+                  label="面试时间"
+                  :label-width="formLabelWidth"
+                  prop="interviewTime"
+                >
+                  <el-time-picker
+                    placeholder="面试时间"
+                    v-model="interview.interviewTime"
+                    value-format="HHmmss"
+                    style="width: 100%;"
+                  ></el-time-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item
+              label="面试联系人"
+              prop="interviewContactName"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                v-model="interview.interviewContactName"
+                autocomplete="off"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="面试联系电话"
+              prop="interviewContactPhone"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                v-model="interview.interviewContactPhone"
+                autocomplete="off"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="面试地址"
+              prop="interviewAddress"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                type="textarea"
+                placeholder="请输入（40字符）"
+                v-model="interview.interviewAddress"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="备注"
+              prop="interviewRemarks"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                type="textarea"
+                placeholder="请输入（2000字符）"
+                v-model="interview.interviewRemarks"
+              ></el-input>
+            </el-form-item>
+          </el-form>
         </div>
 
-        <div class="operate-resume-header">
+        <div class="operate-resume-header" v-if="invitePositionList.length">
           <el-button size="small" @click="invite()"
             ><i class="el-icon-el-icon-tickets">邀约</i></el-button
           >
@@ -404,6 +503,7 @@ import CorpSearchResume from '@/components/corporation/CorpSearchResume.vue';
 import BaseResumeInfo from '@/components/common/BaseResumeInfo.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText } from '@/utils';
+import { phonePattern } from '@/utils/regexp';
 import {
   queryJobs,
   doDeliveryResume
@@ -428,6 +528,8 @@ export default {
   },
   data() {
     return {
+      labelPosition: 'right',
+      formLabelWidth: '150px',
       detailsIndex: null,
       detailsDialog: false,
       inviteDialog: false,
@@ -466,7 +568,6 @@ export default {
         majorName: '',
         languageType: '',
         certName: '',
-
         ageMin: '',
         ageMax: ''
       },
@@ -491,13 +592,64 @@ export default {
       invitePosition: '',
       carouselPageCount: 0,
       invitePositionList: [
-        {
-          cid: '12311234',
-          zwmc: '哈哈',
-          positionId: '1234123'
-        }
+        // {
+        //   cid: '12311234',
+        //   zwmc: '哈哈',
+        //   positionId: '1234123'
+        // }
       ],
-      invitePositionPageList: []
+      invitePositionPageList: [],
+      interview: {
+        // applyforIdList: [],
+        // applyforId: '',
+        // feedbackStatus: '',
+        interviewDate: '',
+        interviewTime: '',
+        interviewContactName: '',
+        interviewContactPhone: '',
+        interviewAddress: '',
+        interviewRemarks: ''
+      },
+      rules: {
+        interview: {
+          interviewDate: [
+            { required: true, message: '请输入面试日期', trigger: 'blur' }
+          ],
+          interviewTime: [
+            { required: true, message: '请输入面试时间', trigger: 'blur' }
+          ],
+          interviewContactName: [
+            { required: true, message: '请输入面试联系人', trigger: 'blur' }
+          ],
+          interviewContactPhone: [
+            { required: true, message: '请输面试联系电话', trigger: 'blur' },
+            {
+              pattern: phonePattern,
+              message: '请输入正确格式的手机号',
+              trigger: ['blur', 'change']
+            }
+          ],
+          interviewAddress: [
+            { required: true, message: '面试地址', trigger: 'blur' },
+            {
+              max: 40,
+              message: '最长不可超过40字符',
+              trigger: ['blur', 'change']
+            }
+          ],
+          // interviewStatus: [
+          //   { required: true, message: '反馈结果', trigger: 'blur' }
+          // ],
+          interviewRemarks: [
+            // { required: true, message: '备注', trigger: 'blur' },
+            {
+              max: 2000,
+              message: '最长不可超过2000字符',
+              trigger: ['blur', 'change']
+            }
+          ]
+        }
+      }
     };
   },
   computed: {
@@ -765,7 +917,7 @@ export default {
       console.log(`queryPid:${queryPid}`);
     },
     /**
-     * 邀约
+     * 打开邀约界面
      */
     inviteDetials(arg) {
       let index = arg[0];
@@ -778,7 +930,7 @@ export default {
       let queryFavor = (arg && arg[3]) || false;
       this.inviteDialog = true;
       //只需首次查询所有职位信息
-      if (this.invitePositionList.length) {
+      if (!this.invitePositionList.length) {
         this.inviteLoading = true;
         this.queryInvitePosition();
       }
@@ -796,23 +948,28 @@ export default {
       }
       this.inviteLoading = false;
     },
-    async invite(arg) {
+    invite(arg) {
       if (!this.invitePosition) {
         this.$alert('请选择一个职位');
         return;
       }
-      let inviteRes = await doInvite({
-        pid: this.queryPid,
-        positionId: this.invitePosition
+      this.$refs.interview.validate(async valid => {
+        if (valid) {
+          let inviteRes = await doInvite({
+            pid: this.queryPid,
+            positionId: this.invitePosition,
+            ...this.interview
+          });
+          if (inviteRes && inviteRes.status === 200) {
+            this.$message({ type: 'success', message: '邀约成功' });
+            this.inviteDialog = false;
+            //TODO 按钮重置
+            //  this.queryResult[index].invite = true;
+          } else if (inviteRes) {
+            this.$message({ type: 'error', message: '邀约失败' });
+          }
+        }
       });
-      if (inviteRes && inviteRes.status === 200) {
-        this.$message({ type: 'success', message: '邀约成功' });
-        this.inviteDialog = false;
-        //TODO 按钮重置
-        //  this.queryResult[index].invite = true;
-      } else if (inviteRes) {
-        this.$message({ type: 'error', message: '邀约失败' });
-      }
     },
     /**
      * 投递简历 TODO (是不是换成邀请人员)

@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-02 16:17:44
+ * @LastEditTime: 2021-06-03 10:48:56
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -184,7 +184,7 @@
               <span>{{ Number(jobItem.workYearNeed) }}年</span>
               <el-button
                 type="primary"
-                class="gray-btn"
+                class="call-btn"
                 @click="callPositionCorp(index, jobItem.corpId)"
                 ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
               >
@@ -194,7 +194,12 @@
         <el-col :span="8">
           <p class="time-p sixteen-opacity">
             {{ jobItem.corpName }}
-            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
+            <img
+              class="ico_rz"
+              src="../../assets/images/ico_rz.png"
+              alt=""
+              style="height: .9em;"
+            />
           </p>
           <p class="span-infor">
             <span>{{ jobItem.industryTypeText }}</span>
@@ -209,7 +214,7 @@
           <el-button
             v-if="jobItem.applyFor"
             type="primary"
-            class="white-btn job-bar-btn"
+            class="gray-btn job-bar-btn"
             @click="
               selectJob(
                 jobItem.applyFor,
@@ -224,7 +229,7 @@
           <el-button
             v-if="!jobItem.applyFor"
             type="primary"
-            class="release-btn job-bar-btn"
+            class="white-btn job-bar-btn"
             @click="
               selectJob(
                 jobItem.applyFor,
@@ -240,7 +245,7 @@
           <el-button
             v-if="jobItem.favor"
             type="primary"
-            class="white-btn job-bar-btn"
+            class="gray-btn job-bar-btn"
             @click="
               favorJob(jobItem.favor, index, jobItem.positionId, jobItem.recId)
             "
@@ -250,7 +255,7 @@
           <el-button
             v-if="!jobItem.favor"
             type="primary"
-            class="release-btn job-bar-btn"
+            class="white-btn job-bar-btn"
             @click="
               favorJob(jobItem.favor, index, jobItem.positionId, jobItem.recId)
             "
@@ -271,30 +276,31 @@
           <span
             v-if="jobItem.recruitType === '2'"
             class="fourteen-opacity jz-font-style"
-            >发布机构：<i>{{ jobItem.workAreaText }}就业促进中心</i></span
+            ><span class="gray-font">发布机构：</span
+            ><i>{{ jobItem.workAreaText }}就业促进中心</i></span
           >
+
           <span
             v-if="jobItem.agencyRecruit === '1'"
             class="fourteen-opacity rl-font-style"
-            >委托代招：<i>{{ jobItem.entrustCorpName }}</i></span
+            ><span class="gray-font">委托代招：</span
+            ><i>{{ jobItem.entrustCorpName }}</i></span
           >
         </el-col>
         <el-col
-          v-if="
-            jobItem.tranBaseSymbol === '1' ||
-              jobItem.recruitType === '2' ||
-              jobItem.agencyRecruit === '1'
-          "
+          v-if="jobItem.recruitType === '2' || jobItem.agencyRecruit === '1'"
           :span="5"
           class="text-right"
         >
           <span class="fourteen-opacity"
-            >发布时间：{{ jobItem.releaseTime }}</span
+            ><span class="gray-font">发布时间：</span
+            >{{ jobItem.releaseTime }}</span
           >
         </el-col>
         <el-col v-else :span="5">
           <span class="fourteen-opacity"
-            >发布时间：{{ jobItem.releaseTime }}</span
+            ><span class="gray-font">发布时间：</span
+            >{{ jobItem.releaseTime }}</span
           >
         </el-col>
       </div>
@@ -523,17 +529,23 @@ export default {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.7);
   margin-top: 15px;
-  .gray-btn,
-  .gray-btn:hover {
+  .call-btn {
     color: #fc6f3d;
     background-color: transparent;
-    border-color: #d1d1d1;
+    border-color: #fc6f3d;
     padding: 3px 10px;
     border-radius: 20px;
+  }
+  .call-btn:hover {
+    color: #fff;
+    background-color: #fc6f3d;
   }
 }
 #jobListpager {
   display: inline-block;
   width: 100%;
+}
+.gray-font {
+  color: #999;
 }
 </style>

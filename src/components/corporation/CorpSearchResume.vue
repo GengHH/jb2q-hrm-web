@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-05-26 20:30:34
+ * @LastEditTime: 2021-06-03 16:18:49
  * @LastEditors: Please set LastEditors
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
@@ -69,7 +69,7 @@
         <el-col :span="5" style="text-align:right">
           <el-button
             type="primary"
-            class="look-btn"
+            class="white-btn"
             @click="
               inviteDetial(
                 index,
@@ -83,7 +83,7 @@
           <el-button
             v-if="resumeItem.favor"
             type="primary"
-            class="white-btn"
+            class="gray-btn"
             style="width:100px"
             @click="favorResume(resumeItem.favor, index, resumeItem.resumeId)"
           >
@@ -92,7 +92,7 @@
           <el-button
             v-else
             type="primary"
-            class="release-btn"
+            class="white-btn"
             style="width:100px"
             @click="favorResume(resumeItem.favor, index, resumeItem.resumeId)"
           >

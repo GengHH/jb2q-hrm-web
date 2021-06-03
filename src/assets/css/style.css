@@ -238,6 +238,11 @@ body {
 
   border-color: #ff9954 !important;
 }
+.gray-btn {
+  color: #999 !important;
+  background-color: #fff !important;
+  border-color: #999 !important;
+}
 .white-btn {
   color: #fc6f3d !important;
   background-color: #fff !important;

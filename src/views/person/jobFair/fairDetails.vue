@@ -148,6 +148,7 @@
 
     <!-- 职位详细信息 弹窗部分 -->
     <el-dialog
+      v-if="detailsDialog"
       width="75%"
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-01 17:42:19
+ * @LastEditTime: 2021-06-03 15:41:26
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -144,6 +144,9 @@ const queryMeetingSchedule = params =>
 //招聘会下所有的单位信息
 const queryMeetingCorporationList = params =>
   postAction(basePath + '/person/meeting/queryMeetingCorporationList', params);
+//招聘会下单位的所有职位信息
+const queryCorpPositionList = params =>
+  postAction(basePath + '/person/meeting/doSearchCorpPositionList', params);
 //招聘会下所有的职位信息
 const queryMeetingPositionList = params =>
   postAction(basePath + '/person/meeting/queryMeetingPositionList', params);
@@ -167,10 +170,6 @@ const doApplyActivity = params =>
   postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
 
 /*********end**********/
-
-//个人投递招聘会下的职位
-const queryPositionDetials = params =>
-  postAction(basePath + '/person/recommend/doQueryRecommendDetail', params);
 
 export {
   doSend,
@@ -211,6 +210,7 @@ export {
   queryMeetingList,
   queryMeetingSchedule,
   queryMeetingCorporationList,
+  queryCorpPositionList,
   queryMeetingPositionList,
   queryCorporationPositionInfo,
   doApplyFor,
