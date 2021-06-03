@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-03 15:26:09
+ * @LastEditTime: 2021-06-03 16:59:59
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -1241,6 +1241,10 @@ export default {
   .zw-carousel {
     margin: 0;
     padding: 10px 60px 0;
+    .radio-list-bar {
+      height: 100%;
+      max-height: 100% !important;
+    }
   }
 }
 </style>

@@ -1,7 +1,21 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-12-16 11:32:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-03 17:24:26
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
+-->
 <template>
   <div class="module-two clearfix">
-    <img src="../../assets/images/logos.png" alt="">
-    <p class="font-eighteen mat-15">万达信息股份有限公司</p>
+    <img
+      v-if="corpBoxInfoObj.zl"
+      src="../../assets/images/zhilianLogo.png"
+      alt=""
+    />
+    <img v-else src="../../assets/images/logos.png" alt="" />
+    <p class="font-eighteen mat-15" v-if="corpBoxInfoObj.zl">智联招聘</p>
+    <p class="font-eighteen mat-15" v-else>万达信息股份有限公司</p>
     <p class="span-infor">
       <span>已上市</span>
       <el-divider direction="vertical"></el-divider>
@@ -18,11 +32,15 @@
  * 首页显示单位信息组件
  */
 export default {
-  name:'BaseCorpBoxShow'
+  name: 'BaseCorpBoxShow',
+  props: {
+    corpBoxInfoObj: Object,
+    default: () => {}
+  }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .module-two {
   border: 1px solid #f0f0f0;
   border-radius: 5px;
@@ -37,13 +55,13 @@ export default {
   }
 
   .font-eighteen {
-      font-size: 18px;
-      color: #000000;
+    font-size: 18px;
+    color: #000000;
   }
-  
+
   .span-infor {
     font-size: 14px;
-    color: rgba(0,0,0,0.7);
+    color: rgba(0, 0, 0, 0.7);
     margin-top: 15px;
     .el-divider--vertical {
       display: inline-block;

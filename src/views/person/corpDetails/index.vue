@@ -286,7 +286,12 @@
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import { loadCorpInfo } from '@/api/corporationApi';
-import { queryCorpPositionList } from '@/api/personApi';
+import {
+  queryCorpPositionList,
+  doDeliveryResume,
+  doFavorJobs,
+  doUnfavorJobs
+} from '@/api/personApi';
 import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
   name: 'CorpDetails',
@@ -313,10 +318,10 @@ export default {
   created() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
-      this.cid = this.$route.query;
+      this.cid = this.$route.query.id;
       //查询单位信息
       this.loadCorpInfo();
-      this.queryCorpPositionList();
+      this.queryJobs();
     }
   },
   updated() {
@@ -351,7 +356,7 @@ export default {
     /**
      * 查询职位信息列表
      */
-    async queryCorpPositionList() {
+    async queryJobs() {
       let that = this;
       let queryRes = await queryCorpPositionList({
         cid: this.cid,
