@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-02 11:18:31
+ * @LastEditTime: 2021-06-02 16:17:44
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -379,26 +379,34 @@ export default {
   methods: {
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.$parent.queryJobs) {
-        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      if (this.$parent.$parent.$parent.queryJobs) {
+        this.$parent.$parent.$parent.queryJobs(
+          this.$parent.$parent.$parent.queryParams.positionName
+        );
       }
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.queryJobs) {
-        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      if (this.$parent.$parent.$parent.queryJobs) {
+        this.$parent.$parent.$parent.queryJobs(
+          this.$parent.$parent.$parent.queryParams.positionName
+        );
       }
     },
     handlePrevClick(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.queryJobs) {
-        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      if (this.$parent.$parent.$parent.queryJobs) {
+        this.$parent.$parent.$parent.queryJobs(
+          this.$parent.$parent.$parent.queryParams.positionName
+        );
       }
     },
     handleNextClick(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.queryJobs) {
-        this.$parent.queryJobs(this.$parent.queryParams.positionName);
+      if (this.$parent.$parent.$parent.queryJobs) {
+        this.$parent.$parent.$parent.queryJobs(
+          this.$parent.$parent.$parent.queryParams.positionName
+        );
       }
     },
     selectJob(applyFor, index, positionId, recId) {

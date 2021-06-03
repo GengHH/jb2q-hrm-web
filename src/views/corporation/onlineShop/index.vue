@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-02 14:33:41
+ * @LastEditTime: 2021-06-03 09:36:03
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\onlineShop\index.vue
 -->
@@ -336,11 +336,13 @@ export default {
         let failCount = 0;
         if (result.result.data.length) {
           result.result.data.forEach(element => {
+            console.log(element);
+            console.log(element.verifyResult);
+            console.log(element.verifyResult === '0');
             if (element.deleteStatus === '1') {
               deleteCount++;
             } else if (element.verifyResult === '0') {
               failCount++;
-              // this.showEditForm = true;
             } else {
               rightCount++;
             }
