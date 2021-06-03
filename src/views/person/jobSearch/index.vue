@@ -311,6 +311,7 @@
           :jobData="queryDefaultResult"
           :total="queryDefaultResultTotal"
           showPager
+          callBackFuncName="queryDefaultJobs"
           @deliveryResume="deliveryResume(arguments)"
           @favorJob="favorJob(arguments)"
           @showJobDetials="showJobDetial(arguments)"

@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-03 10:48:56
+ * @LastEditTime: 2021-06-03 16:47:03
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -305,7 +305,7 @@
         </el-col>
       </div>
     </div>
-    <!-- 分页器 -->
+    <!-- 分页器 （基本上都是采用后端分页）-->
     <el-pagination
       id="jobListpager"
       v-show="showPager"
@@ -346,13 +346,17 @@ export default {
     total: {
       type: Number,
       default: 0
+    },
+    callBackFuncName: {
+      type: String,
+      default: 'queryJobs'
     }
   },
   data() {
     return {
       checkAll: false,
       isIndeterminate: true,
-      currentPage: 0,
+      currentPage: 1,
       pageSize: 10
     };
   },
@@ -385,33 +389,33 @@ export default {
   methods: {
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.$parent.$parent.$parent.queryJobs) {
-        this.$parent.$parent.$parent.queryJobs(
-          this.$parent.$parent.$parent.queryParams.positionName
+      if (this.$parent.$parent.$parent[this.callBackFuncName]) {
+        this.$parent.$parent.$parent[this.callBackFuncName](
+          this.$parent.$parent.$parent?.queryParams?.positionName
         );
       }
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.$parent.$parent.queryJobs) {
-        this.$parent.$parent.$parent.queryJobs(
-          this.$parent.$parent.$parent.queryParams.positionName
+      if (this.$parent.$parent.$parent[this.callBackFuncName]) {
+        this.$parent.$parent.$parent[this.callBackFuncName](
+          this.$parent.$parent.$parent?.queryParams?.positionName
         );
       }
     },
     handlePrevClick(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.$parent.$parent.queryJobs) {
-        this.$parent.$parent.$parent.queryJobs(
-          this.$parent.$parent.$parent.queryParams.positionName
+      if (this.$parent.$parent.$parent[this.callBackFuncName]) {
+        this.$parent.$parent.$parent[this.callBackFuncName](
+          this.$parent.$parent.$parent?.queryParams?.positionName
         );
       }
     },
     handleNextClick(currentPage) {
       this.currentPage = currentPage;
-      if (this.$parent.$parent.$parent.queryJobs) {
-        this.$parent.$parent.$parent.queryJobs(
-          this.$parent.$parent.$parent.queryParams.positionName
+      if (this.$parent.$parent.$parent[this.callBackFuncName]) {
+        this.$parent.$parent.$parent[this.callBackFuncName](
+          this.$parent.$parent.$parent?.queryParams?.positionName
         );
       }
     },
