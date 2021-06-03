@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-06-01 19:22:30
+ * @LastEditTime: 2021-06-03 16:08:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -55,6 +55,26 @@
             <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
             <span style="margin-left:15px">身份证号：</span>
             <span class="fontColor">{{ form.zjhm }}</span>
+            <span
+              v-if="activeName == '02'"
+              class="list"
+              @mouseover="titleListShow = true"
+              @mouseout="titleListShow = false"
+              style="color:#fc7a43;position: relative;cursor: pointer;"
+              ><i class="el-icon-caret-bottom"></i> 求职档案
+              <div class="selectList" v-show="titleListShow">
+                <ul>
+                  <li
+                    @click="liClick(k0)"
+                    v-for="(v0, k0) in titleList"
+                    :key="k0"
+                  >
+                    <span> {{ v0.title }}</span>
+                    <div v-if="k0 != titleList.length - 1" class="line"></div>
+                  </li>
+                </ul>
+              </div>
+            </span>
           </div>
         </div>
         <el-tabs v-model="activeName">
@@ -70,11 +90,12 @@
                 <div
                   style="text-align:right;margin-right: 10px;margin-top: 6px;"
                 >
-                  个人特征
+                  <span style="color:red">*</span> 个人特征
                 </div>
               </el-col>
               <el-col :span="18">
                 <el-tree
+                  v-if="this.detailsType != '1'"
                   :accordion="true"
                   :data="userLabel"
                   show-checkbox
@@ -84,6 +105,17 @@
                   :props="defaultProps"
                 >
                 </el-tree>
+                <div v-if="this.detailsType == '1'">
+                  <el-tag
+                    size="small"
+                    style="margin: 2px;"
+                    v-for="item in treeStrList"
+                    :key="item.labelId"
+                    effect="dark"
+                  >
+                    {{ item.labelName }}
+                  </el-tag>
+                </div>
               </el-col>
             </el-row>
 
@@ -223,6 +255,13 @@
       :serveData="serveData"
       @onclose="serveonclose"
     ></servedetails>
+    <pagelist
+      v-if="dialogTableVisible"
+      :pagelistIndex="pagelistIndex"
+      :dialogTableVisible="dialogTableVisible"
+      :evList="evList"
+      @evclose="dialogTableVisible = false"
+    ></pagelist>
   </div>
 </template>
 
@@ -233,11 +272,12 @@ import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { synthesize_query } from '../../technocracy/api/index';
 import { act_query } from '../../profession/api/index';
 import { guide_add, serve_record, label_query } from '../api/index';
-import recommend from '../../serviceManagement/pages/recommend'; //高级查询
+import recommend from '../../serviceManagement/pages/recommend';
 import servedetails from './serveDetails';
+import pagelist from '../../serviceManagement/module/pageList';
 export default {
   name: 'addDetails',
-  components: { tform, servedetails, recommend },
+  components: { tform, servedetails, recommend, pagelist },
   props: ['visible', 'detailsType', 'detailsData', 'activeName'],
   data() {
     let comConfig = {
@@ -253,6 +293,23 @@ export default {
       }
     };
     return {
+      dialogTableVisible: false,
+      pagelistIndex: 0,
+      evList: {},
+      titleListShow: false,
+      titleList: [
+        { title: '个人基本信息' },
+        { title: '简历信息' },
+        { title: '劳动经历' },
+        { title: '社保缴费记录' },
+        { title: '就业见习记录' },
+        { title: '简历投递及反馈记录' },
+        { title: '职位评论记录' },
+        { title: '职位收藏记录' },
+        { title: '就业服务记录' }
+      ],
+
+      treeStrList: [],
       defaultProps: {
         children: 'labels',
         label: 'labelName'
@@ -339,14 +396,18 @@ export default {
             format: 'yyyyMMdd',
             style: { width: '210px' },
             placeholder: '请输入指导时间',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导时间', trigger: 'blur' }
+            ],
             key: 'guideTime'
           },
           {
             type: 'input',
             label: '指导地点',
             placeholder: '请输入指导地点',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导地点', trigger: 'blur' }
+            ],
             style: { width: '492px' },
             key: 'guideAddress'
           },
@@ -356,8 +417,9 @@ export default {
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入指导过程',
-            //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导过程', trigger: 'blur' }
+            ],
             key: 'guideProcess'
           },
           {
@@ -366,8 +428,9 @@ export default {
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入问题和建议',
-            //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-            rules: [],
+            rules: [
+              { required: true, message: '请输入问题和建议', trigger: 'blur' }
+            ],
             key: 'problem'
           },
           {
@@ -413,7 +476,9 @@ export default {
             type: 'select',
             label: '实施举措',
             // multiple: true,
-            rules: [],
+            rules: [
+              { required: true, message: '请选择实施举措', trigger: 'blur' }
+            ],
             style: { width: '210px' },
             key: 'implementAct',
             options: trim(
@@ -430,6 +495,15 @@ export default {
   },
   computed: {},
   methods: {
+    liClick(e) {
+      if (!this.form.pid) {
+        this.message('warning', '请选择人员');
+        return;
+      }
+      this.evList.pid = this.form.pid;
+      this.pagelistIndex = { id: e };
+      this.dialogTableVisible = true;
+    },
     openRec() {
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
@@ -537,13 +611,15 @@ export default {
       console.log(e);
     },
     userChange(e) {
-      this.recordValue = '';
-      this.recordList = [];
-      this.$refs.form2.value = {
-        guideTime: '',
-        guideAddress: '',
-        problem: ''
-      };
+      if (this.activeName == '02') {
+        this.recordValue = '';
+        this.recordList = [];
+        this.$refs.form2.value = {
+          guideTime: '',
+          guideAddress: '',
+          problem: ''
+        };
+      }
       console.log(e);
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
@@ -618,31 +694,38 @@ export default {
       let data = { ...e, ...this.form };
       if (data.acts) {
         data.acts = data.acts.map(e => {
-          return { acyId: e };
+          return { actId: e };
         });
       }
       data.guideType = this.activeName;
       console.log(data);
-      guide_add(
-        data,
-        res => {
-          this.message('success', '操作成功', () => {
-            this.onclose('1');
-          });
-          console.log(res);
-        },
-        err => {
-          console.log(err);
+      this.$refs.form2.$refs.value.validate(valid => {
+        if (valid) {
+          guide_add(
+            data,
+            res => {
+              this.message('success', '操作成功', () => {
+                this.onclose('1');
+              });
+              console.log(res);
+            },
+            err => {
+              console.log(err);
+            }
+          );
+        } else {
+          console.log('error submit!!');
+          return false;
         }
-      );
+      });
     }
   },
   mounted() {
-    setTimeout(() => {
-      if (this.detailsType == '1') {
-        this.$refs.tree.setCheckedNodes(this.detailsData.focusLabels);
-      }
-    }, 0);
+    // setTimeout(() => {
+    //   if (this.detailsType == '1') {
+    //     this.$refs.tree.setCheckedNodes(this.detailsData.focusLabels);
+    //   }
+    // }, 0);
 
     this.userLabel = this.$store.state.admin.label[1].labels;
 
@@ -660,6 +743,8 @@ export default {
         this.formConfig2.disabled = true;
         this.show = this.detailsData.implementAct;
         this.disabled = true;
+
+        this.treeStrList = this.form.focusLabels;
       }
       console.log(this.detailsData);
     }, 0);
@@ -697,5 +782,52 @@ export default {
 .fontColor {
   color: #787878;
   font-weight: bold;
+}
+.list:hover {
+  box-shadow: 0 2px 10px 0 rgb(0 0 0 / 10%);
+}
+.list {
+  margin: 5px 0;
+  .listTiele {
+    color: #fc7a43;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .listSubTiele {
+    color: #a3a3a3;
+    padding: 0 5px;
+  }
+  .selectList {
+    position: absolute;
+    top: 20;
+    left: 0;
+    width: 150px;
+    height: 250px;
+    background: #fefefe;
+    box-shadow: 0px 0px 10px #c7c7c7;
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+    z-index: 9;
+    span {
+      cursor: pointer;
+    }
+    span:hover {
+      cursor: pointer;
+      color: #fc7a43;
+    }
+    .line {
+      width: 100%;
+      border-top: 1px solid #d0d0d0;
+      margin-top: 4px;
+    }
+    ul {
+      padding: 5px 10px;
+      li {
+        text-align: left;
+        padding: 4px 0;
+        color: #bbbbbb;
+      }
+    }
+  }
 }
 </style>

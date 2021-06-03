@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-25 14:36:30
- * @LastEditTime: 2021-06-01 09:53:06
+ * @LastEditTime: 2021-06-02 17:33:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\api\index.js
@@ -22,6 +22,9 @@ const act_modify = (params, fn, fnErr) =>
   postAction(path + 'activity/modify', params, fn, fnErr);
 const act_apply_query = (params, fn, fnErr) =>
   postAction(path + 'activity/apply/query', params, fn, fnErr);
+const act_apply_modify = (params, fn, fnErr) =>
+  postAction(path + 'activity/apply/modify', params, fn, fnErr);
+
 //实施职业指导
 let guide = '/guide/record/';
 const guide_query = (params, fn, fnErr) =>
@@ -54,5 +57,6 @@ export {
   serve_record,
   serve_save,
   serve_area,
-  serve_check
+  serve_check,
+  act_apply_modify
 };

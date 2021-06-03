@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-05-19 20:37:53
+ * @LastEditTime: 2021-06-03 13:40:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -203,7 +203,8 @@ export default {
   data() {
     return {
       tableoptions: {
-        height: '350px'
+        // height: '580px'
+        height: 'auto'
       },
       selectData: [],
       advancedQuery: false,
@@ -335,14 +336,14 @@ export default {
           if (res.result.data.result) {
             this.$message({
               message: '操作成功',
-              type: 'success'
+              type: 'success',
+              close: () => {
+                this.onsubmit(this.queryData);
+              }
             });
           } else {
             console.log(res.result.data.msg);
-            this.$message({
-              message: res.result.data.msg,
-              type: 'warning'
-            });
+            this.message('warning', res.result.data.msg);
           }
           console.log(res);
         },
@@ -357,7 +358,13 @@ export default {
         res => {
           document.body.click();
           if (res.result.data.result) {
-            this.message('success', '操作成功');
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              close: () => {
+                this.onsubmit(this.queryData);
+              }
+            });
           } else {
             console.log(res.result.data.msg);
             this.message('warning', res.result.data.msg);

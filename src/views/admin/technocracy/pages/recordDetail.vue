@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-05-27 09:20:29
+ * @LastEditTime: 2021-06-03 14:24:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -145,7 +145,8 @@
             </el-form-item>
 
             <img
-              width="600px"
+              width="300px"
+              style="margin:0 auto"
               v-if="disabled && form.pairImageBase64 != ''"
               :src="'data:image/png;base64,' + form.pairImageBase64"
               alt="协议书"
@@ -399,30 +400,44 @@ export default {
       return true;
     }
   },
-  created() {
+  mounted() {
+    if (this.type == '0') {
+      this.userOptions = {
+        label: this.form.expertName,
+        value: this.form.expertId
+      };
+      this.orgOption = {
+        value: this.form.zjhm,
+        label: this.form.xm,
+        pid: this.form.pid,
+        contactNumber: this.form.contactNumber
+      };
+      this.form.name = this.form.expertName;
+      this.form.pids = this.form.xm;
+    }
     //获取人员信息
-    record_queryPsnls(
-      {
-        pageIndex: 0,
-        pageSize: 100
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.pageresult.data;
-          data.map(e => {
-            e.value = e.pid;
-            e.label = e.xm;
-          });
-          this.userList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // record_queryPsnls(
+    //   {
+    //     pageIndex: 0,
+    //     pageSize: 100
+    //   },
+    //   res => {
+    //     if (res.status == 200) {
+    //       let data = res.result.pageresult.data;
+    //       data.map(e => {
+    //         e.value = e.pid;
+    //         e.label = e.xm;
+    //       });
+    //       this.userList = data;
+    //     } else {
+    //       this.message('warning', res.result.data.msg);
+    //     }
+    //     console.log(res);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 13:59:30
- * @LastEditTime: 2021-05-18 19:42:18
+ * @LastEditTime: 2021-06-03 13:30:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\auditDialog.vue
@@ -48,7 +48,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item
-          prop="actSituation"
+          prop="outDate"
           v-if="auditConfig.type == '2' && form.verifyResult == '1'"
           label="出团时间"
         >
@@ -116,7 +116,8 @@ export default {
         joinDate: [{ required: true, message: '请填写必选项' }],
         actSituation: [{ required: true, message: '请填写必选项' }],
         moveDate: [{ required: true, message: '请填写必选项' }],
-        time: [{ required: true, message: '请填写必选项' }]
+        time: [{ required: true, message: '请填写必选项' }],
+        outDate: [{ required: true, message: '请填写必选项' }]
       },
       dicOptions: {
         //区县

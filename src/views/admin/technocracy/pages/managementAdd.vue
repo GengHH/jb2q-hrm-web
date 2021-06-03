@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-05-27 09:17:24
+ * @LastEditTime: 2021-06-03 13:47:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -236,6 +236,7 @@
                 @change="timedayClick"
                 style="width:100%"
               >
+                <el-option label="所有时间均可提供服务" value="all"></el-option>
                 <el-option label="工作日可提供服务" value="workday"></el-option>
                 <el-option label="周末可提供服务" value="weekend"></el-option>
                 <el-option
@@ -435,9 +436,12 @@ export default {
         this.form.workday = 0;
         this.form.weekend = 1;
         this.form.otherTime = '';
-      } else {
+      } else if (e == 'otherTime') {
         this.form.workday = 0;
         this.form.weekend = 0;
+      } else if (e == 'all') {
+        this.form.workday = 1;
+        this.form.weekend = 1;
       }
     },
     getBase64(file, name) {

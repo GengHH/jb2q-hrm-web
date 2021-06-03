@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:48:09
+ * @LastEditTime: 2021-06-03 14:33:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,15 +20,6 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
-      <el-table-column slot="actName" label="活动名称" align="center">
-        <template slot-scope="scope">
-          <div v-for="(v, k) in activityList" :key="k">
-            <div v-if="v.actId == scope.row.actName">
-              {{ v.actName }}
-            </div>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="opendio(1, scope)" plain>
@@ -103,10 +94,11 @@ export default {
       columns: [
         { type: 'index' },
         { title: '专家编号', prop: 'expertId' },
+        { title: '专家姓名', prop: 'expertName' },
         { title: '活动时间', prop: 'actDate' },
         { title: '服务对象姓名', prop: 'xm' },
         { title: '证件号码', prop: 'zjhm' },
-        { title: '活动名称', prop: 'actName', slot: 'actName' },
+        { title: '活动名称', prop: 'actTypems' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       activityList: []

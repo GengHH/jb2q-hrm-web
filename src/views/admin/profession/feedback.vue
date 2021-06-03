@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-05-27 17:48:03
+ * @LastEditTime: 2021-06-03 15:51:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -128,8 +128,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange"
-          @current-change="handleChange"
+          @size-change="handleChange2"
+          @current-change="handleChange2"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -214,6 +214,23 @@ export default {
             placeholder: '请输入身份证号',
             rules: [],
             key: 'zjhm'
+          },
+          {
+            type: 'radio',
+            label: '本人指导',
+            rules: [],
+            key: 'selfGuide',
+            data: [],
+            options: [
+              {
+                value: '1',
+                label: '是'
+              },
+              {
+                value: '0',
+                label: '否'
+              }
+            ]
           }
         ]
       },
@@ -302,8 +319,13 @@ export default {
         }
       );
     },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.querySpecialized(this.dataList);
+    },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.queryPolicy(this.dataList);
     },
     queryPolicy(e) {
       console.log(e);
