@@ -86,9 +86,9 @@ export default {
           },
           {
             type: 'input',
-            label: '薪酬下线',
+            label: '薪酬下限',
             style: { width: '210px' },
-            placeholder: '请输入薪酬下线',
+            placeholder: '请输入薪酬下限',
             rules: [],
             key: 'salaryMin'
           },

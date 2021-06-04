@@ -304,7 +304,7 @@
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
     <el-tabs id="jobInfoGloriette" v-model="activeName">
-      <el-tab-pane label="默认推荐" name="default">
+      <el-tab-pane :label="defaultJobsCount" name="default">
         <per-search-job
           v-if="queryDefaultResult.length"
           ref="searchDefaultJobList"
@@ -457,6 +457,11 @@ export default {
     };
   },
   computed: {
+    defaultJobsCount() {
+      return this.queryDefaultResultTotal
+        ? '管理员推荐（' + this.queryDefaultResultTotal + '）'
+        : '管理员推荐';
+    },
     zyListsTwo() {
       let _data = this.$store.getters['dictionary/recruit_position_s_type'];
       if (_data && _data.length) {
@@ -602,10 +607,10 @@ export default {
         this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
-        this.$alert('年龄上线不得低于16周岁');
+        this.$alert('年龄上限不得低于16周岁');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax > 60) {
-        this.$alert('年龄下线不得超过60周岁');
+        this.$alert('年龄下限不得超过60周岁');
         this.queryParams.ageMax = '';
       } else if (
         this.queryParams.ageMin &&
