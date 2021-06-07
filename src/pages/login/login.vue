@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-06 16:54:17
+ * @LastEditTime: 2021-06-07 18:36:04
  * @Description: file content
 -->
 <template>
@@ -185,6 +185,7 @@
 <script>
 import { doSend, doLogin } from '@/api/personApi';
 import { phonePattern, cP } from '@/utils/regexp';
+import { isNoBody, isPerson, isCorporation, isAdmin } from '@/utils';
 export default {
   name: 'login',
   components: {},
@@ -258,6 +259,9 @@ export default {
   created() {
     //PlaceholderInit();
   },
+  updated() {
+    this.isLogin();
+  },
   methods: {
     // eslint-disable-next-line no-unused-vars
     handleClick(tab, event) {
@@ -325,6 +329,8 @@ export default {
       done();
     },
     doLogin(done, formName) {
+      this.isLogin();
+
       let that = this;
       // 为表单绑定验证功能
       this.$refs[formName].validate(valid => {
@@ -389,6 +395,40 @@ export default {
     },
     onCorpSubmit() {
       this.$alert('此功能暂未实现');
+    },
+    /**
+     * 判断是不是已有登录用户
+     */
+    isLogin() {
+      let vm = this;
+      if (isAdmin(vm)) {
+        vm.$alert('已有管理员登录本系统，请先退出登录');
+        setTimeout(() => {
+          window.location.href = '/ggzp-shrs/admin.html';
+        }, 2000);
+      } else if (isNoBody(vm)) {
+        return;
+      } else if (
+        isPerson(vm) &&
+        store.getters.priorityLoginType !== 'corporation'
+      ) {
+        window.location.href = '/ggzp-shrs/person.html';
+      } else if (
+        isCorporation(vm) &&
+        store.getters.priorityLoginType !== 'person'
+      ) {
+        window.location.href = '/ggzp-shrs/corporation.html';
+      } else {
+        if (isPerson(vm)) {
+          vm.$alert('已有个人登录本系统，请先退出登录');
+        }
+        if (isCorporation(vm)) {
+          vm.$alert('已有单位登录本系统，请先退出登录');
+        }
+        setTimeout(() => {
+          window.location.href = '/ggzp-shrs/index.html';
+        }, 2000);
+      }
     }
   }
 };
