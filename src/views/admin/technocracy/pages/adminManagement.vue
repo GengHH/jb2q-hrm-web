@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-06-03 18:08:58
+ * @LastEditTime: 2021-06-04 10:06:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -51,7 +51,7 @@
         name="0"
       >
         <ttable
-          :options="{ height: '350px' }"
+          :options="{ height: 'auto' }"
           :tableClass="'tableClass'"
           :columns="columns0"
           :list="list0"
@@ -89,8 +89,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange0"
-          @current-change="handleChange0"
+          @size-change="handleChange"
+          @current-change="handleChange"
           :current-page.sync="params0.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -103,11 +103,7 @@
         label="续聘"
         name="1"
       >
-        <ttable
-          :options="{ height: '350px' }"
-          :columns="columns1"
-          :list="list1"
-        >
+        <ttable :options="{ height: 'auto' }" :columns="columns1" :list="list1">
           <el-table-column slot="aaa007" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.aaa007 == '1'" type="success"
@@ -135,8 +131,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange1"
-          @current-change="handleChange1"
+          @size-change="handleChange"
+          @current-change="handleChange"
           :current-page.sync="params1.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -149,11 +145,7 @@
         label="退团"
         name="2"
       >
-        <ttable
-          :options="{ height: '350px' }"
-          :columns="columns2"
-          :list="list2"
-        >
+        <ttable :options="{ height: 'auto' }" :columns="columns2" :list="list2">
           <el-table-column
             v-if="isAudit"
             slot="aaa009"
@@ -173,8 +165,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange2"
-          @current-change="handleChange2"
+          @size-change="handleChange"
+          @current-change="handleChange"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -187,11 +179,7 @@
         label="转移"
         name="3"
       >
-        <ttable
-          :options="{ height: '350px' }"
-          :columns="columns3"
-          :list="list3"
-        >
+        <ttable :options="{ height: 'auto' }" :columns="columns3" :list="list3">
           <el-table-column slot="targetDistrict" label="转入区" align="center">
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.qx" :key="k">
@@ -229,8 +217,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange3"
-          @current-change="handleChange3"
+          @size-change="handleChange"
+          @current-change="handleChange"
           :current-page.sync="params3.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -268,7 +256,6 @@ export default {
   data() {
     return {
       isAudit: true,
-      demoUser: false,
       userType: false,
       queryData: {},
       visible: false,
@@ -437,17 +424,9 @@ export default {
       }
       return str;
     },
-    handleChange0(e) {
-      console.log(e - 1);
-    },
-    handleChange1(e) {
-      console.log(e - 1);
-    },
-    handleChange2(e) {
-      console.log(e - 1);
-    },
-    handleChange3(e) {
-      console.log(e - 1);
+    handleChange(e) {
+      this['params' + this.activeName].pageIndex = e;
+      this.onsubmit(this.queryData);
     },
     setQueryData(res, index) {
       this['params' + index].pageIndex = Number(res.pageIndex) + 1;
@@ -588,12 +567,13 @@ export default {
     }
   },
   mounted() {
-    let qx = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
-    if (qx == '00') {
-      this.demoUser = true;
-    } else {
-      this.demoUser = false;
-    }
+    // let qx = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
+    // if (qx == '00') {
+    //   this.triggerUser(true);
+    // } else {
+    //   this.triggerUser(false);
+    // }
+    this.triggerUser(true);
   },
   created() {}
 };

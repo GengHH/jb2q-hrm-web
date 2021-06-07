@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-01 16:08:42
+ * @LastEditTime: 2021-06-04 17:26:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -260,19 +260,17 @@ export default {
       this.$store.state.admin.userInfo.logonUser.userName
     );
     //获取标签
-    if (!this.$store.state.admin.label) {
-      label_query(
-        {},
-        res => {
-          if (res.status == 200) {
-            this.$store.state.admin.label = res.result.data;
-          }
-        },
-        err => {
-          console.log(err);
+    label_query(
+      {},
+      res => {
+        if (res.status == 200) {
+          this.$store.state.admin.label = res.result.data;
         }
-      );
-    }
+      },
+      err => {
+        console.log(err);
+      }
+    );
   },
   created() {},
   destroyed() {

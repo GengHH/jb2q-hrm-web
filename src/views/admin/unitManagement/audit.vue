@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-24 16:13:21
+ * @LastEditTime: 2021-06-04 10:10:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\audit.vue
@@ -124,8 +124,8 @@
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange"
-          @current-change="handleChange"
+          @size-change="handleChange2"
+          @current-change="handleChange2"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -240,7 +240,12 @@ export default {
       });
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.query(this.activeName, this.dataList);
+    },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.query(this.activeName, this.dataList);
     },
     handleClick(e) {
       this.query(this.activeName, this.dataList);

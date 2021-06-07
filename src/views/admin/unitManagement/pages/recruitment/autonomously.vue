@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-06-03 16:41:17
+ * @LastEditTime: 2021-06-04 10:25:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\autonomously.vue
@@ -190,7 +190,7 @@ export default {
         workNature: ''
       },
       pageParam: {
-        pageSize: 10,
+        pageSize: 5,
         total: 0,
         pageIndex: 1
       },

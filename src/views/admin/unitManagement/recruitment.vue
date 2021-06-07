@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-20 15:18:57
+ * @LastEditTime: 2021-06-04 10:18:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
@@ -113,8 +113,8 @@
         </el-table-column>
       </ttable>
       <el-pagination
-        @size-change="handleChange"
-        @current-change="handleChange"
+        @size-change="handleChange2"
+        @current-change="handleChange2"
         :current-page.sync="params2.pageIndex"
         :page-size="pageSize"
         layout="total, prev, pager, next"
@@ -278,7 +278,7 @@ export default {
         data,
         res => {
           if (res.status == 200) {
-            this.addQuery();
+            this.addQuery(this.dataList2);
           }
           console.log(res);
         },
@@ -344,7 +344,12 @@ export default {
       }
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
+    },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.addQuery(this.dataList2);
     },
     advancedSearch(e) {
       console.log(e);

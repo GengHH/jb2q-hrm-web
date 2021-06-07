@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 18:04:19
+ * @LastEditTime: 2021-06-03 18:23:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -59,7 +59,7 @@
               >确定冻结/解冻</el-button
             >
             <el-button size="mini" slot="reference" type="primary" plain>
-              <i class="el-icon-lock"></i> 冻结</el-button
+              <i class="el-icon-lock"></i> 冻结/解冻</el-button
             >
           </el-popover>
 

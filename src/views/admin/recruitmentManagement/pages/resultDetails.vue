@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-20 11:07:54
- * @LastEditTime: 2021-04-29 17:02:34
+ * @LastEditTime: 2021-06-04 09:45:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\resultDetails.vue
@@ -84,8 +84,8 @@
             </el-table-column></ttable
           >
           <el-pagination
-            @size-change="handleChange"
-            @current-change="handleChange"
+            @size-change="handleChange2"
+            @current-change="handleChange2"
             :current-page.sync="params2.pageIndex"
             :page-size="pageSize"
             layout="total, prev, pager, next"
@@ -120,8 +120,8 @@
             </el-table-column></ttable
           >
           <el-pagination
-            @size-change="handleChange"
-            @current-change="handleChange"
+            @size-change="handleChange3"
+            @current-change="handleChange3"
             :current-page.sync="params3.pageIndex"
             :page-size="pageSize"
             layout="total, prev, pager, next"
@@ -156,6 +156,9 @@ export default {
   components: { tform, ttable },
   data() {
     return {
+      dataList: {},
+      dataList2: {},
+      dataList3: {},
       params: {
         pageIndex: 1,
         total: 0
@@ -435,6 +438,7 @@ export default {
       let data = { ...e.row };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params3.pageIndex)) - 1;
+      this.dataList3 = data;
       result_wanted(
         data,
         res => {
@@ -455,6 +459,7 @@ export default {
       let data = { ...e.row };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1;
+      this.dataList2 = data;
       result_feedback(
         data,
         res => {
@@ -472,7 +477,16 @@ export default {
       );
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.queryList(this.dataList);
+    },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.queryApply(this.dataList2);
+    },
+    handleChange3(e) {
+      this.params3.pageIndex = e;
+      this.queryPosition(this.dataList3);
     },
     advancedSearch() {
       console.log(this.type);
@@ -522,16 +536,11 @@ export default {
     },
     onclose(type) {
       this.$emit('onclose', type || 0);
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.$refs.form.value = { ...this.lookList };
-    }, 0);
-    let data = { ...this.lookList };
-    if (this.type == '2') {
+    },
+    queryList(data) {
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
+      this.dataList = data;
       result_enrollment(
         data,
         res => {
@@ -547,6 +556,15 @@ export default {
           console.log(err);
         }
       );
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.form.value = { ...this.lookList };
+    }, 0);
+    let data = { ...this.lookList };
+    if (this.type == '2') {
+      this.queryList(data);
     }
   },
   created() {}

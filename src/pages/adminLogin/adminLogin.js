@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-28 16:20:19
+ * @LastEditTime: 2021-06-04 17:26:34
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -183,14 +183,13 @@ const vm = new Vue({
   template: '<App/>',
   components: { App }
 });
-
 if (isNoBody(vm)) {
   vm.$mount('#app');
 } else {
-  if (store.getters.priorityLoginType === 'corporation') {
+  if (isPerson(vm)) {
     vm.$alert('已有个人登录本系统，请先退出登录');
   }
-  if (store.getters.priorityLoginType === 'person') {
+  if (isCorporation(vm)) {
     vm.$alert('已有单位登录本系统，请先退出登录');
   }
   setTimeout(() => {

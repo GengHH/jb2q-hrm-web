@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-06-03 18:11:01
+ * @LastEditTime: 2021-06-04 18:13:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -392,6 +392,17 @@ export default {
         formItemList: [
           {
             type: 'date',
+            label: '是否关注',
+            format: 'yyyyMMdd',
+            style: { width: '210px' },
+            placeholder: '请输入指导时间',
+            rules: [
+              { required: true, message: '请输入指导时间', trigger: 'blur' }
+            ],
+            key: 'label'
+          },
+          {
+            type: 'date',
             label: '指导时间',
             format: 'yyyyMMdd',
             style: { width: '210px' },
@@ -698,26 +709,41 @@ export default {
         });
       }
       data.guideType = this.activeName;
+      if (this.activeName == '02') {
+        this.$refs.form2.$refs.value.validate(valid => {
+          if (valid) {
+            guide_add(
+              data,
+              res => {
+                this.message('success', '操作成功', () => {
+                  this.onclose('1');
+                });
+                console.log(res);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      } else {
+        guide_add(
+          data,
+          res => {
+            this.message('success', '操作成功', () => {
+              this.onclose('1');
+            });
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
       console.log(data);
-      this.$refs.form2.$refs.value.validate(valid => {
-        if (valid) {
-          guide_add(
-            data,
-            res => {
-              this.message('success', '操作成功', () => {
-                this.onclose('1');
-              });
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-          );
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
     }
   },
   mounted() {

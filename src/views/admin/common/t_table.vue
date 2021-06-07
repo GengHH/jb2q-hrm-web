@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-05-20 14:15:46
+ * @LastEditTime: 2021-06-04 09:58:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -14,7 +14,7 @@
       v-loading.iTable="options.loading"
       :data="list"
       :stripe="options.stripe"
-      :border="options.border"
+      border
       :highlight-current-row="options.highlightCurrentRow"
       :lazy="options.lazy"
       :height="options.height"
@@ -281,4 +281,8 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#iTable {
+  overflow: auto;
+}
+</style>

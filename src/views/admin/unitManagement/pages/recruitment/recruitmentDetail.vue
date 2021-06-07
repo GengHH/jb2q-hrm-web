@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-05-27 15:31:02
+ * @LastEditTime: 2021-06-04 10:23:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -234,7 +234,7 @@ export default {
         pageIndex: 1,
         total: 0
       },
-      pageSize: 10,
+      pageSize: 5,
       dicOptions: {
         //学历
         edu: trim(this.$store.getters['dictionary/recruit_edu']),
@@ -259,7 +259,9 @@ export default {
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       list0: [],
-      list1: []
+      list1: [],
+      dataList: {},
+      dataList2: {}
     };
   },
   computed: {},
@@ -311,9 +313,13 @@ export default {
     },
     handleChange0(e) {
       console.log(e);
+      this.params0.pageIndex = e;
+      this.queryPosition(this.dataList);
     },
     handleChange1(e) {
       console.log(e);
+      this.params1.pageIndex = e;
+      this.queryResume(this.dataList2);
     },
     accurateClose(type) {
       this.accurateVisible = false;
@@ -346,6 +352,7 @@ export default {
       //分页
       data.pageIndex = JSON.parse(JSON.stringify(this.params0.pageIndex - 1));
       data.pageSize = this.pageSize;
+      this.dataList = data;
       unit_query_agency(
         data,
         res => {
@@ -371,6 +378,7 @@ export default {
       //分页
       data.pageIndex = JSON.parse(JSON.stringify(this.params1.pageIndex - 1));
       data.pageSize = this.pageSize;
+      this.dataList2 = data;
       agency_resume(
         data,
         res => {
