@@ -40,6 +40,15 @@ export function isCorporation(vm) {
 }
 
 /**
+ * 判断是不是管理员登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isAdmin(vm) {
+  return vm && vm.$store && vm.$store.getters['admin/token'];
+}
+
+/**
  * 获取随机key
  * @param len
  * @param type

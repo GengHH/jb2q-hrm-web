@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 16:56:49
+ * @LastEditTime: 2021-06-04 17:18:57
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -53,11 +53,14 @@ if (isNoBody(vm)) {
 } else if (isCorporation(vm) && store.getters.priorityLoginType !== 'person') {
   window.location.href = '/ggzp-shrs/corporation.html';
 } else {
-  if (store.getters.priorityLoginType === 'corporation') {
+  if (isCorporation(vm)) {
     vm.$alert('已有个人登录本系统，请先退出登录');
   }
-  if (store.getters.priorityLoginType === 'person') {
+  if (isPerson(vm)) {
     vm.$alert('已有单位登录本系统，请先退出登录');
+  }
+  if (isAdmin(vm)) {
+    vm.$alert('已有管理员登录本系统，请先退出登录');
   }
   setTimeout(() => {
     window.location.href = '/ggzp-shrs/index.html';

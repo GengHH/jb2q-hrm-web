@@ -791,10 +791,10 @@ export default {
         this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
-        this.$alert('年龄上线不得低于16周岁');
+        this.$alert('年龄上限不得低于16周岁');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax > 60) {
-        this.$alert('年龄下线不得超过60周岁');
+        this.$alert('年龄下限不得超过60周岁');
         this.queryParams.ageMax = '';
       } else if (
         this.queryParams.ageMin &&

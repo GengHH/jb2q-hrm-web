@@ -555,7 +555,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item
-              label="薪酬下线"
+              label="薪酬下限"
               prop="salaryMin"
               :label-width="formLabelWidth"
             >
@@ -568,7 +568,7 @@
           ></el-col>
           <el-col :span="12"
             ><el-form-item
-              label="薪酬上线"
+              label="薪酬上限"
               prop="salaryMax"
               :label-width="formLabelWidth"
             >
