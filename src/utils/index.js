@@ -60,7 +60,7 @@ export function isAdmin(vm) {
   let storeAdmin = vm && vm.$store && vm.$store.getters['admin/token'];
 
   let localData = JSON.parse(localStorage.getItem('vuex'));
-  let login = !!localData?.Admin?.token;
+  let login = !!localData?.admin?.token;
   return storeAdmin || login;
 }
 

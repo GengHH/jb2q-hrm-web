@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-07 14:06:53
+ * @LastEditTime: 2021-06-07 18:11:23
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -46,7 +46,13 @@ const vm = new Vue({
   template: '<App/>',
   components: { App }
 });
-if (isNoBody(vm)) {
+
+if (isAdmin(vm)) {
+  vm.$alert('已有管理员登录本系统，请先退出登录');
+  setTimeout(() => {
+    window.location.href = '/ggzp-shrs/admin.html';
+  }, 2000);
+} else if (isNoBody(vm)) {
   vm.$mount('#app');
 } else if (isPerson(vm) && store.getters.priorityLoginType !== 'corporation') {
   window.location.href = '/ggzp-shrs/person.html';
@@ -58,9 +64,6 @@ if (isNoBody(vm)) {
   }
   if (isCorporation(vm)) {
     vm.$alert('已有单位登录本系统，请先退出登录');
-  }
-  if (isAdmin(vm)) {
-    vm.$alert('已有管理员登录本系统，请先退出登录');
   }
   setTimeout(() => {
     window.location.href = '/ggzp-shrs/index.html';
