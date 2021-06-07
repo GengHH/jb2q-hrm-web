@@ -57,7 +57,11 @@ export function isCorporation(vm) {
  * @returns {boolean}
  */
 export function isAdmin(vm) {
-  return vm && vm.$store && vm.$store.getters['admin/token'];
+  let storeAdmin = vm && vm.$store && vm.$store.getters['admin/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.Admin?.token;
+  return storeAdmin || login;
 }
 
 /**
