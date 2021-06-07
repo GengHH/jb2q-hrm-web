@@ -18,7 +18,10 @@ export function isNoBody(vm) {
     !!vm.$store &&
     (!!vm.$store.getters['person/token'] ||
       !!vm.$store.getters['corporation/token']);
-  return !a;
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.person?.token || !!localData?.corporation?.token;
+  return !a && !login;
 }
 
 /**
@@ -27,7 +30,11 @@ export function isNoBody(vm) {
  * @returns {boolean}
  */
 export function isPerson(vm) {
-  return vm && vm.$store && vm.$store.getters['person/token'];
+  let storePerson = vm && vm.$store && vm.$store.getters['person/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.person?.token;
+  return storePerson || login;
 }
 
 /**
@@ -36,7 +43,12 @@ export function isPerson(vm) {
  * @returns {boolean}
  */
 export function isCorporation(vm) {
-  return vm && vm.$store && vm.$store.getters['corporation/token'];
+  let storeCorporation =
+    vm && vm.$store && vm.$store.getters['corporation/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.corporation?.token;
+  return storeCorporation || login;
 }
 
 /**
