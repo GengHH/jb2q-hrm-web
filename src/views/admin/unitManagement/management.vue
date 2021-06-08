@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-29 17:04:08
+ * @LastEditTime: 2021-06-03 18:23:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -36,8 +36,33 @@
           <el-tag>{{ scope.row.frozen == '1' ? '冻结' : '正常' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="180" slot="aaa010" label="操作" align="center">
+      <el-table-column width="270" slot="aaa010" label="操作" align="center">
         <template slot-scope="scope">
+          <el-popover
+            ref="move_add_pop"
+            placement="bottom"
+            width="400"
+            trigger="click"
+          >
+            <el-select v-model="scope.row.fro" style="width:150px">
+              <el-option label="冻结" value="1"></el-option>
+              <el-option label="正常" value="0"></el-option>
+            </el-select>
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入理由"
+              v-model="scope.row.fReason"
+            >
+            </el-input>
+            <el-button size="mini" type="danger" @click="isFreeze(scope)"
+              >确定冻结/解冻</el-button
+            >
+            <el-button size="mini" slot="reference" type="primary" plain>
+              <i class="el-icon-lock"></i> 冻结/解冻</el-button
+            >
+          </el-popover>
+
           <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
@@ -70,7 +95,7 @@
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
 import { trim } from '@/utils/index';
-import { management_query } from './api/index';
+import { management_query, management_frozen } from './api/index';
 import managementdetail from './pages/managementDetail';
 export default {
   name: 'management',
@@ -128,7 +153,7 @@ export default {
         { title: '单位状态', prop: 'frozen', slot: 'frozen' },
         { title: '冻结/解冻原因', prop: 'frozenReason' },
         { title: '单位标签', slot: 'corpLabel' },
-        { title: '企业LOGO', prop: 'aaa005' },
+        // { title: '企业LOGO', prop: 'aaa005' },
         // { title: '公司简介短视频', prop: 'aaa006' },
         { title: '操作', slot: 'aaa010' }
       ],
@@ -145,6 +170,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     advancedSearch(e) {
       let data = { ...e };
@@ -176,6 +203,50 @@ export default {
         }
       }
       return obj;
+    },
+    //冻结
+    isFreeze(e) {
+      console.log(e);
+      //冻结1 解冻0 备注冻结时必填
+      let data = { ...e.row };
+      data.frozen = data.fro;
+      data.frozenReason = data.fReason;
+      if (data.frozen == '1') {
+        if (!data.frozenReason) {
+          this.$message({
+            message: '请填写原因',
+            type: 'warning',
+            duration: 1000
+          });
+          return;
+        }
+      }
+      management_frozen(
+        data,
+        res => {
+          document.body.click();
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              close: () => {
+                this.advancedSearch(this.dataList);
+              }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     look(e, type) {
       let data = { ...e.row };

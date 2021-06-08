@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:02:14
+ * @LastEditTime: 2021-06-08 15:13:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -81,12 +81,55 @@
               >
                 <i class="el-icon-search"></i> 查看</el-button
               >
+              <el-popover
+                v-if="scope.row.statusId != '3' && scope.row.statusId != ''"
+                ref="move_add_pop"
+                placement="bottom"
+                width="400"
+                trigger="click"
+              >
+                <div>
+                  是否就业：
+                  <el-radio
+                    v-model="maintain.employ"
+                    v-for="(v, k) in dicOptions.yesno"
+                    :key="k"
+                    :label="v.value"
+                    >{{ v.label }}</el-radio
+                  >
+                </div>
+
+                <el-select v-model="maintain.employType" placeholder="就业类型">
+                  <el-option
+                    v-for="(v, k) in dicOptions.jobType"
+                    :key="k"
+                    :label="v.label"
+                    :value="v.value"
+                  ></el-option>
+                </el-select>
+                <el-input
+                  type="textarea"
+                  :rows="2"
+                  placeholder="当前情况"
+                  v-model="maintain.curSituation"
+                >
+                </el-input>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="maintain_add(scope)"
+                  >确定修改</el-button
+                >
+                <el-button size="mini" slot="reference" type="danger" plain
+                  >跟踪维护</el-button
+                >
+              </el-popover>
             </template>
           </el-table-column>
         </ttable>
         <el-pagination
-          @size-change="handleChange"
-          @current-change="handleChange"
+          @size-change="handleChange2"
+          @current-change="handleChange2"
           :current-page.sync="params2.pageIndex"
           :page-size="pageSize"
           layout="total, prev, pager, next"
@@ -117,13 +160,18 @@ import { trim } from '@/utils/index';
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
 import adddetails from './module/addDetails';
-import { guide_query } from './api/index';
+import { guide_query, guide_add } from './api/index';
 
 export default {
   name: 'feedback',
   components: { ttable, tform, adddetails },
   data() {
     return {
+      maintain: {
+        jobType: '',
+        curSituation: '',
+        employ: ''
+      },
       detailsData: {},
       detailsType: '0',
       params: {
@@ -137,7 +185,9 @@ export default {
       pageSize: 10,
       dataList: null,
       dicOptions: {
-        type: trim(this.$store.getters['dictionary/recruit_imple_act_type'])
+        type: trim(this.$store.getters['dictionary/recruit_imple_act_type']),
+        yesno: trim(this.$store.getters['dictionary/yesno']),
+        jobType: trim(this.$store.getters['dictionary/recruit_employ_type'])
       },
 
       activeName: '01',
@@ -164,6 +214,37 @@ export default {
             placeholder: '请输入身份证号',
             rules: [],
             key: 'zjhm'
+          },
+          {
+            type: 'radio',
+            label: '本人指导',
+            rules: [],
+            key: 'selfGuide',
+
+            data: [],
+            options: [
+              {
+                value: '1',
+                label: '是'
+              },
+              {
+                value: '0',
+                label: '否'
+              }
+            ]
+          },
+          {
+            style: { width: '210px', height: '108px', overflow: 'auto' },
+            type: 'tree',
+            label: '人员标签',
+            data: this.$store.state.admin.label,
+            id: 'labelId',
+            rules: [],
+            key: 'pointTypes',
+            defaultProps: {
+              children: 'labels',
+              label: 'labelName'
+            }
           }
         ]
       },
@@ -200,8 +281,65 @@ export default {
   },
   computed: {},
   methods: {
+    formatTime(time) {
+      if (time) {
+        if (time.length > 8) {
+          let t = time.split(' ')[0];
+          let tt = t.replace(/-/g, '');
+          let h = time.split(' ')[1];
+          let hh = h.replace(/:/g, '');
+          return tt + '' + hh;
+        } else {
+          return time;
+        }
+      } else {
+        return '';
+      }
+    },
+    message(type, msg, fn) {
+      this.$message({
+        message: msg,
+        type: type,
+        duration: 1000,
+        onClose: () => {
+          if (fn) {
+            fn();
+          }
+        }
+      });
+    },
+    maintain_add(e) {
+      let data = { ...e.row, ...this.maintain };
+      data.expertGuideEnd = this.formatTime(data.expertGuideEnd);
+      data.expertGuideStart = this.formatTime(data.expertGuideStart);
+      data.guideTime = this.formatTime(data.guideTime);
+      data.recordTime = this.formatTime(data.recordTime);
+      guide_add(
+        data,
+        res => {
+          document.body.click();
+          this.message('success', '操作成功', () => {
+            this.advancedSearch(this.dataList);
+          });
+          this.maintain = {
+            jobType: '',
+            curSituation: '',
+            employ: ''
+          };
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.querySpecialized(this.dataList);
+    },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.queryPolicy(this.dataList);
     },
     queryPolicy(e) {
       console.log(e);
@@ -250,6 +388,9 @@ export default {
       );
     },
     advancedSearch(e) {
+      if (e.pointTypes.length) {
+        e.pointTypes = e.pointTypes.toString();
+      }
       //01政策  02专门
       if (this.activeName == '01') {
         this.queryPolicy(e);
@@ -273,6 +414,7 @@ export default {
       this.visible = true;
     }
   },
+  mounted() {},
   created() {}
 };
 </script>

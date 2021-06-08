@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-04-26 10:21:49
+ * @LastEditTime: 2021-06-01 18:27:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -50,7 +50,6 @@
                 v-model="form.applyTime"
                 type="date"
                 style="width:100%"
-                value-format="yyyyMMdd"
                 disabled
               >
               </el-date-picker>
@@ -109,7 +108,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col v-if="lookList.meetType == '2'" :span="12">
             <el-form-item label="入场时间">
               <el-date-picker
                 v-model="form.admisstionTime"
@@ -123,7 +122,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col v-if="lookList.meetType == '2'" :span="12">
             <el-form-item label="展位号">
               <el-input :disabled="disabled" v-model="form.boothSeq"></el-input>
             </el-form-item>
@@ -140,7 +139,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row if="form.meetType == '2'">
           <el-col :span="12">
             <el-form-item label="区或街镇现场联系人">
               <el-input
@@ -150,7 +149,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="区或街镇现场联系电话">
+            <el-form-item label="联系电话">
               <el-input
                 :disabled="disabled"
                 v-model="form.meetContactPhone"
@@ -189,7 +188,6 @@ export default {
       pageSize: 10,
       fileList: [],
       dicOptions: {
-        //
         type: trim(this.$store.getters['dictionary/recruit_meet_type']),
         //学历
         edu: trim(this.$store.getters['dictionary/recruit_edu'])
@@ -199,7 +197,7 @@ export default {
         { title: '职位名称', prop: 'positionName' },
         { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '职位描述', prop: 'workYearNeed' }
+        { title: '职位描述', prop: 'describe' }
         // { title: '操作', slot: 'aaa010' }
       ],
       list: []
@@ -261,14 +259,13 @@ export default {
   },
   mounted() {
     let data = { ...this.lookList };
-    console.log(data);
     feedback_look(
       data,
       res => {
         if (res.status == 200) {
           let data = res.result.data;
           data.admisstionTime = this.formatTime(data.admisstionTime);
-          this.form = { ...data };
+          this.form = { ...data, ...this.lookList };
         }
         console.log(res);
       },
@@ -306,6 +303,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

@@ -1,8 +1,8 @@
 <!--
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 10:38:16
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-04 17:26:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -135,7 +135,7 @@
 /**
  * 管理员系统入口界面
  */
-import { loginControlle } from './api/index';
+import { loginControlle, label_query } from './api/index';
 import apiUrlConfig from '@/config';
 import { niceScroll } from '@/utils';
 import { removeWatermark, setWaterMark } from '@/utils/watermark';
@@ -250,12 +250,26 @@ export default {
       parentId: 1
     });
     let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
+
     this.menuList = datas[0].childs;
+
     niceScroll('.el-aside');
     //添加水印
     setWaterMark(
       this.$store.state.admin.userInfo.logonUser.userIdStr,
       this.$store.state.admin.userInfo.logonUser.userName
+    );
+    //获取标签
+    label_query(
+      {},
+      res => {
+        if (res.status == 200) {
+          this.$store.state.admin.label = res.result.data;
+        }
+      },
+      err => {
+        console.log(err);
+      }
     );
   },
   created() {},
@@ -288,6 +302,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

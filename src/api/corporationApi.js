@@ -1,8 +1,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 17:47:04
+ * @LastEditors: Please set LastEditors
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -162,7 +161,6 @@ export {
   saveShop,
   updateShop,
   deleteShop,
-  getPersonContact,
-  doInvite,
-  queryPositionList
+  queryPositionList,
+  doInvite
 };

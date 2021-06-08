@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-04-29 17:02:42
+ * @LastEditTime: 2021-05-28 18:10:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -76,9 +76,7 @@
                   </ul>
                 </div>
               </span>
-              <span
-                @click="visible = true"
-                style="color:#4766a4;cursor: pointer;"
+              <span @click="openRec(v)" style="color:#4766a4;cursor: pointer;"
                 ><i class="el-icon-s-promotion"></i> 推荐职位</span
               >
               <span @click="attention(v)" style="color:#d9534f;cursor: pointer;"
@@ -148,7 +146,12 @@
     >
     </pagelist>
 
-    <recommend :visible="visible" @onclose="visible = false"></recommend>
+    <recommend
+      v-if="visible"
+      :dataList="recdata"
+      :visible="visible"
+      @onclose="visible = false"
+    ></recommend>
   </div>
 </template>
 
@@ -165,6 +168,7 @@ export default {
   },
   data() {
     return {
+      recdata: {},
       evList: {},
       dicOptions: {
         //就业状态
@@ -180,6 +184,10 @@ export default {
   },
   computed: {},
   methods: {
+    openRec(e) {
+      this.recdata = { ...e };
+      this.visible = true;
+    },
     formatTime(time) {
       if (!time) {
         return '';
@@ -239,6 +247,9 @@ export default {
 #indexBody {
   .body {
     padding: 15px 0;
+    .list:hover {
+      box-shadow: 0 2px 10px 0 rgb(0 0 0 / 10%);
+    }
     .list {
       border-radius: 4px;
       border: 1px solid #e5e5e5;

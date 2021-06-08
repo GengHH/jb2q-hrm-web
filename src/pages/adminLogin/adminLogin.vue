@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-27 16:58:51
+ * @LastEditTime: 2021-06-08 10:13:20
  * @Description: file content
 -->
 <template>
@@ -35,7 +35,7 @@
             :disabled="show"
             class="btn"
             type="primary"
-            @click="onSubmit('loginForm')"
+            @click="isAdmin('loginForm')"
             >登录</el-button
           >
         </el-form-item>
@@ -87,6 +87,10 @@
 /**
  * 管理员登陆入口界面
  */
+import Vue from 'vue';
+import App from './adminLogin.vue';
+import store from '@/store';
+import { isNoBody, isPerson, isCorporation } from '@/utils';
 import SecCtrl from './module/SecCtrl.js';
 import { queryLogin } from '@/api/adminApi';
 import apiUrlConfig from '@/config';
@@ -196,6 +200,23 @@ export default {
     };
   },
   methods: {
+    isAdmin(formName) {
+      console.log(this.$store);
+      console.log(isNoBody(this));
+      if (isNoBody(this)) {
+        this.onSubmit(formName);
+      } else {
+        if (isPerson(this)) {
+          this.$alert('已有个人登录本系统，请先退出登录');
+        }
+        if (isCorporation(this)) {
+          this.$alert('已有单位登录本系统，请先退出登录');
+        }
+        setTimeout(() => {
+          window.location.href = '/ggzp-shrs/index.html';
+        }, 2000);
+      }
+    },
     onSubmit(formName) {
       // 为表单绑定验证功能
       this.$refs[formName].validate(valid => {
@@ -242,6 +263,7 @@ export default {
     }
   },
   computed: {},
+  mounted() {},
   created() {}
 };
 </script>

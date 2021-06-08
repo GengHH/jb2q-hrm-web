@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:03:44
+ * @LastEditTime: 2021-06-03 16:50:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -93,6 +93,7 @@ export default {
   },
   data() {
     return {
+      dataList: {},
       type: 0,
       form: {},
       initform: {
@@ -161,6 +162,7 @@ export default {
     onSubmit() {
       let data = { ...this.params };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      this.dataList = data;
       summary_query(
         data,
         res => {
@@ -226,6 +228,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.onSubmit(this.dataList);
     }
   },
   created() {}

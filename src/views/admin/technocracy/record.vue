@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 17:03:34
+ * @LastEditTime: 2021-06-04 18:14:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,25 +20,11 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
-      <el-table-column
-        width="120"
-        slot="pairImageBase64"
-        label="结对协议书"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <img
-            width="110px"
-            :src="scope.row.pairImageBase64"
-            alt="结对协议书"
-          />
-        </template>
-      </el-table-column>
       <el-table-column width="260" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" @click="opendio(1, scope)" plain>
+          <!-- <el-button size="mini" @click="opendio(1, scope)" plain>
             <i class="el-icon-edit"></i> 编辑</el-button
-          >
+          > -->
           <el-button size="mini" type="info" @click="opendio(2, scope)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
@@ -114,14 +100,10 @@ export default {
         { title: '结对人员证件号码', prop: 'zjhm' },
         { title: '结对人员联系电话', prop: 'contactNumber' },
         { title: '结对开始时间', prop: 'pairStartTime' },
-        {
-          title: '结对协议书',
-          prop: 'pairImageBase64',
-          slot: 'pairImageBase64'
-        },
         { title: '服务次数', prop: 'serviceCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 200 }
-      ]
+      ],
+      dataList: {}
     };
   },
   computed: {},
@@ -155,6 +137,7 @@ export default {
     onSubmit() {
       let data = { ...this.params };
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+      this.dataList = data;
       record_query(
         data,
         res => {
@@ -201,6 +184,8 @@ export default {
     },
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.onSubmit(this.dataList);
     }
   },
   created() {}

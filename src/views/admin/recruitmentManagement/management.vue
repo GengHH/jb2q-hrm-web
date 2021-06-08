@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-29 17:02:25
+ * @LastEditTime: 2021-06-03 16:32:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -15,6 +15,15 @@
       @selectAll="selectClick"
       @select="selectClick"
     >
+      <el-table-column slot="releaseDistrict" label="发布区县" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.qx" :key="k">
+            <el-tag v-if="v.value == scope.row.releaseDistrict">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         slot="districtCodeList"
         label="报名限制区域"
@@ -83,7 +92,12 @@ import tform from '../common/t_form'; //高级查询
 import ttable from '../common/t_table';
 import managementdetails from './pages/managementDetails';
 import { trim } from '@/utils/index';
-import { schedule_delete, schedule_query, schedule_update } from './api/index';
+import {
+  schedule_delete,
+  schedule_query,
+  schedule_update,
+  schedule_query_info
+} from './api/index';
 export default {
   name: 'management',
   components: {
@@ -111,7 +125,7 @@ export default {
         { title: '招聘会类型', prop: 'meetType', slot: 'meetType' },
         { title: '招聘会召开时间', prop: 'startTime' },
         { title: '招聘会结束时间', prop: 'endTime' },
-        { title: '招聘会地点', prop: 'address' },
+        { title: '发布区县', prop: 'releaseDistrict', slot: 'releaseDistrict' },
         { title: '展位数量', prop: 'boothCount' },
         {
           title: '报名限制区域',
@@ -184,13 +198,28 @@ export default {
       );
     },
     look(type, scope) {
-      if (type == '2') {
-        this.form = { ...scope.row };
-      }
-
       this.type = type;
-      //1 添加 2 修改)
-      this.visible = true;
+      if (type == '2') {
+        let data = { ...scope.row };
+        schedule_query_info(
+          data,
+          res => {
+            if (res.status == 200) {
+              let pageresult = res.result.data;
+              this.form = { ...pageresult };
+              //1 添加 2 修改)
+              this.visible = true;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        //1 添加 2 修改)
+        this.visible = true;
+      }
     },
     onclose(type) {
       if (type == '1') {
@@ -209,7 +238,7 @@ export default {
     },
     onsubmit(e) {
       console.log('------------------');
-      let params = { ...this.form };
+      let params = { ...e.row };
       params.pageParam = {
         pageSize: this.pageListData.pageSize,
         pageIndex: JSON.parse(JSON.stringify(this.pageListData.pageIndex)) - 1
@@ -232,7 +261,8 @@ export default {
       );
     },
     handleChange(e) {
-      console.log(e);
+      this.pageListData.pageIndex = e;
+      this.onsubmit(this.dataList);
     }
   },
   created() {}

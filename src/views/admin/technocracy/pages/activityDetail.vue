@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-29 17:47:56
+ * @LastEditTime: 2021-06-03 17:39:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -22,6 +22,15 @@
         label-width="250px"
       >
         <el-row>
+          <el-col :span="24">
+            <el-form-item label="专家编号">
+              <el-input
+                style="width:350px"
+                disabled
+                v-model="form.expertId"
+              ></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="专家姓名" prop="expertName">
               <el-select
@@ -47,15 +56,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-form-item label="专家编号">
-              <el-input
-                style="width:350px"
-                disabled
-                v-model="form.expertId"
-              ></el-input>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="24">
             <el-form-item label="活动类型" prop="actType">
               <el-select
@@ -98,68 +99,111 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col
-            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
-            :span="24"
-          >
-            <el-form-item label="服务对象姓名" prop="pids">
-              <el-select
-                v-model="form.pids"
-                filterable
-                remote
-                reserve-keyword
-                style="width:350px"
-                placeholder="请输入关键词"
-                :remote-method="orgRemoteMethod"
-                :loading="loading"
-                @change="userChange"
-              >
-                <el-option
-                  v-for="item in orgOption"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item"
+        <template v-if="Number(form.actType) == 1">
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="服务对象姓名" prop="pids">
+                <el-select
+                  v-model="form.pids"
+                  filterable
+                  remote
+                  reserve-keyword
+                  style="width:350px"
+                  placeholder="请输入关键词"
+                  :remote-method="orgRemoteMethod"
+                  :loading="loading"
+                  @change="userChange"
                 >
-                  <span>{{ item.label }}</span
-                  >-<span>{{ item.value }}</span>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col
-            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
-            :span="24"
-          >
-            <el-form-item label="服务对象证件号码">
-              <el-input
-                disabled
-                style="width:350px"
-                v-model="form.zjhm"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <!-- <el-col :span="12">
+                  <el-option
+                    v-for="item in orgOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item"
+                  >
+                    <span>{{ item.label }}</span
+                    >-<span>{{ item.value }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="服务对象证件号码">
+                <el-input
+                  disabled
+                  style="width:350px"
+                  v-model="form.zjhm"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <!-- <el-col :span="12">
             <el-form-item label="参与人员姓名" prop="xm">
               <el-input v-model="form.xm"></el-input>
             </el-form-item>
           </el-col> -->
-          <el-col
-            v-if="Number(form.actType) == 1 || Number(form.actType) == 4"
-            :span="24"
-          >
-            <el-form-item label="服务对象联系电话">
-              <el-input
-                :disabled="true"
-                style="width:350px"
-                v-model="form.contactNumber"
-                maxlength="11"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+            <el-col :span="24">
+              <el-form-item label="服务对象联系电话">
+                <el-input
+                  :disabled="true"
+                  style="width:350px"
+                  v-model="form.contactNumber"
+                  maxlength="11"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </template>
+        <template v-if="Number(form.actType) == 4">
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="结对对象姓名" prop="actpids">
+                <el-select
+                  v-model="form.actpids"
+                  filterable
+                  remote
+                  reserve-keyword
+                  style="width:350px"
+                  placeholder="请输入关键词"
+                  :remote-method="actRemoteMethod"
+                  :loading="loading"
+                  @change="actChange"
+                >
+                  <el-option
+                    v-for="item in actOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item"
+                  >
+                    <span>{{ item.label }}</span
+                    >-<span>{{ item.value }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="结对对象证件号码">
+                <el-input
+                  disabled
+                  style="width:350px"
+                  v-model="form.zjhm"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="结对对象联系电话">
+                <el-input
+                  :disabled="true"
+                  style="width:350px"
+                  v-model="form.contactNumber"
+                  maxlength="11"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </template>
         <el-row>
           <el-col
             v-if="Number(form.actType) == 2 || Number(form.actType) == 3"
@@ -197,7 +241,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -214,9 +257,10 @@
             </el-form-item>
 
             <img
-              width="600px"
-              v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
+              width="300px"
+              style="margin:0 auto"
+              v-if="disabled && form.recordImageBase64 != ''"
+              :src="'data:image/png;base64,' + form.recordImageBase64"
               alt="记录表"
             />
           </el-col>
@@ -231,17 +275,24 @@
 
 <script>
 import { trim } from '@/utils/index';
-import { activity_add, activity_edit, synthesize_query } from '../api/index';
+import {
+  activity_add,
+  activity_edit,
+  synthesize_query,
+  record_query
+} from '../api/index';
 import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { act_query } from '../../profession/api/index';
 export default {
   name: 'activityDetail',
-  props: ['visible', 'disabled', 'form', 'type'],
+  props: ['visible', 'form', 'type'],
   components: {},
   data() {
     return {
+      disabled: false,
       userOptions: [],
       orgOption: [],
+      actOption: [],
       list: [],
       loading: false,
       dicOptions: {
@@ -262,6 +313,7 @@ export default {
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
         pids: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        actpids: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         zjhm: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         expertName: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
@@ -286,6 +338,11 @@ export default {
       this.form.expertId = e.value;
     },
     userChange(e) {
+      this.form.zjhm = e.value;
+      this.form.pid = e.pid;
+      this.form.contactNumber = e.contactNumber;
+    },
+    actChange(e) {
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
@@ -318,8 +375,6 @@ export default {
             console.log(err);
           }
         );
-      } else {
-        this.options = [];
       }
     },
     orgRemoteMethod(query) {
@@ -356,8 +411,43 @@ export default {
             console.log(err);
           }
         );
-      } else {
-        this.options = [];
+      }
+    },
+    actRemoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        let params = {
+          xm: query,
+          expertName: '测试账号',
+          pageParam: {
+            pageIndex: 0,
+            pageSize: 10
+          }
+        };
+
+        record_query(
+          params,
+          res => {
+            if (res.status == 200) {
+              this.loading = false;
+              let pageresult = res.result.pageresult.data;
+              let list = pageresult.map(e => {
+                return {
+                  value: e.zjhm,
+                  label: e.xm,
+                  pid: e.pid,
+                  contactNumber: e.contactNumber
+                };
+              });
+              this.actOption = list;
+            }
+            console.log(res);
+          },
+          err => {
+            console.log('错误');
+            console.log(err);
+          }
+        );
       }
     },
     selectType(e) {
@@ -377,7 +467,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'recordImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'recordImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -387,13 +479,16 @@ export default {
       let data = { ...this.form };
       this.$refs.form.validate(valid => {
         if (valid) {
-          // if (!data.recordImageBase64) {
-          //   this.$message({
-          //     message: '请添加记录表',
-          //     type: 'warning'
-          //   });
-          //   return;
-          // }
+          if (!data.recordImageBase64) {
+            this.$message({
+              message: '请添加签字记录表',
+              type: 'warning'
+            });
+            return;
+          }
+          data.recordImageBase64 = data.recordImageBase64
+            ? data.recordImageBase64.split(',')[1].toString()
+            : '';
           if (this.type == 3) {
             activity_add(
               data,
@@ -449,17 +544,23 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   mounted() {
+    if (this.type == '2') {
+      setTimeout(() => {
+        this.disabled = true;
+      }, 0);
+    }
     //获取活动信息
-
     act_query(
       {
         pageIndex: 0,

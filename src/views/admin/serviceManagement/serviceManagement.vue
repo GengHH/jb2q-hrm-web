@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-04-29 16:06:39
+ * @LastEditTime: 2021-05-17 17:28:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -47,10 +47,7 @@
           style="margin-left:3px"
           type="primary"
           plain
-          @click="
-            advancedQuery = !advancedQuery;
-            form.gjz = '';
-          "
+          @click="openQuery"
           :icon="!advancedQuery ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"
           >高级搜索</el-button
         >
@@ -59,7 +56,11 @@
 
     <transition name="bounce">
       <div v-show="advancedQuery">
-        <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+        <tform
+          ref="tform"
+          :formConfig="formConfig"
+          @onsubmit="advancedSearch"
+        ></tform>
       </div>
     </transition>
     <!-- <el-row>
@@ -115,8 +116,8 @@ export default {
             type: 'checkbox',
             label: '身份标签',
             rules: [],
-            key: 'pointTypeList',
             data: [],
+            key: 'pointTypeList',
             style: { width: '532px' },
             options: trim(this.$store.getters['dictionary/recruit_point_type'])
           },
@@ -216,6 +217,10 @@ export default {
   },
   computed: {},
   methods: {
+    openQuery() {
+      this.advancedQuery = !this.advancedQuery;
+      this.form.gjz = '';
+    },
     handleChange(e) {
       console.log(e);
       this.pageList.pageIndex = e;

@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-05-05 17:06:41
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-08 10:46:36
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
@@ -17,6 +17,53 @@
     :style="formConfig.style"
   >
     <template v-for="(v, k) in formConfig.formItemList">
+      <!-- 树 -->
+      <el-form-item
+        v-if="v.type == 'tree'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-tree
+          :style="v.style"
+          :data="v.data"
+          show-checkbox
+          :node-key="v.id"
+          :ref="v.key"
+          highlight-current
+          :props="v.defaultProps"
+        >
+        </el-tree>
+      </el-form-item>
+      <!-- 最大值和最小值 -->
+      <el-form-item
+        v-if="v.type == 'max'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-input-number
+          v-model="value['max' + v.key]"
+          :placeholder="v.maxplaceholder"
+          :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
+          :disabled="v.disabled"
+          controls-position="right"
+        ></el-input-number>
+        -
+        <el-input-number
+          v-model="value['min' + v.key]"
+          :placeholder="v.minplaceholder"
+          :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
+          :disabled="v.disabled"
+          controls-position="right"
+        ></el-input-number>
+      </el-form-item>
       <!-- 输入框 -->
       <el-form-item
         v-if="v.type == 'input'"
@@ -80,7 +127,28 @@
           </el-select>
         </template>
       </el-form-item>
+      <!-- 日期和时间 -->
+      <el-form-item
+        v-if="v.type == 'datetimerange'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-date-picker
+          :style="v.style"
+          v-model="value[v.key]"
+          :value-format="v.format"
+          :value="v.value"
+          type="datetimerange"
+          range-separator=""
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
+      </el-form-item>
       <!-- 时间 日 双时间 -->
+
       <el-form-item
         v-if="v.type == 'daterange'"
         :key="k"
@@ -398,14 +466,34 @@ export default {
         }
       });
     },
+    getTree(ref) {
+      return this.$refs[ref][0].getCheckedKeys();
+    },
+    resetTree(ref) {
+      this.$refs[ref][0].setCheckedKeys([]);
+    },
     setCheck(arr) {
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].type == 'checkbox') {
           this.value[arr[i].key] = arr[i].data;
         }
+        if (arr[i].type == 'tree') {
+          this.value[arr[i].key] = this.getTree(arr[i].key);
+        }
       }
     },
     resetForm(formName) {
+      let option = this.formConfig.formItemList;
+      console.log(option);
+      for (let i = 0; i < option.length; i++) {
+        if (option[i].type == 'checkbox') {
+          option[i].data = [];
+        }
+        if (option[i].type == 'tree') {
+          this.resetTree(option[i].key);
+        }
+      }
+
       this.$refs.value.resetFields();
     }
   },

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-04-13 14:22:52
+ * @LastEditTime: 2021-06-03 17:50:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -23,28 +23,19 @@
         label-width="150px"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :span="11">
             <el-form-item label="单位名称" prop="meetTheme">
-              <el-input v-model="form.corpName"></el-input>
+              <el-input
+                :title="form.corpName"
+                disabled
+                v-model="form.corpName"
+              ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="单位状态" prop="meetTime">
-              <el-select
-                :disabled="disabled"
-                v-model="form.frozen"
-                style="width:100%"
-              >
-                <el-option label="冻结" value="1"></el-option>
-                <el-option label="正常" value="0"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
+          <el-col :span="9">
             <el-form-item label="冻结/解冻时间" prop="meetAddress">
               <el-date-picker
+                disabled
                 v-model="form.frozenTime"
                 type="date"
                 style="width:100%"
@@ -54,15 +45,26 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <div style="color:#fc6f3d;height: 28px;line-height: 28px;">
+            <span style="color:#fc6f3d;height: 28px;line-height: 28px;">
               查看详情>>
-            </div>
+            </span>
           </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="会议召集人" prop="meetCaller">
-              <el-input v-model="form.meetCaller"></el-input>
+        </el-row>
+        <!-- <div class="title-style">状态</div>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="单位状态" prop="frozen">
+              <el-select
+                :disabled="disabled"
+                @change="isFreeze"
+                v-model="form.frozen"
+                style="width:100%"
+              >
+                <el-option label="冻结" value="1"></el-option>
+                <el-option label="正常" value="0"></el-option>
+              </el-select>
             </el-form-item>
-          </el-col> -->
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
@@ -79,24 +81,23 @@
               查看详情>>
             </div>
           </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="与会其他人员" prop="meetOtherPeople">
-              <el-input v-model="form.meetOtherPeople"></el-input>
-            </el-form-item>
-          </el-col> -->
-        </el-row>
+        </el-row> -->
+        <div class="title-style">详情</div>
         <el-row>
           <el-col :span="24">
             <el-form-item label="单位标签" prop="meetOtherPeople">
               <el-checkbox
+                disabled
                 v-model="form.tranBaseSymbol"
                 label="就业见习基地"
               ></el-checkbox>
               <el-checkbox
+                disabled
                 v-model="form.humanResourceReg"
                 label="人力资源机构"
               ></el-checkbox>
               <el-checkbox
+                disabled
                 v-model="form.entrustStatus"
                 label="代理招聘企业"
               ></el-checkbox>
@@ -142,7 +143,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -160,8 +160,8 @@
 
             <img
               width="600px"
-              v-if="disabled && form.meetImageBase64 != ''"
-              :src="form.meetImageBase64"
+              v-if="disabled && form.logoBase64 != ''"
+              :src="'data:image/png;base64,' + form.logoBase64"
               alt="logo"
             />
           </el-col>
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { management_edit } from '../api/index';
+import { management_edit, management_frozen } from '../api/index';
 import { trim } from '@/utils/index';
 export default {
   name: 'managementDetail',
@@ -212,6 +212,44 @@ export default {
   },
   computed: {},
   methods: {
+    isFreeze(e) {
+      console.log(e);
+      //冻结1 解冻0 备注冻结时必填
+      let data = { ...this.form };
+      if (data.frozen == '1') {
+        if (!data.frozenReason) {
+          this.$message({
+            message: '请填写冻结原因',
+            type: 'warning',
+            duration: 1000
+          });
+          this.form.frozen = '0';
+          return;
+        }
+      }
+      management_frozen(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -225,7 +263,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'meetImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'meetImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -262,6 +302,9 @@ export default {
           //   });
           //   return;
           // }
+          data.logoBase64 = data.logoBase64
+            ? data.logoBase64.split(',')[1].toString()
+            : '';
           management_edit(
             data,
             res => {
@@ -300,12 +343,14 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
   created() {}
@@ -332,5 +377,25 @@ export default {
   width: 100px;
   height: 100px;
   display: block;
+}
+.title-style {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.8);
+  line-height: 40px;
+  border-bottom: 1px solid #e9eef3;
+  text-align: left;
+  padding: 0 30px;
+  box-sizing: border-box;
+  position: relative;
+  margin: 0 0 15px 0;
+}
+.title-style::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  background: $g-mian-color;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-26 10:08:54
+ * @LastEditTime: 2021-06-03 16:33:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
@@ -100,6 +100,8 @@ export default {
       list: [],
       columns: [
         { title: '序号', type: 'index' },
+
+        { title: '招聘会名称', prop: 'meetName' },
         { title: '管理区', prop: 'distictCode', slot: 'distictCode' },
         {
           title: '是否面向高校毕业生',
@@ -109,8 +111,6 @@ export default {
         { title: '招聘单位数', prop: 'corpCount' },
         { title: '招聘职位数', prop: 'positionCount' },
         { title: '招聘人数', prop: 'peopleCount' },
-        { title: '投递简历人次数（线上）', prop: 'collegeDeliveryTon' },
-        { title: '投递简历人数（线上）', prop: 'deliveryOnCount' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       formConfig: {
@@ -162,7 +162,8 @@ export default {
       );
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.onsubmit(this.dataList);
     },
     look(scope, type) {
       this.form = { ...scope.row };
