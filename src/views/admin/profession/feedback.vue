@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-08 15:10:38
+ * @LastEditTime: 2021-06-08 15:13:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -110,7 +110,7 @@
                 <el-input
                   type="textarea"
                   :rows="2"
-                  placeholder="当时情况"
+                  placeholder="当前情况"
                   v-model="maintain.curSituation"
                 >
                 </el-input>
