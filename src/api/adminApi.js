@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-05-05 14:54:26
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-28 14:55:07
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
  */
@@ -121,7 +121,7 @@ const queryLogin = (params, fn, fnErr) =>
   postAction('/loginController/ywjbIndex', params, fn, fnErr);
 
 function initQuery(obj) {
-  let type = obj.type || 'post';
+  let type = 'post';
   return new Promise((reslove, reject) => {
     axios[type](obj.url, obj.data)
       .then(res => {

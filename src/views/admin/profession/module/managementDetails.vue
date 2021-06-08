@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-04-30 16:07:27
+ * @LastEditTime: 2021-06-07 13:54:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -34,7 +34,6 @@
               :file-list="proFileList"
               :auto-upload="false"
               :on-change="proUploadUserChange"
-              :before-upload="beforeAvatarUpload"
               :limit="1"
               :show-file-list="false"
             >
@@ -76,6 +75,7 @@
             <el-col :span="12">
               <el-form-item label="参与人数" prop="participants">
                 <el-input
+                  disabled
                   style="width:190px"
                   v-model="form.participants"
                 ></el-input>
@@ -91,7 +91,6 @@
               :file-list="fileList"
               :auto-upload="false"
               :on-change="uploadUserChange"
-              :before-upload="beforeAvatarUpload"
               :limit="1"
               :show-file-list="false"
             >
@@ -113,15 +112,29 @@
             prop="systemRecSpecialGuide"
           >
             <el-input
+              disabled
               style="width:190px"
               v-model="form.systemRecSpecialGuide"
             ></el-input
             >人
-            <span style="color:#fc6f3d;margin-left:40px">人员详细》》</span>
+            <span
+              @click="openUser('1')"
+              style="color:#fc6f3d;margin-left:40px;cursor: pointer;"
+              >人员详细》》</span
+            >
           </el-form-item>
           <el-form-item label="个人报名活动人数" prop="selfApply">
-            <el-input style="width:190px" v-model="form.selfApply"></el-input>人
-            <span style="color:#fc6f3d;margin-left:40px">人员详细》》</span>
+            <el-input
+              disabled
+              style="width:190px"
+              v-model="form.selfApply"
+            ></el-input
+            >人
+            <span
+              @click="openUser('2')"
+              style="color:#fc6f3d;margin-left:40px;cursor: pointer;"
+              >人员详细》》</span
+            >
           </el-form-item>
           <div style="text-align:center">
             <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -129,6 +142,14 @@
         </el-form>
       </div>
     </div>
+    <userdetails
+      v-if="userVisible"
+      :visible="userVisible"
+      :dataList="userList"
+      @onclose="useronclose"
+      @isApply="isApply"
+    >
+    </userdetails>
   </el-dialog>
 </template>
 
@@ -136,18 +157,22 @@
 import { act_add, act_modify, act_apply_query } from '../api/index';
 import { trim } from '@/utils/index';
 import tform from '../../common/t_form';
+import userdetails from './userDetails';
 export default {
   name: 'managementDetails',
   props: ['visible', 'formConfig', 'type'],
-  components: { tform },
+  components: { tform, userdetails },
   data() {
     return {
+      userList: {},
+      userVisible: false,
       fileList: [],
       proFileList: [],
       form: {
-        systemRecSpecialGuide: '',
-        participants: '',
-        actSituation: ''
+        systemRecSpecialGuide: 0,
+        participants: 0,
+        actSituation: '',
+        selfApply: 0
       },
       proForm: {},
       imageUrl: '',
@@ -173,6 +198,26 @@ export default {
   },
   computed: {},
   methods: {
+    isApply(e) {
+      console.log(e);
+      if (e) {
+        this.form.participants = this.form.participants + 1;
+      } else {
+        this.form.participants = this.form.participants - 1;
+      }
+    },
+    openUser(type) {
+      // type  1系统 2个人推荐
+
+      this.userList = {
+        userType: type,
+        actId: this.formConfig.dataList.actId
+      };
+      this.userVisible = true;
+    },
+    useronclose() {
+      this.userVisible = false;
+    },
     urlRemove() {
       if (this.type == '4') {
         this.imageUrl = '';
@@ -190,6 +235,12 @@ export default {
     onSubmitForm() {
       //1编辑 3新增
       let addForm = { ...this.$refs.advancedSearch.value, ...this.proForm };
+      addForm.actStartTime = addForm.acttime[0];
+      addForm.actEndTime = addForm.acttime[1];
+
+      addForm.applyStartTime = addForm.applytime[0];
+      addForm.applyEndTime = addForm.applytime[1];
+
       if (this.type == '1') {
         act_modify(
           addForm,
@@ -211,6 +262,12 @@ export default {
           }
         );
       } else if (this.type == '3') {
+        if (addForm.propagandaImageBase64) {
+          addForm.propagandaImageBase64 = addForm.propagandaImageBase64
+            .split(',')[1]
+            .toString();
+        }
+
         act_add(
           addForm,
           res => {
@@ -254,12 +311,16 @@ export default {
     },
     //照片base64
     uploadUserChange(file) {
-      this.getBase64(file.raw, 'sceneImageBase64');
-      this.imageUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'sceneImageBase64');
+        this.imageUrl = URL.createObjectURL(file.raw);
+      }
     },
     proUploadUserChange(file) {
-      this.proGetBase64(file.raw, 'propagandaImageBase64');
-      this.propagandaUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file)) {
+        this.proGetBase64(file.raw, 'propagandaImageBase64');
+        this.propagandaUrl = URL.createObjectURL(file.raw);
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -269,16 +330,21 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     },
     open() {},
     onSubmit() {
       let data = { ...this.formConfig.dataList, ...this.form };
+      if (data.sceneImageBase64) {
+        data.sceneImageBase64 = data.sceneImageBase64.split(',')[1].toString();
+      }
       act_modify(
         data,
         res => {
@@ -307,31 +373,28 @@ export default {
     }
   },
   mounted() {
-    // let data = { ...this.formConfig.dataList };
-    // data.pageIndex = 0;
-    // data.pageSize = 10;
-    // //报名渠道（1系统推荐 2主动报名）
-    // data.applyType = 1;
-    // console.log(data);
-    // act_apply_query(
-    //   data,
-    //   res => {
-    //     if (res.status == 200) {
-    //       console.log(res);
-    //     }
-    //     console.log(res);
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
     setTimeout(() => {
       if (this.type != '3') {
         this.$refs.advancedSearch.value = this.formConfig.dataList;
         if (this.type == '2') {
           this.form = { ...this.formConfig.dataList };
+          this.form.sceneImageBase64 =
+            'data:image/png;base64,' + this.form.sceneImageBase64;
         }
         this.proForm = { ...this.formConfig.dataList };
+        this.proForm.propagandaImageBase64 =
+          'data:image/png;base64,' + this.proForm.propagandaImageBase64;
+        //计算个人投递和系统投递人数
+        let systemRecSpecialGuide = this.proForm.systemRecSpecialGuide
+          ? this.proForm.systemRecSpecialGuide
+          : 0;
+        let selfApply = this.proForm.selfApply ? this.proForm.selfApply : 0;
+        this.form = {
+          systemRecSpecialGuide: systemRecSpecialGuide,
+          participants: Number(systemRecSpecialGuide) + Number(selfApply),
+          selfApply: selfApply
+        };
+        console.log(this.proForm);
       } else {
         this.$refs.advancedSearch.value = {};
       }
@@ -351,6 +414,7 @@ export default {
   margin-bottom: 10px;
   box-sizing: border-box;
   position: relative;
+  margin: 0 0 15px 0;
 }
 .title-style::before {
   content: '';

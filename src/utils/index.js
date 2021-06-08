@@ -2,7 +2,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: GengHH
+ * @LastEditors: Please set LastEditors
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -254,6 +254,7 @@ export function formatTime(date) {
     [hour, minute, second].map(formatNumber).join(':')
   );
 }
+
 /**
  * 判断是否空对象
  */
@@ -264,6 +265,15 @@ export function isEmptyObject(obj) {
     return false;
   }
   return true;
+}
+/**
+ * 获取错误信息
+ */
+export function getHtml(data) {
+  let result = data.match(/<td(.*?)<\/td>/g).map(function(val) {
+    return val.replace(/<\/?td>/g, '');
+  });
+  return result[1].split('>')[1];
 }
 /**
  * 去除空格

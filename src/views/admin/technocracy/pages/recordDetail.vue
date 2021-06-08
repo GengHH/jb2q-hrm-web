@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-04-13 13:58:24
+ * @LastEditTime: 2021-06-03 14:24:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -129,7 +129,6 @@
                 :file-list="fileList"
                 :auto-upload="false"
                 :on-change="uploadChange"
-                :before-upload="beforeAvatarUpload"
                 :limit="1"
               >
                 <el-button slot="trigger" size="small" type="primary"
@@ -146,9 +145,10 @@
             </el-form-item>
 
             <img
-              width="600px"
+              width="300px"
+              style="margin:0 auto"
               v-if="disabled && form.pairImageBase64 != ''"
-              :src="form.pairImageBase64"
+              :src="'data:image/png;base64,' + form.pairImageBase64"
               alt="协议书"
             />
           </el-col>
@@ -313,7 +313,9 @@ export default {
     },
     //base64
     uploadChange(file) {
-      this.getBase64(file.raw, 'pairImageBase64');
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'pairImageBase64');
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -330,6 +332,9 @@ export default {
           //   });
           //   return;
           // }
+          data.pairImageBase64 = data.pairImageBase64
+            ? data.pairImageBase64.split(',')[1].toString()
+            : '';
           if (this.type == 3) {
             record_add(
               data,
@@ -385,38 +390,54 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
+        return false;
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     }
   },
-  created() {
+  mounted() {
+    if (this.type == '0') {
+      this.userOptions = {
+        label: this.form.expertName,
+        value: this.form.expertId
+      };
+      this.orgOption = {
+        value: this.form.zjhm,
+        label: this.form.xm,
+        pid: this.form.pid,
+        contactNumber: this.form.contactNumber
+      };
+      this.form.name = this.form.expertName;
+      this.form.pids = this.form.xm;
+    }
     //获取人员信息
-    record_queryPsnls(
-      {
-        pageIndex: 0,
-        pageSize: 100
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.pageresult.data;
-          data.map(e => {
-            e.value = e.pid;
-            e.label = e.xm;
-          });
-          this.userList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
-        }
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // record_queryPsnls(
+    //   {
+    //     pageIndex: 0,
+    //     pageSize: 100
+    //   },
+    //   res => {
+    //     if (res.status == 200) {
+    //       let data = res.result.pageresult.data;
+    //       data.map(e => {
+    //         e.value = e.pid;
+    //         e.label = e.xm;
+    //       });
+    //       this.userList = data;
+    //     } else {
+    //       this.message('warning', res.result.data.msg);
+    //     }
+    //     console.log(res);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   }
 };
 </script>

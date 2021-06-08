@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-29 16:03:29
+ * @LastEditTime: 2021-06-08 11:16:23
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -162,6 +162,46 @@ if (isEmpty(store.getters['dictionary/yesno'])) {
 if (isEmpty(store.getters['dictionary/recruit_point_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POINT_TYPE');
 }
+//应聘反馈状态
+if (isEmpty(store.getters['dictionary/recruit_feedback_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_FEEDBACK_STATUS');
+}
+//应聘反馈
+if (isEmpty(store.getters['dictionary/recruit_feedback_source'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_FEEDBACK_SOURCE');
+}
+//困惑
+if (isEmpty(store.getters['dictionary/zyjs_zyzdzykh'])) {
+  store.dispatch('dictionary/init_Dictionary', 'ZYJS_ZYZDZYKH');
+}
+//专家准入条件
+if (isEmpty(store.getters['dictionary/recruit_expert_approval_entry_type'])) {
+  store.dispatch(
+    'dictionary/init_Dictionary',
+    'RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE'
+  );
+}
+
+//专家服务内容
+if (isEmpty(store.getters['dictionary/recruit_expert_service_content_type'])) {
+  store.dispatch(
+    'dictionary/init_Dictionary',
+    'RECRUIT_EXPERT_SERVICE_CONTENT_TYPE'
+  );
+}
+
+//专家行业类型
+if (isEmpty(store.getters['dictionary/recruit_expert_industry_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EXPERT_INDUSTRY_TYPE');
+}
+
+//专家专业领域类型
+if (isEmpty(store.getters['dictionary/recruit_expert_professional_type'])) {
+  store.dispatch(
+    'dictionary/init_Dictionary',
+    'RECRUIT_EXPERT_PROFESSIONAL_TYPE'
+  );
+}
 
 /* eslint-disable no-new */
 const vm = new Vue({
@@ -171,14 +211,14 @@ const vm = new Vue({
   template: '<App/>',
   components: { App }
 });
-
+console.log(isNoBody(vm));
 if (isNoBody(vm)) {
   vm.$mount('#app');
 } else {
-  if (store.getters.priorityLoginType === 'corporation') {
+  if (isPerson(vm)) {
     vm.$alert('已有个人登录本系统，请先退出登录');
   }
-  if (store.getters.priorityLoginType === 'person') {
+  if (isCorporation(vm)) {
     vm.$alert('已有单位登录本系统，请先退出登录');
   }
   setTimeout(() => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-14 10:13:03
+ * @LastEditTime: 2021-06-03 16:31:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -65,6 +65,8 @@ export default {
       type: '',
       visible: false,
       dicOptions: {
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
         type: trim(this.$store.getters['dictionary/recruit_meet_type'])
       },
       params: {
@@ -120,6 +122,9 @@ export default {
       //1查看  2反馈
       this.disabled = type == '1' ? true : false;
       this.lookList = { ...e.row };
+      this.lookList.applyTime = this.lookList.applyTime
+        ? this.lookList.applyTime.split(' ')[0]
+        : '';
       this.visible = true;
     },
     onsubmit(e) {
@@ -145,7 +150,8 @@ export default {
       );
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.onsubmit(this.dataList);
     }
   },
   created() {}

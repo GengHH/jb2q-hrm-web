@@ -1,158 +1,306 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-30 16:07:11
+ * @LastEditTime: 2021-06-08 10:02:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
 -->
 <template>
   <div id="indexBody">
-    <el-dialog width="55%" title="" :visible="visible" @close="onclose">
-      <div>
-        <span>选择人员</span>
-        <el-select
-          v-model="form.pids"
-          filterable
-          remote
-          reserve-keyword
-          style="width:350px"
-          placeholder="请输入关键词"
-          :remote-method="orgRemoteMethod"
-          :loading="loading"
-          @change="userChange"
-        >
-          <el-option
-            v-for="item in orgOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item"
-          >
-            <span>{{ item.label }}</span
-            >-<span>{{ item.value }}</span>
-          </el-option>
-        </el-select>
-        <div style="margin-top:10px ">
-          <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
-          <span style="margin-left:15px">身份证号：</span>
-          <span class="fontColor">{{ form.zjhm }}</span>
-        </div>
-      </div>
-      <el-tabs v-model="activeName">
-        <el-tab-pane v-if="activeName == '01'" label="政策咨询" name="01">
-          <tform ref="form" :formConfig="formConfig"></tform>
-          <div v-if="this.detailsType != '1'" style="text-align:center">
-            <el-button type="primary" @click="onsubmit">提交</el-button>
+    <el-dialog width="800px" title="" :visible="visible" @close="onclose">
+      <div style="height:600px;overflow: auto;">
+        <div>
+          <div v-if="this.detailsType != '1'">
+            <span>选择人员</span>
+            <el-select
+              v-model="form.pids"
+              filterable
+              remote
+              size="small"
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="orgRemoteMethod"
+              :loading="loading"
+              @change="userChange"
+            >
+              <el-option
+                v-for="item in orgOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item"
+              >
+                <span>{{ item.label }}</span
+                >-<span>{{ item.value }}</span>
+              </el-option>
+            </el-select>
+            <span style="margin-left:20px">预约记录</span>
+            <el-select
+              size="small"
+              v-model="recordValue"
+              @change="recordListClick"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in recordList"
+                :key="item.value"
+                :label="item.label"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
           </div>
-        </el-tab-pane>
-        <el-tab-pane v-if="activeName == '02'" label="专门指导" name="02">
-          <tform ref="form2" :formConfig="formConfig2"></tform>
-          <el-form
-            :model="form"
-            :disabled="disabled"
-            label-width="140px"
-            style="width: 650px;margin: 0 auto"
-          >
-            <div v-show="show == '1'">
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="专家姓名" prop="expertName">
-                    <el-select
-                      v-model="form.expertName"
-                      filterable
-                      remote
-                      reserve-keyword
-                      style="width:210px"
-                      placeholder="请输入关键词"
-                      :remote-method="remoteMethod"
-                      :loading="loading"
-                      @change="expertChange"
-                    >
-                      <el-option
-                        v-for="item in userOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item"
-                      >
-                        <span>{{ item.label }}</span>
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="指导地点" prop="expertGuideAddress">
-                    <el-input
-                      style="width:210px"
-                      v-model="form.expertGuideAddress"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="开始时间" prop="expertGuideStart">
-                    <el-date-picker
-                      v-model="form.expertGuideStart"
-                      type="date"
-                      style="width:210px"
-                      value-format="yyyyMMdd"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="结束时间" prop="expertGuideEnd">
-                    <el-date-picker
-                      v-model="form.expertGuideEnd"
-                      type="date"
-                      style="width:210px"
-                      value-format="yyyyMMdd"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="备注" prop="expertMemo">
-                    <el-input
-                      style="width:532px"
-                      v-model="form.expertMemo"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
-            <div v-show="show == '2'">
-              推荐职位暂无接口
-            </div>
-            <div v-show="show == '4'">
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="活动名称" prop="acts">
-                    <el-select
-                      :multiple="true"
-                      style="width:210px"
-                      v-model="form.acts"
-                    >
-                      <el-option
-                        v-for="(v, k) in activityList"
-                        :key="k"
-                        :label="v.actName"
-                        :value="v.actId"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
+
+          <div style="margin-top:10px ">
+            <span>姓名：</span> <span class="fontColor">{{ form.xm }}</span>
+            <span style="margin-left:15px">身份证号：</span>
+            <span class="fontColor">{{ form.zjhm }}</span>
+            <span
+              v-if="activeName == '02'"
+              class="list"
+              @mouseover="titleListShow = true"
+              @mouseout="titleListShow = false"
+              style="color:#fc7a43;position: relative;cursor: pointer;"
+              ><i class="el-icon-caret-bottom"></i> 求职档案
+              <div class="selectList" v-show="titleListShow">
+                <ul>
+                  <li
+                    @click="liClick(k0)"
+                    v-for="(v0, k0) in titleList"
+                    :key="k0"
+                  >
+                    <span> {{ v0.title }}</span>
+                    <div v-if="k0 != titleList.length - 1" class="line"></div>
+                  </li>
+                </ul>
+              </div>
+            </span>
+          </div>
+          <div style="margin-top:10px">
+            <el-tag
+              size="small"
+              v-for="(v0, k0) in keyPointLableDataList"
+              :key="k0"
+              >{{ v0.pointTypeName }}</el-tag
+            >
+          </div>
+        </div>
+        <el-tabs v-model="activeName">
+          <el-tab-pane v-if="activeName == '01'" label="政策咨询" name="01">
+            <tform ref="form" :formConfig="formConfig"></tform>
             <div v-if="this.detailsType != '1'" style="text-align:center">
-              <el-button type="primary" @click="onsubmit2">提交</el-button>
+              <el-button type="primary" @click="onsubmit">提交</el-button>
             </div>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
+          </el-tab-pane>
+          <el-tab-pane v-if="activeName == '02'" label="专门指导" name="02">
+            <el-row>
+              <el-col :span="6">
+                <div
+                  style="text-align:right;margin-right: 10px;margin-top: 6px;"
+                >
+                  <span style="color:red">*</span> 个人特征
+                </div>
+              </el-col>
+              <el-col :span="18">
+                <el-tree
+                  v-if="this.detailsType != '1'"
+                  :accordion="true"
+                  :data="userLabel"
+                  show-checkbox
+                  node-key="labelId"
+                  ref="tree"
+                  highlight-current
+                  :props="defaultProps"
+                >
+                </el-tree>
+                <div v-if="this.detailsType == '1'">
+                  <el-tag
+                    size="small"
+                    style="margin: 2px;"
+                    v-for="item in treeStrList"
+                    :key="item.labelId"
+                    effect="dark"
+                  >
+                    {{ item.labelName }}
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+
+            <tform ref="form2" :formConfig="formConfig2"></tform>
+            <el-form
+              size="small"
+              :model="form"
+              :disabled="disabled"
+              label-width="140px"
+              style="width: 650px;margin: 0 auto"
+            >
+              <div v-show="show == '1'">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="专家姓名" prop="expertName">
+                      <el-select
+                        v-model="form.expertName"
+                        filterable
+                        remote
+                        reserve-keyword
+                        style="width:210px"
+                        placeholder="请输入关键词"
+                        :remote-method="remoteMethod"
+                        :loading="loading"
+                        @change="expertChange"
+                      >
+                        <el-option
+                          v-for="item in userOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item"
+                        >
+                          <span>{{ item.label }}</span>
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="指导地点" prop="expertGuideAddress">
+                      <el-input
+                        style="width:210px"
+                        v-model="form.expertGuideAddress"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="开始时间" prop="expertGuideStart">
+                      <el-date-picker
+                        v-model="form.expertGuideStart"
+                        type="date"
+                        style="width:210px"
+                        value-format="yyyyMMdd"
+                      >
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="结束时间" prop="expertGuideEnd">
+                      <el-date-picker
+                        v-model="form.expertGuideEnd"
+                        type="date"
+                        style="width:210px"
+                        value-format="yyyyMMdd"
+                      >
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item label="备注" prop="expertMemo">
+                      <el-input
+                        style="width:532px"
+                        v-model="form.expertMemo"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+              <div v-show="show == '2'">
+                <el-button
+                  style="margin-left:22%"
+                  type="primary"
+                  size="mini"
+                  @click="openRec"
+                  >推荐职位</el-button
+                >
+              </div>
+              <div v-show="show == '3'">
+                <el-button
+                  style="margin-left:22%"
+                  type="primary"
+                  size="mini"
+                  @click="openServe"
+                  >预约</el-button
+                >
+              </div>
+              <div v-show="show == '4'">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="活动名称" prop="acts">
+                      <el-select
+                        :multiple="true"
+                        style="width:210px"
+                        v-model="form.acts"
+                        @change="showActivity"
+                      >
+                        <el-option
+                          v-for="(v, k) in activityList"
+                          :key="k"
+                          :label="v.label"
+                          :value="v"
+                        ></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24" v-if="actList.length">
+                    <div v-for="(v, k) in actList" :key="k" class="actList">
+                      <el-row type="flex">
+                        <el-col :span="3"> {{ k + 1 }}.开始时间: </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{
+                            v.actStartTime.split(' ')[0]
+                          }}</span>
+                        </el-col>
+                        <el-col :span="3">
+                          活动地点:
+                        </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{ v.actAddress }}</span>
+                        </el-col>
+                        <el-col :span="3">
+                          主要内容:
+                        </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{ v.content }}</span>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+              <div v-if="this.detailsType != '1'" style="text-align:center">
+                <el-button
+                  size="small"
+                  style="margin-top:10px"
+                  type="primary"
+                  @click="onsubmit2"
+                  >提交</el-button
+                >
+              </div>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </el-dialog>
+    <recommend
+      v-if="recvisible"
+      :dataList="recdata"
+      :visible="recvisible"
+      @onclose="recvisible = false"
+    ></recommend>
+    <servedetails
+      v-if="servevisible"
+      :visible="servevisible"
+      :serveData="serveData"
+      @onclose="serveonclose"
+    ></servedetails>
+    <pagelist
+      v-if="dialogTableVisible"
+      :pagelistIndex="pagelistIndex"
+      :dialogTableVisible="dialogTableVisible"
+      :evList="evList"
+      @evclose="dialogTableVisible = false"
+    ></pagelist>
   </div>
 </template>
 
@@ -162,15 +310,18 @@ import { trim } from '@/utils/index';
 import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { synthesize_query } from '../../technocracy/api/index';
 import { act_query } from '../../profession/api/index';
-import { guide_add } from '../api/index';
+import { guide_add, serve_record, label_query } from '../api/index';
+import recommend from '../../serviceManagement/pages/recommend';
+import servedetails from './serveDetails';
+import pagelist from '../../serviceManagement/module/pageList';
 export default {
   name: 'addDetails',
-  components: { tform },
+  components: { tform, servedetails, recommend, pagelist },
   props: ['visible', 'detailsType', 'detailsData', 'activeName'],
   data() {
     let comConfig = {
       inline: true,
-      size: '',
+      size: 'small',
       labelPosition: 'right',
       labelWidth: '140px',
       disabled: false,
@@ -181,6 +332,35 @@ export default {
       }
     };
     return {
+      keyPointLableDataList: [],
+      actList: [],
+      dialogTableVisible: false,
+      pagelistIndex: 0,
+      evList: {},
+      titleListShow: false,
+      titleList: [
+        { title: '个人基本信息' },
+        { title: '简历信息' },
+        { title: '劳动经历' },
+        { title: '社保缴费记录' },
+        { title: '就业见习记录' },
+        { title: '简历投递及反馈记录' },
+        { title: '职位评论记录' },
+        { title: '职位收藏记录' },
+        { title: '就业服务记录' }
+      ],
+
+      treeStrList: [],
+      defaultProps: {
+        children: 'labels',
+        label: 'labelName'
+      },
+      userLabel: [],
+      recvisible: false,
+      isrecord: false,
+      recordValue: '',
+      recordList: [],
+      servevisible: false,
       disabled: false,
       show: '0',
       activityList: [],
@@ -252,19 +432,41 @@ export default {
       formConfig2: {
         formItemList: [
           {
+            type: 'radio',
+            label: '是否关注',
+            rules: [],
+            key: 'isAttention',
+            options: [
+              {
+                value: '1',
+                label: '是',
+                disabled: false
+              },
+              {
+                value: '0',
+                label: '否',
+                disabled: false
+              }
+            ]
+          },
+          {
             type: 'date',
             label: '指导时间',
             format: 'yyyyMMdd',
             style: { width: '210px' },
             placeholder: '请输入指导时间',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导时间', trigger: 'blur' }
+            ],
             key: 'guideTime'
           },
           {
             type: 'input',
             label: '指导地点',
             placeholder: '请输入指导地点',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导地点', trigger: 'blur' }
+            ],
             style: { width: '492px' },
             key: 'guideAddress'
           },
@@ -274,8 +476,9 @@ export default {
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入指导过程',
-            //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-            rules: [],
+            rules: [
+              { required: true, message: '请输入指导过程', trigger: 'blur' }
+            ],
             key: 'guideProcess'
           },
           {
@@ -284,8 +487,9 @@ export default {
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入问题和建议',
-            //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-            rules: [],
+            rules: [
+              { required: true, message: '请输入问题和建议', trigger: 'blur' }
+            ],
             key: 'problem'
           },
           {
@@ -293,6 +497,7 @@ export default {
             label: '是否就业',
             rules: [],
             key: 'employ',
+            disabled: true,
             options: [
               {
                 value: '1',
@@ -309,6 +514,7 @@ export default {
           {
             type: 'select',
             label: '就业类型',
+            disabled: true,
             rules: [],
             style: { width: '210px' },
             key: 'employType',
@@ -317,6 +523,7 @@ export default {
           {
             type: 'textarea',
             label: '当时情况',
+            disabled: true,
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
             placeholder: '请输入当时情况',
@@ -328,7 +535,9 @@ export default {
             type: 'select',
             label: '实施举措',
             // multiple: true,
-            rules: [],
+            rules: [
+              { required: true, message: '请选择实施举措', trigger: 'blur' }
+            ],
             style: { width: '210px' },
             key: 'implementAct',
             options: trim(
@@ -345,6 +554,53 @@ export default {
   },
   computed: {},
   methods: {
+    showActivity(e) {
+      if (e.length) {
+        e = e.map(e => {
+          e.value = e.actId;
+          e.label = e.actName;
+          return e;
+        });
+      }
+      this.form.acts = e;
+      this.actList = e;
+    },
+    liClick(e) {
+      if (!this.form.pid) {
+        this.message('warning', '请选择人员');
+        return;
+      }
+      this.evList.pid = this.form.pid;
+      this.pagelistIndex = { id: e };
+      this.dialogTableVisible = true;
+    },
+    openRec() {
+      if (!this.form.pid) {
+        this.message('warning', '请选择人员');
+        return;
+      }
+      this.recdata = { ...this.form };
+      this.recvisible = true;
+    },
+    recordListClick(e) {
+      this.$refs.form2.value = {
+        guideTime: e.yyrq,
+        guideAddress: e.yydz,
+        problem: e.zysx
+      };
+      console.log(e);
+    },
+    serveonclose() {
+      this.servevisible = false;
+    },
+    openServe() {
+      if (!this.form.pid) {
+        this.message('warning', '请选择人员');
+        return;
+      }
+      this.serveData = { ...this.form };
+      this.servevisible = true;
+    },
     expertChange(e) {
       console.log(e);
       this.form.expertName = e.label;
@@ -404,7 +660,8 @@ export default {
                   value: e.zjhm,
                   label: e.xm,
                   pid: e.pid,
-                  contactNumber: e.contactNumber
+                  contactNumber: e.contactNumber,
+                  keyPointLableDataList: e.keyPointLableDataList
                 };
               });
               this.orgOption = list;
@@ -425,11 +682,40 @@ export default {
       console.log(e);
     },
     userChange(e) {
+      if (this.activeName == '02') {
+        this.recordValue = '';
+        this.recordList = [];
+        this.$refs.form2.value = {
+          guideTime: '',
+          guideAddress: '',
+          problem: ''
+        };
+      }
       console.log(e);
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
       this.form.xm = e.label;
+      this.keyPointLableDataList = e.keyPointLableDataList;
+      serve_record(
+        { pid: e.pid },
+        res => {
+          if (res.status == '200') {
+            let data = res.result.data;
+            if (data) {
+              for (let i = 0; i < data.length; i++) {
+                data[i].label = data[i].yyrq + ' ' + data[i].zdsd;
+                data[i].value = i;
+              }
+              this.recordList = data;
+            }
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     },
     message(type, msg, fn) {
       this.$message({
@@ -450,48 +736,107 @@ export default {
       let e = { ...this.$refs.form.value };
       this.add(e);
     },
+    getCheckedNodes() {
+      return this.$refs.tree.getCheckedNodes();
+    },
+    getCheckedKeys() {
+      return this.$refs.tree.getCheckedKeys();
+    },
     onsubmit2() {
-      let e = { ...this.$refs.form2.value };
+      let tree = this.getCheckedKeys();
+      if (!tree.length) {
+        this.message('warning', '请选择个人特征');
+        return;
+      }
+      let treeData = tree.map(e => {
+        return {
+          labelId: e
+        };
+      });
+      let e = { ...this.$refs.form2.value, focusLabels: treeData };
       this.add(e);
     },
     add(e) {
       console.log(e);
+
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
         return;
       }
       let data = { ...e, ...this.form };
+      //1是 0否
+      if (data.isAttention == '1') {
+        //10为特别关注人员
+        data.focusLabels.push({ labelId: 10 });
+      }
       if (data.acts) {
         data.acts = data.acts.map(e => {
-          return { acyId: e };
+          return { actId: e };
         });
       }
       data.guideType = this.activeName;
+      if (this.activeName == '02') {
+        this.$refs.form2.$refs.value.validate(valid => {
+          if (valid) {
+            guide_add(
+              data,
+              res => {
+                this.message('success', '操作成功', () => {
+                  this.onclose('1');
+                });
+                console.log(res);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      } else {
+        guide_add(
+          data,
+          res => {
+            this.message('success', '操作成功', () => {
+              this.onclose('1');
+            });
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
       console.log(data);
-      guide_add(
-        data,
-        res => {
-          this.message('success', '操作成功', () => {
-            this.onclose('1');
-          });
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-        }
-      );
     }
   },
   mounted() {
+    // setTimeout(() => {
+    //   if (this.detailsType == '1') {
+    //     this.$refs.tree.setCheckedNodes(this.detailsData.focusLabels);
+    //   }
+    // }, 0);
+
+    this.userLabel = this.$store.state.admin.label[1].labels;
+
     setTimeout(() => {
       if (this.detailsType == '1') {
         this.form = { ...this.detailsData };
-        this.$refs.form.value = { ...this.detailsData };
-        this.$refs.form2.value = { ...this.detailsData };
+        //01政策  02专门
+        if (this.activeName == '01') {
+          this.$refs.form.value = { ...this.detailsData };
+        } else if (this.activeName == '02') {
+          this.$refs.form2.value = { ...this.detailsData };
+        }
+
         this.formConfig.disabled = true;
         this.formConfig2.disabled = true;
         this.show = this.detailsData.implementAct;
         this.disabled = true;
+
+        this.treeStrList = this.form.focusLabels;
       }
       console.log(this.detailsData);
     }, 0);
@@ -502,12 +847,18 @@ export default {
       {
         pageIndex: 0,
         pageSize: 100,
-        actName: ''
+        actName: '',
+        valid: '1'
       },
       res => {
         if (res.status == 200) {
           let data = res.result.data.data;
           data = data.filter(e => e.release == '1');
+          data = data.map(e => {
+            e.value = e.actId;
+            e.label = e.actName;
+            return e;
+          });
           this.activityList = data;
         } else {
           this.message('warning', res.result.data.msg);
@@ -525,8 +876,62 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.actList {
+  .el-row:nth-of-type(odd) {
+    margin: 5px 0 5px 0;
+    padding: 5px 0 5px 0;
+    background: #ebebeb;
+  }
+}
 .fontColor {
   color: #787878;
   font-weight: bold;
+}
+.list:hover {
+  box-shadow: 0 2px 10px 0 rgb(0 0 0 / 10%);
+}
+.list {
+  margin: 5px 0;
+  .listTiele {
+    color: #fc7a43;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .listSubTiele {
+    color: #a3a3a3;
+    padding: 0 5px;
+  }
+  .selectList {
+    position: absolute;
+    top: 20;
+    left: 0;
+    width: 150px;
+    height: 250px;
+    background: #fefefe;
+    box-shadow: 0px 0px 10px #c7c7c7;
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+    z-index: 9;
+    span {
+      cursor: pointer;
+    }
+    span:hover {
+      cursor: pointer;
+      color: #fc7a43;
+    }
+    .line {
+      width: 100%;
+      border-top: 1px solid #d0d0d0;
+      margin-top: 4px;
+    }
+    ul {
+      padding: 5px 10px;
+      li {
+        text-align: left;
+        padding: 4px 0;
+        color: #bbbbbb;
+      }
+    }
+  }
 }
 </style>

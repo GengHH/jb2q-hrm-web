@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-30 10:29:38
+ * @LastEditTime: 2021-06-03 16:46:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\message.vue
@@ -120,6 +120,8 @@ export default {
   methods: {
     handleChange(e) {
       console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
     },
     advancedSearch(e) {
       console.log(e);
@@ -127,7 +129,8 @@ export default {
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
       //默认选择当前所在区
-      data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
+      //data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
+
       this.dataList = data;
       unit_query(
         data,

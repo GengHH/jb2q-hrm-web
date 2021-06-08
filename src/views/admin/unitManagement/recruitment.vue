@@ -1,14 +1,18 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-05-12 19:40:33
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-04 10:18:36
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="tform"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <ttable
       :columns="columns"
       :list="list"
@@ -21,11 +25,6 @@
       </el-table-column>
       <el-table-column width="280" slot="aaa010" label="操作" align="center">
         <template slot-scope="scope">
-          <el-popconfirm title="确定添加吗？" @confirm="add(scope)">
-            <el-button slot="reference" size="mini" type="primary" plain>
-              <i class="el-icon-folder-add"></i> 添加</el-button
-            >
-          </el-popconfirm>
           <el-popover placement="bottom" width="400" trigger="click">
             <el-date-picker
               v-model="scope.row.time"
@@ -60,6 +59,9 @@
     >
     </el-pagination>
     <div style="text-align:right">
+      <el-button type="primary" @click="addVisible = true">
+        <i class="el-icon-folder-add"></i> 添加</el-button
+      >
       <el-button type="danger" icon="el-icon-delete" @click="remove"
         >删除</el-button
       >
@@ -70,6 +72,56 @@
       :form="form"
       @onclose="onclose"
     ></recruitmentdetail>
+    <!-- 添加 -->
+    <el-dialog
+      title="添加代理招聘"
+      width="850px"
+      v-if="addVisible"
+      :visible="addVisible"
+      @close="addVisible = false"
+    >
+      <tform :formConfig="formConfig2" @onsubmit="addQuery"></tform>
+      <ttable :columns="columns2" :list="list2">
+        <el-table-column slot="frozen" label="单位状态" align="center">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.frozen == '1' ? '冻结' : '正常' }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column width="280" slot="aaa010" label="操作" align="center">
+          <template slot-scope="scope">
+            <el-popover
+              ref="move_add_pop"
+              placement="bottom"
+              width="400"
+              trigger="click"
+            >
+              <el-date-picker
+                v-model="scope.row.entrustValid"
+                type="date"
+                value-format="yyyyMMdd"
+                placeholder="请输入代理有效期"
+              >
+              </el-date-picker>
+              <el-button size="mini" type="danger" @click="submitAdd(scope)"
+                >确定添加</el-button
+              >
+              <el-button size="mini" slot="reference" type="danger" plain
+                >添加</el-button
+              >
+            </el-popover>
+          </template>
+        </el-table-column>
+      </ttable>
+      <el-pagination
+        @size-change="handleChange2"
+        @current-change="handleChange2"
+        :current-page.sync="params2.pageIndex"
+        :page-size="pageSize"
+        layout="total, prev, pager, next"
+        :total="params2.total"
+      >
+      </el-pagination>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,7 +133,8 @@ import {
   agency_query,
   agency_cancel,
   agency_add,
-  agency_edit
+  agency_edit,
+  unit_query
 } from './api/index';
 import recruitmentdetail from './pages/recruitment/recruitmentDetail';
 export default {
@@ -90,10 +143,15 @@ export default {
   data() {
     return {
       type: '',
+      addVisible: false,
       disabled: false,
       form: {},
       visible: false,
       params: {
+        pageIndex: 1,
+        total: 0
+      },
+      params2: {
         pageIndex: 1,
         total: 0
       },
@@ -119,8 +177,35 @@ export default {
           {
             type: 'daterange',
             label: '代理有效期',
+            style: { width: '320px' },
             rules: [],
             key: 'time'
+          },
+          {
+            disabled: false,
+            type: 'select',
+            label: '所属区',
+            rules: [],
+            style: { width: '210px' },
+            key: 'districtCode',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          }
+        ]
+      },
+      formConfig2: {
+        inline: true,
+        size: 'small',
+        labelPosition: 'right',
+        labelWidth: '100px',
+
+        formItemList: [
+          {
+            type: 'input',
+            label: '单位名称',
+            style: { width: '210px' },
+            placeholder: '请输入单位名称',
+            rules: [],
+            key: 'corpName'
           }
         ]
       },
@@ -134,7 +219,15 @@ export default {
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
+      columns2: [
+        { title: '序号', type: 'index' },
+        { title: '单位名称', prop: 'corpName' },
+        { title: '单位状态', prop: 'frozen', slot: 'frozen' },
+        { title: '操作', slot: 'aaa010' }
+      ],
+      list2: [],
       dataList: [],
+      dataList2: [],
       selectData: []
     };
   },
@@ -169,19 +262,51 @@ export default {
         }
       );
     },
-    add(e) {
-      let data = { ...e.row };
+    submitAdd(e) {
+      let data = e.row;
+      if (!data.entrustValid) {
+        this.$message({
+          message: '请填写有效时间',
+          type: 'warning',
+          duration: 1000
+        });
+        return;
+      }
+
+      document.body.click();
       agency_add(
         data,
         res => {
           if (res.status == 200) {
+            this.addQuery(this.dataList2);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    addQuery(e) {
+      let data = {
+        entrustStatus: 0,
+        pageSize: this.pageSize,
+        pageIndex: JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1,
+        ...e
+      };
+      this.dataList2 = data;
+      unit_query(
+        data,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list2 = pageresult.data;
+            this.params2.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.params2.total = pageresult.total;
             this.$message({
               message: '操作成功',
               type: 'success',
-              duration: 1000,
-              onClose: () => {
-                this.advancedSearch(this.dataList);
-              }
+              duration: 1000
             });
           }
           console.log(res);
@@ -193,14 +318,17 @@ export default {
     },
     remove() {
       if (this.selectData.length) {
+        let data = [...this.selectData];
+        data = data
+          .map(e => {
+            return e.cid;
+          })
+          .toString();
         agency_cancel(
-          this.selectData,
+          { cids: data },
           res => {
             if (res.status == 200) {
-              let pageresult = res.result.pageresult;
-              this.list = pageresult.data;
-              this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-              this.params.total = pageresult.total;
+              this.advancedSearch(this.dataList);
             }
             console.log(res);
           },
@@ -216,11 +344,18 @@ export default {
       }
     },
     handleChange(e) {
-      console.log(e);
+      this.params.pageIndex = e;
+      this.advancedSearch(this.dataList);
+    },
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.addQuery(this.dataList2);
     },
     advancedSearch(e) {
       console.log(e);
-      let data = { ...e };
+      let areaCode = this.$store.state.admin.userInfo.logonUser.areaInfo
+        .areaCode;
+      let data = { districtCode: areaCode, ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
       if (data.time) {
@@ -250,6 +385,11 @@ export default {
       }
       this.visible = false;
     }
+  },
+  mounted() {
+    this.$refs.tform.value = {
+      districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode
+    };
   },
   created() {}
 };

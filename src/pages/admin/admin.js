@@ -1,8 +1,8 @@
 /*
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-05-05 16:59:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-04 17:30:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.js
  */
@@ -56,10 +56,10 @@ if (config.mock) {
   //console.log('++++++++++成功引入mock数据+++++++');
 }
 
-// 开发环境使用mock时候，模拟管理员登录
-if (config.mock) {
-  store.dispatch('admin/do_login');
-}
+// // 开发环境使用mock时候，模拟管理员登录
+// if (config.mock) {
+//   store.dispatch('admin/do_login');
+// }
 
 //路由拦截(检验管理员是否已经登录)
 router.beforeEach((to, from, next) => {

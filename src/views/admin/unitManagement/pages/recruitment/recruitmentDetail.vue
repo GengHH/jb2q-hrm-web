@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-04-29 17:04:24
+ * @LastEditTime: 2021-06-04 10:23:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -46,10 +46,10 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequir" label="学历要求" align="center">
+            <el-table-column slot="eduRequire" label="学历要求" align="center">
               <template slot-scope="scope">
                 <template v-for="(v, k) in dicOptions.edu">
-                  <div :key="k" v-if="v.value == scope.row.eduRequir">
+                  <div :key="k" v-if="v.value == scope.row.eduRequire">
                     {{ v.label }}
                   </div>
                 </template>
@@ -88,6 +88,26 @@
                   @click="positionAudit('0', scope)"
                   plain
                   >查看</el-button
+                >
+                <el-button
+                  style="margin-top:5px"
+                  v-if="auditStutas != '1'"
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-user-solid"
+                  @click="autonomously('1', scope)"
+                  plain
+                  >精准推荐</el-button
+                >
+                <el-button
+                  style="margin-top:5px"
+                  v-if="auditStutas != '1'"
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-user"
+                  @click="autonomously('0', scope)"
+                  plain
+                  >自主推荐</el-button
                 >
               </template>
             </el-table-column>
@@ -168,6 +188,18 @@
       :type="type"
       @onclose="positionClose"
     ></position>
+    <autonomously
+      v-if="autoVisible"
+      :data="autoData"
+      :resVisible="autoVisible"
+      @onclose="autoClose"
+    ></autonomously>
+    <accurate
+      v-if="accurateVisible"
+      :data="accurateData"
+      :resVisible="accurateVisible"
+      @onclose="accurateClose"
+    ></accurate>
   </el-dialog>
 </template>
 
@@ -176,11 +208,13 @@ import { agency_resume, unit_query_agency } from '../../api/index';
 import { trim } from '@/utils/index';
 import ttable from '../../../common/t_table';
 import position from './position';
+import autonomously from './autonomously';
+import accurate from './accurate';
 import resume from './resume';
 export default {
   name: 'recruitmentDetail',
   props: ['visible', 'form'],
-  components: { ttable, resume, position },
+  components: { ttable, resume, position, autonomously, accurate },
   data() {
     return {
       type: '',
@@ -188,6 +222,8 @@ export default {
       positionData: [],
       resVisible: false,
       positionVisible: false,
+      autoVisible: false,
+      accurateVisible: false,
       auditStutas: '1',
       activeName: '0',
       params0: {
@@ -198,7 +234,7 @@ export default {
         pageIndex: 1,
         total: 0
       },
-      pageSize: 10,
+      pageSize: 5,
       dicOptions: {
         //学历
         edu: trim(this.$store.getters['dictionary/recruit_edu']),
@@ -209,10 +245,8 @@ export default {
         { title: '序号', type: 'index' },
         { title: '职位名称', prop: 'positionName' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '学历要求', prop: 'eduRequir', slot: 'eduRequir' },
+        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
-        { title: '工作地点', prop: 'workAddress' },
-        { title: '发布时间', prop: 'releaseTime' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns1: [
@@ -225,11 +259,24 @@ export default {
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       list0: [],
-      list1: []
+      list1: [],
+      dataList: {},
+      dataList2: {}
     };
   },
   computed: {},
   methods: {
+    autonomously(type, e) {
+      this.type = type;
+      console.log(type);
+      if (type == '0') {
+        this.autoData = { ...e.row };
+        this.autoVisible = true;
+      } else {
+        this.accurateData = { ...e.row };
+        this.accurateVisible = true;
+      }
+    },
     positionAudit(type, e) {
       this.type = type;
       this.positionData = { ...e.row };
@@ -266,9 +313,19 @@ export default {
     },
     handleChange0(e) {
       console.log(e);
+      this.params0.pageIndex = e;
+      this.queryPosition(this.dataList);
     },
     handleChange1(e) {
       console.log(e);
+      this.params1.pageIndex = e;
+      this.queryResume(this.dataList2);
+    },
+    accurateClose(type) {
+      this.accurateVisible = false;
+    },
+    autoClose(type) {
+      this.autoVisible = false;
     },
     positionClose(type) {
       if (type == '1') {
@@ -295,6 +352,7 @@ export default {
       //分页
       data.pageIndex = JSON.parse(JSON.stringify(this.params0.pageIndex - 1));
       data.pageSize = this.pageSize;
+      this.dataList = data;
       unit_query_agency(
         data,
         res => {
@@ -320,6 +378,7 @@ export default {
       //分页
       data.pageIndex = JSON.parse(JSON.stringify(this.params1.pageIndex - 1));
       data.pageSize = this.pageSize;
+      this.dataList2 = data;
       agency_resume(
         data,
         res => {

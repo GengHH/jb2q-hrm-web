@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:54
- * @LastEditTime: 2021-04-29 17:03:11
+ * @LastEditTime: 2021-06-03 16:53:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\serve.vue
@@ -108,7 +108,7 @@ let columns = [
   ]
 ];
 export default {
-  name: 'experience',
+  name: 'serve',
   components: { ttable },
   data() {
     return {
