@@ -165,6 +165,13 @@ service.interceptors.response.use(response => {
     }
     // 后台系统抛出异常时候终止promise
     //return Promise.reject(_data);
+    return '';
+  } else if (!_data) {
+    Notification({
+      title: '系统提示',
+      type: 'error',
+      message: '系统返回值异常'
+    });
   }
   return _data;
 }, err);

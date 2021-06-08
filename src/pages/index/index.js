@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-22 13:24:19
+ * @LastEditTime: 2021-06-08 16:36:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -21,10 +21,19 @@ import { VueAxios } from '@/utils/httpService';
 import '@/auth/permission';
 import config from '@/config';
 import _ from 'lodash';
+import PlTable from '@/components/common/table/BaseTable.vue';
+import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
+import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
+import BaseLoadingButton from '@/components/common/BaseLoadingButton';
+import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
+import Chat from 'jwchat';
+import BaseWChat from '@/components/common/BaseWChat';
+import PlConfig from '@/config/plComponents';
 // 按需引入Element组件
 import ElementUI from '@/config/eleComponents';
 //import 'assets/sass/index.scss';
 import BaiduMap from 'vue-baidu-map';
+
 Vue.config.productionTip = false;
 // 安装vue-axios插件
 Vue.use(VueAxios, router);
@@ -37,13 +46,21 @@ Vue.use(BaiduMap, {
 });
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
-// 使用Element组件
-//Vue.use(Button);
+
+//安装二次封装组件
+Vue.component(PlTable.name, PlTable);
+Vue.component(BaseLabelInput.name, BaseLabelInput);
+Vue.component(BaseLabelSelect.name, BaseLabelSelect);
+Vue.component(BaseLoadingButton.name, BaseLoadingButton);
+Vue.component(BaseLabelDatepicker.name, BaseLabelDatepicker);
+Vue.component(BaseWChat.name, BaseWChat);
+Vue.use(PlConfig, {});
+
 // 引入mock配置
 if (config.mock) {
   require('@/mock/index/index.js');
 }
-//sessionStorage.setItem('a', 'genghonghui');
+
 //测试获取字典表;
 var isEmpty = function(obj) {
   if (obj === null || obj === undefined || obj.length === 0) {
@@ -87,6 +104,9 @@ if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_CORP_NATURE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
 
 /* eslint-disable no-new */

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-05-12 11:01:34
+ * @LastEditTime: 2021-06-08 16:38:14
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -35,11 +35,11 @@ import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
 import BaseLabelSelect from '@/components/common/BaseLabelSelect.vue';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
 import BaseLabelDatepicker from '@/components/common/BaseLabelDatepicker';
+import Chat from 'jwchat';
 import BaseWChat from '@/components/common/BaseWChat';
 import PlConfig from '@/config/plComponents';
 import BaiduMap from 'vue-baidu-map';
-import Chat from 'jwchat';
-import { isPerson } from '@/utils';
+
 Vue.config.productionTip = false;
 //按需使用Element组件
 Vue.use(ElementUI);

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-21 17:42:34
+ * @LastEditTime: 2021-06-08 14:58:53
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -659,6 +659,63 @@ Mock.mock(
           },
           errMsg: 'aute reprehenderit aliquip quis'
         }
+      }
+    };
+  }
+);
+
+//获取职位信息(分页)
+Mock.mock(
+  RegExp(basePath + '/nologin/applyfor/queryPositionList' + '.*'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'positionId|+1': '@string("number", 5)',
+              positionCode: '20210100000002',
+              positionName: 'JAVA架构工程师',
+              salaryScope: '20-5004',
+              workArea: '06',
+              workNature: '01',
+              eduRequire: '08',
+              recruitNum: '@string("number", 1,4)',
+              corpName: '上海新移力自动化科技有限公司',
+              cid: '201002025628331',
+              workYearNeed: '05',
+              releaseTime: '@datetime', //'2021-12-10 10:44:36',
+              'tranBaseSymbol|1': ['0', '1'],
+              'agencyRecruit|1': ['0', '1'],
+              entrustCorpName: '上海新移力自动化科技有限公司',
+              releaseUserId: '0000941012',
+              type: '1',
+              'favor|1': [false, true],
+              'applyFor|1': [false, true],
+              'recruitType|1': ['1', '2'],
+              entrustTyshxym: '',
+              corpId: '201002025628331',
+              positionType: '0201',
+              ageMax: '35',
+              ageMin: '18',
+              workAddress: '上海市普陀区中江路889号804室',
+              workHour: '01',
+              salaryMax: '20000',
+              salaryMin: '6000',
+              salaryPayType: '04',
+              special: '0',
+              describe: '嘴皮子溜，脸皮子厚',
+              onTop: '0',
+              releaseStatusId: '2',
+              'corpNature|1': ['01', '02'],
+              'industryType|1': ['01', '02']
+            }
+          ]
+        })
       }
     };
   }

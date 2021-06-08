@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-21 17:48:09
+ * @LastEditTime: 2021-06-08 14:59:19
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -20,4 +20,9 @@ const queryActivies = params =>
 const queryJyjxJdInfo = params =>
   postAction(basePath + '/corp/position/query-jyjxJdInfo-positionshow', params);
 
-export { queryTable, queryActivies, queryJyjxJdInfo };
+/***不需要登录的接口***/
+//我要求职
+const queryJobs = params =>
+  postAction(basePath + '/nologin/applyfor/queryPositionList', params);
+
+export { queryTable, queryActivies, queryJyjxJdInfo, queryJobs };

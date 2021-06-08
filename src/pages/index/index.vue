@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-21 17:47:25
+ * @LastEditTime: 2021-06-08 16:50:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
@@ -10,9 +10,9 @@
   <div id="indexApp" class="index-scroll">
     <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
-    <transition name="fade">
-      <router-view></router-view>
-    </transition>
+    <!-- <transition name="fade"> -->
+    <router-view></router-view>
+    <!-- </transition> -->
     <el-backtop target=".index-scroll"></el-backtop>
   </div>
 </template>
