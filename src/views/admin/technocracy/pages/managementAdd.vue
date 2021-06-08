@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-06-03 13:47:03
+ * @LastEditTime: 2021-06-08 14:25:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -41,13 +41,13 @@
                 :limit="1"
                 :show-file-list="false"
               >
-                <template v-if="disabled">
+                <template v-if="form.psnlPhotoBase64">
                   <img
                     :src="'data:image/png;base64,' + form.psnlPhotoBase64"
                     class="avatar"
                   />
                 </template>
-                <template v-if="!disabled">
+                <template v-if="!form.psnlPhotoBase64">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </template>
@@ -250,18 +250,6 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="管理所属区" prop="districtCode">
-              <el-select v-model="form.districtCode" style="width:100%">
-                <el-option
-                  v-for="(v, k) in dicOptions.qx"
-                  :key="k"
-                  :label="v.label"
-                  :value="v.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col> -->
         </el-row>
 
         <el-row>
@@ -299,6 +287,94 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="24">
+            <el-form-item label="申请人满足的准入条件" prop="approvalEntry">
+              <el-checkbox-group v-model="form.approvalEntry">
+                <el-checkbox
+                  v-for="(v, k) in dicOptions.entry"
+                  :key="k"
+                  :label="v.value"
+                  :value="v.value"
+                  name="type"
+                  >{{ v.label }}</el-checkbox
+                >
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item
+              label="申请人适合提供的服务内容"
+              prop="serviceContent"
+            >
+              <el-checkbox-group v-model="form.serviceContent">
+                <el-checkbox
+                  v-for="(v, k) in dicOptions.content"
+                  :key="k"
+                  :label="v.value"
+                  :value="v.value"
+                  name="type"
+                  >{{ v.label }}</el-checkbox
+                >
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="申请人所熟悉的行业类型" prop="industryType">
+              <el-checkbox-group v-model="form.industryType">
+                <el-checkbox
+                  v-for="(v, k) in dicOptions.industry"
+                  :key="k"
+                  :label="v.value"
+                  :value="v.value"
+                  name="type"
+                  >{{ v.label
+                  }}<el-input
+                    style="margin-left:5px"
+                    size="mini"
+                    v-if="v.value == '14'"
+                    v-model="form.industryTypeOther"
+                    placeholder="请输入内容"
+                  ></el-input
+                ></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item
+              label="申请人所擅长的专业领域"
+              prop="professionalField"
+            >
+              <el-checkbox-group v-model="form.professionalField">
+                <el-checkbox
+                  v-for="(v, k) in dicOptions.professional"
+                  :key="k"
+                  :label="v.value"
+                  :value="v.value"
+                  name="type"
+                  >{{ v.label
+                  }}<el-input
+                    style="margin-left:5px"
+                    size="mini"
+                    v-if="v.value == '09'"
+                    v-model="form.professionalFieldOther"
+                    placeholder="请输入内容"
+                  ></el-input
+                ></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="其他说明事项" prop="otherMemo">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 7 }"
+                maxlength="500"
+                v-model="form.otherMemo"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="16">
             <el-form-item label="签字后的登记表">
               <template v-if="disabled">
@@ -332,6 +408,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+
         <div v-if="!disabled" style="text-align:center">
           <el-button type="primary" @click="onSubmit">保存</el-button>
         </div>
@@ -354,6 +431,22 @@ export default {
       imageUrl: '',
 
       dicOptions: {
+        //专家准入条件
+        entry: trim(
+          this.$store.getters['dictionary/recruit_expert_approval_entry_type']
+        ),
+        //专家服务内容
+        content: trim(
+          this.$store.getters['dictionary/recruit_expert_service_content_type']
+        ),
+        //专家行业类型
+        industry: trim(
+          this.$store.getters['dictionary/recruit_expert_industry_type']
+        ),
+        //专家专业领域类型
+        professional: trim(
+          this.$store.getters['dictionary/recruit_expert_professional_type']
+        ),
         //性别
         sex: trim(this.$store.getters['dictionary/ggjbxx_sex']),
         //民族
@@ -391,6 +484,22 @@ export default {
         timeday: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         bankId: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         bankaccount: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+
+        approvalEntry: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        serviceContent: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        industryType: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        professionalField: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        otherMemo: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ]
       }
@@ -479,19 +588,29 @@ export default {
             if (!this.form.otherTime) {
               this.$message({
                 message: '请填写其他时间',
-                type: 'warning',
-                duration: 1000
+                type: 'warning'
               });
               return;
             }
           }
           let data = { ...this.form };
-          data.psnlPhotoBase64 = data.psnlPhotoBase64
-            ? data.psnlPhotoBase64.split(',')[1].toString()
-            : '';
+          if (!data.psnlPhotoBase64) {
+            this.$message({
+              message: '请上传证件照',
+              type: 'warning'
+            });
+            return;
+          }
+          data.psnlPhotoBase64 = data.psnlPhotoBase64.split(',')[1].toString();
+
           data.formImageBase64 = data.formImageBase64
             ? data.formImageBase64.split(',')[1].toString()
             : '';
+
+          data.approvalEntry = data.approvalEntry.toString();
+          data.serviceContent = data.serviceContent.toString();
+          data.industryType = data.industryType.toString();
+          data.professionalField = data.professionalField.toString();
           joinTeam_add(
             data,
 
@@ -541,6 +660,9 @@ export default {
       }
       return true;
     }
+  },
+  mounted() {
+    console.log(this.form);
   },
   created() {}
 };

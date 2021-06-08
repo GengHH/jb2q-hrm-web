@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:12:37
- * @LastEditTime: 2021-06-04 18:14:27
+ * @LastEditTime: 2021-06-07 13:55:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\userDetails.vue

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-06-04 09:58:07
+ * @LastEditTime: 2021-06-07 15:29:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -69,6 +69,7 @@
           :label="column.title"
           :align="column.align"
           :width="column.width"
+          :sortable="column.sortable"
           :show-overflow-tooltip="true"
         >
           <template slot-scope="scope">

@@ -3,7 +3,7 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 16:19:42
+ * @LastEditTime: 2021-06-08 11:14:33
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -147,9 +147,29 @@ const getters = {
   recruit_applyfor_source: state => state.RECRUIT_APPLYFOR_SOURCE,
   recruit_feedback_status: state => state.RECRUIT_FEEDBACK_STATUS,
   recruit_feedback_source: state => state.RECRUIT_FEEDBACK_SOURCE,
-  zyjs_zyzdzykh: state => state.ZYJS_ZYZDZYKH
+  zyjs_zyzdzykh: state => state.ZYJS_ZYZDZYKH,
+
+  recruit_expert_professional_type: state =>
+    state.RECRUIT_EXPERT_PROFESSIONAL_TYPE,
+  recruit_expert_industry_type: state => state.RECRUIT_EXPERT_INDUSTRY_TYPE,
+  recruit_expert_service_content_type: state =>
+    state.RECRUIT_EXPERT_SERVICE_CONTENT_TYPE,
+  recruit_expert_approval_entry_type: state =>
+    state.RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE
 };
 const mutations = {
+  set_RECRUIT_EXPERT_PROFESSIONAL_TYPE: (state, dictionary) => {
+    state.RECRUIT_EXPERT_PROFESSIONAL_TYPE = dictionary;
+  },
+  set_RECRUIT_EXPERT_INDUSTRY_TYPE: (state, dictionary) => {
+    state.RECRUIT_EXPERT_INDUSTRY_TYPE = dictionary;
+  },
+  set_RECRUIT_EXPERT_SERVICE_CONTENT_TYPE: (state, dictionary) => {
+    state.RECRUIT_EXPERT_SERVICE_CONTENT_TYPE = dictionary;
+  },
+  set_RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE: (state, dictionary) => {
+    state.RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE = dictionary;
+  },
   set_ZYJS_ZYZDZYKH: (state, dictionary) => {
     state.ZYJS_ZYZDZYKH = dictionary;
   },

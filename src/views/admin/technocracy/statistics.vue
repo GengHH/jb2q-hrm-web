@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-05-24 16:19:59
+ * @LastEditTime: 2021-06-07 17:37:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -12,9 +12,10 @@
         <el-col :span="12">
           <el-form-item label="开始年月">
             <el-date-picker
-              v-model="form.startMonth"
-              type="month"
-              start-placeholder="请选择开始年月"
+              v-model="form.Month"
+              type="monthrange"
+              start-placeholder="开始年月"
+              end-placeholder="结束月份"
               value-format="yyyyMM"
             >
             </el-date-picker>
@@ -65,7 +66,7 @@
       style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
     >
       支付费用合计：
-      <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}元</span>
+      <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}</span>
     </div>
     <div style="text-align:right;padding:5px 15px;">
       <el-button type="primary" @click="print()">打印</el-button>
@@ -81,7 +82,7 @@ const columnsArr = [
   [
     { title: '序号', type: 'index' },
     { title: '日期', prop: 'payMonth' },
-    { title: '支付费用', prop: 'payTotal' }
+    { title: '支付费用', prop: 'payTotal', sortable: true }
   ],
   [
     { title: '序号', type: 'index' },
@@ -91,7 +92,8 @@ const columnsArr = [
     { title: '银行账号', prop: 'bankaccount' },
     { title: '开户银行', prop: 'bankName' },
     { title: '服务时间', prop: 'actDate' },
-    { title: '支付费用', prop: 'payTotal' }
+    { title: '服务次数', prop: 'serviceCount' },
+    { title: '支付费用', prop: 'payTotal', sortable: true }
   ]
 ];
 export default {
@@ -150,10 +152,13 @@ export default {
     },
     onSubmit() {
       let data = { ...this.params, ...this.form };
-      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
-      if (data.startMonth) {
-        data.endMonth = data.startMonth;
+      if (data.Month) {
+        data.startMonth = data.Month[0];
+        data.endMonth = data.Month[1];
       }
+
+      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
+
       statistics_query(
         data,
         res => {
@@ -181,8 +186,42 @@ export default {
         for (let i = 0; i < list.length; i++) {
           val = val + (list[i][type] - 0);
         }
-        this.mouey = val;
+
+        this.mouey = this.digitUppercase(val);
       }
+    },
+    digitUppercase(n) {
+      var fraction = ['角', '分'];
+      var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+      var unit = [
+        ['元', '万', '亿'],
+        ['', '拾', '佰', '仟']
+      ];
+      var head = n < 0 ? '欠' : '';
+      n = Math.abs(n);
+      var s = '';
+      for (var i = 0; i < fraction.length; i++) {
+        s += (
+          digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]
+        ).replace(/零./, '');
+      }
+      s = s || '整';
+      n = Math.floor(n);
+      for (var i = 0; i < unit[0].length && n > 0; i++) {
+        var p = '';
+        for (var j = 0; j < unit[1].length && n > 0; j++) {
+          p = digit[n % 10] + unit[1][j] + p;
+          n = Math.floor(n / 10);
+        }
+        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+      }
+      return (
+        head +
+        s
+          .replace(/(零.)*零元/, '元')
+          .replace(/(零.)+/g, '零')
+          .replace(/^整$/, '零元整')
+      );
     }
   },
   mounted() {

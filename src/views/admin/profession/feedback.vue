@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 15:51:56
+ * @LastEditTime: 2021-06-08 15:10:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -220,6 +220,7 @@ export default {
             label: '本人指导',
             rules: [],
             key: 'selfGuide',
+
             data: [],
             options: [
               {
@@ -231,6 +232,19 @@ export default {
                 label: '否'
               }
             ]
+          },
+          {
+            style: { width: '210px', height: '108px', overflow: 'auto' },
+            type: 'tree',
+            label: '人员标签',
+            data: this.$store.state.admin.label,
+            id: 'labelId',
+            rules: [],
+            key: 'pointTypes',
+            defaultProps: {
+              children: 'labels',
+              label: 'labelName'
+            }
           }
         ]
       },
@@ -374,6 +388,9 @@ export default {
       );
     },
     advancedSearch(e) {
+      if (e.pointTypes.length) {
+        e.pointTypes = e.pointTypes.toString();
+      }
       //01政策  02专门
       if (this.activeName == '01') {
         this.queryPolicy(e);
@@ -397,6 +414,7 @@ export default {
       this.visible = true;
     }
   },
+  mounted() {},
   created() {}
 };
 </script>

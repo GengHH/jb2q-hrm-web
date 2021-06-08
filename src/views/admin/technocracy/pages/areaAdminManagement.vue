@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-06-03 16:49:08
+ * @LastEditTime: 2021-06-08 14:58:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
@@ -68,9 +68,9 @@
         align="center"
       >
         <template slot-scope="scope">
-          <!-- <el-button size="mini" type="primary" @click="look(scope, 1)" plain
+          <el-button size="mini" type="primary" @click="look(scope, 1)" plain
             >修改</el-button
-          > -->
+          >
           <el-button size="mini" type="info" @click="look(scope, 0)" plain
             >查看</el-button
           >
@@ -142,12 +142,7 @@
       <el-button type="primary" @click="renew"
         ><i class="el-icon-folder-add"></i>续聘</el-button
       >
-      <el-button
-        type="primary"
-        @click="
-          visible = true;
-          form = { ...initform };
-        "
+      <el-button type="primary" @click="add(2)"
         ><i class="el-icon-folder-add"></i>入团申请</el-button
       >
       <!-- <el-button
@@ -231,6 +226,22 @@ export default {
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 400 }
       ],
       dicOptions: {
+        //专家准入条件
+        entry: trim(
+          this.$store.getters['dictionary/recruit_expert_approval_entry_type']
+        ),
+        //专家服务内容
+        content: trim(
+          this.$store.getters['dictionary/recruit_expert_service_content_type']
+        ),
+        //专家行业类型
+        industry: trim(
+          this.$store.getters['dictionary/recruit_expert_industry_type']
+        ),
+        //专家专业领域类型
+        professional: trim(
+          this.$store.getters['dictionary/recruit_expert_professional_type']
+        ),
         //专家当前状态
         statusthisStatus: trim(
           this.$store.getters['dictionary/recruit_expert_curr_status']
@@ -246,7 +257,7 @@ export default {
         inline: true,
         size: 'small',
         labelPosition: 'right',
-        labelWidth: '100px',
+        labelWidth: '130px',
         style: {
           width: '100%',
           margin: '0 auto'
@@ -255,9 +266,8 @@ export default {
           {
             type: 'input',
             label: '姓名',
-            style: { width: '210px' },
+            style: { width: '180px' },
             placeholder: '请输入姓名',
-            rules: [],
             key: 'xm'
           },
 
@@ -265,17 +275,64 @@ export default {
             type: 'input',
             label: '证件号码',
             placeholder: '请输入证件号码',
-            style: { width: '210px' },
+            style: { width: '180px' },
             rules: [],
             key: 'zjhm'
+          },
+          {
+            type: 'select',
+            label: '区县',
+            style: { width: '180px' },
+            key: 'districtCode',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          },
+          {
+            type: 'select',
+            label: '学历',
+            style: { width: '180px' },
+            key: 'eduId',
+            options: trim(this.$store.getters['dictionary/recruit_edu'])
+          },
+          {
+            type: 'select',
+            label: '专家准入条件',
+            style: { width: '180px' },
+            key: 'approvalEntry',
+            options: trim(
+              this.$store.getters[
+                'dictionary/recruit_expert_approval_entry_type'
+              ]
+            )
+          },
+          {
+            type: 'select',
+            label: '专家服务内容',
+            key: 'serviceContent',
+            style: { width: '180px' },
+            options: trim(
+              this.$store.getters[
+                'dictionary/recruit_expert_service_content_type'
+              ]
+            )
+          },
+          {
+            type: 'select',
+            label: '专家行业类型',
+            style: { width: '180px' },
+            key: 'industryType',
+            options: trim(
+              this.$store.getters['dictionary/recruit_expert_industry_type']
+            )
+          },
+          {
+            type: 'select',
+            label: '专家专业领域类型',
+            style: { width: '180px' },
+            key: 'professionalField',
+            options: trim(
+              this.$store.getters['dictionary/recruit_expert_professional_type']
+            )
           }
-          // {
-          //   type: 'select',
-          //   label: '区县',
-          //   rules: [],
-          //   key: 'districtCode',
-          //   options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
-          // }
         ]
       },
       disabled: false,
@@ -309,13 +366,24 @@ export default {
         workday: '',
         weekend: '',
         otherTime: '',
-        bankId: ''
+        bankId: '',
+        approvalEntry: [],
+        serviceContent: [],
+        industryType: [],
+        industryTypeOther: '',
+        professionalField: [],
+        professionalFieldOther: '',
+        otherMemo: ''
       },
       dataList: {}
     };
   },
   computed: {},
   methods: {
+    add() {
+      this.form = { ...this.initform };
+      this.visible = true;
+    },
     onclose() {
       this.visible = false;
       this.disabled = false;
@@ -465,6 +533,10 @@ export default {
       if (type == '0') {
         this.disabled = true;
       }
+      this.form.approvalEntry = this.form.approvalEntry.split(',');
+      this.form.serviceContent = this.form.serviceContent.split(',');
+      this.form.industryType = this.form.industryType.split(',');
+      this.form.professionalField = this.form.professionalField.split(',');
       this.visible = true;
     },
     handleChange(e) {

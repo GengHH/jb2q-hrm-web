@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-28 16:19:05
+ * @LastEditTime: 2021-06-08 11:12:01
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -1229,6 +1229,57 @@ const dic = {
     { value: '2	', label: '职场定位、职业选择、转型等职业规划' },
     { value: '3	', label: '职场适应、求职障碍等职场心理' },
     { value: '4	', label: '其他求职（职业）困惑问题' }
+  ],
+  //专家准入条件
+  RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE: [
+    {
+      value: '01	',
+      label:
+        '在大型企业担任部门负责人以上职位；在中型企业担任副总经理以上职位；小微企业的负责人或创办人'
+    },
+    { value: '02	', label: '具有5年以上人力资源从业经历的资深人士' },
+    {
+      value: '03	',
+      label: '从事相关人力资源行业研究并具有副教授、副研究员及以上职称的人员'
+    },
+    { value: '04	', label: '从事媒体相关工作的资深专业人士' },
+    { value: '05	', label: '经区中心批准的符合其他相关条件的人员' }
+  ],
+  //专家服务内容
+  RECRUIT_EXPERT_SERVICE_CONTENT_TYPE: [
+    { value: '01	', label: '决策咨询' },
+    { value: '02	', label: '专业指导' },
+    { value: '03	', label: '项目策划' },
+    { value: '04	', label: '品牌推广' }
+  ],
+  //专家行业类型
+  RECRUIT_EXPERT_INDUSTRY_TYPE: [
+    { value: '01', label: '互联网/IT' },
+    { value: '02', label: '教育/培训' },
+    { value: '03', label: '广告/市场' },
+    { value: '04', label: '金融/投资' },
+    { value: '05', label: '贸易/物流' },
+    { value: '06', label: '生物/医药' },
+    { value: '07', label: '机械/设备' },
+    { value: '08', label: '餐饮/旅游' },
+    { value: '09', label: '物业/建筑' },
+    { value: '10', label: '服装/加工' },
+    { value: '11', label: '医护/保健' },
+    { value: '12', label: '种植/养殖' },
+    { value: '13', label: '文广/工艺' },
+    { value: '14', label: '其他' }
+  ],
+  //专家专业领域类型
+  RECRUIT_EXPERT_PROFESSIONAL_TYPE: [
+    { value: '01', label: '心理咨询' },
+    { value: '02', label: '品牌建设' },
+    { value: '03', label: '宣传策划' },
+    { value: '04', label: '学术研究' },
+    { value: '05', label: '数据分析' },
+    { value: '06', label: '法律法规' },
+    { value: '07', label: '职业测评' },
+    { value: '08', label: '人力资源管理' },
+    { value: '09', label: '其他' }
   ]
 };
 

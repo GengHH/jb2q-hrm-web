@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-06-04 18:13:47
+ * @LastEditTime: 2021-06-08 10:02:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -75,6 +75,14 @@
                 </ul>
               </div>
             </span>
+          </div>
+          <div style="margin-top:10px">
+            <el-tag
+              size="small"
+              v-for="(v0, k0) in keyPointLableDataList"
+              :key="k0"
+              >{{ v0.pointTypeName }}</el-tag
+            >
           </div>
         </div>
         <el-tabs v-model="activeName">
@@ -223,20 +231,51 @@
                         :multiple="true"
                         style="width:210px"
                         v-model="form.acts"
+                        @change="showActivity"
                       >
                         <el-option
                           v-for="(v, k) in activityList"
                           :key="k"
-                          :label="v.actName"
-                          :value="v.actId"
+                          :label="v.label"
+                          :value="v"
                         ></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="24" v-if="actList.length">
+                    <div v-for="(v, k) in actList" :key="k" class="actList">
+                      <el-row type="flex">
+                        <el-col :span="3"> {{ k + 1 }}.开始时间: </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{
+                            v.actStartTime.split(' ')[0]
+                          }}</span>
+                        </el-col>
+                        <el-col :span="3">
+                          活动地点:
+                        </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{ v.actAddress }}</span>
+                        </el-col>
+                        <el-col :span="3">
+                          主要内容:
+                        </el-col>
+                        <el-col :span="5">
+                          <span style="color:grey">{{ v.content }}</span>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </el-col>
                 </el-row>
               </div>
               <div v-if="this.detailsType != '1'" style="text-align:center">
-                <el-button type="primary" @click="onsubmit2">提交</el-button>
+                <el-button
+                  size="small"
+                  style="margin-top:10px"
+                  type="primary"
+                  @click="onsubmit2"
+                  >提交</el-button
+                >
               </div>
             </el-form>
           </el-tab-pane>
@@ -293,6 +332,8 @@ export default {
       }
     };
     return {
+      keyPointLableDataList: [],
+      actList: [],
       dialogTableVisible: false,
       pagelistIndex: 0,
       evList: {},
@@ -391,15 +432,22 @@ export default {
       formConfig2: {
         formItemList: [
           {
-            type: 'date',
+            type: 'radio',
             label: '是否关注',
-            format: 'yyyyMMdd',
-            style: { width: '210px' },
-            placeholder: '请输入指导时间',
-            rules: [
-              { required: true, message: '请输入指导时间', trigger: 'blur' }
-            ],
-            key: 'label'
+            rules: [],
+            key: 'isAttention',
+            options: [
+              {
+                value: '1',
+                label: '是',
+                disabled: false
+              },
+              {
+                value: '0',
+                label: '否',
+                disabled: false
+              }
+            ]
           },
           {
             type: 'date',
@@ -506,6 +554,17 @@ export default {
   },
   computed: {},
   methods: {
+    showActivity(e) {
+      if (e.length) {
+        e = e.map(e => {
+          e.value = e.actId;
+          e.label = e.actName;
+          return e;
+        });
+      }
+      this.form.acts = e;
+      this.actList = e;
+    },
     liClick(e) {
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
@@ -601,7 +660,8 @@ export default {
                   value: e.zjhm,
                   label: e.xm,
                   pid: e.pid,
-                  contactNumber: e.contactNumber
+                  contactNumber: e.contactNumber,
+                  keyPointLableDataList: e.keyPointLableDataList
                 };
               });
               this.orgOption = list;
@@ -636,7 +696,7 @@ export default {
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
       this.form.xm = e.label;
-
+      this.keyPointLableDataList = e.keyPointLableDataList;
       serve_record(
         { pid: e.pid },
         res => {
@@ -698,11 +758,17 @@ export default {
     },
     add(e) {
       console.log(e);
+
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
         return;
       }
       let data = { ...e, ...this.form };
+      //1是 0否
+      if (data.isAttention == '1') {
+        //10为特别关注人员
+        data.focusLabels.push({ labelId: 10 });
+      }
       if (data.acts) {
         data.acts = data.acts.map(e => {
           return { actId: e };
@@ -788,6 +854,11 @@ export default {
         if (res.status == 200) {
           let data = res.result.data.data;
           data = data.filter(e => e.release == '1');
+          data = data.map(e => {
+            e.value = e.actId;
+            e.label = e.actName;
+            return e;
+          });
           this.activityList = data;
         } else {
           this.message('warning', res.result.data.msg);
@@ -805,6 +876,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.actList {
+  .el-row:nth-of-type(odd) {
+    margin: 5px 0 5px 0;
+    padding: 5px 0 5px 0;
+    background: #ebebeb;
+  }
+}
 .fontColor {
   color: #787878;
   font-weight: bold;

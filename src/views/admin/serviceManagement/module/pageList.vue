@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-05-28 14:56:40
+ * @LastEditTime: 2021-06-07 10:00:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -239,7 +239,6 @@ export default {
       {
         url: '/common/person/query-jyjxRecordInfo',
         data: data
-        //url: '/common/person/query-jyjxRecordInfo?pid=201304119008900'
       },
       //简历投递及反馈记录 --
       {
