@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 10:25:23
+ * @LastEditTime: 2021-06-03 16:59:59
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -10,7 +10,7 @@
   <div id="indexBody">
     <el-row>
       <el-col :span="16">
-        <BaseSearch @clickButton="queryJobs($event)"></BaseSearch>
+        <BaseSearch @clickButton="queryResumes($event)"></BaseSearch>
       </el-col>
       <el-col :span="4" class="search-tip">
         剩余的搜索次数<span class="orange font-20">52</span
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.positionTypeList"
+              v-model="queryParams.industryList"
               size="medium"
               id="positionsRadios"
               class="radio-list-bar"
@@ -78,7 +78,7 @@
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.industry"
+              v-model="queryParams.industryList"
               size="medium"
               id="industryRadios"
               class="radio-list-bar"
@@ -122,7 +122,7 @@
           </el-col>
           <el-col :span="22">
             <div class="grid-content bg-purple filter-select">
-              <el-row>
+              <el-row style="border-bottom:0">
                 <el-col :span="4">
                   <el-input
                     id="minSalary"
@@ -196,7 +196,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.language"
+                  v-model="queryParams.languageType"
                   clearable
                   placeholder="外语语种"
                 >
@@ -208,7 +208,7 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="queryParams.certificate"
+                  v-model="queryParams.certName"
                   clearable
                   placeholder="技能证书"
                 >
@@ -233,10 +233,10 @@
     </div>
 
     <!-- E 筛选部分 -->
-    <!-- 查询结果 -->
-    <per-search-job
+    <!-- 查询结果old -->
+    <!-- <per-search-job
       v-if="queryResult.length"
-      ref="searchJobList"
+      ref="searchResumeList"
       :jobData="queryResult"
       :total="queryResultTotal"
       showPager
@@ -245,9 +245,9 @@
       @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
     ></per-search-job>
-    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <BaseLoadingSvg v-else></BaseLoadingSvg> -->
     <!-- 职位详细信息 弹窗部分 -->
-    <el-dialog
+    <!-- <el-dialog
       width="75%"
       :visible.sync="detailsDialog"
       :before-close="handleClose"
@@ -261,57 +261,315 @@
         @favorJob="favorJob(arguments)"
         @callPositionCorp="callPositionCorp(arguments)"
       ></job-details>
+    </el-dialog> -->
+    <!-- old -->
+    <!-- 查询结果new-->
+    <CorpSearchResume
+      v-if="queryResult.length"
+      ref="searchResumeList"
+      :jobData="queryResult"
+      :total="queryResultTotal"
+      showPager
+      @deliveryResume="deliveryResume(arguments)"
+      @favorResume="favorResume(arguments)"
+      @showResumeDetials="showResumeDetials(arguments)"
+      @callPositionCorp="callPositionCorp(arguments)"
+      @inviteDetials="inviteDetials(arguments)"
+    ></CorpSearchResume>
+    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <!-- 简历详细信息 弹窗部分 -->
+    <el-dialog
+      v-if="detailsDialog"
+      width="75%"
+      :visible.sync="detailsDialog"
+      :before-close="handleClose"
+    >
+      <div class="operate-resume-header">
+        <el-button size="small" round
+          ><i class="el-icon-star-on" v-if="queryFavor">已收藏</i>
+          <i class="el-icon-star-off" v-else>收藏</i> </el-button
+        ><el-button size="small" round
+          ><i class="el-icon-download">下载</i></el-button
+        ><el-button size="small" round
+          ><i class="el-icon-user">获取联系方式</i></el-button
+        >
+        <!-- <el-button size="small" round
+          ><i class="el-icon-el-icon-tickets" @click="invite"
+            >邀约</i
+          ></el-button
+        > -->
+      </div>
+      <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
     </el-dialog>
+    <!-- end -->
+
+    <!-- 邀约 弹窗部分 -->
+    <el-dialog
+      width="75%"
+      :visible.sync="inviteDialog"
+      :before-close="handleClose"
+    >
+      <div v-loading="inviteLoading">
+        <!-- 显示职位名称 -->
+        <div class="zw-wrap zw-wrap-header" style="width:100%">
+          <el-row :gutter="40" style="margin:0">
+            <el-col
+              :span="12"
+              class="zw-wrap-header-title"
+              style="line-height: 70px;"
+            >
+              职位列表信息<i class="header-icon el-icon-info"></i>
+            </el-col>
+            <el-col :span="12">
+              <BaseSearch
+                placeholder="请输入职位名称"
+                @clickButton="queryInvitePosition($event)"
+              ></BaseSearch>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          v-if="!invitePositionList.length"
+          class="zw-wrap zw-wrap-body"
+          style="text-align:center;padding:80px;color:#999;"
+        >
+          无职位数据
+        </div>
+        <div v-else class="zw-wrap zw-wrap-body">
+          <!-- 委托单位或者见习职位列表 -->
+          <el-carousel indicator-position="outside" :autoplay="false">
+            <el-carousel-item v-for="item in carouselPageCount" :key="item">
+              <div class="zw-carousel">
+                <el-radio-group
+                  v-model="invitePosition"
+                  size="medium"
+                  id="positionsRadios"
+                  class="radio-list-bar"
+                >
+                  <el-popover
+                    ref="popoverRef"
+                    v-for="(positionItem, index) in invitePositionPageList[
+                      item - 1
+                    ]"
+                    :key="index"
+                    placement="bottom"
+                    width="600"
+                    trigger="click"
+                    :append-to-body="false"
+                    popper-class="invite-position-popover"
+                  >
+                    <el-radio-button
+                      class="zw-radio-button"
+                      :key="positionItem.positionId"
+                      :label="positionItem.positionId"
+                      slot="reference"
+                    >
+                      {{ positionItem.positionName }}
+                      <!-- <span
+                        :id="positionItem.gwbh"
+                        :class="positionItem.cid"
+                        slot="reference"
+                        @click="
+                          radioGroupChange(
+                            positionItem.gwbm,
+                            positionItem.cid,
+                            positionItem.dwmc
+                          )">{{ positionItem.zwmc }}</span
+                      > -->
+                    </el-radio-button>
+                  </el-popover>
+                </el-radio-group>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+          <el-divider></el-divider>
+          <!-- 面试信息 -->
+          <el-form
+            class="width70"
+            :model="interview"
+            ref="interview"
+            :label-position="labelPosition"
+            :rules="rules.interview"
+          >
+            <!-- <el-form-item
+              label="反馈结果"
+              prop="interviewStatus"
+              :label-width="formLabelWidth"
+            >
+              <el-radio-group v-model="interview.interviewStatus" size="medium">
+                <el-radio-button >通知面试</el-radio-button
+                >
+                <el-radio-button label="04">意向录用</el-radio-button>
+                <el-radio-button label="05">通知不录用</el-radio-button>
+              </el-radio-group>
+            </el-form-item> -->
+            <el-row>
+              <el-col :span="12">
+                <el-form-item
+                  class="input-one"
+                  label="面试日期"
+                  :label-width="formLabelWidth"
+                  prop="interviewDate"
+                >
+                  <el-date-picker
+                    type="date"
+                    placeholder="面试日期"
+                    v-model="interview.interviewDate"
+                    value-format="yyyyMMdd"
+                    style="width: 100%;"
+                  ></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  class="input-two"
+                  label="面试时间"
+                  :label-width="formLabelWidth"
+                  prop="interviewTime"
+                >
+                  <el-time-picker
+                    placeholder="面试时间"
+                    v-model="interview.interviewTime"
+                    value-format="HHmmss"
+                    style="width: 100%;"
+                  ></el-time-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item
+              label="面试联系人"
+              prop="interviewContactName"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                v-model="interview.interviewContactName"
+                autocomplete="off"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="面试联系电话"
+              prop="interviewContactPhone"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                v-model="interview.interviewContactPhone"
+                autocomplete="off"
+                placeholder="请输入"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="面试地址"
+              prop="interviewAddress"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                type="textarea"
+                placeholder="请输入（40字符）"
+                v-model="interview.interviewAddress"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="备注"
+              prop="interviewRemarks"
+              :label-width="formLabelWidth"
+            >
+              <el-input
+                type="textarea"
+                placeholder="请输入（2000字符）"
+                v-model="interview.interviewRemarks"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="operate-resume-header" v-if="invitePositionList.length">
+          <el-button size="small" @click="invite()"
+            ><i class="el-icon-el-icon-tickets">邀约</i></el-button
+          >
+        </div>
+      </div>
+      <!-- end -->
+    </el-dialog>
+    <!-- end -->
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
-import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+// import PerSearchJob from '@/components/person/PerSearchJob.vue';
+// import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import CorpSearchResume from '@/components/corporation/CorpSearchResume.vue';
+import BaseResumeInfo from '@/components/common/BaseResumeInfo.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText } from '@/utils';
+import { phonePattern } from '@/utils/regexp';
 import {
   queryJobs,
-  doDeliveryResume,
-  doFavorJobs,
-  doUnfavorJobs
+  doDeliveryResume
+  // doFavorJobs,
+  // doUnfavorJobs
 } from '@/api/personApi';
+import {
+  queryResumeList,
+  queryPositionList,
+  doInvite,
+  getPersonContact
+} from '@/api/corporationApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
-    PerSearchJob,
-    JobDetails,
+    // PerSearchJob,
+    // JobDetails,
+    CorpSearchResume,
+    BaseResumeInfo,
     BaseLoadingSvg
   },
   data() {
     return {
+      labelPosition: 'right',
+      formLabelWidth: '150px',
       detailsIndex: null,
       detailsDialog: false,
+      inviteDialog: false,
       wchatDialog: false,
-      positionDetailsId: '',
-      queryParams: {
-        cid: this.$store.getters['corporation/cid'],
-        industry: [''],
-        positionTypeList: [''],
-        workNature: '',
-        workYearNeed: '',
-        workArea: '',
+      queryParams1: {
+        // cid: this.$store.getters['corporation/cid'],
+        // industry: [''],
+        // positionTypeList: [''],
+        // workNature: '',
+        // //workYearNeed: '',
+        // workArea: '',
         eduRequire: '',
         tranBaseSymbol: '0',
-        special: '',
+        // //special: '',
         agencyRecruit: '0',
-        salaryMin: '',
-        salaryMax: '',
+        // salaryMin: '',
+        // salaryMax: '',
         ageMin: '',
-        ageMax: '',
-        workHour: '',
-        positionName: '',
-        corpName: '',
-
-        language: '',
-        certificate: ''
+        ageMax: ''
+        ////workHour: '',
+        //content: '',
+        ////corpName: '',
+        // languageType: '',
+        // certName: ''
+      },
+      queryParams: {
+        cid: this.$store.getters['corporation/cid'],
+        content: '',
+        invitePositionList: [''],
+        industryList: [''],
+        workNature: '',
+        salaryMax: '',
+        salaryMin: '',
+        workArea: '',
+        eduLevel: '',
+        majorName: '',
+        languageType: '',
+        certName: '',
+        ageMin: '',
+        ageMax: ''
       },
       options: [],
       tableData: [],
@@ -320,14 +578,78 @@ export default {
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
-      tpOptions: this.$store.getters['dictionary/recruit_special_people'],
+      // tpOptions: this.$store.getters['dictionary/recruit_special_people'],
       xlOptions: this.$store.getters['dictionary/recruit_edu'],
       //wtOptions: this.$store.getters['dictionary/yesno'],
       zyOptions: this.$store.getters['dictionary/recruit_position_f_type'],
       wyOptions: this.$store.getters['dictionary/recruit_language_type'],
       //bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       zsOptions: [],
-      jobList: []
+      queryPid: '',
+      queryFavor: false,
+      resumeIdDetailsId: '',
+      inviteLoading: false,
+      invitePosition: '',
+      carouselPageCount: 0,
+      invitePositionList: [
+        // {
+        //   cid: '12311234',
+        //   zwmc: '哈哈',
+        //   positionId: '1234123'
+        // }
+      ],
+      invitePositionPageList: [],
+      interview: {
+        // applyforIdList: [],
+        // applyforId: '',
+        // feedbackStatus: '',
+        interviewDate: '',
+        interviewTime: '',
+        interviewContactName: '',
+        interviewContactPhone: '',
+        interviewAddress: '',
+        interviewRemarks: ''
+      },
+      rules: {
+        interview: {
+          interviewDate: [
+            { required: true, message: '请输入面试日期', trigger: 'blur' }
+          ],
+          interviewTime: [
+            { required: true, message: '请输入面试时间', trigger: 'blur' }
+          ],
+          interviewContactName: [
+            { required: true, message: '请输入面试联系人', trigger: 'blur' }
+          ],
+          interviewContactPhone: [
+            { required: true, message: '请输面试联系电话', trigger: 'blur' },
+            {
+              pattern: phonePattern,
+              message: '请输入正确格式的手机号',
+              trigger: ['blur', 'change']
+            }
+          ],
+          interviewAddress: [
+            { required: true, message: '面试地址', trigger: 'blur' },
+            {
+              max: 40,
+              message: '最长不可超过40字符',
+              trigger: ['blur', 'change']
+            }
+          ],
+          // interviewStatus: [
+          //   { required: true, message: '反馈结果', trigger: 'blur' }
+          // ],
+          interviewRemarks: [
+            // { required: true, message: '备注', trigger: 'blur' },
+            {
+              max: 2000,
+              message: '最长不可超过2000字符',
+              trigger: ['blur', 'change']
+            }
+          ]
+        }
+      }
     };
   },
   computed: {
@@ -343,18 +665,18 @@ export default {
         );
       }
       return [];
-    },
-    onePosition() {
-      let that = this;
-      return this.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
     }
+    // onePosition() {
+    //   let that = this;
+    //   return this.positionDetailsId
+    //     ? this.queryResult.find(function(i) {
+    //         return i.positionId === that.positionDetailsId;
+    //       })
+    //     : {};
+    // }
   },
   watch: {
-    'queryParams.positionTypeList': function(val, oldVal) {
+    'queryParams.industryList': function(val, oldVal) {
       //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
       this._.throttle(() => {
         //监听选中的选项-修改样式
@@ -372,10 +694,36 @@ export default {
           });
         }
       }, 500)();
+    },
+    /**
+     * 职位信息分页
+     */
+    invitePositionList: function() {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (this.invitePositionList.length) {
+          this.invitePositionPageList = [];
+          let pageCount =
+            Math.floor(this.invitePositionList.length / 20) +
+            (this.invitePositionList.length % 20 > 0 ? 1 : 0);
+          for (let i = 1; i <= pageCount; i++) {
+            this.invitePositionPageList.push(
+              this.invitePositionList.slice((i - 1) * 20, i * 20)
+            );
+          }
+          console.log(this.invitePositionPageList);
+          this.carouselPageCount = pageCount;
+        } else {
+          //没有职位信息
+          this.invitePositionPageList = [];
+          this.carouselPageCount = 0;
+        }
+      }, 500)();
     }
   },
-  created() {
-    //this.queryJobs();
+  mounted() {
+    this.queryResumes();
   },
   methods: {
     minSalaryChange() {
@@ -443,10 +791,10 @@ export default {
         this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
-        this.$alert('年龄上线不得低于16周岁');
+        this.$alert('年龄上限不得低于16周岁');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax > 60) {
-        this.$alert('年龄下线不得超过60周岁');
+        this.$alert('年龄下限不得超过60周岁');
         this.queryParams.ageMax = '';
       } else if (
         this.queryParams.ageMin &&
@@ -460,33 +808,35 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.tranBaseSymbol = '0';
-      this.queryParams.agencyRecruit = '0';
-      this.queryParams.industry = [''];
-      this.queryParams.positionTypeList = [''];
+      //this.queryParams.tranBaseSymbol = '0';
+      //this.queryParams.agencyRecruit = '0';
+      this.queryParams.industryList = [''];
+      // this.queryParams.industryList = [''];
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
-    async queryJobs(val) {
+    /**
+     * 简历搜索
+     */
+    async queryResumes(val) {
       // if (!val) {
       //   this.$alert('请输入查询条件');
       //   return;
       // }
-
       let that = this;
       let params = this.$refs['queryJobFrom']?.model
         ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
         : this.queryParams;
-      params.positionName = $.trim(val);
-      that.queryParams.positionName = $.trim(val);
+      params.content = $.trim(val);
+      that.queryParams.content = $.trim(val);
       params.pageParam = {
         total: 0,
-        pageSize: that.$refs.searchJobList?.pageSize || 10,
-        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+        pageSize: that.$refs.searchResumeList?.pageSize || 10,
+        pageIndex: that.$refs.searchResumeList?.currentPage - 1 || 0
       };
       try {
         params.cid = that.$store.getters['corporation/cid'];
-        let result = await queryJobs(params);
+        let result = await queryResumeList(params);
         console.log('result', result);
         if (
           result.status === 200 &&
@@ -501,12 +851,12 @@ export default {
                 item.workArea
               );
             }
-            if (item.eduRequire) {
-              item.eduRequireText = getDicText(
-                that.$store.getters['dictionary/recruit_edu'],
-                item.eduRequire
-              );
-            }
+            // if (item.eduRequire) {
+            //   item.eduRequireText = getDicText(
+            //     that.$store.getters['dictionary/recruit_edu'],
+            //     item.eduRequire
+            //   );
+            // }
             if (item.workNature) {
               item.workNatureText = getDicText(
                 that.$store.getters['dictionary/recruit_work_nature'],
@@ -547,64 +897,142 @@ export default {
           .css('transform', 'rotate(180deg)');
       }
     },
-    showJobDetial(arg) {
-      //显示岗位详细信息
+    /**
+     * 显示简历详情
+     */
+    showResumeDetials(arg) {
       let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
+      //本条记录的简历编号
+      let resumeId = (arg && arg[1]) || '';
+      //本条记录的pid
+      let queryPid = (arg && arg[2]) || '';
+      //本条记录是不是已经收藏
+      let queryFavor = (arg && arg[3]) || false;
       this.detailsIndex = index;
       this.detailsDialog = true;
-      this.positionDetailsId = positionId;
+      this.resumeIdDetailsId = resumeId;
+      //查询简历信息，并显示
+      this.queryPid = queryPid;
+      this.queryFavor = queryFavor;
+      console.log(`queryPid:${queryPid}`);
     },
-    async deliveryResume(arg) {
+    /**
+     * 打开邀约界面
+     */
+    inviteDetials(arg) {
       let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      //投递简历
-      let res = await doDeliveryResume({
-        positionId: positionId,
-        cid: this.$store.getters['corporation/cid']
+      //本条记录的简历编号
+      let resumeId = (arg && arg[1]) || '';
+      //本条记录的pid
+      let queryPid = (arg && arg[2]) || '';
+      this.queryPid = queryPid;
+      //本条记录是不是已经收藏
+      let queryFavor = (arg && arg[3]) || false;
+      this.inviteDialog = true;
+      //只需首次查询所有职位信息
+      if (!this.invitePositionList.length) {
+        this.inviteLoading = true;
+        this.queryInvitePosition();
+      }
+    },
+    async queryInvitePosition(val) {
+      //查询职位信息
+      let queryRes = await queryPositionList({
+        cid: this.$store.getters['corporation/cid'],
+        positionName: val ? $.trim(val) : ''
       });
-      if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.queryResult.splice(index, 1);
-        this.$message({ type: 'success', message: '简历投递成功' });
-      } else {
-        this.$message({
-          type: 'error',
-          message: '简历投递失败'
-        });
+      if (queryRes && queryRes.status === 200) {
+        this.invitePositionList = queryRes.result.data || [];
+      } else if (queryRes) {
+        this.$message({ type: 'error', message: '无法获取职位信息' });
       }
+      this.inviteLoading = false;
     },
-    async favorJob(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let orginFavorType = arg[2];
-      if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
-          id: positionId,
-          cid: this.$store.getters['corporation/cid']
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          this.queryResult[index].favor = true;
-          this.$message({ type: 'success', message: '收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '收藏职位失败' });
-        }
-      } else {
-        //取消收藏职位
-        let res = await doUnfavorJobs({
-          id: positionId,
-          cid: this.$store.getters['corporation/cid']
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          this.queryResult[index].favor = false;
-          this.$message({ type: 'success', message: '取消收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '取消收藏职位失败' });
-        }
+    invite(arg) {
+      if (!this.invitePosition) {
+        this.$alert('请选择一个职位');
+        return;
       }
+      this.$refs.interview.validate(async valid => {
+        if (valid) {
+          let inviteRes = await doInvite({
+            pid: this.queryPid,
+            positionId: this.invitePosition,
+            ...this.interview
+          });
+          if (inviteRes && inviteRes.status === 200) {
+            this.$message({ type: 'success', message: '邀约成功' });
+            this.inviteDialog = false;
+            //TODO 按钮重置
+            //  this.queryResult[index].invite = true;
+          } else if (inviteRes) {
+            this.$message({ type: 'error', message: '邀约失败' });
+          }
+        }
+      });
     },
+    /**
+     * 投递简历 TODO (是不是换成邀请人员)
+     */
+    // async deliveryResume(arg) {
+    //   let index = arg[0];
+    //   let positionId = (arg && arg[1]) || '';
+    //   //投递简历
+    //   let res = await doDeliveryResume({
+    //     positionId: positionId,
+    //     cid: this.$store.getters['corporation/cid']
+    //   });
+    //   if (res && res.status === 200) {
+    //     // TODO 不显示本条数据
+    //     this.queryResult.splice(index, 1);
+    //     this.$message({ type: 'success', message: '简历投递成功' });
+    //   } else if (res) {
+    //     this.$message({
+    //       type: 'error',
+    //       message: '简历投递失败'
+    //     });
+    //   }
+    // },
+    /**
+     * 收藏简历 TODO
+     */
+    async favorResume(arg) {
+      this.$alert('此功能暂未开放，请稍后');
+      return;
+
+      // let index = arg[0];
+      // let positionId = (arg && arg[1]) || '';
+      // let orginFavorType = arg[2];
+      // if (!orginFavorType) {
+      //   let res = await doFavorJobs('2', {
+      //     id: positionId,
+      //     cid: this.$store.getters['corporation/cid']
+      //   });
+      //   if (res.status === 200) {
+      //     // 修改按钮状态
+      //     this.queryResult[index].favor = true;
+      //     this.$message({ type: 'success', message: '收藏职位成功' });
+      //   } else {
+      //     this.$message({ type: 'error', message: '收藏职位失败' });
+      //   }
+      // } else {
+      //   //取消收藏职位
+      //   let res = await doUnfavorJobs({
+      //     id: positionId,
+      //     cid: this.$store.getters['corporation/cid']
+      //   });
+      //   if (res.status === 200) {
+      //     // 修改按钮状态
+      //     this.queryResult[index].favor = false;
+      //     this.$message({ type: 'success', message: '取消收藏职位成功' });
+      //   } else {
+      //     this.$message({ type: 'error', message: '取消收藏职位失败' });
+      //   }
+      // }
+    },
+    /**
+     * 聊天 TODO
+     */
     callPositionCorp(arg) {
       console.log(arg);
       //! TODO显示聊天框
@@ -613,35 +1041,28 @@ export default {
     handleClose() {
       this.detailsDialog = false;
       this.wchatDialog = false;
+      this.inviteDialog = false;
     },
     industryGroupChange(newVal) {
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
-        this.queryParams.industry = [''];
+        this.queryParams.industryList = [''];
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
-        this.queryParams.industry = newVal.filter(item => item !== '');
+        this.queryParams.industryList = newVal.filter(item => item !== '');
       }
     },
     positionGroupChange(val) {
       let newVal = val;
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
-        this.queryParams.positionTypeList = [''];
+        this.queryParams.industryList = [''];
       } else if (newVal && newVal.length && newVal.length > 10) {
         this.$alert('最多只可选择10种职位');
         newVal.pop();
-        this.queryParams.positionTypeList = newVal;
+        this.queryParams.industryList = newVal;
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
-        this.queryParams.positionTypeList = newVal.filter(item => item !== '');
+        this.queryParams.industryList = newVal.filter(item => item !== '');
       } else if (!newVal.length) {
-        this.queryParams.positionTypeList = [''];
+        this.queryParams.industryList = [''];
       }
-    },
-    perfectResume() {
-      //完善简历
-      this.$router.push('/personInfo');
-    },
-    uploadResume() {
-      //上传简历
-      this.$alert('此功能暂时未开放，请稍候！');
     }
   }
 };
@@ -800,6 +1221,30 @@ export default {
   }
   .el-checkbox-button:first-child .el-checkbox-button__inner {
     border-left: 0;
+  }
+}
+.operate-resume-header {
+  width: 100%;
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 14px 0;
+}
+.zw-radio-button {
+  span {
+    border: 0;
+  }
+  &:first-child .el-radio-button__inner {
+    border-left: 0;
+  }
+}
+.el-carousel__item {
+  .zw-carousel {
+    margin: 0;
+    padding: 10px 60px 0;
+    .radio-list-bar {
+      height: 100%;
+      max-height: 100% !important;
+    }
   }
 }
 </style>

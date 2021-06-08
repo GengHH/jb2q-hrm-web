@@ -15,9 +15,9 @@ import { Notification } from 'element-ui';
 //let apiBaseUrl = 'localhost/ggzp-zzjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-zzjb-shrs';
 //let apiBaseUrl = 'localhost/ggzp-ywjb-shrs'; //  指向---->'http://10.5.102.171:8080/ggzp-ywjb-shrs';
 
-//let apiBaseUrl = 'localhost/new-pers-api'; //  指向---->'http://10.5.102.154:8080/ggzp-sjapp-shrs';
-//let apiBaseUrl = 'localhost/new-corp-api'; //  指向---->'http://10.5.102.154:8080/ggzp-zzjb-shrs';
-//let apiBaseUrl = 'localhost/new-admin-api'; //  指向---->'http://10.5.102.154:8080/ggzp-ywjb-shrs';
+//let apiBaseUrl = 'localhost/dev-pers-api'; //  指向---->'http://10.5.102.154:8080/ggzp-sjapp-shrs';
+//let apiBaseUrl = 'localhost/dev-corp-api'; //  指向---->'http://10.5.102.154:8080/ggzp-zzjb-shrs';
+//let apiBaseUrl = 'localhost/dev-admin-api'; //  指向---->'http://10.5.102.154:8080/ggzp-ywjb-shrs';
 
 //默认指向本地Mock数据服务
 let apiBaseUrl = '';
@@ -135,6 +135,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(response => {
   console.log('response', response);
   let _data = response.data;
+  //系统抛出异常返回的是html格式
   if (_data && typeof _data === 'string' && _data.includes('!DOCTYPE')) {
     if (_data.includes('请重新登录')) {
       Notification({
@@ -151,16 +152,19 @@ service.interceptors.response.use(response => {
       //清空数据痕迹
       localStorage.setItem('vuex', null);
     } else {
+      //去掉原始样式
+      let newData = _data.replace(/<td[^>]*>/gi, '<td>');
+      let _newData = newData.replace(/<table[^>]*>/gi, '<table>');
+      let __newDate = _newData.replace(/操作失败!/gi, '');
       Notification({
         title: '系统提示',
         type: 'error',
         dangerouslyUseHTMLString: true,
-        message: _data
+        message: __newDate
       });
-      //return Promise.reject('genghonghuiggggggggggggggggggggg');
     }
-    // 后台系统抛出异常时候
-    return Promise.reject('genghonghuiggggggggggggggggggggg');
+    // 后台系统抛出异常时候终止promise
+    //return Promise.reject(_data);
   }
   return _data;
 }, err);

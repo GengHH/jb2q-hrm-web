@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 15:28:11
+ * @LastEditTime: 2021-06-03 15:41:26
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -39,9 +39,20 @@ const getPersonBaseInfo = params =>
 //修改个人基本信息
 const updatePersonBaseInfo = params =>
   postAction(basePath + '/person/info/savePersonInfo', params);
+
 //搜索数据库中的已经发布的职位列表信息
 const queryJobs = params =>
   postAction(basePath + '/person/manage/find/position', params);
+//查询管理员推荐职位
+const queryRecommendJobs = params =>
+  postAction(basePath + '/person/recommend/queryRecommendList', params);
+//个人投递招聘会下的职位
+const queryRecommendDetai = params =>
+  postAction(basePath + '/person/recommend/doQueryRecommendDetail', params);
+
+// 更新工作年限
+const saveWorkYear = params =>
+  postAction(basePath + '/person/resume/save/workyear', params);
 //加载个人权限信息
 const loadPsnlPermissionsInfo = params =>
   getAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
@@ -75,6 +86,9 @@ const deleteSomeResume = params =>
 //个人投递简历
 const doDeliveryResume = params =>
   postAction(basePath + '/person/feedback/do-applyFor', params);
+//个人投递简历
+const doDeliveryResumeRecommend = params =>
+  postAction(basePath + '/person/recommend/doApplyFor', params);
 //个人收藏单位or职位
 const doFavorJobs = (type, params) =>
   postAction(basePath + '/person/manage/find/do-favor/' + type, params);
@@ -100,17 +114,62 @@ const queryPositionStarList = params =>
   getAction(basePath + '/person/feedback/position/findFavorRecord', params);
 
 //根据不同状态获取简历投递记录
-const findRecord = (type, params) =>
-  getAction(basePath + '/person/feedback/' + type + '/findRecord', params);
+// const findRecord = (type, params) =>
+//   getAction(basePath + '/person/feedback/' + type + '/findRecord', params);
+const findRecord = params =>
+  postAction(basePath + '/person/feedback/find/applyfor', params);
+//反馈
+const doFeedBack = params =>
+  postAction(basePath + '/person/feedback/do-interView', params);
 //评价职位
 const doEvaluateJob = params =>
-  putAction(basePath + '/person/feedback/do-evaluate', params);
+  postAction(basePath + '/person/feedback/do-evaluate', params);
+//查询职位评价内容
+const queryEvaluateList = params =>
+  postAction(basePath + '/person/feedback/query-evaluation', params);
 
 //发送验证码
 const sendSms = params => postAction(basePath + '/person/info/sendSms', params);
 //修改手机号
 const updatePhoneNum = params =>
   postAction(basePath + '/person/info/updatePhoneNum', params);
+
+/*********招聘会**********/
+// 查询招聘会list
+const queryMeetingList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingList', params);
+// 查询某个招聘会详细信息
+const queryMeetingSchedule = params =>
+  postAction(basePath + '/person/meeting/queryMeetingSchedule', params);
+//招聘会下所有的单位信息
+const queryMeetingCorporationList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingCorporationList', params);
+//招聘会下单位的所有职位信息
+const queryCorpPositionList = params =>
+  postAction(basePath + '/person/meeting/doSearchCorpPositionList', params);
+//招聘会下所有的职位信息
+const queryMeetingPositionList = params =>
+  postAction(basePath + '/person/meeting/queryMeetingPositionList', params);
+//查询招聘会职位明细信息
+const queryCorporationPositionInfo = params =>
+  postAction(basePath + '/person/meeting/queryCorporationPositionInfo', params);
+//个人投递招聘会下的职位
+const doApplyFor = params =>
+  postAction(basePath + '/person/meeting/doApplyFor', params);
+
+/*********end**********/
+/*********招聘会**********/
+// 查询招聘会list
+const queryActivityList = params =>
+  postAction(
+    basePath + '/person/activity/queryPersonSpecialActivityList',
+    params
+  );
+//个人投递招聘会下的职位
+const doApplyActivity = params =>
+  postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
+
+/*********end**********/
 
 export {
   doSend,
@@ -129,17 +188,32 @@ export {
   savePsnlEvaluate,
   deleteSomeResume,
   queryJobs,
+  queryRecommendJobs,
+  queryRecommendDetai,
   updatePersonalPermissions,
   doFavorJobs,
   doUnfavorJobs,
   doDeliveryResume,
+  doDeliveryResumeRecommend,
   queryShieldList,
   doShieldCorp,
   doCancelShield,
   queryCorpStarList,
   queryPositionStarList,
   findRecord,
+  doFeedBack,
   doEvaluateJob,
+  queryEvaluateList,
   updatePhoneNum,
-  sendSms
+  sendSms,
+  saveWorkYear,
+  queryMeetingList,
+  queryMeetingSchedule,
+  queryMeetingCorporationList,
+  queryCorpPositionList,
+  queryMeetingPositionList,
+  queryCorporationPositionInfo,
+  doApplyFor,
+  queryActivityList,
+  doApplyActivity
 };

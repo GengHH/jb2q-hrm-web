@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-23 10:03:38
+ * @LastEditTime: 2021-05-13 10:04:58
  * @Description: 职位评价子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobEvaluation.vue
 -->
@@ -10,25 +10,26 @@
   <div id="jobEvaluation">
     <div class="title-style">职位评价</div>
     <el-row>
-      <el-col :span="12">
-        <!-- <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
-          >删除</pl-button
-        >
-        <pl-button class="orange-btn" icon="el-icon-thumb" @click="publickJob"
-          >发布</pl-button
-        > -->
-      </el-col>
+      <el-col :span="12"> </el-col>
       <el-col :span="12">
         <BaseSearch @clickButton="queryJobEvaluationList($event)"></BaseSearch>
       </el-col>
     </el-row>
-    <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
+    <pl-table
+      :data="tableData"
+      :totalCount="totalCount"
+      ref="jobTable"
+      :columns="columns"
+      show-pager
+      @handleSizeChangeOnBack="queryJobEvaluationList"
+      @handleCurrentChangeOnBack="queryJobEvaluationList"
+    >
       <template #date="{row}">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ row.date }}</span>
+        <span style="margin-left: 10px">{{ row.evaluationTime }}</span>
       </template>
       <template #star="{row}">
-        <el-rate disabled v-model="row.star"></el-rate>
+        <el-rate disabled v-model="row.evaluationLevel"></el-rate>
       </template>
     </pl-table>
   </div>
@@ -36,6 +37,7 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
+import { queryEvaluateList } from '@/api/personApi';
 export default {
   name: 'jobEvaluation',
   components: {
@@ -43,78 +45,15 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          id: '1',
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          id: '2',
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 1,
-          actions: ['action1']
-        },
-        {
-          id: '3',
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '家',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          id: '4',
-          date: '2019-05-02',
-          star: 3,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1']
-        },
-        {
-          id: '5',
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '公司',
-          status: 0,
-          actions: ['action1']
-        }
-      ]
+      positioName: '',
+      totalCount: 0,
+      tableData: []
     };
   },
   computed: {
     columns() {
       return [
-        { attrs: { type: 'selection' } },
+        // { attrs: { type: 'selection' } },
         {
           label: '序号',
           attrs: { type: 'index', width: 60 },
@@ -125,23 +64,27 @@ export default {
         },
         {
           label: '单位名称',
-          prop: 'positionName',
+          prop: 'corpName',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
         {
           label: '职位名称',
-          prop: 'name',
+          prop: 'positionName',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
-        { label: '评分星级', prop: 'star', slotName: 'star' },
+        { label: '评分星级', prop: 'evaluationLevel', slotName: 'star' },
         {
           label: '评价内容',
-          prop: 'age',
+          prop: 'evaluationContent',
+          attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
         {
           label: '评价时间',
-          prop: 'date',
+          prop: 'evaluationTime',
+          attrs: { showOverflowTooltip: true },
           formatter: 'date',
           slotName: 'date'
         }
@@ -151,19 +94,27 @@ export default {
       return this.$refs.jobTable.multipleSelection;
     }
   },
+  mounted() {
+    this.queryJobEvaluationList();
+  },
   methods: {
     queryJobEvaluationList(val) {
-      console.log(val);
-      this.$alert('暂时没有此Api接口，请稍后！');
-      // let that = this;
-      // if (this.selection && this.selection.length == 0) {
-      //   this.$alert('请选择一条');
-      // } else {
-      //   // TODO 删除数据
-      //   that.tableData = that.tableData.filter(
-      //     obj => !that.selection.some(i => obj.id === i.id)
-      //   );
-      // }
+      this.filter = val;
+      queryEvaluateList({
+        pid: this.$store.getters['person/pid'],
+        filter: this.filter,
+        pageParam: {
+          pageSize: this.$refs.jobTable.pageSize || 10,
+          pageIndex: this.$refs.jobTable.currentPage - 1 || 0
+        }
+      }).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this.tableData = queryRes.result.pageresult.data || [];
+          this.totalCount = queryRes.result.pageresult.total || [];
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
     }
   }
 };

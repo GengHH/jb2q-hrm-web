@@ -90,14 +90,14 @@
         v-model="corpActiveName"
         @tab-click="corpHandleClick"
       >
-        <el-tab-pane label="推荐企业" name="corpRecommended">
+        <el-tab-pane label="人力资源旗舰店" name="corpRecommended">
           <BaseInfoGloriette
-            :info-list="showList"
+            :info-list="showQjdList"
             :col-num="4"
             :template-name="'corp'"
           ></BaseInfoGloriette>
         </el-tab-pane>
-        <el-tab-pane label="人力资源机构" name="corpInstitution">
+        <el-tab-pane label="推荐企业" name="corpInstitution">
           <BaseInfoGloriette
             :info-list="showList"
             :col-num="4"
@@ -146,6 +146,12 @@ export default {
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
+      showQjdList: [
+        {
+          id: '100',
+          zl: true
+        }
+      ],
       showList: [
         {
           id: '6',
@@ -228,7 +234,7 @@ export default {
       this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'person');
       //this.$alert('个人登录暂时未开放');
       // this.axios
-      //   .get('new-corp-api/loginController/ywtb-index')
+      //   .get('dev-corp-api/loginController/ywtb-index')
       //   .then(res => {
       //     console.log(res);
       //   })

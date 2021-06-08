@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-04-13 15:25:56
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-16 10:27:27
+ * @LastEditTime: 2021-05-18 18:52:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseMap.vue
 -->
@@ -10,7 +10,7 @@
   <div id="myMap">
     <baidu-map class="map" :center="center" :zoom="zoom" @ready="handler">
       <bm-navigation anchor="BMAP_ANCHOR_BOTTOM_RIGHT"></bm-navigation>
-      <bm-panorama></bm-panorama>
+      <bm-panorama style="margin-top:100px"></bm-panorama>
       <template v-if="!pointList.length">
         <bm-marker
           v-for="(item, index) in markPoint"
@@ -153,5 +153,8 @@ export default {
     margin: 20px;
     padding: 10px 20px;
   }
+}
+.anchorTR {
+  margin-top: 50px;
 }
 </style>

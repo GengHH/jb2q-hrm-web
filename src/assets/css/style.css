@@ -238,10 +238,20 @@ body {
 
   border-color: #ff9954 !important;
 }
+.gray-btn {
+  color: #999 !important;
+  background-color: #fff !important;
+  border-color: #999 !important;
+}
 .white-btn {
   color: #fc6f3d !important;
   background-color: #fff !important;
   border-color: #ff9954 !important;
+}
+.red-btn {
+  color: #fff !important;
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
 }
 .brown-btn {
   color: #fff !important;
@@ -287,6 +297,9 @@ body {
   border-bottom: 0 !important;
 }
 
+.el-popconfirm__main {
+  margin: 10px 0;
+}
 /* .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
   outline: 0;
@@ -321,6 +334,6 @@ body {
   transition-delay: 0s;
 }
 
-.requiredSymbol{
-  color:red;
+.requiredSymbol {
+  color: red;
 }

@@ -1,14 +1,14 @@
 <!--
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-28 15:34:37
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-05-13 10:38:16
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
 <template>
   <div id="app" style="width:100%;height:100%">
-    <el-container style="height:100%">
+    <div style="height:100%">
       <el-header height="60px" style="padding:0">
         <div id="indexHeader">
           <el-row>
@@ -35,14 +35,17 @@
           </el-row>
         </div>
       </el-header>
-      <el-container>
-        <el-aside :style="{ width: (isCollapse ? '64' : '300') + 'px' }">
+      <div style="height:100%">
+        <el-aside
+          calss="menu-transition"
+          :style="{ width: (isCollapseTemp ? '64' : '300') + 'px' }"
+        >
           <div style="text-align: center;margin-top:5px">
             <el-button
               size="mini"
               :icon="isCollapse ? 'el-icon-caret-right' : 'el-icon-caret-left'"
               circle
-              @click="isCollapse = !isCollapse"
+              @click="collapseMenu"
             ></el-button>
           </div>
           <el-menu
@@ -86,7 +89,10 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-container>
+        <el-container
+          id="adminContainer"
+          :style="{ left: (isCollapse ? '64' : '300') + 'px' }"
+        >
           <el-main style="padding:5px">
             <div class="title-style">{{ $route.name }}</div>
             <div
@@ -102,8 +108,8 @@
             </div>
           </el-main>
         </el-container>
-      </el-container>
-    </el-container>
+      </div>
+    </div>
     <el-drawer
       title="操作"
       size="350px"
@@ -131,6 +137,8 @@
  */
 import { loginControlle } from './api/index';
 import apiUrlConfig from '@/config';
+import { niceScroll } from '@/utils';
+import { removeWatermark, setWaterMark } from '@/utils/watermark';
 export default {
   name: 'app',
   components: {},
@@ -138,6 +146,7 @@ export default {
     return {
       screenWidth: document.documentElement.clientWidth, //屏幕宽度
       isCollapse: false,
+      isCollapseTemp: false,
       drawerType: '0',
       drawer: false,
       menuList: [],
@@ -204,7 +213,17 @@ export default {
       });
     },
     handleOpen() {},
-    handleClose() {}
+    handleClose() {},
+    collapseMenu() {
+      this.isCollapseTemp = !this.isCollapse;
+      if (!this.isCollapse) {
+        setTimeout(() => {
+          this.isCollapse = !this.isCollapse;
+        }, 500);
+      } else {
+        this.isCollapse = !this.isCollapse;
+      }
+    }
   },
   computed: {
     height() {
@@ -232,14 +251,34 @@ export default {
     });
     let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
     this.menuList = datas[0].childs;
+    niceScroll('.el-aside');
+    //添加水印
+    setWaterMark(
+      this.$store.state.admin.userInfo.logonUser.userIdStr,
+      this.$store.state.admin.userInfo.logonUser.userName
+    );
   },
-  created() {
-    console.log(this.$store.state);
+  created() {},
+  destroyed() {
+    //消除水印
+    removeWatermark();
   }
 };
 </script>
 
 <style lang="scss" scoped>
+#adminContainer {
+  position: absolute;
+  float: right;
+  right: 0px;
+  top: 0px;
+  //left: 300px;
+  padding-top: 60px;
+}
+.el-aside {
+  height: 100%;
+  transition: width 1s ease-out;
+}
 .title-style {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.8);

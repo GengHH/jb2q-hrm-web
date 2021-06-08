@@ -1,10 +1,10 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-04-29 17:04:16
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-12 19:40:33
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
- * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\recruitment.vue
+ * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
 -->
 <template>
   <div id="indexBody">
@@ -142,8 +142,7 @@ export default {
   methods: {
     audit(e) {
       this.form = e.row;
-
-      this.form.cid = '201002025628331';
+      this.form.cid = e.row.cid || '';
       this.visible = true;
     },
     edit(e) {

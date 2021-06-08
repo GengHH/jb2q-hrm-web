@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-14 16:56:49
+ * @LastEditTime: 2021-06-07 18:34:47
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -19,7 +19,7 @@ import { VueAxios } from '@/utils/httpService';
 import '@/auth/permission';
 import '@/utils/placeholderPolyfill';
 import _ from 'lodash';
-import { isNoBody, isPerson, isCorporation } from '@/utils';
+import { isNoBody, isPerson, isCorporation, isAdmin } from '@/utils';
 import config from '@/config';
 import BaseLoadingButton from '@/components/common/BaseLoadingButton';
 import BaseLabelInput from '@/components/common/BaseLabelInput.vue';
@@ -46,17 +46,23 @@ const vm = new Vue({
   template: '<App/>',
   components: { App }
 });
-if (isNoBody(vm)) {
+
+if (isAdmin(vm)) {
+  vm.$alert('已有管理员登录本系统，请先退出登录');
+  setTimeout(() => {
+    window.location.href = '/ggzp-shrs/index.html';
+  }, 2000);
+} else if (isNoBody(vm)) {
   vm.$mount('#app');
 } else if (isPerson(vm) && store.getters.priorityLoginType !== 'corporation') {
   window.location.href = '/ggzp-shrs/person.html';
 } else if (isCorporation(vm) && store.getters.priorityLoginType !== 'person') {
   window.location.href = '/ggzp-shrs/corporation.html';
 } else {
-  if (store.getters.priorityLoginType === 'corporation') {
+  if (isPerson(vm)) {
     vm.$alert('已有个人登录本系统，请先退出登录');
   }
-  if (store.getters.priorityLoginType === 'person') {
+  if (isCorporation(vm)) {
     vm.$alert('已有单位登录本系统，请先退出登录');
   }
   setTimeout(() => {

@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-04-26 10:09:58
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-05 17:06:41
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
 -->
 <template>
@@ -231,7 +231,7 @@
       </el-form-item>
     </template>
     <el-row v-if="!formConfig.isBtn">
-      <el-col :span="24" style="text-align:center">
+      <el-col :span="24" style="text-align:right">
         <el-form-item>
           <template v-if="formConfig.operation">
             <el-button type="primary" @click="onSubmit">

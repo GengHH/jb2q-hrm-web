@@ -294,7 +294,7 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]

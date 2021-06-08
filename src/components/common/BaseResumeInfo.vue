@@ -6,6 +6,7 @@
       <div id="baseInfo" class="title-style font-or font-bold">
         基本信息
         <!-- <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -27,16 +28,52 @@
             class="el-icon-female sixteen-opacity"
             v-else-if="resume.sex === '女'"
           ></i>
+          <span class="sixteen-opacity"
+            >工作经验
+            <span
+              v-if="
+                resume.workYear !== null &&
+                  resume.workYear !== undefined &&
+                  resume.workYear !== ''
+              "
+            >
+              {{ resume.workYear }}
+            </span>
+            <span v-else>?</span>
+            年
+            <!-- <i class="el-icon-edit-outline" @click=""></i> -->
+            <el-popover
+              v-if="notConstResume"
+              placement="right"
+              width="100"
+              trigger="hover"
+              @show="openPop"
+              @hide="hidePop"
+            >
+              <el-input-number
+                v-model="workYear"
+                :min="0"
+                :max="100"
+                size="mini"
+                label="描述文字"
+              ></el-input-number>
+              <!-- <el-button slot="reference">click 激活</el-button> -->
+              <i
+                slot="reference"
+                style="color:#35e835"
+                class="el-icon-edit-outline"
+              ></i>
+            </el-popover>
+          </span>
         </p>
         <p class="fourteen-opacity mat-15">
-          <span v-if="resume.contactPhone"
+          <!-- <span v-if="resume.contactPhone"
             ><i class="icon iconfont">&#xe63d;</i>
             {{ resume.contactPhone }}年毕业</span
           >
-          <el-divider direction="vertical"></el-divider>
-          <span v-if="resume.contactPhone"
-            ><i class="icon iconfont">&#xe641;</i>
-            {{ resume.contactPhone }}</span
+          <el-divider direction="vertical"></el-divider> -->
+          <span v-if="resume.eduLevel"
+            ><i class="icon iconfont">&#xe641;</i> {{ highEduLevel }}</span
           >
           <el-divider direction="vertical"></el-divider>
           <span v-if="resume.contactPhone"
@@ -53,6 +90,7 @@
       <div id="jobIntention" class="title-style font-or font-bold">
         求职意向
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -60,7 +98,7 @@
           >编辑</el-button
         >
       </div>
-      <!-- <div class="column">
+      <div class="column">
         <p class="fourteen-opacity mat-15 bg-gray line40">
           <span class="intention-item" v-if="industryLikeText"
             ><i class="icon iconfont">&#xe641;</i> {{ industryLikeText }}</span
@@ -80,10 +118,11 @@
             ><i class="icon iconfont">&#xe643;</i> {{ workAreaText }}</span
           >
         </p>
-      </div> -->
+      </div>
       <div id="workExperience" class="title-style font-or font-bold">
         工作经历
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -103,6 +142,7 @@
               workCarditem.corpName
             }}</span>
             <el-button
+              v-if="notConstResume"
               type="danger"
               icon="el-icon-delete"
               circle
@@ -111,6 +151,7 @@
               @click="deleteCard('dialog2', index, workCarditem.expId)"
             ></el-button>
             <el-button
+              v-if="notConstResume"
               type="primary"
               icon="el-icon-edit"
               circle
@@ -183,12 +224,67 @@
       <div id="educationExperience" class="title-style font-or font-bold">
         教育经历
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
           @click="dialog3 = true"
           >添加</el-button
         >
+        <el-divider class="vertical-divider" direction="vertical"></el-divider>
+        <!-- 学信网  -->
+        <el-popover
+          v-if="notConstResume"
+          placement="left"
+          width="700"
+          @show="openEduPop"
+          trigger="click"
+        >
+          <el-table
+            ref="multipleEduTable"
+            :data="eduTableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="50"> </el-table-column>
+            <el-table-column
+              prop="collegesName"
+              label="大学名称"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column label="入学日期" width="120">
+              <template slot-scope="scope">{{
+                scope.row.admissionDate
+              }}</template>
+            </el-table-column>
+            <el-table-column label="毕业日期" width="120">
+              <template slot-scope="scope">{{
+                scope.row.graduateDate
+              }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="majorName"
+              label="专业"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column prop="eduLevel" label="学历" show-overflow-tooltip>
+            </el-table-column>
+          </el-table>
+          <el-button id="selectEudBtn" size="small" @click="addEduFromChsi()"
+            >确认选择</el-button
+          >
+          <!-- <el-button slot="reference">click 激活</el-button> -->
+          <el-button
+            class="tab-btn"
+            type="edit"
+            icon="el-icon-circle-plus-outline"
+            slot="reference"
+            >从学信网查询添加</el-button
+          >
+        </el-popover>
       </div>
       <div class="column">
         <el-card
@@ -202,6 +298,7 @@
               eduCarditem.collegesName
             }}</span>
             <el-button
+              v-if="notConstResume"
               type="danger"
               icon="el-icon-delete"
               circle
@@ -209,7 +306,9 @@
               class="card-btn hidden"
               @click="deleteCard('dialog3', index, eduCarditem.eduId)"
             ></el-button>
+            <!-- 来自于学信网的数据不能进行编辑 -->
             <el-button
+              v-if="notConstResume && eduCarditem.sourceOuter !== '1'"
               type="primary"
               icon="el-icon-edit"
               circle
@@ -220,12 +319,12 @@
           </div>
 
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <p class="fourteen-opacity line40">
                 {{ eduCarditem.majorName }}
               </p>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <p class="fourteen-opacity line40">
                 {{ eduCarditem.eduLevel }}
               </p>
@@ -253,12 +352,18 @@
                 }}
               </p>
             </el-col>
+            <el-col :span="4">
+              <p class="fourteen-opacity line40">
+                {{ eduCarditem.sourceOuter === '1' ? '来自学信网' : '' }}
+              </p>
+            </el-col>
           </el-row>
         </el-card>
       </div>
       <div id="languageSkills" class="title-style font-or font-bold">
         外语能力
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
@@ -269,7 +374,7 @@
       <div class="column">
         <el-tag
           size="medium"
-          closable
+          :closable="notConstResume"
           v-for="(languageItem, index) in psnlLanguageTags"
           :key="index"
           @close="languageTagClose(index, languageItem.languageId)"
@@ -279,12 +384,66 @@
       <div id="skillsCertificate" class="title-style font-or font-bold">
         技能证书
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-circle-plus-outline"
           @click="dialog5 = true"
           >添加</el-button
         >
+        <el-divider class="vertical-divider" direction="vertical"></el-divider>
+        <!-- 鉴定内网  -->
+        <el-popover
+          v-if="notConstResume"
+          placement="left"
+          width="700"
+          @show="openSkillPop"
+          trigger="click"
+        >
+          <el-table
+            ref="multipleSkillTable"
+            :data="skillTableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange2"
+          >
+            <el-table-column type="selection" width="50"> </el-table-column>
+            <el-table-column
+              prop="certID"
+              label="证书编号"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="certName"
+              label="证书名称"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="certLevel"
+              label="证书等级"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column label="认证日期" width="120">
+              <template slot-scope="scope">{{
+                scope.row.receiveTime
+              }}</template>
+            </el-table-column>
+          </el-table>
+          <el-button id="selectSkillBtn" size="small" @click="addSkillFromJd()"
+            >确认选择</el-button
+          >
+          <!-- <el-button slot="reference">click 激活</el-button> -->
+          <el-button
+            class="tab-btn"
+            type="edit"
+            icon="el-icon-circle-plus-outline"
+            slot="reference"
+            >从已获取证书中添加</el-button
+          >
+        </el-popover>
       </div>
       <div class="column">
         <span
@@ -295,7 +454,7 @@
           <el-tag
             class="tag-card-item"
             size="medium"
-            closable
+            :closable="notConstResume"
             @close="skillTagClose(index, skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
@@ -308,6 +467,7 @@
       <div id="selfEvaluation" class="title-style font-or font-bold">
         自我评价
         <el-button
+          v-if="notConstResume"
           class="tab-btn"
           type="edit"
           icon="el-icon-edit"
@@ -361,6 +521,7 @@
             v-model="jobIntentionForm.positionLike"
             multiple
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option7"
@@ -380,6 +541,7 @@
             filterable
             v-model="jobIntentionForm.industryLike"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option8"
@@ -393,7 +555,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item
-              label="薪酬下线"
+              label="薪酬下限"
               prop="salaryMin"
               :label-width="formLabelWidth"
             >
@@ -401,11 +563,12 @@
                 v-model.number="jobIntentionForm.salaryMin"
                 autocomplete="off"
                 @change="minSalaryChange"
+                style="width:100%"
               ></el-input> </el-form-item
           ></el-col>
           <el-col :span="12"
             ><el-form-item
-              label="薪酬上线"
+              label="薪酬上限"
               prop="salaryMax"
               :label-width="formLabelWidth"
             >
@@ -413,6 +576,7 @@
                 v-model.number="jobIntentionForm.salaryMax"
                 autocomplete="off"
                 @change="maxSalaryChange"
+                style="width:100%"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -426,6 +590,7 @@
             filterable
             v-model="jobIntentionForm.workArea"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option1"
@@ -445,6 +610,7 @@
             filterable
             v-model="jobIntentionForm.workNature"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option2"
@@ -519,6 +685,7 @@
                 placeholder="选择日期"
                 v-model="workExperienceForm.entryDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -534,6 +701,7 @@
                 placeholder="选择日期"
                 v-model="workExperienceForm.quitDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -640,6 +808,7 @@
             filterable
             v-model="educationExperienceForm.eduLevel"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option4"
@@ -663,6 +832,7 @@
                 placeholder="选择日期"
                 v-model="educationExperienceForm.admissionDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -678,6 +848,7 @@
                 placeholder="选择日期"
                 v-model="educationExperienceForm.graduateDate"
                 value-format="yyyyMMdd"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -726,6 +897,7 @@
             filterable
             v-model="languageSkillsForm.languageType"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option5"
@@ -746,6 +918,7 @@
             filterable
             v-model="languageSkillsForm.languageLevel"
             placeholder="请选择"
+            style="width:100%"
           >
             <el-option
               v-for="item in dicOptions.option6"
@@ -800,6 +973,7 @@
             v-model="skillsCertificateForm.certName"
             autocomplete="off"
             placeholder="请输入"
+            style="width:100%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -811,6 +985,7 @@
             v-model="skillsCertificateForm.certLevel"
             autocomplete="off"
             placeholder="请输入"
+            style="width:100%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -823,8 +998,8 @@
             type="month"
             placeholder="请选择"
             v-model="skillsCertificateForm.receiveTime"
-            style="width: 70%;"
             value-format="yyyyMM"
+            style="width: 100%;"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -895,7 +1070,9 @@ import {
   // getLanguageType,
   // getLanguageLevel,
   // getRecruitEdu,
-  getPsnlResume
+  getPsnlResume,
+  getEduExpFromChsi,
+  getCertInfo
 } from '@/api/common';
 import {
   getPersonBaseInfo,
@@ -905,7 +1082,8 @@ import {
   saveEduExp,
   saveLanguageLevel,
   saveSkillCert,
-  deleteSomeResume
+  deleteSomeResume,
+  saveWorkYear
 } from '@/api/personApi';
 import { getDicText } from '@/utils/index';
 /**
@@ -913,6 +1091,19 @@ import { getDicText } from '@/utils/index';
  */
 export default {
   name: 'BaseResumeInfo',
+  props: {
+    queryPid: {
+      type: String,
+      default: ''
+    },
+    resumeData: {
+      type: Object,
+      //default: () => {}
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       editStatus: false,
@@ -921,6 +1112,7 @@ export default {
       formLabelWidth: '150px',
       applyForId: '',
       resumeId: '',
+      workYear: 0,
       pid: this.$store.getters['person/pid'],
       // xm: '',
       // age: 0,
@@ -958,7 +1150,7 @@ export default {
         eduLevel: '',
         admissionDate: '',
         graduateDate: '',
-        sourceOuter: '',
+        sourceOuter: '0',
         certNum: ''
       },
       languageSkillsForm: {
@@ -1132,11 +1324,21 @@ export default {
         // psnlLanguage: [],
         // psnlSkillcert: [],
         // //evaluate: '本人就是搬砖厉害！夏尔&#10;你好！&#13;再见！'
-        // evaluate: ''
-      }
+        // evaluate: '',
+        // workYear:0,
+        // eduId:''
+      },
+      eduTableData: [],
+      multipleSelection: [],
+      skillTableData: [],
+      multipleSelection2: []
     };
   },
   computed: {
+    // 判断是不是不能修改的情况
+    notConstResume: function() {
+      return JSON.stringify(this.resumeData) == '{}' && !this.queryPid;
+    },
     workNatureText: function() {
       if (
         this.$store.getters['dictionary/recruit_work_nature'] &&
@@ -1238,6 +1440,9 @@ export default {
         return [];
       }
     },
+    /**
+     * 将学历（教育经历）字典转成文字
+     */
     eduExpTransformed() {
       let dictionary = this.$store.getters['dictionary/recruit_edu'];
       return this.resume.eduExp
@@ -1249,6 +1454,16 @@ export default {
             return item;
           })
         : [];
+    },
+    /**
+     * 将最高学历字典转成文字
+     */
+    highEduLevel() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      let dic = dictionary.find(i => {
+        return i.value === this.resume.eduLevel;
+      });
+      return dic ? dic.label : this.resume.eduLevel;
     }
   },
   updated() {
@@ -1293,6 +1508,9 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    handleSelectionChange2(val) {
+      this.multipleSelection2 = val;
+    },
     //handleSizeChange(val) {},
     //handleCurrentChange(val) {},
     //删除技能证书tag
@@ -1330,22 +1548,29 @@ export default {
         });
     },
     //初始化加载个人基本信息
-    async getPersonInfo() {
-      try {
-        let result = await getPersonBaseInfo({
-          pid: this.$store.getters['person/pid'] || ''
-        });
-        console.log('result', result);
-        if (result.status === 200)
-          this.$set(this, 'personInfo', result.result.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async getPersonInfo() {
+    //   try {
+    //     let result = await getPersonBaseInfo({
+    //       pid: this.$store.getters['person/pid'] || ''
+    //     });
+    //     console.log('result', result);
+    //     if (result.status === 200)
+    //       this.$set(this, 'personInfo', result.result.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
-      getPsnlResume({ pid: this.$store.getters['person/pid'] } || '')
+      if (!this.$store.getters['person/pid'] && !this.queryPid) {
+        console.log('缺少个人标识');
+        return;
+      }
+      // 默认先按照传入的pid查询，再按照登录的人员查询
+      getPsnlResume(
+        { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
+      )
         .then(function(res) {
           console.log('个人简历信息', res);
           if (res.status == 200) {
@@ -1383,6 +1608,7 @@ export default {
       //     });
       //   });
     },
+    // 保存各个弹出框中的内容
     dialogSubmit(formName) {
       //保存各模块录入的信息
       if (formName === 'selfEvaluationForm') {
@@ -1442,7 +1668,8 @@ export default {
                 this.resume.eduExp.find(
                   element =>
                     element.collegesName ===
-                    this.educationExperienceForm.collegesName
+                      this.educationExperienceForm.collegesName &&
+                    element.sourceOuter !== '1'
                 )
               ) {
                 this.$message({
@@ -1451,7 +1678,7 @@ export default {
                 });
                 return;
               }
-              saveEduExp(params)
+              saveEduExp({ eduExpList: [params] })
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
@@ -1783,12 +2010,133 @@ export default {
         this.$alert('薪酬上限不得超过薪酬下限的三倍');
         this.jobIntentionForm.salaryMax = '';
       }
+    },
+    openPop() {
+      this.workYear = this.resume.workYear;
+    },
+    hidePop() {
+      console.log(this.workYear);
+      console.log(this.resume.workYear);
+      if (this.workYear == this.resume.workYear) {
+        return;
+      }
+      //保存工作年限
+      saveWorkYear({
+        pid: this.$store.getters['person/pid'],
+        workYear: this.workYear
+      }).then(saveRes => {
+        if (saveRes && saveRes.status === 200) {
+          this.resume.workYear = this.workYear;
+          this.$message({ type: 'success', message: '工作年限修改成功' });
+        } else if (saveRes) {
+          this.$message({ type: 'error', message: '工作年限修改失败' });
+        }
+      });
+    },
+    /**
+     * 显示学信网教育经历数据
+     */
+    openEduPop() {
+      // TODO 查询教育经历信息
+      getEduExpFromChsi({
+        pid: this.$store.getters['person/pid']
+      }).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          // this.$message({ type: 'success', message: '查询成功' });
+          this.eduTableData = queryRes.result.data || [];
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
+    },
+    hideEduPop() {},
+    /**
+     * 显示技能鉴定证书数据
+     */
+    openSkillPop() {
+      // TODO 查询教育经历信息
+      getCertInfo({
+        pid: this.$store.getters['person/pid']
+      }).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          // this.$message({ type: 'success', message: '查询成功' });
+          this.skillTableData = queryRes.result.data || [];
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
+    },
+    hideSkillPop() {},
+    /**
+     *添加教育经历从学信网(可以批量)
+     */
+    addEduFromChsi() {
+      if (this.multipleSelection && this.multipleSelection.length) {
+        console.log(this.multipleSelection);
+        let params = this.multipleSelection.map(i => {
+          let obj = { ...i };
+          obj.pid = this.pid;
+          obj.sourceOuter = '1';
+          return obj;
+        });
+        saveEduExp({ eduExpList: params }).then(queryRes => {
+          if (queryRes && queryRes.status === 200) {
+            this.$message({ type: 'success', message: '保存成功' });
+            //回显数据
+            this.loadPsnlResume();
+            // TODO删掉已经选过的数据
+            this.eduTableData = this.eduTableData.filter(
+              obj => !this.multipleSelection.some(i => obj.eduId === i.eduId)
+            );
+          } else if (queryRes) {
+            this.$message({ type: 'error', message: '保存失败' });
+          }
+        });
+      } else {
+        this.$message({ type: 'warning', message: '请选择数据' });
+      }
+    },
+    /**
+     *添加技能证书从鉴定网(可以批量)
+     */
+    addSkillFromJd() {
+      this.$alert('暂时没有此Api接口，请稍后！');
+      return;
+      if (this.multipleSelection2 && this.multipleSelection2.length) {
+        console.log(this.multipleSelection2);
+        let params = this.multipleSelection2.map(i => {
+          let obj = { ...i };
+          obj.pid = this.pid;
+          obj.sourceOuter = '1';
+          return obj;
+        });
+        saveEduExp({ eduExpList: params }).then(queryRes => {
+          if (queryRes && queryRes.status === 200) {
+            this.$message({ type: 'success', message: '保存成功' });
+            //回显数据
+            this.loadPsnlResume();
+            // TODO删掉已经选过的数据
+            this.eduTableData = this.eduTableData.filter(
+              obj => !this.multipleSelection2.some(i => obj.eduId === i.eduId)
+            );
+          } else if (queryRes) {
+            this.$message({ type: 'error', message: '保存失败' });
+          }
+        });
+      } else {
+        this.$message({ type: 'warning', message: '请选择数据' });
+      }
     }
   },
-  mounted() {
-    console.log('1111111111111111111111');
-    //初始化加载个人简历基本信息
-    this.loadPsnlResume();
+  created() {
+    var arr = Object.keys(this.$props.resumeData);
+    if (arr.length === 0) {
+      //初始化加载个人简历基本信息
+      this.loadPsnlResume();
+    } else {
+      //使用传入的简历信息
+      this.$set(this, 'resume', { ...this.$props.resumeData });
+    }
   }
 };
 </script>
@@ -1826,7 +2174,7 @@ export default {
     top: 13px;
   }
   .column {
-    padding: 20px 120px 40px 25px;
+    padding: 20px 20px 40px 25px;
     box-sizing: border-box;
     .el-tag {
       background-color: #f6f6f6;
@@ -1918,50 +2266,69 @@ export default {
       }
     }
   }
-}
-.hidden {
-  visibility: hidden;
-}
-.pup-btn {
-  text-align: center;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background: #f7f7f7;
-  left: 0;
-  padding: 5px 0;
-  z-index: 2;
-  border-bottom: 1px solid #e6e6e6;
-  .pup-tit {
-    text-align: left;
-    font-size: 14px;
-    color: #fc6f3d;
-    font-weight: bold;
-    padding: 0 20px;
-    line-height: 30px;
-    i {
-      margin-right: 6px;
-    }
+  .hidden {
+    visibility: hidden;
   }
-}
-
-#selfEvaluationArea {
-  ::v-deep .el-form-item__content {
-    margin-left: 0px !important;
-    height: 300px;
-    .el-textarea {
-      height: 100%;
-      textarea {
-        height: 100%;
+  .pup-btn {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: #f7f7f7;
+    left: 0;
+    padding: 5px 0;
+    z-index: 2;
+    border-bottom: 1px solid #e6e6e6;
+    .pup-tit {
+      text-align: left;
+      font-size: 14px;
+      color: #fc6f3d;
+      font-weight: bold;
+      padding: 0 20px;
+      line-height: 30px;
+      i {
+        margin-right: 6px;
       }
     }
   }
+
+  #selfEvaluationArea {
+    ::v-deep .el-form-item__content {
+      margin-left: 0px !important;
+      height: 300px;
+      .el-textarea {
+        height: 100%;
+        textarea {
+          height: 100%;
+        }
+      }
+    }
+  }
+  ::v-deep .el-date-editor,
+  ::v-deep .el-select {
+    width: 100% !important;
+  }
+  ::v-deep textarea {
+    min-height: 150px !important;
+  }
+  .vertical-divider {
+    float: right;
+    height: 26px;
+  }
 }
-::v-deep .el-date-editor,
-::v-deep .el-select {
-  width: 100% !important;
+#selectEudBtn {
+  margin-top: 10px;
+  float: right;
 }
-::v-deep textarea {
-  min-height: 150px !important;
+#selectSkillBtn {
+  margin-top: 10px;
+  float: right;
+}
+::v-deep .el-dialog__body {
+  .pup-btn {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 </style>

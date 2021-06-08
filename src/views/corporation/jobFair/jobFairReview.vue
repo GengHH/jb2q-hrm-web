@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 18:38:11
+ * @LastEditTime: 2021-05-19 16:30:41
  * @Description: 报名审核结果子页面
 -->
 <template>
@@ -11,53 +11,151 @@
     <el-row>
       <el-col :span="12"> </el-col>
       <el-col :span="12">
-        <BaseSearch @clickButton="queryResult($event)"></BaseSearch>
+        <BaseSearch @clickButton="queryResultByBtn($event)"></BaseSearch>
       </el-col>
     </el-row>
-
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <!-- 职位展示位 -->
-      <el-tab-pane label="线下招聘会" name="onlineFair">
+      <!-- 职位展示位onlineFair -->
+      <el-tab-pane label="线上招聘会" name="1">
         <pl-table
-          :data="tableData"
-          ref="jobTable"
+          :data="tableData1"
+          :totalCount="totalCount1"
+          ref="fairTable1"
           :columns="columns"
           show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange1"
+          @handleCurrentChangeOnBack="handlePageChange1"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.feedbackTime }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate disabled v-model="row.star"></el-rate>
+          <template #applyResult="{row}">
+            <span v-if="row.applyResult === '1'" style="color:green">是</span>
+            <el-popover
+              v-else-if="row.applyResult === '0'"
+              trigger="hover"
+              placement="top"
+            >
+              <p><span style="color:red">原因</span>: {{ row.applyMemo }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">否</el-tag>
+              </div>
+            </el-popover>
           </template>
         </pl-table>
       </el-tab-pane>
       <!-- 职位展示位 -->
 
-      <el-tab-pane label="线上招聘会" name="unlineFair">
+      <el-tab-pane label="线上及线下招聘会" name="2">
         <pl-table
-          :data="tableData"
-          ref="jobTable"
+          :data="tableData2"
+          :totalCount="totalCount2"
+          ref="fairTable2"
           :columns="columns"
           show-pager
+          @selection-change="handleSelectionChange"
+          @handleSizeChangeOnBack="handlePageChange2"
+          @handleCurrentChangeOnBack="handlePageChange2"
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ row.date }}</span>
+            <span style="margin-left: 10px">{{ row.feedbackTime }}</span>
           </template>
-          <template #star="{row}">
-            <el-rate disabled v-model="row.star"></el-rate>
+          <template #applyResult="{row}">
+            <span v-if="row.applyResult === '1'" style="color:green">是</span>
+            <el-popover
+              v-else-if="row.applyResult === '0'"
+              trigger="hover"
+              placement="top"
+            >
+              <p><span style="color:red">原因</span>: {{ row.applyMemo }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">否</el-tag>
+              </div>
+            </el-popover>
           </template>
         </pl-table>
       </el-tab-pane>
     </el-tabs>
+    <!----------------------->
+    <!-- 报到详情弹框 ----->
+    <!----------------------->
+    <el-dialog
+      class="info-dialog"
+      width="40%"
+      title="招聘会详情"
+      :visible.sync="dialog"
+      :before-close="handleClose"
+    >
+      <div>
+        <span class="info-dialog-label">招聘会名称：</span
+        >{{ currentRow.meetName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">单位名称 ：</span
+        >{{ currentRow.corpName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">招聘会类型：</span
+        >{{ currentRow.meetType === '2' ? '线上及线下招聘会' : '线上招聘会' }}
+      </div>
+      <!-- <div>
+        <span class="info-dialog-label">报到日期：</span>
+        {{
+          currentRow.reportDate.substr(0, 4) +
+            '-' +
+            currentRow.reportDate.substr(4, 2) +
+            '-' +
+            currentRow.reportDate.substr(6, 2)
+        }}
+      </div> -->
+      <div>
+        <span class="info-dialog-label">报名时间：</span
+        >{{ currentRow.applyTime }}
+      </div>
+      <div>
+        <span class="info-dialog-label">参会联系人：</span
+        >{{ currentRow.applyContactName }}
+      </div>
+      <div>
+        <span class="info-dialog-label">参会联系手机：</span
+        >{{ currentRow.applyContactPhone }}
+      </div>
+      <div>
+        <span class="info-dialog-label">反馈时间：</span
+        >{{ currentRow.feedbackTime }}
+      </div>
+      <div>
+        <span class="info-dialog-label">参会回执：</span>
+        <span v-if="currentRow.applyResult === '1'" style="color:green"
+          >通过</span
+        >
+        <span v-if="currentRow.applyResult === '0'" style="color:red"
+          >不通过</span
+        >
+      </div>
+      <div v-if="currentRow.applyResult === '0'">
+        <span class="info-dialog-label" style="color:red">不通过原因：</span
+        >{{ currentRow.applyMemo }}
+      </div>
+      <div>
+        <span class="info-dialog-label">备注：</span>{{ currentRow.memo }}
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
+import { queryFairResult } from '@/api/corporationApi';
+// const STATUS_TAG_MAP = {
+//   1: { text: '待审核', type: 'info' },
+//   2: { text: '审核通过', type: 'success' },
+//   3: { text: '驳回', type: 'danger' }
+// };
 export default {
   name: 'jobFairReview',
   components: {
@@ -65,84 +163,21 @@ export default {
   },
   data() {
     return {
-      activeName: 'onlineFair',
-      tableData: [
-        {
-          id: '1',
-          date: '2019-05-01',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1518 弄',
-          zip: 200333,
-          tag: '审核通过',
-          status: 0,
-          fairName: '2020界高校毕业生全国网络联合招聘',
-          actions: ['action1']
-        },
-        {
-          id: '2',
-          date: '2019-05-04',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1517 弄',
-          zip: 200333,
-          tag: '审核通过',
-          status: 1,
-          fairName: '2020界高校毕业生全国网络联合招聘',
-          actions: ['action1']
-        },
-        {
-          id: '3',
-          date: '2019-05-03',
-          star: null,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1519 弄',
-          zip: 200333,
-          tag: '审核通过',
-          status: 0,
-          fairName: '2020界高校毕业生全国网络联合招聘',
-          actions: ['action1']
-        },
-        {
-          id: '4',
-          date: '2019-05-02',
-          star: 3,
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1516 弄',
-          zip: 200333,
-          tag: '审核通过',
-          status: 0,
-          fairName: '2020界高校毕业生全国网络联合招聘',
-          actions: ['action1']
-        },
-        {
-          id: '5',
-          date: '2019-05-05',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '金沙江路 1515 弄',
-          zip: 200333,
-          tag: '审核通过',
-          status: 0,
-          fairName: '2020界高校毕业生全国网络联合招聘',
-          actions: ['action1']
-        }
-      ]
+      activeName: '1',
+      dialog: false,
+      currentRow: {},
+      totalCount1: 0,
+      totalCount2: 0,
+      meetName: '',
+      corpName: '',
+      tableData1: [],
+      tableData2: []
     };
   },
   computed: {
     columns() {
       return [
-        { attrs: { type: 'selection' } },
+        // { attrs: { type: 'selection' } },
         {
           label: '序号',
           attrs: { type: 'index', width: 60 },
@@ -153,19 +188,20 @@ export default {
         },
         {
           label: '招聘会名称',
-          prop: 'fairName',
+          prop: 'meetName',
           rowSpan: 'all'
         },
         {
           label: '操作时间',
-          prop: 'date',
+          prop: 'feedbackTime',
           formatter: 'date',
           slotName: 'date'
         },
         {
           label: '审核状态',
-          prop: 'tag',
-          rowSpan: 'all'
+          prop: 'applyResult',
+          rowSpan: 'all',
+          slotName: 'applyResult'
         },
         {
           label: '操作',
@@ -178,35 +214,74 @@ export default {
               icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
+                this.currentRow = row;
+                this.dialog = true;
               },
               hidden: ({ row }, item) => {
-                return !row.actions.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
               }
             }
           ]
         }
       ];
-    },
-    selection() {
-      return this.$refs.jobTable.multipleSelection;
     }
+    // selection() {
+    //   return this.$refs['fairTable' + this.activeName].multipleSelection;
+    // }
+  },
+  mounted() {
+    this.queryResult('1');
+    this.queryResult('2');
   },
   methods: {
-    queryResult(val) {
-      console.log(val);
-      this.$alert('暂时没有此Api接口，请稍后！');
-      // let that = this;
-      // if (this.selection && this.selection.length == 0) {
-      //   this.$alert('请选择一条');
-      // } else {
-      //   // TODO 删除数据
-      //   that.tableData = that.tableData.filter(
-      //     obj => !that.selection.some(i => obj.id === i.id)
-      //   );
-      // }
+    queryResultByBtn(val) {
+      this.meetName = val ? $.trim(val) : '';
+      this.queryResult('1');
+      this.queryResult('2');
+    },
+    queryResult(witchTable) {
+      console.log(this.$refs);
+      console.log(this.$refs['fairTable' + witchTable]);
+      let params = {
+        pageIndex: this.$refs['fairTable' + witchTable].currentPage - 1 || 0,
+        pageSize: this.$refs['fairTable' + witchTable].pageSize || 10,
+        cid: this.$store.getters['corporation/cid'],
+        meetName: this.meetName,
+        meetType: witchTable || ''
+      };
+      queryFairResult(params).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this['totalCount' + witchTable] =
+            queryRes.result.pageresult.total || 0;
+          this['tableData' + witchTable] =
+            queryRes.result.pageresult.data || [];
+          this['tableData' + witchTable].forEach(element => {
+            element.actions = ['action1'];
+          });
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '查询失败' });
+        }
+      });
     },
     handleClick(tab, event) {
-      console.log(tab, event);
+      // console.log(tab, event);
+    },
+    handleClose() {
+      this.dialog = false;
+    },
+    /**
+     *后台分页功能
+     */ handlePageChange1() {
+      this.queryResult('first');
+    },
+    /**
+     *后台分页功能
+     */
+    handlePageChange2() {
+      this.queryResult('second');
+    },
+    handleSelectionChange(val) {
+      console.log(val);
     }
   }
 };
@@ -255,6 +330,18 @@ export default {
     .el-range-editor {
       width: 100%;
     }
+  }
+}
+.info-dialog {
+  .el-dialog__body {
+    padding-top: 5px;
+    & > div {
+      font-size: 16px;
+      margin: 20px 0;
+    }
+  }
+  .info-dialog-label {
+    color: #999;
   }
 }
 </style>

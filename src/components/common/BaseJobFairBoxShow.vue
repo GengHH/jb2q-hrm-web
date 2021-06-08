@@ -16,35 +16,35 @@
     </div>
   </div> -->
   <div class="module-three">
-    <img src="../../assets/img/zl_img.png" alt="未加载">
+    <img src="../../assets/img/zl_img.png" alt="未加载" />
     <p class="zl-font mat-30">招聘会专栏</p>
-    <p class="zl-font2 mat-15">各种线上线下大型招聘会，期待你加入</p>
+    <p class="zl-font2 mat-15">各种线上限下大型招聘会，期待你加入</p>
   </div>
-</template> 
+</template>
 
 <script>
 /**
  * 首页显示招聘会信息的组件
  */
 export default {
-  name:'BaseJobFairBoxShow',
-  props:{
+  name: 'BaseJobFairBoxShow',
+  props: {
     jobFairBoxInfoObj: Object
   }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .module-three {
   background: #fff;
   border-radius: 10px;
   display: inline-block;
   //float: left;
   //margin-right: 23px;
-  img{
+  img {
     width: 100%;
   }
-  p{
+  p {
     text-align: left;
     padding-left: 20px;
   }
@@ -54,7 +54,7 @@ export default {
     box-sizing: border-box;
   }
   .mat-30 {
-      margin-top: 30px;
+    margin-top: 30px;
   }
   .zl-font2 {
     font-size: 15px;
@@ -63,7 +63,7 @@ export default {
     margin-bottom: 30px;
   }
   .mat-15 {
-      margin-top: 15px;
+    margin-top: 15px;
   }
 }
 </style>

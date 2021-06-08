@@ -46,7 +46,7 @@ export default {
     },
     selectValue: {
       type: String,
-      default: 'position'
+      default: ''
     },
     showSelect: {
       type: Boolean,

@@ -2,7 +2,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: Please set LastEditors
+ * @LastEditors: GengHH
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -18,7 +18,10 @@ export function isNoBody(vm) {
     !!vm.$store &&
     (!!vm.$store.getters['person/token'] ||
       !!vm.$store.getters['corporation/token']);
-  return !a;
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.person?.token || !!localData?.corporation?.token;
+  return !a && !login;
 }
 
 /**
@@ -27,7 +30,11 @@ export function isNoBody(vm) {
  * @returns {boolean}
  */
 export function isPerson(vm) {
-  return vm && vm.$store && vm.$store.getters['person/token'];
+  let storePerson = vm && vm.$store && vm.$store.getters['person/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.person?.token;
+  return storePerson || login;
 }
 
 /**
@@ -36,7 +43,25 @@ export function isPerson(vm) {
  * @returns {boolean}
  */
 export function isCorporation(vm) {
-  return vm && vm.$store && vm.$store.getters['corporation/token'];
+  let storeCorporation =
+    vm && vm.$store && vm.$store.getters['corporation/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.corporation?.token;
+  return storeCorporation || login;
+}
+
+/**
+ * 判断是不是管理员登录
+ * @param {object} vm（vm对象）
+ * @returns {boolean}
+ */
+export function isAdmin(vm) {
+  let storeAdmin = vm && vm.$store && vm.$store.getters['admin/token'];
+
+  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let login = !!localData?.admin?.token;
+  return storeAdmin || login;
 }
 
 /**
@@ -313,6 +338,20 @@ export function niceScroll(dom) {
     }
   }
 }
+/**
+ * 使用jquery.nicescroll 更新滚动条样式（兼容IE,全局统一）
+ * @param {*} id
+ */
+export function niceScrollUpdate(dom) {
+  if (dom) {
+    $(dom)
+      ?.getNiceScroll()
+      ?.resize();
+  }
+  $('#indexApp')
+    ?.getNiceScroll()
+    ?.resize();
+}
 
 /**
  *
@@ -345,4 +384,41 @@ export function overDateSomeDays(date, day) {
     ? '' + _date.getFullYear() + (_date.getMonth() + 1) + _date.getDate()
     : 0;
   return tagertDateNum > nowDateNum;
+}
+
+/**
+ *获取当前时间 格式：yyyy-MM-dd HH:MM:SS
+ *
+ * @export
+ */
+export function getCurrentTime() {
+  function zeroFill(i) {
+    if (i >= 0 && i <= 9) {
+      return '0' + i;
+    } else {
+      return i;
+    }
+  }
+  var date = new Date(); //当前时间
+  var month = zeroFill(date.getMonth() + 1); //月
+  var day = zeroFill(date.getDate()); //日
+  var hour = zeroFill(date.getHours()); //时
+  var minute = zeroFill(date.getMinutes()); //分
+  var second = zeroFill(date.getSeconds()); //秒
+
+  //当前时间
+  var curTime =
+    date.getFullYear() +
+    '-' +
+    month +
+    '-' +
+    day +
+    ' ' +
+    hour +
+    ':' +
+    minute +
+    ':' +
+    second;
+
+  return curTime;
 }

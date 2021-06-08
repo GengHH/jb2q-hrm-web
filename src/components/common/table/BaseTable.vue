@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-26 15:49:37
+ * @LastEditTime: 2021-05-20 10:41:04
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -10,7 +10,7 @@
   <div class="pl-table-container">
     <el-table
       ref="table"
-      :data="pageTableData"
+      :data="pageOnFront ? pageTableData : data"
       v-bind="attrs"
       :height="autoHeight ? '500px' : $attrs.height"
       v-on="{ ...$listeners, ...events }"
@@ -36,16 +36,30 @@
         </template>
       </pl-table-column>
     </el-table>
-    <el-pagination
-      v-show="showPager"
-      v-bind="pageAttrs"
-      :class="pagerClass"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :total="tableData.length"
-    >
-    </el-pagination>
+    <template v-if="pageOnFront">
+      <el-pagination
+        v-show="showPager"
+        v-bind="pageAttrs"
+        :class="pagerClass"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :total="tableData.length"
+      >
+      </el-pagination>
+    </template>
+    <template v-else>
+      <el-pagination
+        v-show="showPager"
+        v-bind="pageAttrs"
+        :class="pagerClass"
+        @size-change="handleSizeChangeOnBack"
+        @current-change="handleCurrentChangeOnBack"
+        :current-page="currentPage"
+        :total="totalCount"
+      >
+      </el-pagination>
+    </template>
   </div>
 </template>
 
@@ -121,6 +135,14 @@ export default {
     pagerClass: {
       type: String,
       default: 'peger-center'
+    },
+    pageOnFront: {
+      type: Boolean,
+      default: false
+    },
+    totalCount: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -136,6 +158,10 @@ export default {
     };
   },
   computed: {
+    // currentPage() {
+    //   // 前台分页时默认首页为1，后台分页时默认首页为0
+    //   return this.pageOnFront ? 1 : 1;
+    // },
     attrs() {
       return {
         ...this.$attrs,
@@ -235,7 +261,9 @@ export default {
   },
   updated() {
     // 更新滚动条样式
-    setTimeout(this.resizeScroll()(), 100);
+    if (this.resizeScroll) {
+      setTimeout(this.resizeScroll()(), 100);
+    }
   },
   activated() {
     if (this.keepPosition) {
@@ -266,8 +294,8 @@ export default {
     resizeScroll() {
       return this._.throttle(() => {
         $('.el-table__body-wrapper')
-          .getNiceScroll()
-          .resize();
+          ?.getNiceScroll()
+          ?.resize();
       }, 300);
     },
     getRandomKey(item) {
@@ -458,7 +486,26 @@ export default {
       } else {
         return;
       }
+    },
+    /**
+     *后台分页功能
+     */
+    handleSizeChangeOnBack(pageSize) {
+      this.pageSize = pageSize;
+      this.$emit('handleSizeChangeOnBack');
+    },
+    handleCurrentChangeOnBack(currentPage) {
+      this.currentPage = currentPage;
+      this.$emit('handleCurrentChangeOnBack');
     }
+    // handlePrevClickOnBack(currentPage) {
+    //   this.currentPage = currentPage;
+    //   this.$emit('handlePrevClickOnBack');
+    // },
+    // handleNextClickOnBack(currentPage) {
+    //   this.currentPage = currentPage;
+    //   this.$emit('handleNextClickOnBack');
+    // }
   }
 };
 </script>

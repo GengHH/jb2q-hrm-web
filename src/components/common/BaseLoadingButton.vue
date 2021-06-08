@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-13 13:46:07
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-15 17:46:09
+ * @LastEditTime: 2021-05-07 17:42:25
  * @Description: 二次封装el-button成实现Loading的按钮
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseLoadingButton.vue
 -->
@@ -16,6 +16,7 @@
   >
     <el-button
       slot="reference"
+      :class="btnClass"
       v-loading.fullscreen.lock="fullscreenLoadingStatus"
       v-bind="$attrs"
       :type="type"
@@ -62,6 +63,10 @@ export default {
       default: () => ({ title: '确定吗？' })
     },
     type: {
+      type: String,
+      default: ''
+    },
+    btnClass: {
       type: String,
       default: ''
     },

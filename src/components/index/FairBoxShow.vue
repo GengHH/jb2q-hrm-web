@@ -1,14 +1,14 @@
 <template>
-  <!--S 特色专栏部分 -->
-  <div class="activity-box-module">
+  <!--S 首页招聘会部分 -->
+  <div class="fair-box-module">
     <el-row>
       <el-col :sm="2" :md="4" :lg="6" class="pr">
         <img src="../../assets/img/img04.png" alt="" />
         <div v-if="online" class="float-div">
-          <i class="circle-sty"></i> 进行中
+          <i class="circle-sty"></i>进行中
         </div>
         <div v-if="offline" class="float-div2">
-          <i class="circle-sty"></i> 未开始
+          <i class="circle-sty"></i>未开始
         </div>
       </el-col>
       <el-col class="ul-style" :sm="22" :md="20" :lg="18">
@@ -28,7 +28,7 @@
                 class="or-font"
                 >16</i
               >
-              人
+              个
             </p>
             <p class="  line30">
               <i class="icon iconfont">&#xe650;</i>
@@ -57,18 +57,18 @@
       <pl-map :pointList="pointList"></pl-map>
     </el-dialog>
   </div>
-  <!--E 特色专栏部分 -->
+  <!--E 首页招聘会部分 -->
 </template>
 
 <script>
 import PlMap from '@/components/common/BaseMap';
 export default {
-  name: 'ActivityBoxShow',
+  name: 'FairBoxShow',
   components: {
     PlMap
   },
   props: {
-    activityInfo: Object
+    fairInfo: Object
   },
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.activity-box-module {
+.fair-box-module {
   background-color: #ffffff;
   border-bottom: 1px solid #ededed;
   height: 250px;

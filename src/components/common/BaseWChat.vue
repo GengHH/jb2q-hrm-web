@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-01 11:30:41
+ * @LastEditTime: 2021-05-14 14:22:28
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
@@ -23,71 +23,82 @@
 </template>
 
 <script>
-import { formatTime } from '@/utils';
+import { formatTime, isPerson, isCorporation } from '@/utils';
+import { openSession, sendSession } from '@/api/common';
 export default {
   name: 'pl-wchat',
+  props: {
+    targetObjId: {
+      type: String,
+      default: ''
+    },
+    targetObjName: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       inputMsg: '',
       taleList: [
-        {
-          date: '2020/04/25 21:19:07',
-          text: { text: '起床不' },
-          mine: false,
-          name: '留恋人间不羡仙',
-          img: require('@/assets/images/cover.png')
-        },
-        {
-          date: '2020/04/25 21:19:07',
-          text: {
-            text: '123'
-          },
-          mine: false,
-          name: '只盼流星不盼雨',
-          img: require('@/assets/images/cover.png')
-        },
-        {
-          date: '2020/04/25 21:19:07',
-          text: { text: 'hahaha' },
-          mine: false,
-          name: '只盼流星不盼雨',
-          img: require('@/assets/images/cover.png')
-        },
-        {
-          date: '2020/04/16 21:19:07',
-          text: {
-            text: '456'
-          },
-          mine: true,
-          name: 'JwChat',
-          img: require('@/assets/images/cover.png')
-        },
-        {
-          date: '2021/03/02 13:14:21',
-          mine: false,
-          name: '留恋人间不羡仙',
-          img: require('@/assets/images/cover.png'),
-          text: {
-            system: {
-              title: '在接入人工前，智能助手将为您首次应答。',
-              subtitle: '猜您想问:',
-              content: [
-                {
-                  id: 'system1',
-                  text: '组件如何使用'
-                },
-                {
-                  id: 'system2',
-                  text: '组件参数在哪里查看'
-                },
-                {
-                  id: 'system',
-                  text: '我可不可把组件用在商业'
-                }
-              ]
-            }
-          }
-        }
+        // {
+        //   date: '2020/04/25 21:19:07',
+        //   text: { text: '起床不' },
+        //   mine: false,
+        //   name: '留恋人间不羡仙',
+        //   img: require('@/assets/images/female.png')
+        // },
+        // {
+        //   date: '2020/04/25 21:19:07',
+        //   text: {
+        //     text: '123'
+        //   },
+        //   mine: false,
+        //   name: '只盼流星不盼雨',
+        //   img: require('@/assets/images/female.png')
+        // },
+        // {
+        //   date: '2020/04/25 21:19:07',
+        //   text: { text: 'hahaha' },
+        //   mine: false,
+        //   name: '只盼流星不盼雨',
+        //   img: require('@/assets/images/female.png')
+        // },
+        // {
+        //   date: '2020/04/16 21:19:07',
+        //   text: {
+        //     text: '456'
+        //   },
+        //   mine: true,
+        //   name: 'JwChat',
+        //   img: require('@/assets/images/female.png')
+        // },
+        // {
+        //   date: '2021/03/02 13:14:21',
+        //   mine: false,
+        //   name: '留恋人间不羡仙',
+        //   img: require('@/assets/images/female.png'),
+        //   text: {
+        //     system: {
+        //       title: '在接入人工前，智能助手将为您首次应答。',
+        //       subtitle: '猜您想问:',
+        //       content: [
+        //         {
+        //           id: 'system1',
+        //           text: '组件如何使用'
+        //         },
+        //         {
+        //           id: 'system2',
+        //           text: '组件参数在哪里查看'
+        //         },
+        //         {
+        //           id: 'system',
+        //           text: '我可不可把组件用在商业'
+        //         }
+        //       ]
+        //     }
+        //   }
+        // }
       ],
       tool: {
         // 现在只配置了 ["file", "video", "img", "hongbao", "more", "history"]
@@ -97,8 +108,8 @@ export default {
         callback: this.toolEvent
       },
       config: {
-        img: require('@/assets/images/cover.png'),
-        name: 'JwChat',
+        img: require('@/assets/images/female.png'),
+        name: this.targetObjName, //'JwChat',
         dept: '最简单、最便捷',
         callback: this.bindCover,
         historyConfig: {
@@ -120,7 +131,7 @@ export default {
         // list: [
         //   {
         //     id: 'win00',
-        //     img: '..//image/cover.png',
+        //     img: '..//image/female.png',
         //     name: 'JwChat',
         //     dept: '最简单、最便捷',
         //     readNum: 99
@@ -152,8 +163,20 @@ export default {
         //   }
         // ],
         // callback: this.bindWinBar
-      }
+      },
+      sessionId: '',
+      createId: '',
+      sendName: ''
     };
+  },
+  mounted() {
+    if (this.targetObjId) {
+      console.log('targetObjId', this.targetObjId);
+      this.targetId = this.targetObjId;
+      this.openSession();
+    } else {
+      this.$alert('未知名对象');
+    }
   },
   methods: {
     /**
@@ -163,14 +186,26 @@ export default {
     bindEnter() {
       const msg = this.inputMsg;
       if (!msg) return;
-      const msgObj = {
-        date: formatTime(new Date()),
-        text: { text: msg },
-        mine: true,
-        name: 'JwChat',
-        img: require('@/assets/images/cover.png')
-      };
-      this.taleList.push(msgObj);
+      //发送信息
+      sendSession({
+        sessionId: this.sessionId,
+        createId: this.createId,
+        sendName: this.sendName,
+        content: msg
+      }).then(sendRes => {
+        if (sendRes && sendRes.status === 200) {
+          const msgObj = {
+            date: formatTime(new Date()),
+            text: { text: msg },
+            mine: true,
+            name: 'JwChat',
+            img: require('@/assets/images/female.png')
+          };
+          this.taleList.push(msgObj);
+        } else if (sendRes) {
+          this.$message({ type: 'error', message: '发送失败' });
+        }
+      });
     },
     /**
      * @description:
@@ -214,7 +249,71 @@ export default {
         this.winBarConfig.active = id;
       }
     },
-    talkEvent() {}
+    talkEvent() {},
+    /**
+     *查询历史信息
+     */
+    openSession() {
+      let queryParams = {
+        //打开聊天框的对象，个人填pid，单位填cid
+        openId: '',
+        //RECRUIT_LOGIN_TYPE
+        openType: '',
+        //聊天目标，个人填pid，单位填cid
+        targetId: '',
+        //RECRUIT_LOGIN_TYPE
+        targetType: ''
+      };
+      console.log(this.targetObjId);
+      if (isPerson(this)) {
+        //个人发给单位
+        this.config.img = require('@/assets/images/corp.jpg');
+        this.sendName = this.$store.getters['person/username'];
+        this.createId = queryParams.openId = this.$store.getters['person/pid'];
+        queryParams.openType = '1';
+        queryParams.targetId = this.targetObjId;
+        queryParams.targetType = '2';
+      } else {
+        //单位发给个人
+        //TODO头像识别
+        this.sendName = this.$store.getters['corporation/username'];
+        this.createId = queryParams.openId = this.$store.getters[
+          'corporation/cid'
+        ];
+        queryParams.openType = '2';
+        queryParams.targetId = this.targetObjId;
+        queryParams.targetType = '1';
+      }
+      //开始查询
+      openSession(queryParams).then(queryRes => {
+        if (queryRes && queryRes.status === 200) {
+          this.sessionId = queryRes.result.sessionInfo.sessionId;
+          let target = this.coverMsgs(queryRes.result.sessionInfo.msgs || []);
+          console.log(target);
+          this.taleList = target;
+        } else if (queryRes) {
+          this.$message({ type: 'error', message: '无法获取历史聊天信息' });
+        }
+      });
+    },
+    /**
+     *转换数据（将后台显示的数据转换成需要的数据格式）
+     */
+    coverMsgs(source) {
+      if (source && Array.isArray(source)) {
+        return source.map(msg => {
+          let _obj = { ...msg };
+          _obj.date = msg.createTime;
+          _obj.name = msg.sendName || '';
+          _obj.text = {
+            text: msg.content || ''
+          };
+          _obj.img = require('@/assets/images/female.png');
+          return _obj;
+        });
+      }
+      return [];
+    }
   }
 };
 </script>

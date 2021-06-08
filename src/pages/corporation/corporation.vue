@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 17:50:21
+ * @LastEditTime: 2021-06-01 18:31:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -22,7 +22,7 @@
  * 公司管理系统入口界面
  */
 import BaseHeader from '@/components/common/BaseHeader.vue';
-import { niceScroll } from '@/utils';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'app',
   components: {
@@ -36,22 +36,36 @@ export default {
       corpActiveName: 'corpRecommended',
       navList: [
         {
-          id: '7',
-          path: '/blak1',
+          id: '8',
+          path: '/blank',
           nvaText: '时钟',
           icon: true,
           iconName: 'el-icon-time'
         },
         {
-          id: '6',
+          id: '7',
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
+          type: 'badge',
           iconName: 'el-icon-bell'
+        },
+        {
+          id: '6',
+          path: this.$store.getters['dictionary/human_resource_reg']
+            ? '/blank'
+            : '/onlineShop',
+          nvaText: '在线开店'
         },
         { id: '5', path: '/jobFair', nvaText: '招聘会' },
         { id: '4', path: '/jobFindMgr', nvaText: '应聘管理' },
-        { id: '3', path: '/resumeSearch', nvaText: '简历搜索' },
+        {
+          id: '3',
+          path: this.$store.getters['corporation/special_corp']
+            ? '/resumeSearch'
+            : '/blank',
+          nvaText: '简历搜索'
+        },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
         { id: '1', path: '/corpInfo', nvaText: '单位信息维护' }
       ],
@@ -85,27 +99,45 @@ export default {
   },
   created() {
     // console.log("index begin creating");
-    console.log(this.$store);
+    //console.log(this.$store);
     // console.log(this.$data);
     // this.axios.get('/admin/index').then(res =>{
     //   this.$set(this.obj,'siet',res.data)
     // }).catch( err=>{
     //   console.log(err)
     // });
+    //由于登录（是否首次进入系统接口）为异步，根据其返回的结来判断顶部菜单数据
+    let timer = setInterval(() => {
+      if (
+        this.$store.getters['corporation/username'] ||
+        this.$store.getters['corporation/first_check']
+      ) {
+        //是不是特定单位
+        if (this.$store.getters['corporation/username']) {
+          this.navList.forEach(i => {
+            if (i.nvaText === '简历搜索') i.path = '/resumeSearch';
+          });
+        }
+        //是不是人力资源单位
+        if (this.$store.getters['dictionary/human_resource_reg']) {
+          this.navList.forEach(i => {
+            if (i.nvaText === '在线开店') i.path = '/onlineShop';
+          });
+        }
+        //登录人名称
+        this.userLogInfo.nvaText = this.$store.getters['corporation/username'];
+        if (timer) {
+          clearInterval(timer);
+        }
+      }
+    }, 300);
   },
   mounted() {
-    //niceScroll('#indexApp');
     niceScroll('#indexApp');
-    // setTimeout(function() {
-    //   niceScroll('#indexApp');
-    // }, 10);
   },
   updated() {
-    setTimeout(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
-    }, 10);
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

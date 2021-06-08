@@ -1,122 +1,114 @@
-<!--
- * @Author: GengHH
- * @Date: 2020-12-16 11:32:31
- * @LastEditors: GengHH
- * @LastEditTime: 2021-04-21 18:38:15
- * @Description: file content
- * @FilePath: \jb2q-hrm-web\src\components\index\ActivityBoxShow.vue
--->
 <template>
   <!--S 特色专栏部分 -->
   <div class="activity-box-module">
     <el-row>
-      <el-col :sm="2" :md="4" :lg="6">
-        <img width="300" :src="activityInfo.propagandaImage" alt="未加载" />
+      <el-col :sm="2" :md="4" :lg="6" class="pr">
+        <img src="../../assets/img/img04.png" alt="" />
+        <div v-if="online" class="float-div">
+          <i class="circle-sty"></i>讲座
+        </div>
+        <div v-if="offline" class="float-div2">
+          <i class="circle-sty"></i>主题咨询活动
+        </div>
       </el-col>
       <el-col class="ul-style" :sm="22" :md="20" :lg="18">
-        <p class="black-font">{{ activityInfo.actName }}</p>
-        <p class="six-hui ellipsis line30">
-          {{ activityInfo.content }}
+        <p class="black-font">
+          “助跑就业，青春有梦”——2020年长宁区高校毕业生专场招聘会
         </p>
-        <el-row class="mat-15">
+        <el-row class="mat-15 details-info">
           <el-col :span="18">
-            <p class="six-hui line30 or-font">
-              <i class="icon iconfont six-hui">&#xe651;</i>
-              {{ activityInfo.applyStartTime }} 至
-              {{ activityInfo.applyEndTime }}
+            <p class="  line30 or-font">
+              <i class="icon iconfont ">&#xe651;</i> 2020-11-26 9:00 至
+              2020-11-28 18:00
             </p>
-            <p class="six-hui line30">
-              <i class="icon iconfont">&#xe652;</i> 人数限制 ：{{
-                activityInfo.participants
-              }}
+            <p class="  line30 mat-15">
+              <i class="icon iconfont">&#xe652;</i> 人数限制 ：<i
+                class="or-font"
+                >16</i
+              >
+              人
+              <span style="width:50px;display: inline-block;"></span>
+              <i class="icon iconfont">&#xe652;</i> 还剩名额 ：<i
+                class="or-font"
+                >16</i
+              >
               人
             </p>
-            <p class="six-hui line30">
+            <p class="  line30">
               <i class="icon iconfont">&#xe650;</i>
-              活动地点：{{
-                activityInfo.districtCode
-              }}区就业促进中心(长宁区武夷路517号)
+              招聘地点：长宁区就业促进中心(长宁区武夷路517号)
+              <el-link class="blue-font" :underline="false">
+                <i class="icon iconfont">&#xe654;</i>
+                <span @click="showMap">附近交通</span></el-link
+              >
             </p>
           </el-col>
-          <el-col :span="6">
-            <el-button class="release-btn font-size18" type="primary">
-              <i class="icon iconfont font-size20">&#xe653;</i> 去报名
-            </el-button>
-            <p class="six-hui line30">
-              还剩名额：
-              <i class="or-font">8</i> 个
-            </p>
+          <el-col :span="6" class="text-right">
+            <el-button class="release-btn font-size18 mat-15" type="primary"
+              ><i class="icon iconfont font-size20">&#xe653;</i>
+              去报名</el-button
+            >
           </el-col>
         </el-row>
       </el-col>
     </el-row>
-    <!-- <el-row>
-      <el-col :sm="2" :md="4" :lg="6">
-        <img width="300" src="../../assets/img/img01.png" alt />
-      </el-col>
-      <el-col class="ul-style" :sm="22" :md="20" :lg="18">
-        <p class="black-font">2020上海某银行校园招聘公告解读备考指导特别讲座</p>
-        <p class="six-hui ellipsis line30">
-          这次公司2020上海某银行校园招聘公告解读备考指导特别讲座邀请了某某专家、某某专家为我们讲解...
-        </p>
-        <el-row class="mat-15">
-          <el-col :span="18">
-            <p class="six-hui line30 or-font">
-              <i class="icon iconfont six-hui">&#xe651;</i> 2020-11-26 9:00 至
-              2020-11-28 18:00
-            </p>
-            <p class="six-hui line30">
-              <i class="icon iconfont">&#xe652;</i> 人数限制 ：200 人
-            </p>
-            <p class="six-hui line30">
-              <i class="icon iconfont">&#xe650;</i>
-              活动地点：长宁区就业促进中心(长宁区武夷路517号)
-            </p>
-          </el-col>
-          <el-col :span="6">
-            <el-button class="release-btn font-size18" type="primary">
-              <i class="icon iconfont font-size20">&#xe653;</i> 去报名
-            </el-button>
-            <p class="six-hui line30">
-              还剩名额：
-              <i class="or-font">8</i> 个
-            </p>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row> -->
+    <!-- 地图弹框 -->
+    <el-dialog
+      class="width75 dialog-content-full-screen"
+      :visible.sync="mapDialog"
+      :before-close="mapHandleClose"
+    >
+      <pl-map :pointList="pointList"></pl-map>
+    </el-dialog>
   </div>
   <!--E 特色专栏部分 -->
 </template>
 
 <script>
+import PlMap from '@/components/common/BaseMap';
 export default {
   name: 'ActivityBoxShow',
+  components: {
+    PlMap
+  },
   props: {
     activityInfo: Object
   },
   data() {
-    return {};
+    return {
+      online: true,
+      offline: false,
+      mapDialog: false,
+      pointList: ['长宁区就业促进中心(长宁区武夷路517号)']
+    };
+  },
+  methods: {
+    showMap() {
+      console.log(123);
+      this.mapDialog = true;
+    },
+    mapHandleClose() {
+      this.mapDialog = false;
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .activity-box-module {
+  background-color: #ffffff;
   border-bottom: 1px solid #ededed;
+  height: 250px;
   padding: 30px 0;
-  .el-row {
+  & > .el-row {
+    height: 100%;
     width: 100%;
   }
   img {
     height: 100%;
-    //width: 100%;
+    width: 100%;
   }
-  .black-font {
-    font-size: 20px;
-    color: #000000;
-    line-height: 30px;
-  }
+
   .line30 {
     line-height: 30px;
   }
@@ -125,18 +117,58 @@ export default {
   }
 
   .ul-style {
+    height: 100%;
+    position: relative;
     text-align: left;
     padding-left: 20px;
+
+    .details-info {
+      position: absolute;
+      bottom: 0;
+      left: 20px;
+      right: 0;
+      .blue-font {
+        color: #4766a4;
+      }
+    }
   }
-  .six-hui {
-    font-size: 16px;
-    color: #868686;
+  .pr {
+    height: 100%;
+    position: relative;
+    .float-div,
+    .float-div2 {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      padding: 5px 10px;
+      border-radius: 0 15px 15px 0;
+      font-size: 16px;
+      color: #fff;
+    }
+    .float-div {
+      background: rgba(252, 111, 61, 0.9);
+    }
+    .float-div2 {
+      background: rgba(71, 102, 164, 0.9);
+    }
   }
-  .or-font {
-    color: #fda749 !important;
-  }
-  .font-size18 {
-    font-size: 18px;
+  .black-font {
+    font-size: 20px;
+    color: #000000;
+    line-height: 30px;
+    .span-line,
+    .span-line2 {
+      padding: 3px 7px;
+      font-size: 16px;
+      color: #fff;
+      border-radius: 5px;
+    }
+    .span-line {
+      background-color: #fc7a43;
+    }
+    .span-line2 {
+      background-color: #4766a4;
+    }
   }
 }
 </style>

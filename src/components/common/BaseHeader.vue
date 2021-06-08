@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-04-30 16:06:55
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-21 13:29:21
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
 -->
@@ -28,15 +28,23 @@
                 userLogInfo.nvaText
               }}</el-dropdown-item>
               <el-dropdown-item divided></el-dropdown-item>
-              <el-dropdown-item
-                v-for="nvaIndex in navListReverse"
-                :key="nvaIndex.id"
-                :icon="nvaIndex.iconName"
-              >
-                <router-link :to="nvaIndex.path">
-                  {{ nvaIndex.nvaText }}
-                </router-link>
-              </el-dropdown-item>
+              <template v-for="nvaIndex in navListReverse">
+                <el-dropdown-item
+                  v-if="nvaIndex.path !== '/blank'"
+                  :key="nvaIndex.id"
+                  :icon="nvaIndex.iconName"
+                >
+                  <router-link :to="nvaIndex.path">
+                    {{ nvaIndex.nvaText }}
+                    <el-badge
+                      v-if="nvaIndex.type === 'badge' && messageCount"
+                      :value="messageCount"
+                      :max="maxCount"
+                      class="mark"
+                    />
+                  </router-link>
+                </el-dropdown-item>
+              </template>
               <!-- 二级子菜单 -->
               <template v-if="userLogInfo.subMenu.length > 0">
                 <el-dropdown-item divided></el-dropdown-item>
@@ -73,18 +81,27 @@
               >
             </el-submenu>
             <!-- 其他正常菜单信息栏 -->
-            <el-menu-item
-              v-for="nvaIndex in navList"
-              :key="nvaIndex.id"
-              :index="nvaIndex.path"
-            >
-              <template v-if="nvaIndex.icon">
-                <i class="nva-icon" :class="nvaIndex.iconName"></i>
-              </template>
-              <template v-else>
-                {{ nvaIndex.nvaText }}
-              </template>
-            </el-menu-item>
+            <template v-for="nvaIndex in navList">
+              <el-menu-item
+                v-if="nvaIndex.path !== '/blank'"
+                :key="nvaIndex.id"
+                :index="nvaIndex.path"
+              >
+                <template v-if="nvaIndex.icon">
+                  <el-badge
+                    v-if="nvaIndex.type === 'badge' && messageCount"
+                    :value="messageCount"
+                    :max="maxCount"
+                    class="badge-item"
+                  >
+                  </el-badge>
+                  <i class="nva-icon" :class="nvaIndex.iconName"></i>
+                </template>
+                <template v-else>
+                  {{ nvaIndex.nvaText }}
+                </template>
+              </el-menu-item>
+            </template>
           </el-menu>
         </el-col>
       </el-row>
@@ -115,6 +132,7 @@ export default {
   data() {
     return {
       showIconMenu: true,
+      maxCount: 99,
       // activeIndex:
       //   this.$route.path && this.$route.path.length > 1
       //     ? this.$route.path.substr(1)
@@ -123,6 +141,17 @@ export default {
     };
   },
   computed: {
+    //显示未读信息的数量
+    messageCount() {
+      if (isPerson(this)) {
+        return this.$store.getters['person/message-count'] || 0;
+      } else if (isCorporation(this)) {
+        return this.$store.getters['corporation/message-count'] || 0;
+      } else {
+        return 0;
+      }
+    },
+
     // path() {
     //   console.log(this.$route.path);
     //   var aa =
@@ -159,76 +188,68 @@ export default {
       } else if (to.path === '/logout') {
         if (isPerson(this)) {
           //个人退出
-          let logoutResult = await doPersonLogout();
-          if (logoutResult && logoutResult.status === 200) {
-            let logout = this.$store.dispatch('person/do_logout');
-            logout
-              .then(res => {
-                this.$alert('退出成功');
-                window.setTimeout(function() {
-                  window.location.href = '/ggzp-shrs/index.html';
-                }, 2000);
-                return;
-              })
-              .catch(err => {
-                this.$alert('退出异常');
-              });
-          } else {
-            this.$alert('退出失败');
-          }
-        } else if (isCorporation(this)) {
-          //单位退出
-          // let logoutResult = await doCorporationLogout();
-          // if (logoutResult && logoutResult.status === 200) {
-          //   this.$store
-          //     .dispatch('corporation/do_logout')
-          //     .then(res => {
-          //       this.$alert('退出成功');
-          //       window.setTimeout(function() {
-          //         // window.location.href = '/ggzp-shrs/index.html';
-          //         window.open(window.origin + '/ggzp-shrs/index.html', '_self');
-          //       }, 2000);
-          //       return;
-          //     })
-          //     .catch(err => {
-          //       this.$alert('退出异常');
-          //     });
-          // } else {
-          //   this.$alert('退出失败');
-          // }
           try {
-            console.log('-------1111111111111-----------');
-            let r = await doCorporationLogout();
-            console.log(r);
-            if (r) {
-              let _href = r.match(htmlRgx)?.[0];
-              console.log(_href);
-              //window.location.href = _href;
-              window.open(_href);
-              //let iframe = document.getElementById('iframe');
-              //iframe.src = _href;
+            let logoutResult = await doPersonLogout();
+            if (logoutResult && logoutResult.status === 200) {
+              if (!logoutResult.result.loginSelf) {
+                //不是个人证件号码或者短息登录
+                // let _href = logoutResult.match(htmlRgx)?.[0];
+                window.open(
+                  'http://117.184.226.149/uc/country/cancel.do?type=1&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-shrs/index.html'
+                );
+              }
+              let logout = this.$store.dispatch('person/do_logout');
+              logout
+                .then(res => {
+                  this.$alert('退出成功');
+                  window.setTimeout(function() {
+                    window.location.href = '/ggzp-shrs/index.html';
+                  }, 2000);
+                  return;
+                })
+                .catch(err => {
+                  this.$alert('退出异常');
+                });
             } else {
-              throw new Error('无法退出');
+              this.$alert('退出失败');
             }
           } catch (err) {
-            console.log('-------222222222222-----------');
             console.log('退出失败');
             throw new Error(err);
           }
-          console.log('-------33333333333333-----------');
-          this.$store
-            .dispatch('corporation/do_logout')
-            .then(res => {
-              this.$alert('退出成功');
-              window.setTimeout(function() {
-                window.location.href = '/ggzp-shrs/index.html';
-                //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
-              }, 2000);
-              return;
-            })
-            .catch(err => {
-              this.$alert('退出异常');
-            });
+        } else if (isCorporation(this)) {
+          //单位退出(需要一网通办协助)
+          try {
+            let logoutResult = await doCorporationLogout();
+            if (
+              logoutResult &&
+              logoutResult.status === 200 &&
+              !logoutResult.result.loginSelf
+            ) {
+              //let _href = logoutResult.match(htmlRgx)?.[0];
+              window.open(
+                'http://117.184.226.149/uc/country/cancel.do?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-shrs/index.html'
+              );
+              this.$store
+                .dispatch('corporation/do_logout')
+                .then(res => {
+                  this.$alert('退出成功');
+                  window.setTimeout(function() {
+                    window.location.href = '/ggzp-shrs/index.html';
+                    //window.open(window.origin + '/ggzp-shrs/index.html', '_self');
+                  }, 2000);
+                  return;
+                })
+                .catch(err => {
+                  this.$alert('退出异常');
+                });
+            } else {
+              this.$alert('无法退出');
+            }
+          } catch (err) {
+            console.log('退出失败');
+            throw new Error(err);
+          }
         }
         //this.$router.push('/')
         //this.$router.push(from.path);
@@ -321,6 +342,17 @@ ul.el-dropdown-menu {
     a {
       color: #606266;
     }
+  }
+}
+.badge-item {
+  position: absolute;
+  right: 5px;
+  top: -10px;
+  ::v-deep .el-badge__content {
+    background-color: #fff;
+    color: #666;
+    padding: 0 5px;
+    line-height: 16px;
   }
 }
 </style>

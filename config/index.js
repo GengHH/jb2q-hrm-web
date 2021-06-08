@@ -46,36 +46,36 @@ module.exports = {
         }
       },
       //本地开发的后台机器（nginx指向单独的一台测试机）
-      '/new-common-api': {
-        target: 'http://localhost:8080/new-common-api',
-        //target: '10.5.102.154:8080/new-pers-api',
+      '/dev-common-api': {
+        target: 'http://localhost:8080/dev-common-api',
+        //target: '10.5.102.154:8080/dev-pers-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/new-common-api': '' 
+          '^/dev-common-api': ''
         }
       },
-      '/new-pers-api': {
-        target: 'http://localhost:8099/new-pers-api',
-        //target: '10.5.102.154:8080/new-pers-api',
+      '/dev-pers-api': {
+        target: 'http://localhost:8099/dev-pers-api',
+        //target: '10.5.102.154:8080/dev-pers-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/new-pers-api': ''
+          '^/dev-pers-api': ''
         }
       },
-      '/new-corp-api': {
-        target: 'http://localhost:8099/new-corp-api',
-        //target: process.env.VUE_APP_BASE_URL + '/new-corp-api',
+      '/dev-corp-api': {
+        target: 'http://localhost:8099/dev-corp-api',
+        //target: process.env.VUE_APP_BASE_URL + '/dev-corp-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/new-corp-api': ''
+          '^/dev-corp-api': ''
         }
       },
-      '/new-admin-api': {
+      '/dev-admin-api': {
         target: 'http://localhost:8080/ggzp-ywjb-shrs',
-        //target: process.env.VUE_APP_BASE_URL + '/new-corp-api',
+        //target: process.env.VUE_APP_BASE_URL + '/dev-corp-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/new-admin-api': ''
+          '^/dev-admin-api': ''
         }
       }
     },

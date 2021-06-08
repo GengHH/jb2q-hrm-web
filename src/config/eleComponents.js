@@ -1,8 +1,8 @@
 /*
  * @Author: GegnHH
  * @Date: 2020-12-02 18:23:36
- * @LastEditTime: 2021-04-27 14:49:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-05-24 13:44:06
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\config\eleComponents.js
  */
@@ -66,7 +66,10 @@ import {
   Icon,
   Dropdown,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  TimePicker,
+  Collapse,
+  CollapseItem
 } from 'element-ui';
 
 //将需要使用的UI组件，绑定成一个vue插件，在每个入口js文件进行引入和安装
@@ -127,6 +130,9 @@ export default {
     V.use(Dropdown);
     V.use(DropdownMenu);
     V.use(DropdownItem);
+    V.use(TimePicker);
+    V.use(Collapse);
+    V.use(CollapseItem);
 
     V.prototype.$notify = Notification;
     V.prototype.$message = Message;

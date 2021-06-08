@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-28 11:14:25
+ * @LastEditTime: 2021-06-01 17:10:04
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -11,6 +11,8 @@ import router from '@/pages/corporation/router';
 const state = {
   //用户token
   token: '',
+  //判断是不是首次进入系统的接口是不是已经调用完毕
+  first_check: false,
   //是否首次进入系统
   first_login: true,
   //证件号码
@@ -47,7 +49,9 @@ const state = {
   //是否特定单位(YESNO)
   special_corp: false,
   //是否允许代理招聘(YESNO)
-  entrust_status: false
+  entrust_status: false,
+  //未读信息数据数量
+  message_count: 0
 };
 
 const mutations = {
@@ -58,6 +62,9 @@ const mutations = {
   },
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_FIRST_CHECK: (state, first_check) => {
+    state.first_check = first_check;
   },
   SET_FIRST_LOGIN: (state, first_login) => {
     state.first_login = first_login;
@@ -106,6 +113,9 @@ const mutations = {
   },
   SET_ENTRUST_STATUS: (state, entrust_status) => {
     state.entrust_status = entrust_status;
+  },
+  SET_MESSAGE_COUNT: (state, message_count) => {
+    state.message_count = message_count;
   }
 };
 const getters = {
@@ -113,6 +123,7 @@ const getters = {
   //   return state.name;
   // }
   token: state => state.token,
+  first_check: state => state.first_check,
   first_login: state => state.first_login,
   username: state => state.dwmc,
   cid: state => state.cid,
@@ -120,7 +131,8 @@ const getters = {
   human_resource_reg: state => state.human_resource_reg,
   keypoint_corp: state => state.keypoint_corp,
   special_corp: state => state.special_corp,
-  entrust_status: state => state.entrust_status
+  entrust_status: state => state.entrust_status,
+  message_count: state => state.message_count
 };
 const actions = {
   //用户登录
@@ -163,11 +175,14 @@ const actions = {
         }
       });
       commit('SET_TOKEN', 'login');
+      commit('SET_FIRST_CHECK', true);
       commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
       commit('SET_LOGIN_TIME', 0);
+      commit('SET_TRAN_BASE_SYMBOL', true);
+      commit('SET_SPECIAL_CORP', true);
       //sessionStorage.setItem('vuex', null);
       resolve();
     });
@@ -177,11 +192,14 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_CORPORATIONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
+      commit('SET_FIRST_CHECK', false);
       commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
       commit('SET_CENTER', '');
       commit('SET_LOGINSTATUS', 0);
       commit('SET_LOGIN_TIME', 0);
+      commit('SET_TRAN_BASE_SYMBOL', false);
+      commit('SET_SPECIAL_CORP', false);
       localStorage.setItem('vuex', null);
       resolve();
     });
@@ -189,60 +207,68 @@ const actions = {
 
   get_corporationInfo({ commit }) {
     getLogonUser()
-      .then(async res => {
+      .then(res => {
         console.log('单位登录信息', res);
         if (res.status == 200 && res.result.logonUser?.organIdStr) {
           commit('SET_CORPORATIONINOF', res.result);
           commit('SET_TOKEN', 'login');
-          let checkRes = await checkCorpInit({
+          //判断是不是首次进入系统,并获取单位的基本类型
+          checkCorpInit({
             cid: res.result.logonUser?.organIdStr
-          }).catch(() => {
-            // 检验单位信息失败，显示系统异常界面
-            router.push('/error');
-          });
-          //判断是不是首次进入系统
-          if (checkRes.status === 200) {
-            commit('SET_FIRST_LOGIN', !checkRes.result.data);
-            //单位标志
-            commit(
-              'SET_TRAN_BASE_SYMBOL',
-              (checkRes.result.tranBaseSymbol &&
-                checkRes.result.tranBaseSymbol) === '1'
-                ? true
-                : false
-            );
-            commit(
-              'SET_HUMAN_RESOURCE_REG',
-              (checkRes.result.humanResourceReg &&
-                checkRes.result.humanResourceReg) === '1'
-                ? true
-                : false
-            );
-            commit(
-              'SET_KEYPOINT_CORP',
-              (checkRes.result.keypointCorp && checkRes.result.keypointCorp) ===
-                '1'
-                ? true
-                : false
-            );
-            commit(
-              'SET_SPECIAL_CORP',
-              (checkRes.result.specialCorp && checkRes.result.specialCorp) ===
-                '1'
-                ? true
-                : false
-            );
-            commit(
-              'SET_ENTRUST_STATUS',
-              (checkRes.result.entrustStatus &&
-                checkRes.result.entrustStatus) === '1'
-                ? true
-                : false
-            );
-            //entrustValid
-          } else {
-            commit('SET_FIRST_LOGIN', false);
-          }
+          })
+            .then(checkRes => {
+              if (checkRes.status === 200) {
+                commit('SET_FIRST_LOGIN', !checkRes.result.data);
+                //单位标志
+                commit(
+                  'SET_TRAN_BASE_SYMBOL',
+                  (checkRes.result.tranBaseSymbol &&
+                    checkRes.result.tranBaseSymbol) === '1'
+                    ? true
+                    : false
+                );
+                commit(
+                  'SET_HUMAN_RESOURCE_REG',
+                  (checkRes.result.humanResourceReg &&
+                    checkRes.result.humanResourceReg) === '1'
+                    ? true
+                    : false
+                );
+                commit(
+                  'SET_KEYPOINT_CORP',
+                  (checkRes.result.keypointCorp &&
+                    checkRes.result.keypointCorp) === '1'
+                    ? true
+                    : false
+                );
+                commit(
+                  'SET_SPECIAL_CORP',
+                  (checkRes.result.specialCorp &&
+                    checkRes.result.specialCorp) === '1'
+                    ? true
+                    : false
+                );
+                commit(
+                  'SET_ENTRUST_STATUS',
+                  (checkRes.result.entrustStatus &&
+                    checkRes.result.entrustStatus) === '1'
+                    ? true
+                    : false
+                );
+                //entrustValid
+              } else {
+                commit('SET_FIRST_LOGIN', false);
+              }
+            })
+            .catch(() => {
+              // 检验单位信息失败，显示系统异常界面
+              commit('SET_TOKEN', 'login');
+              router.push('/error');
+            })
+            .finally(() => {
+              //确认初始化校验完毕
+              commit('SET_FIRST_CHECK', true);
+            });
         } else {
           // 登录成功但是获取人员进本信息失败，显示系统异常界面
           router.push('/error');
@@ -250,6 +276,7 @@ const actions = {
         }
       })
       .catch(e => {
+        router.push('/error');
         console.log('加载单位登录信息出错：' + e);
       });
   }

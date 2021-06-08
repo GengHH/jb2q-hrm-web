@@ -16,10 +16,10 @@
               <el-radio-button label="">不限</el-radio-button>
 
               <el-radio-button
-                v-for="index in gznxLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-radio-button
+                v-for="(item, index) in gznxLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-radio-button
               >
               <!-- <el-radio-button label="01">1年以下</el-radio-button>
               <el-radio-button label="02">1~2年</el-radio-button>
@@ -43,10 +43,10 @@
             >
               <el-checkbox-button label="">不限</el-checkbox-button>
               <el-checkbox-button
-                v-for="index in hyLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-checkbox-button
+                v-for="(item, index) in hyLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-checkbox-button
               >
             </el-checkbox-group>
           </el-col>
@@ -83,17 +83,17 @@
               > -->
               <el-popover
                 v-for="(item, index) in zyLists"
-                :key="item.value"
+                :key="index"
                 placement="bottom"
                 width="600"
                 trigger="click"
                 popper-class="position-popover"
               >
                 <el-checkbox-button
-                  v-for="idx in zyListsTwo[index]"
-                  :key="idx.value"
-                  :label="idx.value"
-                  >{{ idx.label }}</el-checkbox-button
+                  v-for="(item, idx) in zyListsTwo[index]"
+                  :key="idx"
+                  :label="item.value"
+                  >{{ item.label }}</el-checkbox-button
                 >
                 <el-button
                   class="show-popover-button"
@@ -137,10 +137,10 @@
             <el-radio-group v-model="queryParams.workNature" size="medium">
               <el-radio-button label="">不限</el-radio-button>
               <el-radio-button
-                v-for="index in gzxzLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-radio-button
+                v-for="(item, index) in gzxzLists"
+                :key="index"
+                :label="item.value"
+                >{{ item.label }}</el-radio-button
               >
               <!-- <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
@@ -239,8 +239,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in tpOptions"
-                    :key="item.value"
+                    v-for="(item, index) in tpOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -253,8 +253,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in xlOptions"
-                    :key="item.value"
+                    v-for="(item, index) in xlOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -266,8 +266,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in qxOptions"
-                    :key="item.value"
+                    v-for="(item, index) in qxOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -279,8 +279,8 @@
                   class="min-size-select"
                 >
                   <el-option
-                    v-for="item in bsOptions"
-                    :key="item.value"
+                    v-for="(item, index) in bsOptions"
+                    :key="index"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
@@ -303,21 +303,44 @@
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job
-      v-if="queryResult.length"
-      ref="searchJobList"
-      :jobData="queryResult"
-      :total="queryResultTotal"
-      showPager
-      @deliveryResume="deliveryResume(arguments)"
-      @favorJob="favorJob(arguments)"
-      @showJobDetials="showJobDetial(arguments)"
-      @callPositionCorp="callPositionCorp(arguments)"
-    ></per-search-job>
-    <BaseLoadingSvg v-else></BaseLoadingSvg>
+    <el-tabs id="jobInfoGloriette" v-model="activeName">
+      <el-tab-pane :label="defaultJobsCount" name="default">
+        <per-search-job
+          v-if="queryDefaultResult.length"
+          ref="searchDefaultJobList"
+          :jobData="queryDefaultResult"
+          :total="queryDefaultResultTotal"
+          showPager
+          callBackFuncName="queryDefaultJobs"
+          @deliveryResume="deliveryResume(arguments)"
+          @favorJob="favorJob(arguments)"
+          @showJobDetials="showJobDetial(arguments)"
+          @callPositionCorp="callPositionCorp(arguments)"
+        ></per-search-job>
+        <div v-else style="text-align:center;margin-top:100px;color:#999;">
+          暂时没有推荐职位信息
+        </div>
+        <!-- <BaseLoadingSvg ></BaseLoadingSvg> -->
+      </el-tab-pane>
+      <el-tab-pane label="自行检索" name="search">
+        <per-search-job
+          v-if="queryResult.length"
+          ref="searchJobList"
+          :jobData="queryResult"
+          :total="queryResultTotal"
+          showPager
+          @deliveryResume="deliveryResume(arguments)"
+          @favorJob="favorJob(arguments)"
+          @showJobDetials="showJobDetial(arguments)"
+          @callPositionCorp="callPositionCorp(arguments)"
+        ></per-search-job>
+        <BaseLoadingSvg v-else></BaseLoadingSvg>
+      </el-tab-pane>
+    </el-tabs>
     <!-- 职位详细信息 弹窗部分 -->
     <el-dialog
       width="75%"
+      v-if="detailsDialog"
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"
     >
@@ -337,7 +360,7 @@
       :visible.sync="wchatDialog"
       :before-close="wchatHandleClose"
     >
-      <pl-wchat></pl-wchat>
+      <pl-wchat :targetObjId="targetObjId"></pl-wchat>
     </el-dialog>
   </div>
 </template>
@@ -347,10 +370,12 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
-import { getDicText } from '@/utils';
+import { getDicText, niceScrollUpdate } from '@/utils';
 import {
   queryJobs,
+  queryRecommendJobs,
   doDeliveryResume,
+  doDeliveryResumeRecommend,
   doFavorJobs,
   doUnfavorJobs
 } from '@/api/personApi';
@@ -364,10 +389,12 @@ export default {
   },
   data() {
     return {
+      activeName: 'default',
       detailsIndex: null,
       detailsDialog: false,
       wchatDialog: false,
       positionDetailsId: '',
+      positionDetailsRecId: '',
       queryParams: {
         pid: this.$store.getters['person/pid'],
         age: '',
@@ -412,6 +439,8 @@ export default {
       tableData: [],
       queryResult: [],
       queryResultTotal: 0,
+      queryDefaultResult: [],
+      queryDefaultResultTotal: 0,
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -422,10 +451,17 @@ export default {
       bsOptions: this.$store.getters['dictionary/recruit_work_hour'],
       gznxLists: this.$store.getters['dictionary/recruit_work_year'],
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
-      jobList: []
+      jobList: [],
+      targetObjId: '',
+      onePosition: {}
     };
   },
   computed: {
+    defaultJobsCount() {
+      return this.queryDefaultResultTotal
+        ? '管理员推荐（' + this.queryDefaultResultTotal + '）'
+        : '管理员推荐';
+    },
     zyListsTwo() {
       let _data = this.$store.getters['dictionary/recruit_position_s_type'];
       if (_data && _data.length) {
@@ -438,15 +474,25 @@ export default {
         );
       }
       return [];
-    },
-    onePosition() {
-      let that = this;
-      return this.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
     }
+    // onePosition() {
+    //   let that = this;
+    //   if (this.activeName === 'search') {
+    //     //系统搜索职位
+    //     return this.positionDetailsId
+    //       ? this.queryResult.find(function(i) {
+    //           return i.positionId === that.positionDetailsId;
+    //         })
+    //       : {};
+    //   } else {
+    //     //推荐职位
+    //     return this.positionDetailsRecId
+    //       ? this.queryDefaultResult.find(function(i) {
+    //           return i.recId === that.positionDetailsRecId;
+    //         })
+    //       : {};
+    //   }
+    // }
   },
   watch: {
     'queryParams.positionTypeList': function(val, oldVal) {
@@ -467,10 +513,33 @@ export default {
           });
         }
       }, 500)();
+    },
+    positionDetailsId: function(val, oldVal) {
+      let that = this;
+      if (this.activeName === 'search') {
+        //自行搜索职位
+        this.onePosition = that.positionDetailsId
+          ? this.queryResult.find(function(i) {
+              return i.positionId === that.positionDetailsId;
+            })
+          : {};
+      } else {
+        this.onePosition = that.positionDetailsRecId
+          ? this.queryDefaultResult.find(function(i) {
+              return i.recId === that.positionDetailsRecId;
+            })
+          : {};
+      }
     }
   },
   created() {
     this.queryJobs();
+    this.queryDefaultJobs();
+  },
+  updated() {
+    console.log(1234);
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
     minSalaryChange() {
@@ -538,10 +607,10 @@ export default {
         this.$alert('请输入数字');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax < 16) {
-        this.$alert('年龄上线不得低于16周岁');
+        this.$alert('年龄上限不得低于16周岁');
         this.queryParams.ageMax = '';
       } else if (this.queryParams.ageMax > 60) {
-        this.$alert('年龄下线不得超过60周岁');
+        this.$alert('年龄下限不得超过60周岁');
         this.queryParams.ageMax = '';
       } else if (
         this.queryParams.ageMin &&
@@ -562,12 +631,10 @@ export default {
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
+    /**
+     * 根据条件查询职位
+     */
     async queryJobs(val) {
-      // if (!val) {
-      //   this.$alert('请输入查询条件');
-      //   return;
-      // }
-
       let that = this;
       let params = this.$refs['queryJobFrom']?.model
         ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
@@ -580,6 +647,7 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
+        this.activeName = 'search';
         params.pid = that.$store.getters['person/pid'];
         let result = await queryJobs(params);
         console.log('result', result);
@@ -608,6 +676,18 @@ export default {
                 item.workNature
               );
             }
+            if (item.corpNature) {
+              item.corpNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_corp_nature'],
+                item.corpNature
+              );
+            }
+            if (item.industryType) {
+              item.industryTypeText = getDicText(
+                that.$store.getters['dictionary/recruit_industry_type'],
+                item.industryType
+              );
+            }
           });
           this.$set(this, 'queryResult', result.result.pageresult.data);
           this.$set(
@@ -618,6 +698,78 @@ export default {
         } else {
           this.$set(this, 'queryResult', []);
           this.$set(this, 'queryResultTotal', 0);
+          this.$message({
+            type: 'success',
+            message: '未查询到信息'
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    /**
+     * 查询系统默认推荐的职位
+     */
+    async queryDefaultJobs(val) {
+      let that = this;
+      try {
+        this.activeName = 'default';
+        let result = await queryRecommendJobs({
+          pid: that.$store.getters['person/pid'],
+          pageParam: {
+            pageSize: that.$refs.searchDefaultJobList?.pageSize || 10,
+            pageIndex: that.$refs.searchDefaultJobList?.currentPage - 1 || 0
+          }
+        });
+        console.log('defaultResult', result);
+        if (
+          result.status === 200 &&
+          result.result.pageresult &&
+          result.result.pageresult.total
+        ) {
+          result.result.pageresult.data.forEach(item => {
+            // 转换字典
+            if (item.workArea) {
+              item.workAreaText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.workArea
+              );
+            }
+            if (item.eduRequire) {
+              item.eduRequireText = getDicText(
+                that.$store.getters['dictionary/recruit_edu'],
+                item.eduRequire
+              );
+            }
+            if (item.workNature) {
+              item.workNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_work_nature'],
+                item.workNature
+              );
+            }
+            if (item.corpNature) {
+              item.corpNatureText = getDicText(
+                that.$store.getters['dictionary/recruit_corp_nature'],
+                item.corpNature
+              );
+            }
+            if (item.industryType) {
+              item.industryTypeText = getDicText(
+                that.$store.getters['dictionary/recruit_industry_type'],
+                item.industryType
+              );
+            }
+          });
+          this.$set(this, 'queryDefaultResult', result.result.pageresult.data);
+          this.$set(
+            this,
+            'queryDefaultResultTotal',
+            Number(result.result.pageresult.total) || 0
+          );
+        } else {
+          this.activeName = 'search';
+          this.$set(this, 'queryDefaultResult', []);
+          this.$set(this, 'queryDefaultResultTotal', 0);
           this.$message({
             type: 'success',
             message: '未查询到信息'
@@ -641,45 +793,66 @@ export default {
           .siblings('.el-icon-caret-bottom')
           .css('transform', 'rotate(180deg)');
       }
-      // TODO更新滚动条样式
-      //console.log($('#indexApp').getNiceScroll());
-      setTimeout(() => {
-        $('#indexApp')
-          .getNiceScroll()
-          .resize();
-      }, 10);
+      // 更新滚动条
+      this._.throttle(niceScrollUpdate, 500)();
     },
     showJobDetial(arg) {
+      console.log(arg);
       //显示岗位详细信息
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
+      let recId = (arg && arg[2]) || '';
       this.detailsIndex = index;
       this.detailsDialog = true;
       this.positionDetailsId = positionId;
+      this.positionDetailsRecId = recId;
     },
     async deliveryResume(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
-      //投递简历
-      let res = await doDeliveryResume({
-        positionId: positionId,
-        pid: this.$store.getters['person/pid']
-      });
-      if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.queryResult.splice(index, 1);
-        this.$message({ type: 'success', message: '简历投递成功' });
-      } else {
-        this.$message({
-          type: 'error',
-          message: '简历投递失败'
+      let recId = (arg && arg[2]) || '';
+      if (!recId) {
+        //向自己搜索的职位投递简历
+        let res = await doDeliveryResume({
+          positionId: positionId,
+          pid: this.$store.getters['person/pid']
         });
+        if (res.status === 200) {
+          // 更换按钮
+          // this.queryResult.splice(index, 1);
+          this.queryResult[index].applyFor = true;
+          this.$message({ type: 'success', message: '简历投递成功' });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '简历投递失败'
+          });
+        }
+      } else {
+        //向推荐职位投递简历
+        let res = await doDeliveryResumeRecommend({
+          recId: recId,
+          positionId: positionId,
+          pid: this.$store.getters['person/pid']
+        });
+        if (res.status === 200) {
+          // 更换按钮
+          // this.queryResult.splice(index, 1);
+          this.queryDefaultResult[index].applyFor = true;
+          this.$message({ type: 'success', message: '简历投递成功' });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '简历投递失败'
+          });
+        }
       }
     },
     async favorJob(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
       let orginFavorType = arg[2];
+      let recId = arg[3] || '';
       if (!orginFavorType) {
         let res = await doFavorJobs('2', {
           id: positionId,
@@ -687,7 +860,11 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = true;
+          if (!recId) {
+            this.queryResult[index].favor = true;
+          } else {
+            this.queryDefaultResult[index].favor = true;
+          }
           this.$message({ type: 'success', message: '收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '收藏职位失败' });
@@ -700,7 +877,11 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = false;
+          if (!recId) {
+            this.queryResult[index].favor = false;
+          } else {
+            this.queryDefaultResult[index].favor = false;
+          }
           this.$message({ type: 'success', message: '取消收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '取消收藏职位失败' });
@@ -708,8 +889,9 @@ export default {
       }
     },
     callPositionCorp(arg) {
-      console.log(arg);
-      //! TODO显示聊天框
+      let index = arg[0];
+      let corpId = (arg && arg[1]) || '';
+      this.targetObjId = corpId;
       this.wchatDialog = true;
     },
     detailsHandleClose() {

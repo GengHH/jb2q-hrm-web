@@ -6,38 +6,37 @@
         <el-row>
           <el-col :span="19">
             <div class="job-title">
-              {{ positionData.positionName }}
+              {{ realData.positionName }}
               <i
-                v-if="positionData.tranBaseSymbol === '1'"
+                v-if="realData.tranBaseSymbol === '1'"
                 class="bl-bg i-style font-size16"
                 >见习</i
               >
               <span class="font-size24 font-or"
-                >{{ positionData.salaryMin }}-{{ positionData.salaryMax }}</span
+                >{{ realData.salaryMin }}-{{ realData.salaryMax }}</span
               >
             </div>
             <div class="sixteen-opacity mat-15">
-              <span>上海{{ positionData.workAreaText }}</span>
+              <span>上海{{ realData.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ positionData.eduRequireText }}</span>
+              <span>{{ realData.eduRequireText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ positionData.workNatureText }}</span>
+              <span>{{ realData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验{{ Number(positionData.workYearNeed) }}年</span>
+              <span>经验{{ Number(realData.workYearNeed) }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘{{ Number(positionData.recruitNum) }}人</span>
+              <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              {{ positionData.corpName }}
+              <span style="display:inline-block;">{{ realData.corpName }}</span>
               <img
                 src="../../../assets/images/ico_rz.png"
                 alt=""
                 class="ico_rz"
+                style="height: .9em;"
               />
             </p>
-            <p class="four-opacity mat-15">
-              更新于 {{ positionData.releaseTime }}
-            </p>
+            <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
           <el-col :span="5" class="padd-l">
             <el-row :gutter="20">
@@ -46,11 +45,14 @@
                   type="primary"
                   class="white-btn mat-15"
                   @click="
-                    favorJob(positionData.favor, index, positionData.positionId)
+                    favorJob(
+                      realData.favor,
+                      index,
+                      realData.positionId,
+                      realData.recId
+                    )
                   "
-                  ><i v-if="positionData.favor" class="el-icon-star-on"
-                    >已收藏</i
-                  >
+                  ><i v-if="realData.favor" class="el-icon-star-on">已收藏</i>
                   <i v-else class="el-icon-star-off">收藏</i></el-button
                 >
               </el-col>
@@ -60,9 +62,10 @@
                   class="release-btn mat-15"
                   @click="
                     deliveryResume(
-                      positionData.favor,
+                      realData.favor,
                       index,
-                      positionData.positionId
+                      realData.positionId,
+                      realData.recId
                     )
                   "
                 >
@@ -92,10 +95,10 @@
             </el-row>
 
             <p
-              v-if="positionData.tranBaseSymbol === '0'"
+              v-if="realData.tranBaseSymbol === '0'"
               class="four-opacity mat-50"
             >
-              发布机构:{{ positionData.corpName }}
+              发布机构:{{ realData.corpName }}
             </p>
           </el-col>
         </el-row>
@@ -104,7 +107,7 @@
     <!--E  职位详情上半部分-->
     <el-row id="jobSearchBox">
       <el-col :span="19" class="middle-box padd-lr bor-r">
-        <div class="title-border">职位描述</div>
+        <!-- <div class="title-border">职位描述</div>
         <p class="mat-15 little-tit">岗位职责 TODO：</p>
         <p class="little-tit">
           1、负责公司房产的营销推广，并做好相应的渠道开拓，并维护好渠道及客户关系；
@@ -133,11 +136,12 @@
         </p>
         <p class="little-tit">待遇：</p>
         <p class="little-tit">底薪5k+业绩提成+满勤+公司福利 做六休一</p>
-        <p class="little-tit">固定团建，弹性工作</p>
-        <div class="title-border mat-15">公司介绍</div>
+        <p class="little-tit">固定团建，弹性工作</p> 
+        <div class="title-border mat-15">公司介绍</div>-->
+        <div class="title-border mat-15">职位描述</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
-            {{ positionData.describe }}
+            {{ realData.describe }}
           </p>
           <!-- <p class="introduce little-tit">
             金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
@@ -154,7 +158,7 @@
         <div class="title-border mat-30">工作地址</div>
         <div class="map-box">
           <!-- <img src="../../../assets/images/map.png" alt="" /> -->
-          <pl-map></pl-map>
+          <pl-map :pointList="pointList"></pl-map>
         </div>
         <div class="title-border mat-15">
           看过该职位的人还看了 TODO
@@ -203,13 +207,13 @@
           />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
-              {{ positionData.releaseUserId }}
+              {{ realData.releaseUserId }}
               <span class="dqzx-span">当前在线</span>
             </p>
             <el-button
               type="primary"
               class="gray-btn or-br mat-15"
-              @click="callPositionCorp(positionData.positionId)"
+              @click="callPositionCorp(realData.positionId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
             >
           </div>
@@ -220,7 +224,7 @@
             src="../../../assets/images/logos.png"
             alt=""
           />
-          <p class="font-sixteen font-or name-p">{{ positionData.corpName }}</p>
+          <p class="font-sixteen font-or name-p">{{ realData.corpName }}</p>
         </div>
         <div class="module1">
           <p class="four-opacity">
@@ -279,6 +283,8 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
+import { queryRecommendDetai } from '@/api/personApi';
+import { getDicText } from '@/utils';
 export default {
   name: 'JobSearchIndex',
   props: {
@@ -295,11 +301,29 @@ export default {
     PlMap
   },
   data() {
-    return {};
+    return {
+      realData: {}
+    };
   },
   computed: {
     describeList() {
-      return this.positionData.describe.split('\n');
+      return this.realData.describe.split('\n');
+    },
+    pointList() {
+      return this.positionData?.workAddress
+        ? [this.positionData.workAddress]
+        : [];
+    }
+  },
+  created() {
+    //如果是推荐的职位
+    if (this.positionData.recId) {
+      this.queryPositionDetials(
+        this.positionData.recId,
+        this.positionData.positionId
+      );
+    } else {
+      this.realData = { ...this.positionData };
     }
   },
   methods: {
@@ -309,22 +333,22 @@ export default {
     uploadResume() {
       this.$emit('uploadResume');
     },
-    deliveryResume(favor, index, positionId) {
+    deliveryResume(favor, index, positionId, recId) {
       //投递简历
       this.$confirm('确认向该职位投递简历？')
         .then(() => {
-          this.$emit('deliveryResume', index, positionId); //通知父组件改变。
+          this.$emit('deliveryResume', index, positionId, recId); //通知父组件改变。
         })
         .catch(err => {
           console.log(err);
         });
     },
-    favorJob(favor, index, positionId) {
+    favorJob(favor, index, positionId, recId) {
       //收藏或者取消收藏职位
       let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
       this.$confirm(str)
         .then(() => {
-          this.$emit('favorJob', index, positionId, favor);
+          this.$emit('favorJob', index, positionId, favor, recId);
         })
         .catch(err => {
           console.log(err);
@@ -332,6 +356,54 @@ export default {
     },
     callPositionCorp(positionId) {
       this.$emit('callPositionCorp', positionId);
+    },
+    /**
+     * 查询推荐的职位的详细信息
+     */
+    async queryPositionDetials(recId, positionId) {
+      let that = this;
+      let res = await queryRecommendDetai({
+        recId: recId,
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      });
+      if (res && res.status === 200) {
+        let item = res.result.data;
+        // 转换字典
+        if (item.workArea) {
+          item.workAreaText = getDicText(
+            that.$store.getters['dictionary/ggjbxx_qx'],
+            item.workArea
+          );
+        }
+        if (item.eduRequire) {
+          item.eduRequireText = getDicText(
+            that.$store.getters['dictionary/recruit_edu'],
+            item.eduRequire
+          );
+        }
+        if (item.workNature) {
+          item.workNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_work_nature'],
+            item.workNature
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            that.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+        this.realData = item;
+      } else if (res) {
+        this.$message({ type: 'error', message: '无法获取详细信息' });
+      }
     }
   }
 };

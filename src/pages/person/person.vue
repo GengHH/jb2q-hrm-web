@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-23 15:07:17
+ * @LastEditTime: 2021-06-01 14:44:12
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -20,7 +20,7 @@
 /**
  * 个人管理系统入口界面
  */
-import { niceScroll } from '@/utils';
+import { niceScroll, niceScrollUpdate } from '@/utils';
 import BaseHeader from '@/components/common/BaseHeader.vue';
 export default {
   name: 'app',
@@ -40,19 +40,22 @@ export default {
         //   nvaText: this.$store.getters.name || '临时工'
         // },
         {
-          id: '7',
-          path: '/blak1',
+          id: '9',
+          path: '/blank',
           nvaText: '时钟',
           icon: true,
           iconName: 'el-icon-time'
         },
         {
-          id: '6',
+          id: '8',
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
+          type: 'badge',
           iconName: 'el-icon-bell'
         },
+        { id: '7', path: '/activity', nvaText: '特色活动' },
+        { id: '6', path: '/jobFair', nvaText: '招聘会' },
         { id: '5', path: '/personInfo', nvaText: '个人信息维护' },
         { id: '4', path: '/jobFindFeedback', nvaText: '求职反馈' },
         { id: '3', path: '/personalCenter', nvaText: '个人中心' },
@@ -85,27 +88,22 @@ export default {
     }
   },
   created() {
-    this.getUserName();
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
+    let timer = setInterval(() => {
+      if (this.$store.getters['person/username']) {
+        this.userLogInfo.nvaText = this.$store.getters['person/username'];
+        if (timer) {
+          clearInterval(timer);
+        }
+      }
+    }, 300);
   },
   mounted() {
-    //niceScroll('#indexApp');
+    console.log(11111111);
     niceScroll('#indexApp');
-    // setTimeout(function() {
-    //   niceScroll('#indexApp');
-    // }, 10);
   },
   updated() {
-    setTimeout(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
-    }, 10);
+    console.log(22222222);
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>
