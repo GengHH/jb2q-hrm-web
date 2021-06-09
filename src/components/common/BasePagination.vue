@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 15:32:44
+ * @LastEditTime: 2021-06-09 13:54:14
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BasePagination.vue
 -->
@@ -10,6 +10,7 @@
   <el-pagination
     v-show="showPager"
     v-bind="pageAttrs"
+    :class="pagerClass"
     @size-change="handleSizeChange"
     @current-change="handleClick"
     @prev-click="handleClick"
@@ -38,6 +39,10 @@ export default {
     totalCount: {
       type: Number,
       default: 0
+    },
+    pagerClass: {
+      type: String,
+      default: 'peger-center'
     }
     // currentPage: {
     //   type: Number,

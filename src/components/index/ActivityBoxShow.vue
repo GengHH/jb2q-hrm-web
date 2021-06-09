@@ -3,40 +3,75 @@
   <div class="activity-box-module">
     <el-row>
       <el-col :sm="2" :md="4" :lg="6" class="pr">
-        <img src="../../assets/img/img04.png" alt="" />
-        <div v-if="online" class="float-div">
+        <!-- <img src="../../assets/img/img04.png" alt="" /> -->
+        <img
+          v-if="
+            activityInfo.propagandaImage || activityInfo.propagandaImage === ''
+          "
+          class="activity-img"
+          :src="'data:image/jpg;base64,' + activityInfo.propagandaImage"
+          @error="defImg"
+          alt="未加载"
+        />
+        <div
+          v-if="activityInfo.actType === '01'"
+          class="activity-type activity-type-one"
+        >
           <i class="circle-sty"></i>讲座
         </div>
-        <div v-if="offline" class="float-div2">
+        <div
+          v-if="activityInfo.actType === '02'"
+          class="activity-type activity-type-two"
+        >
           <i class="circle-sty"></i>主题咨询活动
+        </div>
+        <div
+          v-if="activityInfo.actType === '03'"
+          class="activity-type activity-type-three"
+        >
+          <i class="circle-sty"></i>集体指导活动
+        </div>
+        <div
+          v-if="activityInfo.actType === '04'"
+          class="activity-type activity-type-four"
+        >
+          <i class="circle-sty"></i>其他
         </div>
       </el-col>
       <el-col class="ul-style" :sm="22" :md="20" :lg="18">
-        <p class="black-font">
-          “助跑就业，青春有梦”——2020年长宁区高校毕业生专场招聘会
+        <p class="activity-title black-font">
+          <!-- “助跑就业，青春有梦”——2020年长宁区高校毕业生专场招聘会 -->
+          <b>
+            {{ activityInfo.actName }}
+          </b>
+          <span v-if="activityInfo.expertJoin" class="span-line">{{
+            activityInfo.expertJoin === '1' ? '专家' : '非专家'
+          }}</span>
         </p>
         <el-row class="mat-15 details-info">
           <el-col :span="18">
             <p class="  line30 or-font">
-              <i class="icon iconfont ">&#xe651;</i> 2020-11-26 9:00 至
-              2020-11-28 18:00
+              <i class="icon iconfont ">&#xe651;</i>
+              {{ activityInfo.actStartTime }} 至
+              {{ activityInfo.actEndTime }}
             </p>
             <p class="  line30 mat-15">
               <i class="icon iconfont">&#xe652;</i> 人数限制 ：<i
                 class="or-font"
-                >16</i
+                >{{ activityInfo.selfApplyMax || 0 }}</i
               >
               人
               <span style="width:50px;display: inline-block;"></span>
               <i class="icon iconfont">&#xe652;</i> 还剩名额 ：<i
                 class="or-font"
-                >16</i
+                >{{ activityInfo.remainingPlaces || 0 }}</i
               >
               人
             </p>
             <p class="  line30">
               <i class="icon iconfont">&#xe650;</i>
-              招聘地点：长宁区就业促进中心(长宁区武夷路517号)
+              <!-- 招聘地点：长宁区就业促进中心(长宁区武夷路517号) -->
+              招聘地点：{{ activityInfo.actAddress }}
               <el-link class="blue-font" :underline="false">
                 <i class="icon iconfont">&#xe654;</i>
                 <span @click="showMap">附近交通</span></el-link
@@ -44,9 +79,12 @@
             </p>
           </el-col>
           <el-col :span="6" class="text-right">
-            <el-button class="release-btn font-size18 mat-15" type="primary"
+            <el-button
+              class="release-btn font-size18 mat-15"
+              type="primary"
+              @click="clickDetials(activityInfo.actId)"
               ><i class="icon iconfont font-size20">&#xe653;</i>
-              去报名</el-button
+              查看详情</el-button
             >
           </el-col>
         </el-row>
@@ -76,6 +114,7 @@ export default {
   },
   data() {
     return {
+      defaultImg: require('@/assets/images/break-img.svg'),
       online: true,
       offline: false,
       mapDialog: false,
@@ -89,6 +128,20 @@ export default {
     },
     mapHandleClose() {
       this.mapDialog = false;
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg() {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
+    },
+    /**
+     *显示详情
+     */
+    clickDetials(actId) {
+      this.$emit('clickDetials', actId);
     }
   }
 };
@@ -135,8 +188,7 @@ export default {
   .pr {
     height: 100%;
     position: relative;
-    .float-div,
-    .float-div2 {
+    .activity-type {
       position: absolute;
       top: 10px;
       left: 0;
@@ -144,18 +196,31 @@ export default {
       border-radius: 0 15px 15px 0;
       font-size: 16px;
       color: #fff;
-    }
-    .float-div {
-      background: rgba(252, 111, 61, 0.9);
-    }
-    .float-div2 {
-      background: rgba(71, 102, 164, 0.9);
+      &-one {
+        background: rgba(255, 152, 0, 0.6);
+      }
+      &-two {
+        background: rgba(3, 169, 244, 0.6);
+      }
+      &-three {
+        background: rgba(0, 150, 136, 0.6);
+      }
+      &-four {
+        background: rgba(153, 153, 153, 0.6);
+      }
     }
   }
-  .black-font {
-    font-size: 20px;
-    color: #000000;
+  .activity-title {
+    font-size: 16px;
+    font-weight: 800;
+    // margin: 20px 0;
+    padding: 20px 10px;
     line-height: 30px;
+    b {
+      font-family: 宋体, Arial, Verdana, sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+    }
     .span-line,
     .span-line2 {
       padding: 3px 7px;
@@ -170,5 +235,23 @@ export default {
       background-color: #4766a4;
     }
   }
+  // .black-font {
+  //   font-size: 20px;
+  //   color: #000000;
+  //   line-height: 30px;
+  //   .span-line,
+  //   .span-line2 {
+  //     padding: 3px 7px;
+  //     font-size: 16px;
+  //     color: #fff;
+  //     border-radius: 5px;
+  //   }
+  //   .span-line {
+  //     background-color: #fc7a43;
+  //   }
+  //   .span-line2 {
+  //     background-color: #4766a4;
+  //   }
+  // }
 }
 </style>

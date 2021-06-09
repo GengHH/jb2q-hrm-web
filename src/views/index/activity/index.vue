@@ -1,22 +1,41 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-12-08 16:30:54
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-09 14:14:46
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
+-->
 <template>
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
       <BaseSearch
         :placeholder="searchPlaceHolder"
-        @clickButton="queryActivies($event)"
+        @clickButton="queryActivityList($event)"
       ></BaseSearch>
       <!-- 职位展示位 -->
       <div id="activityBox">
         <ActivityBoxShow
           v-for="activityInfo in showList"
-          :key="activityInfo.id"
-          :activity="activityInfo"
-          @click.native="activityBoxClick(activityInfo)"
+          :key="activityInfo.actId"
+          :activityInfo="activityInfo"
+          @clickDetials="activityBoxClick($event)"
         ></ActivityBoxShow>
       </div>
       <!-- 分页组件 -->
-      <BasePagination v-if="total > 0"></BasePagination>
+      <BasePagination
+        ref="page"
+        :showPager="total > 0"
+        :totalCount="total"
+        @changePage="queryActivityList"
+      ></BasePagination>
+      <div
+        v-if="total == 0"
+        style="width:100%;text-align:center;color:#999;margin-top:100px;"
+      >
+        没有查询数据
+      </div>
     </div>
   </div>
 </template>
@@ -25,7 +44,7 @@
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import BasePagination from '@/components/common/BasePagination.vue';
 import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
-import { queryActivies } from '@/api/indexApi';
+import { queryActivityList } from '@/api/indexApi';
 export default {
   name: 'app',
   components: {
@@ -41,71 +60,51 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       total: 0,
-      showList: [{ id: 12 }]
+      showList: []
     };
   },
-  computed: {
-    jobFaieList: function() {
-      return this.showList ? this.showList.slice(0, 3) : [];
-    }
+  mounted() {
+    this.queryActivityList();
   },
   methods: {
-    async queryActivies(actName) {
-      let res = await queryActivies({
-        pageSize: 10,
-        pageIndex: 0,
-        actName: actName
-      }).catch(() => {
-        this.$massage({
-          type: 'error',
-          message: '系统异常，查询失败'
-        });
-        this.showList = [];
+    async queryActivityList(activityName) {
+      let res = await queryActivityList({
+        pageSize: this.$refs.page.pageSize || 10,
+        pageIndex: this.$refs.page.currentPage - 1 || 0,
+        activityName: activityName ? $.trim(activityName) : ''
       });
       if (res.status === 200) {
         this.total = res.result.pageresult.total;
         this.showList = res.result.pageresult.data;
-      } else {
+      } else if (res) {
         this.total = 0;
         this.showList = [];
-        this.$massage({ type: 'error', message: '查询失败' });
+        this.$massage({ type: 'error', message: '查询特色活动失败' });
       }
     },
-    activityBoxClick(e) {
+    activityBoxClick(actId) {
       this.$router
         .push({
           path: '/activityDetails',
-          query: { activityId: e.id },
+          query: { activityId: actId },
           params: { data: this.showList }
         })
         .catch(err => err);
     },
-    showMore() {
+    changePage() {
       this.$message('this is more');
     }
-  },
-  created() {
-    // console.log("index begin creating");
-    // console.log(this);
-    // console.log(this.$data);
-    // this.axios.get('/admin/index').then(res =>{
-    //   this.$set(this.obj,'siet',res.data)
-    // }).catch( err=>{
-    //   console.log(err)
-    // });
   }
 };
 </script>
 
 <style lang="scss" scoped>
 #indexBody {
-  width: 90%;
+  width: 100%;
   min-height: 100%;
-  //max-height:1000px;
-  margin: 0 auto 30px;
-  padding-top: 90px;
+  padding: 90px 50px 10px;
+  background-color: #fff;
   #activityBox {
-    background-color: #fff;
     margin-top: 32px;
     margin-bottom: 50px;
     //padding: 40px;

@@ -44,14 +44,12 @@
       :fairInfo="item"
     ></FairBoxShow>
     <!-- S 分页部分 -->
-    <div id="demo5" class="page-box tac">
-      <BasePagination
-        ref="page"
-        :showPager="totalCount > 0"
-        :totalCount="totalCount"
-        @changePage="changePage"
-      ></BasePagination>
-    </div>
+    <BasePagination
+      ref="page"
+      :showPager="totalCount > 0"
+      :totalCount="totalCount"
+      @changePage="changePage"
+    ></BasePagination>
   </div>
 </template>
 

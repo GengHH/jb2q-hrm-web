@@ -2,11 +2,6 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <!-- 职位展示位 -->
-      <!-- <div id="activityBox">
-        <ActivityBoxShow></ActivityBoxShow>
-      </div> -->
-
       <!--S 专栏部分 -->
       <div class="middle-box white-bg ">
         <el-row>
@@ -17,7 +12,7 @@
                 activityItem.propagandaImage ||
                   activityItem.propagandaImage === ''
               "
-              class="fair-img"
+              class="activity-img"
               :src="'data:image/jpg;base64,' + activityItem.propagandaImage"
               @error="defImg"
               alt="未加载"
@@ -47,17 +42,16 @@
               2020-11-28 18:00
             </p>
             <p class="six-hui  line30 mat-15">
-              <el-button class="release-btn font-size18" type="primary"
+              <!-- <el-button class="release-btn font-size18" type="primary"
                 ><i class="icon iconfont font-size20">&#xe653;</i>
                 去报名</el-button
-              >
+              > -->
               还剩名额：<i class="or-font">28</i> 个
             </p>
           </el-col>
         </el-row>
       </div>
       <!-- E 专栏部分 -->
-
       <div class="middle-box">
         <div class="bout-us-box2">
           <!--S 特色专栏部分 -->
@@ -112,7 +106,6 @@
 </template>
 
 <script>
-//import ActivityBoxShow from '@/components/index/ActivityBoxShow.vue';
 export default {
   name: 'ActivityInfoDetails',
   components: {
@@ -187,6 +180,7 @@ export default {
     background: #fff;
   }
   .ul-style {
+    padding-top: 20px;
     padding-left: 20px;
     box-sizing: border-box;
   }

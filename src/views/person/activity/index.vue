@@ -48,21 +48,29 @@
           @mouseleave="item.isFlipped = !item.isFlipped"
         >
           <div class="card__pattern" slot="front">
-            <p class="activity-type activity-one">
-              <span v-if="item.actType === '01'" class="span-line">讲座</span>
+            <p
+              v-if="item.actType === '01'"
+              class="activity-type activity-type-one"
+            >
+              <span class="span-line">讲座</span>
             </p>
-            <p class="activity-type activity-two">
-              <span v-if="item.actType === '02'" class="span-line2"
-                >主题咨询活动</span
-              >
+            <p
+              v-if="item.actType === '02'"
+              class="activity-type activity-type-two"
+            >
+              <span class="span-line2">主题咨询活动</span>
             </p>
-            <p class="activity-type activity-three">
-              <span v-if="item.actType === '03'" class="span-line2"
-                >集体指导活动</span
-              >
+            <p
+              v-if="item.actType === '03'"
+              class="activity-type activity-type-three"
+            >
+              <span class="span-line2">集体指导活动</span>
             </p>
-            <p class="activity-type activity-four">
-              <span v-if="item.actType === '04'" class="span-line2">其他</span>
+            <p
+              v-if="item.actType === '04'"
+              class="activity-type activity-type-four"
+            >
+              <span class="span-line2">其他</span>
             </p>
             <img
               v-if="item.propagandaImage || item.propagandaImage === ''"
