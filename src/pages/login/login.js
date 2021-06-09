@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-07 18:34:47
+ * @LastEditTime: 2021-06-09 10:59:20
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -47,7 +47,7 @@ const vm = new Vue({
   components: { App }
 });
 
-if (isAdmin(vm)) {
+if (isAdmin()) {
   vm.$alert('已有管理员登录本系统，请先退出登录');
   setTimeout(() => {
     window.location.href = '/ggzp-shrs/index.html';

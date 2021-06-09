@@ -2,7 +2,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: Please set LastEditors
+ * @LastEditors: GengHH
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -13,15 +13,20 @@
  * @returns {boolean}
  */
 export function isNoBody(vm) {
-  let a =
-    !!vm &&
-    !!vm.$store &&
-    (!!vm.$store.getters['person/token'] ||
-      !!vm.$store.getters['corporation/token']);
-
   let localData = JSON.parse(localStorage.getItem('vuex') || null);
   let login = !!localData?.person?.token || !!localData?.corporation?.token;
-  return !a && !login;
+  if (vm) {
+    //非管理员模块判断
+    let a =
+      !!vm &&
+      !!vm.$store &&
+      (!!vm.$store.getters['person/token'] ||
+        !!vm.$store.getters['corporation/token']);
+    return !a && !login;
+  } else {
+    //管理员模块判断
+    return !login;
+  }
 }
 
 /**
@@ -30,11 +35,16 @@ export function isNoBody(vm) {
  * @returns {boolean}
  */
 export function isPerson(vm) {
-  let storePerson = vm && vm.$store && vm.$store.getters['person/token'];
-
   let localData = JSON.parse(localStorage.getItem('vuex') || null);
   let login = !!localData?.person?.token;
-  return storePerson || login;
+  if (vm) {
+    //非管理员模块判断
+    let storePerson = vm && vm.$store && vm.$store.getters['person/token'];
+    return storePerson || login;
+  } else {
+    //管理员模块判断
+    return login;
+  }
 }
 
 /**
@@ -43,12 +53,17 @@ export function isPerson(vm) {
  * @returns {boolean}
  */
 export function isCorporation(vm) {
-  let storeCorporation =
-    vm && vm.$store && vm.$store.getters['corporation/token'];
-
-  let localData = JSON.parse(localStorage.getItem('vuex') || null);
+  let localData = JSON.parse(localStorage.getItem('a-vuex') || null);
   let login = !!localData?.corporation?.token;
-  return storeCorporation || login;
+  if (vm) {
+    //非管理员模块判断
+    let storeCorporation =
+      vm && vm.$store && vm.$store.getters['corporation/token'];
+    return storeCorporation || login;
+  } else {
+    //管理员模块判断
+    return login;
+  }
 }
 
 /**
@@ -57,11 +72,16 @@ export function isCorporation(vm) {
  * @returns {boolean}
  */
 export function isAdmin(vm) {
-  let storeAdmin = vm && vm.$store && vm.$store.getters['admin/token'];
-
-  let localData = JSON.parse(localStorage.getItem('vuex'));
+  let localData = JSON.parse(localStorage.getItem('a-vuex') || null);
   let login = !!localData?.admin?.token;
-  return storeAdmin || login;
+  if (vm) {
+    //管理员模块判断
+    let storeAdmin = vm && vm.$store && vm.$store.getters['admin/token'];
+    return storeAdmin || login;
+  } else {
+    //非管理员模块判断
+    return login;
+  }
 }
 
 /**

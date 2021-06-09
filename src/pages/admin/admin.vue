@@ -1,8 +1,8 @@
 <!--
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-04 17:26:22
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-08 17:43:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
@@ -26,11 +26,7 @@
               >
                 <i class="nva-icon" :class="v.iconName"></i>
               </div>
-              <div class="list">
-                欢迎您！{{ $store.state.admin.userInfo.logonUser.userName }}（{{
-                  $store.state.admin.userInfo.logonUser.organName
-                }}）
-              </div>
+              <div class="list">欢迎您！{{ name }}（{{ organ }}）</div>
             </el-col>
           </el-row>
         </div>
@@ -226,6 +222,12 @@ export default {
     }
   },
   computed: {
+    name() {
+      return this.$store.state.admin.userInfo?.logonUser?.userName || '';
+    },
+    organ() {
+      return this.$store.state.admin.userInfo?.logonUser?.organName || '';
+    },
     height() {
       let h = document.documentElement.clientHeight;
       return h < 600 ? 600 : h - 112;
@@ -236,7 +238,7 @@ export default {
     }
   },
   mounted() {
-    let dataList = this.$store.state.admin.userInfo.menus;
+    let dataList = this.$store.state.admin.userInfo.menus || [];
     dataList.map(e => {
       e.iconName = e.menuIcon;
       e.id = e.menuId;
@@ -256,8 +258,8 @@ export default {
     niceScroll('.el-aside');
     //添加水印
     setWaterMark(
-      this.$store.state.admin.userInfo.logonUser.userIdStr,
-      this.$store.state.admin.userInfo.logonUser.userName
+      this.$store.state.admin.userInfo?.logonUser?.userIdStr || '',
+      this.$store.state.admin.userInfo?.logonUser?.userName || ''
     );
     //获取标签
     label_query(

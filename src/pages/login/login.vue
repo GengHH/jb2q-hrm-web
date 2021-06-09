@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-07 18:36:04
+ * @LastEditTime: 2021-06-08 09:51:44
  * @Description: file content
 -->
 <template>
@@ -403,9 +403,9 @@ export default {
       let vm = this;
       if (isAdmin(vm)) {
         vm.$alert('已有管理员登录本系统，请先退出登录');
-        setTimeout(() => {
-          window.location.href = '/ggzp-shrs/admin.html';
-        }, 2000);
+        // setTimeout(() => {
+        //   window.location.href = '/ggzp-shrs/index.html';
+        // }, 2000);
       } else if (isNoBody(vm)) {
         return;
       } else if (

@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-05-28 14:55:07
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-08 17:51:36
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
  */
@@ -70,8 +70,8 @@ function postAction(url, params, fn, fnErr) {
             duration: 1500,
             type: 'error',
             onClose: () => {
-              store.dispatch('admin/logout');
-              window.location.href = '/ggzp-shrs/adminLogin.html';
+              //store.dispatch('admin/logout');
+              //window.location.href = '/ggzp-shrs/adminLogin.html';
             }
           });
           return;

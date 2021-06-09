@@ -2,12 +2,13 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-08 16:50:31
+ * @LastEditTime: 2021-06-09 11:04:20
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
 <template>
   <div id="indexApp" class="index-scroll">
+    <!-- <input v-model="$store.index.priorityLoginType" /> -->
     <!-- Header -->
     <HeaderIndex :nav-list="navList"></HeaderIndex>
     <!-- <transition name="fade"> -->
