@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-11 10:51:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 11:05:44
+ * @LastEditTime: 2021-06-10 09:53:26
  * @Description: 全局公用的各种正则表达式
  * @FilePath: \jb2q-hrm-web\src\utils\regexp.js
  */
@@ -50,7 +50,9 @@ export const numPattern = /^-?\d*\.?\d+$/;
 //Email正则
 export const ePattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 //手机号正则
-export const mPattern = /^1[34578]\d{9}$/;
+// export const mPattern = /^1[34578]\d{9}$/;
+//固定电话号正则
+export const telephonePattern = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,11}$/;
 //身份证号（18位）正则
 export const cP = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
 //身份证号（15位）正则

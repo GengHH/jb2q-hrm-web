@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-26 18:22:50
+ * @LastEditTime: 2021-06-10 13:49:57
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -169,16 +169,28 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="positionType" required>
+        <el-form-item prop="positionTypeOne" required>
           <pl-select
-            v-model="jobForm.positionType"
-            label="职位分类"
+            v-model="jobForm.positionTypeOne"
+            label="职位分类一级"
             :optionData="dicZyflData"
             class="w-select"
           >
           </pl-select>
         </el-form-item>
       </el-col>
+      <el-col :span="12">
+        <el-form-item prop="positionType" required>
+          <pl-select
+            v-model="jobForm.positionType"
+            label="职位分类二级"
+            :optionData="dicZyflDataTwo"
+            class="w-select"
+          >
+          </pl-select>
+        </el-form-item>
+      </el-col>
+      <!-- 待修改 -->
       <el-col :span="12">
         <el-col :span="12" class="row-input-one">
           <el-form-item class="input-one" prop="ageMin" required>
@@ -217,7 +229,7 @@
             required
             multiple
             v-model="jobForm.workStreetList"
-            label="工作街镇"
+            placeholder="请选择工作街镇"
             :optionData="dicStreet"
             class="w-select"
           >
@@ -452,10 +464,17 @@ export default {
         //tranBaseSymbol: '',
         //agencyRecruit: '',
         entrustCorpName: '',
+        positionTypeOne: [
+          {
+            required: true,
+            message: '请选择职位分类一级',
+            trigger: ['blur', 'change']
+          }
+        ],
         positionType: [
           {
             required: true,
-            message: '请选择职位分类',
+            message: '请选择职位分类二级',
             trigger: ['blur', 'change']
           }
         ],
@@ -600,6 +619,7 @@ export default {
         entrustTyshxym: '',
         entrustCorpName: '',
         corpId: '',
+        positionTypeOne: '',
         positionType: '',
         workNature: '',
         ageMax: '',
@@ -622,6 +642,7 @@ export default {
         tranCorpId: '', //内网就业见习单位标识
         tranCorpName: '' //内网就业见习单位名称
       },
+      isDefaultPosition: false,
       isDefaultStreet: false,
       showWorkStreetList: [],
       dicGzqyData: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -636,6 +657,7 @@ export default {
       isHumanResourceReg: this.$store.getters['corporation/human_resource_reg'],
       isTranBaseSymbol: this.$store.getters['corporation/tran_base_symbol'],
       dicStreet: [],
+      dicZyflDataTwo: [],
       expireTimeOption: {
         disabledDate(date) {
           //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
@@ -660,19 +682,19 @@ export default {
     this._.throttle(niceScrollUpdate, 500)();
   },
   computed: {
-    dicZyflDataTwo() {
-      let _data = this.$store.getters['dictionary/recruit_position_s_type'];
-      if (_data && _data.length) {
-        return Object.values(
-          _data.reduce((res, item) => {
-            let _code = '' + Number(item.value.substring(0, 2));
-            res[_code] ? res[_code].push(item) : (res[_code] = [item]);
-            return res;
-          }, {})
-        );
-      }
-      return [];
-    }
+    // dicZyflDataTwo() {
+    //   let _data = this.$store.getters['dictionary/recruit_position_s_type'];
+    //   if (_data && _data.length) {
+    //     return Object.values(
+    //       _data.reduce((res, item) => {
+    //         let _code = '' + Number(item.value.substring(0, 2));
+    //         res[_code] ? res[_code].push(item) : (res[_code] = [item]);
+    //         return res;
+    //       }, {})
+    //     );
+    //   }
+    //   return [];
+    // }
     /**
      * 职位信息或者委托单位信息分页
      */
@@ -698,6 +720,9 @@ export default {
     // }
   },
   watch: {
+    /**
+     * 根据区县动态变更街道信息
+     */
     'jobForm.workArea': function() {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
@@ -724,6 +749,29 @@ export default {
         ? this.showWorkStreetList
         : [];
       this.isDefaultStreet = false;
+    },
+    /**
+     * 根据一级职位动态变更二级职位信息
+     */
+    'jobForm.positionTypeOne': function(val, oldVal) {
+      let that = this;
+      if (this.$store.getters['dictionary/recruit_position_s_type']) {
+        let array = this.$store.getters['dictionary/recruit_position_s_type'];
+        let newArray = []; //查找符合条件值并存入新数组
+        // let exist = false;
+        for (let i in array) {
+          if (array[i].value.substr(0, 2) === that.jobForm.positionTypeOne) {
+            newArray[newArray.length] = array[i];
+          }
+        }
+        that.dicZyflDataTwo = newArray;
+      }
+      if (this.isDefaultPosition) {
+        this.isDefaultPosition = false;
+      } else {
+        this.jobForm.positionType = '';
+      }
+      return;
     },
     // dicStreet: function() {
     //   let that = this;
@@ -807,7 +855,7 @@ export default {
               this.jxjdData.positionDataList.slice((i - 1) * 20, i * 20)
             );
           }
-          console.log(this.jyjxList);
+          // console.log(this.jyjxList);
           this.carouselPageCount = pageCount;
         } else if (this.jxjdData?.baseComDataList?.length) {
           this.jyjxList = [];
@@ -819,7 +867,7 @@ export default {
               this.jxjdData.baseComDataList.slice((i - 1) * 20, i * 20)
             );
           }
-          console.log(this.jyjxList);
+          // console.log(this.jyjxList);
           this.carouselPageCount = pageCount;
         } else {
           //没有职位信息
@@ -978,7 +1026,12 @@ export default {
     async findPositionDetail() {
       let queryResult = await findPositionDetail(this.query || {});
       if (queryResult && queryResult.status === 200) {
+        queryResult.result.data.positionTypeOne = queryResult.result.data
+          .positionType
+          ? queryResult.result.data.positionType.substr(0, 2)
+          : '';
         this.jobForm = { ...queryResult.result.data };
+        this.isDefaultPosition = true;
         //临时存储一下街道数据
         this.isDefaultStreet = true;
         this.showWorkStreetList = queryResult.result.data.workStreetList;

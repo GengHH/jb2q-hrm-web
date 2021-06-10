@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 16:47:44
+ * @LastEditTime: 2021-06-10 10:29:07
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -421,14 +421,16 @@ export default {
           });
           if (reusult && reusult.status === 200) {
             done();
-            this.$message({
-              showClose: true,
-              message: '保存成功!',
-              type: 'success'
-            });
+            // this.$message({
+            //   showClose: true,
+            //   message: '保存成功!',
+            //   type: 'success'
+            // });
             //改成非首次登录
             this.isSc = false;
             this.$store.commit('corporation/SET_FIRST_LOGIN', false);
+            //跳转到职位管理界面
+            this.$router.push('/jobMgr');
           } else {
             done();
             this.$message({

@@ -3,8 +3,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-03 18:10:26
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-10 13:48:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -240,7 +240,7 @@ Mock.mock(basePath + '/corp/position/find', 'post', function(options) {
     }
   };
 });
-//查询各种类型（下架等）的单位职位信息
+//查询各种类型（下架等）的单位职位信息用于编辑后重新发布
 Mock.mock(basePath + '/corp/position/detail', 'post', function(options) {
   return {
     status: 200,
@@ -257,7 +257,8 @@ Mock.mock(basePath + '/corp/position/detail', 'post', function(options) {
         entrustTyshxym: '',
         entrustCorpName: '',
         corpId: '200008010546251',
-        positionType: '1   ',
+        // positionTypeOne: '01',
+        positionType: '0510',
         workNature: '01',
         ageMax: 40,
         ageMin: 20,
@@ -914,4 +915,399 @@ Mock.mock(basePath + '/corp/shop/update', 'post', function(options) {
 Mock.mock(basePath + '/corp/shop/delete', 'post', function(options) {
   return successData;
 });
+
+//查询就业见习职位列表
+
+Mock.mock(
+  basePath + '/corp/position/query-jyjxJdInfo-positionPublishing',
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          summary: {
+            total: 1
+          },
+          data: [
+            {
+              jdlx: '2',
+              jdmc: '上海庆圆投资有限公司',
+              jdbh: '2017D10232',
+              isTrial: '0',
+              dwlx: '有限责任公司(自然人投资或控股)',
+              hylb: '投资与资产管理',
+              slrq: '2009年',
+              baseComDataList: [
+                {
+                  dwmc: '上海兴国宾馆',
+                  cid: '200101010041021',
+                  positionDataList: [
+                    {
+                      gwbh: '1912023415',
+                      positionId: '',
+                      gwbm: '酒店管理专员',
+                      gwzs: '5',
+                      zgrs: '0',
+                      isHiring: '',
+                      zprs: '5'
+                    }
+                  ]
+                },
+                {
+                  dwmc: '上海噢开新媒体科技有限公司',
+                  cid: '201911273972621',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海艾佩克文化传播有限公司',
+                  cid: '201911213957661',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海志松国际物流有限公司',
+                  cid: '201807102259781',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海大自鸣钟房地产开发有限公司',
+                  cid: '201306287885951',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海东冠通信建设有限公司',
+                  cid: '200301230676591',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海易贝电脑科技有限公司',
+                  cid: '200008010717921',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '柏佩欧（上海）网络科技有限公司',
+                  cid: '201411198943321',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海通政通讯科技发展有限公司',
+                  cid: '200404191224741',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海松江民生村镇银行股份有限公司',
+                  cid: '201003045656911',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海全满国际商贸有限公司',
+                  cid: '201511059702591',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海天保健康管理有限公司',
+                  cid: '202006054529171',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海弓迈新材料科技有限公司',
+                  cid: '201808222407331',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海皇桥教育科技有限公司',
+                  cid: '201603240056971',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海大新华运通国际旅行社有限公司',
+                  cid: '200511082606411',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '宁波革力物流有限公司上海分公司',
+                  cid: '201912053977291',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '耀沃生物科技（上海）有限公司',
+                  cid: '202008114813891',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海昱仪网络科技有限公司',
+                  cid: '201908063609651',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '臻惠网络科技（上海）有限公司',
+                  cid: '201412199017361',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海细流文化传媒有限公司',
+                  cid: '201903083106921',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海沐丞教育科技有限公司',
+                  cid: '201803151920921',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海瑾缘商务咨询有限公司',
+                  cid: '201901172963991',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海绪飞工程项目管理有限公司',
+                  cid: '201709081428491',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海瑾拓企业管理咨询有限公司',
+                  cid: '201701060778481',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '不老莓（上海）商务服务有限公司',
+                  cid: '202004074282951',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海满好日用品有限公司',
+                  cid: '200008010435071',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海昊海生物科技股份有限公司',
+                  cid: '200706283778501',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海亚盛汽车销售服务有限公司',
+                  cid: '201204097053341',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海超越汽车销售服务有限公司',
+                  cid: '200908315380011',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海珏趣文化传播有限公司',
+                  cid: '201908083625211',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '文兮（上海）广告文化传播有限责任公司',
+                  cid: '201908143644481',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海隆古建筑装饰工程有限公司',
+                  cid: '200408111446881',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海润迅商凯电话商务有限公司',
+                  cid: '201012176187051',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海希映文化传播有限公司',
+                  cid: '201602059915761',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海俊儒文化传媒有限公司',
+                  cid: '201802231842961',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海昉晅电子商务有限公司',
+                  cid: '201911083899961',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海露森信息科技有限公司',
+                  cid: '202008104808981',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '富悦（上海）酒店管理有限公司',
+                  cid: '201509239619811',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海沪腾文化传媒有限公司',
+                  cid: '201909253799051',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海漠狐信息科技有限公司',
+                  cid: '201909243787961',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海蔚宁实业有限公司',
+                  cid: '201809062439841',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海劲橙商贸有限公司',
+                  cid: '201804262052271',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海慧卡智贸易有限公司',
+                  cid: '201903263191501',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '群思科技（北京）有限公司上海分公司',
+                  cid: '201408138728501',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '瑞必科净化设备（上海）有限公司',
+                  cid: '200806034641361',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '仕程卫教信息科技（上海）有限公司',
+                  cid: '201710191531001',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海仁彩印务有限公司',
+                  cid: '200212040611971',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海佰程建设项目管理有限公司',
+                  cid: '201806142196351',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海竹源水业有限公司',
+                  cid: '201909203774341',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海清赞数据科技有限公司',
+                  cid: '201808162382801',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海冉逊环境科技有限公司',
+                  cid: '201710091493731',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海捷鹰实业发展有限公司',
+                  cid: '200801084327271',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海天莫企业咨询服务有限公司',
+                  cid: '201702090842281',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海铂立营销策划有限公司',
+                  cid: '201007205912181',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海松江区博音雅艺文化艺术专修学校',
+                  cid: '201903263190461',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海启跳体育管理咨询有限公司',
+                  cid: '201609140517621',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海松江开天教育培训中心',
+                  cid: '201804192025821',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '伍之舍（上海）文化传播有限公司',
+                  cid: '201611250694211',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海东联北松汽车销售服务有限公司',
+                  cid: '201302167611391',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海东联松奥汽车销售服务有限公司',
+                  cid: '201207237251111',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海徐汇区成功管理进修学校',
+                  cid: '201009085999581',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海先丰工程建设发展有限公司',
+                  cid: '200707133804821',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海庆圆投资有限公司',
+                  cid: '201005125781301',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海云集培训学校有限公司',
+                  cid: '202003164219801',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海小玖影视传媒有限公司',
+                  cid: '202006194605711',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海龙之梦酒店管理有限公司龙之梦万丽酒店',
+                  cid: '200710114013851',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海优游国际旅行社有限公司',
+                  cid: '200908195364601',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海振渠腾通信科技发展有限公司',
+                  cid: '200709073913651',
+                  positionDataList: []
+                },
+                {
+                  dwmc: '上海禾燕实业有限公司',
+                  cid: '201408228753651',
+                  positionDataList: []
+                }
+              ],
+              positionDataList: []
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
+
 export default Mock;

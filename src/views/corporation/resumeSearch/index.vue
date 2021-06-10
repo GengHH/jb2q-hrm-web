@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-03 16:59:59
+ * @LastEditTime: 2021-06-10 14:17:57
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -287,19 +287,21 @@
       <div class="operate-resume-header">
         <el-button size="small" round
           ><i class="el-icon-star-on" v-if="queryFavor">已收藏</i>
-          <i class="el-icon-star-off" v-else>收藏</i> </el-button
-        ><el-button size="small" round
+          <i class="el-icon-star-off" v-else>收藏</i>
+        </el-button>
+        <!--<el-button size="small" round
           ><i class="el-icon-download">下载</i></el-button
-        ><el-button size="small" round
-          ><i class="el-icon-user">获取联系方式</i></el-button
         >
+         <el-button size="small" round
+          ><i class="el-icon-user">获取联系方式</i></el-button
+        > -->
         <!-- <el-button size="small" round
           ><i class="el-icon-el-icon-tickets" @click="invite"
             >邀约</i
           ></el-button
         > -->
       </div>
-      <BaseResumeInfo :queryPid="queryPid"></BaseResumeInfo>
+      <BaseResumeInfo :queryPid="queryPid" secrecy></BaseResumeInfo>
     </el-dialog>
     <!-- end -->
 
@@ -503,7 +505,7 @@ import CorpSearchResume from '@/components/corporation/CorpSearchResume.vue';
 import BaseResumeInfo from '@/components/common/BaseResumeInfo.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText } from '@/utils';
-import { phonePattern } from '@/utils/regexp';
+import { phonePattern, telephonePattern } from '@/utils/regexp';
 import {
   queryJobs,
   doDeliveryResume
@@ -527,6 +529,16 @@ export default {
     BaseLoadingSvg
   },
   data() {
+    /**
+     *自定义校验规则
+     */
+    var validatePhone = (rule, value, callback) => {
+      if (!phonePattern.test(value) && !telephonePattern.test(value)) {
+        return callback(new Error('请输入正确格式的手机号码或者固定电话号'));
+      } else {
+        callback();
+      }
+    };
     return {
       labelPosition: 'right',
       formLabelWidth: '150px',
@@ -623,11 +635,17 @@ export default {
           ],
           interviewContactPhone: [
             { required: true, message: '请输面试联系电话', trigger: 'blur' },
-            {
-              pattern: phonePattern,
-              message: '请输入正确格式的手机号',
-              trigger: ['blur', 'change']
-            }
+            { validator: validatePhone, trigger: 'blur' }
+            // {
+            //   pattern: phonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // },
+            // {
+            //   pattern: telephonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // }
           ],
           interviewAddress: [
             { required: true, message: '面试地址', trigger: 'blur' },

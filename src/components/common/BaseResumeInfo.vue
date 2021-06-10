@@ -14,7 +14,80 @@
           >编辑</el-button
         > -->
       </div>
-      <div class="column">
+      <!-- 私密信息不完全显示 -->
+      <div class="column" v-if="secrecy">
+        <p class="font-size24">
+          {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '' }}
+          <span class="sixteen-opacity">**岁</span>
+          <i
+            class="el-icon-male sixteen-opacity"
+            v-if="resume.sex === '男'"
+          ></i>
+          <i
+            class="el-icon-female sixteen-opacity"
+            v-else-if="resume.sex === '女'"
+          ></i>
+          <span class="sixteen-opacity"
+            >工作经验
+            <span
+              v-if="
+                resume.workYear !== null &&
+                  resume.workYear !== undefined &&
+                  resume.workYear !== ''
+              "
+            >
+              {{ resume.workYear }}
+            </span>
+            <span v-else>?</span>
+            年
+            <!-- <i class="el-icon-edit-outline" @click=""></i> -->
+            <el-popover
+              v-if="notConstResume"
+              placement="right"
+              width="100"
+              trigger="hover"
+              @show="openPop"
+              @hide="hidePop"
+            >
+              <el-input-number
+                v-model="workYear"
+                :min="0"
+                :max="100"
+                size="mini"
+                label="描述文字"
+              ></el-input-number>
+              <!-- <el-button slot="reference">click 激活</el-button> -->
+              <i
+                slot="reference"
+                style="color:#35e835"
+                class="el-icon-edit-outline"
+              ></i>
+            </el-popover>
+          </span>
+        </p>
+        <p class="fourteen-opacity mat-15">
+          <!-- <span v-if="resume.contactPhone"
+            ><i class="icon iconfont">&#xe63d;</i>
+            {{ resume.contactPhone }}年毕业</span
+          >
+          <el-divider direction="vertical"></el-divider> -->
+          <span v-if="resume.eduLevel"
+            ><i class="icon iconfont">&#xe641;</i> {{ highEduLevel }}</span
+          >
+          <el-divider direction="vertical"></el-divider>
+          <span v-if="resume.contactPhone"
+            ><i class="icon iconfont">&#xe63f;</i>
+            {{ resume.contactPhone.substr(0, 3) + '********' }}</span
+          >
+          <el-divider direction="vertical"></el-divider>
+          <span v-if="resume.livingAddress"
+            ><i class="icon iconfont">&#xe643;</i> ******</span
+          >
+        </p>
+      </div>
+
+      <!-- 私密信息完全显示 -->
+      <div class="column" v-else>
         <p class="font-size24">
           {{ resume.xm }}
           <span class="sixteen-opacity" v-if="resume.age"
@@ -231,7 +304,11 @@
           @click="dialog3 = true"
           >添加</el-button
         >
-        <el-divider class="vertical-divider" direction="vertical"></el-divider>
+        <el-divider
+          v-if="notConstResume"
+          class="vertical-divider"
+          direction="vertical"
+        ></el-divider>
         <!-- 学信网  -->
         <el-popover
           v-if="notConstResume"
@@ -391,7 +468,11 @@
           @click="dialog5 = true"
           >添加</el-button
         >
-        <el-divider class="vertical-divider" direction="vertical"></el-divider>
+        <el-divider
+          v-if="notConstResume"
+          class="vertical-divider"
+          direction="vertical"
+        ></el-divider>
         <!-- 鉴定内网  -->
         <el-popover
           v-if="notConstResume"
@@ -1092,6 +1173,10 @@ import { getDicText } from '@/utils/index';
 export default {
   name: 'BaseResumeInfo',
   props: {
+    secrecy: {
+      type: Boolean,
+      default: false
+    },
     queryPid: {
       type: String,
       default: ''

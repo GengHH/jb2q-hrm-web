@@ -2,12 +2,12 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 19:10:09
+ * @LastEditTime: 2021-06-10 16:25:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
 <template>
-  <div id="indexBody">
+  <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <div>
       <BaseSearch
         ref="searchBox"
@@ -75,17 +75,46 @@
                         alt="未加载"
                       />
                     </el-col>
-                    <el-col :span="20">
-                      <div class="jxcorp-title">{{ jdItem.jdmc }}</div>
+                    <el-col :span="20" style="padding-left: 5px;">
+                      <!-- <div
+                        class="jxcorp-title"
+                        :title="'基地名称：' + jdItem.jdmc"
+                        @click="showCorpInfo(jdItem.jdlx)"
+                      >
+                        {{ jdItem.jdmc }}
+                      </div> -->
+
+                      <div
+                        class="jxcorp-title"
+                        :title="'基地名称：' + jdItem.jdmc"
+                        @click="showCorpInfo(jdItem.jdlx)"
+                      >
+                        <div
+                          class="jxcorp-title-mc"
+                          v-if="jdItem.isTrial !== '1'"
+                        >
+                          {{ jdItem.jdmc }}
+                        </div>
+
+                        <div class="jxcorp-title-mc syx-mc" v-else>
+                          {{ jdItem.jdmc }}<span class="syx-label">试运行</span>
+                        </div>
+                      </div>
+
                       <div class="jxcorp-info gray-font">
-                        <span>上市公司</span>| <span>软件服务</span>|
-                        <span>1995年</span>|
+                        <span>{{ jdItem.dwlx }}</span> |
+                        <span>{{ jdItem.hylb }}</span> |
+                        <span>{{ jdItem.slrq }}</span> |
                         <span>其他</span>
                       </div>
                     </el-col>
                   </el-row>
                   <!-- 一个职位 -->
+                  <div v-if="jdItem.positionDataList.length === 0">
+                    <p class="no-data-text">暂无岗位相关信息</p>
+                  </div>
                   <div
+                    v-else
                     class="jxcorp-list"
                     v-for="(jdZwItem, index2) in jdItem.positionDataList"
                     :key="index2"
@@ -133,25 +162,41 @@
                       <div
                         class="jxcorp-title"
                         :title="'基地名称：' + jdItem.jdmc"
+                        @click="showCorpInfo(jdItem.jdlx, zhjdItem.cid)"
                       >
-                        {{ zhjdItem.dwmc }}
+                        <div
+                          class="jxcorp-title-mc"
+                          v-if="jdItem.isTrial !== '1'"
+                        >
+                          {{ zhjdItem.dwmc }}
+                        </div>
+
+                        <div class="jxcorp-title-mc syx-mc" v-else>
+                          {{ zhjdItem.dwmc
+                          }}<span class="syx-label">试运行</span>
+                        </div>
                       </div>
                       <div class="jxcorp-info gray-font">
-                        <span>上市公司</span>|<span>软件服务</span>|
-                        <span>1995年</span>|
+                        <span>{{ jdItem.dwlx }}</span> |
+                        <span>{{ jdItem.hylb }}</span> |
+                        <span>{{ jdItem.slrq }}</span> |
                         <span>其他</span>
                       </div>
                     </el-col>
                   </el-row>
                   <!-- 一个职位 -->
+                  <div v-if="zhjdItem.positionDataList.length === 0">
+                    <p class="no-data-text">暂无岗位相关信息</p>
+                  </div>
                   <div
+                    v-else
                     class="jxcorp-list"
                     v-for="(zhjdZwItem, index3) in zhjdItem.positionDataList"
                     :key="index3"
                   >
-                    <span class="jxcorp-list-name" :title="zhjdZwItem.gwbm">{{
-                      zhjdZwItem.gwbm
-                    }}</span>
+                    <span class="jxcorp-list-name" :title="zhjdZwItem.gwbm">
+                      {{ zhjdZwItem.gwbm }}
+                    </span>
                     <span class="gray-font">岗位：{{ zhjdZwItem.gwzs }}人</span>
                     <span class="gray-font">在岗：{{ zhjdZwItem.zgrs }}人</span>
                     <span class="gray-font">招聘：{{ zhjdZwItem.zprs }}人</span>
@@ -231,6 +276,7 @@
 import BaseSearch from '@/components/common/BaseSearch';
 import BasePagination from '@/components/common/BasePagination.vue';
 import { queryJyjxJdInfo } from '@/api/indexApi';
+import { niceScrollUpdate } from '@/utils';
 export default {
   name: 'employmentTrainee',
   components: {
@@ -239,6 +285,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       qx: '',
       type: '',
       dwmc: null,
@@ -250,11 +297,16 @@ export default {
   mounted() {
     this.queryJyjxJdInfo();
   },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
+  },
   methods: {
     /**
      *查询基地对应的职位信息
      */
     queryJyjxJdInfo(dwmc) {
+      this.loading = true;
       this.dwmc = this.$refs.searchBox.input
         ? $.trim(this.$refs.searchBox.input)
         : null;
@@ -275,6 +327,7 @@ export default {
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
+        this.loading = false;
       });
     },
     /**
@@ -288,10 +341,27 @@ export default {
         } else {
           $target.addClass('jxcorp-open');
         }
+        // 更新滚动条
+        this._.throttle(niceScrollUpdate, 500)();
       }
     },
+    /**
+     *后端分页
+     */
     changePage() {
       this.queryJyjxJdInfo(this.dwmc ? this.dwmc : '');
+    },
+    showCorpInfo(jdlx, cid) {
+      if (jdlx === '1') {
+        this.$alert('缺少单位标识');
+      } else {
+        this.$router.push({
+          path: 'corpDetails',
+          query: {
+            cid: cid
+          }
+        });
+      }
     }
   }
 };
@@ -327,6 +397,7 @@ export default {
       bottom: 10px;
       color: #3f51b5;
       cursor: pointer;
+      font-size: 12px;
       &:hover {
         color: #333;
       }
@@ -339,17 +410,42 @@ export default {
     font-size: 16px;
     font-weight: 800;
     margin: 10px 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-    word-break: break-all;
-    overflow: hidden;
+    cursor: pointer;
+    &:hover {
+      color: #fc7a43;
+    }
+    .jxcorp-title-mc {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+      word-break: break-all;
+      overflow: hidden;
+    }
+
+    .syx-mc {
+      position: relative;
+      padding-right: 50px;
+    }
+    .syx-label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #ad87f1;
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 300;
+      font-family: 宋体, Arial, Verdana, sans-serif;
+    }
   }
   .jxcorp-img {
     width: 100%;
   }
   .jxcorp-header {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #ddd;
   }
   .jxcorp-list {
     margin: 8px 5px;
@@ -357,11 +453,15 @@ export default {
       width: 35%;
       display: inline-block;
       padding-right: 10px;
+      cursor: pointer;
       text-overflow: ellipsis;
       white-space: nowrap;
       word-wrap: normal;
       word-break: break-all;
       overflow: hidden;
+    }
+    &-name:hover {
+      color: #fc7a43;
     }
     .gray-font {
       color: #999;
@@ -379,6 +479,11 @@ export default {
     .el-radio-button--medium .el-radio-button__inner {
       border: 0px;
     }
+  }
+  .no-data-text {
+    margin-top: 30px;
+    text-align: center;
+    color: #999;
   }
 }
 </style>

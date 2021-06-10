@@ -350,7 +350,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/index/IndexSearchJob.vue';
-import JobDetails from '@/views/index/jobSearch/jobDetails.vue';
+import JobDetails from '@/views/index/jobDetails';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import { doDeliveryResume, doFavorJobs, doUnfavorJobs } from '@/api/personApi';

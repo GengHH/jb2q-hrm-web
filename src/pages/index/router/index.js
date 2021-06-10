@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-03-04 17:00:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-10 16:26:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\router\index.js
  */
@@ -79,6 +79,16 @@ export default new Router({
       path: '/activityDetails',
       name: '特色活动详情',
       component: () => import('@/views/index/activity/ActivityInfoDetails')
+    },
+    {
+      path: '/corpDetails',
+      name: '单位详情',
+      component: () => import('@/views/index/corpDetails')
+    },
+    {
+      path: '/jobDetails',
+      name: '职位详情',
+      component: () => import('@/views/index/jobDetails')
     },
     {
       path: '/about',

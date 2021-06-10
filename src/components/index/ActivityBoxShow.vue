@@ -70,11 +70,13 @@
             </p>
             <p class="  line30">
               <i class="icon iconfont">&#xe650;</i>
-              <!-- 招聘地点：长宁区就业促进中心(长宁区武夷路517号) -->
-              招聘地点：{{ activityInfo.actAddress }}
+              <!-- 活动地点：长宁区就业促进中心(长宁区武夷路517号) -->
+              活动地点：{{ activityInfo.actAddress }}
               <el-link class="blue-font" :underline="false">
                 <i class="icon iconfont">&#xe654;</i>
-                <span @click="showMap">附近交通</span></el-link
+                <span @click="showMap(activityInfo.actAddress)"
+                  >附近交通</span
+                ></el-link
               >
             </p>
           </el-col>
@@ -122,8 +124,11 @@ export default {
     };
   },
   methods: {
-    showMap() {
-      console.log(123);
+    showMap(actAddress) {
+      if (actAddress) {
+        this.pointList = [];
+        this.pointList.push(actAddress);
+      }
       this.mapDialog = true;
     },
     mapHandleClose() {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-02 15:58:34
+ * @LastEditTime: 2021-06-10 14:41:44
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -237,7 +237,10 @@
       :visible.sync="dialog1"
       :before-close="handleClose"
     >
-      <BaseResumeInfo :resumeData="resumeData"></BaseResumeInfo>
+      <BaseResumeInfo
+        :resumeData="resumeData"
+        :secrecy="secrecy"
+      ></BaseResumeInfo>
     </el-dialog>
 
     <!-- 反馈功能弹窗部分 -->
@@ -512,7 +515,7 @@ import {
   queryResumeInfo,
   doFeedBack
 } from '@/api/corporationApi';
-import { phonePattern } from '@/utils/regexp';
+import { phonePattern, telephonePattern } from '@/utils/regexp';
 import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'resumeReceived',
@@ -521,6 +524,16 @@ export default {
     JwChat
   },
   data() {
+    /**
+     *自定义校验规则
+     */
+    var validatePhone = (rule, value, callback) => {
+      if (!phonePattern.test(value) && !telephonePattern.test(value)) {
+        return callback(new Error('请输入正确格式的手机号码或者固定电话号'));
+      } else {
+        callback();
+      }
+    };
     return {
       yes: true,
       dialog1: false,
@@ -546,11 +559,17 @@ export default {
           ],
           interviewContactPhone: [
             { required: true, message: '请输面试联系电话', trigger: 'blur' },
-            {
-              pattern: phonePattern,
-              message: '请输入正确格式的手机号',
-              trigger: ['blur', 'change']
-            }
+            { validator: validatePhone, trigger: 'blur' }
+            // {
+            //   pattern: phonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // },
+            // {
+            //   pattern: telephonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // }
           ],
           interviewAddress: [
             { required: true, message: '面试地址', trigger: 'blur' },
@@ -630,6 +649,7 @@ export default {
       totalCount04: 0,
       tableData05: [],
       totalCount05: 0,
+      secrecy: true,
       resumeData: {},
       feedback: {
         applyforIdList: [],
@@ -751,8 +771,13 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
-                //console.log(row);
+                //判断是不是显示简历的私密信息
                 if (row.applyforId) {
+                  if (this.activeName === '03' && row.reply === '1') {
+                    this.secrecy = false;
+                  } else {
+                    this.secrecy = true;
+                  }
                   this.queryResumesInfo(row.applyforId);
                 } else {
                   //无法获取简历信息
@@ -911,9 +936,9 @@ export default {
         this.$set(this, 'resumeData', getRes.result.data || {});
         this.dialog1 = true;
         //回显数据
-        this.queryResumes('all');
+        //this.queryResumes('all');
       } else if (getRes) {
-        this.$message({ type: 'error', message: '简历查询失败' });
+        this.$message({ type: 'error', message: '查询简历失败' });
       }
     },
     /**

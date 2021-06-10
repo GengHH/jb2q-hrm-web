@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 17:54:32
+ * @LastEditTime: 2021-06-10 10:22:26
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFair\jobFairResume.vue
 -->
@@ -538,7 +538,7 @@ import {
   queryResumeInfo,
   doFeedBack
 } from '@/api/corporationApi';
-import { phonePattern } from '@/utils/regexp';
+import { phonePattern, telephonePattern } from '@/utils/regexp';
 import { niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'resumeReceived',
@@ -547,6 +547,16 @@ export default {
     JwChat
   },
   data() {
+    /**
+     *自定义校验规则
+     */
+    var validatePhone = (rule, value, callback) => {
+      if (!phonePattern.test(value) && !telephonePattern.test(value)) {
+        return callback(new Error('请输入正确格式的手机号码或者固定电话号'));
+      } else {
+        callback();
+      }
+    };
     return {
       yes: true,
       dialog1: false,
@@ -572,11 +582,17 @@ export default {
           ],
           interviewContactPhone: [
             { required: true, message: '请输面试联系电话', trigger: 'blur' },
-            {
-              pattern: phonePattern,
-              message: '请输入正确格式的手机号',
-              trigger: ['blur', 'change']
-            }
+            { validator: validatePhone, trigger: 'blur' }
+            // {
+            //   pattern: phonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // },
+            // {
+            //   pattern: telephonePattern,
+            //   message: '请输入正确格式的手机号码或者固定电话号',
+            //   trigger: ['blur', 'change']
+            // }
           ],
           interviewAddress: [
             { required: true, message: '面试地址', trigger: 'blur' },
