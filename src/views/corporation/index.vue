@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 10:29:07
+ * @LastEditTime: 2021-06-11 18:23:45
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -18,6 +18,31 @@
       label-width="0px"
       class="clearfix"
     >
+      <el-col :span="8" class="form-item-left"> </el-col>
+      <el-col :span="8" class="form-item-left" style="text-align:center;">
+        <el-form-item label="" style="padding:0">
+          <el-upload
+            class="avatar-uploader"
+            action=""
+            :auto-upload="false"
+            :on-change="imgBroadcastChange"
+            accept="image/jpg,image/png,image/jpeg"
+            :show-file-list="false"
+          >
+            <img
+              v-if="corporationInfo.logoBase64.length > 0"
+              :src="'data:image/jpg;base64,' + corporationInfo.logoBase64"
+              @error="defImg"
+              alt="未加载"
+              class="avatar"
+            />
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <div style="color:#ccc">（logo）</div>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8" class="form-item-left"> </el-col>
+
       <el-col :span="12" class="form-item-left">
         <el-form-item prop="tyshxym">
           <pl-input
@@ -281,10 +306,12 @@ export default {
   },
   data() {
     return {
-      path: require('@/assets/logo.png'),
+      defaultImg: require('@/assets/images/break-img.svg'),
+      // path: require('@/assets/logo.png'),
       isSc: this.$store.getters['corporation/first_login'],
       dialogFormVisible: false,
       corporationInfo: {
+        logoBase64: '',
         cid: '',
         tyshxym: '',
         corpName: '',
@@ -484,6 +511,48 @@ export default {
       //清空弹出框
       //this.$refs.corporationInfo.resetFields();
       this.getcorporationInfo(done);
+    },
+    imgBroadcastChange(file, fileList) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (isLt2M) {
+        // uploadImgToBase64()返回一个Promise对象，通过.then()获取其数据。其中data.result是图片转成的base64值
+        this.uploadImgToBase64(file.raw).then(data => {
+          this.corporationInfo.logoBase64 = data.result.replace(
+            'data:image/jpg;base64,',
+            ''
+          );
+          this.corporationInfo.logoBase64 = this.corporationInfo.logoBase64.replace(
+            'data:image/jpeg;base64,',
+            ''
+          );
+          this.corporationInfo.logoBase64 = this.corporationInfo.logoBase64.replace(
+            'data:image/png;base64,',
+            ''
+          );
+          //this.$set('this.corporationInfo', 'logoBase64', data.result);
+        });
+      } else {
+        this.$message.error('上传封面图片大小不能超过 2MB!');
+      }
+    },
+    uploadImgToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          // 图片转base64完成后返回reader对象
+          resolve(reader);
+        };
+        reader.onerror = reject;
+      });
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
     }
   },
   created() {
@@ -508,6 +577,27 @@ export default {
   margin: 0 auto 150px;
   padding-top: 60px;
   background-color: $g-white-color;
+  img {
+    object-fit: contain; //（保持纵横比缩放图片，使图片的长边能完全显示出来）
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #fc7a43;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    border: 1px solid #eee;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+    border: 1px solid #eee;
+  }
   .title-style {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.8);

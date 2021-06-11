@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 16:25:26
+ * @LastEditTime: 2021-06-11 10:54:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -379,7 +379,7 @@ export default {
     // background-color: #fff;
   }
   .jxcorp-row {
-    width: 92%;
+    // width: 92%;
     margin: 0 auto;
     padding: 20px 0 50px;
   }

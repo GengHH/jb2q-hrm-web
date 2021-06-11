@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 13:48:04
+ * @LastEditTime: 2021-06-11 18:25:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -64,6 +64,7 @@ const getCorpbaseInfo = pid => {
         recruitStaffName2: '刘德坡',
         recruitStaffPhone2: '13764565977',
         logo: '',
+        logoBase64: '',
         publicityMovie: '',
         statusId: '1',
         resumeSearch: '1',

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-06-09 15:02:43
+ * @LastEditTime: 2021-06-11 11:07:28
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -206,7 +206,7 @@ export default {
   position: fixed;
   height: 90px;
   width: 100%;
-  z-index: 999;
+  z-index: 9999;
   background-color: $g-white-color;
   box-shadow: 2px 2px 5px #eee;
   //color: $g-white-color !important;
