@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-11 18:23:45
+ * @LastEditTime: 2021-06-15 15:44:23
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\index.vue
 -->
@@ -18,8 +18,8 @@
       label-width="0px"
       class="clearfix"
     >
-      <el-col :span="8" class="form-item-left"> </el-col>
-      <el-col :span="8" class="form-item-left" style="text-align:center;">
+      <!-- <el-col :span="8" class="form-item-left"> </el-col> -->
+      <el-col :span="24" class="form-item-left" style="text-align:center;">
         <el-form-item label="" style="padding:0">
           <el-upload
             class="avatar-uploader"
@@ -41,7 +41,7 @@
           <div style="color:#ccc">（logo）</div>
         </el-form-item>
       </el-col>
-      <el-col :span="8" class="form-item-left"> </el-col>
+      <!-- <el-col :span="8" class="form-item-left"> </el-col> -->
 
       <el-col :span="12" class="form-item-left">
         <el-form-item prop="tyshxym">
@@ -513,26 +513,18 @@ export default {
       this.getcorporationInfo(done);
     },
     imgBroadcastChange(file, fileList) {
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       if (isLt2M) {
         // uploadImgToBase64()返回一个Promise对象，通过.then()获取其数据。其中data.result是图片转成的base64值
         this.uploadImgToBase64(file.raw).then(data => {
-          this.corporationInfo.logoBase64 = data.result.replace(
-            'data:image/jpg;base64,',
-            ''
-          );
-          this.corporationInfo.logoBase64 = this.corporationInfo.logoBase64.replace(
-            'data:image/jpeg;base64,',
-            ''
-          );
-          this.corporationInfo.logoBase64 = this.corporationInfo.logoBase64.replace(
-            'data:image/png;base64,',
-            ''
-          );
+          this.corporationInfo.logoBase64 = data.result
+            .replace('data:image/jpg;base64,', '')
+            .replace('data:image/jpeg;base64,', '')
+            .replace('data:image/png;base64,', '');
           //this.$set('this.corporationInfo', 'logoBase64', data.result);
         });
       } else {
-        this.$message.error('上传封面图片大小不能超过 2MB!');
+        this.$message.error('上传封面图片大小不能超过 1MB!');
       }
     },
     uploadImgToBase64(file) {
@@ -579,6 +571,10 @@ export default {
   background-color: $g-white-color;
   img {
     object-fit: contain; //（保持纵横比缩放图片，使图片的长边能完全显示出来）
+  }
+  .avatar-uploader {
+    padding: 20px 0;
+    background: #f0f8ff;
   }
   .avatar-uploader .el-upload:hover {
     border-color: #fc7a43;

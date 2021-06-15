@@ -52,25 +52,31 @@
               v-if="item.actType === '01'"
               class="activity-type activity-type-one"
             >
-              <span class="span-line">讲座</span>
+              <span class="span-line">{{ item.actTypeText }}</span>
             </p>
             <p
               v-if="item.actType === '02'"
               class="activity-type activity-type-two"
             >
-              <span class="span-line2">主题咨询活动</span>
+              <span class="span-line">{{ item.actTypeText }}</span>
             </p>
             <p
               v-if="item.actType === '03'"
               class="activity-type activity-type-three"
             >
-              <span class="span-line2">集体指导活动</span>
+              <span class="span-line">{{ item.actTypeText }}</span>
             </p>
             <p
               v-if="item.actType === '04'"
               class="activity-type activity-type-four"
             >
-              <span class="span-line2">其他</span>
+              <span class="span-line">{{ item.actTypeText }}</span>
+            </p>
+            <p
+              v-if="item.actType === '05'"
+              class="activity-type activity-type-four"
+            >
+              <span class="span-line">{{ item.actTypeText }}</span>
             </p>
             <img
               v-if="item.propagandaImage || item.propagandaImage === ''"
@@ -87,14 +93,6 @@
               <span v-if="item.expertJoin" class="span-line">{{
                 item.expertJoin === '1' ? '专家' : '非专家'
               }}</span>
-              <!-- <span v-if="item.actType === '01'" class="span-line">讲座</span>
-              <span v-if="item.actType === '02'" class="span-line2"
-                >主题咨询活动</span
-              >
-              <span v-if="item.actType === '03'" class="span-line2"
-                >集体指导活动</span
-              >
-              <span v-if="item.actType === '04'" class="span-line2">其他</span> -->
             </p>
             <p class="line30">
               <span class="gray-font"
@@ -230,6 +228,15 @@ export default {
               i.districtCode
             );
             i.isFlipped = false;
+          });
+          queryRes.result.pageresult.data.forEach(item => {
+            // 转换字典
+            if (item.actType) {
+              item.actTypeText = getDicText(
+                this.$store.getters['dictionary/recruit_special_activity_type'],
+                item.actType
+              );
+            }
           });
           this.activityInfo = queryRes.result.pageresult.data || [];
           if (

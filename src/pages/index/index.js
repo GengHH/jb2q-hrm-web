@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-08 16:36:49
+ * @LastEditTime: 2021-06-15 16:43:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -108,7 +108,10 @@ if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
 if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
 }
-
+//特色活动状态
+if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

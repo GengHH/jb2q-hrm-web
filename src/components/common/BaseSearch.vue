@@ -44,7 +44,7 @@ export default {
       type: String,
       default: '请输入'
     },
-    selectValue: {
+    defaultSelectValue: {
       type: String,
       default: ''
     },
@@ -57,11 +57,11 @@ export default {
       default: () => []
     }
   },
-  component: {},
   data() {
     return {
       input: '',
-      selectOne: false
+      selectOne: false,
+      selectValue: this.defaultSelectValue ? this.defaultSelectValue : ''
     };
   },
   methods: {

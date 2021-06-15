@@ -364,10 +364,11 @@
         </el-popover>
       </div>
       <div class="column">
+        <!-- 一行显示一条 -->
         <el-card
           class="box-card bg-gray"
           shadow="hover"
-          v-for="(eduCarditem, index) in eduExpTransformed"
+          v-for="(eduCarditem, index) in eduExpTransformed1"
           :key="index"
         >
           <div slot="header" class="clearfix">
@@ -391,7 +392,7 @@
               circle
               style="float: right;"
               class="card-btn hidden"
-              @click="editCard('dialog3', index)"
+              @click="editCard('dialog3', index, '1')"
             ></el-button>
           </div>
 
@@ -436,6 +437,84 @@
             </el-col>
           </el-row>
         </el-card>
+        <!-- 一行显示两条 -->
+        <el-row :gutter="20">
+          <el-col
+            :span="12"
+            v-for="(eduCarditem, index) in eduExpTransformed2"
+            :key="index"
+          >
+            <el-card class="box-card bg-gray" shadow="hover">
+              <div slot="header" class="clearfix">
+                <span class="font-bold sixteen-opacity">{{
+                  eduCarditem.collegesName
+                }}</span>
+                <el-button
+                  v-if="notConstResume"
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  style="float: right;"
+                  class="card-btn hidden"
+                  @click="deleteCard('dialog3', index, eduCarditem.eduId)"
+                ></el-button>
+                <!-- 来自于学信网的数据不能进行编辑 -->
+                <el-button
+                  v-if="notConstResume && eduCarditem.sourceOuter !== '1'"
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  style="float: right;"
+                  class="card-btn hidden"
+                  @click="editCard('dialog3', index, '2')"
+                ></el-button>
+              </div>
+
+              <el-row>
+                <el-col :span="12">
+                  <p class="fourteen-opacity line40">
+                    {{ eduCarditem.majorName }}
+                  </p>
+                </el-col>
+                <el-col :span="12" style="text-align:right;">
+                  <p class="fourteen-opacity line40">
+                    {{ eduCarditem.eduLevel }}
+                  </p>
+                </el-col>
+              </el-row>  
+              <el-row>  
+                <el-col :span="18">
+                  <p class="four-opacity line40">
+                    {{
+                      eduCarditem.admissionDate
+                        ? eduCarditem.admissionDate.substring(0, 4) +
+                          '年' +
+                          eduCarditem.admissionDate.substring(4, 6) +
+                          '月' +
+                          eduCarditem.admissionDate.substring(6, 8) +
+                          '日'
+                        : '无'
+                    }}-{{
+                      eduCarditem.graduateDate
+                        ? eduCarditem.graduateDate.substring(0, 4) +
+                          '年' +
+                          eduCarditem.graduateDate.substring(4, 6) +
+                          '月' +
+                          eduCarditem.graduateDate.substring(6, 8) +
+                          '日'
+                        : '至今'
+                    }}
+                  </p>
+                </el-col>
+                <el-col :span="6" style="text-align:right;">
+                  <p class="fourteen-opacity line40">
+                    {{ eduCarditem.sourceOuter === '1' ? '来自学信网' : '' }}
+                  </p>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+        </el-row>
       </div>
       <div id="languageSkills" class="title-style font-or font-bold">
         外语能力
@@ -1416,7 +1495,9 @@ export default {
       eduTableData: [],
       multipleSelection: [],
       skillTableData: [],
-      multipleSelection2: []
+      multipleSelection2: [],
+      eduExp1: [],
+      eduExp2: []
     };
   },
   computed: {
@@ -1532,6 +1613,30 @@ export default {
       let dictionary = this.$store.getters['dictionary/recruit_edu'];
       return this.resume.eduExp
         ? this.resume.eduExp.map(item => {
+            let dic = dictionary.find(i => {
+              return i.value === item.eduLevel;
+            });
+            item.eduLevel = dic ? dic.label : item.eduLevel;
+            return item;
+          })
+        : [];
+    },
+    eduExpTransformed1() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      return this.eduExp1
+        ? this.eduExp1.map(item => {
+            let dic = dictionary.find(i => {
+              return i.value === item.eduLevel;
+            });
+            item.eduLevel = dic ? dic.label : item.eduLevel;
+            return item;
+          })
+        : [];
+    },
+    eduExpTransformed2() {
+      let dictionary = this.$store.getters['dictionary/recruit_edu'];
+      return this.eduExp2
+        ? this.eduExp2.map(item => {
             let dic = dictionary.find(i => {
               return i.value === item.eduLevel;
             });
@@ -1877,7 +1982,7 @@ export default {
       //清空弹出框
       this.$refs[formName].resetFields();
     },
-    editCard(dialog, index) {
+    editCard(dialog, index, type) {
       let _orginData = {};
       if (dialog) {
         switch (dialog) {
@@ -1919,9 +2024,18 @@ export default {
             $('#dialog3Btn')
               .children('span')
               .html('还 原');
-            this.educationExperienceForm = JSON.parse(
-              JSON.stringify(this.resume.eduExp[index])
-            );
+            // this.educationExperienceForm = JSON.parse(
+            //   JSON.stringify(this.resume.eduExp[index])
+            // );
+            if (type === '1') {
+              this.educationExperienceForm = JSON.parse(
+                JSON.stringify(this.eduExp1[index])
+              );
+            } else {
+              this.educationExperienceForm = JSON.parse(
+                JSON.stringify(this.eduExp2[index])
+              );
+            }
             break;
           case 'dialog6':
             this.dialog6 = true;
@@ -2168,6 +2282,7 @@ export default {
           if (queryRes && queryRes.status === 200) {
             this.$message({ type: 'success', message: '保存成功' });
             //回显数据
+            //this.resume.eduExp.push(this.multipleSelection[0]);
             this.loadPsnlResume();
             // TODO删掉已经选过的数据
             this.eduTableData = this.eduTableData.filter(
@@ -2221,6 +2336,57 @@ export default {
     } else {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });
+    }
+  },
+  watch: {
+    /**
+     *  将教育经历分组显示
+     */
+    'resume.eduExp': function(val) {
+      this.eduExp1 = [];
+      this.eduExp2 = [];
+      //排序
+      let orderVal = this._.orderBy(
+        val,
+        ['collegesName', 'majorName'],
+        ['asc', 'desc']
+      );
+      if (orderVal && orderVal.length) {
+        // 拆分需要显示的教育经历
+        if (orderVal.length === 1) {
+          // 只有一条时，默认显示一行一条
+          this.eduExp1 = [...orderVal];
+          this.eduExp2 = [];
+        } else {
+          //将学信网，和手动添加的教育经历；（学校名和专业名称相同的视为一对）
+          this.eduExp1 = [];
+          this.eduExp2 = [];
+          let orginArray = [...orderVal];
+          orderVal.forEach((element, index) => {
+            let diff = true;
+            for (let i = 0; i < orginArray.length; i++) {
+              let obj2 = orginArray[i];
+              if (index === i && i !== orginArray.length - 1) {
+                continue;
+              }
+              if (index === i && i === orginArray.length - 1) {
+                this.eduExp1.push(element);
+                break;
+              } else if (
+                element.collegesName === obj2.collegesName &&
+                element.majorName === obj2.majorName
+              ) {
+                this.eduExp2.push(element);
+                diff = false;
+                break;
+              }
+              if (diff && i === orginArray.length - 1) {
+                this.eduExp1.push(element);
+              }
+            }
+          });
+        }
+      }
     }
   }
 };

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 15:57:08
+ * @LastEditTime: 2021-06-15 15:03:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -104,6 +104,10 @@ Mock.mock(
               jdlx: '2',
               jdmc: '上海庆圆投资有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '0',
               dwlx: '有限责任公司(自然人投资或控股)',
               hylb: '投资与资产管理',
@@ -127,6 +131,7 @@ Mock.mock(
                 {
                   dwmc: '上海噢开新媒体科技有限公司二级同色人家搜是大法官',
                   cid: '201911273972621',
+                  logo: '',
                   positionDataList: [
                     {
                       gwbh: '1912023415',
@@ -182,6 +187,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -212,6 +219,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -242,6 +251,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -272,6 +283,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -302,6 +315,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -332,6 +347,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -362,6 +379,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -392,6 +411,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -422,6 +443,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232111111',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',
@@ -470,6 +493,8 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
+              cid: '200211110579131',
+              logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
               hylb: '投资与资产管理',

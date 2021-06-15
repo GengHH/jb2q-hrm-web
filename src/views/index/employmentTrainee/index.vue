@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-11 10:54:47
+ * @LastEditTime: 2021-06-15 15:17:20
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -69,9 +69,15 @@
                 <div class="jxcorp-box" :id="jdItem.jdbh">
                   <el-row class="jxcorp-header">
                     <el-col :span="4">
-                      <img
+                      <!-- <img
                         class="jxcorp-img"
                         src="../../../assets/images/logos.png"
+                        alt="未加载"
+                      /> -->
+                      <img
+                        class="jxcorp-img"
+                        :src="'data:image/jpg;base64,' + jdItem.logo"
+                        @error="defImg"
                         alt="未加载"
                       />
                     </el-col>
@@ -87,7 +93,7 @@
                       <div
                         class="jxcorp-title"
                         :title="'基地名称：' + jdItem.jdmc"
-                        @click="showCorpInfo(jdItem.jdlx)"
+                        @click="showCorpInfo(jdItem.jdlx, jdItem.cid)"
                       >
                         <div
                           class="jxcorp-title-mc"
@@ -151,9 +157,15 @@
                 <div class="jxcorp-box" :id="zhjdItem.cid">
                   <el-row class="jxcorp-header">
                     <el-col :span="4">
-                      <img
+                      <!-- <img
                         class="jxcorp-img"
                         src="../../../assets/images/logos.png"
+                        alt="未加载"
+                      /> -->
+                      <img
+                        class="jxcorp-img"
+                        :src="'data:image/jpg;base64,' + zhjdItem.logo"
+                        @error="defImg"
                         alt="未加载"
                       />
                     </el-col>
@@ -212,54 +224,6 @@
             </template>
           </template>
         </el-row>
-        <!-- <el-row :gutter="20">
-          <el-col
-            :sm="24"
-            :md="12"
-            :lg="8"
-            :xl="6"
-            v-for="(item, index) in showList"
-            :key="index"
-          >
-            <div class="jxcorp-box">
-              <el-row class="jxcorp-header">
-                <el-col :span="4">
-                  <img
-                    class="jxcorp-img"
-                    src="../../../assets/images/logos.png"
-                    alt="未加载"
-                  />
-                </el-col>
-                <el-col :span="20">
-                  <div class="jxcorp-title">万达信息有限公司</div>
-                  <div class="jxcorp-info gray-font">
-                    <span>上市公司</span>| <span>软件服务</span>|
-                    <span>1995年</span>|
-                    <span>其他</span>
-                  </div>
-                </el-col>
-              </el-row>
-              <div class="jxcorp-list">
-                <span class="jxcorp-list-name">123412</span>
-                <span class="gray-font">岗位：8人</span>
-                <span class="gray-font">在岗：10人</span>
-                <span class="gray-font">招聘：10人</span>
-              </div>
-              <div class="jxcorp-list">
-                <span class="jxcorp-list-name">123412</span>
-                <span class="gray-font">岗位：8人</span>
-                <span class="gray-font">在岗：10人</span>
-                <span class="gray-font">招聘：10人</span>
-              </div>
-              <div class="jxcorp-list">
-                <span class="jxcorp-list-name">123412</span>
-                <span class="gray-font">岗位：8人</span>
-                <span class="gray-font">在岗：10人</span>
-                <span class="gray-font">招聘：10人</span>
-              </div>
-            </div>
-          </el-col>
-        </el-row> -->
       </div>
     </div>
     <!-- 分页组件 -->
@@ -286,6 +250,7 @@ export default {
   data() {
     return {
       loading: false,
+      defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       type: '',
       dwmc: null,
@@ -352,7 +317,7 @@ export default {
       this.queryJyjxJdInfo(this.dwmc ? this.dwmc : '');
     },
     showCorpInfo(jdlx, cid) {
-      if (jdlx === '1') {
+      if (!cid) {
         this.$alert('缺少单位标识');
       } else {
         this.$router.push({
@@ -362,6 +327,14 @@ export default {
           }
         });
       }
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
     }
   }
 };
@@ -375,9 +348,6 @@ export default {
   margin: 0 auto;
   padding: 90px 50px 10px;
   background-color: #fff;
-  .container {
-    // background-color: #fff;
-  }
   .jxcorp-row {
     // width: 92%;
     margin: 0 auto;
@@ -441,6 +411,8 @@ export default {
   }
   .jxcorp-img {
     width: 100%;
+    max-width: 64px;
+    margin: 0 auto;
   }
   .jxcorp-header {
     margin-bottom: 10px;
@@ -471,10 +443,10 @@ export default {
     margin: 20px auto 0;
     display: block;
   }
-  .condition {
-    padding-top: 10px;
-    padding-bottom: 20px;
-  }
+  // .condition {
+  //   padding-top: 10px;
+  //   padding-bottom: 20px;
+  // }
   ::v-deep .el-radio-group {
     .el-radio-button--medium .el-radio-button__inner {
       border: 0px;

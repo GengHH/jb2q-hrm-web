@@ -17,25 +17,61 @@
           v-if="activityInfo.actType === '01'"
           class="activity-type activity-type-one"
         >
-          <i class="circle-sty"></i>讲座
+          <i class="circle-sty"></i
+          >{{
+            getDicText(
+              $store.getters['dictionary/recruit_special_activity_type'],
+              activityInfo.actType
+            )
+          }}
         </div>
         <div
           v-if="activityInfo.actType === '02'"
           class="activity-type activity-type-two"
         >
-          <i class="circle-sty"></i>主题咨询活动
+          <i class="circle-sty"></i
+          >{{
+            getDicText(
+              $store.getters['dictionary/recruit_special_activity_type'],
+              activityInfo.actType
+            )
+          }}
         </div>
         <div
           v-if="activityInfo.actType === '03'"
           class="activity-type activity-type-three"
         >
-          <i class="circle-sty"></i>集体指导活动
+          <i class="circle-sty"></i
+          >{{
+            getDicText(
+              $store.getters['dictionary/recruit_special_activity_type'],
+              activityInfo.actType
+            )
+          }}
         </div>
         <div
           v-if="activityInfo.actType === '04'"
           class="activity-type activity-type-four"
         >
-          <i class="circle-sty"></i>其他
+          <i class="circle-sty"></i
+          >{{
+            getDicText(
+              $store.getters['dictionary/recruit_special_activity_type'],
+              activityInfo.actType
+            )
+          }}
+        </div>
+        <div
+          v-if="activityInfo.actType === '05'"
+          class="activity-type activity-type-four"
+        >
+          <i class="circle-sty"></i
+          >{{
+            getDicText(
+              $store.getters['dictionary/recruit_special_activity_type'],
+              activityInfo.actType
+            )
+          }}
         </div>
       </el-col>
       <el-col class="ul-style" :sm="22" :md="20" :lg="18">
@@ -106,6 +142,7 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
+import { getDicText } from '@/utils';
 export default {
   name: 'ActivityBoxShow',
   components: {
@@ -147,6 +184,9 @@ export default {
      */
     clickDetials(actId) {
       this.$emit('clickDetials', actId);
+    },
+    getDicText(data, value) {
+      return getDicText(data, value);
     }
   }
 };
