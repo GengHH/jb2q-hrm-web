@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-15 15:03:29
+ * @LastEditTime: 2021-06-16 11:29:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -107,8 +107,7 @@ Mock.mock(
               cid: '200211110579131',
               logo: '',
               cid: '200211110579131',
-              logo: '',
-              isTrial: '0',
+              isTrial: '1',
               dwlx: '有限责任公司(自然人投资或控股)',
               hylb: '投资与资产管理',
               slrq: '2009年',

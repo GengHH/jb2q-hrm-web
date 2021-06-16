@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-03 16:18:49
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-16 17:22:49
+ * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpSearchResume.vue
 -->
@@ -40,7 +40,11 @@
                 )
               "
             >
-              <span class="personName">{{ resumeItem.xm }}</span>
+              <span class="personName">{{
+                resumeItem.xm
+                  ? resumeItem.xm.substr(0, 1) + '**'
+                  : resumeItem.xm
+              }}</span>
               <!-- <span>人力资源总监</span>  -->
             </p>
             <p class="span-infor">

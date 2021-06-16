@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:30:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-15 17:09:52
+ * @LastEditTime: 2021-06-16 11:10:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
 -->
@@ -22,7 +22,7 @@
         :xl="2"
         style="padding: 10px; text-align:center;"
       >
-        区县选择：</el-col
+        区县：</el-col
       >
       <el-col :sm="20" :md="21" :lg="21" :xl="22">
         <el-radio-group v-model="qx" size="medium">
@@ -44,7 +44,7 @@
         :xl="2"
         style="padding: 10px;text-align:center;"
       >
-        基地类型：</el-col
+        排序：</el-col
       >
       <el-col :sm="20" :md="21" :lg="21" :xl="22">
         <el-radio-group v-model="order" size="medium">
@@ -54,7 +54,7 @@
         </el-radio-group>
       </el-col>
     </el-row>
-    <!-- 职位展示位 -->
+    <!-- 活动展示位 -->
     <div id="activityBox">
       <ActivityBoxShow
         v-for="activityInfo in showList"

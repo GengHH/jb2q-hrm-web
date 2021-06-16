@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-08 14:12:52
+ * @LastEditTime: 2021-06-16 16:22:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -188,9 +188,7 @@ Mock.mock(basePath + '/person/resume/save/workyear', 'post', function(options) {
   return successData;
 });
 //新增或修改个人技能证书信息
-Mock.mock(basePath + '/person/inresumeo/saveSkillCert', 'post', function(
-  options
-) {
+Mock.mock(basePath + '/person/resume/saveSkillCert', 'post', function(options) {
   return successData;
 });
 //新增或修改个人语言能力信息

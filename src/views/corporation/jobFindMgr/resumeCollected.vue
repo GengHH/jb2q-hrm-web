@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-12 18:59:27
+ * @LastEditTime: 2021-06-16 17:11:41
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -227,6 +227,10 @@ export default {
         {
           label: '姓名',
           prop: 'name',
+          customerRenderText: ({ row }) => {
+            const { name } = row;
+            return name ? name.substr(0, 1) + '**' : name;
+          },
           rowSpan: 'all'
         },
         {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 13:49:57
+ * @LastEditTime: 2021-06-16 11:08:07
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -160,6 +160,15 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" v-if="isHumanResourceReg">
+        <el-form-item prop="entrustTyshxym">
+          <pl-input
+            required
+            v-model="jobForm.entrustTyshxym"
+            label="委托待招单位统一社会信用码"
+          ></pl-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24" v-if="isHumanResourceReg">
         <el-form-item prop="entrustCorpName">
           <pl-input
             required
@@ -460,10 +469,28 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        //entrustTyshxym: '',
+        entrustTyshxym: [
+          {
+            required: true,
+            message: '请输入统一社会信用码',
+            trigger: ['blur', 'change']
+          },
+          {
+            len: 18,
+            message: '请输入18位',
+            trigger: ['blur', 'change']
+          }
+        ],
         //tranBaseSymbol: '',
         //agencyRecruit: '',
-        entrustCorpName: '',
+        entrustCorpName: [
+          {
+            required: true,
+            message: '请输入委托单位名称',
+            trigger: ['blur', 'change']
+          },
+          { max: 40, message: '不得超过40字符', trigger: 'blur' }
+        ],
         positionTypeOne: [
           {
             required: true,

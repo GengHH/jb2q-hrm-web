@@ -404,7 +404,7 @@
             </el-col>
             <el-col :span="4">
               <p class="fourteen-opacity line40">
-                {{ eduCarditem.eduLevel }}
+                {{ eduCarditem.eduLevelText }}
               </p>
             </el-col>
             <el-col :span="10">
@@ -478,11 +478,11 @@
                 </el-col>
                 <el-col :span="12" style="text-align:right;">
                   <p class="fourteen-opacity line40">
-                    {{ eduCarditem.eduLevel }}
+                    {{ eduCarditem.eduLevelText }}
                   </p>
                 </el-col>
-              </el-row>  
-              <el-row>  
+              </el-row>
+              <el-row>
                 <el-col :span="18">
                   <p class="four-opacity line40">
                     {{
@@ -569,7 +569,7 @@
           >
             <el-table-column type="selection" width="50"> </el-table-column>
             <el-table-column
-              prop="certID"
+              prop="certId"
               label="证书编号"
               show-overflow-tooltip
             >
@@ -618,6 +618,9 @@
             @close="skillTagClose(index, skillItem.certId)"
             >{{ skillItem.certName }}
             <p>
+              <span v-if="skillItem.sourceOuter === '1'" class="type-label"
+                >认证</span
+              >
               <span>{{ skillItem.certLevel }}</span>
               <span>{{ skillItem.receiveTime }}</span>
             </p>
@@ -1224,16 +1227,7 @@
 </template>
 
 <script>
-import {
-  // getGzxz,
-  // getQx,
-  // getLanguageType,
-  // getLanguageLevel,
-  // getRecruitEdu,
-  getPsnlResume,
-  getEduExpFromChsi,
-  getCertInfo
-} from '@/api/common';
+import { getPsnlResume, getEduExpFromChsi, getCertInfo } from '@/api/common';
 import {
   getPersonBaseInfo,
   savePositionLike,
@@ -1616,7 +1610,7 @@ export default {
             let dic = dictionary.find(i => {
               return i.value === item.eduLevel;
             });
-            item.eduLevel = dic ? dic.label : item.eduLevel;
+            item.eduLevelText = dic ? dic.label : item.eduLevel;
             return item;
           })
         : [];
@@ -1628,7 +1622,7 @@ export default {
             let dic = dictionary.find(i => {
               return i.value === item.eduLevel;
             });
-            item.eduLevel = dic ? dic.label : item.eduLevel;
+            item.eduLevelText = dic ? dic.label : item.eduLevel;
             return item;
           })
         : [];
@@ -1640,7 +1634,7 @@ export default {
             let dic = dictionary.find(i => {
               return i.value === item.eduLevel;
             });
-            item.eduLevel = dic ? dic.label : item.eduLevel;
+            item.eduLevelText = dic ? dic.label : item.eduLevel;
             return item;
           })
         : [];
@@ -1949,7 +1943,7 @@ export default {
                 });
                 return;
               }
-              saveSkillCert(params)
+              saveSkillCert({ certList: [params] })
                 .then(res => {
                   if (res.status === 200) {
                     this.$message({
@@ -2236,7 +2230,7 @@ export default {
      * 显示学信网教育经历数据
      */
     openEduPop() {
-      // TODO 查询教育经历信息
+      // 查询教育经历信息
       getEduExpFromChsi({
         pid: this.$store.getters['person/pid']
       }).then(queryRes => {
@@ -2244,7 +2238,8 @@ export default {
           // this.$message({ type: 'success', message: '查询成功' });
           this.eduTableData = queryRes.result.data || [];
         } else if (queryRes) {
-          this.$message({ type: 'error', message: '查询失败' });
+          this.eduTableData = [];
+          this.$message({ type: 'error', message: '查询教育经历失败' });
         }
       });
     },
@@ -2253,7 +2248,7 @@ export default {
      * 显示技能鉴定证书数据
      */
     openSkillPop() {
-      // TODO 查询教育经历信息
+      // 查询技能证书信息
       getCertInfo({
         pid: this.$store.getters['person/pid']
       }).then(queryRes => {
@@ -2261,7 +2256,8 @@ export default {
           // this.$message({ type: 'success', message: '查询成功' });
           this.skillTableData = queryRes.result.data || [];
         } else if (queryRes) {
-          this.$message({ type: 'error', message: '查询失败' });
+          this.skillTableData = [];
+          this.$message({ type: 'error', message: '查询技能证书失败' });
         }
       });
     },
@@ -2282,9 +2278,9 @@ export default {
           if (queryRes && queryRes.status === 200) {
             this.$message({ type: 'success', message: '保存成功' });
             //回显数据
-            //this.resume.eduExp.push(this.multipleSelection[0]);
+            //this.resume.eduExp.push(...params);
             this.loadPsnlResume();
-            // TODO删掉已经选过的数据
+            // 删掉已经选过的数据
             this.eduTableData = this.eduTableData.filter(
               obj => !this.multipleSelection.some(i => obj.eduId === i.eduId)
             );
@@ -2300,8 +2296,6 @@ export default {
      *添加技能证书从鉴定网(可以批量)
      */
     addSkillFromJd() {
-      this.$alert('暂时没有此Api接口，请稍后！');
-      return;
       if (this.multipleSelection2 && this.multipleSelection2.length) {
         console.log(this.multipleSelection2);
         let params = this.multipleSelection2.map(i => {
@@ -2310,14 +2304,15 @@ export default {
           obj.sourceOuter = '1';
           return obj;
         });
-        saveEduExp({ eduExpList: params }).then(queryRes => {
+        saveSkillCert({ certList: params }).then(queryRes => {
           if (queryRes && queryRes.status === 200) {
             this.$message({ type: 'success', message: '保存成功' });
             //回显数据
+            //this.resume.psnlSkillcert.push(...params);
             this.loadPsnlResume();
-            // TODO删掉已经选过的数据
-            this.eduTableData = this.eduTableData.filter(
-              obj => !this.multipleSelection2.some(i => obj.eduId === i.eduId)
+            //删掉已经选过的数据
+            this.skillTableData = this.skillTableData.filter(
+              obj => !this.multipleSelection2.some(i => obj.certId === i.certId)
             );
           } else if (queryRes) {
             this.$message({ type: 'error', message: '保存失败' });
@@ -2515,32 +2510,23 @@ export default {
         top: 2px;
         right: 0;
       }
+      .type-label {
+        font-size: 12px;
+        color: #fc6f3d;
+        height: 20px;
+        width: 60px;
+        display: block;
+        /* background-color: #fc6f3d; */
+        transform: rotate(-45deg);
+        text-align: center;
+        left: -20px;
+        top: 0px;
+        position: absolute;
+      }
     }
   }
   .hidden {
     visibility: hidden;
-  }
-  .pup-btn {
-    text-align: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    background: #f7f7f7;
-    left: 0;
-    padding: 5px 0;
-    z-index: 2;
-    border-bottom: 1px solid #e6e6e6;
-    .pup-tit {
-      text-align: left;
-      font-size: 14px;
-      color: #fc6f3d;
-      font-weight: bold;
-      padding: 0 20px;
-      line-height: 30px;
-      i {
-        margin-right: 6px;
-      }
-    }
   }
 
   #selfEvaluationArea {
@@ -2580,6 +2566,28 @@ export default {
     text-align: center;
     font-size: 20px;
     margin-bottom: 20px;
+  }
+}
+.pup-btn {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #f7f7f7;
+  left: 0;
+  padding: 5px 0;
+  z-index: 2;
+  border-bottom: 1px solid #e6e6e6;
+  .pup-tit {
+    text-align: left;
+    font-size: 14px;
+    color: #fc6f3d;
+    font-weight: bold;
+    padding: 0 20px;
+    line-height: 30px;
+    i {
+      margin-right: 6px;
+    }
   }
 }
 </style>

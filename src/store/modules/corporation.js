@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-01 17:10:04
+ * @LastEditTime: 2021-06-16 09:51:36
  * @Description: 单位模块基本信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\corporation.js
  */
@@ -183,6 +183,7 @@ const actions = {
       commit('SET_LOGIN_TIME', 0);
       commit('SET_TRAN_BASE_SYMBOL', true);
       commit('SET_SPECIAL_CORP', true);
+      commit('SET_HUMAN_RESOURCE_REG', true);
       //sessionStorage.setItem('vuex', null);
       resolve();
     });
@@ -200,6 +201,7 @@ const actions = {
       commit('SET_LOGIN_TIME', 0);
       commit('SET_TRAN_BASE_SYMBOL', false);
       commit('SET_SPECIAL_CORP', false);
+      commit('SET_HUMAN_RESOURCE_REG', false);
       localStorage.setItem('vuex', null);
       resolve();
     });

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-11 18:25:15
+ * @LastEditTime: 2021-06-16 17:19:23
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -334,6 +334,7 @@ Mock.mock(basePath + '/corp/manage/find/receive', 'post', function(options) {
             collegesName: '',
             createTime: '2021-04-30 18:04:07',
             'reply|1': ['0', '1'],
+            'source|1': ['01', '04'],
             reason: '123412341234123szdasdASDasdsafasdfggsadggdasgfas4',
             noticeInterview: '2021-05-10 20:51:02',
             interviewDate: '20210809',

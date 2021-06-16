@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-28 13:20:32
+ * @LastEditTime: 2021-06-16 16:27:28
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -112,7 +112,7 @@ const resumeMockData = function(req) {
             pid: '',
             collegesName: '复旦大学',
             majorName: '英语',
-            eduLevel: '大学本科',
+            eduLevel: '01',
             admissionDate: '20140910',
             graduateDate: '20180630',
             sourceOuter: '1',
@@ -255,35 +255,35 @@ Mock.mock(RegExp(basePath + '/common/person/query-certInfo'), 'post', function(
       data: [
         {
           pid: '201407075117900',
-          certID: '201814630428685',
+          certId: '201814630428685',
           certName: '电子商务应用',
           certLevel: '高级/三级',
           receiveTime: '20180716'
         },
         {
           pid: '201407075117900',
-          certID: '2003000041460272',
+          certId: '2003000041460272',
           certName: '美容师',
           certLevel: '中级/四级',
           receiveTime: '20200110'
         },
         {
           pid: '201407075117900',
-          certID: '1903000260561310',
+          certId: '1903000260561310',
           certName: '美容师',
           certLevel: '初级/五级',
           receiveTime: '20190812'
         },
         {
           pid: '201407075117900',
-          certID: '1903000139960642',
+          certId: '1903000139960642',
           certName: '创业能力',
           certLevel: '专项能力',
           receiveTime: '20190415'
         },
         {
           pid: '201407075117900',
-          certID: '2003000323960137',
+          certId: '2003000323960137',
           certName: '芳香美容',
           certLevel: '专项能力',
           receiveTime: '20201013'

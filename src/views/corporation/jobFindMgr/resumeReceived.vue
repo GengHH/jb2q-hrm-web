@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 14:41:44
+ * @LastEditTime: 2021-06-16 17:17:10
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -649,7 +649,7 @@ export default {
       totalCount04: 0,
       tableData05: [],
       totalCount05: 0,
-      secrecy: true,
+      secrecy: false,
       resumeData: {},
       feedback: {
         applyforIdList: [],
@@ -693,6 +693,14 @@ export default {
         {
           label: '姓名',
           prop: 'xm',
+          customerRenderText: ({ row }) => {
+            const { xm, reply, source } = row;
+            if (source === '04' && reply === '0' && this.activeName === '03') {
+              return xm ? xm.substr(0, 1) + '**' : xm;
+            } else {
+              return xm;
+            }
+          },
           rowSpan: 'all' //tranBaseSymbol
         },
         {
@@ -771,12 +779,16 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
-                //判断是不是显示简历的私密信息
+                //判断是不是显示简历的私密信息（应聘来源为04-邀约应聘，且不参见面试的不能查看到私密简历信息）
                 if (row.applyforId) {
-                  if (this.activeName === '03' && row.reply === '1') {
-                    this.secrecy = false;
-                  } else {
+                  if (
+                    this.activeName === '03' &&
+                    row.reply === '1' &&
+                    row.source === '04'
+                  ) {
                     this.secrecy = true;
+                  } else {
+                    this.secrecy = false;
                   }
                   this.queryResumesInfo(row.applyforId);
                 } else {

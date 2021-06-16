@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-15 15:17:20
+ * @LastEditTime: 2021-06-16 15:45:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -108,16 +108,19 @@
                       </div>
 
                       <div class="jxcorp-info gray-font">
-                        <span>{{ jdItem.dwlx }}</span> |
-                        <span>{{ jdItem.hylb }}</span> |
-                        <span>{{ jdItem.slrq }}</span> |
+                        <span>{{ jdItem.dwlx }}</span
+                        ><span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.hylb }}</span
+                        ><span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.slrq }}</span
+                        ><span class="jxcorp-info-line">|</span>
                         <span>其他</span>
                       </div>
                     </el-col>
                   </el-row>
                   <!-- 一个职位 -->
                   <div v-if="jdItem.positionDataList.length === 0">
-                    <p class="no-data-text">暂无岗位相关信息</p>
+                    <p class="no-data-text">暂不招录</p>
                   </div>
                   <div
                     v-else
@@ -128,9 +131,9 @@
                     <span class="jxcorp-list-name" :title="jdZwItem.gwbm">{{
                       jdZwItem.gwbm
                     }}</span>
-                    <span class="gray-font">岗位：{{ jdZwItem.gwzs }}人</span>
-                    <span class="gray-font">在岗：{{ jdZwItem.zgrs }}人</span>
-                    <span class="gray-font">招聘：{{ jdZwItem.zprs }}人</span>
+                    <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
+                    <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
+                    <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
                   </div>
                   <span
                     class="more-position"
@@ -143,9 +146,74 @@
             </template>
 
             <!---------------->
-            <!-- 综合类基地 -->
+            <!-- 综合类基地（无子单位）-->
             <!---------------->
-            <template v-if="jdItem.jdlx === '2'">
+            <template v-if="jdItem.jdlx === '2' && !jdItem.baseComDataList.length">
+              <el-col
+                :sm="24"
+                :md="12"
+                :lg="8"
+                :xl="6"
+                :key="index"
+              >
+                <div class="jxcorp-box" :id="jdItem.cid">
+                  <el-row class="jxcorp-header">
+                    <el-col :span="4">
+                      <!-- <img
+                        class="jxcorp-img"
+                        src="../../../assets/images/logos.png"
+                        alt="未加载"
+                      /> -->
+                      <img
+                        class="jxcorp-img"
+                        :src="'data:image/jpg;base64,' + jdItem.logo"
+                        @error="defImg"
+                        alt="未加载"
+                      />
+                    </el-col>
+                    <el-col :span="20">
+                      <!-- <div class="jxcorp-title" >{{ jdItem.jdmc }}</div> -->
+                      <div
+                        class="jxcorp-title"
+                        :title="'基地名称：' + jdItem.jdmc"
+                        @click="showCorpInfo(jdItem.jdlx, zhjdItem.cid)"
+                      >
+                        <div
+                          class="jxcorp-title-mc"
+                          v-if="jdItem.isTrial !== '1'"
+                        >
+                          {{ jdItem.jdmc }} 
+                        </div>
+
+                        <div class="jxcorp-title-mc syx-mc" v-else>
+                          {{ jdItem.jdmc }} <span
+                            class="syx-label"
+                            >试运行</span
+                          >
+                        </div>
+                      </div>
+                      <div class="jxcorp-info gray-font">
+                        <span>{{ jdItem.dwlx }}</span>
+                        <span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.hylb }}</span>
+                        <span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.slrq }}</span>
+                        <span class="jxcorp-info-line">|</span>
+                        <span>其他</span>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <!-- 没有一个职位 -->
+                  <div>
+                    <p class="no-data-text">暂不招录</p>
+                  </div>
+                </div>
+              </el-col>
+            </template>
+            <!---------------->
+            <!-- 综合类基地（有子单位）-->
+            <!---------------->
+            <template v-if="jdItem.jdlx === '2' && jdItem.baseComDataList.length">
               <el-col
                 :sm="24"
                 :md="12"
@@ -180,25 +248,30 @@
                           class="jxcorp-title-mc"
                           v-if="jdItem.isTrial !== '1'"
                         >
-                          {{ zhjdItem.dwmc }}
+                          {{ jdItem.jdmc }} （{{ zhjdItem.dwmc }}）
                         </div>
 
                         <div class="jxcorp-title-mc syx-mc" v-else>
-                          {{ zhjdItem.dwmc
-                          }}<span class="syx-label">试运行</span>
+                          {{ jdItem.jdmc }} （{{ zhjdItem.dwmc }}）<span
+                            class="syx-label"
+                            >试运行</span
+                          >
                         </div>
                       </div>
                       <div class="jxcorp-info gray-font">
-                        <span>{{ jdItem.dwlx }}</span> |
-                        <span>{{ jdItem.hylb }}</span> |
-                        <span>{{ jdItem.slrq }}</span> |
+                        <span>{{ jdItem.dwlx }}</span>
+                        <span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.hylb }}</span>
+                        <span class="jxcorp-info-line">|</span>
+                        <span>{{ jdItem.slrq }}</span>
+                        <span class="jxcorp-info-line">|</span>
                         <span>其他</span>
                       </div>
                     </el-col>
                   </el-row>
                   <!-- 一个职位 -->
                   <div v-if="zhjdItem.positionDataList.length === 0">
-                    <p class="no-data-text">暂无岗位相关信息</p>
+                    <p class="no-data-text">暂不招录</p>
                   </div>
                   <div
                     v-else
@@ -209,9 +282,9 @@
                     <span class="jxcorp-list-name" :title="zhjdZwItem.gwbm">
                       {{ zhjdZwItem.gwbm }}
                     </span>
-                    <span class="gray-font">岗位：{{ zhjdZwItem.gwzs }}人</span>
-                    <span class="gray-font">在岗：{{ zhjdZwItem.zgrs }}人</span>
-                    <span class="gray-font">招聘：{{ zhjdZwItem.zprs }}人</span>
+                    <span class="gray-font">拟招：{{ zhjdZwItem.gwzs }}人</span>
+                    <span class="gray-font">可招：{{ zhjdZwItem.zgrs }}人</span>
+                    <span class="gray-font">已招：{{ zhjdZwItem.zprs }}人</span>
                   </div>
                   <span
                     class="more-position"
@@ -385,11 +458,12 @@ export default {
       color: #fc7a43;
     }
     .jxcorp-title-mc {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-wrap: normal;
-      word-break: break-all;
-      overflow: hidden;
+      line-height: 20px;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
+      // word-wrap: normal;
+      // word-break: break-all;
+      // overflow: hidden;
     }
 
     .syx-mc {
@@ -408,6 +482,10 @@ export default {
       font-weight: 300;
       font-family: 宋体, Arial, Verdana, sans-serif;
     }
+  }
+  .jxcorp-info-line {
+    color: #ccc;
+    padding: 0 5px;
   }
   .jxcorp-img {
     width: 100%;

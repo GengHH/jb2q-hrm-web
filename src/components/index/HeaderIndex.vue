@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-06-11 11:07:28
+ * @LastEditTime: 2021-06-16 11:26:20
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -17,8 +17,8 @@
           上海市人力资源和社会保障局 | 公共服务平台
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="16" :xl="16" class="text-right">
-          <i class="el-icon-user"></i>
-          登录 | 注册
+          <!-- <i class="el-icon-user"></i>
+          登录 | 注册 -->
         </el-col>
       </el-row>
     </div>
@@ -225,9 +225,10 @@ export default {
     img {
       /* width: 90%; */
       margin: 0 auto;
-      vertical-align: middle;
-      height: 50px;
-      margin-top: 3px;
+      /* vertical-align: middle; */
+      /* height: 44px; */
+      margin-top: 8px;
+      width: 80%;
     }
   }
   #indexPageHeader {
