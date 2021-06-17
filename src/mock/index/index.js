@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 11:29:04
+ * @LastEditTime: 2021-06-17 14:46:46
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -100,117 +100,135 @@ Mock.mock(
             total: 1
           },
           data: [
+            // {
+            //   jdlx: '2',
+            //   jdmc: '上海庆圆投资有限公司',
+            //   jdbh: '2017D10232',
+            //   cid: '200211110579131',
+            //   logo: '',
+            //   cid: '200211110579131',
+            //   isTrial: '1',
+            //   dwlx: '有限责任公司(自然人投资或控股)',
+            //   hylb: '投资与资产管理',
+            //   slrq: '2009年',
+            //   baseComDataList: [
+            //     {
+            //       dwmc: '上海兴国宾馆',
+            //       cid: '200101010041021',
+            //       positionDataList: [
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '酒店管理专员',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         }
+            //       ]
+            //     },
+            //     {
+            //       dwmc: '上海噢开新媒体科技有限公司二级同色人家搜是大法官',
+            //       cid: '201911273972621',
+            //       logo: '',
+            //       positionDataList: [
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '京东方佛感受到',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         },
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '士大夫撒多of老地方',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         },
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '士大夫撒多of老地方',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         },
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '士大夫撒多of老地方',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         },
+            //         {
+            //           gwbh: '1912023415',
+            //           positionId: '',
+            //           gwbm: '士大夫撒多of老地方',
+            //           gwzs: '5',
+            //           zgrs: '0',
+            //           isHiring: '',
+            //           zprs: '5'
+            //         }
+            //       ]
+            //     }
+            //   ],
+            //   positionDataList: []
+            // },
             {
+              dwmc: '上海市宝山区红星幼儿园（上海市宝山区红星幼儿园分园）',
+              cid: '200008010006541',
               jdlx: '2',
-              jdmc: '上海庆圆投资有限公司',
-              jdbh: '2017D10232',
-              cid: '200211110579131',
-              logo: '',
-              cid: '200211110579131',
+              jdmc: '上海宝山人力资源有限公司',
+              jdbh: '2017D10597',
+              jdCid: '200008010027061',
+              dwlx: '有限责任公司(非自然人投资或控股的法人独资)',
+              hylb: '劳务派遣服务',
+              slrq: '2000年',
               isTrial: '1',
-              dwlx: '有限责任公司(自然人投资或控股)',
-              hylb: '投资与资产管理',
-              slrq: '2009年',
-              baseComDataList: [
-                {
-                  dwmc: '上海兴国宾馆',
-                  cid: '200101010041021',
-                  positionDataList: [
-                    // {
-                    //   gwbh: '1912023415',
-                    //   positionId: '',
-                    //   gwbm: '酒店管理专员',
-                    //   gwzs: '5',
-                    //   zgrs: '0',
-                    //   isHiring: '',
-                    //   zprs: '5'
-                    // }
-                  ]
-                },
-                {
-                  dwmc: '上海噢开新媒体科技有限公司二级同色人家搜是大法官',
-                  cid: '201911273972621',
-                  logo: '',
-                  positionDataList: [
-                    {
-                      gwbh: '1912023415',
-                      positionId: '',
-                      gwbm: '京东方佛感受到',
-                      gwzs: '5',
-                      zgrs: '0',
-                      isHiring: '',
-                      zprs: '5'
-                    },
-                    {
-                      gwbh: '1912023415',
-                      positionId: '',
-                      gwbm: '士大夫撒多of老地方',
-                      gwzs: '5',
-                      zgrs: '0',
-                      isHiring: '',
-                      zprs: '5'
-                    },
-                    {
-                      gwbh: '1912023415',
-                      positionId: '',
-                      gwbm: '士大夫撒多of老地方',
-                      gwzs: '5',
-                      zgrs: '0',
-                      isHiring: '',
-                      zprs: '5'
-                    },
-                    {
-                      gwbh: '1912023415',
-                      positionId: '',
-                      gwbm: '士大夫撒多of老地方',
-                      gwzs: '5',
-                      zgrs: '0',
-                      isHiring: '',
-                      zprs: '5'
-                    },
-                    {
-                      gwbh: '1912023415',
-                      positionId: '',
-                      gwbm: '士大夫撒多of老地方',
-                      gwzs: '5',
-                      zgrs: '0',
-                      isHiring: '',
-                      zprs: '5'
-                    }
-                  ]
-                }
-              ],
-              positionDataList: []
-            },
-            {
-              jdlx: '1',
-              jdmc: '上海万达股份有限公司',
-              jdbh: '2017D10232',
-              cid: '200211110579131',
-              logo: '',
-              isTrial: '1',
-              dwlx: '有限责任公司',
-              hylb: '投资与资产管理',
-              slrq: '2009年',
-              baseComDataList: [],
               positionDataList: [
                 {
-                  gwbh: '1912023415',
+                  gwbh: '2009074204',
                   positionId: '',
-                  gwbm: '酒店管理专员1',
-                  gwzs: '5',
+                  gwbm: '幼儿教师',
+                  gwzs: '10',
                   zgrs: '0',
                   isHiring: '',
-                  zprs: '5'
+                  zprs: '10'
                 },
                 {
-                  gwbh: '1912023415',
+                  gwbh: '2009074204',
                   positionId: '',
-                  gwbm: '酒店管理专员2',
-                  gwzs: '5',
+                  gwbm: '幼儿教师',
+                  gwzs: '10',
                   zgrs: '0',
                   isHiring: '',
-                  zprs: '5'
+                  zprs: '10'
+                },
+                {
+                  gwbh: '2009074204',
+                  positionId: '',
+                  gwbm: '幼儿教师',
+                  gwzs: '10',
+                  zgrs: '0',
+                  isHiring: '',
+                  zprs: '10'
+                },
+                {
+                  gwbh: '2009074204',
+                  positionId: '',
+                  gwbm: '幼儿教师',
+                  gwzs: '10',
+                  zgrs: '0',
+                  isHiring: '',
+                  zprs: '10'
                 }
               ]
             },
@@ -250,7 +268,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791311',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -282,7 +300,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791312',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -314,7 +332,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791313',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -346,7 +364,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791314',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -378,7 +396,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791315',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -410,7 +428,39 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791316',
+              logo: '',
+              isTrial: '1',
+              dwlx: '有限责任公司',
+              hylb: '投资与资产管理',
+              slrq: '2009年',
+              baseComDataList: [],
+              positionDataList: [
+                {
+                  gwbh: '1912023415',
+                  positionId: '',
+                  gwbm: '酒店管理专员1',
+                  gwzs: '5',
+                  zgrs: '0',
+                  isHiring: '',
+                  zprs: '5'
+                },
+                {
+                  gwbh: '1912023415',
+                  positionId: '',
+                  gwbm: '酒店管理专员2',
+                  gwzs: '5',
+                  zgrs: '0',
+                  isHiring: '',
+                  zprs: '5'
+                }
+              ]
+            },
+            {
+              jdlx: '1',
+              jdmc: '上海万达股份有限公司',
+              jdbh: '2017D10232',
+              cid: '2002111105791317',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -442,7 +492,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232111111',
-              cid: '200211110579131',
+              cid: '2002111105791318',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',
@@ -492,7 +542,7 @@ Mock.mock(
               jdlx: '1',
               jdmc: '上海万达股份有限公司',
               jdbh: '2017D10232',
-              cid: '200211110579131',
+              cid: '2002111105791319',
               logo: '',
               isTrial: '1',
               dwlx: '有限责任公司',

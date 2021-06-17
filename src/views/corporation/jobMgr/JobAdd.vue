@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 11:08:07
+ * @LastEditTime: 2021-06-17 10:28:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -159,7 +159,10 @@
           </pl-select>
         </el-form-item>
       </el-col>
-      <el-col :span="12" v-if="isHumanResourceReg">
+      <el-col
+        :span="12"
+        v-if="isHumanResourceReg && jobForm.agencyRecruit === '1'"
+      >
         <el-form-item prop="entrustTyshxym">
           <pl-input
             required
@@ -168,7 +171,10 @@
           ></pl-input>
         </el-form-item>
       </el-col>
-      <el-col :span="24" v-if="isHumanResourceReg">
+      <el-col
+        :span="24"
+        v-if="isHumanResourceReg && jobForm.agencyRecruit === '1'"
+      >
         <el-form-item prop="entrustCorpName">
           <pl-input
             required
@@ -968,7 +974,7 @@ export default {
       this.$refs.jobForm.validate(async valid => {
         if (valid) {
           this.jobForm.opWay = 'save';
-          this.jobForm.agencyRecruit = '0';
+          this.jobForm.agencyRecruit = this.jobForm.agencyRecruit || '0';
           let saveResult = await savePosition(this.jobForm).catch(() => {
             done();
           });
@@ -1010,7 +1016,7 @@ export default {
               // )
               //   .then(async () => {
               this.jobForm.opWay = 'release';
-              this.jobForm.agencyRecruit = '0';
+              this.jobForm.agencyRecruit = this.jobForm.agencyRecruit || '0';
               let publicResult = await releasePosition(this.jobForm).catch(
                 () => {
                   done();
@@ -1030,7 +1036,7 @@ export default {
               // });
             } else {
               this.jobForm.opWay = 'release';
-              this.jobForm.agencyRecruit = '0';
+              this.jobForm.agencyRecruit = this.jobForm.agencyRecruit || '0';
               let publicResult = await releasePosition(this.jobForm).catch(
                 () => {
                   done();
@@ -1170,7 +1176,7 @@ export default {
     color: #acacac;
   }
   .jx-wrap-header {
-    padding: 0 60px;
+    padding: 0 0 0 60px;
     background-color: #f9f9f9;
     &-title {
       line-height: 75px;

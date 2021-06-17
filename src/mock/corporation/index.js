@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 17:19:23
+ * @LastEditTime: 2021-06-17 18:19:32
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -64,7 +64,8 @@ const getCorpbaseInfo = pid => {
         recruitStaffName2: '刘德坡',
         recruitStaffPhone2: '13764565977',
         logo: '',
-        logoBase64: '',
+        logoBase64:
+          'PHN2ZyBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHBhdGggZD0iTTMwNC4xMjggNDU2LjE5MmM0OC42NCAwIDg4LjA2NC0zOS40MjQgODguMDY0LTg4LjA2NHMtMzkuNDI0LTg4LjA2NC04OC4wNjQtODguMDY0LTg4LjA2NCAzOS40MjQtODguMDY0IDg4LjA2NCAzOS40MjQgODguMDY0IDg4LjA2NCA4OC4wNjR6bTAtMTE2LjIyNGMxNS4zNiAwIDI4LjE2IDEyLjI4OCAyOC4xNiAyOC4xNnMtMTIuMjg4IDI4LjE2LTI4LjE2IDI4LjE2LTI4LjE2LTEyLjI4OC0yOC4xNi0yOC4xNiAxMi4yODgtMjguMTYgMjguMTYtMjguMTZ6IiBmaWxsPSIjZTZlNmU2Ii8+PHBhdGggZD0iTTg4Ny4yOTYgMTU5Ljc0NEgxMzYuNzA0Qzk2Ljc2OCAxNTkuNzQ0IDY0IDE5MiA2NCAyMzIuNDQ4djU1OS4xMDRjMCAzOS45MzYgMzIuMjU2IDcyLjcwNCA3Mi43MDQgNzIuNzA0aDE5OC4xNDRMNTAwLjIyNCA2ODguNjRsLTM2LjM1Mi0yMjIuNzIgMTYyLjMwNC0xMzAuNTYtNjEuNDQgMTQzLjg3MiA5Mi42NzIgMjE0LjAxNi0xMDUuNDcyIDE3MS4wMDhoMzM1LjM2QzkyNy4yMzIgODY0LjI1NiA5NjAgODMyIDk2MCA3OTEuNTUyVjIzMi40NDhjMC0zOS45MzYtMzIuMjU2LTcyLjcwNC03Mi43MDQtNzIuNzA0em0tMTM4Ljc1MiA3MS42OHYuNTEySDg1Ny42YzE2LjM4NCAwIDMwLjIwOCAxMy4zMTIgMzAuMjA4IDMwLjIwOHYzOTkuODcyTDY3My4yOCA0MDguMDY0bDc1LjI2NC0xNzYuNjR6TTMwNC42NCA3OTIuMDY0SDE2NS44ODhjLTE2LjM4NCAwLTMwLjIwOC0xMy4zMTItMzAuMjA4LTMwLjIwOHYtOS43MjhsMTM4Ljc1Mi0xNjQuMzUyIDEwNC45NiAxMjQuNDE2LTc0Ljc1MiA3OS44NzJ6bTgxLjkyLTM1NS44NGwzNy4zNzYgMjI4Ljg2NC0uNTEyLjUxMi0xNDIuODQ4LTE2OS45ODRjLTMuMDcyLTMuNTg0LTkuMjE2LTMuNTg0LTEyLjI4OCAwTDEzNS42OCA2NTIuOFYyNjIuMTQ0YzAtMTYuMzg0IDEzLjMxMi0zMC4yMDggMzAuMjA4LTMwLjIwOGg0NzQuNjI0TDM4Ni41NiA0MzYuMjI0em01MDEuMjQ4IDMyNS42MzJjMCAxNi44OTYtMTMuMzEyIDMwLjIwOC0yOS42OTYgMzAuMjA4SDY4MC45Nmw1Ny4zNDQtOTMuMTg0LTg3LjU1Mi0yMDIuMjQgNy4xNjgtNy42OCAyMjkuODg4IDI3Mi44OTZ6IiBmaWxsPSIjZTZlNmU2Ii8+PC9zdmc+',
         publicityMovie: '',
         statusId: '1',
         resumeSearch: '1',
@@ -1311,5 +1312,126 @@ Mock.mock(
     };
   }
 );
+
+const resumeMockData = function(req) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        applyForId: '',
+        resumeId: '1',
+        pid: '201906186258910',
+        xm: '哈哈哈',
+        age: 24,
+        sex: '男',
+        contactPhone: '13122272095',
+        workYear: 0,
+        eduLevel: '03',
+        eduId: '05',
+        livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
+        workNature: '01',
+        industryLike: '15',
+        salaryScope: '10000-50000',
+        workArea: '05',
+        positionLike: '1501-1502',
+        laborExp: [
+          {
+            expId: '1',
+            pid: '',
+            corpName: '万达信息股份有限公司',
+            positionName: '开发',
+            entryDate: '20190611',
+            quitDate: '',
+            workDescribe: '搬砖'
+          },
+          {
+            expId: '2',
+            pid: '',
+            corpName: '北京电影学院',
+            positionName: '表演',
+            entryDate: '20110601',
+            quitDate: '20080101',
+            workDescribe: '表演\n唱歌\n跳舞'
+          }
+        ],
+        eduExp: [
+          {
+            eduId: '3',
+            pid: '',
+            collegesName: '复旦大学',
+            majorName: '英语',
+            eduLevel: '01',
+            admissionDate: '20140910',
+            graduateDate: '20180630',
+            sourceOuter: '1',
+            certNum: ''
+          }
+        ],
+        psnlLanguage: [
+          {
+            languageId: '1',
+            pid: '',
+            languageType: '01',
+            languageLevel: '1'
+          },
+          {
+            languageId: '2',
+            pid: '',
+            languageType: '02',
+            languageLevel: '2'
+          },
+          {
+            languageId: '3',
+            pid: '',
+            languageType: '03',
+            languageLevel: '3'
+          }
+        ],
+        psnlSkillcert: [
+          {
+            certId: '1',
+            pid: '',
+            certName: '信息系统项目管理师证书',
+            certLevel: '一级',
+            receiveTime: '2020-10-11'
+          },
+          {
+            certId: '2',
+            pid: '',
+            certName: '计算机二级国家证书',
+            certLevel: '二级',
+            receiveTime: '2019-05-09'
+          },
+          {
+            certId: '3',
+            pid: '',
+            certName: 'CISP注册信息安全专业人员',
+            certLevel: '三级',
+            receiveTime: '2020-01-01'
+          },
+          {
+            certId: '4',
+            pid: '',
+            certName: '英语专业等级证书',
+            certLevel: '六级',
+            receiveTime: '2018-09-19'
+          }
+        ],
+        evaluate: '本人就是搬砖厉害！'
+      }
+    }
+  };
+};
+//获取个人的基本简历信息
+Mock.mock(
+  RegExp(basePath + '/corp/resume/loadPsnlResume' + '.*'),
+  'get',
+  resumeMockData
+);
+//获取个人的基本简历信息
+Mock.mock(RegExp(basePath + '/corp/resume/favor'), 'post', function(options) {
+  return successData;
+});
 
 export default Mock;

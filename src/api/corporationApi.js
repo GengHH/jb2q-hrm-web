@@ -1,7 +1,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
- * @LastEditors: Please set LastEditors
+ * @LastEditors: GengHH
  * @Description: 单位模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\corporationApi.js
  */
@@ -112,9 +112,10 @@ const queryPositionList = params =>
 //邀约
 const doInvite = params => postAction(basePath + '/corp/resume/invite', params);
 
-// 招聘会职位信息
-// const queryJobFairPositionInfo = params =>
-//   postAction(basePath + '/corp/meeting/find/positionInfo', params);
+//招聘会职位信息
+const doFavorResume = params =>
+  postAction(basePath + '/corp/resume/favor', params);
+
 // // 报名招聘会
 // const applyJobFair = params =>
 //   postAction(basePath + '/corp/meeting/save', params);
@@ -131,7 +132,9 @@ const updateShop = params => postAction(basePath + '/corp/shop/update', params);
 const deleteShop = params => postAction(basePath + '/corp/shop/delete', params);
 
 /**********end***********/
-
+// 单位获取个人简历信息
+const getPsnlResumeByCorp = params =>
+  getAction(basePath + '/corp/resume/loadPsnlResume', params);
 export {
   doCorporationLogout,
   getLogonUser,
@@ -162,5 +165,7 @@ export {
   updateShop,
   deleteShop,
   queryPositionList,
-  doInvite
+  doInvite,
+  getPsnlResumeByCorp,
+  doFavorResume
 };

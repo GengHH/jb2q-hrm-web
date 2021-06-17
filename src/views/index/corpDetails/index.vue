@@ -289,8 +289,7 @@ import { loadCorpInfo } from '@/api/corporationApi';
 import {
   queryCorpPositionList,
   doDeliveryResume,
-  doFavorJobs,
-  doUnfavorJobs
+  attentionOrFavor
 } from '@/api/personApi';
 import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
@@ -453,25 +452,27 @@ export default {
       let positionId = (arg && arg[1]) || '';
       let orginFavorType = arg[2];
       let recId = arg[3] || '';
+      console.log(123542134234);
       if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
+        // TODO收藏职位
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: true
         });
         if (res.status === 200) {
           // 修改按钮状态
-
           this.queryResult[index].favor = true;
-
           this.$message({ type: 'success', message: '收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '收藏职位失败' });
         }
       } else {
-        //取消收藏职位
-        let res = await doUnfavorJobs({
+        // TODO取消收藏职位
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: false
         });
         if (res.status === 200) {
           // 修改按钮状态

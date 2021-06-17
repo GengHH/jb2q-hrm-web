@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 18:38:49
+ * @LastEditTime: 2021-06-17 16:29:23
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -31,7 +31,7 @@
     </el-row>
     <!-- 查询结果Tabs -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="未查看" name="01">
+      <el-tab-pane :label="labelCount01" name="01">
         <pl-table
           :data="tableData01"
           :totalCount="totalCount01"
@@ -49,7 +49,7 @@
           </template>
         </pl-table>
       </el-tab-pane>
-      <el-tab-pane label="已查看" name="02"
+      <el-tab-pane :label="labelCount02" name="02"
         ><pl-table
           :data="tableData02"
           :totalCount="totalCount02"
@@ -67,7 +67,7 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知面试" name="03"
+      <el-tab-pane :label="labelCount03" name="03"
         ><pl-table
           :data="tableData03"
           :totalCount="totalCount03"
@@ -98,7 +98,7 @@
           </template>
         </pl-table></el-tab-pane
       >
-      <el-tab-pane label="通知录用" name="04"
+      <el-tab-pane :label="labelCount04" name="04"
         ><pl-table
           :data="tableData04"
           :totalCount="totalCount04"
@@ -128,7 +128,7 @@
             </el-popover>
           </template> </pl-table
       ></el-tab-pane>
-      <el-tab-pane label="通知不录用" name="05"
+      <el-tab-pane :label="labelCount05" name="05"
         ><pl-table
           :data="tableData05"
           :totalCount="totalCount05"
@@ -462,6 +462,31 @@ export default {
     };
   },
   computed: {
+    labelCount01() {
+      return this.totalCount01
+        ? '未查看（' + this.totalCount01 + '）'
+        : '未查看';
+    },
+    labelCount02() {
+      return this.totalCount02
+        ? '已查看（' + this.totalCount02 + '）'
+        : '已查看';
+    },
+    labelCount03() {
+      return this.totalCount03
+        ? '通知面试（' + this.totalCount03 + '）'
+        : '通知面试';
+    },
+    labelCount04() {
+      return this.totalCount04
+        ? '通知录用（' + this.totalCount04 + '）'
+        : '通知录用';
+    },
+    labelCount05() {
+      return this.totalCount05
+        ? '通知不录用（' + this.totalCount05 + '）'
+        : '通知不录用';
+    },
     columns() {
       return [
         { attrs: { type: 'selection' } },

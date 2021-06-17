@@ -1,5 +1,6 @@
 <template>
-  <div id="indexBody">
+  <div id="indexBody" v-loading="loading"
+    element-loading-text="拼命加载中">
     <!-- 区县 -->
     <el-row>
       <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
@@ -181,6 +182,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       order: '1',
@@ -218,6 +220,7 @@ export default {
         //address: this.address,
         //type: this.type
       };
+      this.loading = true;
       queryActivityList(params).then(queryRes => {
         console.log(queryRes);
         if (queryRes && queryRes.status === 200) {
@@ -248,6 +251,7 @@ export default {
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
+      this.loading = false;
       });
     },
     /**

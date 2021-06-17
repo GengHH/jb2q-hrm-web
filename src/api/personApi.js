@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-03 15:41:26
+ * @LastEditTime: 2021-06-17 17:44:18
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -90,11 +90,11 @@ const doDeliveryResume = params =>
 const doDeliveryResumeRecommend = params =>
   postAction(basePath + '/person/recommend/doApplyFor', params);
 //个人收藏单位or职位
-const doFavorJobs = (type, params) =>
-  postAction(basePath + '/person/manage/find/do-favor/' + type, params);
+// const doFavorJobs = (type, params) =>
+//   postAction(basePath + '/person/manage/find/do-favor/' + type, params);
 //个人取消收藏单位or职位
-const doUnfavorJobs = params =>
-  postAction(basePath + '/person/manage/find/cancle-favor', params);
+// const doUnfavorJobs = params =>
+//   postAction(basePath + '/person/manage/find/cancle-favor', params);
 
 //个人查询屏蔽信息列表
 const queryShieldList = params =>
@@ -170,6 +170,9 @@ const doApplyActivity = params =>
   postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
 
 /*********end**********/
+//个人收藏或取消收藏职位和个人关注或取消关注单位 (type :1 收藏单位 ；2 收藏职位)
+const attentionOrFavor = (type, params) =>
+  postAction(basePath + '/person/manage/do-favor/' + type, params);
 
 export {
   doSend,
@@ -191,8 +194,8 @@ export {
   queryRecommendJobs,
   queryRecommendDetai,
   updatePersonalPermissions,
-  doFavorJobs,
-  doUnfavorJobs,
+  // doFavorJobs,
+  // doUnfavorJobs,
   doDeliveryResume,
   doDeliveryResumeRecommend,
   queryShieldList,
@@ -215,5 +218,6 @@ export {
   queryCorporationPositionInfo,
   doApplyFor,
   queryActivityList,
-  doApplyActivity
+  doApplyActivity,
+  attentionOrFavor
 };

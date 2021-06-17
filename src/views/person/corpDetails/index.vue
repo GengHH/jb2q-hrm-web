@@ -35,9 +35,13 @@
             </el-row>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <el-button type="primary" class="white-btn mat-15"
-              ><i class="el-icon-star-off"></i>关注单位</el-button
-            >
+            <el-button
+              type="primary"
+              class="white-btn mat-15"
+              @click="attentionCorp"
+              ><i class="el-icon-star-off">关注单位</i>
+              <i class="el-icon-star-on">取消关注单位</i>
+            </el-button>
             <div class="font12">
               <el-link :underline="false"
                 ><img
@@ -289,8 +293,7 @@ import { loadCorpInfo } from '@/api/corporationApi';
 import {
   queryCorpPositionList,
   doDeliveryResume,
-  doFavorJobs,
-  doUnfavorJobs
+  attentionOrFavor
 } from '@/api/personApi';
 import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
@@ -454,9 +457,10 @@ export default {
       let orginFavorType = arg[2];
       let recId = arg[3] || '';
       if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: true
         });
         if (res.status === 200) {
           // 修改按钮状态
@@ -469,9 +473,10 @@ export default {
         }
       } else {
         //取消收藏职位
-        let res = await doUnfavorJobs({
+        let res = await attentionOrFavor('2',{
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: false
         });
         if (res.status === 200) {
           // 修改按钮状态
@@ -482,6 +487,29 @@ export default {
         } else {
           this.$message({ type: 'error', message: '取消收藏职位失败' });
         }
+      }
+    },
+    /**
+     * 个人关注or取消关注单位
+     * TODO 参数未定
+     */
+    async attentionCorp() {
+      let queryRes = await attentionOrFavor('1', {
+        id: this.cid,
+        pid: this.$store.getters['person/pid'],
+        boolean: this.queryResult.attention
+      });
+      if (queryRes && queryRes.status === 200) {
+        // this.corpInfo = queryRes.result.data;
+        this.$message.success(
+          this.queryResult.attention ? '关注成功' : '取消关注成功'
+        );
+        //TODO更新按钮样式
+        this.queryResult.attention = !this.queryResult.attention;
+      } else if (queryRes) {
+        this.$message.error(
+          this.queryResult.attention ? '关注失败' : '取消关注失败'
+        );
       }
     },
     callPositionCorp(arg) {

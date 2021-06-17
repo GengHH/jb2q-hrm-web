@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 14:17:57
+ * @LastEditTime: 2021-06-17 18:17:54
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -301,7 +301,11 @@
           ></el-button
         > -->
       </div>
-      <BaseResumeInfo :queryPid="queryPid" secrecy></BaseResumeInfo>
+      <BaseResumeInfo
+        secrecy
+        :queryPid="queryPid"
+        searchByCorp
+      ></BaseResumeInfo>
     </el-dialog>
     <!-- end -->
 
@@ -506,16 +510,12 @@ import BaseResumeInfo from '@/components/common/BaseResumeInfo.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText } from '@/utils';
 import { phonePattern, telephonePattern } from '@/utils/regexp';
-import {
-  queryJobs,
-  doDeliveryResume
-  // doFavorJobs,
-  // doUnfavorJobs
-} from '@/api/personApi';
+import { queryJobs, doDeliveryResume } from '@/api/personApi';
 import {
   queryResumeList,
   queryPositionList,
   doInvite,
+  doFavorResume,
   getPersonContact
 } from '@/api/corporationApi';
 export default {
@@ -1015,38 +1015,38 @@ export default {
      * 收藏简历 TODO
      */
     async favorResume(arg) {
-      this.$alert('此功能暂未开放，请稍后');
-      return;
-
-      // let index = arg[0];
-      // let positionId = (arg && arg[1]) || '';
-      // let orginFavorType = arg[2];
-      // if (!orginFavorType) {
-      //   let res = await doFavorJobs('2', {
-      //     id: positionId,
-      //     cid: this.$store.getters['corporation/cid']
-      //   });
-      //   if (res.status === 200) {
-      //     // 修改按钮状态
-      //     this.queryResult[index].favor = true;
-      //     this.$message({ type: 'success', message: '收藏职位成功' });
-      //   } else {
-      //     this.$message({ type: 'error', message: '收藏职位失败' });
-      //   }
-      // } else {
-      //   //取消收藏职位
-      //   let res = await doUnfavorJobs({
-      //     id: positionId,
-      //     cid: this.$store.getters['corporation/cid']
-      //   });
-      //   if (res.status === 200) {
-      //     // 修改按钮状态
-      //     this.queryResult[index].favor = false;
-      //     this.$message({ type: 'success', message: '取消收藏职位成功' });
-      //   } else {
-      //     this.$message({ type: 'error', message: '取消收藏职位失败' });
-      //   }
-      // }
+      let index = arg[0];
+      let resumeId = (arg && arg[1]) || '';
+      let orginFavorType = arg[2];
+      if (!orginFavorType) {
+        //收藏简历
+        let res = await doFavorResume({
+          resumeId: resumeId,
+          cid: this.$store.getters['corporation/cid'],
+          favorType: true
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = true;
+          this.$message({ type: 'success', message: '收藏简历成功' });
+        } else {
+          this.$message({ type: 'error', message: '收藏简历失败' });
+        }
+      } else {
+        //取消收藏简历
+        let res = await doFavorResume({
+          resumeId: resumeId,
+          cid: this.$store.getters['corporation/cid'],
+          favorType: false
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = false;
+          this.$message({ type: 'success', message: '取消收藏简历成功' });
+        } else {
+          this.$message({ type: 'error', message: '取消收藏简历失败' });
+        }
+      }
     },
     /**
      * 聊天 TODO

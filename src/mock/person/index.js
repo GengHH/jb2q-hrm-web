@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 16:22:42
+ * @LastEditTime: 2021-06-17 17:48:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -1119,6 +1119,14 @@ Mock.mock(
 //个人报名特色活动
 Mock.mock(
   basePath + '/person/activity/saveApplySpecialActivity',
+  'post',
+  function(options) {
+    return successData;
+  }
+);
+//个人收藏职位和个人关注单位 (type :1 收藏单位 ；2 收藏职位)
+Mock.mock(
+  RegExp(basePath + '/person/manage/do-favor/' + '.*'),
   'post',
   function(options) {
     return successData;

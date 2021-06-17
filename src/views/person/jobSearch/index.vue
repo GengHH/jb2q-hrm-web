@@ -208,10 +208,10 @@
           </el-col>
         </el-row>
         <el-row class="condition condition-six">
-          <el-col :span="2">
+          <!-- <el-col :span="2">
             <div class="place-holder">placeHolder</div>
-          </el-col>
-          <el-col :span="19">
+          </el-col> -->
+          <el-col :span="21" style="padding-left:40px;">
             <div class="grid-content bg-purple filter-select">
               <template>
                 <el-checkbox
@@ -376,8 +376,7 @@ import {
   queryRecommendJobs,
   doDeliveryResume,
   doDeliveryResumeRecommend,
-  doFavorJobs,
-  doUnfavorJobs
+  attentionOrFavor
 } from '@/api/personApi';
 export default {
   name: 'JobSearch',
@@ -854,9 +853,10 @@ export default {
       let orginFavorType = arg[2];
       let recId = arg[3] || '';
       if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status:true
         });
         if (res.status === 200) {
           // 修改按钮状态
@@ -871,9 +871,10 @@ export default {
         }
       } else {
         //取消收藏职位
-        let res = await doUnfavorJobs({
+        let res = await attentionOrFavor('2',{
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status:false
         });
         if (res.status === 200) {
           // 修改按钮状态

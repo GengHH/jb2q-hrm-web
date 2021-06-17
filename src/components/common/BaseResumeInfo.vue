@@ -1228,6 +1228,7 @@
 
 <script>
 import { getPsnlResume, getEduExpFromChsi, getCertInfo } from '@/api/common';
+import { getPsnlResumeByCorp } from '@/api/corporationApi';
 import {
   getPersonBaseInfo,
   savePositionLike,
@@ -1253,6 +1254,10 @@ export default {
     queryPid: {
       type: String,
       default: ''
+    },
+    searchByCorp: {
+      type: Boolean,
+      default: false
     },
     resumeData: {
       type: Object,
@@ -1752,21 +1757,39 @@ export default {
         return;
       }
       // 默认先按照传入的pid查询，再按照登录的人员查询
-      getPsnlResume(
-        { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
-      )
-        .then(function(res) {
-          console.log('个人简历信息', res);
-          if (res.status == 200) {
-            that.$set(that, 'resume', res.result.data);
-          }
-        })
-        .catch(function(err) {
-          that.$message({
-            message: '缺失简历信息' + err,
-            type: 'error'
+      if (this.searchByCorp) {
+        getPsnlResumeByCorp(
+          { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
+        )
+          .then(function(res) {
+            console.log('个人简历信息', res);
+            if (res.status == 200) {
+              that.$set(that, 'resume', res.result.data);
+            }
+          })
+          .catch(function(err) {
+            that.$message({
+              message: '缺失简历信息' + err,
+              type: 'error'
+            });
           });
-        });
+      } else {
+        getPsnlResume(
+          { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
+        )
+          .then(function(res) {
+            console.log('个人简历信息', res);
+            if (res.status == 200) {
+              that.$set(that, 'resume', res.result.data);
+            }
+          })
+          .catch(function(err) {
+            that.$message({
+              message: '缺失简历信息' + err,
+              type: 'error'
+            });
+          });
+      }
     },
     loadDicData() {
       // let that = this;

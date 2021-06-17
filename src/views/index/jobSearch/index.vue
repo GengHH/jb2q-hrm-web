@@ -353,7 +353,7 @@ import PerSearchJob from '@/components/index/IndexSearchJob.vue';
 import JobDetails from '@/views/index/jobDetails';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
-import { doDeliveryResume, doFavorJobs, doUnfavorJobs } from '@/api/personApi';
+import { doDeliveryResume, attentionOrFavor } from '@/api/personApi';
 import { queryJobs } from '@/api/indexApi';
 export default {
   name: 'JobSearch',
@@ -682,9 +682,10 @@ export default {
       let orginFavorType = arg[2];
       let recId = arg[3] || '';
       if (!orginFavorType) {
-        let res = await doFavorJobs('2', {
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: true
         });
         if (res.status === 200) {
           // 修改按钮状态
@@ -695,9 +696,10 @@ export default {
         }
       } else {
         //取消收藏职位
-        let res = await doUnfavorJobs({
+        let res = await attentionOrFavor('2', {
           id: positionId,
-          pid: this.$store.getters['person/pid']
+          pid: this.$store.getters['person/pid'],
+          status: false
         });
         if (res.status === 200) {
           // 修改按钮状态
