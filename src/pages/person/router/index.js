@@ -116,7 +116,7 @@ let router = new Router({
         {
           path: '/jobSearch/jobDetails',
           name: '职位详情',
-          component: () => import('@/views/person/jobSearch/jobDetails')
+          component: () => import('@/views/person/jobDetails')
         }
       ]
     },
@@ -246,7 +246,7 @@ let router = new Router({
       //   {
       //     path: '/jobSearch/jobDetails',
       //     name: '职位详情',
-      //     component: () => import('@/views/person/jobSearch/jobDetails')
+      //     component: () => import('@/views/person/jobDetails')
       //   }
       // ]
     },

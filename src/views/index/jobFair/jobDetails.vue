@@ -45,13 +45,13 @@
                   alt=""
                 />完善在线简历</el-link
               >
-              <el-link :underline="false"
+              <!-- <el-link :underline="false"
                 ><img
                   class="ico_rz"
                   src="../../../assets/images/ico-02.png"
                   alt=""
                 />上传附件简历</el-link
-              >
+              > -->
             </div>
             <p class="four-opacity mat-50">发布机构:上海某某职业代理有限公司</p>
           </el-col>

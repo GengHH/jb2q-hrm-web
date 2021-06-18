@@ -184,7 +184,7 @@
 <script>
 import PlMap from '@/components/common/BaseMap';
 import PerSearchJob from '@/components/person/PerSearchJob';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import JobDetails from '@/views/person/jobDetails.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import {
   queryMeetingSchedule,

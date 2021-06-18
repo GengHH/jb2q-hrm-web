@@ -43,12 +43,12 @@
               <i class="el-icon-star-on">取消关注单位</i>
             </el-button>
             <div class="font12">
-              <el-link :underline="false"
+              <el-link :underline="false" @click="perfectResume"
                 ><img
                   class="ico_rz"
                   src="../../../assets/images/ico-01.png"
                   alt=""
-                />完善在线简历</el-link
+                />完善在线简历1</el-link
               >
             </div>
           </el-col>
@@ -288,7 +288,7 @@
 
 <script>
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import JobDetails from '@/views/person/jobDetails.vue';
 import { loadCorpInfo } from '@/api/corporationApi';
 import {
   queryCorpPositionList,
@@ -473,7 +473,7 @@ export default {
         }
       } else {
         //取消收藏职位
-        let res = await attentionOrFavor('2',{
+        let res = await attentionOrFavor('2', {
           id: positionId,
           pid: this.$store.getters['person/pid'],
           status: false
@@ -520,6 +520,9 @@ export default {
     },
     wchatHandleClose() {
       this.wchatDialog = false;
+    },
+    perfectResume() {
+      this.$router.push('/resumeMgr');
     }
   }
 };

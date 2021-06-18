@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-04-09 10:47:03
+ * @LastEditTime: 2021-06-18 17:43:06
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -14,7 +14,7 @@
         <pl-button
           type="danger"
           icon="el-icon-star-off"
-          @click="cancelAttention"
+          @click="deleteAttention"
           >取消关注</pl-button
         >
       </el-col>
@@ -23,6 +23,15 @@
       </el-col>
     </el-row>
     <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
+      <template #logo="{row}">
+        <img
+          :src="'data:image/jpg;base64,' + row.logo"
+          @error="defImg"
+          alt="未加载"
+          class="logo"
+        />
+        <!-- <span>{{ row.logo }}</span> -->
+      </template>
       <template #date="{row}">
         <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ row.favorTime }}</span>
@@ -33,7 +42,8 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-import { queryCorpStarList } from '@/api/personApi';
+import { queryCorpStarList, attentionOrFavor } from '@/api/personApi';
+import { getDicText } from '@/utils';
 export default {
   name: 'corporationAttention',
   components: {
@@ -41,6 +51,7 @@ export default {
   },
   data() {
     return {
+      defaultImg: require('@/assets/images/break-img.svg'),
       tableData: []
     };
   },
@@ -59,7 +70,8 @@ export default {
         {
           label: '单位logo',
           prop: 'logo',
-          rowSpan: 'all'
+          rowSpan: 'all',
+          slotName: 'logo'
         },
         {
           label: '单位名称',
@@ -68,12 +80,12 @@ export default {
         },
         {
           label: '行业类别',
-          prop: 'industryType',
+          prop: 'industryTypeText',
           rowSpan: 'all'
         },
         {
           label: '单位性质',
-          prop: 'corpNature',
+          prop: 'corpNatureText',
           rowSpan: 'all'
         },
         {
@@ -92,7 +104,7 @@ export default {
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-star-off',
               onClick: ({ row }) => {
-                //console.log(row);
+                this.cancelAttention(row);
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -114,13 +126,50 @@ export default {
       if (res.status === 200) {
         res.result.data.forEach(item => {
           item.actions = ['action1'];
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              this.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              this.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
         });
         this.tableData = res.result.data;
       } else {
         this.$message({ type: 'success', message: '未查询到信息' });
       }
     },
-    cancelAttention() {
+    /**
+     *取消收藏记录
+     */
+    async cancelAttention(row) {
+      if (!row) {
+        this.$alert('请选择一条');
+      } else if (!row.cid) {
+        this.$alert('缺少单位标识');
+      } else {
+        let res = await attentionOrFavor('1', {
+          id: row.cid,
+          pid: this.$store.getters['person/pid'],
+          status: false
+        });
+        if (res && res.status === 200) {
+          this.$message.success('取消收藏成功');
+          // TODO 删除数据 （重新加载数据）
+          this.tableData = this.tableData.filter(obj => !(obj.cid === row.cid));
+        } else if (res) {
+          this.$message.error('取消收藏失败');
+        }
+      }
+    },
+    deleteAttention() {
+      this.$alert('此功能暂未开放，请稍后');
+      return;
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
@@ -130,6 +179,13 @@ export default {
           obj => !that.selection.some(i => obj.id === i.id)
         );
       }
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */ defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
     }
   },
   created() {
@@ -181,6 +237,10 @@ export default {
     .el-range-editor {
       width: 100%;
     }
+  }
+  .logo {
+    height: 40px;
+    margin: 0 auto;
   }
 }
 </style>

@@ -284,7 +284,7 @@
 
 <script>
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import JobDetails from '@/views/person/jobDetails.vue';
 import { loadCorpInfo } from '@/api/corporationApi';
 import {
   queryCorpPositionList,
@@ -452,7 +452,6 @@ export default {
       let positionId = (arg && arg[1]) || '';
       let orginFavorType = arg[2];
       let recId = arg[3] || '';
-      console.log(123542134234);
       if (!orginFavorType) {
         // TODO收藏职位
         let res = await attentionOrFavor('2', {

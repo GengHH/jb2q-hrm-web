@@ -364,11 +364,10 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
-import JobDetails from '@/views/person/jobSearch/jobDetails.vue';
+import JobDetails from '@/views/person/jobDetails.vue';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import {
@@ -856,7 +855,7 @@ export default {
         let res = await attentionOrFavor('2', {
           id: positionId,
           pid: this.$store.getters['person/pid'],
-          status:true
+          status: true
         });
         if (res.status === 200) {
           // 修改按钮状态
@@ -871,10 +870,10 @@ export default {
         }
       } else {
         //取消收藏职位
-        let res = await attentionOrFavor('2',{
+        let res = await attentionOrFavor('2', {
           id: positionId,
           pid: this.$store.getters['person/pid'],
-          status:false
+          status: false
         });
         if (res.status === 200) {
           // 修改按钮状态

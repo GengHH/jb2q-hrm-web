@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 17:44:18
+ * @LastEditTime: 2021-06-18 17:18:17
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -170,7 +170,7 @@ const doApplyActivity = params =>
   postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
 
 /*********end**********/
-//个人收藏或取消收藏职位和个人关注或取消关注单位 (type :1 收藏单位 ；2 收藏职位)
+//个人收藏或取消收藏职位和个人关注或取消关注单位 (type :1 关注单位 ；2 收藏职位)
 const attentionOrFavor = (type, params) =>
   postAction(basePath + '/person/manage/do-favor/' + type, params);
 

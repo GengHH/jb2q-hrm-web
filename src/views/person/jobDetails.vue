@@ -6,54 +6,100 @@
         <el-row>
           <el-col :span="19">
             <div class="job-title">
-              IOS开发工程师 <i class="bl-bg i-style font-size16">见习</i>
-              <span class="font-size24 font-or">12k-15k</span>
+              {{ realData.positionName }}
+              <i
+                v-if="realData.tranBaseSymbol === '1'"
+                class="bl-bg i-style font-size16"
+                >见习</i
+              >
+              <span class="font-size24 font-or"
+                >{{ realData.salaryMin }}-{{ realData.salaryMax }}</span
+              >
             </div>
             <div class="sixteen-opacity mat-15">
-              <span>上海静安</span>
+              <span>上海{{ realData.workAreaText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
+              <span>{{ realData.eduRequireText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
+              <span>{{ realData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
+              <span>经验{{ Number(realData.workYearNeed) }}年</span>
               <el-divider direction="vertical"></el-divider>
-              <span>招聘8人</span>
+              <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              万达信息股份有限公司
+              <span style="display:inline-block;">{{ realData.corpName }}</span>
               <img
-                src="../../../assets/images/ico_rz.png"
+                src="../../assets/images/ico_rz.png"
                 alt=""
                 class="ico_rz"
+                style="height: .9em;"
               />
             </p>
-            <p class="four-opacity mat-15">更新于 2020-11-06</p>
+            <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <!-- <el-button type="primary" class="white-btn mat-15"
-              ><i class="el-icon-star-off"></i> 收藏</el-button
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-button
+                  type="primary"
+                  class="white-btn mat-15"
+                  @click="
+                    favorJob(
+                      realData.favor,
+                      index,
+                      realData.positionId,
+                      realData.recId
+                    )
+                  "
+                  ><i v-if="realData.favor" class="el-icon-star-on">已收藏</i>
+                  <i v-else class="el-icon-star-off">收藏</i></el-button
+                >
+              </el-col>
+              <el-col :span="12">
+                <el-button
+                  type="primary"
+                  class="release-btn mat-15"
+                  @click="
+                    deliveryResume(
+                      realData.favor,
+                      index,
+                      realData.positionId,
+                      realData.recId
+                    )
+                  "
+                >
+                  <i class="el-icon-position"></i>投简历</el-button
+                >
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" class="font12">
+              <el-col :span="12">
+                <el-link :underline="false" @click="perfectResume"
+                  ><img
+                    class="ico_rz"
+                    src="../../assets/images/ico-01.png"
+                    alt=""
+                  />完善在线简历</el-link
+                >
+              </el-col>
+              <el-col :span="12">
+                <!-- <el-link :underline="false" @click="uploadResume"
+                  ><img
+                    class="ico_rz"
+                    src="../../assets/images/ico-02.png"
+                    alt=""
+                  />上传附件简历</el-link
+                > -->
+              </el-col>
+            </el-row>
+
+            <p
+              v-if="realData.tranBaseSymbol === '0'"
+              class="four-opacity mat-50"
             >
-            <el-button type="primary" class="release-btn mat-15">
-              <i class="el-icon-position"></i>投简历</el-button
-            >
-            <div class="font12">
-              <el-link :underline="false"
-                ><img
-                  class="ico_rz"
-                  src="../../../assets/images/ico-01.png"
-                  alt=""
-                />完善在线简历</el-link
-              >
-              <el-link :underline="false"
-                ><img
-                  class="ico_rz"
-                  src="../../../assets/images/ico-02.png"
-                  alt=""
-                />上传附件简历</el-link
-              >
-            </div>
-            <p class="four-opacity mat-50">发布机构:上海某某职业代理有限公司</p>-->
+              发布机构:{{ realData.corpName }}
+            </p>
           </el-col>
         </el-row>
       </div>
@@ -61,8 +107,8 @@
     <!--E  职位详情上半部分-->
     <el-row id="jobSearchBox">
       <el-col :span="19" class="middle-box padd-lr bor-r">
-        <div class="title-border">职位描述</div>
-        <p class="mat-15 little-tit">岗位职责：</p>
+        <!-- <div class="title-border">职位描述</div>
+        <p class="mat-15 little-tit">岗位职责 TODO：</p>
         <p class="little-tit">
           1、负责公司房产的营销推广，并做好相应的渠道开拓，并维护好渠道及客户关系；
         </p>
@@ -79,7 +125,7 @@
         <p class="little-tit">
           6、根据本区域市场状况及具体个案，确定目标项目进行接洽。
         </p>
-        <p class="little-tit">任职要求：</p>
+        <p class="little-tit">任职要求 TODO：</p>
         <p class="little-tit">1.有房产相关经验（有车者优先）</p>
         <p class="little-tit">2.责任心强，业绩能力突出，致力于从事销售工作；</p>
         <p class="little-tit">
@@ -90,33 +136,38 @@
         </p>
         <p class="little-tit">待遇：</p>
         <p class="little-tit">底薪5k+业绩提成+满勤+公司福利 做六休一</p>
-        <p class="little-tit">固定团建，弹性工作</p>
-        <div class="title-border mat-15">公司介绍</div>
+        <p class="little-tit">固定团建，弹性工作</p> 
+        <div class="title-border mat-15">公司介绍</div>-->
+        <div class="title-border mat-15">职位描述</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
+            {{ realData.describe }}
+          </p>
+          <!-- <p class="introduce little-tit">
             金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
             经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
             公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易、
             以及房地产相关咨询等专业、完美、全面的不...金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
             经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
             公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易
-          </p>
-          <span class="look-all"
+          </p> -->
+          <!-- <span class="look-all"
             >查看全部<i class="el-icon-arrow-down"></i
-          ></span>
+          ></span> -->
         </div>
         <div class="title-border mat-30">工作地址</div>
         <div class="map-box">
-          <img src="../../../assets/images/map.png" alt="" />
+          <!-- <img src="../../assets/images/map.png" alt="" /> -->
+          <pl-map :pointList="pointList"></pl-map>
         </div>
         <div class="title-border mat-15">
-          看过该职位的人还看了
+          看过该职位的人还看了 TODO
           <span class="fr fourteen-opacity">更多职位 > </span>
         </div>
         <el-row>
           <el-col :span="8">
             <div class="img-div clearfix">
-              <img class="fl" src="../../../assets/images/img1.png" alt="" />
+              <img class="fl" src="../../assets/images/img1.png" alt="" />
               <div class="job-right fl">
                 <p class="font-sixteen">营销代表</p>
                 <p class="font-eighteen font-or">8k-10k</p>
@@ -126,7 +177,7 @@
           </el-col>
           <el-col :span="8">
             <div class="clearfix img-div">
-              <img class="fl" src="../../../assets/images/img2.png" alt="" />
+              <img class="fl" src="../../assets/images/img2.png" alt="" />
               <div class="job-right fl">
                 <p class="font-sixteen">招聘专员</p>
                 <p class="font-eighteen font-or">6k-8k</p>
@@ -136,7 +187,7 @@
           </el-col>
           <el-col :span="8">
             <div class="clearfix img-div">
-              <img class="fl" src="../../../assets/images/img3.png" alt="" />
+              <img class="fl" src="../../assets/images/img3.png" alt="" />
               <div class="job-right fl">
                 <p class="font-sixteen">销售代表</p>
                 <p class="font-eighteen font-or">5k-8k</p>
@@ -149,16 +200,16 @@
       <el-col :span="5" class="padd-l ">
         <p class="sixteen-opacity">职位发布者</p>
         <div class="header-box clearfix">
-          <img
-            src="../../../assets/images/header.png"
-            class="head-img"
-            alt=""
-          />
+          <img src="../../assets/images/header.png" class="head-img" alt="" />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
-              王琳 <span class="dqzx-span">当前在线</span>
+              {{ realData.releaseUserId }}
+              <span class="dqzx-span">当前在线</span>
             </p>
-            <el-button type="primary" class="gray-btn or-br mat-15"
+            <el-button
+              type="primary"
+              class="gray-btn or-br mat-15"
+              @click="callPositionCorp(realData.positionId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
             >
           </div>
@@ -166,23 +217,23 @@
         <div class="mat-30 clearfix">
           <img
             class="fl ico_rz logos"
-            src="../../../assets/images/logos.png"
+            src="../../assets/images/logos.png"
             alt=""
           />
-          <p class="font-sixteen font-or name-p">万达信息股份有限公司</p>
+          <p class="font-sixteen font-or name-p">{{ realData.corpName }}</p>
         </div>
         <div class="module1">
           <p class="four-opacity">
-            <img src="../../../assets/images/ico01.png" alt="" /> 互联网
+            <img src="../../assets/images/ico01.png" alt="" /> 互联网
           </p>
           <p class="four-opacity">
-            <img src="../../../assets/images/ico02.png" alt="" /> 上市
+            <img src="../../assets/images/ico02.png" alt="" /> 上市
           </p>
           <p class="four-opacity">
-            <img src="../../../assets/images/ico03.png" alt="" /> 1000-9999人
+            <img src="../../assets/images/ico03.png" alt="" /> 1000-9999人
           </p>
           <p class="four-opacity">
-            <img src="../../../assets/images/ico04.png" alt="" />
+            <img src="../../assets/images/ico04.png" alt="" />
             https://www.jinshida.com/
           </p>
         </div>
@@ -227,20 +278,140 @@
 </template>
 
 <script>
+import PlMap from '@/components/common/BaseMap';
+import { queryRecommendDetai } from '@/api/personApi';
+import { getDicText } from '@/utils';
 export default {
   name: 'JobSearchIndex',
+  props: {
+    index: {
+      type: Number,
+      default: null
+    },
+    positionData: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  components: {
+    PlMap
+  },
   data() {
-    return {};
+    return {
+      realData: {}
+    };
+  },
+  computed: {
+    describeList() {
+      return this.realData.describe.split('\n');
+    },
+    pointList() {
+      return this.positionData?.workAddress
+        ? [this.positionData.workAddress]
+        : [];
+    }
+  },
+  created() {
+    //如果是推荐的职位
+    if (this.positionData.recId) {
+      this.queryPositionDetials(
+        this.positionData.recId,
+        this.positionData.positionId
+      );
+    } else {
+      this.realData = { ...this.positionData };
+    }
+  },
+  methods: {
+    perfectResume() {
+      // this.$emit('perfectResume');
+      this.$router.push('/resumeMgr');
+    },
+    uploadResume() {
+      this.$emit('uploadResume');
+    },
+    deliveryResume(favor, index, positionId, recId) {
+      //投递简历
+      this.$confirm('确认向该职位投递简历？')
+        .then(() => {
+          this.$emit('deliveryResume', index, positionId, recId); //通知父组件改变。
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    favorJob(favor, index, positionId, recId) {
+      //收藏或者取消收藏职位
+      let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
+      this.$confirm(str)
+        .then(() => {
+          this.$emit('favorJob', index, positionId, favor, recId);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    callPositionCorp(positionId) {
+      this.$emit('callPositionCorp', positionId);
+    },
+    /**
+     * 查询推荐的职位的详细信息
+     */
+    async queryPositionDetials(recId, positionId) {
+      let that = this;
+      let res = await queryRecommendDetai({
+        recId: recId,
+        positionId: positionId,
+        pid: this.$store.getters['person/pid']
+      });
+      if (res && res.status === 200) {
+        let item = res.result.data;
+        // 转换字典
+        if (item.workArea) {
+          item.workAreaText = getDicText(
+            that.$store.getters['dictionary/ggjbxx_qx'],
+            item.workArea
+          );
+        }
+        if (item.eduRequire) {
+          item.eduRequireText = getDicText(
+            that.$store.getters['dictionary/recruit_edu'],
+            item.eduRequire
+          );
+        }
+        if (item.workNature) {
+          item.workNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_work_nature'],
+            item.workNature
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            that.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+        this.realData = item;
+      } else if (res) {
+        this.$message({ type: 'error', message: '无法获取详细信息' });
+      }
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 #jobSearchView {
-  width: 90%;
+  width: 96%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto;
   background: #ffffff;
   //color: #000;
   //padding: 0;
@@ -259,7 +430,8 @@ export default {
       margin-top: 20px;
     }
     .font12 .el-link {
-      margin-right: 5px;
+      font-size: 12px;
+      //margin-right: 5px;
     }
     .font12 img {
       position: relative;
@@ -404,17 +576,6 @@ export default {
   .mat-30 {
     margin-top: 30px;
   }
-  // .white-btn {
-  //   color: #fc6f3d;
-  //   background-color: #fff;
-  //   border-color: #ff9954;
-  // }
-  // .release-btn {
-  //   background-color: #fc7a43;
-  //   font-size: 14px;
-  //   color: #fff;
-  //   border-color: #fc7a43;
-  // }
   .font12 {
     font-size: 12px;
     color: #656565;
