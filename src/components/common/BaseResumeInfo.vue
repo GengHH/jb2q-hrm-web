@@ -113,8 +113,9 @@
               {{ resume.workYear }}
             </span>
             <span v-else>?</span>
-            年
-            <!-- <i class="el-icon-edit-outline" @click=""></i> -->
+            <span>
+              年
+            </span>
             <el-popover
               v-if="notConstResume"
               placement="right"
@@ -145,9 +146,45 @@
             {{ resume.contactPhone }}年毕业</span
           >
           <el-divider direction="vertical"></el-divider> -->
-          <span v-if="resume.eduLevel"
-            ><i class="icon iconfont">&#xe641;</i> {{ highEduLevel }}</span
+
+          <span
+            v-if="
+              resume.eduLevel !== null &&
+                resume.eduLevel !== undefined &&
+                resume.eduLevel !== ''
+            "
+            title="最高学历"
           >
+            <i class="icon iconfont">&#xe641;</i>{{ highEduLevel }}
+          </span>
+          <span v-else title="最高学历"
+            ><i class="icon iconfont">&#xe641;</i>?</span
+          >
+          <el-popover
+            v-if="notConstResume"
+            placement="right"
+            width="150"
+            trigger="click"
+          >
+            <el-select v-model="selectHighEdu" placeholder="请选择最高学历">
+              <el-option
+                v-for="item in dicOptions.option4"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <i
+              slot="reference"
+              style="color:#35e835"
+              class="el-icon-edit-outline"
+            ></i>
+          </el-popover>
+          <!-- <span v-if="resume.eduLevel" 
+            ><i class="icon iconfont">&#xe641;</i>
+            {{ highEduLevel }}</span
+          > -->
           <el-divider direction="vertical"></el-divider>
           <span v-if="resume.contactPhone"
             ><i class="icon iconfont">&#xe63f;</i>
@@ -1653,6 +1690,14 @@ export default {
         return i.value === this.resume.eduLevel;
       });
       return dic ? dic.label : this.resume.eduLevel;
+    },
+    selectHighEdu: {
+      get: function() {
+        return this.resume.eduLevel;
+      },
+      set: function(v) {
+        this.markHighEdu(v);
+      }
     }
   },
   updated() {
@@ -2231,8 +2276,6 @@ export default {
       this.workYear = this.resume.workYear;
     },
     hidePop() {
-      console.log(this.workYear);
-      console.log(this.resume.workYear);
       if (this.workYear == this.resume.workYear) {
         return;
       }
@@ -2344,6 +2387,10 @@ export default {
       } else {
         this.$message({ type: 'warning', message: '请选择数据' });
       }
+    },
+    markHighEdu(highEdu) {
+      //TODO 需要增加手动修改最高学历的接口
+      this.resume.eduLevel = highEdu;
     }
   },
   created() {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-06-08 16:38:14
+ * @LastEditTime: 2021-06-21 18:22:41
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -133,6 +133,10 @@ if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_applyfor_source'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_APPLYFOR_SOURCE');
+}
+//工资支付方式
+if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
 }
 let vm = new Vue({
   el: '#app',

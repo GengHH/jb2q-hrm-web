@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-03 16:47:03
+ * @LastEditTime: 2021-06-21 18:16:10
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -172,7 +172,8 @@
                 v-if="jobItem.agencyRecruit === '1'"
                 >人力</i
               >
-              <span>{{ jobItem.salaryMin }}- {{ jobItem.salaryMax }}</span>
+              <span>{{ jobItem.salaryMin }}-{{ jobItem.salaryMax }}</span>
+              <span>{{ jobItem.salaryPayTypeText }}</span>
             </p>
             <p class="span-infor">
               <span>上海{{ jobItem.workAreaText }}</span>
@@ -181,7 +182,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>{{ jobItem.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ Number(jobItem.workYearNeed) }}年</span>
+              <span title="工作年限">{{ jobItem.workYearNeedText }}</span>
               <el-button
                 type="primary"
                 class="call-btn"

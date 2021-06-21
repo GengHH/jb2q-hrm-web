@@ -6,7 +6,7 @@
     ></base-search>
     <!-- S筛选部分 -->
     <div class="filter-content">
-      <el-form ref="queryJobFrom" :model="queryParams">
+      <el-form ref="queryJobForm" :model="queryParams">
         <el-row class="condition condition-one">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作年限：</div>
@@ -634,8 +634,8 @@ export default {
      */
     async queryJobs(val) {
       let that = this;
-      let params = this.$refs['queryJobFrom']?.model
-        ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
+      let params = this.$refs['queryJobForm']?.model
+        ? JSON.parse(JSON.stringify(this.$refs['queryJobForm'].model))
         : this.queryParams;
       params.positionName = $.trim(val);
       that.queryParams.positionName = $.trim(val);
@@ -685,6 +685,20 @@ export default {
                 that.$store.getters['dictionary/recruit_industry_type'],
                 item.industryType
               );
+            }
+            if (item.workYearNeed) {
+              item.workYearNeedText = getDicText(
+                that.$store.getters['dictionary/recruit_work_year'],
+                item.workYearNeed
+              );
+            }
+            if (item.salaryPayType) {
+              item.salaryPayTypeText =
+                '元/' +
+                getDicText(
+                  that.$store.getters['dictionary/recruit_salary_pay_type'],
+                  item.salaryPayType
+                );
             }
           });
           this.$set(this, 'queryResult', result.result.pageresult.data);
@@ -756,6 +770,20 @@ export default {
                 that.$store.getters['dictionary/recruit_industry_type'],
                 item.industryType
               );
+            }
+            if (item.workYearNeed) {
+              item.workYearNeedText = getDicText(
+                that.$store.getters['dictionary/recruit_work_year'],
+                item.workYearNeed
+              );
+            }
+            if (item.salaryPayType) {
+              item.salaryPayTypeText =
+                '元/' +
+                getDicText(
+                  that.$store.getters['dictionary/recruit_salary_pay_type'],
+                  item.salaryPayType
+                );
             }
           });
           this.$set(this, 'queryDefaultResult', result.result.pageresult.data);

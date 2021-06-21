@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 18:23:06
+ * @LastEditTime: 2021-06-21 16:23:57
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -973,7 +973,7 @@ export default {
         this.$set(this, 'resumeData', getRes.result.data || {});
         this.dialog1 = true;
         //回显数据
-        //this.queryResumes('all');
+        this.queryResumes('all');
       } else if (getRes) {
         this.$message({ type: 'error', message: '查询简历失败' });
       }

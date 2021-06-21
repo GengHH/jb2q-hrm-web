@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-18 17:36:20
+ * @LastEditTime: 2021-06-21 18:02:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -383,7 +383,7 @@ Mock.mock(
           workArea: '05',
           workAddress: '天山路1800号',
           workHour: '005',
-          workYearNeed: '03',
+          workYearNeed: '01',
           eduRequire: '07',
           salaryMax: 10000,
           salaryMin: 5000,
@@ -407,7 +407,8 @@ Mock.mock(
           offUserId: '',
           editTime: '',
           specialList: [],
-          workStreetList: ['0501', '0502']
+          workStreetList: ['0501', '0502'],
+          isComplaint: false
         }
       }
     };
@@ -1133,4 +1134,73 @@ Mock.mock(
     return successData;
   }
 );
+
+//职位搜索后-个人投诉职位（短信验证码）
+Mock.mock(basePath + '/person/manage/sendComplaintSms', 'post', function(
+  options
+) {
+  return successData;
+});
+
+//职位搜索后-个人投诉职位
+Mock.mock(basePath + '/person/manage/complaint', 'post', function(options) {
+  return successData;
+});
+
+//个人查询职位明细信息
+Mock.mock(basePath + '/person/manage/queryPositionDetail', 'post', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        editId: '',
+        positionId: 15,
+        positionCode: '2021null00000009',
+        positionName: '职位名称',
+        recruitType: '1',
+        tranBaseSymbol: '0',
+        agencyRecruit: '0',
+        entrustTyshxym: '',
+        entrustCorpName: '',
+        corpId: '200008010546251',
+        // positionTypeOne: '01',
+        positionType: '0510',
+        workNature: '01',
+        ageMax: 40,
+        ageMin: 20,
+        workArea: '01',
+        workAddress: '上海市长宁区天山路100号',
+        workHour: '',
+        workYearNeed: '03',
+        eduRequire: '07',
+        salaryMax: 90000,
+        salaryMin: 30000,
+        salaryPayType: '',
+        recruitNum: 10,
+        special: '01,02,03',
+        describe: '职位描述',
+        workStreet: '01,02',
+        onTop: '0',
+        endDate: '20210605',
+        statusId: '',
+        verifyUserId: '',
+        verifyTime: '',
+        verifyMemo: '',
+        releaseStatusId: '2',
+        releaseUserId: '-1        ',
+        releaseTime: '2021-05-06 10:31:51',
+        offShelf: '0',
+        offTime: '',
+        offReason: '',
+        offUserId: '',
+        specialList: ['01', '02', '03'],
+        workStreetList: ['0101', '0102'],
+        isComplaint: false
+      }
+    }
+  };
+});
 export default Mock;

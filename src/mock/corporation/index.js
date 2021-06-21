@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 18:19:32
+ * @LastEditTime: 2021-06-21 16:44:52
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -290,7 +290,8 @@ Mock.mock(basePath + '/corp/position/detail', 'post', function(options) {
         offReason: '',
         offUserId: '',
         specialList: ['01', '02', '03'],
-        workStreetList: ['0101', '0102']
+        workStreetList: ['0101', '0102'],
+        isComplaint: true
       }
     }
   };
@@ -1425,13 +1426,39 @@ const resumeMockData = function(req) {
 };
 //获取个人的基本简历信息
 Mock.mock(
-  RegExp(basePath + '/corp/resume/loadPsnlResume' + '.*'),
-  'get',
+  RegExp(basePath + '/corp/resume/detail' + '.*'),
+  'post',
   resumeMockData
 );
 //获取个人的基本简历信息
 Mock.mock(RegExp(basePath + '/corp/resume/favor'), 'post', function(options) {
   return successData;
 });
+//根据统一社会信用码获取单位名称
+Mock.mock(
+  RegExp(basePath + '/corp/position/queryEntrustCorp'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          data: [
+            {
+              entrustTyshxym: '92310230MA1M55HM8T',
+              entrustCorpName: '上海市崇明区珺鑫苗木经营部'
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
 
 export default Mock;

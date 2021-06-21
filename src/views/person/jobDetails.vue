@@ -1,5 +1,66 @@
 <template>
   <div id="jobSearchView" class="content-box">
+    <div class="operate-position-header" v-if="!realData.isComplaint">
+      <el-button size="small" round @click="complaint = !complaint">
+        <i class="el-icon-star-off">投诉</i>
+      </el-button>
+      <el-form
+        v-if="complaint"
+        ref="complaintForm"
+        :rules="rules"
+        :model="complaintParams"
+        style="width: 96%;margin: 20px auto 0;"
+      >
+        <el-row class="condition condition-one" :gutter="20">
+          <el-col :span="12">
+            <el-form-item prop="contactPhone" required>
+              <pl-input
+                label="手机号码"
+                v-model="complaintParams.contactPhone"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="verifyCode" required>
+              <el-row :gutter="10">
+                <el-col :span="18">
+                  <pl-input
+                    label="短信验证码"
+                    v-model="complaintParams.verifyCode"
+                  ></pl-input>
+                </el-col>
+                <el-col :span="6" class="text-right">
+                  <pl-button
+                    v-show="verifyCodeShow"
+                    @click="getMessage($event)"
+                  >
+                    发送短信
+                  </pl-button>
+                  <pl-button v-show="!verifyCodeShow" class="count">
+                    {{ count }} s
+                  </pl-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item prop="complaintContent" required>
+              <pl-input
+                required
+                type="textarea"
+                label="职位描述（1000字符）"
+                v-model="complaintParams.complaintContent"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div v-if="complaint" style="text-align:center;">
+        <el-button size="small" @click="doComplaint">
+          确认
+        </el-button>
+      </div>
+    </div>
     <!--S 职位详情上半部分 -->
     <div class="infor-job">
       <div class="middle-box">
@@ -15,6 +76,9 @@
               <span class="font-size24 font-or"
                 >{{ realData.salaryMin }}-{{ realData.salaryMax }}</span
               >
+              <span class="font-size24 font-or">{{
+                realData.salaryPayTypeText
+              }}</span>
             </div>
             <div class="sixteen-opacity mat-15">
               <span>上海{{ realData.workAreaText }}</span>
@@ -23,7 +87,7 @@
               <el-divider direction="vertical"></el-divider>
               <span>{{ realData.workNatureText }}</span>
               <el-divider direction="vertical"></el-divider>
-              <span>经验{{ Number(realData.workYearNeed) }}年</span>
+              <span>{{ realData.workYearNeedText }}</span>
               <el-divider direction="vertical"></el-divider>
               <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
@@ -39,7 +103,7 @@
             <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <el-row :gutter="20">
+            <el-row :gutter="20" v-if="!disabled">
               <el-col :span="12">
                 <el-button
                   type="primary"
@@ -73,8 +137,8 @@
                 >
               </el-col>
             </el-row>
-            <el-row :gutter="20" class="font12">
-              <el-col :span="12">
+            <el-row :gutter="20" class="font12" v-if="!disabled">
+              <el-col :span="24">
                 <el-link :underline="false" @click="perfectResume"
                   ><img
                     class="ico_rz"
@@ -83,15 +147,15 @@
                   />完善在线简历</el-link
                 >
               </el-col>
-              <el-col :span="12">
-                <!-- <el-link :underline="false" @click="uploadResume"
+              <!-- <el-col :span="12">
+                <el-link :underline="false" @click="uploadResume"
                   ><img
                     class="ico_rz"
                     src="../../assets/images/ico-02.png"
                     alt=""
                   />上传附件简历</el-link
-                > -->
-              </el-col>
+                > 
+              </el-col> -->
             </el-row>
 
             <p
@@ -279,10 +343,16 @@
 
 <script>
 import PlMap from '@/components/common/BaseMap';
-import { queryRecommendDetai } from '@/api/personApi';
+import {
+  queryRecommendDetai,
+  sendComplaintSms,
+  doComplaint
+} from '@/api/personApi';
 import { getDicText } from '@/utils';
+import { phonePattern } from '@/utils/regexp';
+
 export default {
-  name: 'JobSearchIndex',
+  name: 'JobDetails',
   props: {
     index: {
       type: Number,
@@ -291,6 +361,10 @@ export default {
     positionData: {
       type: Object,
       default: () => {}
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -298,7 +372,48 @@ export default {
   },
   data() {
     return {
-      realData: {}
+      realData: {},
+      complaint: false,
+      complaintParams: {
+        complaintId: '',
+        positionId: '',
+        cid: '',
+        corpName: '',
+        pid: this.$store.getters['person/pid'] || '',
+        xm: this.$store.getters['person/username'] || '',
+        contactPhone: '',
+        verifyCode: '',
+        complaintContent: ''
+      },
+      count: '',
+      verifyCodeShow: true,
+      rules: {
+        contactPhone: [
+          {
+            required: true,
+            message: '手机号码不能为空',
+            trigger: 'blur'
+          },
+          {
+            pattern: phonePattern,
+            message: '请输入正确格式的手机号码',
+            trigger: ['blur', 'change']
+          }
+        ],
+        verifyCode: [
+          { required: true, message: '短信验证码不能为空', trigger: 'blur' }
+          // { type: 'number', message: '请输数字', trigger: 'blur' }
+          //{ min: 6, max: 6, message: '请输六位验证码', trigger: 'blur' }
+        ],
+        complaintContent: [
+          { required: true, message: '投诉内容不能为空', trigger: 'blur' },
+          {
+            max: 1000,
+            message: '不能超过1000字符',
+            trigger: ['blur', 'change']
+          }
+        ]
+      }
     };
   },
   computed: {
@@ -397,9 +512,79 @@ export default {
             item.industryType
           );
         }
+        if (item.workYearNeed) {
+          item.workYearNeedText = getDicText(
+            that.$store.getters['dictionary/recruit_work_year'],
+            item.workYearNeed
+          );
+        }
+        if (item.salaryPayType) {
+          item.salaryPayTypeText =
+            '元/' +
+            getDicText(
+              that.$store.getters['dictionary/recruit_salary_pay_type'],
+              item.salaryPayType
+            );
+        }
         this.realData = item;
       } else if (res) {
         this.$message({ type: 'error', message: '无法获取详细信息' });
+      }
+    },
+    /**
+     *获取短信验证码
+     */
+    async getMessage(done) {
+      //获取短信验证码
+      let that = this;
+      if (!this.complaintParams.contactPhone) {
+        this.$alert('手机号不能为空');
+      } else if (!phonePattern.test(this.complaintParams.contactPhone)) {
+        this.$alert('手机号格式不正确');
+      } else {
+        let smsResult = await sendComplaintSms({
+          phone: that.complaintParams.contactPhone
+        });
+        if (smsResult && smsResult.status === 200) {
+          //采用倒计时方法
+          that.$message.success('证码已发送至手机');
+          const TIME_COUNT = 60;
+          if (!that.timer) {
+            that.count = TIME_COUNT;
+            that.verifyCodeShow = false;
+            that.timer = setInterval(() => {
+              if (that.count > 0 && that.count <= TIME_COUNT) {
+                that.count--;
+              } else {
+                that.verifyCodeShow = true;
+                clearInterval(that.timer);
+                that.timer = null;
+              }
+            }, 1000);
+          }
+        } else if (smsResult) {
+          that.$message.error('获取验证码失败');
+        }
+      }
+      done();
+    },
+    /**
+     *投诉职位
+     */
+    async doComplaint() {
+      if (!this.realData) {
+        this.$alert('缺少数据，无法投诉');
+        return;
+      }
+      this.complaintParams.cid = this.realData.cid;
+      this.complaintParams.corpName = this.realData.corpName;
+      this.complaintParams.positionId = this.realData.positionId;
+      let doRes = await doComplaint(this.complaintParams);
+      if (doRes && doRes.status === 200) {
+        this.$message.success('投诉成功');
+        this.realData.isComplaint = true;
+      } else if (doRes) {
+        this.$message.error('投诉失败');
       }
     }
   }
@@ -594,6 +779,15 @@ export default {
   .padd-lr {
     padding-left: 30px;
     padding-right: 30px;
+  }
+  .operate-position-header {
+    width: 100%;
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 14px 0;
+  }
+  .count {
+    background-color: #f6f6f6;
   }
 }
 </style>

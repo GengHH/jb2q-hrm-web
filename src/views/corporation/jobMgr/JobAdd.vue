@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 10:28:34
+ * @LastEditTime: 2021-06-21 14:20:46
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -168,6 +168,7 @@
             required
             v-model="jobForm.entrustTyshxym"
             label="委托待招单位统一社会信用码"
+            @change="queryEntrustCorp"
           ></pl-input>
         </el-form-item>
       </el-col>
@@ -180,6 +181,7 @@
             required
             v-model="jobForm.entrustCorpName"
             label="委托代招单位"
+            disabled
           ></pl-input>
         </el-form-item>
       </el-col>
@@ -439,7 +441,8 @@ import {
   savePosition,
   releasePosition,
   findPositionDetail,
-  queryJyjxJdInfo
+  queryJyjxJdInfo,
+  queryEntrustCorp
 } from '@/api/corporationApi';
 import { salaryPattern, agePattern } from '@/utils/regexp';
 import BaseSearch from '@/components/common/BaseSearch.vue';
@@ -1117,6 +1120,30 @@ export default {
       // 见习职位-对应的外派单位信息
       this.jobForm.tranCorpId = wpdwCid || '';
       this.jobForm.tranCorpName = wpdwDwmc || '';
+    },
+    /**
+     * 根据统一社会信用码获取单位名称
+     */
+    async queryEntrustCorp(tyshxym) {
+      console.log(
+        '%c 🍹 tyshxym: ',
+        'font-size:20px;background-color: #FCA650;color:#fff;',
+        tyshxym
+      );
+      let queryRes = await queryEntrustCorp({
+        entrustTyshxym: tyshxym,
+        entrustCorpName: ''
+      });
+      if (
+        queryRes &&
+        queryRes.status === 200 &&
+        queryRes.result.pageresult.total === 1
+      ) {
+        this.jobForm.entrustCorpName =
+          queryRes.result.pageresult.data[0]?.entrustCorpName;
+      } else {
+        this.jobForm.entrustCorpName = '';
+      }
     }
   }
 };

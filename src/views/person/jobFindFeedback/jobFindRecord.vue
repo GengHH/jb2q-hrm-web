@@ -2,13 +2,13 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 16:29:23
+ * @LastEditTime: 2021-06-21 17:26:11
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
 
 <template>
-  <div id="jobFindRecord">
+  <div id="jobFindRecord" v-loading="loading" element-loading-text="拼命加载中">
     <div class="title-style">求职记录</div>
     <el-row>
       <el-col :span="12">
@@ -391,20 +391,39 @@
         :targetObjName="targetObjName"
       ></pl-wchat>
     </el-dialog>
+    <!----------------------->
+    <!-- 职位详细信息 弹窗部分 -->
+    <!----------------------->
+    <el-dialog
+      width="75%"
+      v-if="detailsDialog"
+      :visible.sync="detailsDialog"
+      :before-close="detailsHandleClose"
+    >
+      <job-details :positionData="onePosition" disabled></job-details>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-import { findRecord, doEvaluateJob, doFeedBack } from '@/api/personApi';
+import JobDetails from '@/views/person/jobDetails.vue';
+import {
+  findRecord,
+  doEvaluateJob,
+  doFeedBack,
+  queryPositionDetail
+} from '@/api/personApi';
 import { niceScroll, niceScrollUpdate, getCurrentTime } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
-    BaseSearch
+    BaseSearch,
+    JobDetails
   },
   data() {
     return {
+      loading: false,
       actionColWidth: 240,
       activeName: '01',
       labelPosition: 'right',
@@ -414,6 +433,7 @@ export default {
       dialog3: false,
       dialog4: false,
       wchatDialog: false,
+      detailsDialog: false,
       batch: false,
       selects: [],
       reason: '',
@@ -458,7 +478,8 @@ export default {
         reportTime: '000000'
       },
       targetObjId: '',
-      targetObjName: ''
+      targetObjName: '',
+      onePosition: {}
     };
   },
   computed: {
@@ -593,6 +614,9 @@ export default {
                     this.dialog3 = true;
                   } else if (this.activeName == '04') {
                     this.dialog4 = true;
+                  } else {
+                    //查看职位信息
+                    this.queryPositionDetail(row);
                   }
                 } else {
                   this.$alert('没有可查看的数据');
@@ -874,6 +898,7 @@ export default {
         for (let i = 1; i < 6; i++) {
           let params = { ...this.queryParam };
           params.feedbackStatus = '0' + i;
+          this.loading = true;
           findRecord(params).then(queryRes => {
             if (queryRes && queryRes.status === 200) {
               this['tableData0' + i] = queryRes.result.pageresult.data || [];
@@ -911,6 +936,7 @@ export default {
                 }
               });
             }
+            this.loading = false;
           });
         }
       } else {
@@ -922,6 +948,7 @@ export default {
         params.feedbackStatus = witchTable;
         params.pageParam.pageSize = _pageSize;
         params.pageParam.pageIndex = _pageIndex;
+        this.loading = true;
         findRecord(params).then(queryRes => {
           if (queryRes && queryRes.status == 200) {
             this.$message({ type: 'success', message: '查询成功' });
@@ -964,6 +991,7 @@ export default {
           } else if (queryRes) {
             this.$message({ type: 'error', message: '查询失败' });
           }
+          this.loading = false;
         });
       }
     },
@@ -1063,6 +1091,25 @@ export default {
     },
     bulkFeedback() {
       this.$alert('此功能暂未开通！');
+    },
+    detailsHandleClose() {
+      this.detailsDialog = false;
+    },
+    /**
+     * 获取职位的详细信息
+     */
+    async queryPositionDetail(row) {
+      this.loading = true;
+      let queryRes = await queryPositionDetail({
+        positionId: row.positionId
+      });
+      if (queryRes && queryRes.status === 200) {
+        this.onePosition = queryRes.result.data || {};
+        this.detailsDialog = true;
+      } else if (queryRes) {
+        this.$message.error('获取职位详细信息失败');
+      }
+      this.loading = false;
     }
   }
 };

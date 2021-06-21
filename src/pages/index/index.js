@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-15 16:43:09
+ * @LastEditTime: 2021-06-21 18:21:10
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -111,6 +111,10 @@ if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
 //特色活动状态
 if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
+//工资支付方式
+if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
 }
 /* eslint-disable no-new */
 new Vue({

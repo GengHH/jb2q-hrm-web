@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-18 17:18:17
+ * @LastEditTime: 2021-06-21 16:46:21
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -173,6 +173,15 @@ const doApplyActivity = params =>
 //个人收藏或取消收藏职位和个人关注或取消关注单位 (type :1 关注单位 ；2 收藏职位)
 const attentionOrFavor = (type, params) =>
   postAction(basePath + '/person/manage/do-favor/' + type, params);
+//职位搜索后-个人投诉职位（短信验证码）
+const sendComplaintSms = params =>
+  postAction(basePath + '/person/manage/sendComplaintSms');
+//职位搜索后-个人投诉职位
+const doComplaint = params => postAction(basePath + '/person/manage/complaint');
+
+//个人查询职位明细信息
+const queryPositionDetail = params =>
+  postAction(basePath + '/person/manage/queryPositionDetail');
 
 export {
   doSend,
@@ -219,5 +228,8 @@ export {
   doApplyFor,
   queryActivityList,
   doApplyActivity,
-  attentionOrFavor
+  attentionOrFavor,
+  sendComplaintSms,
+  doComplaint,
+  queryPositionDetail
 };

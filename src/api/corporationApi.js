@@ -134,7 +134,10 @@ const deleteShop = params => postAction(basePath + '/corp/shop/delete', params);
 /**********end***********/
 // 单位获取个人简历信息
 const getPsnlResumeByCorp = params =>
-  getAction(basePath + '/corp/resume/loadPsnlResume', params);
+  postAction(basePath + '/corp/resume/detail', params);
+// 获取单位名称
+const queryEntrustCorp = params =>
+  postAction(basePath + '/corp/position/queryEntrustCorp', params);
 export {
   doCorporationLogout,
   getLogonUser,
@@ -167,5 +170,6 @@ export {
   queryPositionList,
   doInvite,
   getPsnlResumeByCorp,
-  doFavorResume
+  doFavorResume,
+  queryEntrustCorp
 };
