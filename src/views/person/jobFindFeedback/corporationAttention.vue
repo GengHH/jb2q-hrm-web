@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-18 17:43:06
+ * @LastEditTime: 2021-06-22 13:41:57
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -15,7 +15,7 @@
           type="danger"
           icon="el-icon-star-off"
           @click="deleteAttention"
-          >取消关注</pl-button
+          >批量取消</pl-button
         >
       </el-col>
       <el-col :span="12">
@@ -154,30 +154,40 @@ export default {
         this.$alert('缺少单位标识');
       } else {
         let res = await attentionOrFavor('1', {
-          id: row.cid,
+          id: [row.cid],
           pid: this.$store.getters['person/pid'],
           status: false
         });
         if (res && res.status === 200) {
           this.$message.success('取消收藏成功');
-          // TODO 删除数据 （重新加载数据）
-          this.tableData = this.tableData.filter(obj => !(obj.cid === row.cid));
+          // 删除数据 （重新加载数据）
+          // this.tableData = this.tableData.filter(obj => !(obj.cid === row.cid));
+          this.queryCorpAttentionList();
         } else if (res) {
           this.$message.error('取消收藏失败');
         }
       }
     },
-    deleteAttention() {
-      this.$alert('此功能暂未开放，请稍后');
-      return;
+    async deleteAttention() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
       } else {
-        // TODO 删除数据
-        that.tableData = that.tableData.filter(
-          obj => !that.selection.some(i => obj.id === i.id)
-        );
+        let res = await attentionOrFavor('1', {
+          id: this.selection.map(obj => {
+            return obj.cid;
+          }),
+          pid: this.$store.getters['person/pid'],
+          status: false
+        });
+        if (res && res.status === 200) {
+          this.$message.success('取消收藏成功');
+          // 删除数据 （重新加载数据）
+          // this.tableData = this.tableData.filter(obj => !(obj.cid === row.cid));
+          this.queryCorpAttentionList();
+        } else if (res) {
+          this.$message.error('取消收藏失败');
+        }
       }
     },
     /**

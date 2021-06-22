@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 17:26:11
+ * @LastEditTime: 2021-06-22 15:26:58
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -41,6 +41,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          @cell-dblclick="showJobDetialByCell"
           max-height="620"
         >
           <template #createTime="{row}">
@@ -59,6 +60,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          @cell-dblclick="showJobDetialByCell"
           max-height="620"
         >
           <template #createTime="{row}">
@@ -77,6 +79,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          @cell-dblclick="showJobDetialByCell"
           max-height="620"
         >
           <template #createTime="{row}">
@@ -108,6 +111,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          @cell-dblclick="showJobDetialByCell"
           max-height="620"
         >
           <template #createTime="{row}">
@@ -138,6 +142,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
+          @cell-dblclick="showJobDetialByCell"
           max-height="620"
         >
           <template #createTime="{row}">
@@ -414,7 +419,7 @@ import {
   doFeedBack,
   queryPositionDetail
 } from '@/api/personApi';
-import { niceScroll, niceScrollUpdate, getCurrentTime } from '@/utils';
+import { getDicText, niceScrollUpdate, getCurrentTime } from '@/utils';
 export default {
   name: 'jobFindRecord',
   components: {
@@ -1104,12 +1109,65 @@ export default {
         positionId: row.positionId
       });
       if (queryRes && queryRes.status === 200) {
-        this.onePosition = queryRes.result.data || {};
+        let item = queryRes.result.data || {};
+        if (item.workArea) {
+          item.workAreaText = getDicText(
+            this.$store.getters['dictionary/ggjbxx_qx'],
+            item.workArea
+          );
+        }
+        if (item.eduRequire) {
+          item.eduRequireText = getDicText(
+            this.$store.getters['dictionary/recruit_edu'],
+            item.eduRequire
+          );
+        }
+        if (item.workNature) {
+          item.workNatureText = getDicText(
+            this.$store.getters['dictionary/recruit_work_nature'],
+            item.workNature
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            this.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            this.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+        if (item.workYearNeed) {
+          item.workYearNeedText = getDicText(
+            this.$store.getters['dictionary/recruit_work_year'],
+            item.workYearNeed
+          );
+        }
+        if (item.salaryPayType) {
+          item.salaryPayTypeText =
+            '元/' +
+            getDicText(
+              this.$store.getters['dictionary/recruit_salary_pay_type'],
+              item.salaryPayType
+            );
+        }
+        this.onePosition = item || {};
         this.detailsDialog = true;
       } else if (queryRes) {
         this.$message.error('获取职位详细信息失败');
       }
       this.loading = false;
+    },
+    /**
+     * 双击职位cell，显示职位详情
+     */
+    showJobDetialByCell(row, column) {
+      if (column && column.property === 'positionName') {
+        this.queryPositionDetail(row);
+      }
     }
   }
 };

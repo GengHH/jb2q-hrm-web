@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 17:11:41
+ * @LastEditTime: 2021-06-22 16:13:18
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -64,7 +64,7 @@
         </el-col>
         <el-col :span="8">
           <el-date-picker
-            v-model="queryParam.gjz"
+            v-model="queryParam.favorDate"
             type="daterange"
             align="right"
             unlink-panels
@@ -72,6 +72,7 @@
             range-separator="至"
             start-placeholder="收藏开始日期"
             end-placeholder="收藏结束日期"
+            value-format="yyyy-MM-dd"
             :picker-options="pickerOptions"
           >
           </el-date-picker>
@@ -80,7 +81,12 @@
 
       <el-row :gutter="20">
         <el-col :span="8">
-          <pl-button class="orange-btn" icon="el-icon-edit">批量操作</pl-button>
+          <pl-button
+            class="orange-btn"
+            icon="el-icon-edit"
+            @click="doFavorResume"
+            >批量操作</pl-button
+          >
         </el-col>
         <el-col :span="8"> </el-col>
         <el-col :span="8">
@@ -96,7 +102,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <pl-table :data="tableData" ref="serveTable" :columns="columns" show-pager>
+    <pl-table :data="tableData" ref="resumeTable" :columns="columns" show-pager>
       <template #date="{row}">
         <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ row.date }}</span>
@@ -109,12 +115,24 @@
 </template>
 
 <script>
+import { doFavorResume } from '@/api/corporationApi';
 export default {
   name: 'resumeCollected',
   data() {
     return {
       queryParam: {
-        gjz: ''
+        // feedBackStatus: '',
+        gjz: '',
+        ageMin: '',
+        ageMax: '',
+        positionName: '',
+        workYear: '',
+        eduLevel: '',
+        favorDate: '',
+        pageParam: {
+          pageSize: 10,
+          pageIndex: 0
+        }
       },
       data: [],
       dicGznx: this.$store.getters['dictionary/recruit_work_year'],
@@ -296,6 +314,7 @@ export default {
               icon: 'el-icon-star-on',
               onClick: ({ row }) => {
                 //console.log(row);
+                this.doFavorResume(row);
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -304,11 +323,37 @@ export default {
           ]
         }
       ];
+    },
+    selection() {
+      return this.$refs.resumeTable.multipleSelection;
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
+    /**
+     * 单个取消和批量取消
+     */
+    async doFavorResume(row) {
+      if (!row && this.selection && this.selection.length == 0) {
+        this.$alert('请选择一条');
+      } else {
+        //取消收藏简历
+        let res = await doFavorResume({
+          resumeId: row
+            ? [resumeId]
+            : this.selection.map(obj => {
+                return obj.resumeId;
+              }),
+          cid: this.$store.getters['corporation/cid'],
+          favorType: false
+        });
+        if (res.status === 200) {
+          // 修改按钮状态
+          this.queryResult[index].favor = false;
+          this.$message({ type: 'success', message: '取消收藏简历成功' });
+        } else {
+          this.$message({ type: 'error', message: '取消收藏简历失败' });
+        }
+      }
     }
   }
 };

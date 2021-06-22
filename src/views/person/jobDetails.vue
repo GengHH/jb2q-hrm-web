@@ -273,7 +273,7 @@
             <el-button
               type="primary"
               class="gray-btn or-br mat-15"
-              @click="callPositionCorp(realData.positionId)"
+              @click="callPositionCorp(realData.cid || realData.corpId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
             >
           </div>

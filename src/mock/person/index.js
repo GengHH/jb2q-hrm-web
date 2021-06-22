@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 18:02:50
+ * @LastEditTime: 2021-06-22 15:04:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -493,6 +493,7 @@ Mock.mock(
       result: Mock.mock({
         'data|1-10': [
           {
+            'cid|+1': '@string("number", 5)',
             corpName: '上海新移力自动化科技有限公司',
             industryType: '02',
             corpNature: '02',
@@ -535,7 +536,7 @@ Mock.mock(
             salaryScope: '9999',
             eduRequire: '01',
             workNature: '01',
-            workYearNeed: '5',
+            workYearNeed: '05',
             recruitNum: '100',
             workArea: '01',
             favorTime: '2021-01-14 16:32:30',
@@ -1178,7 +1179,7 @@ Mock.mock(basePath + '/person/manage/queryPositionDetail', 'post', function(
         eduRequire: '07',
         salaryMax: 90000,
         salaryMin: 30000,
-        salaryPayType: '',
+        salaryPayType: '01',
         recruitNum: 10,
         special: '01,02,03',
         describe: '职位描述',

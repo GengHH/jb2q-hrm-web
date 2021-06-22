@@ -458,7 +458,7 @@ export default {
       let recId = arg[3] || '';
       if (!orginFavorType) {
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: true
         });
@@ -474,7 +474,7 @@ export default {
       } else {
         //取消收藏职位
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: false
         });
@@ -495,9 +495,9 @@ export default {
      */
     async attentionCorp() {
       let queryRes = await attentionOrFavor('1', {
-        id: this.cid,
+        id: [this.cid],
         pid: this.$store.getters['person/pid'],
-        boolean: this.queryResult.attention
+        status: this.queryResult.attention
       });
       if (queryRes && queryRes.status === 200) {
         // this.corpInfo = queryRes.result.data;

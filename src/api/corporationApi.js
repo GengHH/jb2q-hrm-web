@@ -112,7 +112,7 @@ const queryPositionList = params =>
 //邀约
 const doInvite = params => postAction(basePath + '/corp/resume/invite', params);
 
-//招聘会职位信息
+//收藏或取消收藏简历
 const doFavorResume = params =>
   postAction(basePath + '/corp/resume/favor', params);
 

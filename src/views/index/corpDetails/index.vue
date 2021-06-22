@@ -455,7 +455,7 @@ export default {
       if (!orginFavorType) {
         // TODO收藏职位
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: true
         });
@@ -469,7 +469,7 @@ export default {
       } else {
         // TODO取消收藏职位
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: false
         });

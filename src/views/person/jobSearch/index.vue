@@ -881,7 +881,7 @@ export default {
       let recId = arg[3] || '';
       if (!orginFavorType) {
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: true
         });
@@ -899,7 +899,7 @@ export default {
       } else {
         //取消收藏职位
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: false
         });
@@ -916,9 +916,12 @@ export default {
         }
       }
     },
+    /**
+     * 和职位所属单位进行聊天
+     */
     callPositionCorp(arg) {
-      let index = arg[0];
-      let corpId = (arg && arg[1]) || '';
+      // let index = arg[0];
+      let corpId = (arg && arg[0]) || '';
       this.targetObjId = corpId;
       this.wchatDialog = true;
     },

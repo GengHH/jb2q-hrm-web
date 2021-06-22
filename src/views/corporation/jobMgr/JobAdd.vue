@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 14:20:46
+ * @LastEditTime: 2021-06-22 17:36:42
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -55,7 +55,9 @@
         </el-form-item>
       </el-col>
 
-      <!-- 显示岗位名称 -->
+      <!-------------------------->
+      <!-- 显示就业见习岗位名称 -->
+      <!-------------------------->
       <el-col :span="24" v-if="showJxPosition">
         <div class="jx-wrap jx-wrap-header">
           <el-row :gutter="40" style="margin:0">
@@ -155,12 +157,77 @@
             label="是否属于中介代招"
             :optionData="dicData"
             class="w-select"
+            @change="agencyRecruitChange"
           >
           </pl-select>
         </el-form-item>
       </el-col>
+
+      <!---------------------->
+      <!-- 显示委托单位名称 -->
+      <!---------------------->
+      <el-col :span="24" v-if="showWtCorp">
+        <div class="jx-wrap jx-wrap-header">
+          <el-row :gutter="40" style="margin:0">
+            <el-col :span="12" class="jx-wrap-header-title">
+              委托单位信息<i class="header-icon el-icon-info"></i>
+            </el-col>
+            <el-col :span="12">
+              <BaseSearch
+                placeholder="请输入"
+                showSelect
+                :selectData="wtSelectData"
+                defaultSelectValue="1"
+                @clickButton="queryEntrustCorp(arguments)"
+              ></BaseSearch>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          v-if="!wtdwList.length"
+          class="jx-wrap jx-wrap-body"
+          style="text-align:center;padding:20px"
+        >
+          无单位信息数据
+        </div>
+        <div v-else class="jx-wrap jx-wrap-body">
+          <!-- 单位名称列表 -->
+          <el-carousel indicator-position="outside" :autoplay="false">
+            <el-carousel-item v-for="item in carouselPageCount2" :key="item">
+              <div class="jx-carousel">
+                <el-radio-group
+                  v-model="jobForm.entrustCorpName"
+                  size="medium"
+                  id="corpRadios"
+                  class="radio-list-bar"
+                >
+                  <!--直接显示单位信息 -->
+                  <el-radio-button
+                    v-for="idx in wtdwList[item - 1]"
+                    :key="idx.entrustTyshxym"
+                    :label="idx.entrustCorpName"
+                  >
+                    <span
+                      @click="
+                        wtRadioGroupChange(
+                          idx.entrustTyshxym,
+                          idx.entrustCorpName
+                        )
+                      "
+                      >{{ idx.entrustTyshxym }}（{{
+                        idx.entrustCorpName
+                      }}）</span
+                    >
+                  </el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-col>
+      <!-- end -->
       <el-col
-        :span="12"
+        :span="24"
         v-if="isHumanResourceReg && jobForm.agencyRecruit === '1'"
       >
         <el-form-item prop="entrustTyshxym">
@@ -168,7 +235,7 @@
             required
             v-model="jobForm.entrustTyshxym"
             label="委托待招单位统一社会信用码"
-            @change="queryEntrustCorp"
+            disabled
           ></pl-input>
         </el-form-item>
       </el-col>
@@ -463,10 +530,18 @@ export default {
       activeNames: ['1'],
       // autoplay: false,
       showJxPosition: false,
+      showWtCorp: false,
       disabledByJxzw: false,
       jxjdData: {},
       jyjxList: [],
+      wtSelectData: [
+        { label: '统一社会信用码', value: '1' },
+        { label: '单位名称', value: '2' }
+      ],
+      wtdwData: [],
+      wtdwList: [],
       carouselPageCount: 0,
+      carouselPageCount2: 0,
       // zwbh: '', //见习职位编号
       // jxzwname: '', //见习职位名称
       rules: {
@@ -875,7 +950,7 @@ export default {
       }, 500)();
     },
     /**
-     * 职位信息或者委托单位信息分页
+     * 见习职位信息或者基地单位信息分页
      */
     jxjdData: function() {
       //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
@@ -909,6 +984,30 @@ export default {
           //没有职位信息
           this.jyjxList = [];
           this.carouselPageCount = 1;
+        }
+      }, 500)();
+    },
+    /**
+     * 委托单位信息分页
+     */
+    wtdwData: function() {
+      //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
+      this._.throttle(() => {
+        //监听选中的选项-修改样式
+        if (this.wtdwData.length) {
+          this.wtdwList = [];
+          let pageCount =
+            Math.floor(this.wtdwData.length / 20) +
+            (this.wtdwData.length % 20 > 0 ? 1 : 0);
+          for (let i = 1; i <= pageCount; i++) {
+            this.wtdwList.push(this.wtdwData.slice((i - 1) * 20, i * 20));
+          }
+          // console.log(this.wtdwList);
+          this.carouselPageCount2 = pageCount;
+        } else {
+          //没有职位信息
+          this.wtdwList = [];
+          this.carouselPageCount2 = 1;
         }
       }, 500)();
     }
@@ -1122,26 +1221,43 @@ export default {
       this.jobForm.tranCorpName = wpdwDwmc || '';
     },
     /**
+     * 是否中介代招发生变化时，如果是“是”
+     */
+    agencyRecruitChange() {
+      if (this.jobForm.agencyRecruit === '1') {
+        this.showWtCorp = true;
+      } else {
+        //需要重新选择
+        this.jobForm.positionName = '';
+        this.showWtCorp = false;
+      }
+    },
+    wtRadioGroupChange(tyshxym, corpName) {
+      // 委托单位信息
+      this.jobForm.entrustTyshxym = tyshxym || '';
+      this.jobForm.entrustCorpName = corpName || '';
+    },
+    /**
      * 根据统一社会信用码获取单位名称
      */
-    async queryEntrustCorp(tyshxym) {
-      console.log(
-        '%c 🍹 tyshxym: ',
-        'font-size:20px;background-color: #FCA650;color:#fff;',
-        tyshxym
-      );
+    async queryEntrustCorp(args) {
+      let type = args[0] || '';
+      let value = args[1] || '';
+      if (!value) {
+        this.$alert('请输入相关信息进行查询');
+        return;
+      }
       let queryRes = await queryEntrustCorp({
-        entrustTyshxym: tyshxym,
-        entrustCorpName: ''
+        entrustTyshxym: type === '1' ? value : '',
+        entrustCorpName: type === '2' ? value : ''
       });
-      if (
-        queryRes &&
-        queryRes.status === 200 &&
-        queryRes.result.pageresult.total === 1
-      ) {
-        this.jobForm.entrustCorpName =
-          queryRes.result.pageresult.data[0]?.entrustCorpName;
-      } else {
+      if (queryRes && queryRes.status === 200) {
+        this.wtdwData = queryRes.result.data || [];
+        this.jobForm.entrustTyshxym = '';
+        this.jobForm.entrustCorpName = '';
+      } else if (queryRes) {
+        this.wtdwData = [];
+        this.jobForm.entrustTyshxym = '';
         this.jobForm.entrustCorpName = '';
       }
     }
@@ -1239,7 +1355,8 @@ export default {
     border: 0;
   }
 }
-#positionsRadios {
+#positionsRadios,
+#corpRadios {
   ::v-deep .el-radio-button__inner {
     background-color: #f6f6f6;
     border: 0;

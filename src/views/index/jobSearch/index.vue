@@ -683,7 +683,7 @@ export default {
       let recId = arg[3] || '';
       if (!orginFavorType) {
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: true
         });
@@ -697,7 +697,7 @@ export default {
       } else {
         //取消收藏职位
         let res = await attentionOrFavor('2', {
-          id: positionId,
+          id: [positionId],
           pid: this.$store.getters['person/pid'],
           status: false
         });
