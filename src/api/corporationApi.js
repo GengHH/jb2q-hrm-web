@@ -73,6 +73,9 @@ const queryResumeInfo = params =>
 // 获取已经收到的简历的详细信息
 const doFeedBack = params =>
   postAction(basePath + '/corp/manage/feedBack', params);
+// 获取已经收藏的简历
+const findFavorList = params =>
+  postAction(basePath + '/corp/resume/findFavorList', params);
 
 /*********招聘会**********/
 // 查询招聘会listt
@@ -157,6 +160,7 @@ export {
   queryReceiveResume,
   queryResumeInfo,
   doFeedBack,
+  findFavorList,
   queryJobFairList,
   queryJobFairPositionInfo,
   applyJobFair,

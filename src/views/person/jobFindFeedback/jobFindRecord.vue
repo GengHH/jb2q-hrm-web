@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-22 15:26:58
+ * @LastEditTime: 2021-06-23 14:03:33
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -429,7 +429,7 @@ export default {
   data() {
     return {
       loading: false,
-      actionColWidth: 240,
+      actionColWidth: 100,
       activeName: '01',
       labelPosition: 'right',
       formLabelWidth: '120px',
@@ -746,6 +746,27 @@ export default {
     //   return this.$refs.serveTable05.multipleSelection;
     // }
   },
+  watch: {
+    activeName: function(val) {
+      if (val === '03') {
+        this.actionColWidth = 420;
+        this.unshowCjmsColumn = false;
+        this.unshowPjColumn = true;
+      } else if (val === '04') {
+        this.actionColWidth = 300;
+        this.unshowPjColumn = false;
+        this.unshowCjmsColumn = true;
+      } else {
+        if (val === '01') {
+          this.actionColWidth = 100;
+        } else {
+          this.actionColWidth = 250;
+        }
+        this.unshowPjColumn = true;
+        this.unshowCjmsColumn = true;
+      }
+    }
+  },
   created() {
     this.queryJobRecordList('all');
   },
@@ -757,22 +778,22 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      if (tab.name === '03') {
-        this.actionColWidth = 420;
-        this.unshowCjmsColumn = false;
-        this.unshowPjColumn = true;
-      } else if (tab.name === '04') {
-        this.unshowPjColumn = false;
-        this.unshowCjmsColumn = true;
-      } else {
-        if (tab.name === '01') {
-          this.actionColWidth = 150;
-        } else {
-          this.actionColWidth = 280;
-        }
-        this.unshowPjColumn = true;
-        this.unshowCjmsColumn = true;
-      }
+      //   if (tab.name === '03') {
+      //     this.actionColWidth = 420;
+      //     this.unshowCjmsColumn = false;
+      //     this.unshowPjColumn = true;
+      //   } else if (tab.name === '04') {
+      //     this.unshowPjColumn = false;
+      //     this.unshowCjmsColumn = true;
+      //   } else {
+      //     if (tab.name === '01') {
+      //       this.actionColWidth = 150;
+      //     } else {
+      //       this.actionColWidth = 280;
+      //     }
+      //     this.unshowPjColumn = true;
+      //     this.unshowCjmsColumn = true;
+      //   }
     },
     handleSelectionChange(val) {
       //console.log(val);

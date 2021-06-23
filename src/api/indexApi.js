@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 13:26:05
+ * @LastEditTime: 2021-06-23 09:56:04
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -30,11 +30,18 @@ const queryActivityList = params =>
     basePath + '/nologin/specialActivity/querySpecialActivityList',
     params
   );
+//特色活动-详情信息
+const querySpecialActivityDetail = params =>
+  postAction(
+    basePath + '/nologin/specialActivity/querySpecialActivityDetail',
+    params
+  );
 
 export {
   queryTable,
   // queryActivies,
   queryJyjxJdInfo,
   queryJobs,
-  queryActivityList
+  queryActivityList,
+  querySpecialActivityDetail
 };

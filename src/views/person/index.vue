@@ -67,13 +67,20 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-right">
-        <el-form-item prop="contactPhone">
-          <pl-input
-            v-model="personInfo.contactPhone"
-            :disabled="true"
-            label="手机号"
-          ></pl-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="20">
+            <el-form-item prop="contactPhone">
+              <pl-input
+                v-model="personInfo.contactPhone"
+                :disabled="true"
+                label="手机号"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4" style="text-align:right">
+            <el-button @click="dialog = !dialog">修改</el-button>
+          </el-col>
+        </el-row>
       </el-col>
       <el-col :span="12" class="form-item-left">
         <el-form-item prop="livingArea">
@@ -120,17 +127,29 @@
         >取消</el-button
       >
     </div>
+    <!-- 聊天框 弹窗部分 -->
+    <el-dialog
+      class="width75"
+      :visible.sync="dialog"
+      :before-close="handleClose"
+    >
+      <update-phone :oldPhone="personInfo.contactPhone"></update-phone>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getPersonBaseInfo, updatePersonBaseInfo } from '@/api/personApi';
+import updatePhone from '@/views/person/personalCenter/updatePhoneNumber';
 // import { phonePattern } from '@/utils/regexp';
 export default {
   name: 'personApp',
-  components: {},
+  components: {
+    updatePhone
+  },
   data() {
     return {
+      dialog: false,
       isFlipped: false,
       personInfo: {
         birthDate: '',
@@ -221,6 +240,9 @@ export default {
     }
   },
   methods: {
+    handleClose() {
+      this.dialog = false;
+    },
     async getPersonInfo() {
       try {
         if (!this.$store.getters['person/token']) {
@@ -360,12 +382,13 @@ export default {
       width: 100%;
     }
     .form-item-left {
-      .el-form-item {
+      & > .el-form-item {
         padding-right: 15%;
       }
     }
     .form-item-right {
-      .el-form-item {
+      & > .el-form-item,
+      & > .el-row {
         padding-left: 15%;
       }
     }

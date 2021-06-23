@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:30:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 11:10:09
+ * @LastEditTime: 2021-06-23 10:32:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
 -->
@@ -147,8 +147,8 @@ export default {
       this.$router
         .push({
           path: '/activityDetails',
-          query: { activityId: actId },
-          params: { data: this.showList }
+          query: { activityId: actId }
+          // params: { data: this.showList }
         })
         .catch(err => err);
     },

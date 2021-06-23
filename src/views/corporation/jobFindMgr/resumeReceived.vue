@@ -2,12 +2,16 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 16:23:57
+ * @LastEditTime: 2021-06-23 16:48:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
 <template>
-  <div id="resumeReceived">
+  <div
+    id="resumeReceived"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+  >
     <div class="title-style">收到的简历</div>
     <el-form>
       <el-row :gutter="20">
@@ -535,12 +539,14 @@ export default {
       }
     };
     return {
+      loading: false,
       yes: true,
       dialog1: false,
       dialog2: false,
       dialog3: false,
       labelPosition: 'right',
       formLabelWidth: '150px',
+      colwidth: 240,
       activeName: '01',
       batch: false,
       selects: [],
@@ -676,9 +682,9 @@ export default {
     /**
      *根据按钮的多少判断列宽
      */
-    colwidth() {
-      return this.activeName === '02' || this.activeName === '03' ? 100 : 0;
-    },
+    // colwidth() {
+    //   return this.activeName === '02' || this.activeName === '03' ? 100 : 0;
+    // },
     labelCount01() {
       return this.totalCount01
         ? '未查看（' + this.totalCount01 + '）'
@@ -740,7 +746,7 @@ export default {
           rowSpan: 'all'
         },
         {
-          label: '工作年限',
+          label: '工作年限（年）',
           prop: 'workYear',
           customerRenderText: ({ row }) => {
             const { workYear } = row;
@@ -762,6 +768,19 @@ export default {
             return (
               data.find(element => element.value === eduLevel)?.label ||
               eduLevel
+            );
+          },
+          rowSpan: 'all'
+        },
+        {
+          label: '应聘来源',
+          prop: 'source',
+          customerRenderText: ({ row }) => {
+            const { source } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_applyfor_source'] || [];
+            return (
+              data.find(element => element.value === source)?.label || source
             );
           },
           rowSpan: 'all'
@@ -796,7 +815,7 @@ export default {
         // },
         {
           label: '操作',
-          attrs: { width: 240 + Number(this.colwidth) }, //340
+          attrs: { width: this.colwidth }, //340
           actions: [
             {
               id: 'action1',
@@ -873,6 +892,15 @@ export default {
       ];
     }
   },
+  watch: {
+    activeName: function(val) {
+      if (this.activeName === '02' || this.activeName === '03') {
+        this.colwidth = 340;
+      } else {
+        this.colwidth = 240;
+      }
+    }
+  },
   created() {
     this.queryResumes('all');
   },
@@ -913,6 +941,7 @@ export default {
         for (let i = 1; i < 6; i++) {
           let params = { ...this.queryParam };
           params.feedBackStatus = '0' + i;
+          this.loading = true;
           queryReceiveResume(params).then(queryRes => {
             if (queryRes && queryRes.status == 200) {
               this['tableData0' + i] = queryRes.result.pageresult.data || [];
@@ -929,6 +958,7 @@ export default {
             } else if (queryRes) {
               this.$message({ type: 'error', message: '查询失败' });
             }
+            this.loading = false;
           });
         }
       } else {
@@ -940,6 +970,7 @@ export default {
         params.feedBackStatus = witchTable;
         params.pageParam.pageSize = _pageSize;
         params.pageParam.pageIndex = _pageIndex;
+        this.loading = true;
         queryReceiveResume(params).then(queryRes => {
           if (queryRes && queryRes.status == 200) {
             this.$message({ type: 'success', message: '查询成功' });
@@ -959,6 +990,7 @@ export default {
           } else if (queryRes) {
             this.$message({ type: 'error', message: '查询失败' });
           }
+          this.loading = false;
         });
       }
     },

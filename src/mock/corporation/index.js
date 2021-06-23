@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 16:44:52
+ * @LastEditTime: 2021-06-23 15:11:03
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -607,6 +607,42 @@ Mock.mock(basePath + '/corp/manage/resume/detail', 'post', function(options) {
 // 单位反馈
 Mock.mock(basePath + '/corp/manage/feedBack', 'post', function(options) {
   return successData;
+});
+
+//获取已经收藏的简历列表
+Mock.mock(basePath + '/corp/resume/findFavorList', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      pageresult: Mock.mock({
+        'total|1-10': 1,
+        'data|1-10': [
+          {
+            favorId: '@string("number", 1)',
+            resumeId: '@string("number", 5)',
+            pid: '40',
+            xm: 'GHH',
+            age: 28,
+            eduLevel: '02',
+            workYear: '1',
+            positionName: '先最接',
+            updateTime: '2010-02-01 09:29:02',
+            loginTime: '1979-06-07 21:47:52',
+            favorStartTime: '1988-10-08 15:26:01',
+            birthDate: '2008-03-22',
+            positionList: [
+              'est culpa',
+              'eu',
+              'dolore laboris fugiat Excepteur dolor',
+              'id et',
+              'sunt minim'
+            ]
+          }
+        ]
+      })
+    }
+  };
 });
 
 /*********招聘会**********/

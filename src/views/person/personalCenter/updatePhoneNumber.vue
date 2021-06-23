@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-04-16 13:32:34
+ * @LastEditTime: 2021-06-23 16:11:38
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -19,10 +19,18 @@
             label="手机短信验证码"
           ></pl-input>
         </el-col>
-        <el-col :span="8">
-          <pl-button id="codeBtn" type="primary" @click="getCode($event)" plain
+        <el-col :span="8" style="    text-align: right;">
+          <pl-button
+            id="codeBtn"
+            type="primary"
+            v-show="verifyCodeShow"
+            @click="getCode($event)"
+            plain
             >获取验证码</pl-button
           >
+          <pl-button v-show="!verifyCodeShow" class="count">
+            {{ count }} s
+          </pl-button>
         </el-col>
       </el-row>
     </el-form-item>
@@ -40,11 +48,19 @@ import { phonePattern, codePattern } from '@/utils/regexp';
 import { sendSms, updatePhoneNum } from '@/api/personApi';
 export default {
   name: 'updatePhoneNumber',
+  props: {
+    oldPhone: {
+      type: String,
+      default: ''
+    }
+  },
   components: {
     //plInput
   },
   data() {
     return {
+      count: 0,
+      verifyCodeShow: true,
       formData: {
         newphoneNum: '',
         verificationCode: ''
@@ -72,12 +88,36 @@ export default {
     };
   },
   methods: {
+    // async getCode(done) {
+    //   let that = this;
+    //   if (!this.formData.newphoneNum) {
+    //     this.$alert('手机号不能为空');
+    //   } else if (!phonePattern.test(this.formData.newphoneNum)) {
+    //     this.$alert('手机号格式不正确');
+    //   } else {
+    //     let smsResult = await sendSms({
+    //       contactPhone: that.formData.newphoneNum
+    //     }).catch(() => {
+    //       done();
+    //       that.$message({ type: 'error', message: '系统异常，获取验证码失败' });
+    //     });
+    //     if (smsResult.status === 200) {
+    //       that.$message({ type: 'success', message: '获取验证码成功' });
+    //     } else {
+    //       that.$message({ type: 'error', message: '获取验证码失败' });
+    //     }
+    //   }
+    //   done();
+    // },
     async getCode(done) {
+      //获取短信验证码
       let that = this;
       if (!this.formData.newphoneNum) {
         this.$alert('手机号不能为空');
       } else if (!phonePattern.test(this.formData.newphoneNum)) {
         this.$alert('手机号格式不正确');
+      } else if (this.oldPhone && this.oldPhone === this.formData.newphoneNum) {
+        this.$alert('此号码为旧号码，请使用新号码进行更新');
       } else {
         let smsResult = await sendSms({
           contactPhone: that.formData.newphoneNum
@@ -86,7 +126,22 @@ export default {
           that.$message({ type: 'error', message: '系统异常，获取验证码失败' });
         });
         if (smsResult.status === 200) {
-          that.$message({ type: 'success', message: '获取验证码成功' });
+          //采用倒计时方法
+          //that.$message({ type: 'success', message: '获取验证码成功' });
+          const TIME_COUNT = 60;
+          if (!that.timer) {
+            that.count = TIME_COUNT;
+            that.verifyCodeShow = false;
+            that.timer = setInterval(() => {
+              if (that.count > 0 && that.count <= TIME_COUNT) {
+                that.count--;
+              } else {
+                that.verifyCodeShow = true;
+                clearInterval(that.timer);
+                that.timer = null;
+              }
+            }, 1000);
+          }
         } else {
           that.$message({ type: 'error', message: '获取验证码失败' });
         }

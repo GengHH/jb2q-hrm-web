@@ -1,21 +1,21 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-05-07 19:41:35
+ * @LastEditTime: 2021-06-23 14:29:45
  * @LastEditors: GengHH
  * @Description: 单位模块子菜单
  * @FilePath: \jb2q-hrm-web\src\components\corporation\CorpJobfindmgrNavMenu.vue
 -->
 <template>
   <el-menu
-    default-active="1"
+    :default-active="$route.path"
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
     :collapse="isCollapse"
   >
     <router-link to="/jobFindMgr/resumeReceived">
-      <el-menu-item index="1">
+      <el-menu-item index="/jobFindMgr/resumeReceived">
         <i class="el-icon-user"></i>
         <span slot="title">
           收到的简历
@@ -23,7 +23,7 @@
       </el-menu-item>
     </router-link>
     <router-link to="/jobFindMgr/resumeCollected">
-      <el-menu-item index="2">
+      <el-menu-item index="/jobFindMgr/resumeCollected">
         <i class="el-icon-menu"></i>
         <span slot="title">
           已收藏的简历
