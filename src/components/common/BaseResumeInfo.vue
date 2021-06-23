@@ -18,7 +18,7 @@
       <div class="column" v-if="secrecy">
         <p class="font-size24">
           {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '' }}
-          <span class="sixteen-opacity">**岁</span>
+          <span class="sixteen-opacity">{{ resume.age }}岁</span>
           <i
             class="el-icon-male sixteen-opacity"
             v-if="resume.sex === '男'"
