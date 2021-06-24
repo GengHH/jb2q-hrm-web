@@ -3,7 +3,19 @@
     <div id="baseResumeInfo" ref="print">
       <!-- <el-button @click="print()">打印</el-button>
       <el-button @click="exportPdf()">导出PDF</el-button> -->
-      <div id="baseInfo" class="title-style font-or font-bold">
+      <div
+        id="baseInfo"
+        class="title-style font-or font-bold"
+        v-if="notConstResume"
+      >
+        基本信息
+        <span style="color: #fc6f3d;font-weight: 500;"
+          >（可点击
+          <i style="color:#35e835" class="el-icon-edit-outline"></i>
+          修改“工作经验”、“最高学历”）</span
+        >
+      </div>
+      <div id="baseInfo" class="title-style font-or font-bold" v-else>
         基本信息
         <!-- <el-button
           v-if="notConstResume"
@@ -14,6 +26,7 @@
           >编辑</el-button
         > -->
       </div>
+
       <!-- 私密信息不完全显示 -->
       <div class="column" v-if="secrecy">
         <p class="font-size24">
@@ -27,7 +40,7 @@
             class="el-icon-female sixteen-opacity"
             v-else-if="resume.sex === '女'"
           ></i>
-          <span class="sixteen-opacity"
+          <span class="sixteen-opacity" style="margin: 0 10px;"
             >工作经验
             <span
               v-if="
@@ -163,7 +176,7 @@
           <el-popover
             v-if="notConstResume"
             placement="right"
-            width="150"
+            width="200"
             trigger="click"
           >
             <el-select v-model="selectHighEdu" placeholder="请选择最高学历">

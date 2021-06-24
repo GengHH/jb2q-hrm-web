@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 10:41:04
+ * @LastEditTime: 2021-06-24 15:16:39
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -69,7 +69,7 @@ import {
   removeResizeListener
 } from 'element-ui/lib/utils/resize-event';
 import PlTableColumn from './BaseTableColumn';
-import { getRandomKey, niceScroll } from '@/utils';
+import { getRandomKey, niceScroll, niceScrollUpdate } from '@/utils';
 const Item2UIDMap = new WeakMap();
 export default {
   name: 'pl-table',
@@ -248,8 +248,9 @@ export default {
   },
   mounted() {
     //初始化滚动条样式
-    niceScroll('.el-table__body-wrapper');
+    //niceScroll('.el-table__body-wrapper');
     this.$nextTick(() => {
+      // console.log(10000);
       if (this.autoHeight) {
         addResizeListener(window.document.body, this.setHeight);
         addResizeListener(this.$refs.table.$el, this.setHeight);
@@ -260,10 +261,14 @@ export default {
     });
   },
   updated() {
-    // 更新滚动条样式
-    if (this.resizeScroll) {
-      setTimeout(this.resizeScroll()(), 100);
-    }
+    //niceScroll('.el-table__body-wrapper');
+    // console.log(123412);
+    // console.log($('.el-table__body-wrapper').getNiceScroll());
+    // this._.throttle(() => niceScrollUpdate('.el-table__body-wrapper'), 100)();
+    //更新滚动条样式
+    // if (this.resizeScroll) {
+    //   setTimeout(this.resizeScroll()(), 100);
+    // }
   },
   activated() {
     if (this.keepPosition) {
@@ -295,7 +300,17 @@ export default {
       return this._.throttle(() => {
         $('.el-table__body-wrapper')
           ?.getNiceScroll()
-          ?.resize();
+          .each(i => {
+            console.log(
+              '%c 🥞 i: ',
+              'font-size:20px;background-color: #FCA650;color:#fff;',
+              i
+            );
+            niceScroll('.el-table__body-wrapper');
+            $('.el-table__body-wrapper')
+              .getNiceScroll()
+              [i].resize();
+          });
       }, 300);
     },
     getRandomKey(item) {
@@ -510,7 +525,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .el-table .el-table__row td .cell:empty:before,
 .el-table .el-table__footer-wrapper td .cell:empty:before {
   content: '-';
@@ -526,7 +541,8 @@ export default {
   width: 8px;
   /* 横向 */
   height: 8px;
-  background-color: #ededed;
+  /* background-color: #ededed; */
+  background-color: red;
 }
 /* 滚动条上的按钮(上下箭头) */
 .el-table__body-wrapper::-webkit-scrollbar-button {
@@ -552,5 +568,12 @@ export default {
 /* 右下角拖动块 */
 .el-table__body-wrapper::-webkit-resizer {
   display: none;
+}
+</style>
+
+<style>
+/* el-table不使用niceScroll时候，确保IE下能显示滚动条 */
+.el-table__body-wrapper {
+  -ms-overflow-style: auto !important;
 }
 </style>

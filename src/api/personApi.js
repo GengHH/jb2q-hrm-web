@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 09:37:11
+ * @LastEditTime: 2021-06-24 10:38:14
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -108,10 +108,10 @@ const doCancelShield = params =>
 
 //获取关注单位列表
 const queryCorpStarList = params =>
-  getAction(basePath + '/person/feedback/corp/findFavorRecord', params);
+  postAction(basePath + '/person/feedback/corp/findFavorRecord', params);
 //获取个人收藏职位列表
 const queryPositionStarList = params =>
-  getAction(basePath + '/person/feedback/position/findFavorRecord', params);
+  postAction(basePath + '/person/feedback/position/findFavorRecord', params);
 
 //根据不同状态获取简历投递记录
 // const findRecord = (type, params) =>

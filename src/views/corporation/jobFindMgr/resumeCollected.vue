@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 15:40:39
+ * @LastEditTime: 2021-06-24 13:13:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -146,6 +146,7 @@ export default {
       loading: false,
       queryParam: {
         // feedBackStatus: '',
+        cid: this.$store.getters['corporation/cid'],
         keyWord: '',
         ageMin: '',
         ageMax: '',

@@ -579,9 +579,9 @@ export default {
         this.$alert('缺少数据，无法投诉');
         return;
       }
-      this.complaintParams.cid = this.realData.cid;
-      this.complaintParams.corpName = this.realData.corpName;
-      this.complaintParams.positionId = this.realData.positionId;
+      this.complaintParams.cid = this.realData.corpId || '';
+      this.complaintParams.corpName = this.realData.corpName || '';
+      this.complaintParams.positionId = this.realData.positionId || '';
       let doRes = await doComplaint(this.complaintParams);
       if (doRes && doRes.status === 200) {
         this.$message.success('投诉成功');

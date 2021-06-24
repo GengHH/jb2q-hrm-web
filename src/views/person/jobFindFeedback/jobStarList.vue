@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-22 17:35:46
+ * @LastEditTime: 2021-06-24 15:33:33
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -19,7 +19,15 @@
         <BaseSearch @clickButton="queryStarList($event)"></BaseSearch>
       </el-col>
     </el-row>
-    <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
+    <pl-table
+      :data="tableData"
+      :totalCount="tableCount"
+      ref="jobTable"
+      :columns="columns"
+      show-pager
+      @handleSizeChangeOnBack="handlePageChange"
+      @handleCurrentChangeOnBack="handlePageChange"
+    >
       <template #date="{row}">
         <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ row.favorTime }}</span>
@@ -74,6 +82,7 @@ export default {
       detailsDialog: false,
       wchatDialog: false,
       tableData: [],
+      tableCount: 0,
       onePosition: {},
       detailsIndex: 0,
       targetObjId: ''
@@ -189,15 +198,22 @@ export default {
     wchatHandleClose() {
       this.wchatDialog = false;
     },
+    handlePageChange() {
+      this.queryStarList();
+    },
     /**
      *查询收藏职位信息的列表
      */
     async queryStarList() {
       let res = await queryPositionStarList({
+        pageParam: {
+          pageIndex: this.$refs.jobTable?.currentPage - 1 || 0,
+          pageSize: this.$refs.jobTable?.pageSize || 10
+        },
         pid: this.$store.getters['person/pid'] || ''
       });
-      if (res.status === 200) {
-        res.result.data.forEach(item => {
+      if (res && res.status === 200) {
+        res.result.pageresult.data.forEach(item => {
           item.actions = ['action1', 'action2'];
           // 转换字典
           if (item.workArea) {
@@ -231,9 +247,12 @@ export default {
             );
           }
         });
-        this.tableData = res.result.data;
-      } else {
-        this.$message({ type: 'success', message: '未查询到信息' });
+        this.tableData = res.result.pageresult.data;
+        this.tableCount = res.result.pageresult.total;
+      } else if (res) {
+        this.tableData = [];
+        this.tableCount = 0;
+        this.$message.success('未查询到信息');
       }
     },
     /**
@@ -264,8 +283,6 @@ export default {
      *删除收藏记录
      */
     async deleteFavorite() {
-      // this.$alert('此功能暂未开放，请稍后');
-      // return;
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
@@ -454,7 +471,7 @@ export default {
       this.wchatDialog = true;
     }
   },
-  created() {
+  mounted() {
     this.queryStarList();
   }
 };

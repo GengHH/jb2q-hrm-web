@@ -80,9 +80,9 @@
           <b>
             {{ activityInfo.actName }}
           </b>
-          <span v-if="activityInfo.expertJoin" class="span-line">{{
+          <!-- <span v-if="activityInfo.expertJoin" class="span-line">{{
             activityInfo.expertJoin === '1' ? '专家' : '非专家'
-          }}</span>
+          }}</span> -->
         </p>
         <el-row class="mat-15 details-info">
           <el-col :span="18">

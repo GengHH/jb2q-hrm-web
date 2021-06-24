@@ -340,6 +340,9 @@ export function trim(data) {
  * @param {*} id
  */
 export function niceScroll(dom) {
+  // if (dom !== '.el-table__body-wrapper') {
+  //   return;
+  // }
   if (dom) {
     let scrollConfig = {
       cursorcolor: '#aaa', // 改变滚动条颜色，使用16进制颜色值
@@ -356,8 +359,11 @@ export function niceScroll(dom) {
       dblclickzoom: true, // (仅当 boxzoom=true时有效)双击box时放大
       gesturezoom: false, // (仅 boxzoom=true 和触屏设备时有效) 激活变焦当out/in（两个手指外张或收缩）
       grabcursorenabled: true, // (仅当 touchbehavior=true) 显示“抓住”图标display "grab" icon
-      autohidemode: true // 隐藏滚动条的方式, 可用的值:true or false
+      autohidemode: false // 隐藏滚动条的方式, 可用的值:true or false
     };
+    if (dom === '.el-table__body-wrapper') {
+      scrollConfig.mousescrollstep = 0;
+    }
     let $doms = $(dom);
     if ($doms.length && $doms.length === 1) {
       $doms.niceScroll(scrollConfig);

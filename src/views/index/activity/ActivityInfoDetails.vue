@@ -82,9 +82,9 @@
             <p class="font-size24 line30">
               <!-- 2020上海某银行校园招聘公告解读备考指导特别讲座 -->
               {{ activityItem.actName }}
-              <span v-if="activityItem.expertJoin" class="span-line">{{
+              <!-- <span v-if="activityItem.expertJoin" class="span-line">{{
                 activityItem.expertJoin === '1' ? '专家' : '非专家'
-              }}</span>
+              }}</span> -->
             </p>
             <p class="six-hui  line30 or-font mat-15">
               <i class="icon iconfont six-hui">&#xe651;</i>
@@ -97,13 +97,14 @@
               }}
               人
             </p>
-            <p class="six-hui  line30" v-if="activityItem.expertJoin === '1'">
+            <!-- <p class="six-hui  line30" v-if="activityItem.expertJoin === '1'">
               <i class="icon iconfont">&#xe652;</i> 参与专家：刘专家 李专家
               张专家
-            </p>
+            </p> -->
             <p class="six-hui  line30">
               <i class="icon iconfont">&#xe650;</i>
-              活动地点：长宁区就业促进中心(长宁区武夷路517号)
+              活动地点：
+              <!-- 长宁区就业促进中心(长宁区武夷路517号) -->
               {{ activityItem.actAddress }}
               <el-link class="blue-font" :underline="false">
                 <i class="icon iconfont">&#xe654;</i>
@@ -124,7 +125,11 @@
                 ><i class="icon iconfont font-size20">&#xe653;</i>
                 去报名</el-button
               > -->
-              还剩名额：<i class="or-font">28</i> 个
+              还剩名额：<i class="or-font">{{
+                (Number(activityItem.selfApplyMax) || 0) -
+                  (Number(activityItem.selfApply) || 0)
+              }}</i>
+              个
             </p>
           </el-col>
         </el-row>

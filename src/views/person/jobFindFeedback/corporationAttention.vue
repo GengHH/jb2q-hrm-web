@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-22 13:41:57
+ * @LastEditTime: 2021-06-24 10:53:32
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -22,7 +22,15 @@
         <BaseSearch @clickButton="queryCorpAttentionList($event)"></BaseSearch>
       </el-col>
     </el-row>
-    <pl-table :data="tableData" ref="jobTable" :columns="columns" show-pager>
+    <pl-table
+      :data="tableData"
+      :totalCount="tableCount"
+      ref="corpTable"
+      :columns="columns"
+      show-pager
+      @handleSizeChangeOnBack="handlePageChange"
+      @handleCurrentChangeOnBack="handlePageChange"
+    >
       <template #logo="{row}">
         <img
           :src="'data:image/jpg;base64,' + row.logo"
@@ -52,7 +60,8 @@ export default {
   data() {
     return {
       defaultImg: require('@/assets/images/break-img.svg'),
-      tableData: []
+      tableData: [],
+      tableCount: 0
     };
   },
   computed: {
@@ -115,16 +124,23 @@ export default {
       ];
     },
     selection() {
-      return this.$refs.jobTable.multipleSelection;
+      return this.$refs.corpTable.multipleSelection;
     }
   },
   methods: {
+    handlePageChange() {
+      this.queryCorpAttentionList();
+    },
     async queryCorpAttentionList() {
       let res = await queryCorpStarList({
+        pageParam: {
+          pageIndex: this.$refs.corpTable?.currentPage - 1 || 0,
+          pageSize: this.$refs.corpTable?.pageSize || 10
+        },
         pid: this.$store.getters['person/pid'] || ''
       });
       if (res.status === 200) {
-        res.result.data.forEach(item => {
+        res.result.pageresult.data.forEach(item => {
           item.actions = ['action1'];
           if (item.industryType) {
             item.industryTypeText = getDicText(
@@ -139,8 +155,11 @@ export default {
             );
           }
         });
-        this.tableData = res.result.data;
+        this.tableData = res.result.pageresult.data;
+        this.tableCount = res.result.pageresult.total;
       } else {
+        this.tableData = [];
+        this.tableCount = 0;
         this.$message({ type: 'success', message: '未查询到信息' });
       }
     },
@@ -198,7 +217,7 @@ export default {
       img.onerror = null; //防止闪图
     }
   },
-  created() {
+  mounted() {
     this.queryCorpAttentionList();
   }
 };

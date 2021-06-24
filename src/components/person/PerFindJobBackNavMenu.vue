@@ -1,21 +1,21 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-16 10:41:00
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-27 14:49:32
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-24 10:57:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\person\PerFindJobBackNavMenu.vue
 -->
 <template>
   <el-menu
-    default-active="1"
+    :default-active="$route.path"
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
     :collapse="isCollapse"
   >
     <router-link to="/jobFindFeedback/jobFindRecord">
-      <el-menu-item index="1">
+      <el-menu-item index="/jobFindFeedback/jobFindRecord">
         <i class="el-icon-menu"></i>
         <span slot="title">求职记录</span>
       </el-menu-item>
@@ -28,19 +28,19 @@
       <el-menu-item-group>
         <!-- <template slot="title">分组一</template> -->
         <router-link to="/jobFindFeedback/corporationAttention">
-          <el-menu-item index="2-1"
+          <el-menu-item index="/jobFindFeedback/corporationAttention"
             ><i class="el-icon-view"></i>单位关注</el-menu-item
           >
         </router-link>
         <router-link to="/jobFindFeedback/jobStarList">
-          <el-menu-item index="2-2"
+          <el-menu-item index="/jobFindFeedback/jobStarList"
             ><i class="el-icon-star-off"></i>职位收藏列表</el-menu-item
           >
         </router-link>
       </el-menu-item-group>
     </el-submenu>
     <router-link to="/jobFindFeedback/jobEvaluation">
-      <el-menu-item index="3">
+      <el-menu-item index="/jobFindFeedback/jobEvaluation">
         <i class="el-icon-setting"></i>
         <span slot="title">职位评价</span>
       </el-menu-item>
