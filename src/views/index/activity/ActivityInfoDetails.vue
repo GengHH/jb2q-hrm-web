@@ -257,7 +257,7 @@ export default {
     console.log(this.$route.params);
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
-      this.actId = this.$route.query.actId;
+      this.actId = this.$route.query.activityId;
       //查询单位信息
       this.loadActDetailsInfo();
     }

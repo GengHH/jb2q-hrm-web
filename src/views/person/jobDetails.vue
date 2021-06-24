@@ -13,19 +13,21 @@
       >
         <el-row class="condition condition-one" :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="contactPhone" required>
+            <el-form-item prop="contactPhone">
               <pl-input
                 label="手机号码"
+                required
                 v-model="complaintParams.contactPhone"
               ></pl-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="verifyCode" required>
+            <el-form-item prop="verifyCode">
               <el-row :gutter="10">
                 <el-col :span="18">
                   <pl-input
                     label="短信验证码"
+                    required
                     v-model="complaintParams.verifyCode"
                   ></pl-input>
                 </el-col>
@@ -33,6 +35,7 @@
                   <pl-button
                     v-show="verifyCodeShow"
                     @click="getMessage($event)"
+                    style="width: 100%;overflow: hidden;"
                   >
                     发送短信
                   </pl-button>
@@ -48,7 +51,7 @@
               <pl-input
                 required
                 type="textarea"
-                label="职位描述（1000字符）"
+                label="投诉内容（1000字符）"
                 v-model="complaintParams.complaintContent"
               ></pl-input>
             </el-form-item>
@@ -543,7 +546,7 @@ export default {
         this.$alert('手机号格式不正确');
       } else {
         let smsResult = await sendComplaintSms({
-          phone: that.complaintParams.contactPhone
+          contactPhone: that.complaintParams.contactPhone
         });
         if (smsResult && smsResult.status === 200) {
           //采用倒计时方法

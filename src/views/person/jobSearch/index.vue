@@ -796,10 +796,10 @@ export default {
           this.activeName = 'search';
           this.$set(this, 'queryDefaultResult', []);
           this.$set(this, 'queryDefaultResultTotal', 0);
-          this.$message({
-            type: 'success',
-            message: '未查询到信息'
-          });
+          // this.$message({
+          //   type: 'success',
+          //   message: '未查询到信息'
+          // });
         }
       } catch (error) {
         console.log(error);
