@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-21 18:16:10
+ * @LastEditTime: 2021-06-24 18:40:30
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -186,7 +186,14 @@
               <el-button
                 type="primary"
                 class="call-btn"
-                @click="callPositionCorp(index, jobItem.corpId)"
+                @click="
+                  callPositionCorp(
+                    index,
+                    jobItem.corpId || jobItem.targetId,
+                    jobItem.positionId,
+                    jobItem.positionName
+                  )
+                "
                 ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
               >
             </p>
@@ -452,9 +459,9 @@ export default {
     showJobDetial(index, positionId, recId) {
       this.$emit('showJobDetials', index, positionId, recId);
     },
-    callPositionCorp(index, corpId) {
+    callPositionCorp(index, corpId, positionId, positionName) {
       //和单位聊天
-      this.$emit('callPositionCorp', index, corpId);
+      this.$emit('callPositionCorp', index, corpId, positionId, positionName);
     }
   }
 };
@@ -491,6 +498,7 @@ export default {
   }
   .job-bar-btn {
     min-width: 100px;
+    margin-top: 5px;
   }
   .i-style {
     font-size: 14px;

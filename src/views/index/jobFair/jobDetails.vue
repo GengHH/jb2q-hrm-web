@@ -247,7 +247,7 @@ export default {
   padding-bottom: 20px;
   .infor-job {
     background: #ffffff;
-    padding: 20px 30px;
+    padding: 30px 30px;
   }
   .middle-box {
     margin: 0 auto;

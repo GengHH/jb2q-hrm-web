@@ -1,13 +1,12 @@
 <template>
-  <div id="indexBody" v-loading="loading"
-    element-loading-text="拼命加载中">
+  <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <!-- 区县 -->
     <el-row>
       <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
         区县：</el-col
       >
       <el-col :sm="21" :md="22" :lg="22" :xl="23">
-        <el-radio-group v-model="qx" size="medium">
+        <el-radio-group v-model="qx" size="medium" @change="query">
           <el-radio-button
             :label="item.value"
             v-for="(item, index) in dicQx"
@@ -23,7 +22,7 @@
         排序：</el-col
       >
       <el-col :sm="21" :md="22" :lg="22" :xl="23">
-        <el-radio-group v-model="order" size="medium">
+        <el-radio-group v-model="order" size="medium" @change="query">
           <el-radio-button label="1">最新</el-radio-button>
           <el-radio-button label="2">最热</el-radio-button>
         </el-radio-group>
@@ -182,7 +181,7 @@ export default {
   },
   data() {
     return {
-      loading:false,
+      loading: false,
       defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       order: '1',
@@ -194,7 +193,7 @@ export default {
     };
   },
   computed: {},
-  created() {
+  mounted() {
     //初始化查询招聘会信息
     this.query();
   },
@@ -213,7 +212,8 @@ export default {
           pageIndex: 0,
           pageSize: 120
         },
-        districtCode: this.qx
+        districtCode: this.qx || '',
+        order: this.order || '1'
         //pageIndex: this.$refs.page.currentPage - 1 || 0,
         //pageSize: this.$refs.page.pageSize,
         //date: this.date,
@@ -251,7 +251,7 @@ export default {
         } else if (queryRes) {
           this.$message({ type: 'error', message: '查询失败' });
         }
-      this.loading = false;
+        this.loading = false;
       });
     },
     /**

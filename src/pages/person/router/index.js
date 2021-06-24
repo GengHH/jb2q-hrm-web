@@ -256,6 +256,18 @@ let router = new Router({
       component: () => import('@/views/person/activity')
     },
     {
+      path: '/positionDetails',
+      name: '职位详情',
+      component: () => import('@/views/person/jobDetails')
+      // children: [
+      //   {
+      //     path: '/jobSearch/jobDetails',
+      //     name: '职位详情',
+      //     component: () => import('@/views/person/jobDetails')
+      //   }
+      // ]
+    },
+    {
       path: '/loadding',
       name: '加载中',
       component: () => import('@/views/person/personLoadding')

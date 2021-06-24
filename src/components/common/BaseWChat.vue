@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-14 14:22:28
+ * @LastEditTime: 2021-06-24 18:34:55
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
@@ -35,6 +35,10 @@ export default {
     targetObjName: {
       type: String,
       default: ''
+    },
+    sysmData: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -209,6 +213,33 @@ export default {
     },
     /**
      * @description:
+     * @param {*} type 点击历史聊天记录
+     * @param {*} plyload 记录对用的信息数据
+     * @return {*}
+     */
+    talkEvent(play) {
+      console.log(play);
+      if (play && play.type === 'systemItem') {
+        //系统自动发送的数据
+        if (play.data?.subType === 'position') {
+          //系统显示的是于职位相关的信息
+          //浏览西自动打开详细信息界面
+          if (play.data.id) {
+            window.open(
+              'person.html#/positionDetails?positionId=' + play.data.id,
+              '_blank'
+            );
+          } else {
+            this.$alert('未知名对象');
+          }
+        }
+      } else if (play && play.type === 'taskItem') {
+        //人员自己输入的数据
+        return;
+      }
+    },
+    /**
+     * @description:
      * @param {*} type 当前点击的按钮
      * @param {*} plyload 附加文件或者需要处理的数据
      * @return {*}
@@ -249,7 +280,6 @@ export default {
         this.winBarConfig.active = id;
       }
     },
-    talkEvent() {},
     /**
      *查询历史信息
      */
@@ -291,6 +321,28 @@ export default {
           let target = this.coverMsgs(queryRes.result.sessionInfo.msgs || []);
           console.log(target);
           this.taleList = target;
+          //! TODO默认显示推荐的职位信息
+          if (this.sysmData && Object.keys(this.sysmData).length > 0) {
+            this.taleList.push({
+              date: '2021/03/02 13:14:21',
+              mine: true,
+              name: '留恋人间不羡仙',
+              img: require('@/assets/images/female.png'),
+              text: {
+                system: {
+                  title: '经系统验证，智能识别为您显示目标信息。',
+                  subtitle: '相关职位信息:',
+                  content: [
+                    {
+                      id: this.sysmData.positionId || '',
+                      subType: this.sysmData.type || 'position',
+                      text: this.sysmData.positionName || '数据异常'
+                    }
+                  ]
+                }
+              }
+            });
+          }
         } else if (queryRes) {
           this.$message({ type: 'error', message: '无法获取历史聊天信息' });
         }
@@ -324,6 +376,10 @@ export default {
     text-align: center;
     margin: 10px auto;
     color: #aaa;
+    .web__main-text {
+      background-color: #ffffff !important;
+      color: #333 !important;
+    }
   }
   ::v-deep .header {
     background-color: #f1b6b6 !important;

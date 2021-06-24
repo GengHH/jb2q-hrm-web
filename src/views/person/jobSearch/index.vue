@@ -356,11 +356,12 @@
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
+      v-if="wchatDialog"
       class="width75 dialog-content-full-screen"
       :visible.sync="wchatDialog"
       :before-close="wchatHandleClose"
     >
-      <pl-wchat :targetObjId="targetObjId"></pl-wchat>
+      <pl-wchat :targetObjId="targetObjId" :sysmData="sysmData"></pl-wchat>
     </el-dialog>
   </div>
 </template>
@@ -451,7 +452,8 @@ export default {
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: [],
       targetObjId: '',
-      onePosition: {}
+      onePosition: {},
+      sysmData: {}
     };
   },
   computed: {
@@ -920,10 +922,17 @@ export default {
      * 和职位所属单位进行聊天
      */
     callPositionCorp(arg) {
-      // let index = arg[0];
-      let corpId = (arg && arg[0]) || '';
+      let index = arg[0];
+      let corpId = (arg && arg[1]) || '';
+      let positionId = (arg && arg[2]) || '';
+      let positionName = (arg && arg[3]) || '';
       this.targetObjId = corpId;
-      this.wchatDialog = true;
+      (this.sysmData = {
+        type: 'position',
+        positionId: positionId,
+        positionName: positionName
+      }),
+        (this.wchatDialog = true);
     },
     detailsHandleClose() {
       this.detailsDialog = false;

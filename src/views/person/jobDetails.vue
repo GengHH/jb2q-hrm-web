@@ -1,11 +1,21 @@
 <template>
-  <div id="jobSearchView" class="content-box">
-    <div class="operate-position-header" v-if="!realData.isComplaint">
-      <el-button size="small" round @click="complaint = !complaint">
-        <i class="el-icon-star-off">投诉</i>
-      </el-button>
+  <div
+    id="jobSearchView"
+    :class="[{ 'content-box': asPage }]"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+  >
+    <el-button
+      id="complaintBtn"
+      v-if="!realData.isComplaint"
+      @click="complaint = !complaint"
+    >
+      投诉
+      <i v-if="complaint" class="arrow el-icon-arrow-up"></i>
+      <i v-else class="arrow el-icon-arrow-down"></i>
+    </el-button>
+    <div class="operate-position-header" v-if="complaint">
       <el-form
-        v-if="complaint"
         ref="complaintForm"
         :rules="rules"
         :model="complaintParams"
@@ -347,11 +357,12 @@
 <script>
 import PlMap from '@/components/common/BaseMap';
 import {
+  queryPositionDetail,
   queryRecommendDetai,
   sendComplaintSms,
   doComplaint
 } from '@/api/personApi';
-import { getDicText } from '@/utils';
+import { getDicText, niceScrollUpdate } from '@/utils';
 import { phonePattern } from '@/utils/regexp';
 
 export default {
@@ -375,6 +386,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      asPage: false,
       realData: {},
       complaint: false,
       complaintParams: {
@@ -429,14 +442,26 @@ export default {
         : [];
     }
   },
+  watch: {
+    complaint: function(val) {
+      this._.throttle(niceScrollUpdate, 500)();
+    }
+  },
   created() {
-    //如果是推荐的职位
-    if (this.positionData.recId) {
+    //根据url上的参数查询职位信息
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      let positionId = this.$route.query.positionId;
+      this.asPage = true;
+      //查询单位信息
+      this.queryPositionDetail(positionId);
+    } else if (this.positionData.recId) {
+      //如果是推荐的职位
       this.queryPositionDetials(
         this.positionData.recId,
         this.positionData.positionId
       );
     } else {
+      //直接传入的数据
       this.realData = { ...this.positionData };
     }
   },
@@ -473,10 +498,71 @@ export default {
       this.$emit('callPositionCorp', positionId);
     },
     /**
+     * 获取职位的详细信息
+     */
+    async queryPositionDetail(positionId) {
+      this.loading = true;
+      let queryRes = await queryPositionDetail({
+        positionId: positionId
+      });
+      if (queryRes && queryRes.status === 200) {
+        let item = queryRes.result.data || {};
+        if (item.workArea) {
+          item.workAreaText = getDicText(
+            this.$store.getters['dictionary/ggjbxx_qx'],
+            item.workArea
+          );
+        }
+        if (item.eduRequire) {
+          item.eduRequireText = getDicText(
+            this.$store.getters['dictionary/recruit_edu'],
+            item.eduRequire
+          );
+        }
+        if (item.workNature) {
+          item.workNatureText = getDicText(
+            this.$store.getters['dictionary/recruit_work_nature'],
+            item.workNature
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            this.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            this.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+        if (item.workYearNeed) {
+          item.workYearNeedText = getDicText(
+            this.$store.getters['dictionary/recruit_work_year'],
+            item.workYearNeed
+          );
+        }
+        if (item.salaryPayType) {
+          item.salaryPayTypeText =
+            '元/' +
+            getDicText(
+              this.$store.getters['dictionary/recruit_salary_pay_type'],
+              item.salaryPayType
+            );
+        }
+        this.realData = item;
+      } else if (queryRes) {
+        this.$message.error('获取职位详细信息失败');
+      }
+      this.loading = false;
+    },
+    /**
      * 查询推荐的职位的详细信息
      */
     async queryPositionDetials(recId, positionId) {
       let that = this;
+      this.loading = true;
       let res = await queryRecommendDetai({
         recId: recId,
         positionId: positionId,
@@ -531,8 +617,9 @@ export default {
         }
         this.realData = item;
       } else if (res) {
-        this.$message({ type: 'error', message: '无法获取详细信息' });
+        this.$message.error('获取职位详细信息失败');
       }
+      this.loading = false;
     },
     /**
      *获取短信验证码
@@ -545,6 +632,7 @@ export default {
       } else if (!phonePattern.test(this.complaintParams.contactPhone)) {
         this.$alert('手机号格式不正确');
       } else {
+        this.loading = true;
         let smsResult = await sendComplaintSms({
           contactPhone: that.complaintParams.contactPhone
         });
@@ -568,6 +656,7 @@ export default {
         } else if (smsResult) {
           that.$message.error('获取验证码失败');
         }
+        this.loading = true;
       }
       done();
     },
@@ -582,6 +671,7 @@ export default {
       this.complaintParams.cid = this.realData.corpId || '';
       this.complaintParams.corpName = this.realData.corpName || '';
       this.complaintParams.positionId = this.realData.positionId || '';
+      this.loading = true;
       let doRes = await doComplaint(this.complaintParams);
       if (doRes && doRes.status === 200) {
         this.$message.success('投诉成功');
@@ -589,12 +679,16 @@ export default {
       } else if (doRes) {
         this.$message.error('投诉失败');
       }
+      this.loading = false;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.content-box {
+  padding-top: 60px;
+}
 #jobSearchView {
   width: 96%;
   min-height: 100%;
@@ -604,9 +698,66 @@ export default {
   //color: #000;
   //padding: 0;
   padding-bottom: 20px;
+  position: relative;
+  border-top: 1px solid #eee;
+  #complaintBtn {
+    width: 160px;
+    font-size: 16px;
+    padding: 10px 0px;
+    box-shadow: 1px 3px 5px #eee;
+    border-radius: 0;
+    border-top: 0;
+    margin: 0 auto;
+    display: block;
+    position: absolute;
+    left: 50%;
+    z-index: 99;
+    transform: translateX(-80px);
+    .arrow {
+      -webkit-animation: twinkling 1.5s infinite ease-in-out;
+      animation: twinkling 1.5s infinite ease-in-out;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+
+    @-webkit-keyframes twinkling {
+      0% {
+        opacity: 0.2;
+        filter: alpha(opacity=20);
+        -webkit-transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        -webkit-transform: scale(1.12);
+      }
+      100% {
+        opacity: 0.2;
+        filter: alpha(opacity=20);
+        -webkit-transform: scale(1);
+      }
+    }
+    @keyframes twinkling {
+      0% {
+        opacity: 0.2;
+        filter: alpha(opacity=20);
+        -webkit-transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        -webkit-transform: scale(1.12);
+      }
+      100% {
+        opacity: 0.2;
+        filter: alpha(opacity=20);
+        -webkit-transform: scale(1);
+      }
+    }
+  }
   .infor-job {
     background: #ffffff;
-    padding: 20px 30px;
+    padding: 30px 30px;
   }
   .middle-box {
     margin: 0 auto;
@@ -788,6 +939,7 @@ export default {
     background-color: #f4f4f4;
     text-align: center;
     padding: 14px 0;
+    padding-top: 40px;
   }
   .count {
     background-color: #f6f6f6;
