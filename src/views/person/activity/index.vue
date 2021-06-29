@@ -2,7 +2,7 @@
   <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <!-- 区县 -->
     <el-row>
-      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
+      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding:8px 10px;">
         区县：</el-col
       >
       <el-col :sm="21" :md="22" :lg="22" :xl="23">
@@ -16,9 +16,21 @@
         </el-radio-group>
       </el-col>
     </el-row>
+    <!-- 状态 -->
+    <el-row>
+      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding:8px 10px;">
+        状态：</el-col
+      >
+      <el-col :sm="21" :md="22" :lg="22" :xl="23">
+        <el-radio-group v-model="applyStatus" size="medium" @change="query">
+          <el-radio-button label="1">未报名</el-radio-button>
+          <el-radio-button label="2">已报名</el-radio-button>
+        </el-radio-group>
+      </el-col>
+    </el-row>
     <!-- 排序 -->
     <el-row>
-      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
+      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding:8px 10px;">
         排序：</el-col
       >
       <el-col :sm="21" :md="22" :lg="22" :xl="23">
@@ -147,8 +159,14 @@
                   >{{ item.applyTime ? item.applyTime : '无' }}</el-col
                 > -->
                 <el-col :span="24" style="text-align:center">
-                  <span class="shop-edit-btn" @click="applyActivity(item)"
+                  <span
+                    class="shop-edit-btn"
+                    v-if="item.apply === '0'"
+                    @click="applyActivity(item)"
                     ><i class="el-icon-view"></i>报名参加</span
+                  >
+                  <span class="shop-edit-btn" v-else
+                    ><i class="el-icon-view"></i>已报名</span
                   >
                 </el-col>
               </el-row>
@@ -185,6 +203,7 @@ export default {
       defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       order: '1',
+      applyStatus: '1',
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
       totalCount: 0,
@@ -213,7 +232,8 @@ export default {
           pageSize: 120
         },
         districtCode: this.qx || '',
-        order: this.order || '1'
+        order: this.order || '1',
+        applyStatus: this.applyStatus || '1'
         //pageIndex: this.$refs.page.currentPage - 1 || 0,
         //pageSize: this.$refs.page.pageSize,
         //date: this.date,
@@ -339,6 +359,15 @@ export default {
     &:hover {
       color: #fc7a43;
     }
+  }
+  ::v-deep .el-radio-button:first-child,
+  ::v-deep .el-radio-button:last-child {
+    .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  ::v-deep .el-radio-button__inner {
+    padding: 8px 10px;
   }
 }
 </style>

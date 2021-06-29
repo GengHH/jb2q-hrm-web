@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-22 17:36:42
+ * @LastEditTime: 2021-06-29 14:24:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -310,7 +310,7 @@
       <el-col :span="12">
         <el-form-item class="input-two" prop="workStreetList">
           <el-select
-            required
+            :required="streetRequired"
             multiple
             v-model="jobForm.workStreetList"
             placeholder="请选择工作街镇"
@@ -354,6 +354,7 @@
             label="工资支付方式"
             :optionData="dicZffsData"
             class="w-select"
+            :disabled="disabledByJxzw"
           >
           </pl-select>
         </el-form-item>
@@ -442,7 +443,7 @@
             required
             id="jobTextarea"
             type="textarea"
-            label="职位描述（1000字符）"
+            label="职位描述（3000字符）"
             v-model="jobForm.describe"
           ></pl-input>
         </el-form-item>
@@ -544,6 +545,7 @@ export default {
       carouselPageCount2: 0,
       // zwbh: '', //见习职位编号
       // jxzwname: '', //见习职位名称
+      streetRequired: true,
       rules: {
         corpId: '',
         positionName: [
@@ -645,7 +647,7 @@ export default {
             message: '请输职位描述',
             trigger: ['blur', 'change']
           },
-          { max: 1000, message: '不得超过1000字符', trigger: 'blur' }
+          { max: 3000, message: '不得超过3000字符', trigger: 'blur' }
         ],
         ageMin: [
           {
@@ -756,7 +758,7 @@ export default {
       isDefaultPosition: false,
       isDefaultStreet: false,
       showWorkStreetList: [],
-      dicGzqyData: this.$store.getters['dictionary/ggjbxx_qx'],
+      // dicGzqyData: this.$store.getters['dictionary/ggjbxx_qx@3'],
       //dicGzjzData: this.$store.getters['dictionary/ggjbxx_street'],
       dicBsData: this.$store.getters['dictionary/recruit_work_hour'],
       dicTdrqData: this.$store.getters['dictionary/recruit_special_people'],
@@ -793,6 +795,17 @@ export default {
     this._.throttle(niceScrollUpdate, 500)();
   },
   computed: {
+    //重置区县字典表下拉框
+    dicGzqyData() {
+      let _dic = this.$store.getters['dictionary/ggjbxx_qx@3'];
+      if (_dic && _dic.length) {
+        _dic.unshift({
+          value: '00',
+          label: '全市'
+        });
+      }
+      return _dic;
+    }
     // dicZyflDataTwo() {
     //   let _data = this.$store.getters['dictionary/recruit_position_s_type'];
     //   if (_data && _data.length) {
@@ -834,7 +847,7 @@ export default {
     /**
      * 根据区县动态变更街道信息
      */
-    'jobForm.workArea': function() {
+    'jobForm.workArea': function(val) {
       let that = this;
       if (this.$store.getters['dictionary/ggjbxx_street']) {
         let array = this.$store.getters['dictionary/ggjbxx_street'];
@@ -860,6 +873,22 @@ export default {
         ? this.showWorkStreetList
         : [];
       this.isDefaultStreet = false;
+
+      //如果是‘全市’，街道非必填
+      if (val === '00') {
+        this.streetRequired = false;
+        this.rules.workStreetList = [];
+      } else {
+        this.streetRequired = true;
+        this.rules.workStreetList = [
+          {
+            required: true,
+            message: '请选择工作街镇',
+            trigger: ['blur']
+          }
+        ];
+      }
+      this.$refs.jobForm.clearValidate();
     },
     /**
      * 根据一级职位动态变更二级职位信息
@@ -1205,12 +1234,16 @@ export default {
           //查询见习岗位名称
           this.queryJxPosition();
         }
+        //工资支付方式
+        this.jobForm.salaryPayType = '04';
       } else {
         this.disabledByJxzw = false;
         //需要重新选择
         this.jobForm.tranPositionCode = '';
         this.jobForm.positionName = '';
         this.showJxPosition = false;
+        //工资支付方式
+        this.jobForm.salaryPayType = '';
       }
     },
     radioGroupChange(name, wpdwCid, wpdwDwmc) {

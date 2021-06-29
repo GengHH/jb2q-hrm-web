@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 14:03:33
+ * @LastEditTime: 2021-06-29 15:30:42
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -11,10 +11,10 @@
   <div id="jobFindRecord" v-loading="loading" element-loading-text="拼命加载中">
     <div class="title-style">求职记录</div>
     <el-row>
-      <el-col :span="12">
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
+      <el-col :span="6">
+        <!-- <pl-button type="danger" icon="el-icon-delete" @click="deleteJob"
           >删除</pl-button
-        >
+        > -->
         <pl-button
           v-if="activeName === '02' || activeName === '03'"
           class="orange-btn"
@@ -23,7 +23,22 @@
           >批量反馈</pl-button
         >
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8" style="text-align:right">
+        <el-date-picker
+          v-model="queryParam.dateInterval"
+          type="monthrange"
+          align="right"
+          unlink-panels
+          label="123"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM"
+          :picker-options="pickerOptions"
+        >
+        </el-date-picker>
+      </el-col>
+      <el-col :span="10">
         <BaseSearch
           @clickButton="queryJobRecordList('all', $event)"
         ></BaseSearch>
@@ -41,9 +56,14 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-dblclick="showJobDetialByCell"
+          @cell-lclick="showJobDetialByCell"
           max-height="620"
         >
+          <template #positionName="{row}">
+            <span style="color:#fc6f3d;cursor: pointer;">{{
+              row.positionName
+            }}</span>
+          </template>
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
@@ -305,9 +325,7 @@
         >{{
           currentRow.interviewTime.substr(0, 2) +
             ':' +
-            currentRow.interviewTime.substr(2, 2) +
-            ':' +
-            currentRow.interviewTime.substr(4, 2)
+            currentRow.interviewTime.substr(2, 2)
         }}
       </div>
       <div>
@@ -453,6 +471,7 @@ export default {
         feedbackStatus: '',
         corpName: '',
         positionName: '',
+        dateInterval: [],
         pageParam: {
           pageSize: 10,
           pageIndex: 0
@@ -484,7 +503,35 @@ export default {
       },
       targetObjId: '',
       targetObjName: '',
-      onePosition: {}
+      onePosition: {},
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '本月',
+            onClick(picker) {
+              picker.$emit('pick', [new Date(), new Date()]);
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setMonth(start.getMonth() - 3);
+              picker.$emit('pick', [start, end]);
+            }
+          },
+          {
+            text: '最近六个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setMonth(start.getMonth() - 6);
+              picker.$emit('pick', [start, end]);
+            }
+          }
+        ]
+      }
     };
   },
   computed: {
@@ -534,12 +581,27 @@ export default {
           label: '职位名称',
           prop: 'positionName',
           attrs: { showOverflowTooltip: true },
+          slotName: 'positionName',
           rowSpan: 'all'
         },
         {
           label: '职位薪资',
           prop: 'salaryScope',
           rowSpan: 'all'
+        },
+        {
+          label: '工作性质',
+          prop: 'workNature',
+          rowSpan: 'all',
+          customerRenderText: ({ row }) => {
+            const { workNature } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_work_nature'] || [];
+            return (
+              data.find(element => element.value === workNature)?.label ||
+              workNature
+            );
+          }
         },
         {
           label: '工作地点',
@@ -757,11 +819,12 @@ export default {
         this.unshowPjColumn = false;
         this.unshowCjmsColumn = true;
       } else {
-        if (val === '01') {
-          this.actionColWidth = 100;
-        } else {
-          this.actionColWidth = 250;
-        }
+        // if (val === '01') {
+        //   this.actionColWidth = 100;
+        // } else {
+        //   this.actionColWidth = 250;
+        // }
+        this.actionColWidth = 100;
         this.unshowPjColumn = true;
         this.unshowCjmsColumn = true;
       }
@@ -935,7 +998,7 @@ export default {
                     element.actions = ['action3'];
                     break;
                   case 2:
-                    element.actions = ['action1', 'action3'];
+                    element.actions = ['action3'];
                     break;
                   case 3:
                     if (element.reply) {
@@ -957,7 +1020,7 @@ export default {
                     }
                     break;
                   case 5:
-                    element.actions = ['action1', 'action3'];
+                    element.actions = ['action3'];
                     break;
                 }
               });

@@ -2,9 +2,9 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-28 16:25:21
+ * @LastEditTime: 2021-06-28 17:59:28
  * @Description: 职位收藏子界面
- * @FilePath: \jb2q-hrm-web\src\views\person\remind\remindCenter.vue
+ * @FilePath: \jb2q-hrm-web\src\views\person\remind\systemMsg.vue
 -->
 <template>
   <div id="jobStarList">
@@ -19,7 +19,7 @@
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch @clickButton="queryStarList($event)"></BaseSearch>
+        <BaseSearch @clickButton="querySystemMsg($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table
@@ -43,13 +43,7 @@
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"
     >
-      <job-details
-        :positionData="onePosition"
-        :index="detailsIndex"
-        @deliveryResume="deliveryResume(arguments)"
-        @favorJob="favorJob(arguments)"
-        @callPositionCorp="callPositionCorp(arguments)"
-      ></job-details>
+      123
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
@@ -70,7 +64,9 @@ import {
   attentionOrFavor,
   queryPositionDetail,
   doDeliveryResume,
-  doDeliveryResumeRecommend
+  doDeliveryResumeRecommend,
+  querySystemMsg,
+  queryMsgDetails
 } from '@/api/personApi';
 import { getDicText } from '@/utils';
 
@@ -115,7 +111,6 @@ export default {
           prop: 'positionName',
           rowSpan: 'all'
         },
-
         {
           label: '时间',
           attrs: { 'show-overflow-tooltip': true },
@@ -128,7 +123,7 @@ export default {
           attrs: { width: 200 },
           actions: [
             {
-              id: 'action1',
+              id: 'action2',
               text: '删除',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-delete',
@@ -140,8 +135,8 @@ export default {
               }
             },
             {
-              id: 'action2',
-              text: '回复',
+              id: 'action1',
+              text: '详情',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
@@ -170,13 +165,13 @@ export default {
       this.wchatDialog = false;
     },
     handlePageChange() {
-      this.queryStarList();
+      this.querySystemMsg();
     },
     /**
      *查询收藏职位信息的列表
      */
-    async queryStarList() {
-      let res = await queryPositionStarList({
+    async querySystemMsg() {
+      let res = await querySystemMsg({
         pageParam: {
           pageIndex: this.$refs.jobTable?.currentPage - 1 || 0,
           pageSize: this.$refs.jobTable?.pageSize || 10
@@ -185,49 +180,18 @@ export default {
       });
       if (res && res.status === 200) {
         res.result.pageresult.data.forEach(item => {
-          item.actions = ['action1', 'action2'];
-          // 转换字典
-          // if (item.workArea) {
-          //   item.workAreaText = getDicText(
-          //     this.$store.getters['dictionary/ggjbxx_qx'],
-          //     item.workArea
-          //   );
-          // }
-          // if (item.industryType) {
-          //   item.industryTypeText = getDicText(
-          //     this.$store.getters['dictionary/recruit_industry_type'],
-          //     item.industryType
-          //   );
-          // }
-          // if (item.workNature) {
-          //   item.workNatureText = getDicText(
-          //     this.$store.getters['dictionary/recruit_work_nature'],
-          //     item.workNature
-          //   );
-          // }
-          // if (item.eduRequire) {
-          //   item.eduRequireText = getDicText(
-          //     this.$store.getters['dictionary/recruit_edu'],
-          //     item.eduRequire
-          //   );
-          // }
-          // if (item.workYearNeed) {
-          //   item.workYearNeedText = getDicText(
-          //     this.$store.getters['dictionary/recruit_work_year'],
-          //     item.workYearNeed
-          //   );
-          // }
+          item.actions = ['action1'];
         });
         this.tableData = res.result.pageresult.data;
         this.tableCount = res.result.pageresult.total;
       } else if (res) {
         this.tableData = [];
         this.tableCount = 0;
-        this.$message.success('未查询到信息');
+        this.$message.success('未查询到系统消息');
       }
     },
     /**
-     *取消收藏记录
+     * TODO 取消收藏记录（标记已读）
      */
     async cancelFavorite(row) {
       if (!row) {
@@ -244,14 +208,14 @@ export default {
           // this.tableData = this.tableData.filter(
           //   obj => !(obj.positionId === row.positionId)
           // );
-          this.queryStarList();
+          this.querySystemMsg();
         } else if (res) {
           this.$message.error('取消收藏失败');
         }
       }
     },
     /**
-     *删除收藏记录
+     *TODO 删除收藏记录（删除消息）
      */
     async deleteFavorite() {
       let that = this;
@@ -268,7 +232,7 @@ export default {
         if (res && res.status === 200) {
           this.$message.success('批量取消收藏成功');
           // 删除数据 （重新加载数据）
-          this.queryStarList();
+          this.querySystemMsg();
         } else if (res) {
           this.$message.error('批量取消收藏失败');
         }
@@ -279,7 +243,7 @@ export default {
      */
     async queryPositionDetail(row) {
       this.loading = true;
-      let queryRes = await queryPositionDetail({
+      let queryRes = await queryMsgDetails({
         positionId: row.positionId
       });
       if (queryRes && queryRes.status === 200) {
@@ -331,103 +295,13 @@ export default {
         this.onePosition = item || {};
         this.detailsDialog = true;
       } else if (queryRes) {
-        this.$message.error('获取职位详细信息失败');
+        this.$message.error('获取详细信息失败');
       }
       this.loading = false;
     },
+
     /**
-     * 职位详细信息页面-投递简历
-     */
-    async deliveryResume(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let recId = (arg && arg[2]) || '';
-      if (!recId) {
-        //向自己搜索的职位投递简历
-        let res = await doDeliveryResume({
-          positionId: positionId,
-          pid: this.$store.getters['person/pid']
-        });
-        if (res.status === 200) {
-          // 更换按钮
-          // this.tableData.splice(index, 1);
-          this.tableData[index].applyFor = true;
-          this.$message({ type: 'success', message: '简历投递成功' });
-        } else {
-          this.$message({
-            type: 'error',
-            message: '简历投递失败'
-          });
-        }
-      } else {
-        //向推荐职位投递简历
-        let res = await doDeliveryResumeRecommend({
-          recId: recId,
-          positionId: positionId,
-          pid: this.$store.getters['person/pid']
-        });
-        if (res.status === 200) {
-          // 更换按钮
-          // this.tableData.splice(index, 1);
-          this.queryDefaultResult[index].applyFor = true;
-          this.$message({ type: 'success', message: '简历投递成功' });
-        } else {
-          this.$message({
-            type: 'error',
-            message: '简历投递失败'
-          });
-        }
-      }
-    },
-    /**
-     * 职位详细信息页面-取消收藏
-     */
-    async favorJob(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let orginFavorType = arg[2];
-      let recId = arg[3] || '';
-      if (!orginFavorType) {
-        let res = await attentionOrFavor('2', {
-          id: [positionId],
-          pid: this.$store.getters['person/pid'],
-          status: true
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          // if (!recId) {
-          //   this.tableData[index].favor = true;
-          // } else {
-          //   this.queryDefaultResult[index].favor = true;
-          // }
-          this.detailsDialog = false;
-          this.$message({ type: 'success', message: '收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '收藏职位失败' });
-        }
-      } else {
-        //取消收藏职位
-        let res = await attentionOrFavor('2', {
-          id: [positionId],
-          pid: this.$store.getters['person/pid'],
-          status: false
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          // if (!recId) {
-          //   this.tableData[index].favor = false;
-          // } else {
-          //   this.queryDefaultResult[index].favor = false;
-          // }
-          this.detailsDialog = false;
-          this.$message({ type: 'success', message: '取消收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '取消收藏职位失败' });
-        }
-      }
-    },
-    /**
-     * 职位详细信息页面-聊天
+     * TODO 职位详细信息页面-聊天
      */
     callPositionCorp(arg) {
       console.log(
@@ -443,7 +317,7 @@ export default {
     }
   },
   mounted() {
-    this.queryStarList();
+    this.querySystemMsg();
   }
 };
 </script>

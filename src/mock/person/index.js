@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 10:34:03
+ * @LastEditTime: 2021-06-29 18:21:40
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -1117,7 +1117,7 @@ Mock.mock(
               systemRecSpecialGuide: '',
               actStatus: '1',
               sceneImage: [],
-              apply: '0'
+              apply: '1'
             }
           ]
         }

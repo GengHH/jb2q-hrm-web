@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-17 14:52:27
+ * @LastEditTime: 2021-06-29 17:58:02
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -22,7 +22,7 @@
           :md="3"
           :lg="3"
           :xl="2"
-          style="padding: 10px; text-align:center;"
+          style="padding:8px 10px; text-align:center;"
         >
           区县选择：</el-col
         >
@@ -44,16 +44,27 @@
           :md="3"
           :lg="3"
           :xl="2"
-          style="padding: 10px;text-align:center;"
+          style="padding: 8px;text-align:center;"
         >
           基地类型：</el-col
         >
-        <el-col :sm="20" :md="21" :lg="21" :xl="22">
+        <el-col :sm="16" :md="17" :lg="17" :xl="18">
           <el-radio-group v-model="type" size="medium">
             <el-radio-button label="">不限</el-radio-button>
             <el-radio-button label="1">一般基地</el-radio-button>
             <el-radio-button label="2">综合类基地</el-radio-button>
           </el-radio-group>
+        </el-col>
+        <el-col :sm="4" :md="4" :lg="4" :xl="4" style="text-align:right">
+          <span style="padding:8px 10px;">正在招录</span>
+          <el-switch
+            v-model="isHiring"
+            active-text=""
+            inactive-text=""
+            active-value="1"
+            inactive-value="0"
+          >
+          </el-switch>
         </el-col>
       </el-row>
       <!-- 基地信息列表 -->
@@ -276,6 +287,7 @@ export default {
       defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       type: '',
+      isHiring: '1',
       dwmc: null,
       dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
       countTotal: 0,
@@ -303,6 +315,7 @@ export default {
         dwmc: dwmc || null,
         qxid: this.qx || null,
         jdlx: this.type || null,
+        isHiring: this.isHiring || '1',
         pageParam: {
           pageSize: this.$refs.page.pageSize || 10,
           pageIndex: this.$refs.page.currentPage - 1 || 0
@@ -376,7 +389,7 @@ export default {
   .jxcorp-row {
     // width: 92%;
     margin: 0 auto;
-    padding: 20px 0 50px;
+    padding: 5px 0 50px;
   }
   .jxcorp-box {
     position: relative;
@@ -481,6 +494,15 @@ export default {
     .el-radio-button--medium .el-radio-button__inner {
       border: 0px;
     }
+  }
+  ::v-deep .el-radio-button:first-child,
+  ::v-deep .el-radio-button:last-child {
+    .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  ::v-deep .el-radio-button__inner {
+    padding: 8px 10px;
   }
   .no-data-text {
     margin-top: 30px;

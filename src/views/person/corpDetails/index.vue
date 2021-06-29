@@ -39,8 +39,8 @@
               type="primary"
               class="white-btn mat-15"
               @click="attentionCorp"
-              ><i class="el-icon-star-off">关注单位</i>
-              <i class="el-icon-star-on">取消关注单位</i>
+              ><i v-if="corpInfo.favor" class="el-icon-star-off">关注单位</i>
+              <i v-else class="el-icon-star-on">取消关注单位</i>
             </el-button>
             <div class="font12">
               <el-link :underline="false" @click="perfectResume"

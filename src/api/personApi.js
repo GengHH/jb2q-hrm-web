@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 10:38:14
+ * @LastEditTime: 2021-06-28 16:30:56
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -184,6 +184,19 @@ const doComplaint = params =>
 const queryPositionDetail = params =>
   postAction(basePath + '/person/manage/queryPositionDetail', params);
 
+/*********个人消息**********/
+//查询系统消息
+const querySystemMsg = params =>
+  postAction(basePath + '/person/notice/queryNoticeList/system', params);
+//查询推送消息
+const queryPushMsg = params =>
+  postAction(basePath + '/person/notice/queryNoticeList/push', params);
+//查询消息详细信息
+const queryMsgDetails = params =>
+  postAction(basePath + '/person/notice/queryNoticeDetail', params);
+
+/*********end**********/
+
 export {
   doSend,
   doLogin,
@@ -232,5 +245,8 @@ export {
   attentionOrFavor,
   sendComplaintSms,
   doComplaint,
-  queryPositionDetail
+  queryPositionDetail,
+  querySystemMsg,
+  queryPushMsg,
+  queryMsgDetails
 };

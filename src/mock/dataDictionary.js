@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-15 16:50:53
+ * @LastEditTime: 2021-06-29 14:19:05
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -14,31 +14,50 @@ const dic = {
   ],
   //区县
   GGJBXX_QX: [
-    { value: '00', label: ' 市中心' },
-    { value: '01', label: ' 黄浦' },
-    { value: '02', label: ' 南市' },
-    { value: '03', label: ' 卢湾' },
-    { value: '04', label: ' 徐汇' },
-    { value: '05', label: ' 长宁' },
-    { value: '06', label: ' 静安' },
-    { value: '07', label: ' 普陀' },
-    { value: '08', label: ' 闸北' },
-    { value: '09', label: ' 虹口' },
-    { value: '10', label: ' 杨浦' },
-    { value: '12', label: ' 闵行' },
-    { value: '13', label: ' 宝山' },
-    { value: '14', label: ' 嘉定' },
-    { value: '15', label: ' 浦东' },
-    { value: '16', label: ' 金山' },
-    { value: '17', label: ' 松江' },
-    { value: '18', label: ' 青浦' },
-    { value: '25', label: ' 南汇' },
-    { value: '26', label: ' 奉贤' },
-    { value: '30', label: ' 崇明' },
-    { value: '96', label: ' 外高桥' },
-    { value: '97', label: ' 直属部' },
-    { value: '98', label: ' 外省市' },
-    { value: '99', label: ' 分不出地区' }
+    { value: '00', label: '市中心' },
+    { value: '01', label: '黄浦' },
+    { value: '02', label: '南市' },
+    { value: '03', label: '卢湾' },
+    { value: '04', label: '徐汇' },
+    { value: '05', label: '长宁' },
+    { value: '06', label: '静安' },
+    { value: '07', label: '普陀' },
+    { value: '08', label: '闸北' },
+    { value: '09', label: '虹口' },
+    { value: '10', label: '杨浦' },
+    { value: '12', label: '闵行' },
+    { value: '13', label: '宝山' },
+    { value: '14', label: '嘉定' },
+    { value: '15', label: '浦东' },
+    { value: '16', label: '金山' },
+    { value: '17', label: '松江' },
+    { value: '18', label: '青浦' },
+    { value: '25', label: '南汇' },
+    { value: '26', label: '奉贤' },
+    { value: '30', label: '崇明' },
+    { value: '96', label: '外高桥' },
+    { value: '97', label: '直属部' },
+    { value: '98', label: '外省市' },
+    { value: '99', label: '分不出地区' }
+  ],
+  //区县3(不包含市中心)
+  GGJBXX_QX_3: [
+    { value: '01', label: '黄浦' },
+    { value: '04', label: '徐汇' },
+    { value: '05', label: '长宁' },
+    { value: '06', label: '静安' },
+    { value: '07', label: '普陀' },
+    { value: '09', label: '虹口' },
+    { value: '10', label: '杨浦' },
+    { value: '12', label: '闵行' },
+    { value: '13', label: '宝山' },
+    { value: '14', label: '嘉定' },
+    { value: '15', label: '浦东' },
+    { value: '16', label: '金山' },
+    { value: '17', label: '松江' },
+    { value: '18', label: '青浦' },
+    { value: '26', label: '奉贤' },
+    { value: '30', label: '崇明' }
   ],
   //单位性质
   RECRUIT_CORP_NATURE: [
@@ -747,7 +766,8 @@ const dic = {
     { value: '4905', label: '园林园艺', filter: '49' },
     { value: '4906', label: '林业苗木', filter: '49' },
     { value: '4907', label: '渔业水产', filter: '49' },
-    { value: '4908', label: '家禽养殖', filter: '49' }
+    { value: '4908', label: '家禽养殖', filter: '49' },
+    { value: '5001', label: '其他', filter: '50' }
   ],
   //反馈来源
   RECRUIT_FEEDBACK_SOURCE: [
@@ -764,7 +784,8 @@ const dic = {
   ],
   //学历
   RECRUIT_EDU: [
-    { value: '01', label: '初中及以下' },
+    { value: '00', label: '无学历要求' },
+    { value: '01', label: '初中' },
     { value: '02', label: '高中' },
     { value: '03', label: '职高' },
     { value: '04', label: '技校' },

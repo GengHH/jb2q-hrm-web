@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-16 16:27:28
+ * @LastEditTime: 2021-06-29 10:47:00
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -82,7 +82,7 @@ const resumeMockData = function(req) {
         eduId: '05',
         livingAddress: '宝山淞南镇新梅松南苑11号楼1201',
         workNature: '01',
-        industryLike: '15',
+        industryLike: '04-15',
         salaryScope: '10000-50000',
         workArea: '05',
         positionLike: '1501-1502',

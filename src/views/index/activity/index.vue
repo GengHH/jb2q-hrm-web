@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:30:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 10:32:45
+ * @LastEditTime: 2021-06-29 16:53:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
 -->
@@ -20,7 +20,7 @@
         :md="3"
         :lg="3"
         :xl="2"
-        style="padding: 10px; text-align:center;"
+        style="padding:8px 10px; text-align:center;"
       >
         区县：</el-col
       >
@@ -42,7 +42,7 @@
         :md="3"
         :lg="3"
         :xl="2"
-        style="padding: 10px;text-align:center;"
+        style="padding:8px 10px;text-align:center;"
       >
         排序：</el-col
       >
@@ -129,13 +129,13 @@ export default {
         },
         actName: activityName ? $.trim(activityName) : '',
         actType: actType,
-        districtCode: this.qx,
-        order: this.order
+        districtCode: this.qx || '',
+        order: this.order || '1'
       });
 
       if (res.status === 200) {
-        this.total = res.result.pageresult.total;
-        this.showList = res.result.pageresult.data;
+        this.total = res.result.pageresult.total || 0;
+        this.showList = res.result.pageresult.data || [];
       } else if (res) {
         this.total = 0;
         this.showList = [];
@@ -174,6 +174,15 @@ export default {
     .el-radio-button--medium .el-radio-button__inner {
       border: 0px;
     }
+  }
+  ::v-deep .el-radio-button:first-child,
+  ::v-deep .el-radio-button:last-child {
+    .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  ::v-deep .el-radio-button__inner {
+    padding: 8px 10px;
   }
 }
 </style>

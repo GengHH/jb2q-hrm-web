@@ -1,9 +1,9 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: Please set LastEditors
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-08 11:14:33
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-29 13:38:14
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -115,6 +115,7 @@ const getters = {
   common_startext: state => state.COMMON_STARTEXT,
   yesno: state => state.YESNO,
   ggjbxx_qx: state => state.GGJBXX_QX,
+  'ggjbxx_qx@3': state => state.GGJBXX_QX_3,
   recruit_position_f_type: state => state.RECRUIT_POSITION_F_TYPE,
   recruit_position_s_type: state => state.RECRUIT_POSITION_S_TYPE,
   recruit_edu: state => state.RECRUIT_EDU,
@@ -236,6 +237,10 @@ const mutations = {
 
   set_GGJBXX_QX: (state, dictionary) => {
     state.GGJBXX_QX = dictionary;
+  },
+
+  set_GGJBXX_QX_3: (state, dictionary) => {
+    state.GGJBXX_QX_3 = dictionary;
   },
 
   set_RECRUIT_POSITION_F_TYPE: (state, dictionary) => {

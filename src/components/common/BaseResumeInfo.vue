@@ -12,7 +12,7 @@
         <span style="color: #fc6f3d;font-weight: 500;"
           >（可点击
           <i style="color:#35e835" class="el-icon-edit-outline"></i>
-          修改“工作经验”、“最高学历”）</span
+          修改“工作年限”、“最高学历”）</span
         >
       </div>
       <div id="baseInfo" class="title-style font-or font-bold" v-else>
@@ -32,16 +32,17 @@
         <p class="font-size24">
           {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '' }}
           <span class="sixteen-opacity">{{ resume.age }}岁</span>
-          <i
+          <span class="sixteen-opacity">{{ resume.sex }}</span>
+          <!-- <i
             class="el-icon-male sixteen-opacity"
             v-if="resume.sex === '男'"
           ></i>
           <i
             class="el-icon-female sixteen-opacity"
             v-else-if="resume.sex === '女'"
-          ></i>
+          ></i> -->
           <span class="sixteen-opacity" style="margin: 0 10px;"
-            >工作经验
+            >工作年限
             <span
               v-if="
                 resume.workYear !== null &&
@@ -106,16 +107,17 @@
           <span class="sixteen-opacity" v-if="resume.age"
             >{{ resume.age }}岁</span
           >
-          <i
+          <span class="sixteen-opacity">{{ resume.sex }}</span>
+          <!-- <i
             class="el-icon-male sixteen-opacity"
             v-if="resume.sex === '男'"
           ></i>
           <i
             class="el-icon-female sixteen-opacity"
             v-else-if="resume.sex === '女'"
-          ></i>
+          ></i> -->
           <span class="sixteen-opacity"
-            >工作经验
+            >工作年限
             <span
               v-if="
                 resume.workYear !== null &&
@@ -753,6 +755,7 @@
           <el-select
             filterable
             v-model="jobIntentionForm.industryLike"
+            multiple
             placeholder="请选择"
             style="width:100%"
           >
@@ -801,6 +804,7 @@
         >
           <el-select
             filterable
+            clearable
             v-model="jobIntentionForm.workArea"
             placeholder="请选择"
             style="width:100%"
@@ -1340,7 +1344,7 @@ export default {
       //positionLike: '',
       jobIntentionForm: {
         workNature: '',
-        industryLike: '',
+        industryLike: [],
         workArea: '',
         salaryMax: '',
         salaryMin: '',
@@ -1389,11 +1393,11 @@ export default {
             { required: true, message: '请选择职位类型', trigger: 'blur' }
           ],
           industryLike: [
-            { required: true, message: '请输入意向行业', trigger: 'blur' },
-            { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
+            { required: true, message: '请输入意向行业', trigger: 'blur' }
+            // { max: 80, message: '长度不可超过80个字符', trigger: 'blur' }
           ],
           workArea: [
-            { required: true, message: '请输入意向工作区域', trigger: 'blur' }
+            // { required: true, message: '请输入意向工作区域', trigger: 'blur' }
           ],
           workNature: [
             { required: true, message: '请输入意向工作性质', trigger: 'blur' }
@@ -1586,6 +1590,11 @@ export default {
         ? this.resume.positionLike.split('-')
         : [];
     },
+    industryLikeArray: function() {
+      return this.resume.industryLike
+        ? this.resume.industryLike.split('-')
+        : [];
+    },
     positionLikeText: function() {
       let that = this,
         positionArray = [],
@@ -1605,7 +1614,7 @@ export default {
           return _dic ? _dic.label : '';
         });
       }
-      return positionNameArray.join('-');
+      return positionNameArray.join(' - ');
     },
     industryLikeText: function() {
       let that = this;
@@ -1816,9 +1825,10 @@ export default {
       }
       // 默认先按照传入的pid查询，再按照登录的人员查询
       if (this.searchByCorp) {
-        getPsnlResumeByCorp(
-          { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
-        )
+        getPsnlResumeByCorp({
+          pid: this.queryPid || this.$store.getters['person/pid'],
+          cid: this.$store.getters['corporation/cid'] || ''
+        })
           .then(function(res) {
             console.log('个人简历信息', res);
             if (res.status == 200) {
@@ -2068,7 +2078,8 @@ export default {
             this.jobIntentionForm = {
               contactPhone: _orginData.contactPhone,
               livingAddress: _orginData.livingAddress,
-              industryLike: _orginData.industryLike,
+              // industryLike: _orginData.industryLike,
+              industryLike: this.industryLikeArray,
               // positionLike: _orginData.positionLike
               //   ? _orginData.positionLike.split('-')
               //   : [],
@@ -2198,6 +2209,7 @@ export default {
         if (valid) {
           let params = this.$refs[formName].model;
           params.positionLike = params.positionLike.join('-');
+          params.industryLike = params.industryLike.join('-');
           params.pid = this.$store.getters['person/pid'];
           let saveResult = await savePositionLike(params).catch(() => {
             that.$message({
@@ -2211,7 +2223,6 @@ export default {
               message: '保存成功'
             });
             this.resume.workNature = this.jobIntentionForm.workNature;
-            this.resume.industryLike = this.jobIntentionForm.industryLike;
             this.resume.workArea = this.jobIntentionForm.workArea;
             this.resume.salaryMax = this.jobIntentionForm.salaryMax;
             this.resume.salaryMin = this.jobIntentionForm.salaryMin;
@@ -2222,6 +2233,8 @@ export default {
             // this.resume.positionLike = this.jobIntentionForm.positionLike
             //   ? this.jobIntentionForm.positionLike.join('-')
             //   : '';
+            this.resume.industryLike = this.jobIntentionForm.industryLike;
+            this.jobIntentionForm.industryLike = this.industryLikeArray;
             this.resume.positionLike = this.jobIntentionForm.positionLike;
             this.jobIntentionForm.positionLike = this.positionLikeArray;
             this.dialog1 = false;

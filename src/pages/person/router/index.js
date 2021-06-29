@@ -167,11 +167,27 @@ let router = new Router({
     {
       path: '/remind',
       name: '提醒',
-      redirect: '/remind/remind',
+      redirect: '/remind/systemMsg',
       component: () => import('@/views/person/PersonLayout'),
       children: [
         {
-          path: '/remind/remind',
+          path: '/remind/systemMsg',
+          name: '系统信息',
+          components: {
+            personNavMenu: () => import('@/components/person/remindMenu'),
+            default: () => import('@/views/person/remind/systemMsg')
+          }
+        },
+        {
+          path: '/remind/pushMsg',
+          name: '推送消息',
+          components: {
+            personNavMenu: () => import('@/components/person/remindMenu'),
+            default: () => import('@/views/person/remind/pushMsg')
+          }
+        },
+        {
+          path: '/remind/remindCenter',
           name: '私信',
           components: {
             personNavMenu: () => import('@/components/person/remindMenu'),

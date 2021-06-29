@@ -2,11 +2,11 @@
   <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <!-- 区县 -->
     <el-row>
-      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
+      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding:8px 10px;">
         区县：</el-col
       >
       <el-col :sm="21" :md="22" :lg="22" :xl="23">
-        <el-radio-group v-model="qx" size="medium">
+        <el-radio-group v-model="qx" size="medium" @change="query">
           <el-radio-button
             :label="item.value"
             v-for="(item, index) in dicQx"
@@ -18,19 +18,36 @@
     </el-row>
     <!-- 排序 -->
     <el-row>
-      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding: 10px;">
+      <el-col :sm="3" :md="2" :lg="2" :xl="1" style="padding:8px 10px;">
         排序：</el-col
       >
-      <el-col :sm="21" :md="22" :lg="22" :xl="23">
-        <el-radio-group v-model="order" size="medium">
+      <el-col :sm="17" :md="18" :lg="18" :xl="19">
+        <el-radio-group v-model="order" size="medium" @change="query">
           <el-radio-button label="1">最新</el-radio-button>
           <el-radio-button label="2">最热</el-radio-button>
         </el-radio-group>
       </el-col>
+      <el-col :sm="4" :md="4" :lg="4" :xl="4" style="text-align:right">
+        <el-radio-group v-model="layoutRadio" size="medium" id="layoutRadio">
+          <el-radio-button label="1"
+            ><i class="el-icon-s-unfold"></i
+          ></el-radio-button>
+          <el-radio-button label="2"
+            ><i class="el-icon-s-grid"></i
+          ></el-radio-button>
+        </el-radio-group>
+      </el-col>
     </el-row>
 
+    <template v-if="layoutRadio === '1'">
+      <FairBoxShow
+        v-for="(item, index) in fairInfo"
+        :fairInfo="item"
+        :key="index"
+      ></FairBoxShow>
+    </template>
     <!-- 展示栏 -->
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-else>
       <el-col
         :sm="24"
         :md="12"
@@ -135,6 +152,7 @@
 </template>
 
 <script>
+import FairBoxShow from '@/components/person/FairBoxShow.vue';
 import PlMap from '@/components/common/BaseMap';
 import { queryMeetingList } from '@/api/personApi';
 import plFlipper from '@/components/common/BaseFlipper.vue';
@@ -142,6 +160,7 @@ import { getDicText, niceScrollUpdate } from '@/utils';
 export default {
   name: 'personApp',
   components: {
+    FairBoxShow,
     plFlipper,
     PlMap
   },
@@ -151,6 +170,7 @@ export default {
       defaultImg: require('@/assets/images/break-img.svg'),
       qx: '',
       order: '1',
+      layoutRadio: '1',
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
       totalCount: 0,
@@ -177,7 +197,8 @@ export default {
           pageIndex: 0,
           pageSize: 120
         },
-        districtCode: this.qx
+        districtCode: this.qx || '',
+        order: this.order || '1'
         //pageIndex: this.$refs.page.currentPage - 1 || 0,
         //pageSize: this.$refs.page.pageSize,
         //date: this.date,
@@ -285,6 +306,23 @@ export default {
     &:hover {
       color: #fc7a43;
     }
+  }
+  #layoutRadio {
+    ::v-deep .el-radio-button__orig-radio + .el-radio-button__inner {
+      background-color: #f1f1f1;
+    }
+    ::v-deep .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+      background-color: #fc7a43;
+    }
+  }
+  ::v-deep .el-radio-button:first-child,
+  ::v-deep .el-radio-button:last-child {
+    .el-radio-button__inner {
+      border-radius: 0;
+    }
+  }
+  ::v-deep .el-radio-button__inner {
+    padding: 8px 10px;
   }
 }
 </style>

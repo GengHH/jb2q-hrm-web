@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 16:48:24
+ * @LastEditTime: 2021-06-29 15:56:24
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -290,6 +290,7 @@
                 type="date"
                 placeholder="面试日期"
                 v-model="feedback.interviewDate"
+                :picker-options="interviewDateOptions"
                 value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
@@ -301,11 +302,20 @@
               :label-width="formLabelWidth"
               prop="interviewTime"
             >
-              <el-time-picker
+              <!-- <el-time-picker
                 placeholder="面试时间"
                 v-model="feedback.interviewTime"
                 value-format="HHmmss"
-              ></el-time-picker>
+              ></el-time-picker> -->
+              <el-time-select
+                v-model="feedback.interviewTime"
+                placeholder="面试时间"
+                :picker-options="{
+                  start: '06:30',
+                  step: '00:15',
+                  end: '22:30'
+                }"
+              ></el-time-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -390,6 +400,7 @@
                 type="date"
                 placeholder="报到日期"
                 v-model="feedback.reportDate"
+                :picker-options="interviewDateOptions"
                 value-format="yyyyMMdd"
               ></el-date-picker>
             </el-form-item>
@@ -607,11 +618,7 @@ export default {
           ],
           reportContactPhone: [
             { required: true, message: '请输报到联系电话', trigger: 'blur' },
-            {
-              pattern: phonePattern,
-              message: '请输入正确格式的手机号',
-              trigger: ['blur', 'change']
-            }
+            { validator: validatePhone, trigger: 'blur' }
           ],
           reportAddress: [
             { required: true, message: '报到地址', trigger: 'blur' },
@@ -673,6 +680,12 @@ export default {
         reportContactPhone: '',
         reportAddress: '',
         reportRemarks: ''
+      },
+      interviewDateOptions: {
+        //控制时间范围
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        }
       },
       targetObjId: '',
       targetObjName: ''

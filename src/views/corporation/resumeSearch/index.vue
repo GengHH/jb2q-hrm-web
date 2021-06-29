@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-22 16:06:10
+ * @LastEditTime: 2021-06-29 15:48:34
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -421,6 +421,7 @@
                     type="date"
                     placeholder="面试日期"
                     v-model="interview.interviewDate"
+                    :picker-options="interviewDateOptions"
                     value-format="yyyyMMdd"
                     style="width: 100%;"
                   ></el-date-picker>
@@ -433,12 +434,22 @@
                   :label-width="formLabelWidth"
                   prop="interviewTime"
                 >
-                  <el-time-picker
+                  <!-- <el-time-picker
                     placeholder="面试时间"
                     v-model="interview.interviewTime"
                     value-format="HHmmss"
                     style="width: 100%;"
-                  ></el-time-picker>
+                  ></el-time-picker> -->
+                  <el-time-select
+                    v-model="feedback.interviewTime"
+                    placeholder="面试时间"
+                    :picker-options="{
+                      start: '06:30',
+                      step: '00:15',
+                      end: '22:30'
+                    }"
+                    style="width: 100%;"
+                  ></el-time-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -621,6 +632,12 @@ export default {
         interviewContactPhone: '',
         interviewAddress: '',
         interviewRemarks: ''
+      },
+      interviewDateOptions: {
+        //控制时间范围（只选今天之后的日期）
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        }
       },
       rules: {
         interview: {

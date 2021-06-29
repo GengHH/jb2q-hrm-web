@@ -1,36 +1,36 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-17 09:54:08
- * @LastEditTime: 2021-04-09 10:40:19
+ * @LastEditTime: 2021-06-28 16:26:57
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\remindMenu.vue
 -->
 <template>
   <el-menu
-    default-active="3"
+    :default-active="$route.path"
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
   >
-    <router-link to="/remind">
-      <el-menu-item index="1">
+    <router-link to="/remind/systemMsg">
+      <el-menu-item index="/remind/systemMsg">
         <i class="el-icon-user"></i>
         <span slot="title">
           系统消息
         </span>
       </el-menu-item>
     </router-link>
-    <router-link to="/remind">
-      <el-menu-item index="2">
+    <router-link to="/remind/pushMsg">
+      <el-menu-item index="/remind/pushMsg">
         <i class="el-icon-menu"></i>
         <span slot="title">
           推送消息
         </span>
       </el-menu-item>
     </router-link>
-    <router-link to="/remind/remind">
-      <el-menu-item index="3">
+    <router-link to="/remind/remindCenter">
+      <el-menu-item index="/remind/remindCenter">
         <i class="el-icon-document"></i>
         <span slot="title">
           私信
