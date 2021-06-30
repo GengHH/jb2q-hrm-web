@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 10:47:00
+ * @LastEditTime: 2021-06-30 09:35:15
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -27,12 +27,16 @@ const dicMockDataPost = function(req) {
   //const code = req.body;
   console.log('mock 拦截 dic参数', code);
   if (code) {
+    let objArray = code.split('@');
+    let key = code.includes('@')
+      ? objArray[0] + '_' + objArray[1]
+      : objArray[0];
     return {
       //dicData: dic[code]
       status: 200,
       message: '',
       result: {
-        data: JSON.stringify(dic[code])
+        data: JSON.stringify(dic[key])
       }
     };
   }
@@ -49,11 +53,15 @@ const dicMockData = function(options) {
   let code = params.split('=')[1];
   console.log('mock 拦截 dic参数', code);
   if (code) {
+    let objArray = code.split('@');
+    let key = code.includes('@')
+      ? objArray[0] + '_' + objArray[1]
+      : objArray[0];
     return {
       status: 200,
       message: '',
       result: {
-        data: JSON.stringify(dic[code])
+        data: JSON.stringify(dic[key])
       }
     };
   }

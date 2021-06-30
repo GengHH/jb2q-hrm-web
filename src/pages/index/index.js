@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-21 18:21:10
+ * @LastEditTime: 2021-06-30 10:30:19
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -74,6 +74,9 @@ if (isEmpty(store.getters['dictionary/yesno'])) {
 }
 if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx@3'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX@3');
 }
 if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');

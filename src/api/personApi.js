@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-28 16:30:56
+ * @LastEditTime: 2021-06-30 11:00:55
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -165,6 +165,12 @@ const queryActivityList = params =>
     basePath + '/person/activity/queryPersonSpecialActivityList',
     params
   );
+// 查询招聘会详情
+const queryPersonSpecialActivityDetail = params =>
+  postAction(
+    basePath + '/person/activity/queryPersonSpecialActivityDetail',
+    params
+  );
 //个人投递招聘会下的职位
 const doApplyActivity = params =>
   postAction(basePath + '/person/activity/saveApplySpecialActivity', params);
@@ -241,6 +247,7 @@ export {
   queryCorporationPositionInfo,
   doApplyFor,
   queryActivityList,
+  queryPersonSpecialActivityDetail,
   doApplyActivity,
   attentionOrFavor,
   sendComplaintSms,

@@ -451,7 +451,7 @@
           <el-row>
             <el-col :span="6">
               <p class="fourteen-opacity line40">
-                {{ eduCarditem.majorName }}
+                {{ eduCarditem.majorName ? eduCarditem.majorName : '无' }}
               </p>
             </el-col>
             <el-col :span="4">
@@ -525,7 +525,7 @@
               <el-row>
                 <el-col :span="12">
                   <p class="fourteen-opacity line40">
-                    {{ eduCarditem.majorName }}
+                    {{ eduCarditem.majorName ? eduCarditem.majorName : '无' }}
                   </p>
                 </el-col>
                 <el-col :span="12" style="text-align:right;">
@@ -992,31 +992,6 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="专业"
-          prop="majorName"
-          :label-width="formLabelWidth"
-        >
-          <el-input
-            v-model="educationExperienceForm.majorName"
-            autocomplete="off"
-            placeholder="请输入专业"
-          ></el-input>
-          <!-- <el-select
-          filterable 
-            v-model="educationExperienceForm.majorName"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in dicOptions.option3"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option> 
-          </el-select> -->
-        </el-form-item>
-
-        <el-form-item
           label="学历"
           prop="eduLevel"
           :label-width="formLabelWidth"
@@ -1036,6 +1011,32 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item
+          label="专业"
+          prop="majorName"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="educationExperienceForm.majorName"
+            autocomplete="off"
+            placeholder="请输入专业"
+            :disabled="majorNameDisabled"
+          ></el-input>
+          <!-- <el-select
+          filterable 
+            v-model="educationExperienceForm.majorName"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in dicOptions.option3"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option> 
+          </el-select> -->
+        </el-form-item>
+
         <el-row>
           <el-col :span="12">
             <el-form-item
@@ -1550,7 +1551,8 @@ export default {
       skillTableData: [],
       multipleSelection2: [],
       eduExp1: [],
-      eduExp2: []
+      eduExp2: [],
+      majorNameDisabled: false
     };
   },
   computed: {
@@ -2477,6 +2479,30 @@ export default {
             }
           });
         }
+      }
+    },
+    /**
+     *录入教育经历时，学历变化(职高、技校、中专、高中、初中及以下不能录入专业)
+     */
+    'educationExperienceForm.eduLevel': function(val) {
+      // let _eduLevel = this.educationExperienceForm.eduLevel;
+      if (
+        val === '00' ||
+        val === '01' ||
+        val === '02' ||
+        val === '03' ||
+        val === '04' ||
+        val === '05'
+      ) {
+        this.rules.educationExperienceRules.majorName = [];
+        this.majorNameDisabled = true;
+        this.educationExperienceForm.majorName = '';
+      } else {
+        this.rules.educationExperienceRules.majorName = [
+          { required: true, message: '请输入专业', trigger: 'blur' },
+          { max: 400, message: '长度不可超过400个字符', trigger: 'blur' }
+        ];
+        this.majorNameDisabled = false;
       }
     }
   }

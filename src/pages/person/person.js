@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-06-21 18:22:41
+ * @LastEditTime: 2021-06-30 10:30:32
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -97,6 +97,9 @@ if (isEmpty(store.getters['dictionary/yesno'])) {
 }
 if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx@3'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX@3');
 }
 if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');

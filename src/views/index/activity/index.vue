@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:30:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 16:53:31
+ * @LastEditTime: 2021-06-30 10:50:47
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
 -->
@@ -143,6 +143,9 @@ export default {
       }
       this.loading = false;
     },
+    /**
+     * 显示特色活动详情信息
+     */
     activityBoxClick(actId) {
       this.$router
         .push({

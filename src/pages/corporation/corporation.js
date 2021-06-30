@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 13:41:37
+ * @LastEditTime: 2021-06-30 09:14:31
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -89,7 +89,7 @@ if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
 }
 if (isEmpty(store.getters['dictionary/ggjbxx_qx@3'])) {
-  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX_3');
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX@3');
 }
 if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');

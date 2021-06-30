@@ -3,7 +3,7 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 13:38:14
+ * @LastEditTime: 2021-06-30 09:49:35
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -28,6 +28,8 @@ const state = {
   YESNO: [],
   //区县
   GGJBXX_QX: [],
+  //区县
+  GGJBXX_QX_3: [],
   //单位性质
   RECRUIT_CORP_NATURE: [],
   //行业分类
@@ -294,8 +296,12 @@ const actions = {
       .then(res => {
         console.log('获取的字典表', res);
         if (res.status == 200) {
+          let objArray = dicTpye.split('@');
+          let key = dicTpye.includes('@')
+            ? 'set_' + objArray[0] + '_' + objArray[1]
+            : 'set_' + objArray[0];
           commit(
-            'set_' + dicTpye,
+            key,
             res.result.data && typeof res.result.data === 'string'
               ? JSON.parse(res.result.data)
               : res.result.data

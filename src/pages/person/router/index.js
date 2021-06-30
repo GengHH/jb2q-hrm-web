@@ -272,8 +272,13 @@ let router = new Router({
       component: () => import('@/views/person/activity')
     },
     {
+      path: '/activityDetails',
+      name: '特色活动详情信息',
+      component: () => import('@/views/person/activity/ActivityInfoDetails')
+    },
+    {
       path: '/positionDetails',
-      name: '职位详情',
+      name: '职位详情信息',
       component: () => import('@/views/person/jobDetails')
       // children: [
       //   {
