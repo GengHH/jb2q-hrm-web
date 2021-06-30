@@ -656,7 +656,7 @@ export default {
         } else if (smsResult) {
           that.$message.error('获取验证码失败');
         }
-        this.loading = true;
+        this.loading = false;
       }
       done();
     },
