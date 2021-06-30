@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 15:30:42
+ * @LastEditTime: 2021-06-30 13:49:31
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -56,7 +56,7 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-lclick="showJobDetialByCell"
+          @cell-click="showJobDetialByCell"
           max-height="620"
         >
           <template #positionName="{row}">
@@ -80,9 +80,14 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-dblclick="showJobDetialByCell"
+          @cell-click="showJobDetialByCell"
           max-height="620"
         >
+          <template #positionName="{row}">
+            <span style="color:#fc6f3d;cursor: pointer;">{{
+              row.positionName
+            }}</span>
+          </template>
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
@@ -99,9 +104,14 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-dblclick="showJobDetialByCell"
+          @cell-click="showJobDetialByCell"
           max-height="620"
         >
+          <template #positionName="{row}">
+            <span style="color:#fc6f3d;cursor: pointer;">{{
+              row.positionName
+            }}</span>
+          </template>
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
@@ -131,9 +141,14 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-dblclick="showJobDetialByCell"
+          @cell-click="showJobDetialByCell"
           max-height="620"
         >
+          <template #positionName="{row}">
+            <span style="color:#fc6f3d;cursor: pointer;">{{
+              row.positionName
+            }}</span>
+          </template>
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>
@@ -162,9 +177,14 @@
           @selection-change="handleSelectionChange"
           @handleSizeChangeOnBack="handlePageChange"
           @handleCurrentChangeOnBack="handlePageChange"
-          @cell-dblclick="showJobDetialByCell"
+          @cell-click="showJobDetialByCell"
           max-height="620"
         >
+          <template #positionName="{row}">
+            <span style="color:#fc6f3d;cursor: pointer;">{{
+              row.positionName
+            }}</span>
+          </template>
           <template #createTime="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.createTime }}</span>

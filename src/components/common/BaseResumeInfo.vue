@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading" element-loading-text="拼命加载中">
     <div id="baseResumeInfo" ref="print">
       <!-- <el-button @click="print()">打印</el-button>
       <el-button @click="exportPdf()">导出PDF</el-button> -->
@@ -1324,6 +1324,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       editStatus: false,
       editItemIdex: 0,
       labelPosition: 'right',
@@ -1827,6 +1828,12 @@ export default {
       }
       // 默认先按照传入的pid查询，再按照登录的人员查询
       if (this.searchByCorp) {
+        this.loading = true;
+        console.log(
+          '%c 🍪 new date(): ',
+          'font-size:20px;background-color: #ED9EC7;color:#fff;',
+          new date()
+        );
         getPsnlResumeByCorp({
           pid: this.queryPid || this.$store.getters['person/pid'],
           cid: this.$store.getters['corporation/cid'] || ''
@@ -1836,14 +1843,22 @@ export default {
             if (res.status == 200) {
               that.$set(that, 'resume', res.result.data);
             }
+            that.loading = false;
+            console.log(
+              '%c 🍪 new date(): ',
+              'font-size:20px;background-color: #ED9EC7;color:#fff;',
+              new date()
+            );
           })
           .catch(function(err) {
             that.$message({
               message: '缺失简历信息' + err,
               type: 'error'
             });
+            that.loading = false;
           });
       } else {
+        this.loading = true;
         getPsnlResume(
           { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
         )
@@ -1852,12 +1867,14 @@ export default {
             if (res.status == 200) {
               that.$set(that, 'resume', res.result.data);
             }
+            that.loading = false;
           })
           .catch(function(err) {
             that.$message({
               message: '缺失简历信息' + err,
               type: 'error'
             });
+            that.loading = false;
           });
       }
     },
