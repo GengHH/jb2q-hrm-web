@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 11:10:15
+ * @LastEditTime: 2021-06-30 17:37:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -1252,4 +1252,83 @@ Mock.mock(basePath + '/person/manage/queryPositionDetail', 'post', function(
     }
   };
 });
+
+/*********个人消息**********/
+//查询系统消息、推送消息
+Mock.mock(
+  RegExp(basePath + '/person/notice/queryNoticeList/' + '.*'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'noticeId|+1': '@string("number", 5)',
+              noticeType: '08',
+              noticeTypeName: '单位邀约应聘通知',
+              receiveId: '200709138518590',
+              receiveType: '1',
+              receiveName: '李珍',
+              content:
+                '您好，中化资产管理（上海）有限公司已经在上海公共招聘网站主动检索到您的简历，并获取了您的联系方式，请保持联系方式畅通。',
+              readsStatus: '0',
+              readTime: '',
+              deleteStatus: '0',
+              deleteTime: ''
+            }
+          ]
+        })
+      }
+    };
+  }
+);
+//查询消息详细信息
+Mock.mock(
+  RegExp(basePath + '/person/notice/queryNoticeDetail'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: {
+          'noticeId|+1': '@string("number", 5)',
+          noticeType: '08',
+          receiveId: '200709138518590',
+          receiveType: '1',
+          receiveName: '李珍',
+          content: '11111222a',
+          readsStatus: '0',
+          readTime: '',
+          deleteStatus: '0',
+          deleteTime: '',
+          noticeTypeName: '单位邀约应聘通知'
+        }
+      }
+    };
+  }
+);
+
+//批量已读
+Mock.mock(
+  RegExp(basePath + '/person/notice/updateBatchReadNotice'),
+  'post',
+  function(options) {
+    return successData;
+  }
+);
+//批量删除
+Mock.mock(
+  RegExp(basePath + '/person/notice/deleteBatchNotice'),
+  'post',
+  function(options) {
+    return successData;
+  }
+);
+
+/*********end**********/
 export default Mock;

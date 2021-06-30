@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 11:00:55
+ * @LastEditTime: 2021-06-30 17:38:50
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -200,6 +200,12 @@ const queryPushMsg = params =>
 //查询消息详细信息
 const queryMsgDetails = params =>
   postAction(basePath + '/person/notice/queryNoticeDetail', params);
+// 消息批量已读
+const updateBatchReadNotice = params =>
+  postAction(basePath + '/person/notice/updateBatchReadNotice', params);
+// 消息批量删除
+const deleteBatchNotice = params =>
+  postAction(basePath + '/person/notice/deleteBatchNotice', params);
 
 /*********end**********/
 
@@ -255,5 +261,7 @@ export {
   queryPositionDetail,
   querySystemMsg,
   queryPushMsg,
-  queryMsgDetails
+  queryMsgDetails,
+  deleteBatchNotice,
+  updateBatchReadNotice
 };

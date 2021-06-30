@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-13 10:04:58
+ * @LastEditTime: 2021-06-30 16:49:17
  * @Description: 职位评价子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobEvaluation.vue
 -->
@@ -38,6 +38,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { queryEvaluateList } from '@/api/personApi';
+import { niceScrollUpdate } from '@/utils';
 export default {
   name: 'jobEvaluation',
   components: {
@@ -96,6 +97,9 @@ export default {
   },
   mounted() {
     this.queryJobEvaluationList();
+  },
+  updated() {
+    this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
     queryJobEvaluationList(val) {

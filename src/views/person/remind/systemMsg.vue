@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-28 17:59:28
+ * @LastEditTime: 2021-06-30 18:13:58
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\remind\systemMsg.vue
 -->
@@ -11,10 +11,10 @@
     <div class="title-style">私信</div>
     <el-row>
       <el-col :span="12">
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteFavorite"
+        <pl-button type="danger" icon="el-icon-delete" @click="deleteMsg"
           >删除</pl-button
         >
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteFavorite"
+        <pl-button type="danger" icon="el-icon-delete" @click="readMsg"
           >标记已读</pl-button
         >
       </el-col>
@@ -25,15 +25,20 @@
     <pl-table
       :data="tableData"
       :totalCount="tableCount"
-      ref="jobTable"
+      ref="msgTable"
       :columns="columns"
       show-pager
       @handleSizeChangeOnBack="handlePageChange"
       @handleCurrentChangeOnBack="handlePageChange"
     >
+      <template #readsStatus="{row}">
+        <!-- <i class="el-icon-time"></i> -->
+        <span style="color:green" v-if="row.readsStatus === '0'">未读</span>
+        <span style="color:green" v-else>已读</span>
+      </template>
       <template #date="{row}">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ row.favorTime }}</span>
+        <span style="margin-left: 10px">{{ row.readTime }}</span>
       </template>
     </pl-table>
     <!-- 职位详细信息 弹窗部分 -->
@@ -43,7 +48,7 @@
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"
     >
-      123
+      {{ oneRow.content }}
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
@@ -60,11 +65,8 @@
 import BaseSearch from '@/components/common/BaseSearch';
 import JobDetails from '@/views/person/jobDetails.vue';
 import {
-  queryPositionStarList,
-  attentionOrFavor,
-  queryPositionDetail,
-  doDeliveryResume,
-  doDeliveryResumeRecommend,
+  deleteBatchNotice,
+  updateBatchReadNotice,
   querySystemMsg,
   queryMsgDetails
 } from '@/api/personApi';
@@ -84,7 +86,8 @@ export default {
       tableCount: 0,
       onePosition: {},
       detailsIndex: 0,
-      targetObjId: ''
+      targetObjId: '',
+      oneRow: {}
     };
   },
   computed: {
@@ -102,19 +105,26 @@ export default {
         {
           label: '发送人',
           attrs: { showOverflowTooltip: true },
-          prop: 'corpName',
+          prop: 'noticeTypeName',
           rowSpan: 'all'
         },
         {
           label: '标题内容',
           attrs: { 'show-overflow-tooltip': true },
-          prop: 'positionName',
+          prop: 'content',
+          rowSpan: 'all'
+        },
+        {
+          label: '未/已读',
+          attrs: { 'show-overflow-tooltip': true },
+          prop: 'readsStatus',
+          slotName: 'readsStatus',
           rowSpan: 'all'
         },
         {
           label: '时间',
           attrs: { 'show-overflow-tooltip': true },
-          prop: 'favorTime',
+          prop: 'readTime',
           formatter: 'date',
           slotName: 'date'
         },
@@ -141,9 +151,11 @@ export default {
               icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
-                // this.detailsDialog = true;
-                //查看职位信息
-                this.queryPositionDetail(row);
+                this.oneRow = { ...row };
+                this.detailsDialog = true;
+                this.readMsg(row);
+                // TODO查看职位信息
+                //this.queryPositionDetail(row);
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -154,7 +166,7 @@ export default {
       ];
     },
     selection() {
-      return this.$refs.jobTable.multipleSelection;
+      return this.$refs.msgTable.multipleSelection;
     }
   },
   methods: {
@@ -170,13 +182,14 @@ export default {
     /**
      *查询收藏职位信息的列表
      */
-    async querySystemMsg() {
+    async querySystemMsg(arg) {
       let res = await querySystemMsg({
         pageParam: {
-          pageIndex: this.$refs.jobTable?.currentPage - 1 || 0,
-          pageSize: this.$refs.jobTable?.pageSize || 10
+          pageIndex: this.$refs.msgTable?.currentPage - 1 || 0,
+          pageSize: this.$refs.msgTable?.pageSize || 10
         },
-        pid: this.$store.getters['person/pid'] || ''
+        receiveId: this.$store.getters['person/pid'] || '',
+        content: arg
       });
       if (res && res.status === 200) {
         res.result.pageresult.data.forEach(item => {
@@ -191,50 +204,54 @@ export default {
       }
     },
     /**
-     * TODO 取消收藏记录（标记已读）
+     * 标记已读
      */
-    async cancelFavorite(row) {
-      if (!row) {
+    async readMsg(row) {
+      if (
+        (!row || typeof row === 'function') &&
+        (!this.selection || this.selection.length === 0)
+      ) {
         this.$alert('请选择一条');
       } else {
-        let res = await attentionOrFavor('2', {
-          id: [row.positionId],
-          pid: this.$store.getters['person/pid'],
-          status: false
+        let res = await updateBatchReadNotice({
+          noticeIdList:
+            row && typeof row !== 'function'
+              ? [row.noticeId]
+              : this.selection.map(obj => {
+                  return obj.noticeId;
+                })
         });
         if (res && res.status === 200) {
-          this.$message.success('取消收藏成功');
+          this.$message.success('批量已读成功');
           // 删除数据 （重新加载数据）
           // this.tableData = this.tableData.filter(
           //   obj => !(obj.positionId === row.positionId)
           // );
           this.querySystemMsg();
         } else if (res) {
-          this.$message.error('取消收藏失败');
+          this.$message.error('批量已读失败');
         }
       }
     },
     /**
-     *TODO 删除收藏记录（删除消息）
+     *删除消息
      */
-    async deleteFavorite() {
+    async deleteMsg() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
       } else {
-        let res = await attentionOrFavor('2', {
-          id: this.selection.map(obj => {
-            return obj.positionId;
-          }),
-          pid: this.$store.getters['person/pid'],
-          status: false
+        let res = await deleteBatchNotice({
+          noticeIdList: this.selection.map(obj => {
+            return obj.noticeId;
+          })
         });
         if (res && res.status === 200) {
-          this.$message.success('批量取消收藏成功');
+          this.$message.success('批量删除成功');
           // 删除数据 （重新加载数据）
           this.querySystemMsg();
         } else if (res) {
-          this.$message.error('批量取消收藏失败');
+          this.$message.error('批量删除失败');
         }
       }
     },
@@ -244,7 +261,7 @@ export default {
     async queryPositionDetail(row) {
       this.loading = true;
       let queryRes = await queryMsgDetails({
-        positionId: row.positionId
+        noticeId: row.noticeId
       });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data || {};

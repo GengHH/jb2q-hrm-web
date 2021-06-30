@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 15:33:33
+ * @LastEditTime: 2021-06-30 16:47:53
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobStarList.vue
 -->
@@ -69,7 +69,7 @@ import {
   doDeliveryResume,
   doDeliveryResumeRecommend
 } from '@/api/personApi';
-import { getDicText } from '@/utils';
+import { getDicText, niceScrollUpdate } from '@/utils';
 
 export default {
   name: 'jobStarList',
@@ -473,6 +473,9 @@ export default {
   },
   mounted() {
     this.queryStarList();
+  },
+  updated() {
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

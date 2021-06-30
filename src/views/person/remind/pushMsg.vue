@@ -2,38 +2,43 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-28 16:25:21
+ * @LastEditTime: 2021-06-30 18:16:09
  * @Description: 职位收藏子界面
- * @FilePath: \jb2q-hrm-web\src\views\person\remind\remindCenter.vue
+ * @FilePath: \jb2q-hrm-web\src\views\person\remind\pushMsg.vue
 -->
 <template>
   <div id="jobStarList">
     <div class="title-style">私信</div>
     <el-row>
       <el-col :span="12">
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteFavorite"
+        <pl-button type="danger" icon="el-icon-delete" @click="deleteMsg"
           >删除</pl-button
         >
-        <pl-button type="danger" icon="el-icon-delete" @click="deleteFavorite"
+        <pl-button type="danger" icon="el-icon-delete" @click="readMsg"
           >标记已读</pl-button
         >
       </el-col>
       <el-col :span="12">
-        <BaseSearch @clickButton="queryStarList($event)"></BaseSearch>
+        <BaseSearch @clickButton="queryPushMsg($event)"></BaseSearch>
       </el-col>
     </el-row>
     <pl-table
       :data="tableData"
       :totalCount="tableCount"
-      ref="jobTable"
+      ref="msgTable"
       :columns="columns"
       show-pager
       @handleSizeChangeOnBack="handlePageChange"
       @handleCurrentChangeOnBack="handlePageChange"
     >
+      <template #readsStatus="{row}">
+        <!-- <i class="el-icon-time"></i> -->
+        <span style="color:green" v-if="row.readsStatus === '0'">未读</span>
+        <span style="color:green" v-else>已读</span>
+      </template>
       <template #date="{row}">
         <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ row.favorTime }}</span>
+        <span style="margin-left: 10px">{{ row.readTime }}</span>
       </template>
     </pl-table>
     <!-- 职位详细信息 弹窗部分 -->
@@ -43,13 +48,7 @@
       :visible.sync="detailsDialog"
       :before-close="detailsHandleClose"
     >
-      <job-details
-        :positionData="onePosition"
-        :index="detailsIndex"
-        @deliveryResume="deliveryResume(arguments)"
-        @favorJob="favorJob(arguments)"
-        @callPositionCorp="callPositionCorp(arguments)"
-      ></job-details>
+      {{ oneRow.content }}
     </el-dialog>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
@@ -66,11 +65,10 @@
 import BaseSearch from '@/components/common/BaseSearch';
 import JobDetails from '@/views/person/jobDetails.vue';
 import {
-  queryPositionStarList,
-  attentionOrFavor,
-  queryPositionDetail,
-  doDeliveryResume,
-  doDeliveryResumeRecommend
+  deleteBatchNotice,
+  updateBatchReadNotice,
+  queryPushMsg,
+  queryMsgDetails
 } from '@/api/personApi';
 import { getDicText } from '@/utils';
 
@@ -88,7 +86,8 @@ export default {
       tableCount: 0,
       onePosition: {},
       detailsIndex: 0,
-      targetObjId: ''
+      targetObjId: '',
+      oneRow: {}
     };
   },
   computed: {
@@ -106,20 +105,26 @@ export default {
         {
           label: '发送人',
           attrs: { showOverflowTooltip: true },
-          prop: 'corpName',
+          prop: 'noticeTypeName',
           rowSpan: 'all'
         },
         {
           label: '标题内容',
           attrs: { 'show-overflow-tooltip': true },
-          prop: 'positionName',
+          prop: 'content',
           rowSpan: 'all'
         },
-
+        {
+          label: '未/已读',
+          attrs: { 'show-overflow-tooltip': true },
+          prop: 'readsStatus',
+          slotName: 'readsStatus',
+          rowSpan: 'all'
+        },
         {
           label: '时间',
           attrs: { 'show-overflow-tooltip': true },
-          prop: 'favorTime',
+          prop: 'readTime',
           formatter: 'date',
           slotName: 'date'
         },
@@ -128,7 +133,7 @@ export default {
           attrs: { width: 200 },
           actions: [
             {
-              id: 'action1',
+              id: 'action2',
               text: '删除',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-delete',
@@ -140,15 +145,17 @@ export default {
               }
             },
             {
-              id: 'action2',
-              text: '回复',
+              id: 'action1',
+              text: '详情',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
-                // this.detailsDialog = true;
-                //查看职位信息
-                this.queryPositionDetail(row);
+                this.oneRow = { ...row };
+                this.detailsDialog = true;
+                this.readMsg(row);
+                // TODO查看职位信息
+                //this.queryPositionDetail(row);
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -159,7 +166,7 @@ export default {
       ];
     },
     selection() {
-      return this.$refs.jobTable.multipleSelection;
+      return this.$refs.msgTable.multipleSelection;
     }
   },
   methods: {
@@ -170,107 +177,81 @@ export default {
       this.wchatDialog = false;
     },
     handlePageChange() {
-      this.queryStarList();
+      this.queryPushMsg();
     },
     /**
      *查询收藏职位信息的列表
      */
-    async queryStarList() {
-      let res = await queryPositionStarList({
+    async queryPushMsg(arg) {
+      let res = await queryPushMsg({
         pageParam: {
-          pageIndex: this.$refs.jobTable?.currentPage - 1 || 0,
-          pageSize: this.$refs.jobTable?.pageSize || 10
+          pageIndex: this.$refs.msgTable?.currentPage - 1 || 0,
+          pageSize: this.$refs.msgTable?.pageSize || 10
         },
-        pid: this.$store.getters['person/pid'] || ''
+        receiveId: this.$store.getters['person/pid'] || '',
+        content: arg
       });
       if (res && res.status === 200) {
         res.result.pageresult.data.forEach(item => {
-          item.actions = ['action1', 'action2'];
-          // 转换字典
-          // if (item.workArea) {
-          //   item.workAreaText = getDicText(
-          //     this.$store.getters['dictionary/ggjbxx_qx'],
-          //     item.workArea
-          //   );
-          // }
-          // if (item.industryType) {
-          //   item.industryTypeText = getDicText(
-          //     this.$store.getters['dictionary/recruit_industry_type'],
-          //     item.industryType
-          //   );
-          // }
-          // if (item.workNature) {
-          //   item.workNatureText = getDicText(
-          //     this.$store.getters['dictionary/recruit_work_nature'],
-          //     item.workNature
-          //   );
-          // }
-          // if (item.eduRequire) {
-          //   item.eduRequireText = getDicText(
-          //     this.$store.getters['dictionary/recruit_edu'],
-          //     item.eduRequire
-          //   );
-          // }
-          // if (item.workYearNeed) {
-          //   item.workYearNeedText = getDicText(
-          //     this.$store.getters['dictionary/recruit_work_year'],
-          //     item.workYearNeed
-          //   );
-          // }
+          item.actions = ['action1'];
         });
         this.tableData = res.result.pageresult.data;
         this.tableCount = res.result.pageresult.total;
       } else if (res) {
         this.tableData = [];
         this.tableCount = 0;
-        this.$message.success('未查询到信息');
+        this.$message.success('未查询到系统消息');
       }
     },
     /**
-     *取消收藏记录
+     * 标记已读
      */
-    async cancelFavorite(row) {
-      if (!row) {
+    async readMsg(row) {
+      if (
+        (!row || typeof row === 'function') &&
+        (!this.selection || this.selection.length === 0)
+      ) {
         this.$alert('请选择一条');
       } else {
-        let res = await attentionOrFavor('2', {
-          id: [row.positionId],
-          pid: this.$store.getters['person/pid'],
-          status: false
+        let res = await updateBatchReadNotice({
+          noticeIdList:
+            row && typeof row !== 'function'
+              ? [row.noticeId]
+              : this.selection.map(obj => {
+                  return obj.noticeId;
+                })
         });
         if (res && res.status === 200) {
-          this.$message.success('取消收藏成功');
+          this.$message.success('批量已读成功');
           // 删除数据 （重新加载数据）
           // this.tableData = this.tableData.filter(
           //   obj => !(obj.positionId === row.positionId)
           // );
-          this.queryStarList();
+          this.queryPushMsg();
         } else if (res) {
-          this.$message.error('取消收藏失败');
+          this.$message.error('批量已读失败');
         }
       }
     },
     /**
-     *删除收藏记录
+     *删除消息
      */
-    async deleteFavorite() {
+    async deleteMsg() {
       let that = this;
       if (this.selection && this.selection.length == 0) {
         this.$alert('请选择一条');
       } else {
-        let res = await attentionOrFavor('2', {
-          id: this.selection.map(obj => {
-            return obj.positionId;
-          }),
-          pid: this.$store.getters['person/pid'],
-          status: false
+        let res = await deleteBatchNotice({
+          noticeIdList: this.selection.map(obj => {
+            return obj.noticeId;
+          })
         });
         if (res && res.status === 200) {
-          this.$message.success('批量取消收藏成功');
+          this.$message.success('批量删除成功');
           // 删除数据 （重新加载数据）
-          this.queryStarList();
+          this.queryPushMsg();
         } else if (res) {
-          this.$message.error('批量取消收藏失败');
+          this.$message.error('批量删除失败');
         }
       }
     },
@@ -279,8 +260,8 @@ export default {
      */
     async queryPositionDetail(row) {
       this.loading = true;
-      let queryRes = await queryPositionDetail({
-        positionId: row.positionId
+      let queryRes = await queryMsgDetails({
+        noticeId: row.noticeId
       });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data || {};
@@ -331,103 +312,13 @@ export default {
         this.onePosition = item || {};
         this.detailsDialog = true;
       } else if (queryRes) {
-        this.$message.error('获取职位详细信息失败');
+        this.$message.error('获取详细信息失败');
       }
       this.loading = false;
     },
+
     /**
-     * 职位详细信息页面-投递简历
-     */
-    async deliveryResume(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let recId = (arg && arg[2]) || '';
-      if (!recId) {
-        //向自己搜索的职位投递简历
-        let res = await doDeliveryResume({
-          positionId: positionId,
-          pid: this.$store.getters['person/pid']
-        });
-        if (res.status === 200) {
-          // 更换按钮
-          // this.tableData.splice(index, 1);
-          this.tableData[index].applyFor = true;
-          this.$message({ type: 'success', message: '简历投递成功' });
-        } else {
-          this.$message({
-            type: 'error',
-            message: '简历投递失败'
-          });
-        }
-      } else {
-        //向推荐职位投递简历
-        let res = await doDeliveryResumeRecommend({
-          recId: recId,
-          positionId: positionId,
-          pid: this.$store.getters['person/pid']
-        });
-        if (res.status === 200) {
-          // 更换按钮
-          // this.tableData.splice(index, 1);
-          this.queryDefaultResult[index].applyFor = true;
-          this.$message({ type: 'success', message: '简历投递成功' });
-        } else {
-          this.$message({
-            type: 'error',
-            message: '简历投递失败'
-          });
-        }
-      }
-    },
-    /**
-     * 职位详细信息页面-取消收藏
-     */
-    async favorJob(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let orginFavorType = arg[2];
-      let recId = arg[3] || '';
-      if (!orginFavorType) {
-        let res = await attentionOrFavor('2', {
-          id: [positionId],
-          pid: this.$store.getters['person/pid'],
-          status: true
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          // if (!recId) {
-          //   this.tableData[index].favor = true;
-          // } else {
-          //   this.queryDefaultResult[index].favor = true;
-          // }
-          this.detailsDialog = false;
-          this.$message({ type: 'success', message: '收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '收藏职位失败' });
-        }
-      } else {
-        //取消收藏职位
-        let res = await attentionOrFavor('2', {
-          id: [positionId],
-          pid: this.$store.getters['person/pid'],
-          status: false
-        });
-        if (res.status === 200) {
-          // 修改按钮状态
-          // if (!recId) {
-          //   this.tableData[index].favor = false;
-          // } else {
-          //   this.queryDefaultResult[index].favor = false;
-          // }
-          this.detailsDialog = false;
-          this.$message({ type: 'success', message: '取消收藏职位成功' });
-        } else {
-          this.$message({ type: 'error', message: '取消收藏职位失败' });
-        }
-      }
-    },
-    /**
-     * 职位详细信息页面-聊天
+     * TODO 职位详细信息页面-聊天
      */
     callPositionCorp(arg) {
       console.log(
@@ -443,7 +334,7 @@ export default {
     }
   },
   mounted() {
-    this.queryStarList();
+    this.queryPushMsg();
   }
 };
 </script>

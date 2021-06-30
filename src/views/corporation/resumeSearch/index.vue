@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 15:48:34
+ * @LastEditTime: 2021-06-30 18:10:12
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -1038,7 +1038,7 @@ export default {
       if (!orginFavorType) {
         //收藏简历
         let res = await doFavorResume({
-          resumeId: [resumeId],
+          resumeIdList: [resumeId],
           cid: this.$store.getters['corporation/cid'],
           favorType: true
         });
@@ -1052,7 +1052,7 @@ export default {
       } else {
         //取消收藏简历
         let res = await doFavorResume({
-          resumeId: [resumeId],
+          resumeIdList: [resumeId],
           cid: this.$store.getters['corporation/cid'],
           favorType: false
         });

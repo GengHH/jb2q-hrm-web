@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:14
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 13:13:29
+ * @LastEditTime: 2021-06-30 18:10:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeCollected.vue
 -->
@@ -329,7 +329,7 @@ export default {
       } else {
         //取消收藏简历
         let res = await doFavorResume({
-          resumeId: row
+          resumeIdList: row
             ? [row.resumeId]
             : this.selection.map(obj => {
                 return obj.resumeId;

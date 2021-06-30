@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:34
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 10:53:32
+ * @LastEditTime: 2021-06-30 16:48:04
  * @Description: 单位关注子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\corporationAttention.vue
 -->
@@ -51,7 +51,7 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
 import { queryCorpStarList, attentionOrFavor } from '@/api/personApi';
-import { getDicText } from '@/utils';
+import { getDicText, niceScroll, niceScrollUpdate } from '@/utils';
 export default {
   name: 'corporationAttention',
   components: {
@@ -139,7 +139,7 @@ export default {
         },
         pid: this.$store.getters['person/pid'] || ''
       });
-      if (res.status === 200) {
+      if (res && res.status === 200) {
         res.result.pageresult.data.forEach(item => {
           item.actions = ['action1'];
           if (item.industryType) {
@@ -157,7 +157,7 @@ export default {
         });
         this.tableData = res.result.pageresult.data;
         this.tableCount = res.result.pageresult.total;
-      } else {
+      } else if (res) {
         this.tableData = [];
         this.tableCount = 0;
         this.$message({ type: 'success', message: '未查询到信息' });
@@ -219,6 +219,9 @@ export default {
   },
   mounted() {
     this.queryCorpAttentionList();
+  },
+  updated() {
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

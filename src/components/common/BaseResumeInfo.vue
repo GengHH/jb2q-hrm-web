@@ -1830,9 +1830,9 @@ export default {
       if (this.searchByCorp) {
         this.loading = true;
         console.log(
-          '%c 🍪 new date(): ',
+          '%c 🍪 new Date(): ',
           'font-size:20px;background-color: #ED9EC7;color:#fff;',
-          new date()
+          new Date()
         );
         getPsnlResumeByCorp({
           pid: this.queryPid || this.$store.getters['person/pid'],
@@ -1845,9 +1845,9 @@ export default {
             }
             that.loading = false;
             console.log(
-              '%c 🍪 new date(): ',
+              '%c 🍪 new Date(): ',
               'font-size:20px;background-color: #ED9EC7;color:#fff;',
-              new date()
+              new Date()
             );
           })
           .catch(function(err) {
@@ -1859,6 +1859,11 @@ export default {
           });
       } else {
         this.loading = true;
+        console.log(
+          '%c 🍪 new Date(): ',
+          'font-size:20px;background-color: #ED9EC7;color:#fff;',
+          new Date()
+        );
         getPsnlResume(
           { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
         )
@@ -1868,6 +1873,11 @@ export default {
               that.$set(that, 'resume', res.result.data);
             }
             that.loading = false;
+            console.log(
+          '%c 🍪 new Date(): ',
+          'font-size:20px;background-color: #ED9EC7;color:#fff;',
+          new Date()
+        );
           })
           .catch(function(err) {
             that.$message({
