@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 17:58:02
+ * @LastEditTime: 2021-07-01 17:56:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -27,7 +27,8 @@
           区县选择：</el-col
         >
         <el-col :sm="20" :md="21" :lg="21" :xl="22">
-          <el-radio-group v-model="qx" size="medium">
+          <el-radio-group v-model="qx" size="medium" @change="queryJyjxJdInfo">
+            <el-radio-button label="">不限</el-radio-button>
             <el-radio-button
               :label="item.value"
               v-for="(item, index) in dicQx"
@@ -49,7 +50,11 @@
           基地类型：</el-col
         >
         <el-col :sm="16" :md="17" :lg="17" :xl="18">
-          <el-radio-group v-model="type" size="medium">
+          <el-radio-group
+            v-model="type"
+            size="medium"
+            @change="queryJyjxJdInfo"
+          >
             <el-radio-button label="">不限</el-radio-button>
             <el-radio-button label="1">一般基地</el-radio-button>
             <el-radio-button label="2">综合类基地</el-radio-button>
@@ -63,6 +68,7 @@
             inactive-text=""
             active-value="1"
             inactive-value="0"
+            @change="queryJyjxJdInfo"
           >
           </el-switch>
         </el-col>
@@ -312,7 +318,7 @@ export default {
         : null;
       queryJyjxJdInfo({
         cid: null,
-        dwmc: dwmc || null,
+        dwmc: this.dwmc || null,
         qxid: this.qx || null,
         jdlx: this.type || null,
         isHiring: this.isHiring || '1',

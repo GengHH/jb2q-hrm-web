@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 15:56:37
+ * @LastEditTime: 2021-07-01 15:42:22
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFair\jobFairResume.vue
 -->
@@ -713,8 +713,8 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]

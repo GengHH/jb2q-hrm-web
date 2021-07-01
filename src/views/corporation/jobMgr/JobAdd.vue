@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 14:24:37
+ * @LastEditTime: 2021-07-01 10:34:05
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -800,7 +800,7 @@ export default {
       let _dic = this.$store.getters['dictionary/ggjbxx_qx@3'];
       if (_dic && _dic.length) {
         _dic.unshift({
-          value: '00',
+          value: '0A',
           label: '全市'
         });
       }

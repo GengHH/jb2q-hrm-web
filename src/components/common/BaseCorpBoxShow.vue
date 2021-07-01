@@ -2,28 +2,46 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-03 17:24:26
+ * @LastEditTime: 2021-07-01 17:24:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
 -->
 <template>
   <div class="module-two clearfix">
-    <img
+    <!-- <img
       v-if="corpBoxInfoObj.zl"
       src="../../assets/images/zhilianLogo.png"
       alt=""
-    />
-    <img v-else src="../../assets/images/logos.png" alt="" />
+    /> -->
+    <div v-if="corpBoxInfoObj.zl">
+      <img
+        v-if="corpBoxInfoObj.propagandaImage"
+        :src="'data:image/jpg;base64,' + corpBoxInfoObj.propagandaImage"
+        @error="defImg"
+        alt="未加载"
+      />
+      <img v-else :src="defaultImg" alt="未加载" />
+    </div>
+    <!-- <img v-else src="../../assets/images/logos.png" alt="" /> -->
+    <div v-else>
+      <img
+        v-if="corpBoxInfoObj.propagandaImage"
+        :src="'data:image/jpg;base64,' + corpBoxInfoObj.propagandaImage"
+        @error="defImg"
+        alt="未加载"
+      />
+      <img v-else :src="defaultImg" alt="未加载" />
+    </div>
     <p class="font-eighteen mat-15" v-if="corpBoxInfoObj.zl">智联招聘</p>
-    <p class="font-eighteen mat-15" v-else>万达信息股份有限公司</p>
+    <p class="font-eighteen mat-15" v-else>{{ corpBoxInfoObj.corpName }}</p>
     <p class="span-infor">
-      <span>已上市</span>
+      <span>{{ corpBoxInfoObj.corpNatureText }}</span>
       <el-divider direction="vertical"></el-divider>
-      <span>5000人</span>
+      <span>?人</span>
       <el-divider direction="vertical"></el-divider>
-      <span>软件服务</span>
+      <span>{{ corpBoxInfoObj.industryTypeText }}</span>
     </p>
-    <span class="span-btn mat-15"><i class="or-font">22</i> 个在招职位</span>
+    <span class="span-btn mat-15"><i class="or-font">?</i> 个在招职位</span>
   </div>
 </template>
 
@@ -36,6 +54,21 @@ export default {
   props: {
     corpBoxInfoObj: Object,
     default: () => {}
+  },
+  data() {
+    return {
+      defaultImg: require('@/assets/images/break-img.svg')
+    };
+  },
+  methods: {
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
+    }
   }
 };
 </script>

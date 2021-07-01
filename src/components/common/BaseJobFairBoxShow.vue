@@ -1,3 +1,11 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-12-16 11:32:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-07-01 13:24:59
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\components\common\BaseJobFairBoxShow.vue
+-->
 <template>
   <!-- <div class="module-one clearfix">
     <img src="../../assets/images/logos.png" alt="未加载">
@@ -15,8 +23,8 @@
       </p>
     </div>
   </div> -->
-  <div class="module-three">
-    <img src="../../assets/img/zl_img.png" alt="未加载" />
+  <div class="module-three" @click="goPath(index)">
+    <img :src="imgs[index]" alt="未加载" />
     <p class="zl-font mat-30">招聘会专栏</p>
     <p class="zl-font2 mat-15">各种线上限下大型招聘会，期待你加入</p>
   </div>
@@ -29,7 +37,23 @@
 export default {
   name: 'BaseJobFairBoxShow',
   props: {
+    index: Number,
     jobFairBoxInfoObj: Object
+  },
+  data() {
+    return {
+      imgs: [
+        require('@/assets/img/zl_img.png'),
+        require('@/assets/img/jx_img.png'),
+        require('@/assets/img/hd_img.png')
+      ],
+      path: ['/jobFair', '/employmentTrainee', '/activity']
+    };
+  },
+  methods: {
+    goPath(index) {
+      this.$router.push(this.path[index]);
+    }
   }
 };
 </script>

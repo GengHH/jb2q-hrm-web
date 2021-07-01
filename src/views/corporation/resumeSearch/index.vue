@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 18:10:12
+ * @LastEditTime: 2021-07-01 14:58:49
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -441,7 +441,7 @@
                     style="width: 100%;"
                   ></el-time-picker> -->
                   <el-time-select
-                    v-model="feedback.interviewTime"
+                    v-model="interview.interviewTime"
                     placeholder="面试时间"
                     :picker-options="{
                       start: '06:30',
@@ -970,6 +970,9 @@ export default {
         this.queryInvitePosition();
       }
     },
+    /**
+     * 查询可以邀约的单位
+     */
     async queryInvitePosition(val) {
       //查询职位信息
       let queryRes = await queryPositionList({
@@ -983,6 +986,9 @@ export default {
       }
       this.inviteLoading = false;
     },
+    /**
+     * 邀约
+     */
     invite(arg) {
       if (!this.invitePosition) {
         this.$alert('请选择一个职位');

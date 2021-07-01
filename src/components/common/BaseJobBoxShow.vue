@@ -1,5 +1,32 @@
+<!--
+ * @Author: GengHH
+ * @Date: 2020-12-16 11:32:31
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-07-01 18:06:20
+ * @Description: file content
+ * @FilePath: \jb2q-hrm-web\src\components\common\BaseJobBoxShow.vue
+-->
 <template>
   <div class="module-one clearfix">
+    <img src="../../assets/images/logos.png" alt="未加载" />
+    <div class="module-right ">
+      <p class="font-eighteen">{{ jobBoxInfoObj.positionName }}</p>
+      <p class="span-infor">
+        <span>{{ jobBoxInfoObj.corpName }}</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>{{ jobBoxInfoObj.workYearNeedText }}</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>{{ jobBoxInfoObj.eduRequireText }}</span>
+      </p>
+      <p class="span-infor">
+        <i class="font20"
+          >{{ jobBoxInfoObj.salaryMin }}-{{ jobBoxInfoObj.salaryMax }}</i
+        >
+        {{ jobBoxInfoObj.salaryPayTypeText }}
+      </p>
+    </div>
+  </div>
+  <!-- <div class="module-one clearfix">
     <img src="../../assets/images/logos.png" alt="未加载">
     <div class="module-right ">
       <p class="font-eighteen">{{ jobBoxInfoObj.jobName }}</p>
@@ -14,7 +41,7 @@
         <i class="font20">{{ jobBoxInfoObj.minSalary }}-{{ jobBoxInfoObj.maxSalary }}</i> {{ jobBoxInfoObj.paymentUnit }}
       </p>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="module-one clearfix">
     <img src="../../assets/images/logos.png" alt="">
     <div class="module-right ">
@@ -29,21 +56,21 @@
       <p class="span-infor"> <i class="font20">10000-15000</i> 元/月</p>
     </div>
   </div> -->
-</template> 
+</template>
 
 <script>
 /**
  * 首页显示工作职位信息的组件
  */
 export default {
-  name:'BaseJobBoxShow',
-  props:{
+  name: 'BaseJobBoxShow',
+  props: {
     jobBoxInfoObj: Object
   }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .module-one {
   //margin-right: 23px;
   //margin-bottom: 23px;
@@ -63,10 +90,10 @@ export default {
       color: #000000;
     }
     .span-infor {
-    font-size: 14px;
-    color: rgba(0,0,0,0.7);
-    margin-top: 15px;
-    .font20 {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.7);
+      margin-top: 15px;
+      .font20 {
         font-size: 20px;
         color: #fc6f3d;
       }

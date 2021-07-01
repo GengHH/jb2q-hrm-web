@@ -21,16 +21,32 @@
           </div>
       </el-col>
     </el-row> -->
-    
+
     <!-- 默认显示的是两列 -->
     <el-row :gutter="colRowGutter">
-      <el-col :sm="colNumProperty.smStr" :md="colNumProperty.mdStr" :lg="colNumProperty.lgStr" :xl="colNumProperty.xlStr" 
-        v-for="infoIndex in infoList" :key="infoIndex.id">
-          <div class="infoContent infoIndex.styleCalssName">
-            <BaseJobBoxShow v-if="templateName === 'job'" :job-box-info-obj="infoIndex"></BaseJobBoxShow>
-            <BaseCorpBoxShow v-if="templateName === 'corp'" :corp-box-info-obj="infoIndex"></BaseCorpBoxShow>
-            <BaseJobFairBoxShow v-if="templateName === 'jobFair'" :job-fair-box-info-obj="infoIndex"></BaseJobFairBoxShow>
-          </div>
+      <el-col
+        :sm="colNumProperty.smStr"
+        :md="colNumProperty.mdStr"
+        :lg="colNumProperty.lgStr"
+        :xl="colNumProperty.xlStr"
+        v-for="(infoIndex, index) in infoList"
+        :key="index"
+      >
+        <div class="infoContent infoIndex.styleCalssName">
+          <BaseJobBoxShow
+            v-if="templateName === 'job'"
+            :job-box-info-obj="infoIndex"
+          ></BaseJobBoxShow>
+          <BaseCorpBoxShow
+            v-if="templateName === 'corp'"
+            :corp-box-info-obj="infoIndex"
+          ></BaseCorpBoxShow>
+          <BaseJobFairBoxShow
+            v-if="templateName === 'jobFair'"
+            :job-fair-box-info-obj="infoIndex"
+            :index="index"
+          ></BaseJobFairBoxShow>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -40,50 +56,50 @@
 /**
  * 通用显示块状信息栏的显示组件
  */
-let tempInfo = { template:'<div>hahhah</div>' };
+let tempInfo = { template: '<div>hahhah</div>' };
 import BaseJobBoxShow from '@/components/common/BaseJobBoxShow.vue';
 import BaseCorpBoxShow from '@/components/common/BaseCorpBoxShow.vue';
 import BaseJobFairBoxShow from '@/components/common/BaseJobFairBoxShow.vue';
 export default {
   name: 'BaseInfoGloriette',
-  props:{
-    colRowGutter:{
-      type:Number,
-      default:20
+  props: {
+    colRowGutter: {
+      type: Number,
+      default: 20
     },
-    colNum:Number,
+    colNum: Number,
     templateName: String,
-    infoList:Array
+    infoList: Array
   },
-  components:{
+  components: {
     BaseJobBoxShow,
     BaseCorpBoxShow,
     BaseJobFairBoxShow
   },
-  data(){
-    return{
+  data() {
+    return {
       tempInfo: tempInfo,
-      list:[],
-      colNumProperty:{
-        smStr:24,
-        mdStr:24,
-        lgStr:12,
-        xlStr:12
+      list: [],
+      colNumProperty: {
+        smStr: 24,
+        mdStr: 24,
+        lgStr: 12,
+        xlStr: 12
       }
     };
   },
   computed: {},
-  created(){
+  created() {
     // if(this.$props.templateName === "job"){
     //   this.tempInfo = import('@/components/common/BaseJobBoxShow')
     // }else{
     //   this.tempInfo = import('@/components/common/BaseCorpBoxShow')
     // }
-    if(this.$props.colNum === 3){
+    if (this.$props.colNum === 3) {
       this.colNumProperty.mdStr = 8;
       this.colNumProperty.lgStr = 8;
       this.colNumProperty.xlStr = 8;
-    }else if(this.$props.colNum === 4){
+    } else if (this.$props.colNum === 4) {
       this.colNumProperty.mdStr = 12;
       this.colNumProperty.lgStr = 6;
       this.colNumProperty.xlStr = 6;
@@ -92,18 +108,18 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
-#infoGlorietteBox{
+<style lang="scss" scoped>
+#infoGlorietteBox {
   width: 100%;
-  .infoContent{
+  .infoContent {
     width: 100%;
     height: 94%;
     margin: 3% 0;
   }
-  & .el-col:nth-child(2n) > .infoContent{
+  & .el-col:nth-child(2n) > .infoContent {
     //background-color: #999;
   }
-  & .el-col:nth-child(2n+1) > .infoContent{
+  & .el-col:nth-child(2n + 1) > .infoContent {
     //background-color: #ccc;
   }
 }

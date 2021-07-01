@@ -62,27 +62,41 @@
             :col-num="3"
             :template-name="'job'"
           ></BaseInfoGloriette>
+          <el-button id="jobListMore1" class="more-btn" @click="showMore"
+            >查看更多</el-button
+          >
         </el-tab-pane>
         <el-tab-pane label="热招职位" name="jobHot">
           <BaseInfoGloriette
-            :info-list="showList"
+            :info-list="hotPositionList"
             :col-num="3"
             :template-name="'job'"
             ><div>test2</div></BaseInfoGloriette
           >
+          <el-button
+            id="jobListMore2"
+            class="more-btn"
+            v-if="hotPositionList && hotPositionList.length > 9"
+            @click="showMore"
+            >查看更多</el-button
+          >
         </el-tab-pane>
         <el-tab-pane label="急招职位" name="jobUrgent">
           <BaseInfoGloriette
-            :info-list="showList"
+            :info-list="urgPositionList"
             :col-num="4"
             :template-name="'job'"
             ><div>test3</div></BaseInfoGloriette
           >
+          <el-button
+            id="jobListMore3"
+            class="more-btn"
+            v-if="urgPositionList && urgPositionList.length > 9"
+            @click="showMore"
+            >查看更多</el-button
+          >
         </el-tab-pane>
       </el-tabs>
-      <el-button id="jobListMore" class="more-btn" @click="showMore"
-        >查看更多</el-button
-      >
 
       <!-- 单位展示位 -->
       <el-tabs
@@ -96,6 +110,13 @@
             :col-num="4"
             :template-name="'corp'"
           ></BaseInfoGloriette>
+          <el-button
+            id="corpListMore1"
+            class="more-btn"
+            v-if="showQjdList && showQjdList.length > 9"
+            @click="showMore"
+            >查看更多</el-button
+          >
         </el-tab-pane>
         <el-tab-pane label="推荐企业" name="corpInstitution">
           <BaseInfoGloriette
@@ -103,20 +124,20 @@
             :col-num="4"
             :template-name="'corp'"
           ></BaseInfoGloriette>
+          <el-button id="corpListMore2" class="more-btn" @click="showMore"
+            >查看更多</el-button
+          >
         </el-tab-pane>
       </el-tabs>
-      <el-button id="corpListMore" class="more-btn" @click="showMore"
-        >查看更多</el-button
-      >
 
-      <!-- 首页-招聘会信息列表 -->
+      <!-- 首页-三大模块信息列表 -->
+      <div style="width:100%;height:60px;"></div>
       <BaseInfoGloriette
         :info-list="jobFaieList"
         :col-num="3"
         :template-name="'jobFair'"
         :col-row-gutter="colRowGutter"
-        >3</BaseInfoGloriette
-      >
+      ></BaseInfoGloriette>
     </div>
     <!-- Footer -->
     <FooterIndex></FooterIndex>
@@ -128,8 +149,15 @@ import FooterIndex from '@/components/index/FooterIndex.vue';
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
-import { testData } from '@pub/mockTestData';
-import { isPerson, isCorporation } from '@/utils';
+import { isPerson, isCorporation, getDicText } from '@/utils';
+import {
+  queryHRFlagshipStoreInfo,
+  queryHRFlagshipStoreInfoAll,
+  queryHotPositionInfo,
+  queryHotPositionInfoAll,
+  querySortUrgRecPositionList,
+  queryAllUrgRecPositionList
+} from '@/api/indexApi';
 export default {
   name: 'indexApp',
   components: {
@@ -141,79 +169,119 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
-      list: testData.list,
       obj: {},
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       showQjdList: [
-        {
-          id: '100',
-          zl: true
-        }
+        // {
+        //   id: '100',
+        //   zl: true
+        // }
       ],
       showList: [
         {
-          id: '6',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
+          'positionId|+1': '@string("number", 3)',
+          positionCode: '20210400000032',
+          positionName: '初级审计师4405',
+          recruitType: '1',
+          tranBaseSymbol: '0',
+          agencyRecruit: '0',
+          entrustTyshxym: '',
+          entrustCorpName: '',
+          corpId: '200008010000011',
+          positionType: '10  ',
+          workNature: '01',
+          ageMax: '40',
+          ageMin: '18',
+          workArea: '04',
+          workAddress: '工作详细地址',
+          workHour: '05',
+          workYearNeed: '04',
+          eduRequire: '07',
+          salaryMax: '99999',
+          salaryMin: '50000',
+          salaryPayType: '04',
+          recruitNum: '3',
+          special: '',
+          describe: '初级审计师描述',
+          onTop: '0',
+          releaseStatusId: '2',
+          releaseUserId: '0001564639',
+          releaseTime: '2021-06-03 13:32:04',
+          corpName: '中化资产管理（上海）有限公司',
+          corpNature: '15',
+          industryType: '09'
         },
         {
-          id: '5',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
+          'positionId|+1': '@string("number", 3)',
+          positionCode: '20210400000032',
+          positionName: '初级审计师4405',
+          recruitType: '1',
+          tranBaseSymbol: '0',
+          agencyRecruit: '0',
+          entrustTyshxym: '',
+          entrustCorpName: '',
+          corpId: '200008010000011',
+          positionType: '10  ',
+          workNature: '01',
+          ageMax: '40',
+          ageMin: '18',
+          workArea: '04',
+          workAddress: '工作详细地址',
+          workHour: '05',
+          workYearNeed: '04',
+          eduRequire: '07',
+          salaryMax: '99999',
+          salaryMin: '50000',
+          salaryPayType: '04',
+          recruitNum: '3',
+          special: '',
+          describe: '初级审计师描述',
+          onTop: '0',
+          releaseStatusId: '2',
+          releaseUserId: '0001564639',
+          releaseTime: '2021-06-03 13:32:04',
+          corpName: '中化资产管理（上海）有限公司',
+          corpNature: '15',
+          industryType: '09'
         },
         {
-          id: '4',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '3',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动列表',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '2',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
-        },
-        {
-          id: '1',
-          jobName: 'HTML5移动开发工程师',
-          districtName: '活动管理',
-          timeInterval: '3-5年',
-          educationName: '本科',
-          minSalary: '10000',
-          maxSalary: '15000',
-          paymentUnit: '元/月'
+          'positionId|+1': '@string("number", 3)',
+          positionCode: '20210400000032',
+          positionName: '初级审计师4405',
+          recruitType: '1',
+          tranBaseSymbol: '0',
+          agencyRecruit: '0',
+          entrustTyshxym: '',
+          entrustCorpName: '',
+          corpId: '200008010000011',
+          positionType: '10  ',
+          workNature: '01',
+          ageMax: '40',
+          ageMin: '18',
+          workArea: '04',
+          workAddress: '工作详细地址',
+          workHour: '05',
+          workYearNeed: '04',
+          eduRequire: '07',
+          salaryMax: '99999',
+          salaryMin: '50000',
+          salaryPayType: '04',
+          recruitNum: '3',
+          special: '',
+          describe: '初级审计师描述',
+          onTop: '0',
+          releaseStatusId: '2',
+          releaseUserId: '0001564639',
+          releaseTime: '2021-06-03 13:32:04',
+          corpName: '中化资产管理（上海）有限公司',
+          corpNature: '15',
+          industryType: '09'
         }
       ],
+      hotPositionList: [],
+      urgPositionList: [],
       selectValue: 'position',
       selectData: [
         {
@@ -230,6 +298,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 跳转个人登录界面或者个人界面
+     */
     personSignIn() {
       this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'person');
       //this.$alert('个人登录暂时未开放');
@@ -247,6 +318,9 @@ export default {
         window.location.href = '/ggzp-shrs/login.html';
       }
     },
+    /**
+     * 跳转单位登录界面或者单位界面
+     */
     corpSignIn() {
       this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'corporation');
       if (isCorporation(this)) {
@@ -257,17 +331,6 @@ export default {
       // window.location.href =
       //   'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
-    test() {
-      this.axios
-        .get('http://api.wpbom.com/api/neran.php')
-        .then(res => {
-          this.$set(this.obj, 'siet', res.data);
-          console.log(this.$data);
-        })
-        .catch(err => {
-          throw new Error('调用API失败' + err);
-        });
-    },
     jobHandleClick() {
       console.log(1);
     },
@@ -276,7 +339,91 @@ export default {
     },
     showMore() {
       this.$message('this is more');
+    },
+    async initPage() {
+      //热招
+      let hotRes = await queryHotPositionInfo();
+      if (hotRes && hotRes.status === 200) {
+        hotRes.result.data.forEach(item => {
+          // if (item.workArea) {
+          //   item.workAreaText = getDicText(
+          //     this.$store.getters['dictionary/ggjbxx_qx'],
+          //     item.workArea
+          //   );
+          // }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              this.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workYearNeed) {
+            item.workYearNeedText = getDicText(
+              this.$store.getters['dictionary/recruit_work_year'],
+              item.workYearNeed
+            );
+          }
+          if (item.salaryPayType) {
+            item.salaryPayTypeText =
+              '元/' +
+              getDicText(
+                this.$store.getters['dictionary/recruit_salary_pay_type'],
+                item.salaryPayType
+              );
+          }
+        });
+
+        this.hotPositionList = hotRes.result.data;
+      } else if (hotRes) {
+        this.$message.error('获取热招职位信息失败');
+      }
+      //急招
+      let urgRes = await querySortUrgRecPositionList();
+      if (urgRes && urgRes.status === 200) {
+        urgRes.result.data.forEach(item => {
+          // if (item.corpNature) {
+          //   item.corpNatureText = getDicText(
+          //     this.$store.getters['dictionary/recruit_corp_nature'],
+          //     item.corpNature
+          //   );
+          // }
+          // if (item.industryType) {
+          //   item.industryTypeText = getDicText(
+          //     this.$store.getters['dictionary/recruit_industry_type'],
+          //     item.industryType
+          //   );
+          // }
+        });
+        this.urgPositionList = urgRes.result.data;
+      } else if (urgRes) {
+        this.$message.error('获取紧急招职位信息失败');
+      }
+      //旗舰店
+      let shipRes = await queryHRFlagshipStoreInfo();
+      if (shipRes && shipRes.status === 200) {
+        shipRes.result.data.forEach(item => {
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              this.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              this.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+
+        this.showQjdList = shipRes.result.data;
+      } else if (shipRes) {
+        this.$message.error('获取人力资源旗舰店信息失败');
+      }
     }
+  },
+  created() {
+    this.initPage();
   },
   mounted() {
     if (isPerson(this)) {
@@ -298,7 +445,7 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 150px;
+  margin: 0 auto 100px;
   padding-top: 90px;
   //background-color: $g-gray1-color;
   .more-btn {

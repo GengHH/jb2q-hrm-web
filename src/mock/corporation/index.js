@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 15:11:03
+ * @LastEditTime: 2021-07-01 14:52:44
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -1496,5 +1496,73 @@ Mock.mock(
     };
   }
 );
+
+//邀约时获取职位信息
+
+Mock.mock(
+  RegExp(basePath + '/corp/resume/queryPositionListNoPage'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            positionId: 9,
+            positionCode: '20211700000009',
+            positionName: '文员',
+            recruitType: '1',
+            tranBaseSymbol: '1',
+            tranPositionCode: '2007144038',
+            tranCorpId: '200511082606411',
+            tranCorpName: '上海大新华运通国际旅行社有限公司',
+            agencyRecruit: '0',
+            entrustTyshxym: '',
+            entrustCorpName: '',
+            corpId: '201005125781301',
+            positionType: '09  ',
+            workNature: '03',
+            ageMax: 30,
+            ageMin: 20,
+            workArea: '05',
+            workAddress: '江苏路',
+            workHour: '025',
+            workYearNeed: '01',
+            eduRequire: '05',
+            salaryMax: 6000,
+            salaryMin: 3000,
+            salaryPayType: '04',
+            recruitNum: 1,
+            special: '',
+            describe: '综合类基地，见习岗位测试',
+            workStreet: '0502',
+            onTop: '0',
+            endDate: '20210531',
+            statusId: '',
+            verifyUserId: '',
+            verifyTime: '',
+            verifyMemo: '',
+            releaseStatusId: '2',
+            releaseUserId: '0001564640',
+            releaseTime: '2021-05-26 16:31:43',
+            offShelf: '0',
+            offTime: '',
+            offReason: '',
+            offUserId: '',
+            editTime: '',
+            specialList: [],
+            workStreetList: ['0502']
+          }
+        ]
+      }
+    };
+  }
+);
+
+//邀约
+Mock.mock(RegExp(basePath + '/corp/resume/invite'), 'post', function(options) {
+  return successData;
+});
 
 export default Mock;

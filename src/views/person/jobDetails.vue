@@ -105,13 +105,23 @@
               <span>招聘{{ Number(realData.recruitNum) }}人</span>
             </div>
             <p class="sixteen-opacity mat-30">
-              <span style="display:inline-block;">{{ realData.corpName }}</span>
+              <span style="display:inline-block;position: relative;top: 2px;">{{
+                realData.corpName
+              }}</span>
               <img
                 src="../../assets/images/ico_rz.png"
                 alt=""
                 class="ico_rz"
-                style="height: .9em;"
-              />
+                style="height: .9em;position: relative;top: 3px;"
+              /><i
+                v-if="realData.attention"
+                class="star-btn el-icon-star-off"
+                @click="attentionCorp"
+                >关注单位</i
+              >
+              <i v-else class="star-btn el-icon-star-on" @click="attentionCorp"
+                >取消关注单位</i
+              >
             </p>
             <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
@@ -360,7 +370,8 @@ import {
   queryPositionDetail,
   queryRecommendDetai,
   sendComplaintSms,
-  doComplaint
+  doComplaint,
+  attentionOrFavor
 } from '@/api/personApi';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import { phonePattern } from '@/utils/regexp';
@@ -680,6 +691,28 @@ export default {
         this.$message.error('投诉失败');
       }
       this.loading = false;
+    },
+    /**
+     * TODO(attention) 个人关注or取消关注单位
+     */
+    async attentionCorp() {
+      let queryRes = await attentionOrFavor('1', {
+        id: [this.realData.corpId],
+        pid: this.$store.getters['person/pid'],
+        status: this.realData.attention
+      });
+      if (queryRes && queryRes.status === 200) {
+        // this.corpInfo = queryRes.result.data;
+        this.$message.success(
+          this.realData.attention ? '关注成功' : '取消关注成功'
+        );
+        //TODO更新按钮样式
+        this.realData.attention = !this.realData.attention;
+      } else if (queryRes) {
+        this.$message.error(
+          this.realData.attention ? '关注失败' : '取消关注失败'
+        );
+      }
     }
   }
 };
@@ -943,6 +976,15 @@ export default {
   }
   .count {
     background-color: #f6f6f6;
+  }
+  .star-btn {
+    color: #fc7a43;
+    border: 1px solid #fc7a43;
+    padding: 2px 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    cursor: pointer;
   }
 }
 </style>

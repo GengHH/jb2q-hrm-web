@@ -110,8 +110,8 @@ export default {
       return [
         { attrs: { type: 'selection' } },
         {
-          label: '行序号',
-          attrs: { type: 'index', width: 100 },
+          label: '序号',
+          attrs: { type: 'index', width: 60 },
           rowSpan: [
             [0, 1],
             [2, 4]

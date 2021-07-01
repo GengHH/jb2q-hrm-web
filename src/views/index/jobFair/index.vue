@@ -9,13 +9,13 @@
         v-model="jobActiveName"
         @tab-click="jobHandleClick"
       >
-        <el-tab-pane label="全部" name="jobRecommended">
+        <el-tab-pane label="全部" name="0">
           <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow>
         </el-tab-pane>
-        <el-tab-pane label="进行中" name="jobHot">
+        <el-tab-pane label="进行中" name="1">
           <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow>
         </el-tab-pane>
-        <el-tab-pane label="未开始" name="jobUrgent">
+        <el-tab-pane label="未开始" name="2">
           <FairBoxShow v-for="index in showList" :key="index.id"></FairBoxShow>
         </el-tab-pane>
       </el-tabs>
@@ -35,7 +35,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import FairBoxShow from '@/components/index/FairBoxShow.vue';
 import { testData } from '@pub/mockTestData';
 export default {
-  name: 'app',
+  name: 'indexJobFair',
   components: {
     FairBoxShow,
     BaseSearch
@@ -45,7 +45,7 @@ export default {
       list: testData.list,
       obj: {},
       searchPlaceHolder: '搜索职位、公司',
-      jobActiveName: 'jobRecommended',
+      jobActiveName: '0',
       corpActiveName: 'corpRecommended',
       showList: [
         {

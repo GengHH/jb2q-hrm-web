@@ -491,7 +491,6 @@ export default {
     },
     /**
      * 个人关注or取消关注单位
-     * TODO 参数未定
      */
     async attentionCorp() {
       let queryRes = await attentionOrFavor('1', {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 10:03:24
+ * @LastEditTime: 2021-07-01 18:09:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -715,6 +715,216 @@ Mock.mock(
               releaseStatusId: '2',
               'corpNature|1': ['01', '02'],
               'industryType|1': ['01', '02']
+            }
+          ]
+        })
+      }
+    };
+  }
+);
+
+//默认热招推荐类简历投递数倒序前9职位明细
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryHotPositionInfo'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            'positionId|+1': '@string("number", 3)',
+            positionCode: '20210400000032',
+            positionName: '初级审计师4405',
+            recruitType: '1',
+            tranBaseSymbol: '0',
+            agencyRecruit: '0',
+            entrustTyshxym: '',
+            entrustCorpName: '',
+            corpId: '200008010000011',
+            positionType: '10  ',
+            workNature: '01',
+            ageMax: '40',
+            ageMin: '18',
+            workArea: '04',
+            workAddress: '工作详细地址',
+            workHour: '05',
+            workYearNeed: '04',
+            eduRequire: '07',
+            salaryMax: '99999',
+            salaryMin: '50000',
+            salaryPayType: '04',
+            recruitNum: '3',
+            special: '',
+            describe: '初级审计师描述',
+            onTop: '0',
+            releaseStatusId: '2',
+            releaseUserId: '0001564639',
+            releaseTime: '2021-06-03 13:32:04',
+            corpName: '中化资产管理（上海）有限公司',
+            corpNature: '15',
+            industryType: '09'
+          }
+        ]
+      })
+    };
+  }
+);
+//分页查询所有热招职位
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryHotPositionInfoAll'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'cid|+1': '@string("number", 12)',
+              corpName: '万达信息股份有限公司',
+              tyshxydm: '91310000132653687M',
+              corpNature: '15',
+              industryType: '01'
+            }
+          ]
+        })
+      }
+    };
+  }
+);
+
+//查询工资下限前九的急招职位
+Mock.mock(
+  RegExp(basePath + '/nologin/index/querySortUrgRecPositionList'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            'positionId|+1': '@string("number", 3)',
+            positionCode: '20210400000032',
+            positionName: '初级审计师4405',
+            recruitType: '1',
+            tranBaseSymbol: '0',
+            agencyRecruit: '0',
+            entrustTyshxym: '',
+            entrustCorpName: '',
+            corpId: '200008010000011',
+            positionType: '10  ',
+            workNature: '01',
+            ageMax: '40',
+            ageMin: '18',
+            workArea: '04',
+            workAddress: '工作详细地址',
+            workHour: '05',
+            workYearNeed: '04',
+            eduRequire: '07',
+            salaryMax: '99999',
+            salaryMin: '50000',
+            salaryPayType: '04',
+            recruitNum: '3',
+            special: '',
+            describe: '初级审计师描述',
+            onTop: '0',
+            releaseStatusId: '2',
+            releaseUserId: '0001564639',
+            releaseTime: '2021-06-03 13:32:04',
+            corpName: '中化资产管理（上海）有限公司',
+            corpNature: '15',
+            industryType: '09'
+          }
+        ]
+      })
+    };
+  }
+);
+//查询所有急招职位
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryAllUrgRecPositionList'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'cid|+1': '@string("number", 12)',
+              corpName: '万达信息股份有限公司',
+              tyshxydm: '91310000132653687M',
+              corpNature: '15',
+              industryType: '01'
+            }
+          ]
+        })
+      }
+    };
+  }
+);
+
+//人力资源旗舰店默认前九
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryHRFlagshipStoreInfo'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            cid: '200008010784151',
+            corpName: '万达信息股份有限公司',
+            tyshxydm: '91310000132653687M',
+            corpNature: '15',
+            industryType: '01'
+          },
+          {
+            cid: '200008010784151',
+            corpName: '万达信息股份有限公司',
+            tyshxydm: '91310000132653687M',
+            corpNature: '15',
+            industryType: '01'
+          },
+          {
+            cid: '200008010784151',
+            corpName: '万达信息股份有限公司',
+            tyshxydm: '91310000132653687M',
+            corpNature: '15',
+            industryType: '01'
+          }
+        ]
+      }
+    };
+  }
+);
+//查询所有人力资源旗舰店(分页)
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryHRFlagshipStoreInfoAll'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'cid|+1': '@string("number", 12)',
+              corpName: '万达信息股份有限公司',
+              tyshxydm: '91310000132653687M',
+              corpNature: '15',
+              industryType: '01'
             }
           ]
         })
