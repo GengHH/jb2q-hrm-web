@@ -218,10 +218,10 @@ export default {
             !this.totalCount ||
             (this.totalCount && Number(this.totalCount) === 0)
           ) {
-            this.$message({ type: 'success', message: '未查询到结果' });
+            this.$message.success('未查询到结果');
           }
         } else if (queryRes) {
-          this.$message({ type: 'error', message: '查询失败' });
+          this.$message.error('查询失败');
         }
         this.loading = false;
       });

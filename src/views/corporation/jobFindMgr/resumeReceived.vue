@@ -415,7 +415,8 @@
               <el-time-picker
                 placeholder="报到时间"
                 v-model="feedback.reportTime"
-                value-format="HHmmss"
+                format="HH:mm"
+                value-format="HHmm"
               ></el-time-picker>
             </el-form-item>
           </el-col>

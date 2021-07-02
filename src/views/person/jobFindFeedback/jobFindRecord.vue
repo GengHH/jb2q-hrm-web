@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 13:49:31
+ * @LastEditTime: 2021-07-02 18:14:58
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -398,9 +398,7 @@
         {{
           currentRow.reportTime.substr(0, 2) +
             ':' +
-            currentRow.reportTime.substr(2, 2) +
-            ':' +
-            currentRow.reportTime.substr(4, 2)
+            currentRow.reportTime.substr(2, 2)
         }}
       </div>
       <div>

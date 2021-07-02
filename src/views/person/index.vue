@@ -165,7 +165,7 @@ export default {
       },
       rules: {
         contactPhone: [
-          // { required: true, message: '请输手机号', trigger: 'blur' },
+          { required: true, message: '请输手机号', trigger: 'blur' }
           // {
           //   pattern: phonePattern,
           //   message: '请输入正确格式的手机号',

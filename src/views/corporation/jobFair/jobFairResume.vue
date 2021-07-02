@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 15:42:22
+ * @LastEditTime: 2021-07-02 18:14:10
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFair\jobFairResume.vue
 -->
@@ -427,7 +427,8 @@
               <el-time-picker
                 placeholder="报到时间"
                 v-model="feedback.reportTime"
-                value-format="HHmmss"
+                format="HH:mm"
+                value-format="HHmm"
               ></el-time-picker>
             </el-form-item>
           </el-col>

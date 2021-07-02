@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 17:34:40
+ * @LastEditTime: 2021-07-02 17:35:02
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -58,6 +58,13 @@ const queryHRFlagshipStoreInfo = params =>
 const queryHRFlagshipStoreInfoAll = params =>
   postAction(basePath + '/nologin/index/queryHRFlagshipStoreInfoAll', params);
 
+//查询特色活动列表
+const queryMeetingList = params =>
+  postAction(basePath + '/nologin/meeting/queryMeetingList', params);
+//查询特色活动明细信息
+const queryMeetingDetail = params =>
+  postAction(basePath + '/nologin/meeting/queryMeetingDetail', params);
+
 export {
   queryTable,
   // queryActivies,
@@ -70,5 +77,7 @@ export {
   querySortUrgRecPositionList,
   queryAllUrgRecPositionList,
   queryHRFlagshipStoreInfo,
-  queryHRFlagshipStoreInfoAll
+  queryHRFlagshipStoreInfoAll,
+  queryMeetingList,
+  queryMeetingDetail
 };

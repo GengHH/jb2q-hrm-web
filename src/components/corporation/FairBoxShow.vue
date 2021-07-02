@@ -258,10 +258,7 @@ export default {
      * 报名参见招聘会
      */
     applyJobFair(done) {
-      if (
-        !this.positionList ||
-        (this.positionList && !this.positionList.length)
-      ) {
+      if (!this.positsionId || (this.positsionId && !this.positsionId.length)) {
         this.$alert('没有选择职位信息，无法添加');
         return;
       }

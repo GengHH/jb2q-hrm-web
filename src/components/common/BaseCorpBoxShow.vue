@@ -2,12 +2,12 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 17:24:58
+ * @LastEditTime: 2021-07-02 15:49:03
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
 -->
 <template>
-  <div class="module-two clearfix">
+  <div class="module-two clearfix" @click="showCorpDetails">
     <!-- <img
       v-if="corpBoxInfoObj.zl"
       src="../../assets/images/zhilianLogo.png"
@@ -68,6 +68,21 @@ export default {
       let img = event.target;
       img.src = this.defaultImg;
       img.onerror = null; //防止闪图
+    },
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    showCorpDetails() {
+      if (!this.corpBoxInfoObj.cid) {
+        this.$alert('无法获取职位详细信息');
+      } else {
+        this.$router.push({
+          path: '/corpDetails',
+          query: {
+            id: this.corpBoxInfoObj.cid
+          }
+        });
+      }
     }
   }
 };
@@ -80,6 +95,9 @@ export default {
   background: #fff;
   padding: 22px;
   text-align: center;
+  &:hover {
+    border: 1px solid #fc6f3d;
+  }
   img {
     display: inline-block;
   }

@@ -2,13 +2,14 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:30:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 10:50:47
+ * @LastEditTime: 2021-07-02 10:32:54
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\activity\index.vue
 -->
 <template>
   <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <BaseSearch
+      ref="searchBox"
       :placeholder="searchPlaceHolder"
       showSelect
       :selectData="selectData"
@@ -25,7 +26,7 @@
         区县：</el-col
       >
       <el-col :sm="20" :md="21" :lg="21" :xl="22">
-        <el-radio-group v-model="qx" size="medium">
+        <el-radio-group v-model="qx" size="medium" @change="queryActivityList">
           <el-radio-button
             :label="item.value"
             v-for="(item, index) in dicQx"
@@ -47,7 +48,11 @@
         排序：</el-col
       >
       <el-col :sm="20" :md="21" :lg="21" :xl="22">
-        <el-radio-group v-model="order" size="medium">
+        <el-radio-group
+          v-model="order"
+          size="medium"
+          @change="queryActivityList"
+        >
           <!-- <el-radio-button label="">不限</el-radio-button> -->
           <el-radio-button label="1">最新</el-radio-button>
           <el-radio-button label="2">最热</el-radio-button>
@@ -119,8 +124,16 @@ export default {
   },
   methods: {
     async queryActivityList(args) {
-      let actType = args ? args[0] : '';
-      let activityName = args ? args[1] : '';
+      // let actType = args ? args[0] : '';
+      // let activityName = args ? args[1] : '';
+      let actType = this.$refs.searchBox.input
+        ? $.trim(this.$refs.searchBox.input)
+        : null;
+
+      let activityName = this.$refs.searchBox.selectValue
+        ? $.trim(this.$refs.searchBox.selectValue)
+        : null;
+
       this.loading = true;
       let res = await queryActivityList({
         pageParam: {

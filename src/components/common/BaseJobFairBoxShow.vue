@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 13:24:59
+ * @LastEditTime: 2021-07-02 16:00:57
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseJobFairBoxShow.vue
 -->
@@ -25,8 +25,8 @@
   </div> -->
   <div class="module-three" @click="goPath(index)">
     <img :src="imgs[index]" alt="未加载" />
-    <p class="zl-font mat-30">招聘会专栏</p>
-    <p class="zl-font2 mat-15">各种线上限下大型招聘会，期待你加入</p>
+    <!-- <p class="zl-font mat-30">招聘会专栏</p>
+    <p class="zl-font2 mat-15">各种线上限下大型招聘会，期待你加入</p> -->
   </div>
 </template>
 

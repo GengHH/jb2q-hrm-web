@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 18:09:34
+ * @LastEditTime: 2021-07-02 18:07:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -784,11 +784,37 @@ Mock.mock(
           'total|1-10': 1,
           'data|1-10': [
             {
-              'cid|+1': '@string("number", 12)',
-              corpName: '万达信息股份有限公司',
-              tyshxydm: '91310000132653687M',
+              'positionId|+1': '@string("number", 3)',
+              positionCode: '20210400000032',
+              positionName: '初级审计师4405666',
+              recruitType: '1',
+              tranBaseSymbol: '0',
+              agencyRecruit: '0',
+              entrustTyshxym: '',
+              entrustCorpName: '',
+              corpId: '200008010000011',
+              positionType: '10  ',
+              workNature: '01',
+              ageMax: '40',
+              ageMin: '18',
+              workArea: '04',
+              workAddress: '工作详细地址',
+              workHour: '05',
+              workYearNeed: '04',
+              eduRequire: '07',
+              salaryMax: '99999',
+              salaryMin: '50000',
+              salaryPayType: '04',
+              recruitNum: '3',
+              special: '',
+              describe: '初级审计师描述',
+              onTop: '0',
+              releaseStatusId: '2',
+              releaseUserId: '0001564639',
+              releaseTime: '2021-06-03 13:32:04',
+              corpName: '中化资产管理（上海）有限公司',
               corpNature: '15',
-              industryType: '01'
+              industryType: '09'
             }
           ]
         })
@@ -858,11 +884,37 @@ Mock.mock(
           'total|1-10': 1,
           'data|1-10': [
             {
-              'cid|+1': '@string("number", 12)',
-              corpName: '万达信息股份有限公司',
-              tyshxydm: '91310000132653687M',
+              'positionId|+1': '@string("number", 3)',
+              positionCode: '20210400000032',
+              positionName: '初级审计师4405',
+              recruitType: '1',
+              tranBaseSymbol: '0',
+              agencyRecruit: '0',
+              entrustTyshxym: '',
+              entrustCorpName: '',
+              corpId: '200008010000011',
+              positionType: '10  ',
+              workNature: '01',
+              ageMax: '40',
+              ageMin: '18',
+              workArea: '04',
+              workAddress: '工作详细地址',
+              workHour: '05',
+              workYearNeed: '04',
+              eduRequire: '07',
+              salaryMax: '99999',
+              salaryMin: '50000',
+              salaryPayType: '04',
+              recruitNum: '3',
+              special: '',
+              describe: '初级审计师描述',
+              onTop: '0',
+              releaseStatusId: '2',
+              releaseUserId: '0001564639',
+              releaseTime: '2021-06-03 13:32:04',
+              corpName: '中化资产管理（上海）有限公司',
               corpNature: '15',
-              industryType: '01'
+              industryType: '09'
             }
           ]
         })
@@ -929,6 +981,86 @@ Mock.mock(
           ]
         })
       }
+    };
+  }
+);
+//查询特色活动列表(分页)
+Mock.mock(
+  RegExp(basePath + '/nologin/meeting/queryMeetingList'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: Mock.mock({
+          'total|1-10': 1,
+          'data|1-10': [
+            {
+              'meetId|+1': '@string("number", 3)',
+              meetName: '招聘会名称测试12222',
+              meetIntroduce: '招聘会名称',
+              meetType: '1',
+              startTime: '2021-04-25 00:00:00',
+              endTime: '2021-04-30 00:00:00',
+              address: '天山路1800号',
+              boothCount: '9999',
+              traffic: '地铁2，3，4，15号线',
+              mainCorpName: '万达信息',
+              contactName: '令狐冲',
+              contactPhone: '123123122312',
+              propagandaImage: 'iVBORw0KGgoAAAANSUhEUgAAA9EAAAGtCAYAAAART/',
+              districtCode: '03,02',
+              onTop: '0',
+              releaseStatus: '1',
+              applyStatus: '1',
+              userId: '0001564698',
+              releaseTime: '2021-05-22 13:43:15',
+              endApplyTime: '2021-05-05 00:00:00',
+              releaseDistrict: '00'
+            }
+          ]
+        })
+      }
+    };
+  }
+);
+
+//查询工资下限前九的急招职位
+Mock.mock(
+  RegExp(basePath + '/nologin/meeting/queryMeetingDetail'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            'meetId|+1': '@string("number", 3)',
+            meetName: '招聘会名称测试12222',
+            meetIntroduce: '招聘会名称',
+            meetType: '1',
+            startTime: '2021-04-25 00:00:00',
+            endTime: '2021-04-30 00:00:00',
+            address: '天山路1800号',
+            boothCount: '9999',
+            traffic: '地铁2，3，4，15号线',
+            mainCorpName: '万达信息',
+            contactName: '令狐冲',
+            contactPhone: '123123122312',
+            propagandaImage: 'iVBORw0KGgoAAAANSUhEUgAAA9EAAAGtCAYAAAART/',
+            districtCode: '03,02',
+            onTop: '0',
+            releaseStatus: '1',
+            applyStatus: '1',
+            userId: '0001564698',
+            releaseTime: '2021-05-22 13:43:15',
+            endApplyTime: '2021-05-05 00:00:00',
+            releaseDistrict: '00'
+          }
+        ]
+      })
     };
   }
 );

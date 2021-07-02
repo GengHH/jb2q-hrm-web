@@ -1,6 +1,6 @@
 <template>
   <div id="indexBody">
-    <div style="padding:0 40px">
+    <div>
       <base-search
         placeholder="请输入相关职位名称"
         @clickButton="queryJobs($event)"
@@ -146,6 +146,19 @@
               <!-- <el-radio-button label="01">全职</el-radio-button>
               <el-radio-button label="02">兼职</el-radio-button>
               <el-radio-button label="03">就业见习</el-radio-button> -->
+            </el-radio-group>
+          </el-col>
+        </el-row>
+        <el-row class="condition condition-four">
+          <el-col :span="2">
+            <div class="grid-content bg-purple">职位类型：</div>
+          </el-col>
+          <el-col :span="20">
+            <el-radio-group v-model="queryParams.positionType" size="medium">
+              <el-radio-button label="">不限</el-radio-button>
+              <el-radio-button label="01">推荐</el-radio-button>
+              <el-radio-button label="02">热招</el-radio-button>
+              <el-radio-button label="03">急招</el-radio-button>
             </el-radio-group>
           </el-col>
         </el-row>
@@ -327,6 +340,7 @@
       :before-close="detailsHandleClose"
     >
       <job-details
+        notSinglePage
         :positionData="onePosition"
         :index="detailsIndex"
         @perfectResume="perfectResume"
@@ -354,7 +368,11 @@ import JobDetails from '@/views/index/jobDetails';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import { doDeliveryResume, attentionOrFavor } from '@/api/personApi';
-import { queryJobs } from '@/api/indexApi';
+import {
+  queryJobs,
+  queryAllUrgRecPositionList,
+  queryHotPositionInfoAll
+} from '@/api/indexApi';
 export default {
   name: 'JobSearch',
   components: {
@@ -389,7 +407,8 @@ export default {
         ageMax: '',
         workHour: '',
         positionName: '',
-        corpName: ''
+        corpName: '',
+        positionType: ''
       },
       options: [],
       tableData: [],
@@ -456,7 +475,26 @@ export default {
     }
   },
   created() {
-    this.queryJobs();
+    //根据url上的参数查询职位信息
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      // this.queryParams.positionType = this.$route.query.type;
+      if (this.$route.query.type === 'urg') {
+        //查询急招职位
+        this.queryParams.positionType = '03';
+        this.queryAllUrgRecPositionList();
+      } else if (this.$route.query.type === 'hot') {
+        //查询热招职位
+        this.queryParams.positionType = '02';
+        this.queryHotPositionInfoAll();
+      } else {
+        this.queryParams.positionType = '01';
+        //TODO 查询推荐职位
+        return;
+      }
+    } else {
+      this.queryParams.positionType = '';
+      this.queryJobs();
+    }
   },
   updated() {
     console.log(1234);
@@ -750,6 +788,122 @@ export default {
     uploadResume() {
       //上传简历
       this.$alert('此功能暂时未开放，请稍候！');
+    },
+    //查询急招职位
+    async queryAllUrgRecPositionList() {
+      let that = this;
+      let result = await queryAllUrgRecPositionList();
+
+      if (
+        result.status === 200 &&
+        result.result.pageresult &&
+        result.result.pageresult.total
+      ) {
+        result.result.pageresult.data.forEach(item => {
+          // 转换字典
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              that.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              that.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workNature) {
+            item.workNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_work_nature'],
+              item.workNature
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              that.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.$set(this, 'queryResult', result.result.pageresult.data);
+        this.$set(
+          this,
+          'queryResultTotal',
+          Number(result.result.pageresult.total) || 0
+        );
+      } else if (result) {
+        this.$set(this, 'queryResult', []);
+        this.$set(this, 'queryResultTotal', 0);
+        this.$message({
+          type: 'success',
+          message: '未查询到信息'
+        });
+      }
+    },
+
+    //查询热招职位
+    async queryHotPositionInfoAll() {
+      let that = this;
+      let result = await queryHotPositionInfoAll();
+      if (
+        result.status === 200 &&
+        result.result.pageresult &&
+        result.result.pageresult.total
+      ) {
+        result.result.pageresult.data.forEach(item => {
+          // 转换字典
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              that.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              that.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workNature) {
+            item.workNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_work_nature'],
+              item.workNature
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              that.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.$set(this, 'queryResult', result.result.pageresult.data);
+        this.$set(
+          this,
+          'queryResultTotal',
+          Number(result.result.pageresult.total) || 0
+        );
+      } else if (result) {
+        this.$set(this, 'queryResult', []);
+        this.$set(this, 'queryResultTotal', 0);
+        this.$message({
+          type: 'success',
+          message: '未查询到信息'
+        });
+      }
     }
   }
 };
@@ -773,12 +927,13 @@ export default {
 
   .radio-list-bar {
     overflow: hidden;
-    max-height: 52px;
+    max-height: 40px;
     transition: height 0.5s;
     -webkit-transition: max-height 0.5s;
     ::v-deep .el-checkbox-button__inner {
       border: 0 !important;
-      padding: 10px 20px !important;
+      // padding: 10px 20px !important;
+      padding: 7px 15px !important;
       border-radius: 0 !important;
     }
   }
@@ -786,13 +941,14 @@ export default {
     max-height: 416px !important;
   }
   .el-checkbox-button {
-    margin: 10px 0;
+    margin: 6px 0;
   }
 }
 
 .filter-content {
   margin-bottom: 20px;
   ::v-deep .el-radio-button__inner {
+    padding: 7px 15px;
     border: 0;
   }
   ::v-deep .el-input__inner {
@@ -839,14 +995,14 @@ export default {
     border-bottom: 1px solid #eeeeee;
   }
   .el-radio-group {
-    line-height: 52px;
+    line-height: 40px;
     //text-align: center;
     ::v-deep .el-radio-button__inner {
       border-radius: 0;
     }
   }
   .bg-purple {
-    line-height: 52px;
+    line-height: 40px;
     text-align: center;
   }
   .filter-select {
@@ -878,7 +1034,7 @@ export default {
     border: 0;
     border-radius: 0;
     padding: 10px 20px;
-    margin: 10px 0;
+    // margin: 10px 0;
   }
 }
 </style>

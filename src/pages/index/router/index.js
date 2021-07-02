@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-10 16:26:04
+ * @LastEditTime: 2021-07-02 18:12:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\router\index.js
  */
@@ -64,6 +64,11 @@ export default new Router({
       path: '/jobFair',
       name: '招聘会',
       component: () => import('@/views/index/jobFair')
+    },
+    {
+      path: '/fairDetails',
+      name: '招聘会详情',
+      component: () => import('@/views/index/jobFair/fairDetails')
     },
     {
       path: '/employmentTrainee',

@@ -1,5 +1,8 @@
 <template>
-  <div id="jobSearchView" class="content-box">
+  <div
+    id="jobSearchView"
+    :class="['content-box', { notSinglePage: notSinglePage }]"
+  >
     <!--S 职位详情上半部分 -->
     <div class="infor-job">
       <div class="middle-box">
@@ -229,13 +232,28 @@
 <script>
 export default {
   name: 'JobSearchIndex',
+  props: {
+    notSinglePage: Boolean,
+    default: false
+  },
   data() {
-    return {};
+    return {
+      positionId: ''
+    };
+  },
+  created() {
+    //根据url上的参数查询职位信息
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      this.positionId = this.$route.query.id;
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.notSinglePage {
+  padding-top: 0 !important;
+}
 #jobSearchView {
   width: 90%;
   min-height: 100%;
@@ -244,6 +262,7 @@ export default {
   background: #ffffff;
   //color: #000;
   //padding: 0;
+  padding-top: 90px;
   padding-bottom: 20px;
   .infor-job {
     background: #ffffff;

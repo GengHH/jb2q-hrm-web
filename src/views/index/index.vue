@@ -62,7 +62,10 @@
             :col-num="3"
             :template-name="'job'"
           ></BaseInfoGloriette>
-          <el-button id="jobListMore1" class="more-btn" @click="showMore"
+          <el-button
+            id="jobListMore1"
+            class="more-btn"
+            @click="showMorePosition('rec')"
             >查看更多</el-button
           >
         </el-tab-pane>
@@ -76,23 +79,23 @@
           <el-button
             id="jobListMore2"
             class="more-btn"
-            v-if="hotPositionList && hotPositionList.length > 9"
-            @click="showMore"
+            v-if="hotPositionList && hotPositionList.length >= 9"
+            @click="showMorePosition('hot')"
             >查看更多</el-button
           >
         </el-tab-pane>
         <el-tab-pane label="急招职位" name="jobUrgent">
           <BaseInfoGloriette
             :info-list="urgPositionList"
-            :col-num="4"
+            :col-num="3"
             :template-name="'job'"
             ><div>test3</div></BaseInfoGloriette
           >
           <el-button
             id="jobListMore3"
             class="more-btn"
-            v-if="urgPositionList && urgPositionList.length > 9"
-            @click="showMore"
+            v-if="urgPositionList && urgPositionList.length >= 9"
+            @click="showMorePosition('urg')"
             >查看更多</el-button
           >
         </el-tab-pane>
@@ -113,7 +116,7 @@
           <el-button
             id="corpListMore1"
             class="more-btn"
-            v-if="showQjdList && showQjdList.length > 9"
+            v-if="showQjdList && showQjdList.length >= 9"
             @click="showMore"
             >查看更多</el-button
           >
@@ -149,7 +152,7 @@ import FooterIndex from '@/components/index/FooterIndex.vue';
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
-import { isPerson, isCorporation, getDicText } from '@/utils';
+import { isPerson, isCorporation, getDicText, niceScrollUpdate } from '@/utils';
 import {
   queryHRFlagshipStoreInfo,
   queryHRFlagshipStoreInfoAll,
@@ -340,17 +343,31 @@ export default {
     showMore() {
       this.$message('this is more');
     },
+    /**
+     *显示更多职位
+     */
+    showMorePosition(type) {
+      this.$router.push({
+        path: '/jobSearch',
+        query: {
+          type: type
+        }
+      });
+    },
+    /**
+     *初始化首页相关信息查询
+     */
     async initPage() {
       //热招
       let hotRes = await queryHotPositionInfo();
       if (hotRes && hotRes.status === 200) {
         hotRes.result.data.forEach(item => {
-          // if (item.workArea) {
-          //   item.workAreaText = getDicText(
-          //     this.$store.getters['dictionary/ggjbxx_qx'],
-          //     item.workArea
-          //   );
-          // }
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              this.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
           if (item.eduRequire) {
             item.eduRequireText = getDicText(
               this.$store.getters['dictionary/recruit_edu'],
@@ -381,18 +398,32 @@ export default {
       let urgRes = await querySortUrgRecPositionList();
       if (urgRes && urgRes.status === 200) {
         urgRes.result.data.forEach(item => {
-          // if (item.corpNature) {
-          //   item.corpNatureText = getDicText(
-          //     this.$store.getters['dictionary/recruit_corp_nature'],
-          //     item.corpNature
-          //   );
-          // }
-          // if (item.industryType) {
-          //   item.industryTypeText = getDicText(
-          //     this.$store.getters['dictionary/recruit_industry_type'],
-          //     item.industryType
-          //   );
-          // }
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              this.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              this.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workYearNeed) {
+            item.workYearNeedText = getDicText(
+              this.$store.getters['dictionary/recruit_work_year'],
+              item.workYearNeed
+            );
+          }
+          if (item.salaryPayType) {
+            item.salaryPayTypeText =
+              '元/' +
+              getDicText(
+                this.$store.getters['dictionary/recruit_salary_pay_type'],
+                item.salaryPayType
+              );
+          }
         });
         this.urgPositionList = urgRes.result.data;
       } else if (urgRes) {
@@ -426,6 +457,8 @@ export default {
     this.initPage();
   },
   mounted() {
+    //更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
     if (isPerson(this)) {
       $('#perosnLoginBtn').html('已登录');
     } else {
@@ -455,6 +488,9 @@ export default {
     color: #fc6f3d;
     border: 1px solid #fc6f3d;
     display: block;
+  }
+  ::v-deep .el-tabs__header {
+    margin: 20px 0 0;
   }
 }
 
