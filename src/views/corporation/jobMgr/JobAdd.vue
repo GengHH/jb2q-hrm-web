@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 10:34:05
+ * @LastEditTime: 2021-07-05 15:32:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -797,8 +797,8 @@ export default {
   computed: {
     //重置区县字典表下拉框
     dicGzqyData() {
-      let _dic = this.$store.getters['dictionary/ggjbxx_qx@3'];
-      if (_dic && _dic.length) {
+      let _dic = [...this.$store.getters['dictionary/ggjbxx_qx@3']];
+      if (_dic && _dic.length && _dic[0].value !== '0A') {
         _dic.unshift({
           value: '0A',
           label: '全市'
