@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-06-30 10:30:32
+ * @LastEditTime: 2021-07-06 16:55:38
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -140,6 +140,9 @@ if (isEmpty(store.getters['dictionary/recruit_applyfor_source'])) {
 //工资支付方式
 if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_surplus_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SURPLUS_VERIFY_STATUS');
 }
 let vm = new Vue({
   el: '#app',

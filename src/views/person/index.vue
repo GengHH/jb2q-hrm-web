@@ -78,7 +78,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4" style="text-align:right">
-            <el-button @click="dialog = !dialog">修改</el-button>
+            <el-button @click="dialog = !dialog">变更</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -133,7 +133,10 @@
       :visible.sync="dialog"
       :before-close="handleClose"
     >
-      <update-phone :oldPhone="personInfo.contactPhone"></update-phone>
+      <update-phone
+        :oldPhone="personInfo.contactPhone"
+        @afterChangePhone="afterChangePhone"
+      ></update-phone>
     </el-dialog>
   </div>
 </template>
@@ -311,12 +314,14 @@ export default {
         // }
       });
       done();
+    },
+    /**
+     *修改手机号后的回调方法
+     */
+    afterChangePhone(newPhone) {
+      this.dialog = false;
+      this.personInfo.contactPhone = newPhone;
     }
-    // submit(done) {
-    //   setTimeout(() => {
-    //     done();
-    //   }, 1000);
-    // }
   },
   created() {
     //this.getQx();

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-02 18:14:58
+ * @LastEditTime: 2021-07-06 17:04:26
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -192,9 +192,7 @@
         </pl-table></el-tab-pane
       >
     </el-tabs>
-    <!----------------------->
     <!-- 评价弹窗部分 -->
-    <!----------------------->
     <el-dialog
       class="width75"
       :visible.sync="dialog1"
@@ -293,9 +291,9 @@
         >
       </div>
     </el-dialog>
-    <!----------------------->
+
     <!-- 不参见面试弹框 -->
-    <!----------------------->
+
     <el-dialog title="" :visible.sync="dialog2" :before-close="handleClose">
       <pl-input
         type="textarea"
@@ -308,9 +306,9 @@
         <el-button type="primary" @click="dontInterView">确 定</el-button>
       </div>
     </el-dialog>
-    <!----------------------->
-    <!-- 面试详情弹框 ----->
-    <!----------------------->
+
+    <!-- 面试详情弹框 -->
+
     <el-dialog
       class="info-dialog"
       width="40%"
@@ -365,9 +363,9 @@
         >{{ currentRow.interviewRemarks }}
       </div>
     </el-dialog>
-    <!----------------------->
-    <!-- 报到详情弹框 ----->
-    <!----------------------->
+
+    <!-- 报到详情弹框 -->
+
     <el-dialog
       class="info-dialog"
       width="40%"
@@ -418,9 +416,9 @@
         >{{ currentRow.reportRemarks }}
       </div>
     </el-dialog>
-    <!----------------------->
+
     <!-- 聊天弹框 -->
-    <!----------------------->
+
     <el-dialog
       v-if="wchatDialog"
       class="width75 dialog-content-full-screen"
@@ -432,9 +430,9 @@
         :targetObjName="targetObjName"
       ></pl-wchat>
     </el-dialog>
-    <!----------------------->
+
     <!-- 职位详细信息 弹窗部分 -->
-    <!----------------------->
+
     <el-dialog
       width="75%"
       v-if="detailsDialog"
@@ -1208,7 +1206,7 @@ export default {
     async queryPositionDetail(row) {
       this.loading = true;
       let queryRes = await queryPositionDetail({
-        positionId: row.positionId
+        positionId: row.positionId || ''
       });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data || {};

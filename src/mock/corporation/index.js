@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 14:52:44
+ * @LastEditTime: 2021-07-06 15:47:16
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -744,27 +744,33 @@ Mock.mock(basePath + '/corp/meeting/find/positionInfo', 'post', function(
       data: [
         {
           positionId: '13',
-          positionName: '职位名称'
+          positionName: '职位名称',
+          endDate: '20200630'
         },
         {
           positionId: '16',
-          positionName: '职位名称'
+          positionName: '职位名称',
+          endDate: '20210424'
         },
         {
           positionId: '21',
-          positionName: '职位名称'
+          positionName: '职位名称',
+          endDate: '20210425'
         },
         {
           positionId: '22',
-          positionName: 'CEO'
+          positionName: 'CEO',
+          endDate: '20210426'
         },
         {
           positionId: '23',
-          positionName: 'CEO'
+          positionName: 'CEO',
+          endDate: '20210630'
         },
         {
           positionId: '33',
-          positionName: 'test2'
+          positionName: 'test2',
+          endDate: '20210630'
         }
       ]
     }
@@ -1565,4 +1571,109 @@ Mock.mock(RegExp(basePath + '/corp/resume/invite'), 'post', function(options) {
   return successData;
 });
 
+/*********用工余缺**********/
+Mock.mock(basePath + '/corp/empsurpluslack/surplus/save', 'post', function(
+  options
+) {
+  return successData;
+});
+
+Mock.mock(basePath + '/corp/empsurpluslack/lack/save', 'post', function(
+  options
+) {
+  return successData;
+});
+
+//单位查询用工缺失申请信息
+Mock.mock(
+  RegExp(basePath + '/corp/empsurpluslack/lack/query'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          data: [
+            {
+              contactPhone: '18631735637',
+              lackId: 37,
+              content: 'quis',
+              pageParam: 'anim dolor fugiat do',
+              verifyStatus: 'sed incididunt',
+              eduRequire: 'veniam tempor',
+              positionType: 'sed non dolor',
+              dockResult: 'dolor laborum quis non',
+              districtCode: '35',
+              salaryMax: 43,
+              borrowPeriod: 'et ut reprehenderit minim',
+              verifyTime: '1987-05-16 16:54:35',
+              tyshxym: 'commodo cillum do',
+              corpName: '种其委科',
+              recruitNum: 20,
+              verifyUserId: '95',
+              memo: 'veniam cillum culpa cupidatat',
+              cid: '38',
+              workNature: 'in',
+              validDate: '92',
+              contactName: '只据体极主边着',
+              salaryMin: 99
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
+//单位查询用工剩余申请信息
+Mock.mock(
+  RegExp(basePath + '/corp/empsurpluslack/surplus/query'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          data: [
+            {
+              cid: '24',
+              contactName: '改县名统',
+              memo: 'laborum nostrud aliquip culpa Ut',
+              salaryMin: 100,
+              validDate: '7',
+              corpName: '特深华原四',
+              positionType: 'nostrud irure ullamco dolore',
+              content: 'eu sed',
+              tyshxym: 'ut dolor',
+              pageParam: 'quis',
+              lackId: 97,
+              verifyTime: '1981-02-16 23:40:28',
+              eduRequire: 'consequat laborum mollit',
+              verifyUserId: '79',
+              salaryMax: 68,
+              workNature: 'magna labore aliquip sunt',
+              dockResult: 'Ut occaecat voluptate incididunt dolor',
+              contactPhone: '18112957344',
+              borrowPeriod: 'et quis',
+              districtCode: '13',
+              recruitNum: 33,
+              verifyStatus: 'elit velit'
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
 export default Mock;

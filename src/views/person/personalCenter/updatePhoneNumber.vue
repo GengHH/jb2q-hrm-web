@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-06-23 16:11:38
+ * @LastEditTime: 2021-07-06 17:48:39
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePhoneNumber.vue
@@ -164,6 +164,10 @@ export default {
             that.$message({ type: 'error', message: result.message });
           } else if (result.status === 200) {
             that.$message({ type: 'success', message: '修改成功' });
+            //回显新号码
+            if (this.oldPhone) {
+              that.$emit('afterChangePhone', that.formData.newphoneNum);
+            }
           } else {
             that.$message({ type: 'error', message: '修改失败' });
           }

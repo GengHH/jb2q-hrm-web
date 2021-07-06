@@ -178,6 +178,11 @@ let router = new Router({
       component: () => import('@/views/corporation/onlineShop')
     },
     {
+      path: '/empsurpluslack',
+      name: '用工余缺',
+      component: () => import('@/views/corporation/empsurpluslack')
+    },
+    {
       path: '/remind',
       name: '提醒',
       redirect: '/remind/remind',

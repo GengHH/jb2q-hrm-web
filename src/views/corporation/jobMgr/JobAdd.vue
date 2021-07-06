@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-05 15:32:50
+ * @LastEditTime: 2021-07-06 17:29:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -253,9 +253,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="positionTypeOne" required>
+        <el-form-item prop="positionFType" required>
           <pl-select
-            v-model="jobForm.positionTypeOne"
+            v-model="jobForm.positionFType"
             label="职位分类一级"
             :optionData="dicZyflData"
             class="w-select"
@@ -443,7 +443,7 @@
             required
             id="jobTextarea"
             type="textarea"
-            label="职位描述（3000字符）"
+            label="职位描述（1500字符）"
             v-model="jobForm.describe"
           ></pl-input>
         </el-form-item>
@@ -577,7 +577,7 @@ export default {
           },
           { max: 40, message: '不得超过40字符', trigger: 'blur' }
         ],
-        positionTypeOne: [
+        positionFType: [
           {
             required: true,
             message: '请选择职位分类一级',
@@ -647,7 +647,7 @@ export default {
             message: '请输职位描述',
             trigger: ['blur', 'change']
           },
-          { max: 3000, message: '不得超过3000字符', trigger: 'blur' }
+          { max: 1500, message: '不得超过1500字符', trigger: 'blur' }
         ],
         ageMin: [
           {
@@ -732,7 +732,7 @@ export default {
         entrustTyshxym: '',
         entrustCorpName: '',
         corpId: '',
-        positionTypeOne: '',
+        positionFType: '',
         positionType: '',
         workNature: '',
         ageMax: '',
@@ -893,14 +893,14 @@ export default {
     /**
      * 根据一级职位动态变更二级职位信息
      */
-    'jobForm.positionTypeOne': function(val, oldVal) {
+    'jobForm.positionFType': function(val, oldVal) {
       let that = this;
       if (this.$store.getters['dictionary/recruit_position_s_type']) {
         let array = this.$store.getters['dictionary/recruit_position_s_type'];
         let newArray = []; //查找符合条件值并存入新数组
         // let exist = false;
         for (let i in array) {
-          if (array[i].value.substr(0, 2) === that.jobForm.positionTypeOne) {
+          if (array[i].value.substr(0, 2) === that.jobForm.positionFType) {
             newArray[newArray.length] = array[i];
           }
         }
@@ -1190,7 +1190,7 @@ export default {
     async findPositionDetail() {
       let queryResult = await findPositionDetail(this.query || {});
       if (queryResult && queryResult.status === 200) {
-        queryResult.result.data.positionTypeOne = queryResult.result.data
+        queryResult.result.data.positionFType = queryResult.result.data
           .positionType
           ? queryResult.result.data.positionType.substr(0, 2)
           : '';

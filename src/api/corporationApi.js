@@ -133,8 +133,26 @@ const saveShop = params => postAction(basePath + '/corp/shop/save', params);
 const updateShop = params => postAction(basePath + '/corp/shop/update', params);
 
 const deleteShop = params => postAction(basePath + '/corp/shop/delete', params);
+/**********end***********/
+
+/*********用工余缺**********/
+// 单位查询用工缺失申请信息
+const queryLack = params =>
+  postAction(basePath + '/corp/empsurpluslack/lack/query', params);
+
+// 单位查询用工剩余申请信息
+const querySurplus = params =>
+  postAction(basePath + '/corp/empsurpluslack/surplus/query', params);
+
+//保存用工缺失申请信息
+const saveLack = params =>
+  postAction(basePath + '/empsurpluslack/lack/save', params);
+//保存用工剩余申请信息
+const saveSurplus = params =>
+  postAction(basePath + '/corp/empsurpluslack/surplus/save', params);
 
 /**********end***********/
+
 // 单位获取个人简历信息
 const getPsnlResumeByCorp = params =>
   postAction(basePath + '/corp/resume/detail', params);
@@ -175,5 +193,9 @@ export {
   doInvite,
   getPsnlResumeByCorp,
   doFavorResume,
-  queryEntrustCorp
+  queryEntrustCorp,
+  queryLack,
+  querySurplus,
+  saveLack,
+  saveSurplus
 };

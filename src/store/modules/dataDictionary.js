@@ -3,7 +3,7 @@
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 09:49:35
+ * @LastEditTime: 2021-07-06 15:16:44
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -151,6 +151,8 @@ const getters = {
   recruit_feedback_status: state => state.RECRUIT_FEEDBACK_STATUS,
   recruit_feedback_source: state => state.RECRUIT_FEEDBACK_SOURCE,
   zyjs_zyzdzykh: state => state.ZYJS_ZYZDZYKH,
+  recruit_verify_status: state => state.RECRUIT_VERIFY_STATUS,
+  recruit_surplus_verify_status: state => state.RECRUIT_SURPLUS_VERIFY_STATUS,
 
   recruit_expert_professional_type: state =>
     state.RECRUIT_EXPERT_PROFESSIONAL_TYPE,
@@ -287,6 +289,12 @@ const mutations = {
   },
   set_RECRUIT_APPLYFOR_SOURCE: (state, dictionary) => {
     state.RECRUIT_APPLYFOR_SOURCE = dictionary;
+  },
+  set_RECRUIT_VERIFY_STATUS: (state, dictionary) => {
+    state.RECRUIT_VERIFY_STATUS = dictionary;
+  },
+  set_RECRUIT_SURPLUS_VERIFY_STATUS: (state, dictionary) => {
+    state.RECRUIT_SURPLUS_VERIFY_STATUS = dictionary;
   }
 };
 

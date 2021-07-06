@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 18:05:30
+ * @LastEditTime: 2021-07-05 13:36:38
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -36,20 +36,21 @@ export default {
       corpActiveName: 'corpRecommended',
       navList: [
         {
-          id: '8',
+          id: '9',
           path: '/blank',
           nvaText: '时钟',
           icon: true,
           iconName: 'el-icon-time'
         },
         {
-          id: '7',
+          id: '8',
           path: '/remind',
           nvaText: '铃铛',
           icon: true,
           type: 'badge',
           iconName: 'el-icon-bell'
         },
+        { id: '7', path: '/empsurpluslack', nvaText: '用工余缺' },
         {
           id: '6',
           path: this.$store.getters['dictionary/human_resource_reg']

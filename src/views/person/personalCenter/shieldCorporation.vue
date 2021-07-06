@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-16 10:36:27
- * @LastEditTime: 2021-03-19 10:59:14
+ * @LastEditTime: 2021-07-05 13:54:06
  * @LastEditors: GengHH
  * @Description: 个人屏蔽单位
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\shieldCorporation.vue
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import baseSearch from '@/components/common/BaseSearch';
+import BaseSearch from '@/components/common/BaseSearch';
 import { doShieldCorp } from '@/api/personApi';
 export default {
   name: 'shieldCorporation',
   components: {
-    baseSearch
+    BaseSearch
   },
   data() {
     return {

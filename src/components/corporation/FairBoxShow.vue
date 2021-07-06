@@ -106,6 +106,8 @@
             :key="index"
             :label="item.positionId"
             border
+            :name="item.endDate"
+            @change="changePosition"
             >{{ item.positionName }}</el-checkbox
           >
         </el-checkbox-group>
@@ -159,6 +161,7 @@
 <script>
 import PlMap from '@/components/common/BaseMap';
 import { phonePattern } from '@/utils/regexp';
+import { getDateNumber } from '@/utils';
 import { queryJobFairPositionInfo, applyJobFair } from '@/api/corporationApi';
 export default {
   name: 'fairBoxShow',
@@ -313,6 +316,17 @@ export default {
       let img = event.target;
       img.src = this.defaultImg;
       img.onerror = null; //防止闪图
+    },
+    /**
+     *选择职位时候时判断截止日期和招聘会的截止日期
+     */
+    changePosition(checked) {
+      //event.target.name 的值为endDate（职位的失效日期 yyyyMMdd）
+      if (checked && event.target.name && this.fairInfo.startTime) {
+        if (event.target.name < getDateNumber(this.fairInfo.startTime)) {
+          this.$alert('管理员同意参会后发布截止日期会自动延长');
+        }
+      }
     }
   }
 };

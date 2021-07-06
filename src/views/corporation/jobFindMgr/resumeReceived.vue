@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 15:56:24
+ * @LastEditTime: 2021-07-06 14:34:00
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -533,6 +533,12 @@ import {
 } from '@/api/corporationApi';
 import { phonePattern, telephonePattern } from '@/utils/regexp';
 import { niceScroll, niceScrollUpdate } from '@/utils';
+const SOURCE_TAG_MAP = {
+  '01': { text: '直接投递', type: 'info' },
+  '02': { text: '招聘会投递', type: 'success' },
+  '03': { text: '管理员推荐', type: 'danger' },
+  '04': { text: '邀约应聘', type: 'warning' }
+};
 export default {
   name: 'resumeReceived',
   components: {
@@ -789,14 +795,15 @@ export default {
         {
           label: '应聘来源',
           prop: 'source',
-          customerRenderText: ({ row }) => {
-            const { source } = row;
-            const data =
-              this.$store.getters['dictionary/recruit_applyfor_source'] || [];
-            return (
-              data.find(element => element.value === source)?.label || source
-            );
-          },
+          tagMap: SOURCE_TAG_MAP,
+          // customerRenderText: ({ row }) => {
+          //   const { source } = row;
+          //   const data =
+          //     this.$store.getters['dictionary/recruit_applyfor_source'] || [];
+          //   return (
+          //     data.find(element => element.value === source)?.label || source
+          //   );
+          // },
           rowSpan: 'all'
         },
         {

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-29 14:19:05
+ * @LastEditTime: 2021-07-06 15:14:33
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -177,7 +177,17 @@ const dic = {
     { value: '2', label: '代理招聘' }
   ],
   //审核状态
-  RECRUIT_VERIFY_STATUS: [],
+  RECRUIT_SURPLUS_VERIFY_STATUS: [
+    { value: '1', label: '待审核' },
+    { value: '2', label: '审核通过' },
+    { value: '3', label: '驳回' }
+  ],
+  //审核状态
+  RECRUIT_VERIFY_STATUS: [
+    { value: '1', label: '待审核' },
+    { value: '2', label: '审核通过' },
+    { value: '3', label: '驳回' }
+  ],
   //发布状态
   RECRUIT_RELEASE_STATUS: [
     { value: '1', label: '待发布' },

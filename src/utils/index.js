@@ -255,6 +255,7 @@ export function queryParams(
 /**
  * 时间格式化
  * @param {*} date
+ * return "2021-07-06 11:10:31"
  */
 let formatNumber = n => {
   n = n.toString();
@@ -422,19 +423,19 @@ export function overDateSomeDays(date, day) {
   return tagertDateNum > nowDateNum;
 }
 
+function zeroFill(i) {
+  if (i >= 0 && i <= 9) {
+    return '0' + i;
+  } else {
+    return i;
+  }
+}
 /**
  *获取当前时间 格式：yyyy-MM-dd HH:MM:SS
  *
  * @export
  */
 export function getCurrentTime() {
-  function zeroFill(i) {
-    if (i >= 0 && i <= 9) {
-      return '0' + i;
-    } else {
-      return i;
-    }
-  }
   var date = new Date(); //当前时间
   var month = zeroFill(date.getMonth() + 1); //月
   var day = zeroFill(date.getDate()); //日
@@ -457,4 +458,23 @@ export function getCurrentTime() {
     second;
 
   return curTime;
+}
+
+/**
+ *格式化某个日期成八位数字   格式：yyyyMMdd
+ *
+ * @export
+ */
+export function getDateNumber(orignDate) {
+  var date = new Date(orignDate); //当前时间
+  var month = zeroFill(date.getMonth() + 1); //月
+  var day = zeroFill(date.getDate()); //日
+  //var hour = zeroFill(date.getHours()); //时
+  //var minute = zeroFill(date.getMinutes()); //分
+  //var second = zeroFill(date.getSeconds()); //秒
+
+  //当前时间
+  var targetDate = date.getFullYear() + month + day;
+
+  return targetDate;
 }
