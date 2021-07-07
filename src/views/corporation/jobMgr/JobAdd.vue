@@ -2,13 +2,17 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 17:29:37
+ * @LastEditTime: 2021-07-07 17:51:27
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
 <template>
   <!--S demo2职位管理右侧内容部分 -->
-  <div class="shadow-left" v-loading="loading">
+  <div
+    class="shadow-left"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+  >
     <!--S 公共标题部分 -->
     <div class="title-style">
       发布职位
@@ -58,7 +62,12 @@
       <!-------------------------->
       <!-- 显示就业见习岗位名称 -->
       <!-------------------------->
-      <el-col :span="24" v-if="showJxPosition">
+      <el-col
+        :span="24"
+        v-if="showJxPosition"
+        v-loading="jxLoading"
+        element-loading-text="拼命加载中"
+      >
         <div class="jx-wrap jx-wrap-header">
           <el-row :gutter="40" style="margin:0">
             <el-col :span="12" class="jx-wrap-header-title">
@@ -166,13 +175,18 @@
       <!---------------------->
       <!-- 显示委托单位名称 -->
       <!---------------------->
-      <el-col :span="24" v-if="showWtCorp">
+      <el-col
+        :span="24"
+        v-if="showWtCorp"
+        v-loading="wtLoading"
+        element-loading-text="拼命加载中"
+      >
         <div class="jx-wrap jx-wrap-header">
           <el-row :gutter="40" style="margin:0">
-            <el-col :span="12" class="jx-wrap-header-title">
+            <el-col :span="6" class="jx-wrap-header-title">
               委托单位信息<i class="header-icon el-icon-info"></i>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="18">
               <BaseSearch
                 placeholder="请输入"
                 showSelect
@@ -525,6 +539,8 @@ export default {
       openDelay: 200,
       closeDelay: 0,
       loading: false,
+      jxLoading: false,
+      wtLoading: false,
       formDisabled: false,
       labelPosition: 'right',
       isPublic: false,
@@ -776,7 +792,8 @@ export default {
           //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
           return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
         }
-      }
+      },
+      wtQueryType: '1'
     };
   },
   created() {
@@ -1207,11 +1224,12 @@ export default {
      * 查询单位见习职位信息
      */
     async queryJxPosition(val) {
+      this.jxLoading = true;
       let queryRes = await queryJyjxJdInfo({
         cid: this.$store.getters['corporation/cid'],
         zymc: $.trim(val) ? $.trim(val) : null
       }).catch(() => {
-        this.loading = false;
+        this.jxLoading = false;
       });
       if (queryRes && queryRes.status === 200) {
         this.jxjdData = queryRes.result.data || {};
@@ -1219,7 +1237,7 @@ export default {
         this.jxjdData = {};
         this.$message({ type: 'error', message: '查询就业见习职位信息失败' });
       }
-      this.loading = false;
+      this.jxLoading = false;
     },
     /**
      * 单位性质发生变化时，如果是见习单位
@@ -1230,7 +1248,6 @@ export default {
         this.showJxPosition = true;
         //已经查询过数据，不需要再次查询
         if (!this.jxjdData?.baseComDataList?.length) {
-          this.loading = true;
           //查询见习岗位名称
           this.queryJxPosition();
         }
@@ -1265,21 +1282,50 @@ export default {
         this.showWtCorp = false;
       }
     },
-    wtRadioGroupChange(tyshxym, corpName) {
+    /**
+     *选择查询出来的单位
+     */
+    async wtRadioGroupChange(tyshxym, corpname) {
       // 委托单位信息
-      this.jobForm.entrustTyshxym = tyshxym || '';
-      this.jobForm.entrustCorpName = corpName || '';
+      if (this.wtQueryType === '2') {
+        //根据选择单位的统一社会信用码再次判断
+        this.wtLoading = true;
+        let queryRes = await queryEntrustCorp({
+          entrustTyshxym: tyshxym,
+          entrustCorpName: corpname
+        });
+        if (
+          queryRes &&
+          queryRes.status === 200 &&
+          queryRes.result.data.length === 0
+        ) {
+          this.jobForm.entrustTyshxym = tyshxym || '';
+          this.jobForm.entrustCorpName = corpName || '';
+        } else if (queryRes) {
+          this.$alert('此单位为“外地”单位或者“非存续”单位');
+          this.jobForm.entrustTyshxym = '';
+          this.jobForm.entrustCorpName = '';
+        }
+        this.wtLoading = false;
+      } else {
+        await function(tyshxym, corpName) {
+          this.jobForm.entrustTyshxym = tyshxym || '';
+          this.jobForm.entrustCorpName = corpName || '';
+        };
+      }
     },
     /**
      * 根据统一社会信用码获取单位名称
      */
     async queryEntrustCorp(args) {
       let type = args[0] || '';
+      this.wtQueryType = args[0] || '1';
       let value = args[1] || '';
       if (!value) {
         this.$alert('请输入相关信息进行查询');
         return;
       }
+      this.wtLoading = true;
       let queryRes = await queryEntrustCorp({
         entrustTyshxym: type === '1' ? value : '',
         entrustCorpName: type === '2' ? value : ''
@@ -1293,6 +1339,7 @@ export default {
         this.jobForm.entrustTyshxym = '';
         this.jobForm.entrustCorpName = '';
       }
+      this.wtLoading = false;
     }
   }
 };

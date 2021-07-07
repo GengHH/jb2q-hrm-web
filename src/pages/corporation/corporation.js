@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 09:14:31
+ * @LastEditTime: 2021-07-07 11:06:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -129,6 +129,9 @@ if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
 }
 if (isEmpty(store.getters['dictionary/recruit_applyfor_source'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_APPLYFOR_SOURCE');
+}
+if (isEmpty(store.getters['dictionary/recruit_surplus_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SURPLUS_VERIFY_STATUS');
 }
 let vm = new Vue({
   el: '#app',

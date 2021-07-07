@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-02 18:12:45
+ * @LastEditTime: 2021-07-07 16:03:34
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\router\index.js
  */
@@ -94,6 +94,11 @@ export default new Router({
       path: '/jobDetails',
       name: '职位详情',
       component: () => import('@/views/index/jobDetails')
+    },
+    {
+      path: '/empsurpluslack',
+      name: '用工余缺',
+      component: () => import('@/views/index/empsurpluslack')
     },
     {
       path: '/about',

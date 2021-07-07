@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-20 18:38:03
+ * @LastEditTime: 2021-07-07 11:35:34
  * @Description: 自己封装的table列组件（替代el-table-column）
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTableColumn.vue
 -->

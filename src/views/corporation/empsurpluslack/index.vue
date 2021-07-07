@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 18:30:40
+ * @LastEditTime: 2021-07-07 14:47:26
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\empsurpluslack\index.vue
 -->
@@ -20,36 +20,39 @@
     </div>
     <!-- 历史信息展示 -->
     <el-row :gutter="20" style="margin-top:40px;">
-      <el-col :span="6">
-        <pl-select
-          required
-          v-model="params.positionType"
-          :optionData="zwlbDic"
-          label="职位类别"
-        >
-        </pl-select>
-      </el-col>
-      <el-col :span="6">
-        <pl-select
-          required
-          v-model="params.verifyStatus"
-          :optionData="ztDic"
-          label="审核状态"
-        >
-        </pl-select>
-      </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <pl-select
           required
           v-model="params.queryType"
           :optionData="lxDic"
           label="申请类型"
+          @change="query"
         >
         </pl-select>
       </el-col>
-      <el-col :span="6">
-        <BaseSearch ref="searchBox" @click="query($event)"></BaseSearch>
+      <el-col :span="8">
+        <pl-select
+          required
+          v-model="params.positionType"
+          :optionData="zwlbDic"
+          label="职位类别"
+          @change="query"
+        >
+        </pl-select>
       </el-col>
+      <el-col :span="8">
+        <pl-select
+          required
+          v-model="params.verifyStatus"
+          :optionData="ztDic"
+          label="审核状态"
+          @change="query"
+        >
+        </pl-select>
+      </el-col>
+      <!-- <el-col :span="6">
+        <BaseSearch ref="searchBox" @click="query($event)"></BaseSearch>
+      </el-col> -->
       <el-col :span="24">
         <pl-table
           id="tableData"
@@ -63,167 +66,28 @@
         >
           <template #date="{row}">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 5px">{{ row.createTime }}</span>
+            <span style="margin-left: 5px">{{ row.verifyTime }}</span>
           </template>
-          <template #reply="{row}">
-            <span v-if="row.reply === '1'" style="color:green">是</span>
-            <el-popover v-else trigger="hover" placement="top">
-              <p><span style="color:red">原因</span>: {{ row.reason }}</p>
+          <template #verifyStatus="{row}">
+            <span v-if="row.verifyStatus === '1'" style="color:green"
+              >通过</span
+            >
+            <el-popover
+              v-else-if="row.verifyStatus === '0'"
+              trigger="hover"
+              placement="top"
+            >
+              <p><span style="color:red">原因</span>: {{ row.memo }}</p>
               <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">否</el-tag>
+                <el-tag size="medium">驳回</el-tag>
               </div>
             </el-popover>
+            <span v-else>待审核</span>
           </template>
         </pl-table>
       </el-col>
     </el-row>
-    <!-- 操作 -->
-    <el-form
-      v-if="showEditForm"
-      :model="shopInfo"
-      :rules="rules"
-      ref="shopInfo"
-      label-width="0px"
-      class="clearfix"
-    >
-      <el-col :span="12" class="form-item-left">
-        <el-form-item prop="tyshxydm">
-          <pl-input
-            required
-            v-model="shopInfo.tyshxydm"
-            label="社会信用代码"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-right">
-        <el-form-item prop="corpName">
-          <pl-input
-            required
-            v-model="shopInfo.corpName"
-            label="单位名称"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-left">
-        <el-form-item prop="tyshxydm">
-          <pl-input
-            required
-            v-model="shopInfo.tyshxydm"
-            label="职位分类"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-right">
-        <el-form-item prop="corpName">
-          <pl-input
-            required
-            v-model="shopInfo.corpName"
-            label="招聘人数"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-left">
-        <el-form-item prop="tyshxydm">
-          <pl-select
-            required
-            v-model="shopInfo.verifyStatus"
-            :optionData="ztDic"
-            label="工作性质"
-            :disabled="true"
-          >
-          </pl-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-right">
-        <el-form-item prop="corpName">
-          <pl-select
-            required
-            v-model="shopInfo.verifyStatus"
-            :optionData="ztDic"
-            label="学历要求"
-            :disabled="true"
-          >
-          </pl-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-left">
-        <el-form-item prop="salaryMin">
-          <pl-input
-            required
-            v-model="shopInfo.salaryMin"
-            label="薪酬下限"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-right">
-        <el-form-item prop="salaryMax">
-          <pl-input
-            required
-            v-model="shopInfo.salaryMax"
-            label="薪酬上限"
-            :disabled="disabledEditForm"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-left">
-        <el-form-item required prop="contactName">
-          <pl-input
-            required
-            v-model="shopInfo.contactName"
-            label="联系人"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12" class="form-item-right">
-        <el-form-item prop="contactPhone">
-          <pl-input
-            required
-            v-model="shopInfo.contactPhone"
-            label="联系人电话"
-          ></pl-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="24">
-        <el-form-item prop="applyMemo">
-          <pl-input
-            required
-            type="textarea"
-            autosize
-            label="其他说明（不超过2000字符）"
-            maxlength="2000"
-            show-word-limit
-            :rows="12"
-            v-model="shopInfo.applyMemo"
-          >
-          </pl-input>
-        </el-form-item>
-      </el-col>
-      <div class="form-btns">
-        <pl-button class="white-btn btn-style" @click="clearEditShop($event)"
-          >清空</pl-button
-        >
-        <!-- <pl-button
-          v-if="updateShop"
-          class="orange-btn btn-style"
-          :auto-loading="true"
-          @click="submitForm($event, 'shopInfo')"
-        >
-          修改
-        </pl-button> -->
-        <pl-button
-          class="orange-btn btn-style"
-          :auto-loading="true"
-          @click="submitForm($event, 'shopInfo')"
-        >
-          添加
-        </pl-button>
-      </div>
-    </el-form>
+
     <!-- 用工缺口弹出框 -->
     <el-dialog
       :title="dialogTitle"
@@ -231,37 +95,150 @@
       :visible.sync="dialogFormVisible"
     >
       <el-form
-        :model="shopInfo"
+        :model="workInfo"
         :rules="rules"
-        ref="shopInfo"
+        ref="workInfo"
         label-width="0px"
         class="clearfix"
       >
         <el-col :span="12" class="form-item-left">
-          <el-form-item prop="tyshxydm">
+          <el-form-item prop="corpName">
             <pl-input
               required
-              v-model="shopInfo.tyshxydm"
-              label="社会信用代码"
-              :disabled="disabledEditForm"
+              v-model="workInfo.corpName"
+              label="单位名称"
+              disabled
             ></pl-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="form-item-right">
-          <el-form-item prop="corpName">
+          <el-form-item prop="tyshxym">
             <pl-input
               required
-              v-model="shopInfo.corpName"
-              label="单位名称"
-              :disabled="disabledEditForm"
+              v-model="workInfo.tyshxym"
+              label="社会信用代码"
             ></pl-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="form-item-left">
+          <el-form-item prop="positionType">
+            <pl-select
+              required
+              v-model="workInfo.positionType"
+              :optionData="zwlbDic"
+              label="职位类别"
+            >
+            </pl-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="form-item-right">
+          <el-form-item prop="validDate">
+            <!-- <pl-input
+              required
+              v-model="workInfo.validDate"
+              label="该条信息有效期"
+            ></pl-input> -->
+            <pl-date-picker
+              required
+              v-model="workInfo.validDate"
+              type="date"
+              value-format="yyyyMMdd"
+              label="该条信息有效期"
+            >
+            </pl-date-picker>
+          </el-form-item>
+        </el-col>
+        <!-- 用工缺口 -->
+        <template v-if="params.queryType">
+          <el-col :span="12" class="form-item-left">
+            <el-form-item prop="recruitNum">
+              <pl-input
+                required
+                v-model.number="workInfo.recruitNum"
+                label="招聘人数"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-right">
+            <el-form-item prop="workNature">
+              <pl-select
+                required
+                v-model="workInfo.workNature"
+                :optionData="gzxzDic"
+                label="工作性质"
+              >
+              </pl-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-left">
+            <el-form-item prop="eduRequire">
+              <pl-select
+                required
+                v-model="workInfo.eduRequire"
+                :optionData="xlyqDic"
+                label="学历要求"
+              >
+              </pl-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-right">
+            <el-form-item prop="borrowPeriod">
+              <pl-input
+                required
+                v-model="workInfo.borrowPeriod"
+                label="借用期限"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-left">
+            <el-form-item prop="salaryMin">
+              <pl-input
+                required
+                v-model.number="workInfo.salaryMin"
+                @change="minSalaryChange"
+                label="薪酬下限"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-right">
+            <el-form-item prop="salaryMax">
+              <pl-input
+                required
+                v-model.number="workInfo.salaryMax"
+                @change="maxSalaryChange"
+                label="薪酬上限"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+        </template>
+        <!-- end -->
+        <!-- 用工剩余 -->
+        <template v-else>
+          <el-col :span="12" class="form-item-left">
+            <el-form-item prop="surplusNum">
+              <pl-input
+                required
+                v-model.number="workInfo.surplusNum"
+                label="用工剩余人数"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="form-item-right">
+            <el-form-item prop="lendPeriod">
+              <pl-input
+                required
+                v-model="workInfo.lendPeriod"
+                label="可借出期限"
+              ></pl-input>
+            </el-form-item>
+          </el-col>
+        </template>
+        <!-- end -->
+        <el-col :span="12" class="form-item-left">
           <el-form-item required prop="contactName">
             <pl-input
               required
-              v-model="shopInfo.contactName"
+              v-model="workInfo.contactName"
               label="联系人"
             ></pl-input>
           </el-form-item>
@@ -270,13 +247,13 @@
           <el-form-item prop="contactPhone">
             <pl-input
               required
-              v-model="shopInfo.contactPhone"
+              v-model="workInfo.contactPhone"
               label="联系人电话"
             ></pl-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item prop="applyMemo">
+          <el-form-item prop="content">
             <pl-input
               required
               type="textarea"
@@ -285,20 +262,20 @@
               maxlength="2000"
               show-word-limit
               :rows="12"
-              v-model="shopInfo.applyMemo"
+              v-model="workInfo.content"
             >
             </pl-input>
           </el-form-item>
         </el-col>
         <div class="form-btns">
-          <pl-button class="white-btn btn-style" @click="unEditShop($event)"
+          <pl-button class="white-btn btn-style" @click="unEditInfo($event)"
             >取消</pl-button
           >
           <pl-button
-            v-if="updateShop"
+            v-if="updateInfo"
             class="orange-btn btn-style"
             :auto-loading="true"
-            @click="submitForm($event, 'shopInfo')"
+            @click="submitForm($event, 'workInfo')"
           >
             修改
           </pl-button>
@@ -306,9 +283,9 @@
             v-else
             class="orange-btn btn-style"
             :auto-loading="true"
-            @click="submitForm($event, 'shopInfo')"
+            @click="submitForm($event, 'workInfo')"
           >
-            开店
+            添加
           </pl-button>
         </div>
       </el-form>
@@ -318,7 +295,6 @@
 
 <script>
 import { phonePattern } from '@/utils/regexp';
-import { queryShop, saveShop, updateShop } from '@/api/corporationApi';
 import {
   queryLack,
   querySurplus,
@@ -331,6 +307,16 @@ export default {
   name: 'empsurpluslackApp',
   components: { BaseSearch },
   data() {
+    var checkNum = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('不能为0'));
+      }
+      if (value > 999) {
+        callback(new Error('不能超过999'));
+      } else {
+        callback();
+      }
+    };
     return {
       path: require('@/assets/logo.png'),
       loading: false,
@@ -339,28 +325,28 @@ export default {
       disabledEditForm: false,
       showEditBtn: false,
       showEditForm: false,
-      updateShop: false,
+      updateInfo: false,
       tableData: [],
       totalCount: 0,
-      shopInfo: {
-        applyId: null,
+      workInfo: {
+        lackId: null,
+        surplusId: null,
         cid: this.$store.getters['corporation/cid'],
         corpName: this.$store.getters['corporation/username'],
-        tyshxydm: '',
+        tyshxym: '',
         contactName: '',
         contactPhone: '',
-        applyMemo: '',
-        applyUserId: '',
-        applyTime: '',
-        verifyUserId: '',
-        verifyResult: '',
-        verifyTime: '',
-        verifyMemo: '',
-        channelNo: '',
-        deleteStatus: '',
-        deleteTime: '',
-        deleteUserId: '',
-        deleteMemo: ''
+        positionType: '0101',
+        recruitNum: 60,
+        workNature: '01',
+        eduRequire: '02',
+        salaryMax: '3000',
+        salaryMin: '1000',
+        borrowPeriod: '1',
+        content: 'sit quis laboris',
+        validDate: '16',
+        surplusNum: '20',
+        lendPeriod: '1'
       },
       params: {
         positionType: '',
@@ -368,8 +354,8 @@ export default {
         queryType: true
       },
       rules: {
-        tyshxydm: [
-          { required: true, message: '社会信用代码', trigger: 'blur' },
+        tyshxym: [
+          { required: true, message: '请输入社会信用代码', trigger: 'blur' },
           {
             max: 18,
             message: '最长不可超过18字符',
@@ -377,7 +363,7 @@ export default {
           }
         ],
         corpName: [
-          { required: true, message: '单位名称', trigger: 'blur' },
+          { required: true, message: '请输入单位名称', trigger: 'blur' },
           {
             max: 100,
             message: '最长不可超过100字符',
@@ -385,15 +371,56 @@ export default {
           }
         ],
         contactPhone: [
-          { required: true, message: '请输手机号', trigger: 'blur' },
+          { required: true, message: '请输入请输联系电话', trigger: 'blur' },
           {
             pattern: phonePattern,
-            message: '请输入正确格式的手机号',
+            message: '请输入正确格式的联系电话',
             trigger: ['blur', 'change']
           }
         ],
-        applyMemo: [
-          { required: true, message: '其他说明', trigger: 'blur' },
+        contactName: [
+          { required: true, message: '请输入请输联系人', trigger: 'blur' }
+        ],
+        positionType: [
+          { required: true, message: '请输入工作性质', trigger: 'blur' }
+        ],
+        recruitNum: [
+          { required: true, message: '请输入招聘人数', trigger: 'blur' },
+          {
+            validator: checkNum,
+            trigger: ['blur', 'change']
+          }
+        ],
+        workNature: [
+          { required: true, message: '请输入工作性质', trigger: 'blur' }
+        ],
+        eduRequire: [
+          { required: true, message: '请输入学历要求', trigger: 'blur' }
+        ],
+        salaryMax: [
+          { required: true, message: '请输入薪酬上限', trigger: 'blur' }
+        ],
+        salaryMin: [
+          { required: true, message: '请输入薪酬下限', trigger: 'blur' }
+        ],
+        borrowPeriod: [
+          { required: true, message: '请输入借用期限', trigger: 'blur' }
+        ],
+        validDate: [
+          { required: true, message: '请输入该条信息有效期', trigger: 'blur' }
+        ],
+        surplusNum: [
+          { required: true, message: '请输入用工剩余人数', trigger: 'blur' },
+          {
+            validator: checkNum,
+            trigger: ['blur', 'change']
+          }
+        ],
+        lendPeriod: [
+          { required: true, message: '请输入可借出期限', trigger: 'blur' }
+        ],
+        content: [
+          { required: true, message: '请输入其他说明', trigger: 'blur' },
           {
             max: 2000,
             message: '最长不可超过2000字符',
@@ -403,6 +430,8 @@ export default {
       },
       dicData: this.$store.getters['dictionary/yesno'],
       zwlbDic: this.$store.getters['dictionary/recruit_position_s_type'],
+      // gzxzDic: this.$store.getters['dictionary/recruit_work_nature'],
+      xlyqDic: this.$store.getters['dictionary/recruit_work_year'],
       ztDic: this.$store.getters['dictionary/recruit_surplus_verify_status'],
       lxDic: [
         { label: '用工缺失', value: true },
@@ -411,6 +440,17 @@ export default {
     };
   },
   computed: {
+    gzxzDic() {
+      //就业见习基地”标签单位
+      let isTranBaseSymbol = this.$store.getters[
+        'corporation/tran_base_symbol'
+      ];
+      let _dic = this.$store.getters['dictionary/recruit_work_nature'];
+      if (!isTranBaseSymbol && _dic.length > 0) {
+        _dic.pop();
+      }
+      return _dic;
+    },
     columns() {
       return [
         // { attrs: { type: 'selection' } },
@@ -431,6 +471,15 @@ export default {
         {
           label: '职位分类',
           prop: 'positionType',
+          customerRenderText: ({ row }) => {
+            const { positionType } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_position_s_type'] || [];
+            return (
+              data.find(element => element.value === positionType)?.label ||
+              positionType
+            );
+          },
           rowSpan: 'all' //tranBaseSymbol
         },
         {
@@ -441,6 +490,15 @@ export default {
         {
           label: '工作性质',
           prop: 'workNature',
+          customerRenderText: ({ row }) => {
+            const { workNature } = row;
+            const data =
+              this.$store.getters['dictionary/recruit_work_nature'] || [];
+            return (
+              data.find(element => element.value === workNature)?.label ||
+              workNature
+            );
+          },
           rowSpan: 'all'
         },
         // {
@@ -498,7 +556,7 @@ export default {
         {
           label: '审核状态',
           prop: 'verifyStatus',
-          rowSpan: 'all'
+          slotName: 'verifyStatus'
         },
         {
           label: '审核人',
@@ -547,7 +605,20 @@ export default {
                 //console.log(row);
               },
               hidden: ({ row }, item) => {
-                //return !row?.actions?.find(c => c === item.id);
+                return !row?.actions?.find(c => c === item.id);
+              }
+            },
+            {
+              id: 'action2',
+              text: '编辑更新',
+              attrs: { round: true, size: 'small' },
+              icon: 'el-icon-view',
+              onClick: ({ row }) => {
+                //console.log(row);
+                this.editInfo(row);
+              },
+              hidden: ({ row }, item) => {
+                return !row?.actions?.find(c => c === item.id);
               }
             }
             // {
@@ -601,11 +672,69 @@ export default {
   methods: {
     btnClick1() {
       this.dialogTitle = '用工缺口';
-      dialogFormVisible = !dialogFormVisible;
+      this.updateInfo = false;
+      Object.keys(this.workInfo).forEach(
+        key =>
+          (this.workInfo[key] =
+            key === 'cid' || key === 'corpName' ? this.workInfo[key] : '')
+      );
+      this.params.queryType = true;
+      this.dialogFormVisible = !this.dialogFormVisible;
     },
     btnClick2() {
       this.dialogTitle = '用工剩余';
-      dialogFormVisible = !dialogFormVisible;
+      this.updateInfo = false;
+      Object.keys(this.workInfo).forEach(
+        key =>
+          (this.workInfo[key] =
+            key === 'cid' || key === 'corpName' ? this.workInfo[key] : '')
+      );
+      this.params.queryType = false;
+      this.dialogFormVisible = !this.dialogFormVisible;
+    },
+    minSalaryChange() {
+      if (!this.workInfo.salaryMin) {
+        return;
+      }
+      // if (isNaN(Number(this.workInfo.salaryMin))) {
+      //   this.$alert('请输入数字');
+      //   this.workInfo.salaryMin = '';
+      // } else
+      if (
+        this.workInfo.salaryMax &&
+        this.workInfo.salaryMin > this.workInfo.salaryMax
+      ) {
+        this.$alert('薪酬下限不得低于薪酬上限');
+        this.workInfo.salaryMin = '';
+      } else if (
+        this.workInfo.salaryMax &&
+        this.workInfo.salaryMin * 3 < this.workInfo.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.workInfo.salaryMax = '';
+      }
+    },
+    maxSalaryChange() {
+      if (!this.workInfo.salaryMax) {
+        return;
+      }
+      // if (isNaN(Number(this.workInfo.salaryMax))) {
+      //   this.$alert('请输入数字');
+      //   this.workInfo.salaryMax = '';
+      // } else
+      if (
+        this.workInfo.salaryMin &&
+        this.workInfo.salaryMin > this.workInfo.salaryMax
+      ) {
+        this.$alert('薪酬上限不得高于薪酬下限');
+        this.workInfo.salaryMin = '';
+      } else if (
+        this.workInfo.salaryMin &&
+        this.workInfo.salaryMin * 3 < this.workInfo.salaryMax
+      ) {
+        this.$alert('薪酬上限不得超过薪酬下限的三倍');
+        this.workInfo.salaryMax = '';
+      }
     },
     /**
      * 获取用工状况申请信息列表
@@ -628,10 +757,13 @@ export default {
         });
         console.log('result', queryRes);
         if (queryRes.status === 200 && queryRes.result.pageresult.data) {
-          queryRes.result.pageresult.data.forEach(element => {
-            element.actions = ['action1'];
-          });
           this.tableData = queryRes.result.pageresult.data || [];
+          this.tableData.forEach(element => {
+            element.actions = ['action1'];
+            if (element.verifyStatus === '1') {
+              element.actions.push('action2');
+            }
+          });
           this.totalCount = queryRes.result.pageresult.total || 0;
         } else if (queryRes) {
           this.tableData = [];
@@ -640,7 +772,7 @@ export default {
         }
       } else {
         //查询用工剩余
-        let result = await querySurplus({
+        let queryRes = await querySurplus({
           cid: this.$store.getters['corporation/cid'] || '',
           positionType: this.params.positionType,
           verifyStatus: this.params.verifyStatus,
@@ -651,10 +783,13 @@ export default {
         });
         console.log('result', result);
         if (queryRes.status === 200 && queryRes.result.pageresult.data) {
-          queryRes.result.pageresult.data.forEach(element => {
-            element.actions = ['action1'];
-          });
           this.tableData = queryRes.result.pageresult.data || [];
+          this.tableData.forEach(element => {
+            element.actions = ['action1'];
+            if (element.verifyStatus === '1') {
+              element.actions.push('action2');
+            }
+          });
           this.totalCount = queryRes.result.pageresult.total || 0;
         } else if (queryRes) {
           this.tableData = [];
@@ -666,97 +801,57 @@ export default {
     /**
      * 编辑店面
      */
-    editShop(data) {
-      this.shopInfo = data;
+    editInfo(data) {
+      this.workInfo = { ...data };
       this.dialogFormVisible = true;
       //this.showEditForm = true;
       this.disabledEditForm = true;
-      this.updateShop = true;
+      this.updateInfo = true;
     },
     /**
      * 取消编辑编辑店面
      */
-    unEditShop() {
+    unEditInfo() {
       this.dialogFormVisible = false;
       //this.showEditForm = false;
       this.disabledEditForm = false;
     },
     /**
-     * 保存店面
+     * 保存用工信息（新增或者修改）
      */
     submitForm(done, formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          //let formData = JSON.parse(JSON.stringify(this.shopInfo));
-          let formData = this.$refs[formName].model;
-          // 更新信息
-          if (this.updateShop) {
-            let params = {
-              applyId: formData.applyId,
-              contactName: formData.contactName,
-              contactPhone: formData.contactPhone,
-              applyMemo: formData.applyMemo
-            };
-            let result = await updateShop(params).catch(() => {
-              done();
-              this.$message({
-                showClose: true,
-                message: '系统异常，保存失败',
-                type: 'error'
-              });
-            });
-            if (result && result.status === 200) {
-              // 更新数据
-              this.query();
-              this.$message({
-                showClose: true,
-                message: '修改成功!',
-                type: 'success'
-              });
-              this.dialogFormVisible = false;
-            } else if (result) {
-              this.$message({
-                showClose: true,
-                message: '修改失败',
-                type: 'error'
-              });
-              done();
-            }
-          } else {
-            // 新增信息
-            let params = {
-              cid: formData.cid,
-              corpName: formData.corpName,
-              tyshxydm: formData.tyshxydm,
-              contactName: formData.contactName,
-              contactPhone: formData.contactPhone,
-              applyMemo: formData.applyMemo
-            };
-            let result = await saveShop(params).catch(() => {
-              done();
-              this.$message({
-                showClose: true,
-                message: '系统异常，保存失败',
-                type: 'error'
-              });
-            });
+          //let formData = JSON.parse(JSON.stringify(this.workInfo));
+          // let formData = this.$refs[formName].model;
+          if (this.params.queryType) {
+            //用工缺口
+            let result = await saveLack(this.workInfo);
             if (result && result.status === 200) {
               //更新数据
-              this.query();
-              //this.historyList.push({ ...this.shopInfo });
-              this.$message({
-                showClose: true,
-                message: '开店成功!',
-                type: 'success'
-              });
+              //this.query();
+              this.tableData.push({ ...this.workInfo });
+
+              this.$message.success('保存成功!');
               this.dialogFormVisible = false;
               this.showEditForm = false;
             } else if (result) {
-              this.$message({
-                showClose: true,
-                message: '开店失败',
-                type: 'error'
-              });
+              this.$message.error('保存失败');
+              done();
+            }
+          } else {
+            //用工剩余
+            let result = await saveSurplus(this.workInfo);
+            if (result && result.status === 200) {
+              //更新数据
+              //this.query();
+              this.tableData.push({ ...this.workInfo });
+
+              this.$message.success('保存成功!');
+              this.dialogFormVisible = false;
+              this.showEditForm = false;
+            } else if (result) {
+              this.$message.error('保存失败');
               done();
             }
           }
@@ -765,8 +860,8 @@ export default {
     },
     clearEditShop(done) {
       //清空表格
-      this.$refs.shopInfo.resetFields();
-      //this.shopInfo(done);
+      this.$refs.workInfo.resetFields();
+      //this.workInfo(done);
     }
   },
   mounted() {

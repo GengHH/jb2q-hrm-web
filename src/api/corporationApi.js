@@ -146,7 +146,7 @@ const querySurplus = params =>
 
 //保存用工缺失申请信息
 const saveLack = params =>
-  postAction(basePath + '/empsurpluslack/lack/save', params);
+  postAction(basePath + '/corp/empsurpluslack/lack/save', params);
 //保存用工剩余申请信息
 const saveSurplus = params =>
   postAction(basePath + '/corp/empsurpluslack/surplus/save', params);

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 11:04:20
+ * @LastEditTime: 2021-07-07 16:03:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.vue
 -->
@@ -36,7 +36,8 @@ export default {
       jobActiveName: 'jobRecommended',
       corpActiveName: 'corpRecommended',
       navList: [
-        { id: '7', path: '/about', nvaText: '关于我们' },
+        { id: '8', path: '/about', nvaText: '关于我们' },
+        { id: '7', path: '/empsurpluslack', nvaText: '用工余缺' },
         { id: '6', path: '/activity', nvaText: '特色活动' },
         { id: '5', path: '/employmentTrainee', nvaText: '就业见习' },
         { id: '4', path: '/jobFair', nvaText: '招聘会' },

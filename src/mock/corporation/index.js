@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 15:47:16
+ * @LastEditTime: 2021-07-07 14:55:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -1485,19 +1485,19 @@ Mock.mock(
       status: 200,
       message: '',
       result: {
-        pageresult: {
-          pageSize: 10,
-          pageIndex: 0,
-          total: 1,
-          data: [
-            {
-              entrustTyshxym: '92310230MA1M55HM8T',
-              entrustCorpName: '上海市崇明区珺鑫苗木经营部'
-            }
-          ],
-          size: 1,
-          pageCount: 1
-        }
+        // pageresult: {
+        //   pageSize: 10,
+        //   pageIndex: 0,
+        //   total: 1,
+        data: [
+          {
+            entrustTyshxym: '92310230MA1M55HM8T',
+            entrustCorpName: '上海市崇明区珺鑫苗木经营部'
+          }
+        ]
+        //   size: 1,
+        //   pageCount: 1
+        // }
       }
     };
   }
@@ -1603,7 +1603,7 @@ Mock.mock(
               lackId: 37,
               content: 'quis',
               pageParam: 'anim dolor fugiat do',
-              verifyStatus: 'sed incididunt',
+              verifyStatus: '1',
               eduRequire: 'veniam tempor',
               positionType: 'sed non dolor',
               dockResult: 'dolor laborum quis non',
@@ -1611,7 +1611,7 @@ Mock.mock(
               salaryMax: 43,
               borrowPeriod: 'et ut reprehenderit minim',
               verifyTime: '1987-05-16 16:54:35',
-              tyshxym: 'commodo cillum do',
+              tyshxym: '123123123123123123',
               corpName: '种其委科',
               recruitNum: 20,
               verifyUserId: '95',
@@ -1653,11 +1653,11 @@ Mock.mock(
               corpName: '特深华原四',
               positionType: 'nostrud irure ullamco dolore',
               content: 'eu sed',
-              tyshxym: 'ut dolor',
+              tyshxym: '123123123123123123',
               pageParam: 'quis',
-              lackId: 97,
+              surplusId: 97,
               verifyTime: '1981-02-16 23:40:28',
-              eduRequire: 'consequat laborum mollit',
+              eduRequire: '02',
               verifyUserId: '79',
               salaryMax: 68,
               workNature: 'magna labore aliquip sunt',
@@ -1666,7 +1666,7 @@ Mock.mock(
               borrowPeriod: 'et quis',
               districtCode: '13',
               recruitNum: 33,
-              verifyStatus: 'elit velit'
+              verifyStatus: '2'
             }
           ],
           size: 1,
