@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 17:04:26
+ * @LastEditTime: 2021-07-08 09:42:37
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -553,13 +553,13 @@ export default {
   computed: {
     labelCount01() {
       return this.totalCount01
-        ? '未查看（' + this.totalCount01 + '）'
-        : '未查看';
+        ? '简历未被查看（' + this.totalCount01 + '）'
+        : '简历未被查看';
     },
     labelCount02() {
       return this.totalCount02
-        ? '已查看（' + this.totalCount02 + '）'
-        : '已查看';
+        ? '简历已被查看（' + this.totalCount02 + '）'
+        : '简历已被查看';
     },
     labelCount03() {
       return this.totalCount03
