@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-02 15:48:52
+ * @LastEditTime: 2021-07-08 17:07:01
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseJobBoxShow.vue
 -->
@@ -107,7 +107,7 @@ export default {
         this.$router.push({
           path: '/jobDetails',
           query: {
-            id: jobBoxInfoObj.positionId
+            id: this.jobBoxInfoObj.positionId
           }
         });
       }

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 14:35:08
+ * @LastEditTime: 2021-07-08 17:17:45
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\empsurpluslack\index.vue
 -->
@@ -269,7 +269,7 @@ export default {
       }, 500)();
     }
   },
-  mounted() {
+  created() {
     this.queryJyjxJdInfo();
   },
   updated() {
@@ -282,7 +282,7 @@ export default {
      */
     queryJyjxJdInfo(dwmc) {
       this.loading = true;
-      this.dwmc = this.$refs.searchBox.input
+      this.dwmc = this.$refs?.searchBox?.input
         ? $.trim(this.$refs.searchBox.input)
         : null;
       queryJyjxJdInfo({
@@ -292,8 +292,8 @@ export default {
         jdlx: this.type || null,
         isHiring: this.isHiring || '1',
         pageParam: {
-          pageSize: this.$refs.page.pageSize || 10,
-          pageIndex: this.$refs.page.currentPage - 1 || 0
+          pageSize: this.$refs?.page?.pageSize || 10,
+          pageIndex: this.$refs?.page?.currentPage - 1 || 0
         }
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
