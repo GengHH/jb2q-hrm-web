@@ -462,7 +462,9 @@ export default {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       let positionId = this.$route.query.positionId;
-      this.asPage = true;
+      if (this.$route.path.includes('positionDetails')) {
+        this.asPage = true;
+      }
       //查询单位信息
       this.queryPositionDetail(positionId);
     } else if (this.positionData.recId) {

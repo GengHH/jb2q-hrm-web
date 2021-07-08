@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 17:38:50
+ * @LastEditTime: 2021-07-08 15:34:55
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -53,6 +53,12 @@ const queryRecommendDetai = params =>
 // 更新工作年限
 const saveWorkYear = params =>
   postAction(basePath + '/person/resume/save/workyear', params);
+// 更新最该学历
+const saveEduLevel = params =>
+  postAction(basePath + '/person/resume/save/eduLevel', params);
+// 校验最高学历是否包含教育经历
+const includeEduExp = params =>
+  postAction(basePath + '/person/resume/check/includeEduExp', params);
 //加载个人权限信息
 const loadPsnlPermissionsInfo = params =>
   getAction(basePath + '/person/info/loadPsnlPermissionsInfo', params);
@@ -245,6 +251,8 @@ export {
   updatePhoneNum,
   sendSms,
   saveWorkYear,
+  saveEduLevel,
+  includeEduExp,
   queryMeetingList,
   queryMeetingSchedule,
   queryMeetingCorporationList,

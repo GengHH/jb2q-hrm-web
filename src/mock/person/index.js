@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 17:37:49
+ * @LastEditTime: 2021-07-08 16:50:19
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -187,6 +187,16 @@ Mock.mock(basePath + '/person/info/savePersonInfo', 'post', function(options) {
 Mock.mock(basePath + '/person/resume/save/workyear', 'post', function(options) {
   return successData;
 });
+//更新最高学历
+Mock.mock(basePath + '/person/resume/save/eduLevel', 'post', function(options) {
+  return successData;
+});
+//更新最高学历
+Mock.mock(basePath + '/person/resume/check/includeEduExp', 'post', function(
+  options
+) {
+  return successData;
+});
 //新增或修改个人技能证书信息
 Mock.mock(basePath + '/person/resume/saveSkillCert', 'post', function(options) {
   return successData;
@@ -249,7 +259,8 @@ Mock.mock(
               onTop: '0',
               releaseStatusId: '2',
               'corpNature|1': ['01', '02'],
-              'industryType|1': ['01', '02']
+              'industryType|1': ['01', '02'],
+              'districtCode|1': ['01', '04']
             }
           ]
         })
@@ -609,11 +620,13 @@ Mock.mock(basePath + '/person/feedback/find/applyfor', 'post', function(
           {
             applyforId: '@string("number", 5)',
             corpName: '上海市数字证书认证中心有限公司',
+            positionId: '@string("number", 5)',
+            positionCode: '@string("number", 5)',
             positionName: 'UI绘图',
             salaryScope: '1000-5000',
             workArea: '05',
             createTime: '2021-05-07 13:35:02',
-            source: '01',
+            'source|1': ['', '01', '02', '03', '04'],
             'reply|1': ['', '0', '1'],
             cid: '200008010219711',
             feedbackStatus: '05',

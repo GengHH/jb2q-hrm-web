@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-19 16:30:41
+ * @LastEditTime: 2021-07-08 11:02:51
  * @Description: 报名审核结果子页面
 -->
 <template>
@@ -33,7 +33,7 @@
             <span style="margin-left: 10px">{{ row.feedbackTime }}</span>
           </template>
           <template #applyResult="{row}">
-            <span v-if="row.applyResult === '1'" style="color:green">是</span>
+            <span v-if="row.applyResult === '1'" style="color:green">通过</span>
             <el-popover
               v-else-if="row.applyResult === '0'"
               trigger="hover"
@@ -41,9 +41,10 @@
             >
               <p><span style="color:red">原因</span>: {{ row.applyMemo }}</p>
               <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">否</el-tag>
+                <el-tag size="medium">驳回</el-tag>
               </div>
             </el-popover>
+            <span v-else>待审核</span>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -65,7 +66,7 @@
             <span style="margin-left: 10px">{{ row.feedbackTime }}</span>
           </template>
           <template #applyResult="{row}">
-            <span v-if="row.applyResult === '1'" style="color:green">是</span>
+            <span v-if="row.applyResult === '1'" style="color:green">通过</span>
             <el-popover
               v-else-if="row.applyResult === '0'"
               trigger="hover"
@@ -73,9 +74,10 @@
             >
               <p><span style="color:red">原因</span>: {{ row.applyMemo }}</p>
               <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">否</el-tag>
+                <el-tag size="medium">驳回</el-tag>
               </div>
             </el-popover>
+            <span v-else>待审核</span>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -272,13 +274,13 @@ export default {
     /**
      *后台分页功能
      */ handlePageChange1() {
-      this.queryResult('first');
+      this.queryResult('1');
     },
     /**
      *后台分页功能
      */
     handlePageChange2() {
-      this.queryResult('second');
+      this.queryResult('2');
     },
     handleSelectionChange(val) {
       console.log(val);

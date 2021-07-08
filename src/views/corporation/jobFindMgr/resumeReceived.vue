@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-18 10:55:17
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 14:34:00
+ * @LastEditTime: 2021-07-08 16:34:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobFindMgr\resumeReceived.vue
 -->
@@ -960,8 +960,13 @@ export default {
         this.queryParam.pageParam.pageSize = 10;
         this.queryParam.pageParam.pageIndex = 0;
         for (let i = 1; i < 6; i++) {
+          let _pageSize = this.$refs['serveTable0' + i]?.pageSize || 10,
+            _pageIndex = this.$refs['serveTable0' + i]?.currentPage - 1 || 0;
+
           let params = { ...this.queryParam };
           params.feedBackStatus = '0' + i;
+          params.pageParam.pageSize = _pageSize;
+          params.pageParam.pageIndex = _pageIndex;
           this.loading = true;
           queryReceiveResume(params).then(queryRes => {
             if (queryRes && queryRes.status == 200) {

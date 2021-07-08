@@ -122,8 +122,8 @@
             </p>
             <p class="six-hui  line30 mat-15">
               还剩名额：<i class="or-font">{{
-                (Number(activityItem.selfApplyMax) || 0) -
-                  (Number(activityItem.selfApply) || 0)
+                (Number(activityItem.selfApplyMax || 0) || 0) -
+                  (Number(activityItem.selfApply || 0) || 0)
               }}</i>
               个
             </p>

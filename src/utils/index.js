@@ -401,7 +401,10 @@ export function overDateSomeDays(date, day) {
   let nowDate = new Date();
   nowDate.setDate(nowDate.getDate() + (day || 0));
   let nowDateNum = nowDate
-    ? '' + nowDate.getFullYear() + (nowDate.getMonth() + 1) + nowDate.getDate()
+    ? '' +
+      nowDate.getFullYear() +
+      zeroFill(nowDate.getMonth() + 1) +
+      zeroFill(nowDate.getDate())
     : 0;
 
   let _date = date
@@ -418,7 +421,10 @@ export function overDateSomeDays(date, day) {
       : date
     : new Date();
   let tagertDateNum = _date
-    ? '' + _date.getFullYear() + (_date.getMonth() + 1) + _date.getDate()
+    ? '' +
+      _date.getFullYear() +
+      zeroFill(_date.getMonth() + 1) +
+      zeroFill(_date.getDate())
     : 0;
   return tagertDateNum > nowDateNum;
 }

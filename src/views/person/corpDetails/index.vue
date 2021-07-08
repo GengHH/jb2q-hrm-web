@@ -48,7 +48,7 @@
                   class="ico_rz"
                   src="../../../assets/images/ico-01.png"
                   alt=""
-                />完善在线简历1</el-link
+                />完善在线简历</el-link
               >
             </div>
           </el-col>
@@ -721,7 +721,7 @@ export default {
   }
 
   .padd-lr {
-    padding-left: 30px;
+    // padding-left: 30px;
     padding-right: 30px;
   }
 }

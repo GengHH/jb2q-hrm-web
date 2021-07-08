@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-07 14:55:29
+ * @LastEditTime: 2021-07-08 14:36:09
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -702,7 +702,8 @@ Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
             userId: '0000309307',
             releaseTime: '2021-04-29 14:06:27',
             endApplyTime: '',
-            meetIdList: []
+            meetIdList: [],
+            signedup: '1'
           },
           {
             meetId: '22',
@@ -722,7 +723,7 @@ Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
             districtCodeList: ['05'],
             onTop: '0',
             releaseStatus: '1',
-            applyStatus: '1',
+            applyStatus: '2',
             userId: '9000003910',
             releaseTime: '2021-05-05 15:55:58',
             endApplyTime: '',

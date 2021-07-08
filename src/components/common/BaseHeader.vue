@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-05-26 14:42:16
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-08 15:03:19
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
 -->
@@ -284,7 +284,7 @@ export default {
   height: 60px;
   width: 100%;
   padding: 0 5%;
-  z-index: 999;
+  z-index: 2001;
   background-color: $g-mian-color;
   color: $g-white-color !important;
   .left {

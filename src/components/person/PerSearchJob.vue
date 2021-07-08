@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-06-24 18:40:30
+ * @LastEditTime: 2021-07-08 15:50:38
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -285,7 +285,7 @@
             v-if="jobItem.recruitType === '2'"
             class="fourteen-opacity jz-font-style"
             ><span class="gray-font">发布机构：</span
-            ><i>{{ jobItem.workAreaText }}就业促进中心</i></span
+            ><i>{{ jobItem.districtCodeText }}就业促进中心</i></span
           >
 
           <span

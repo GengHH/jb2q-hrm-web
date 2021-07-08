@@ -318,7 +318,7 @@
           @callPositionCorp="callPositionCorp(arguments)"
         ></per-search-job>
         <div v-else style="text-align:center;margin-top:100px;color:#999;">
-          暂时没有推荐职位信息
+          暂无推荐职位信息
         </div>
         <!-- <BaseLoadingSvg ></BaseLoadingSvg> -->
       </el-tab-pane>
@@ -334,7 +334,10 @@
           @showJobDetials="showJobDetial(arguments)"
           @callPositionCorp="callPositionCorp(arguments)"
         ></per-search-job>
-        <BaseLoadingSvg v-else></BaseLoadingSvg>
+        <!-- <BaseLoadingSvg v-else></BaseLoadingSvg> -->
+        <div v-else style="text-align:center;margin-top:100px;color:#999;">
+          暂无职位信息
+        </div>
       </el-tab-pane>
     </el-tabs>
     <!-- 职位详细信息 弹窗部分 -->
@@ -664,6 +667,12 @@ export default {
                 item.workArea
               );
             }
+            if (item.districtCode) {
+              item.districtCodeText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.districtCode
+              );
+            }
             if (item.eduRequire) {
               item.eduRequireText = getDicText(
                 that.$store.getters['dictionary/recruit_edu'],
@@ -747,6 +756,12 @@ export default {
               item.workAreaText = getDicText(
                 that.$store.getters['dictionary/ggjbxx_qx'],
                 item.workArea
+              );
+            }
+            if (item.districtCode) {
+              item.districtCodeText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.districtCode
               );
             }
             if (item.eduRequire) {

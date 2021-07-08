@@ -3,6 +3,13 @@
   <div id="jobFairApply">
     <div class="title-style">单位招聘会报名</div>
     <el-row id="selectBar" :gutter="20">
+      <el-col :span="10">
+        <el-radio-group v-model="type" size="medium">
+          <el-radio-button label="">全部</el-radio-button>
+          <el-radio-button label="1">线上</el-radio-button>
+          <el-radio-button label="2">线上及线下</el-radio-button>
+        </el-radio-group>
+      </el-col>
       <el-col :span="5">
         <pl-date-picker
           v-model="date"
@@ -14,13 +21,6 @@
       </el-col>
       <el-col :span="5">
         <pl-input label="地点" v-model="address"></pl-input>
-      </el-col>
-      <el-col :span="10">
-        <el-radio-group v-model="type" size="medium">
-          <el-radio-button label="">全部</el-radio-button>
-          <el-radio-button label="1">线上</el-radio-button>
-          <el-radio-button label="2">线上及线下</el-radio-button>
-        </el-radio-group>
       </el-col>
       <el-col :span="4" class="text-right">
         <pl-button
@@ -90,6 +90,7 @@ export default {
   methods: {
     query(done) {
       let params = {
+        cid: this.$store.getters['corporation/cid'],
         pageIndex: this.$refs.page.currentPage - 1 || 0,
         pageSize: this.$refs.page.pageSize,
         date: this.date,

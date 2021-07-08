@@ -1290,6 +1290,8 @@ import {
   savePsnlEvaluate,
   saveLaborExp,
   saveEduExp,
+  saveEduLevel,
+  includeEduExp,
   saveLanguageLevel,
   saveSkillCert,
   deleteSomeResume,
@@ -1332,6 +1334,7 @@ export default {
       applyForId: '',
       resumeId: '',
       workYear: 0,
+      eduLevel: '00',
       pid: this.$store.getters['person/pid'],
       // xm: '',
       // age: 0,
@@ -1874,10 +1877,10 @@ export default {
             }
             that.loading = false;
             console.log(
-          '%c 🍪 new Date(): ',
-          'font-size:20px;background-color: #ED9EC7;color:#fff;',
-          new Date()
-        );
+              '%c 🍪 new Date(): ',
+              'font-size:20px;background-color: #ED9EC7;color:#fff;',
+              new Date()
+            );
           })
           .catch(function(err) {
             that.$message({
@@ -1989,6 +1992,7 @@ export default {
                       type: 'success',
                       message: '保存成功'
                     });
+                    this.includeEduExp();
                     //this.resume.eduExp.push(params);
                     this.loadPsnlResume();
                   } else {
@@ -2443,9 +2447,34 @@ export default {
         this.$message({ type: 'warning', message: '请选择数据' });
       }
     },
+    /**
+     *保存最高学历
+     */
     markHighEdu(highEdu) {
-      //TODO 需要增加手动修改最高学历的接口
-      this.resume.eduLevel = highEdu;
+      //增加手动修改最高学历的接口
+      saveEduLevel({
+        pid: this.$store.getters['person/pid'],
+        eduLevel: highEdu
+      }).then(saveRes => {
+        if (saveRes && saveRes.status === 200) {
+          this.resume.eduLevel = highEdu;
+          this.$message({ type: 'success', message: '最高学历修改成功' });
+        } else if (saveRes) {
+          this.$message({ type: 'error', message: '最高学历修改失败' });
+        }
+      });
+    },
+    /**
+     *校验最高学历是否包含教育经历
+     */
+    includeEduExp() {
+      includeEduExp({
+        pid: this.$store.getters['person/pid']
+      }).then(saveRes => {
+        // if (saveRes && saveRes.status === 200) {
+        // } else if (saveRes) {
+        // }
+      });
     }
   },
   created() {
@@ -2457,6 +2486,9 @@ export default {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });
     }
+
+    //校验最高学历是否包含教育经历
+    this.includeEduExp();
   },
   watch: {
     /**

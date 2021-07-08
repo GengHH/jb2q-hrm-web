@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 09:42:37
+ * @LastEditTime: 2021-07-08 16:48:44
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -590,6 +590,12 @@ export default {
         {
           label: '单位名称',
           prop: 'corpName',
+          attrs: { showOverflowTooltip: true },
+          rowSpan: 'all'
+        },
+        {
+          label: '职位编号',
+          prop: 'positionCode',
           attrs: { showOverflowTooltip: true },
           rowSpan: 'all'
         },
@@ -1204,9 +1210,15 @@ export default {
      * 获取职位的详细信息
      */
     async queryPositionDetail(row) {
+      console.log(
+        '%c 🍒 row: ',
+        'font-size:20px;background-color: #F5CE50;color:#fff;',
+        row
+      );
       this.loading = true;
       let queryRes = await queryPositionDetail({
-        positionId: row.positionId || ''
+        positionId: row.positionId || '',
+        pid: this.$store.getters['person/pid']
       });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data || {};

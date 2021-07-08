@@ -9,14 +9,14 @@
           @error="defImg"
           alt="未加载"
         />
-        <div v-if="online" class="float-div">
+        <div v-if="fairInfo.applyStatus === '1'" class="float-div">
           <i class="circle-sty"></i> 进行中
         </div>
-        <div v-if="offline" class="float-div2">
-          <i class="circle-sty"></i> 未开始
+        <div v-if="fairInfo.applyStatus === '2'" class="float-div2">
+          <i class="circle-sty"></i> 已截止
         </div>
       </el-col>
-      <el-col class="ul-style" :sm="22" :md="20" :lg="9">
+      <el-col class="ul-style" :sm="11" :md="10" :lg="9">
         <p class="black-font">
           <b>{{ fairInfo.meetName }} </b>
           <span
@@ -28,6 +28,10 @@
         </p>
         <el-row class="mat-15 details-info">
           <el-col :span="24">
+            <p class="line30">
+              <span class="gray-font"> 主办单位：</span
+              >{{ fairInfo.mainCorpName }}
+            </p>
             <p class="line30 or-font">
               <i class="icon iconfont ">&#xe651;</i>{{ fairInfo.startTime }} 至
               {{ fairInfo.endTime }}
@@ -42,13 +46,9 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col class="ul-style" :sm="22" :md="20" :lg="9">
+      <el-col class="ul-style" :sm="1" :md="10" :lg="9">
         <el-row class="mat-15 details-info">
           <el-col :span="18">
-            <p class="line30">
-              <span class="gray-font"> 主办单位：</span
-              >{{ fairInfo.mainCorpName }}
-            </p>
             <p class="line30">
               <span class="gray-font"> 联系人：</span>{{ fairInfo.contactName }}
             </p>
@@ -66,7 +66,7 @@
           </el-col>
           <el-col :span="6" class="text-right">
             <el-button
-              v-if="cannotApply"
+              v-if="fairInfo.signedup === '1' || cannotApply"
               class="gray-btn font-size18 mat-15"
               type="primary"
               @click="hadApply"
@@ -74,7 +74,11 @@
               已报名</el-button
             >
             <el-button
-              v-else
+              v-if="
+                !cannotApply &&
+                  !fairInfo.signedup &&
+                  fairInfo.applyStatus !== '2'
+              "
               class="release-btn font-size18 mat-15"
               type="primary"
               @click="queryJobFairPositionList"

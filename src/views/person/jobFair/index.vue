@@ -40,7 +40,14 @@
     </el-row>
 
     <template v-if="layoutRadio === '1'">
+      <div
+        v-if="fairInfo.length == 0"
+        style="text-align: center;margin-top: 200px;color: #999;"
+      >
+        暂无数据
+      </div>
       <FairBoxShow
+        v-else
         v-for="(item, index) in fairInfo"
         :fairInfo="item"
         :key="index"
@@ -48,7 +55,14 @@
     </template>
     <!-- 展示栏 -->
     <el-row :gutter="20" v-else>
+      <div
+        v-if="fairInfo.length == 0"
+        style="text-align: center;margin-top: 200px;color: #999;"
+      >
+        暂无数据
+      </div>
       <el-col
+        v-else
         :sm="24"
         :md="12"
         :lg="8"

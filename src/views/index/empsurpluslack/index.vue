@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-07 17:56:59
+ * @LastEditTime: 2021-07-08 14:35:08
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\empsurpluslack\index.vue
 -->
@@ -111,187 +111,86 @@
           </el-radio-group>
         </el-col>
       </el-row>
-      <!-- 基地信息列表 -->
+      <!-- 用工申请信息列表 -->
       <div class="jxcorp-row">
         <!-- 展示栏 -->
         <el-row :gutter="20">
           <template v-for="(jdItem, index) in showList">
-            <!------------------>
-            <!-- 一般基地类型 -->
-            <!------------------>
-            <template v-if="jdItem.jdlx === '1'">
-              <el-col :sm="24" :md="12" :lg="8" :xl="6" :key="'jd' + index">
-                <div class="jxcorp-box" :id="jdItem.cid">
-                  <el-row class="jxcorp-header">
-                    <el-col :span="4">
-                      <!-- <img
-                        class="jxcorp-img"
-                        src="../../../assets/images/logos.png"
-                        alt="未加载"
-                      /> -->
-                      <img
-                        v-if="jdItem.logo"
-                        class="jxcorp-img"
-                        :src="'data:image/jpg;base64,' + jdItem.logo"
-                        @error="defImg"
-                        alt="未加载"
-                      />
-                      <img
-                        v-else
-                        class="jxcorp-img"
-                        :src="defaultImg"
-                        @error="defImg"
-                        alt="未加载"
-                      />
-                    </el-col>
-                    <el-col :span="20" style="padding-left: 5px;">
+            <el-col :sm="24" :md="12" :lg="8" :xl="6" :key="'jd' + index">
+              <div class="jxcorp-box" :id="jdItem.cid">
+                <el-row class="jxcorp-header">
+                  <el-col :span="4">
+                    <img
+                      v-if="jdItem.logo"
+                      class="jxcorp-img"
+                      :src="'data:image/jpg;base64,' + jdItem.logo"
+                      @error="defImg"
+                      alt="未加载"
+                    />
+                    <img
+                      v-else
+                      class="jxcorp-img"
+                      :src="defaultImg"
+                      @error="defImg"
+                      alt="未加载"
+                    />
+                  </el-col>
+                  <el-col :span="20" style="padding-left: 5px;">
+                    <div
+                      class="jxcorp-title"
+                      :title="'基地名称：' + jdItem.jdmc"
+                      @click="showCorpInfo(jdItem.jdlx, jdItem.cid)"
+                    >
                       <div
-                        class="jxcorp-title"
-                        :title="'基地名称：' + jdItem.jdmc"
-                        @click="showCorpInfo(jdItem.jdlx, jdItem.cid)"
+                        class="jxcorp-title-mc"
+                        v-if="jdItem.isTrial !== '1'"
                       >
-                        <div
-                          class="jxcorp-title-mc"
-                          v-if="jdItem.isTrial !== '1'"
-                        >
-                          {{ jdItem.jdmc }}
-                        </div>
-
-                        <div class="jxcorp-title-mc syx-mc" v-else>
-                          {{ jdItem.jdmc }}<span class="syx-label">试运行</span>
-                        </div>
+                        {{ jdItem.jdmc }}
                       </div>
 
-                      <div class="jxcorp-info gray-font">
-                        <span>{{ jdItem.dwlx }}</span
-                        ><span class="jxcorp-info-line">|</span>
-                        <span>{{ jdItem.hylb }}</span
-                        ><span class="jxcorp-info-line">|</span>
-                        <span>{{ jdItem.slrq }}</span
-                        ><span class="jxcorp-info-line">|</span>
-                        <span>其他</span>
+                      <div class="jxcorp-title-mc syx-mc" v-else>
+                        {{ jdItem.jdmc }}<span class="syx-label">试运行</span>
                       </div>
-                    </el-col>
-                  </el-row>
-                  <!-- 没有一个职位 -->
-                  <div v-if="jdItem.positionDataList.length === 0">
-                    <p class="no-data-text">暂不招录</p>
-                  </div>
-                  <!-- 一个or多个职位 -->
-                  <div
-                    v-else
-                    class="jxcorp-list"
-                    v-for="(jdZwItem, index2) in jdItem.positionDataList"
-                    :key="index2"
-                  >
-                    <span class="jxcorp-list-name" :title="jdZwItem.gwbm">{{
-                      jdZwItem.gwbm
-                    }}</span>
-                    <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
-                    <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
-                    <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
-                  </div>
-                  <span
-                    :id="'span' + jdItem.cid"
-                    class="more-position"
-                    v-if="jdItem.positionDataList.length > 3"
-                    @click="openShowMore(jdItem.cid)"
-                    >展开</span
-                  >
+                    </div>
+
+                    <div class="jxcorp-info gray-font">
+                      <span>{{ jdItem.dwlx }}</span
+                      ><span class="jxcorp-info-line">|</span>
+                      <span>{{ jdItem.hylb }}</span
+                      ><span class="jxcorp-info-line">|</span>
+                      <span>{{ jdItem.slrq }}</span
+                      ><span class="jxcorp-info-line">|</span>
+                      <span>其他</span>
+                    </div>
+                  </el-col>
+                </el-row>
+                <!-- 没有一个职位 -->
+                <div v-if="jdItem.positionDataList.length === 0">
+                  <p class="no-data-text">暂不招录</p>
                 </div>
-              </el-col>
-            </template>
-
-            <!---------------->
-            <!-- 综合类基地 -->
-            <!---------------->
-            <template v-if="jdItem.jdlx === '2'">
-              <el-col :sm="24" :md="12" :lg="8" :xl="6" :key="index">
-                <div class="jxcorp-box" :id="jdItem.cid">
-                  <el-row class="jxcorp-header">
-                    <el-col :span="4">
-                      <!-- <img
-                        class="jxcorp-img"
-                        src="../../../assets/images/logos.png"
-                        alt="未加载"
-                      /> -->
-                      <img
-                        v-if="jdItem.logo"
-                        class="jxcorp-img"
-                        :src="'data:image/jpg;base64,' + jdItem.logo"
-                        @error="defImg"
-                        alt="未加载"
-                      />
-                      <img
-                        v-else
-                        class="jxcorp-img"
-                        :src="defaultImg"
-                        @error="defImg"
-                        alt="未加载"
-                      />
-                    </el-col>
-                    <el-col :span="20">
-                      <div
-                        class="jxcorp-title"
-                        :title="
-                          '详细：' + jdItem.jdmc + '【' + jdItem.dwmc + '】'
-                        "
-                        @click="showCorpInfo(jdItem.jdlx, jdItem.cid)"
-                      >
-                        <div
-                          class="jxcorp-title-mc"
-                          v-if="jdItem.isTrial !== '1'"
-                        >
-                          {{ jdItem.jdmc }}<span class="gray-font">【</span>
-                          {{ jdItem.dwmc }}
-                          <span class="gray-font">】</span>
-                        </div>
-
-                        <div class="jxcorp-title-mc syx-mc" v-else>
-                          {{ jdItem.jdmc }} <span class="gray-font">【</span>
-                          {{ jdItem.dwmc }} <span class="gray-font">】</span>
-                          <span class="syx-label">试运行</span>
-                        </div>
-                      </div>
-                      <div class="jxcorp-info gray-font">
-                        <span>{{ jdItem.dwlx }}</span>
-                        <span class="jxcorp-info-line">|</span>
-                        <span>{{ jdItem.hylb }}</span>
-                        <span class="jxcorp-info-line">|</span>
-                        <span>{{ jdItem.slrq }}</span>
-                        <span class="jxcorp-info-line">|</span>
-                        <span>其他</span>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <!-- 没有一个职位 -->
-                  <div v-if="jdItem.positionDataList.length === 0">
-                    <p class="no-data-text">暂不招录</p>
-                  </div>
-                  <!-- 一个or多个职位 -->
-                  <div
-                    v-else
-                    class="jxcorp-list"
-                    v-for="(jdZwItem, index3) in jdItem.positionDataList"
-                    :key="index3"
-                  >
-                    <span class="jxcorp-list-name" :title="jdZwItem.gwbm">
-                      {{ jdZwItem.gwbm }}
-                    </span>
-                    <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
-                    <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
-                    <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
-                  </div>
-                  <span
-                    :id="'span' + jdItem.cid"
-                    class="more-position"
-                    v-if="jdItem.positionDataList.length > 3"
-                    @click="openShowMore(jdItem.cid)"
-                    >展开</span
-                  >
+                <!-- 一个or多个职位 -->
+                <div
+                  v-else
+                  class="jxcorp-list"
+                  v-for="(jdZwItem, index2) in jdItem.positionDataList"
+                  :key="index2"
+                >
+                  <span class="jxcorp-list-name" :title="jdZwItem.gwbm">{{
+                    jdZwItem.gwbm
+                  }}</span>
+                  <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
+                  <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
+                  <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
                 </div>
-              </el-col>
-            </template>
+                <span
+                  :id="'span' + jdItem.cid"
+                  class="more-position"
+                  v-if="jdItem.positionDataList.length > 3"
+                  @click="openShowMore(jdItem.cid)"
+                  >展开</span
+                >
+              </div>
+            </el-col>
           </template>
         </el-row>
       </div>

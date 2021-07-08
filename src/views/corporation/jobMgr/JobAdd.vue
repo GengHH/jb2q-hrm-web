@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-07 17:51:27
+ * @LastEditTime: 2021-07-08 10:11:13
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -1137,21 +1137,20 @@ export default {
     },
     releasePosition(done) {
       this.isPublic = true;
+      console.log(
+        '%c 🍿 overDateSomeDays(this.jobForm.endDate, 30): ',
+        'font-size:20px;background-color: #E41A6A;color:#fff;',
+        overDateSomeDays(this.jobForm.endDate, 30)
+      );
       if (overDateSomeDays(this.jobForm.endDate, 30)) {
-        this.$message({
-          type: 'error',
-          message: '发布日期不得超过当前日期30天'
-        });
+        this.$message.error('发布截止日期不得超过当前日期30天');
       } else {
         this.$refs.jobForm.validate(async valid => {
           if (valid) {
             if (!this.jobForm.endDate) {
               this.$message({ type: 'error', message: '发布日期不能为空' });
             } else if (overDateSomeDays(this.jobForm.endDate, 30)) {
-              this.$message({
-                type: 'error',
-                message: '发布日期不得超过当前日期30天'
-              });
+              this.$message.error('发布截止日期不得超过当前日期30天');
             } else if (this.jobForm.workNature === '03') {
               // this.$confirm(
               //   '发布就业见习职位，需管理人员确认, 是否继续?',
