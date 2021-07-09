@@ -107,7 +107,7 @@
         v-model="corpActiveName"
         @tab-click="corpHandleClick"
       >
-        <el-tab-pane label="人力资源旗舰店" name="corpRecommended">
+        <el-tab-pane label="人力资源旗舰店" name="corpFlagship">
           <BaseInfoGloriette
             :info-list="showQjdList"
             :col-num="4"
@@ -116,12 +116,12 @@
           <el-button
             id="corpListMore1"
             class="more-btn"
-            v-if="showQjdList && showQjdList.length >= 9"
-            @click="showMore"
+            v-if="showQjdList && showQjdList.length >= 3"
+            @click="showMoreCorp('flagship')"
             >查看更多</el-button
           >
         </el-tab-pane>
-        <el-tab-pane label="推荐企业" name="corpInstitution">
+        <el-tab-pane label="推荐企业" name="corpRecommended">
           <BaseInfoGloriette
             :info-list="showList"
             :col-num="4"
@@ -349,6 +349,17 @@ export default {
     showMorePosition(type) {
       this.$router.push({
         path: '/jobSearch',
+        query: {
+          type: type
+        }
+      });
+    },
+    /**
+     *显示更多单位or旗舰店
+     */
+    showMoreCorp(type) {
+      this.$router.push({
+        path: '/corpSearch',
         query: {
           type: type
         }

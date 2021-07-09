@@ -1813,7 +1813,7 @@ export default {
     // async getPersonInfo() {
     //   try {
     //     let result = await getPersonBaseInfo({
-    //       pid: this.$store.getters['person/pid'] || ''
+    //       pid: this.$store.getters['person/pid'] || this.queryPid
     //     });
     //     console.log('result', result);
     //     if (result.status === 200)
@@ -2357,7 +2357,7 @@ export default {
     openEduPop() {
       // 查询教育经历信息
       getEduExpFromChsi({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
           // this.$message({ type: 'success', message: '查询成功' });
@@ -2375,7 +2375,7 @@ export default {
     openSkillPop() {
       // 查询技能证书信息
       getCertInfo({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
           // this.$message({ type: 'success', message: '查询成功' });
@@ -2469,7 +2469,7 @@ export default {
      */
     includeEduExp() {
       includeEduExp({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(saveRes => {
         // if (saveRes && saveRes.status === 200) {
         // } else if (saveRes) {
