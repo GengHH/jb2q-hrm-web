@@ -30,7 +30,7 @@
       <!-- 私密信息不完全显示 -->
       <div class="column" v-if="secrecy">
         <p class="font-size24">
-          {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '' }}
+          {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '此人不存在' }}
           <span class="sixteen-opacity">{{ resume.age }}岁</span>
           <span class="sixteen-opacity">{{ resume.sex }}</span>
           <!-- <i
@@ -103,7 +103,7 @@
       <!-- 私密信息完全显示 -->
       <div class="column" v-else>
         <p class="font-size24">
-          {{ resume.xm }}
+          {{ resume.xm ? resume.xm : '此人不存在' }}
           <span class="sixteen-opacity" v-if="resume.age"
             >{{ resume.age }}岁</span
           >
@@ -1738,15 +1738,17 @@ export default {
       !this.dialog5 &&
       !this.dialog6
     ) {
-      this.resizeScroll();
-      //this._.throttle(niceScrollUpdate, 500)();
+      //this.resizeScroll();
+      this._.throttle(niceScrollUpdate, 500)();
     }
   },
   methods: {
     resizeScroll: _.throttle(function() {
-      $('#indexApp')
-        ?.getNiceScroll()
-        ?.resize();
+      if ($.prototype.getNiceScroll) {
+        $('#indexApp')
+          ?.getNiceScroll()
+          ?.resize();
+      }
     }, 2000),
     print() {
       // 打印
@@ -1831,8 +1833,8 @@ export default {
         return;
       }
       // 默认先按照传入的pid查询，再按照登录的人员查询
+      this.loading = true;
       if (this.searchByCorp) {
-        this.loading = true;
         console.log(
           '%c 🍪 new Date(): ',
           'font-size:20px;background-color: #ED9EC7;color:#fff;',
@@ -1862,7 +1864,6 @@ export default {
             that.loading = false;
           });
       } else {
-        this.loading = true;
         console.log(
           '%c 🍪 new Date(): ',
           'font-size:20px;background-color: #ED9EC7;color:#fff;',

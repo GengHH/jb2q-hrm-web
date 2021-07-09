@@ -341,6 +341,7 @@ export function trim(data) {
  * @param {*} id
  */
 export function niceScroll(dom) {
+  if (!$.prototype.niceScroll) return;
   // if (dom !== '.el-table__body-wrapper') {
   //   return;
   // }
@@ -380,6 +381,7 @@ export function niceScroll(dom) {
  * @param {*} id
  */
 export function niceScrollUpdate(dom) {
+  if (!$.prototype.getNiceScroll) return;
   if (dom) {
     $(dom)
       ?.getNiceScroll()

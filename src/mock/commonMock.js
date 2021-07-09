@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 09:35:15
+ * @LastEditTime: 2021-07-09 17:14:46
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -14,6 +14,10 @@ import dic from './dataDictionary';
 import config from '../config/mock.conf';
 
 const basePath = config.commonBasePath;
+
+Mock.setup({
+  timeout: 3000
+});
 
 const successData = {
   status: 200,
