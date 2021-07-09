@@ -1297,7 +1297,7 @@ import {
   deleteSomeResume,
   saveWorkYear
 } from '@/api/personApi';
-import { getDicText } from '@/utils/index';
+import { getDicText, niceScrollUpdate } from '@/utils/index';
 /**
  * 简历信息的基本模板
  */
@@ -1739,13 +1739,14 @@ export default {
       !this.dialog6
     ) {
       this.resizeScroll();
+      //this._.throttle(niceScrollUpdate, 500)();
     }
   },
   methods: {
     resizeScroll: _.throttle(function() {
       $('#indexApp')
-        .getNiceScroll()
-        .resize();
+        ?.getNiceScroll()
+        ?.resize();
     }, 2000),
     print() {
       // 打印
