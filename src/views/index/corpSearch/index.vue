@@ -1,15 +1,15 @@
 <template>
-  <div id="indexBody">
+  <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <div>
       <base-search
-        placeholder="请输入相关职位名称"
-        @clickButton="queryJobs($event)"
+        placeholder="请输入相关单位名称"
+        @clickButton="queryCorps($event)"
       ></base-search>
     </div>
     <!-- S筛选部分 -->
     <div class="filter-content">
-      <el-form ref="queryJobFrom" :model="queryParams">
-        <el-row class="condition condition-one">
+      <el-form ref="queryCorpFrom" :model="queryParams">
+        <!-- <el-row class="condition condition-one">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作年限：</div>
           </el-col>
@@ -22,17 +22,12 @@
                 :label="item.value"
                 >{{ item.label }}</el-radio-button
               >
-              <!-- <el-radio-button label="01">1年以下</el-radio-button>
-              <el-radio-button label="02">1~2年</el-radio-button>
-              <el-radio-button label="03">3~5年</el-radio-button>
-              <el-radio-button label="04">6~9年</el-radio-button>
-              <el-radio-button label="05">10年及以上</el-radio-button> -->
             </el-radio-group>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row class="condition condition-two">
           <el-col :span="2">
-            <div class="grid-content bg-purple">行业：</div>
+            <div class="grid-content bg-purple">行业类型：</div>
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
@@ -61,7 +56,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="condition condition-three">
+        <!-- <el-row class="condition condition-three">
           <el-col :span="2">
             <div class="grid-content bg-purple">职位：</div>
           </el-col>
@@ -76,12 +71,6 @@
               <el-checkbox-button id="postionsAll" label=""
                 >不限</el-checkbox-button
               >
-              <!-- <el-checkbox-button
-                v-for="index in zyLists"
-                :key="index.value"
-                :label="index.value"
-                >{{ index.label }}</el-checkbox-button
-              > -->
               <el-popover
                 v-for="(item, index) in zyLists"
                 :key="index"
@@ -115,21 +104,6 @@
             </div>
           </el-col>
         </el-row>
-        <!-- <el-row class="condition condition-three">
-          <el-col :span="2">
-            <div class="grid-content bg-purple">薪酬：</div>
-          </el-col>
-          <el-col :span="20">
-            <el-radio-group v-model="queryParams.salaryScope" size="medium">
-              <el-radio-button label="不限">不限</el-radio-button>
-              <el-radio-button label="1">3500以下</el-radio-button>
-              <el-radio-button label="2">3500-8000</el-radio-button>
-              <el-radio-button label="3">8000-15000</el-radio-button>
-              <el-radio-button label="4">15000-30000</el-radio-button>
-              <el-radio-button label="5">30000以上</el-radio-button>
-            </el-radio-group>
-          </el-col>
-        </el-row> -->
         <el-row class="condition condition-four">
           <el-col :span="2">
             <div class="grid-content bg-purple">工作性质：</div>
@@ -143,26 +117,22 @@
                 :label="item.value"
                 >{{ item.label }}</el-radio-button
               >
-              <!-- <el-radio-button label="01">全职</el-radio-button>
-              <el-radio-button label="02">兼职</el-radio-button>
-              <el-radio-button label="03">就业见习</el-radio-button> -->
             </el-radio-group>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row class="condition condition-four">
           <el-col :span="2">
-            <div class="grid-content bg-purple">职位类型：</div>
+            <div class="grid-content bg-purple">单位类型：</div>
           </el-col>
           <el-col :span="20">
             <el-radio-group v-model="queryParams.positionType" size="medium">
               <el-radio-button label="">不限</el-radio-button>
               <el-radio-button label="01">推荐</el-radio-button>
-              <el-radio-button label="02">热招</el-radio-button>
-              <el-radio-button label="03">急招</el-radio-button>
+              <el-radio-button label="02">旗舰店</el-radio-button>
             </el-radio-group>
           </el-col>
         </el-row>
-        <el-row class="condition condition-five">
+        <!-- <el-row class="condition condition-five">
           <el-col :span="2">
             <div class="grid-content bg-purple">年龄：</div>
           </el-col>
@@ -220,11 +190,8 @@
               </el-row>
             </div>
           </el-col>
-        </el-row>
-        <el-row class="condition condition-six">
-          <!-- <el-col :span="2">
-            <div class="place-holder">placeHolder</div>
-          </el-col> -->
+        </el-row> -->
+        <!-- <el-row class="condition condition-six">
           <el-col :span="21" style="padding-left:40px;">
             <div class="grid-content bg-purple filter-select">
               <template>
@@ -240,12 +207,6 @@
                   v-model="queryParams.tranBaseSymbol"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
-                <!-- <el-checkbox
-                  false-label="0"
-                  true-label="1"
-                  v-model="queryParams.special"
-                  >招聘特定人群</el-checkbox
-                > -->
                 <el-select
                   v-model="queryParams.special"
                   clearable
@@ -311,45 +272,92 @@
               <span>清空筛选条件</span>
             </div>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-form>
     </div>
 
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
-    <per-search-job
-      v-if="queryResult.length"
+    <!-- <per-search-job
+      v-if="tableData.length"
       ref="searchJobList"
-      :jobData="queryResult"
-      :total="queryResultTotal"
+      :jobData="tableData"
+      :total="countTotal"
       showPager
       @deliveryResume="deliveryResume(arguments)"
       @favorJob="favorJob(arguments)"
       @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
-    ></per-search-job>
+    ></per-search-job> -->
     <!-- <BaseLoadingSvg v-else></BaseLoadingSvg> -->
-    <div v-else style="text-align:center;margin-top:100px;color:#999;">
+    <!-- <div v-else style="text-align:center;margin-top:100px;color:#999;">
       暂时没有职位信息
-    </div>
-    <!-- 职位详细信息 弹窗部分 -->
-    <el-dialog
-      width="75%"
-      v-if="detailsDialog"
-      :visible.sync="detailsDialog"
-      :before-close="detailsHandleClose"
-    >
-      <job-details
-        notSinglePage
-        :positionData="onePosition"
-        :index="detailsIndex"
-        @perfectResume="perfectResume"
-        @uploadResume="uploadResume"
-        @deliveryResume="deliveryResume(arguments)"
-        @favorJob="favorJob(arguments)"
-        @callPositionCorp="callPositionCorp(arguments)"
-      ></job-details>
-    </el-dialog>
+    </div> -->
+
+    <div class="no-data gray-font" v-if="!tableData.length">暂无数据</div>
+    <!-- 展示栏 -->
+    <el-row :gutter="20" v-else style="padding: 20px 5px;">
+      <el-col
+        :sm="24"
+        :md="12"
+        :lg="8"
+        :xl="8"
+        v-for="(item, index) in tableData"
+        :key="index"
+      >
+        <div class="corp-box">
+          <div class="corp-box-container">
+            <h2 class="long-text" @click="showCorpDetails(item.cid)">{{ item.corpName }}</h2>
+            <p>
+              <span class="gray-font"
+                ><i class="el-icon-school"></i>{{ item.cid }}</span
+              >
+            </p>
+            <div class="corp-info">
+              <p class="corp-info-tag gray-font">
+                <span>{{
+                  item.industryTypeText ? item.industryTypeText : '无'
+                }}</span>
+                <span>{{
+                  item.districtCodeText ? item.districtCodeText : '无'
+                }}</span>
+                <span>{{
+                  item.corpNatureText ? item.corpNatureText : '无'
+                }}</span>
+              </p>
+              <p>
+                <span class="gray-font">
+                  <i class="el-icon-location-outline">{{
+                    item.unitResidence ? item.unitResidence : '无'
+                  }}</i>
+                </span>
+              </p>
+              <el-row class="corp-info-count">
+                <el-col :span="18">
+                  <span class="count orange-font">
+                    {{ item.positionCount ? item.positionCount : '0' }} </span
+                  >个在招职位
+                </el-col>
+                <el-col :span="6" style="text-align:right">
+                  <p class="gray-font corp-detials-btn">
+                    <i class="el-icon-view" @click="showCorpDetails(item.cid)"
+                      >详情</i
+                    >
+                  </p>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- 分页组件 -->
+    <BasePagination
+      ref="page"
+      :showPager="countTotal > 0"
+      :totalCount="countTotal"
+      @changePage="queryCorps"
+    ></BasePagination>
     <!-- 聊天框 弹窗部分 -->
     <el-dialog
       class="width75 dialog-content-full-screen"
@@ -364,31 +372,24 @@
 <script>
 import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/index/IndexSearchJob.vue';
-import JobDetails from '@/views/index/jobDetails';
-import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
+import BasePagination from '@/components/common/BasePagination.vue';
 import BaseCorpBoxShow from '@/components/common/BaseCorpBoxShow.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import { doDeliveryResume, attentionOrFavor } from '@/api/personApi';
-import {
-  queryJobs,
-  queryAllUrgRecPositionList,
-  queryHotPositionInfoAll
-} from '@/api/indexApi';
+import { queryHRFlagshipStoreInfoAll } from '@/api/indexApi';
 export default {
   name: 'JobSearch',
   components: {
     BaseSearch,
     PerSearchJob,
-    JobDetails,
-    BaseLoadingSvg,
+    BasePagination,
     BaseCorpBoxShow
   },
   data() {
     return {
+      loading: false,
       detailsIndex: null,
-      detailsDialog: false,
       wchatDialog: false,
-      positionDetailsId: '',
       positionDetailsRecId: '',
       queryParams: {
         pid: this.$store.getters['person/pid'],
@@ -414,8 +415,7 @@ export default {
       },
       options: [],
       tableData: [],
-      queryResult: [],
-      queryResultTotal: 0,
+      countTotal: 0,
       hyLists: this.$store.getters['dictionary/recruit_industry_type'],
       zyLists: this.$store.getters['dictionary/recruit_position_f_type'],
       qxOptions: this.$store.getters['dictionary/ggjbxx_qx'],
@@ -427,8 +427,7 @@ export default {
       gznxLists: this.$store.getters['dictionary/recruit_work_year'],
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: [],
-      targetObjId: '',
-      onePosition: {}
+      targetObjId: ''
     };
   },
   computed: {
@@ -465,43 +464,29 @@ export default {
           });
         }
       }, 500)();
-    },
-    positionDetailsId: function(val, oldVal) {
-      let that = this;
-      //自行搜索职位
-      this.onePosition = that.positionDetailsId
-        ? this.queryResult.find(function(i) {
-            return i.positionId === that.positionDetailsId;
-          })
-        : {};
     }
   },
   created() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       // this.queryParams.positionType = this.$route.query.type;
-      if (this.$route.query.type === 'urg') {
-        //查询急招职位
-        this.queryParams.positionType = '03';
-        this.queryAllUrgRecPositionList();
-      } else if (this.$route.query.type === 'hot') {
-        //查询热招职位
+      if (this.$route.query.type === 'flagship') {
+        //旗舰店
         this.queryParams.positionType = '02';
-        this.queryHotPositionInfoAll();
+        this.queryHRFlagshipStoreInfoAll();
       } else if (this.$route.query.type === 'rec') {
         this.queryParams.positionType = '01';
-        //TODO 查询推荐职位
+        //TODO 查询推荐单位
         return;
       } else {
         this.queryParams.positionType = '';
       }
     } else {
       this.queryParams.positionType = '';
-      this.queryJobs();
+      this.queryCorps();
     }
   },
   updated() {
-    console.log(1234);
     // 更新滚动条
     this._.throttle(niceScrollUpdate, 500)();
   },
@@ -594,79 +579,74 @@ export default {
       this.queryParams.positionTypeList = [''];
     },
     /**
-     * 根据条件查询职位
+     * 根据条件查询旗舰店单位
      */
-    async queryJobs(val) {
+    async queryHRFlagshipStoreInfoAll(val) {
       let that = this;
-      let params = this.$refs['queryJobFrom']?.model
-        ? JSON.parse(JSON.stringify(this.$refs['queryJobFrom'].model))
+      let params = this.$refs['queryCorpFrom']?.model
+        ? JSON.parse(JSON.stringify(this.$refs['queryCorpFrom'].model))
         : this.queryParams;
       params.positionName = $.trim(val);
       that.queryParams.positionName = $.trim(val);
       params.pageParam = {
-        total: 0,
-        pageSize: that.$refs.searchJobList?.pageSize || 10,
-        pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
+        pageSize: that.$refs.page?.pageSize || 10,
+        pageIndex: that.$refs.page?.currentPage - 1 || 0
       };
-      try {
-        //params.pid = that.$store.getters['person/pid'];
-        let result = await queryJobs(params);
-        console.log('result', result);
-        if (
-          result.status === 200 &&
-          result.result.pageresult &&
-          result.result.pageresult.total
-        ) {
-          result.result.pageresult.data.forEach(item => {
-            // 转换字典
-            if (item.workArea) {
-              item.workAreaText = getDicText(
-                that.$store.getters['dictionary/ggjbxx_qx'],
-                item.workArea
-              );
-            }
-            if (item.eduRequire) {
-              item.eduRequireText = getDicText(
-                that.$store.getters['dictionary/recruit_edu'],
-                item.eduRequire
-              );
-            }
-            if (item.workNature) {
-              item.workNatureText = getDicText(
-                that.$store.getters['dictionary/recruit_work_nature'],
-                item.workNature
-              );
-            }
-            if (item.corpNature) {
-              item.corpNatureText = getDicText(
-                that.$store.getters['dictionary/recruit_corp_nature'],
-                item.corpNature
-              );
-            }
-            if (item.industryType) {
-              item.industryTypeText = getDicText(
-                that.$store.getters['dictionary/recruit_industry_type'],
-                item.industryType
-              );
-            }
-          });
-          this.$set(this, 'queryResult', result.result.pageresult.data);
-          this.$set(
-            this,
-            'queryResultTotal',
-            Number(result.result.pageresult.total) || 0
-          );
-        } else {
-          this.$set(this, 'queryResult', []);
-          this.$set(this, 'queryResultTotal', 0);
-          this.$message({
-            type: 'success',
-            message: '未查询到信息'
-          });
-        }
-      } catch (error) {
-        console.log(error);
+
+      //查询所有旗舰店
+      this.loading = true;
+      let result = await queryHRFlagshipStoreInfoAll(params);
+      console.log('result', result);
+      if (
+        result.status === 200 &&
+        result.result.pageresult &&
+        result.result.pageresult.total
+      ) {
+        result.result.pageresult.data.forEach(item => {
+          // 转换字典
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              that.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              that.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workNature) {
+            item.workNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_work_nature'],
+              item.workNature
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              that.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.$set(this, 'tableData', result.result.pageresult.data);
+        this.$set(
+          this,
+          'countTotal',
+          Number(result.result.pageresult.total) || 0
+        );
+      } else {
+        this.$set(this, 'tableData', []);
+        this.$set(this, 'countTotal', 0);
+        this.$message.success('未查询到信息');
       }
+      this.loading = false;
     },
     showMoreRadios(event, radiosIndex) {
       let dom = $('#' + radiosIndex);
@@ -685,17 +665,7 @@ export default {
       // 更新滚动条
       this._.throttle(niceScrollUpdate, 500)();
     },
-    showJobDetial(arg) {
-      console.log(arg);
-      //显示岗位详细信息
-      let index = arg[0];
-      let positionId = (arg && arg[1]) || '';
-      let recId = (arg && arg[2]) || '';
-      this.detailsIndex = index;
-      this.detailsDialog = true;
-      this.positionDetailsId = positionId;
-      this.positionDetailsRecId = recId;
-    },
+
     async deliveryResume(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
@@ -708,8 +678,8 @@ export default {
       });
       if (res.status === 200) {
         // 更换按钮
-        // this.queryResult.splice(index, 1);
-        this.queryResult[index].applyFor = true;
+        // this.tableData.splice(index, 1);
+        this.tableData[index].applyFor = true;
         this.$message({ type: 'success', message: '简历投递成功' });
       } else {
         this.$message({
@@ -731,7 +701,7 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = true;
+          this.tableData[index].favor = true;
           this.$message({ type: 'success', message: '收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '收藏职位失败' });
@@ -745,7 +715,7 @@ export default {
         });
         if (res.status === 200) {
           // 修改按钮状态
-          this.queryResult[index].favor = false;
+          this.tableData[index].favor = false;
           this.$message({ type: 'success', message: '取消收藏职位成功' });
         } else {
           this.$message({ type: 'error', message: '取消收藏职位失败' });
@@ -758,9 +728,7 @@ export default {
       this.targetObjId = corpId;
       this.wchatDialog = true;
     },
-    detailsHandleClose() {
-      this.detailsDialog = false;
-    },
+
     wchatHandleClose() {
       this.wchatDialog = false;
     },
@@ -785,129 +753,30 @@ export default {
         this.queryParams.positionTypeList = [''];
       }
     },
-    perfectResume() {
-      //完善简历
-      this.$router.push('/personInfo');
-    },
-    uploadResume() {
-      //上传简历
-      this.$alert('此功能暂时未开放，请稍候！');
-    },
-    //查询急招职位
-    async queryAllUrgRecPositionList() {
-      let that = this;
-      let result = await queryAllUrgRecPositionList();
-
-      if (
-        result.status === 200 &&
-        result.result.pageresult &&
-        result.result.pageresult.total
-      ) {
-        result.result.pageresult.data.forEach(item => {
-          // 转换字典
-          if (item.workArea) {
-            item.workAreaText = getDicText(
-              that.$store.getters['dictionary/ggjbxx_qx'],
-              item.workArea
-            );
-          }
-          if (item.eduRequire) {
-            item.eduRequireText = getDicText(
-              that.$store.getters['dictionary/recruit_edu'],
-              item.eduRequire
-            );
-          }
-          if (item.workNature) {
-            item.workNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_work_nature'],
-              item.workNature
-            );
-          }
-          if (item.corpNature) {
-            item.corpNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_corp_nature'],
-              item.corpNature
-            );
-          }
-          if (item.industryType) {
-            item.industryTypeText = getDicText(
-              that.$store.getters['dictionary/recruit_industry_type'],
-              item.industryType
-            );
-          }
-        });
-        this.$set(this, 'queryResult', result.result.pageresult.data);
-        this.$set(
-          this,
-          'queryResultTotal',
-          Number(result.result.pageresult.total) || 0
-        );
-      } else if (result) {
-        this.$set(this, 'queryResult', []);
-        this.$set(this, 'queryResultTotal', 0);
-        this.$message({
-          type: 'success',
-          message: '未查询到信息'
-        });
+    /**
+     *查询单位信息列表
+     */
+    queryCorps() {
+      //根据url上的参数查询职位信息
+      if (this.queryParams.positionType === '02') {
+        //旗舰店
+        this.queryHRFlagshipStoreInfoAll();
+      } else if (this.queryParams.positionType === '01') {
+        //TODO 查询推荐单位
+        return;
+      } else {
+        //TODO 查询所有单位
+        // this.queryCorps();
       }
     },
-
-    //查询热招职位
-    async queryHotPositionInfoAll() {
-      let that = this;
-      let result = await queryHotPositionInfoAll();
-      if (
-        result.status === 200 &&
-        result.result.pageresult &&
-        result.result.pageresult.total
-      ) {
-        result.result.pageresult.data.forEach(item => {
-          // 转换字典
-          if (item.workArea) {
-            item.workAreaText = getDicText(
-              that.$store.getters['dictionary/ggjbxx_qx'],
-              item.workArea
-            );
-          }
-          if (item.eduRequire) {
-            item.eduRequireText = getDicText(
-              that.$store.getters['dictionary/recruit_edu'],
-              item.eduRequire
-            );
-          }
-          if (item.workNature) {
-            item.workNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_work_nature'],
-              item.workNature
-            );
-          }
-          if (item.corpNature) {
-            item.corpNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_corp_nature'],
-              item.corpNature
-            );
-          }
-          if (item.industryType) {
-            item.industryTypeText = getDicText(
-              that.$store.getters['dictionary/recruit_industry_type'],
-              item.industryType
-            );
-          }
-        });
-        this.$set(this, 'queryResult', result.result.pageresult.data);
-        this.$set(
-          this,
-          'queryResultTotal',
-          Number(result.result.pageresult.total) || 0
-        );
-      } else if (result) {
-        this.$set(this, 'queryResult', []);
-        this.$set(this, 'queryResultTotal', 0);
-        this.$message({
-          type: 'success',
-          message: '未查询到信息'
-        });
-      }
+    /**
+     *显示单位详情
+     */
+    showCorpDetails(cid) {
+      this.$router.push({
+        path: '/corpDetails',
+        query: { id: cid }
+      });
     }
   }
 };
@@ -946,6 +815,79 @@ export default {
   }
   .el-checkbox-button {
     margin: 6px 0;
+  }
+  .corp-box {
+    width: 100%;
+    // min-height: 180px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(rgb(61, 61, 61), 0.35);
+    margin-bottom: 10px;
+    .corp-box-container {
+      margin: 10px 0;
+    }
+    &:hover {
+      // border: 1px solid #fc7a43;
+      background-color: #f6f6f6;
+    }
+    h2 {
+      margin: 10px 0 5px 0;
+      font-family: 宋体, Arial, Verdana, sans-serif;
+    }
+    .corp-info {
+      width: 100%;
+      font-size: 14px;
+      margin-top: 15px;
+      line-height: 24px;
+    }
+    .corp-info-tag {
+      span {
+        display: inline-block;
+        padding: 4px 10px;
+        margin: 0 3px;
+        border-radius: 15px;
+        background-color: #f4f4f4;
+      }
+    }
+    .corp-info-count {
+      margin: 10px 0;
+      span.count {
+        display: inline-block;
+        padding: 4px 10px;
+        margin: 0 3px;
+        border-radius: 50%;
+        background-color: #f4f4f4;
+      }
+      // &:after {
+      //   content: '';
+      //   height: 0;
+      //   line-height: 0;
+      //   display: block;
+      //   visibility: hidden;
+      //   clear: both;
+      // }
+    }
+    .corp-detials-btn {
+      padding: 5px 0;
+    }
+    .corp-detials-btn:hover {
+      color: #20c997;
+      //color: #333;
+      cursor: pointer;
+    }
+  }
+  .gray-font {
+    color: #999;
+  }
+  .orange-font {
+    color: #fc7a43;
+  }
+  .long-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    word-break: break-all;
+    overflow: hidden;
   }
 }
 
@@ -1040,6 +982,11 @@ export default {
     padding: 10px 20px;
     // margin: 10px 0;
   }
+}
+.no-data {
+  width: 100%;
+  margin-top: 160px;
+  text-align: center;
 }
 </style>
 

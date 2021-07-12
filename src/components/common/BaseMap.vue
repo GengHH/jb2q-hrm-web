@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-04-13 15:25:56
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-18 18:52:45
+ * @LastEditTime: 2021-07-12 13:24:51
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseMap.vue
 -->
@@ -134,6 +134,13 @@ export default {
         const point = new this.BMap.Point(this.center.lng, this.center.lat);
         this.map.panTo(point);
       }
+    },
+    _initBaiduMap(val) {
+      console.log(
+        '%c 🍡 callback: ',
+        'font-size:20px;background-color: #B03734;color:#fff;',
+        val
+      );
     }
   }
 };

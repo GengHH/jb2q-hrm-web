@@ -225,10 +225,16 @@
         <p class="little-tit">底薪5k+业绩提成+满勤+公司福利 做六休一</p>
         <p class="little-tit">固定团建，弹性工作</p> 
         <div class="title-border mat-15">公司介绍</div>-->
+        <div class="title-border mat-15">公司简介</div>
+        <div class="little-tit  mat-15">
+          <p class="introduce little-tit">
+            {{ realData.introduce ? realData.introduce : '无' }}
+          </p>
+        </div>
         <div class="title-border mat-15">职位描述</div>
         <div class="little-tit  mat-15">
           <p class="introduce little-tit">
-            {{ realData.describe }}
+            {{ realData.describe ? realData.describe : '无' }}
           </p>
           <!-- <p class="introduce little-tit">
             金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
@@ -242,14 +248,16 @@
             >查看全部<i class="el-icon-arrow-down"></i
           ></span> -->
         </div>
-        <div class="title-border mat-30">工作地址</div>
+        <div class="title-border mat-30">
+          工作地址：（{{ positionData.workAddress }}）
+        </div>
         <div class="map-box">
           <!-- <img src="../../assets/images/map.png" alt="" /> -->
           <pl-map :pointList="pointList"></pl-map>
         </div>
         <div class="title-border mat-15">
           看过该职位的人还看了 TODO
-          <span class="fr fourteen-opacity">更多职位 > </span>
+          <!-- <span class="fr fourteen-opacity">更多职位 > </span> -->
         </div>
         <el-row>
           <el-col :span="8">
@@ -287,11 +295,13 @@
       <el-col :span="5" class="padd-l ">
         <p class="sixteen-opacity">职位发布者</p>
         <div class="header-box clearfix">
-          <img src="../../assets/images/header.png" class="head-img" alt="" />
+          <img src="../../assets/images/corp.jpg" class="head-img" alt="" />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
-              {{ realData.releaseUserId }}
-              <span class="dqzx-span">当前在线</span>
+              <!-- {{ realData.releaseUserId }} -->
+            </p>
+            <p>
+              <!-- <span class="dqzx-span">当前在线</span> -->
             </p>
             <el-button
               type="primary"
@@ -309,7 +319,7 @@
           />
           <p class="font-sixteen font-or name-p">{{ realData.corpName }}</p>
         </div>
-        <div class="module1">
+        <!-- <div class="module1">
           <p class="four-opacity">
             <img src="../../assets/images/ico01.png" alt="" /> 互联网
           </p>
@@ -358,7 +368,7 @@
             </p>
             <p class="four-opacity">重庆聚心动 · 重庆</p>
           </div>
-        </div>
+        </div> -->
       </el-col>
     </el-row>
   </div>
@@ -698,6 +708,7 @@ export default {
      * TODO(attention) 个人关注or取消关注单位
      */
     async attentionCorp() {
+      this.loading = true;
       let queryRes = await attentionOrFavor('1', {
         id: [this.realData.corpId],
         pid: this.$store.getters['person/pid'],
@@ -715,6 +726,7 @@ export default {
           this.realData.attention ? '关注失败' : '取消关注失败'
         );
       }
+      this.loading = false;
     }
   }
 };

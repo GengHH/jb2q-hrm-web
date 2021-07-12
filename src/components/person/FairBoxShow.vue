@@ -167,6 +167,9 @@ export default {
   .pr {
     height: 100%;
     position: relative;
+    img {
+      background-color: #fafafa;
+    }
     .float-div,
     .float-div2 {
       position: absolute;

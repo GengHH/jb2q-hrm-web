@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-09 10:50:07
+ * @LastEditTime: 2021-07-12 13:55:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -71,6 +71,9 @@ const queryAllEmploymentLack = params =>
 //用工剩余调剂信息专区
 const queryAllEmploymentSurplus = params =>
   postAction(basePath + '/nologin/index/queryAllEmploymentSurplus', params);
+//获取职位详细信息
+const getPositionDetail = params =>
+  postAction(basePath + '/nologin/index/getPositionDetail', params);
 
 export {
   queryTable,
@@ -88,5 +91,6 @@ export {
   queryMeetingList,
   queryMeetingDetail,
   queryAllEmploymentLack,
-  queryAllEmploymentSurplus
+  queryAllEmploymentSurplus,
+  getPositionDetail
 };

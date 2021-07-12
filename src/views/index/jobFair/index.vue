@@ -41,6 +41,7 @@
       id="jobInfoGloriette"
       v-model="jobActiveName"
       @tab-click="jobHandleClick"
+      style="margin-top: 20px;"
     >
       <el-tab-pane label="全部" name="0">
         <FairBoxShow

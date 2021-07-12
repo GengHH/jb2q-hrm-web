@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 10:11:13
+ * @LastEditTime: 2021-07-12 17:59:17
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -892,7 +892,7 @@ export default {
       this.isDefaultStreet = false;
 
       //如果是‘全市’，街道非必填
-      if (val === '00') {
+      if (val === '0A') {
         this.streetRequired = false;
         this.rules.workStreetList = [];
       } else {

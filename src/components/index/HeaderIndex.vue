@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-07-08 15:04:00
+ * @LastEditTime: 2021-07-12 15:30:37
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -53,7 +53,6 @@
             :default-active="$route.path"
             class="el-menu-demo"
             mode="horizontal"
-            router
             background-color="#fff"
             text-color="#333"
             @select="handleSelect"
@@ -63,6 +62,7 @@
               :key="nvaIndex.id"
               :index="nvaIndex.path"
               class="bottom-inOutSpread"
+              @click="jump(nvaIndex.path)"
             >
               <template v-if="nvaIndex.icon">
                 <i class="nva-icon" :class="nvaIndex.iconName"></i>
@@ -186,6 +186,16 @@ export default {
     // }
   },
   methods: {
+    jump(val) {
+      if (val === '/recruitment') {
+        //直接跳转单位登录界面
+        this.$store.commit('index/set_PRIORITY_LOGIN_TYPE', 'corporation');
+        window.location.href = '/ggzp-shrs/login.html';
+      } else {
+        //跳转相应的路由地址
+        this.$router.push(val);
+      }
+    },
     changeMenuStyle() {
       if (window.innerWidth < 992) {
         this.showIconMenu = true;

@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-07-08 15:50:38
+ * @LastEditTime: 2021-07-12 10:03:13
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -156,6 +156,9 @@
               @click="showJobDetial(index, jobItem.positionId, jobItem.recId)"
             >
               <span class="positionName"> {{ jobItem.positionName }} </span>
+              <span v-if="jobItem.positionCode" title="职位编号">
+                {{ '（' + jobItem.positionCode + '）' }}
+              </span>
               <!-- <i class="bl-bg i-style" v-if="jobItem.workNature === '03'">见习</i> -->
               <i
                 class="bl-bg i-style jx-style"

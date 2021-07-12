@@ -127,7 +127,7 @@
             :col-num="4"
             :template-name="'corp'"
           ></BaseInfoGloriette>
-          <el-button id="corpListMore2" class="more-btn" @click="showMore"
+          <el-button id="corpListMore2" class="more-btn" @click="showMoreCorp('rec')"
             >查看更多</el-button
           >
         </el-tab-pane>
@@ -175,7 +175,7 @@ export default {
       obj: {},
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
-      corpActiveName: 'corpRecommended',
+      corpActiveName: 'corpFlagship',
       showQjdList: [
         // {
         //   id: '100',
