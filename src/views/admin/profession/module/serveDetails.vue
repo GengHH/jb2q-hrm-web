@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:12:37
- * @LastEditTime: 2021-06-01 17:22:06
+ * @LastEditTime: 2021-07-02 14:26:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\serveDetails.vue
@@ -152,7 +152,7 @@ export default {
             rules: [{ required: true, message: '请选择学历', trigger: 'blur' }],
             key: 'xlId',
             style: { width: '210px' },
-            options: trim(this.$store.getters['dictionary/recruit_edu'])
+            options: trim(this.$store.getters['dictionary/zyjs_xyjycd'])
           },
           {
             type: 'select',
@@ -222,6 +222,12 @@ export default {
             yyqx: this.qxValue,
             pid: this.serveData.pid
           };
+          // this.message('success', '预约成功！');
+          // this.infoList = [];
+          // this.isform = false;
+          // this.$emit('getInfo', data);
+          // this.$emit('onclose');
+          // return;
           serve_save(
             data,
             res => {
@@ -242,8 +248,6 @@ export default {
           return false;
         }
       });
-
-      console.log(e);
     },
     onsubmit(e, b) {
       let data = { ...e, ...b };
@@ -302,7 +306,7 @@ export default {
       );
     },
     getTime() {
-      let data = { qx: this.qxValue, ...this.serveData };
+      let data = { ...this.serveData, qx: this.qxValue };
       serve_area(
         data,
         res => {
@@ -320,6 +324,7 @@ export default {
             });
             this.timeList = yxDate;
             this.infoList = [];
+            this.isform = false;
           }
         },
         err => {
@@ -328,8 +333,14 @@ export default {
       );
     },
 
-    onclose() {
-      this.$emit('onclose');
+    onclose(type) {
+      //是否从预约进入
+
+      if (this.serveData.isOrder) {
+        this.$emit('onclose', '2');
+      } else {
+        this.$emit('onclose', type || 0);
+      }
     }
   },
   mounted() {

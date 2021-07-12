@@ -1,14 +1,14 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 16:33:27
+ * @LastEditTime: 2021-07-02 17:59:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+    <tform ref="tform" :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable :columns="columns" :list="list">
       <el-table-column
         slot="forCollegeGraduates"
@@ -23,6 +23,7 @@
           </div>
         </template>
       </el-table-column>
+
       <el-table-column slot="distictCode" label="管理区" align="center">
         <template slot-scope="scope">
           <div v-for="(v, k) in dicOptions.qx" :key="k">
@@ -82,6 +83,7 @@ export default {
   },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       disabled: false,
       type: '0',
       form: {},
@@ -126,6 +128,14 @@ export default {
             placeholder: '请输入关键字',
             rules: [],
             key: 'meetName'
+          },
+          {
+            type: 'select',
+            label: '所在区',
+            style: { width: '210px' },
+            rules: [],
+            key: 'areaId',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
         ]
       }
@@ -198,7 +208,18 @@ export default {
       this.visible = true;
     }
   },
-  created() {}
+  mounted() {
+    this.$refs.tform.value = {
+      areaId: this.adminId
+    };
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[1].disabled = false;
+    } else {
+      this.formConfig.formItemList[1].disabled = true;
+    }
+  }
 };
 </script>
 

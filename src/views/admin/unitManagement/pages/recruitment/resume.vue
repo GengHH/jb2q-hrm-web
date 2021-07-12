@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:43
- * @LastEditTime: 2021-05-24 10:52:10
+ * @LastEditTime: 2021-07-01 19:41:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\resume.vue
@@ -15,7 +15,7 @@
     append-to-body
   >
     <div style="height:500px;overflow: scroll;overflow-x: hidden;">
-      <userresume :form="resumeList"></userresume>
+      <userresume v-if="userPid" :userPid="userPid"></userresume>
       <div v-if="type == '1'">
         <div class="title-style">审核</div>
         <el-form size="small" :model="form" label-width="100px">
@@ -60,7 +60,7 @@ export default {
   components: { userresume },
   data() {
     return {
-      resumeList: {},
+      userPid: '',
       form: {
         verifyResult: '1',
         verifyMemo: ''
@@ -120,7 +120,7 @@ export default {
       data,
       res => {
         if (res.status == 200) {
-          this.resumeList = res.result.data;
+          this.userPid = res.result.data.pid;
         } else {
           this.$message({
             message: res.result.data.msg,

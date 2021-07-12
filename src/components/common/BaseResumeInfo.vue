@@ -30,7 +30,7 @@
       <!-- 私密信息不完全显示 -->
       <div class="column" v-if="secrecy">
         <p class="font-size24">
-          {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '' }}
+          {{ resume.xm ? resume.xm.substr(0, 1) + '**' : '此人不存在' }}
           <span class="sixteen-opacity">{{ resume.age }}岁</span>
           <span class="sixteen-opacity">{{ resume.sex }}</span>
           <!-- <i
@@ -103,7 +103,7 @@
       <!-- 私密信息完全显示 -->
       <div class="column" v-else>
         <p class="font-size24">
-          {{ resume.xm }}
+          {{ resume.xm ? resume.xm : '此人不存在' }}
           <span class="sixteen-opacity" v-if="resume.age"
             >{{ resume.age }}岁</span
           >
@@ -1297,7 +1297,7 @@ import {
   deleteSomeResume,
   saveWorkYear
 } from '@/api/personApi';
-import { getDicText } from '@/utils/index';
+import { getDicText, niceScrollUpdate } from '@/utils/index';
 /**
  * 简历信息的基本模板
  */
@@ -1738,14 +1738,17 @@ export default {
       !this.dialog5 &&
       !this.dialog6
     ) {
-      this.resizeScroll();
+      //this.resizeScroll();
+      this._.throttle(niceScrollUpdate, 500)();
     }
   },
   methods: {
     resizeScroll: _.throttle(function() {
-      $('#indexApp')
-        .getNiceScroll()
-        .resize();
+      if ($.prototype.getNiceScroll) {
+        $('#indexApp')
+          ?.getNiceScroll()
+          ?.resize();
+      }
     }, 2000),
     print() {
       // 打印
@@ -1813,7 +1816,7 @@ export default {
     // async getPersonInfo() {
     //   try {
     //     let result = await getPersonBaseInfo({
-    //       pid: this.$store.getters['person/pid'] || ''
+    //       pid: this.$store.getters['person/pid'] || this.queryPid
     //     });
     //     console.log('result', result);
     //     if (result.status === 200)
@@ -1829,9 +1832,10 @@ export default {
         console.log('缺少个人标识');
         return;
       }
+      this.loading = true;
       // 默认先按照传入的pid查询，再按照登录的人员查询
+      this.loading = true;
       if (this.searchByCorp) {
-        this.loading = true;
         console.log(
           '%c 🍪 new Date(): ',
           'font-size:20px;background-color: #ED9EC7;color:#fff;',
@@ -1861,7 +1865,6 @@ export default {
             that.loading = false;
           });
       } else {
-        this.loading = true;
         console.log(
           '%c 🍪 new Date(): ',
           'font-size:20px;background-color: #ED9EC7;color:#fff;',
@@ -2357,7 +2360,7 @@ export default {
     openEduPop() {
       // 查询教育经历信息
       getEduExpFromChsi({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
           // this.$message({ type: 'success', message: '查询成功' });
@@ -2375,7 +2378,7 @@ export default {
     openSkillPop() {
       // 查询技能证书信息
       getCertInfo({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
           // this.$message({ type: 'success', message: '查询成功' });
@@ -2469,7 +2472,7 @@ export default {
      */
     includeEduExp() {
       includeEduExp({
-        pid: this.$store.getters['person/pid']
+        pid: this.$store.getters['person/pid'] || this.queryPid
       }).then(saveRes => {
         // if (saveRes && saveRes.status === 200) {
         // } else if (saveRes) {
@@ -2481,7 +2484,9 @@ export default {
     var arr = Object.keys(this.$props.resumeData);
     if (arr.length === 0) {
       //初始化加载个人简历基本信息
-      this.loadPsnlResume();
+      setTimeout(() => {
+        this.loadPsnlResume();
+      }, 3000);
     } else {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });

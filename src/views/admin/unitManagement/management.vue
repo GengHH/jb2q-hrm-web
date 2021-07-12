@@ -1,14 +1,18 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 18:23:39
+ * @LastEditTime: 2021-07-09 10:14:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="tform"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <ttable :columns="columns" :list="list">
       <!-- 内容部分-操作 -->
 
@@ -102,6 +106,7 @@ export default {
   components: { ttable, tform, managementdetail },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       visible: false,
       form: {},
       disabled: false,
@@ -139,6 +144,13 @@ export default {
                 label: '正常'
               }
             ]
+          },
+          {
+            type: 'select',
+            label: '所在区',
+            style: { width: '210px' },
+            key: 'districtCode',
+            options: this.setQx()
           }
         ]
       },
@@ -162,6 +174,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '' });
+      return qx;
+    },
     onclose(type) {
       if (type == '1') {
         this.advancedSearch(this.dataList);
@@ -285,7 +302,20 @@ export default {
       }
     }
   },
-  created() {}
+  mounted() {
+    setTimeout(() => {
+      this.$refs.tform.value = {
+        districtCode: this.adminId
+      };
+    }, 0);
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[2].disabled = false;
+    } else {
+      this.formConfig.formItemList[2].disabled = true;
+    }
+  }
 };
 </script>
 

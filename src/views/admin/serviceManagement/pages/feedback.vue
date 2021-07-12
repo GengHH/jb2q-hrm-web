@@ -1,30 +1,45 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:33
- * @LastEditTime: 2021-03-10 14:33:00
+ * @LastEditTime: 2021-07-09 10:59:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\feedback.vue
 -->
 <template>
   <div id="indexBody">
-    <ttable :columns="columns" :list="list">
+    <ttable
+      v-loading="loading"
+      :options="{ height: '560px' }"
+      :columns="columns"
+      :list="list"
+    >
       <!-- 内容部分-操作 -->
-      <el-table-column slot="aaa005" label="反馈状态" align="center">
+      <el-table-column slot="feedbackStatus" label="反馈状态" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.aaa005 == '1'" type="success">已查看</el-tag>
-          <el-tag v-else-if="scope.row.aaa005 == '2'">录用通知</el-tag>
-          <el-tag else type="warning">面试通知</el-tag>
+          <div v-for="(v, k) in dicOptions.status" :key="k">
+            <el-tag v-if="v.value == scope.row.feedbackStatus" type="warning">{{
+              v.label
+            }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column slot="reply" label="是否参见面试" align="center">
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.yesno" :key="k">
+            <el-tag v-if="v.value == scope.row.reply" type="warning">{{
+              v.label
+            }}</el-tag>
+          </div>
         </template>
       </el-table-column>
     </ttable>
     <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :page-size="pageParam.pageSize"
       layout="total, prev, pager, next"
-      :total="1000"
+      :total="pageParam.total"
     >
     </el-pagination>
   </div>
@@ -32,59 +47,67 @@
 
 <script>
 import ttable from '../../common/t_table';
+import { job_queryApplyForFeedbackList } from '../api/index';
 export default {
   name: 'feedback',
   components: { ttable },
+  props: ['userPid'],
   data() {
     return {
-      currentPage: 1,
+      dicOptions: {
+        //状态
+        status: this.$store.getters['dictionary/recruit_feedback_status'],
+        yesno: this.$store.getters['dictionary/yesno']
+      },
+      pageParam: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 10
+      },
+      loading: true,
       columns: [
         { title: '序号', type: 'index' },
-        { title: '单位名称', prop: 'aaa001' },
-        { title: '职位名称', prop: 'aaa002' },
-        { title: '职位薪酬', prop: 'aaa003' },
-        { title: '投递时间', prop: 'aaa004' },
-        { title: '反馈状态', prop: 'aaa005', slot: 'aaa005' },
-        { title: '反馈时间', prop: 'aaa006' },
+        { title: '单位名称', prop: 'corpName' },
+        { title: '职位名称', prop: 'positionName' },
+        { title: '职位薪酬', prop: 'salary' },
+        { title: '反馈状态', prop: 'feedbackStatus', slot: 'feedbackStatus' },
+        { title: '反馈时间', prop: 'feedbackTime' },
         { title: '面试信息', prop: 'aaa007' },
-        { title: '是否参见面试', prop: 'aaa008' },
-        { title: '不参加原因', prop: 'aaa009' }
-        // {
-        //   title: '性别',
-        //   prop: 'sex',
-        //   align: 'center',
-        //   render: (h, params) => {
-        //     let sex = params.row.sex; //params.row.type==获取到的值
-        //     let nowText = '';
-        //     if (sex == '1') {
-        //       nowText = '男';
-        //     } else {
-        //       nowText = '女';
-        //     }
-        //     return h('div', {}, nowText);
-        //   }
-        // }
+        { title: '是否参见面试', prop: 'reply', slot: 'reply' },
+        { title: '不参加原因', prop: 'reason' }
       ],
-      list: [
-        {
-          aaa001: '测试',
-          aaa002: '测试',
-          aaa003: '测试',
-          aaa004: '2019-05-01',
-          aaa005: '1',
-          aaa006: '2019-05-01',
-          aaa007: '测试',
-          aaa008: '测试',
-          aaa009: '测试'
-        }
-      ]
+      list: []
     };
   },
   computed: {},
   methods: {
+    query() {
+      let data = { pid: this.userPid, pageParam: this.pageParam };
+      data.pageParam.pageIndex =
+        JSON.parse(JSON.stringify(this.pageParam.pageIndex)) - 1;
+      job_queryApplyForFeedbackList(
+        data,
+        res => {
+          this.loading = false;
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.pageParam.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.pageParam.total = pageresult.total;
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     handleChange(e) {
-      console.log;
+      this.pageParam.pageIndex = e;
+      this.query();
     }
+  },
+  mounted() {
+    this.query();
   },
   created() {}
 };

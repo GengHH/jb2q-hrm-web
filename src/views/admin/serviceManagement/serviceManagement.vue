@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-05-17 17:28:47
+ * @LastEditTime: 2021-07-12 11:09:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -11,6 +11,7 @@
     <el-row>
       <el-col>
         <div style="margin-left:20px;color:#fc7a43">
+          <span>重点人群人数：</span>
           <span style="font-size:24px">{{ total }}</span>
           <span>人</span>
         </div>
@@ -92,7 +93,6 @@ export default {
   },
   data() {
     return {
-      istotal: true,
       total: 0,
       dates: ['2021-03-16', '2021-03-17'],
       form: {
@@ -119,7 +119,7 @@ export default {
             data: [],
             key: 'pointTypeList',
             style: { width: '532px' },
-            options: trim(this.$store.getters['dictionary/recruit_point_type'])
+            options: this.$store.state.admin.label[0].labels
           },
           {
             type: 'select',
@@ -176,6 +176,13 @@ export default {
             format: 'yyyy-MM-dd',
             rules: [],
             key: 'time'
+          },
+          {
+            type: 'select',
+            label: '年龄',
+            style: { width: '210px' },
+            key: 'age',
+            options: trim(this.$store.getters['dictionary/recruit_age_type'])
           },
           {
             type: 'input',
@@ -237,7 +244,7 @@ export default {
       this.onSearch();
     },
     onSearch() {
-      console.log('------------------');
+      console.log(123);
       let params = { ...this.form };
       params.pageParam = { ...this.pageList };
       params.pageParam.pageIndex = this.pageList.pageIndex - 1;
@@ -245,7 +252,7 @@ export default {
         params,
         res => {
           console.log(res);
-          let record = res.result.data;
+          let record = res.result.pageresult;
           let data = record.data.map(e => {
             e.titleList = this.titleList;
             e.titleListShow = false;
@@ -259,10 +266,7 @@ export default {
             pageIndex: Number(record.pageIndex) + 1
           };
 
-          if (this.istotal) {
-            this.total = record.total;
-            this.istotal = false;
-          }
+          this.total = record.total;
         },
         err => {
           console.log(err);

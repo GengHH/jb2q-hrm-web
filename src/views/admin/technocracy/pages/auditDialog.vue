@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 13:59:30
- * @LastEditTime: 2021-06-03 13:30:19
+ * @LastEditTime: 2021-06-23 13:06:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\auditDialog.vue
@@ -74,20 +74,27 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item
-          prop="time"
+          prop="startDate"
           v-if="auditConfig.type < 2 && form.verifyResult == '1'"
           label="新聘期时间"
         >
           <el-date-picker
-            v-model="form.time"
-            type="daterange"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            @change="newTime"
+            v-model="form.startDate"
+            type="date"
+            placeholder="开始日期"
+            value-format="yyyyMMdd"
+          >
+          </el-date-picker>
+          <el-date-picker
+            disabled
+            v-model="form.endDate"
+            type="date"
+            placeholder="结束日期"
             value-format="yyyyMMdd"
           >
           </el-date-picker>
         </el-form-item>
-
         <div style="text-align:center">
           <el-button type="primary" @click="onSubmit">审核</el-button>
         </div>
@@ -110,13 +117,14 @@ export default {
   components: { tform },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       rules: {
         verifyResult: [{ required: true, message: '请填写必选项' }],
         verifyMemo: [{ required: true, message: '请填写必选项' }],
         joinDate: [{ required: true, message: '请填写必选项' }],
         actSituation: [{ required: true, message: '请填写必选项' }],
         moveDate: [{ required: true, message: '请填写必选项' }],
-        time: [{ required: true, message: '请填写必选项' }],
+        startDate: [{ required: true, message: '请填写必选项' }],
         outDate: [{ required: true, message: '请填写必选项' }]
       },
       dicOptions: {
@@ -128,12 +136,31 @@ export default {
         region: '',
         verifyMemo: '',
         joinDate: '',
-        time: ''
+        startDate: '',
+        endDate: ''
       }
     };
   },
   computed: {},
   methods: {
+    newTime(e) {
+      let y = e.substring(0, 4);
+      let m = e.substring(4, 6);
+      let s = e.substring(6, 8);
+
+      //默认加2年减1天
+      let d = new Date(Number(y) + 2 + '-' + m + '-' + s);
+      d = d.setDate(d.getDate() - 1);
+      d = new Date(d);
+
+      let year = d.getFullYear();
+      let month = d.getMonth() + 1;
+      month = month > 9 ? month : '0' + month;
+      let day = d.getDate();
+      day = day > 9 ? day : '0' + day;
+      let time = year + '' + month + '' + day;
+      this.form.endDate = time;
+    },
     selectChange(e) {
       console.log(e);
     },
@@ -156,10 +183,6 @@ export default {
       let form = this.form;
       let index = this.auditConfig.type;
       let row = this.auditConfig.row;
-      if (form.time) {
-        form.startDate = form.time[0];
-        form.endDate = form.time[1];
-      }
       let data = { ...form };
       if (data.verifyResult == '0') {
         if (!data.verifyMemo) {
@@ -175,6 +198,7 @@ export default {
           //0入团 1续聘 2退团 3转移
           if (index == '0') {
             data.innerId = row.innerId;
+            data.districtCode = this.adminId;
             joinTeam_audit(
               data,
               res => {

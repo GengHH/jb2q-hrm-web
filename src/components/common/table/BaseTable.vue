@@ -1,8 +1,8 @@
 <!--
  * @Author: GengHH
  * @Date: 2021-01-25 11:21:13
- * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 15:16:39
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-24 15:43:51
  * @Description: 自己封装的table组件
  * @FilePath: \jb2q-hrm-web\src\components\common\table\BaseTable.vue
 -->
@@ -12,7 +12,7 @@
       ref="table"
       :data="pageOnFront ? pageTableData : data"
       v-bind="attrs"
-      :height="autoHeight ? '500px' : $attrs.height"
+      :height="'500px' || $attrs.height"
       v-on="{ ...$listeners, ...events }"
       @cell-dblclick="copy"
       @selection-change="handleSelectionChange"

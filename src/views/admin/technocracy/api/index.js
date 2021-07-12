@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-25 14:36:30
- * @LastEditTime: 2021-04-07 16:28:44
+ * @LastEditTime: 2021-06-29 15:34:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\api\index.js
@@ -9,6 +9,9 @@
 import { getAction, postAction } from '@/api/adminApi';
 let path = '/expert/';
 //专家管理-------------------------------------------
+//专家修改
+const expert_modify = (params, fn, fnErr) =>
+  postAction(path + 'modify', params, fn, fnErr);
 //综合查询
 const synthesize_query = (params, fn, fnErr) =>
   postAction(path + 'query/all', params, fn, fnErr);
@@ -28,6 +31,8 @@ const continue_audit = (params, fn, fnErr) =>
   postAction(path + 'renew/verify', params, fn, fnErr);
 const continue_more = (params, fn, fnErr) =>
   postAction(path + 'renew/applyMore', params, fn, fnErr);
+const continue_verifyMore = (params, fn, fnErr) =>
+  postAction(path + 'renew/verifyMore', params, fn, fnErr);
 
 //退团
 const quit_add = (params, fn, fnErr) =>
@@ -74,6 +79,8 @@ const summary_remove = (params, fn, fnErr) =>
 //报表统计-------------------------------------------
 const statistics_query = (params, fn, fnErr) =>
   postAction(path + 'pay/query', params, fn, fnErr);
+const statistics_dtl = (params, fn, fnErr) =>
+  postAction(path + 'pay/query/dtl', params, fn, fnErr);
 export {
   summary_add,
   summary_edit,
@@ -101,5 +108,8 @@ export {
   move_add,
   move_query,
   move_audit,
-  statistics_query
+  statistics_query,
+  statistics_dtl,
+  continue_verifyMore,
+  expert_modify
 };

@@ -1,8 +1,8 @@
 /*
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 10:39:13
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-02 18:33:16
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -61,6 +61,11 @@ if (isEmpty(store.getters['dictionary/ggjbxx_sex'])) {
 if (isEmpty(store.getters['dictionary/recruit_edu'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
 }
+//老学历
+if (isEmpty(store.getters['dictionary/zyjs_xyjycd'])) {
+  store.dispatch('dictionary/init_Dictionary', 'ZYJS_XYJYCD');
+}
+
 //民族
 if (isEmpty(store.getters['dictionary/ggjbxx_nationality'])) {
   store.dispatch('dictionary/init_Dictionary', 'GGJBXX_NATIONALITY');
@@ -202,6 +207,47 @@ if (isEmpty(store.getters['dictionary/recruit_expert_professional_type'])) {
     'RECRUIT_EXPERT_PROFESSIONAL_TYPE'
   );
 }
+//年龄
+if (isEmpty(store.getters['dictionary/recruit_age_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_AGE_TYPE');
+}
+//问题诊断一级
+if (isEmpty(store.getters['dictionary/recruit_diagnosis_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_DIAGNOSIS_TYPE');
+}
+//二级
+if (isEmpty(store.getters['dictionary/recruit_diagnosis_que_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_DIAGNOSIS_QUE_TYPE');
+}
+//指导状态
+if (isEmpty(store.getters['dictionary/zyjs_zyzdzt'])) {
+  store.dispatch('dictionary/init_Dictionary', 'ZYJS_ZYZDZT');
+}
+//一级职业类型
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+//审核状态
+if (isEmpty(store.getters['dictionary/recruit_surplus_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SURPLUS_VERIFY_STATUS');
+}
+//职业指导类型
+if (isEmpty(store.getters['dictionary/recruit_guide_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_GUIDE_TYPE');
+}
+//审核状态
+
+if (isEmpty(store.getters['dictionary/recruit_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_VERIFY_STATUS');
+}
+//审核状态
+if (isEmpty(store.getters['dictionary/recruit_release_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_RELEASE_STATUS');
+}
+// //投诉状态
+// if (isEmpty(store.getters['dictionary/recruit_complaint_status'])) {
+//   store.dispatch('dictionary/init_Dictionary', 'recruit_complaint_status');
+// }
 
 /* eslint-disable no-new */
 const vm = new Vue({
@@ -211,14 +257,14 @@ const vm = new Vue({
   template: '<App/>',
   components: { App }
 });
-console.log(isNoBody(vm));
-if (isNoBody(vm)) {
+console.log(isNoBody());
+if (isNoBody()) {
   vm.$mount('#app');
 } else {
-  if (isPerson(vm)) {
+  if (isPerson()) {
     vm.$alert('已有个人登录本系统，请先退出登录');
   }
-  if (isCorporation(vm)) {
+  if (isCorporation()) {
     vm.$alert('已有单位登录本系统，请先退出登录');
   }
   setTimeout(() => {

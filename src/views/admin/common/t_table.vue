@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-06-07 15:29:28
+ * @LastEditTime: 2021-06-28 11:13:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -11,17 +11,15 @@
     <el-table
       id="iTable"
       :class="tableClass"
-      v-loading.iTable="options.loading"
       :data="list"
       :stripe="options.stripe"
       border
       :highlight-current-row="options.highlightCurrentRow"
       :lazy="options.lazy"
-      :height="options.height"
+      :height="options.height || '500px'"
       :load="loadGetData"
       ref="mutipleTable"
       style="width:100%;"
-      max-height="600"
       :width="options.width"
       @row-click="clickRow"
       @row-dblclick="dblclickRow"
@@ -165,7 +163,7 @@ export default {
     }
   },
   mounted() {
-    niceScroll('.el-table__body-wrapper');
+    //niceScroll('.el-table__body-wrapper');
   },
   watch: {},
   computed: {},

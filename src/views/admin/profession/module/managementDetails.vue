@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-06-07 13:54:37
+ * @LastEditTime: 2021-07-08 16:22:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -34,14 +34,16 @@
               :file-list="proFileList"
               :auto-upload="false"
               :on-change="proUploadUserChange"
-              :limit="1"
               :show-file-list="false"
             >
               <template v-if="proForm.propagandaImageBase64">
                 <img :src="proForm.propagandaImageBase64" class="avatar" />
               </template>
               <template v-if="!proForm.propagandaImageBase64">
-                <img v-if="propagandaUrl" :src="propagandaUrl" class="avatar" />
+                <div v-if="propagandaUrl">
+                  <img :src="propagandaUrl" class="avatar" />
+                </div>
+
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </template>
             </el-upload>
@@ -75,7 +77,6 @@
             <el-col :span="12">
               <el-form-item label="参与人数" prop="participants">
                 <el-input
-                  disabled
                   style="width:190px"
                   v-model="form.participants"
                 ></el-input>
@@ -234,18 +235,34 @@ export default {
     },
     onSubmitForm() {
       //1编辑 3新增
-      let addForm = { ...this.$refs.advancedSearch.value, ...this.proForm };
-      addForm.actStartTime = addForm.acttime[0];
-      addForm.actEndTime = addForm.acttime[1];
+      let addForm = { ...this.proForm, ...this.$refs.advancedSearch.value };
+      addForm.propagandaImageBase64 = this.proForm.propagandaImageBase64;
 
-      addForm.applyStartTime = addForm.applytime[0];
-      addForm.applyEndTime = addForm.applytime[1];
+      if (addForm.acttime) {
+        addForm.actStartTime = addForm.acttime[0];
+        addForm.actEndTime = addForm.acttime[1];
+      }
+
+      if (addForm.applytime) {
+        addForm.applyStartTime = addForm.applytime[0];
+        addForm.applyEndTime = addForm.applytime[1];
+      }
 
       if (this.type == '1') {
+        let str = 'data:';
+
+        if (addForm.propagandaImageBase64) {
+          let subStr = addForm.propagandaImageBase64.substring(0, 5);
+          if (str == subStr) {
+            addForm.propagandaImageBase64 = addForm.propagandaImageBase64
+              .split(',')[1]
+              .toString();
+          }
+        }
         act_modify(
           addForm,
           res => {
-            if (res.status == 200) {
+            if (res.result.data.result) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
@@ -253,6 +270,12 @@ export default {
                 onClose: () => {
                   this.onclose();
                 }
+              });
+            } else {
+              this.$message({
+                message: res.result.data.msg,
+                type: 'warning',
+                duration: 1000
               });
             }
             console.log(res);
@@ -271,7 +294,7 @@ export default {
         act_add(
           addForm,
           res => {
-            if (res.status == 200) {
+            if (res.result.data.result) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
@@ -279,6 +302,12 @@ export default {
                 onClose: () => {
                   this.onclose('1');
                 }
+              });
+            } else {
+              this.$message({
+                message: res.result.data.msg,
+                type: 'warning',
+                duration: 1000
               });
             }
             console.log(res);
@@ -289,21 +318,28 @@ export default {
         );
       }
     },
-    getBase64(file, name) {
+    getBase64(file, name, fn) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.form[name] = reader.result;
+        if (fn) {
+          fn();
+        }
       };
       reader.onerror = function(error) {
         console.log('Error: ', error);
       };
     },
-    proGetBase64(file, name) {
+    proGetBase64(file, name, fn) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
+        console.log(reader.result);
         this.proForm[name] = reader.result;
+        if (fn) {
+          fn();
+        }
       };
       reader.onerror = function(error) {
         console.log('Error: ', error);
@@ -311,25 +347,32 @@ export default {
     },
     //照片base64
     uploadUserChange(file) {
-      if (this.beforeAvatarUpload(file)) {
-        this.getBase64(file.raw, 'sceneImageBase64');
-        this.imageUrl = URL.createObjectURL(file.raw);
+      if (this.beforeAvatarUpload(file.raw)) {
+        this.getBase64(file.raw, 'sceneImageBase64', () => {
+          this.urlRemove();
+          this.imageUrl = URL.createObjectURL(file.raw);
+        });
       }
     },
     proUploadUserChange(file) {
-      if (this.beforeAvatarUpload(file)) {
-        this.proGetBase64(file.raw, 'propagandaImageBase64');
-        this.propagandaUrl = URL.createObjectURL(file.raw);
+      console.log(1);
+      if (this.beforeAvatarUpload(file.raw)) {
+        this.proGetBase64(file.raw, 'propagandaImageBase64', () => {
+          this.proUrlRemove();
+          this.propagandaUrl = URL.createObjectURL(file.raw);
+        });
       }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
       const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
+      if (
+        file.type != 'image/jpeg' &&
+        file.type != 'image/png' &&
+        file.type != 'image/jpg'
+      ) {
         this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
         return false;
       }
@@ -366,24 +409,58 @@ export default {
       );
     },
     onclose(type) {
-      if (type) {
-        this.$emit('onclose', type);
-      }
-      this.$emit('onclose');
+      this.$emit('onclose', '1');
+    },
+    querySize() {
+      let data = {
+        actId: this.formConfig.dataList.actId,
+        applyType: this.formConfig.dataList.applyType
+      };
+      data.pageIndex = 0;
+      data.pageSize = 10;
+      act_apply_query(
+        { ...data, applyType: 1 },
+        res => {
+          if (res.status == 200) {
+            let total = res.result.data.total;
+            this.form.systemRecSpecialGuide = total;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+      act_apply_query(
+        { ...data, applyType: 2 },
+        res => {
+          if (res.status == 200) {
+            let total = res.result.data.total;
+            this.form.selfApply = total;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
   },
   mounted() {
+    console.log(this.type);
+    let dataList = { ...this.formConfig.dataList };
     setTimeout(() => {
       if (this.type != '3') {
-        this.$refs.advancedSearch.value = this.formConfig.dataList;
-        if (this.type == '2') {
-          this.form = { ...this.formConfig.dataList };
-          this.form.sceneImageBase64 =
-            'data:image/png;base64,' + this.form.sceneImageBase64;
-        }
-        this.proForm = { ...this.formConfig.dataList };
-        this.proForm.propagandaImageBase64 =
-          'data:image/png;base64,' + this.proForm.propagandaImageBase64;
+        this.$refs.advancedSearch.value = dataList;
+        this.proForm = { ...dataList };
+
+        this.proForm.sceneImageBase64 = this.proForm.sceneImageBase64
+          ? 'data:image/png;base64,' + this.proForm.sceneImageBase64
+          : '';
+
+        this.proForm.propagandaImageBase64 = this.proForm.propagandaImageBase64
+          ? 'data:image/png;base64,' + this.proForm.propagandaImageBase64
+          : '';
         //计算个人投递和系统投递人数
         let systemRecSpecialGuide = this.proForm.systemRecSpecialGuide
           ? this.proForm.systemRecSpecialGuide
@@ -391,10 +468,14 @@ export default {
         let selfApply = this.proForm.selfApply ? this.proForm.selfApply : 0;
         this.form = {
           systemRecSpecialGuide: systemRecSpecialGuide,
-          participants: Number(systemRecSpecialGuide) + Number(selfApply),
-          selfApply: selfApply
+          participants: this.proForm.participants,
+          selfApply: selfApply,
+          sceneImageBase64: this.proForm.sceneImageBase64,
+          actSituation: this.proForm.actSituation
         };
-        console.log(this.proForm);
+        if (this.type == '4' && this.type != '2') {
+          this.querySize();
+        }
       } else {
         this.$refs.advancedSearch.value = {};
       }

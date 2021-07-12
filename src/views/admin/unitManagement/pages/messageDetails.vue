@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-10 15:35:57
- * @LastEditTime: 2021-05-20 17:33:43
+ * @LastEditTime: 2021-07-08 14:34:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\messagedetails.vue
@@ -18,10 +18,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="单位logo">
-              <el-input
-                :disabled="disabled"
-                v-model="form.logoBase64"
-              ></el-input>
+              <img
+                v-if="form.logoBase64"
+                style="width:240px"
+                :src="'data:image/png;base64,' + form.logoBase64"
+              />
+              <span v-if="!form.logoBase64">暂无图片</span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -321,6 +323,15 @@
               </template>
             </el-table-column>
           </ttable>
+          <el-pagination
+            @size-change="handleChange"
+            @current-change="handleChange"
+            :current-page.sync="params.pageIndex"
+            :page-size="pageSize"
+            layout="total, prev, pager, next"
+            :total="params.total"
+          >
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="代理招聘" name="second">
           <ttable
@@ -438,6 +449,15 @@
               </template>
             </el-table-column>
           </ttable>
+          <el-pagination
+            @size-change="handleChange2"
+            @current-change="handleChange2"
+            :current-page.sync="params2.pageIndex"
+            :page-size="pageSize"
+            layout="total, prev, pager, next"
+            :total="params2.total"
+          >
+          </el-pagination>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -541,6 +561,14 @@ export default {
   },
   computed: {},
   methods: {
+    handleChange2(e) {
+      this.params2.pageIndex = e;
+      this.queryAgency();
+    },
+    handleChange(e) {
+      this.params.pageIndex = e;
+      this.queryAutonomously();
+    },
     look(e) {
       this.formQuery = { ...e.row };
       console.log(this.formQuery);

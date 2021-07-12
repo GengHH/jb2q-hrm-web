@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-06-03 17:39:00
+ * @LastEditTime: 2021-06-29 14:53:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\activityDetail.vue
@@ -109,7 +109,7 @@
                   remote
                   reserve-keyword
                   style="width:350px"
-                  placeholder="请输入关键词"
+                  placeholder="请输入身份证号"
                   :remote-method="orgRemoteMethod"
                   :loading="loading"
                   @change="userChange"
@@ -195,7 +195,6 @@
             <el-col :span="24">
               <el-form-item label="结对对象联系电话">
                 <el-input
-                  :disabled="true"
                   style="width:350px"
                   v-model="form.contactNumber"
                   maxlength="11"
@@ -210,14 +209,11 @@
             :span="24"
           >
             <el-form-item label="活动名称" prop="actName">
-              <el-select style="width:350px" v-model="form.actName">
-                <el-option
-                  v-for="(v, k) in activityList"
-                  :key="k"
-                  :label="v.actName"
-                  :value="v.actId"
-                ></el-option>
-              </el-select>
+              <el-input
+                style="width:350px"
+                v-model="form.actName"
+                maxlength="50"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col
@@ -266,7 +262,8 @@
           </el-col>
         </el-row>
         <div v-if="!disabled" style="text-align:center">
-          <el-button type="primary" @click="onSubmit">保存</el-button>
+          <el-button type="success" @click="onSubmit('0')">保存</el-button>
+          <el-button type="primary" @click="onSubmit('1')">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -274,14 +271,14 @@
 </template>
 
 <script>
-import { trim } from '@/utils/index';
+import { trim, isZjhm } from '@/utils/index';
 import {
   activity_add,
   activity_edit,
   synthesize_query,
   record_query
 } from '../api/index';
-import { emphasis_keypoint } from '../../serviceManagement/api/index';
+import { guide_queryPerson } from '../../profession/api/index';
 import { act_query } from '../../profession/api/index';
 export default {
   name: 'activityDetail',
@@ -338,11 +335,13 @@ export default {
       this.form.expertId = e.value;
     },
     userChange(e) {
+      this.form.xm = e.label;
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
     },
     actChange(e) {
+      this.form.xm = e.label;
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
@@ -380,20 +379,21 @@ export default {
     orgRemoteMethod(query) {
       if (query !== '') {
         this.loading = true;
+        let q = isZjhm(query);
         let params = {
-          xm: query,
+          zjhm: query,
           pageParam: {
             pageIndex: 0,
             pageSize: 10
           }
         };
 
-        emphasis_keypoint(
+        guide_queryPerson(
           params,
           res => {
             if (res.status == 200) {
               this.loading = false;
-              let pageresult = res.result.data.data;
+              let pageresult = res.result.pageresult.data;
               let list = pageresult.map(e => {
                 return {
                   value: e.zjhm,
@@ -453,6 +453,9 @@ export default {
     selectType(e) {
       console.log(e);
       this.actType = Number(e);
+      // if (this.actType == '2' || this.actType == '3') {
+      //   this.get_act_query();
+      // }
     },
     getBase64(file, name) {
       var reader = new FileReader();
@@ -475,8 +478,9 @@ export default {
       console.log(file, fileList);
     },
 
-    onSubmit() {
+    onSubmit(realSubmit) {
       let data = { ...this.form };
+      data.realSubmit = realSubmit;
       this.$refs.form.validate(valid => {
         if (valid) {
           if (!data.recordImageBase64) {
@@ -486,9 +490,12 @@ export default {
             });
             return;
           }
-          data.recordImageBase64 = data.recordImageBase64
-            ? data.recordImageBase64.split(',')[1].toString()
-            : '';
+          if (this.type == '3') {
+            data.recordImageBase64 = data.recordImageBase64
+              .split(',')[1]
+              .toString();
+          }
+
           if (this.type == 3) {
             activity_add(
               data,
@@ -536,6 +543,29 @@ export default {
         }
       });
     },
+    get_act_query() {
+      //获取活动信息
+      act_query(
+        {
+          pageIndex: 0,
+          pageSize: 100,
+          actName: ''
+        },
+        res => {
+          if (res.status == 200) {
+            let data = res.result.data.data;
+            this.activityList = data;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log('-----------------------------');
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     onclose(type) {
       this.$emit('onclose', type || 0);
     },
@@ -555,32 +585,13 @@ export default {
     }
   },
   mounted() {
+    console.log(this.type);
+    console.log(this.form);
     if (this.type == '2') {
       setTimeout(() => {
         this.disabled = true;
       }, 0);
     }
-    //获取活动信息
-    act_query(
-      {
-        pageIndex: 0,
-        pageSize: 100,
-        actName: ''
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.data.data;
-          this.activityList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
-        }
-        console.log('-----------------------------');
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
   },
   created() {}
 };

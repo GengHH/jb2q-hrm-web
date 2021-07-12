@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-04 11:10:20
- * @LastEditTime: 2021-06-03 17:04:04
+ * @LastEditTime: 2021-06-28 17:55:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\admin\router\index.js
@@ -186,6 +186,24 @@ export default new Router({
         import(
           '@/views/admin/positionComplainManagement/positionComplainManagement'
         )
+    },
+    // 热招职位
+    {
+      path: '/hotPost/hotPost',
+      name: '热招职位',
+      component: () => import('@/views/admin/hotPost/hotPost')
+    },
+    // 急招职位
+    {
+      path: '/vexedlyPost/vexedlyPost',
+      name: '急招职位',
+      component: () => import('@/views/admin/vexedlyPost/vexedlyPost')
+    },
+    // 空白页
+    {
+      path: '/blank',
+      name: '',
+      component: () => import('@/views/admin/blank')
     },
     {
       path: '/*',

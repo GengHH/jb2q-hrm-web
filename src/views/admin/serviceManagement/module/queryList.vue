@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-08 16:18:55
- * @LastEditTime: 2021-05-28 18:10:51
+ * @LastEditTime: 2021-07-12 11:06:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\queryList.vue
@@ -88,29 +88,27 @@
             </div>
           </el-col>
         </el-row>
-        <el-row
-          style="padding:0px 10px;background:#eeeeee;height:44px;line-height:44px"
-        >
+        <el-row style="padding:0px 10px;background:#eeeeee;line-height:44px">
           <el-col :md="18" :lg="18" :xl="18">
             <template v-if="v.keyPointLableDataList">
               <template v-for="(v1, k1) in v.keyPointLableDataList">
                 <el-tag
-                  v-if="v1.pointType != '08'"
+                  v-if="v1.pointType == '10'"
+                  style="margin:0 2px"
+                  :key="'b' + k1"
+                  type="warning"
+                  effect="dark"
+                  size="small"
+                  >{{ getqx(v1.districtCode) }}-{{ v1.pointTypeName }}</el-tag
+                >
+                <el-tag
+                  v-if="v1.pointType != '10'"
                   style="margin:0 2px"
                   :key="'k' + k1"
                   effect="plain"
                   type="info"
                   size="small"
                   >{{ v1.pointTypeName }}</el-tag
-                >
-                <el-tag
-                  v-if="v1.pointType == '08'"
-                  style="margin:0 2px"
-                  :key="'b' + k1"
-                  type="warning"
-                  effect="dark"
-                  size="small"
-                  >关注-{{ v1.pointTypeName }}</el-tag
                 >
               </template>
             </template>
@@ -127,14 +125,16 @@
           </el-col>
         </el-row>
       </div>
+
       <el-pagination
         @size-change="handleChange"
         @current-change="handleChange"
         :current-page.sync="pageListData.pageIndex"
         :page-size="pageListData.pageSize"
-        layout="total, prev, pager, next"
+        layout="slot,total, prev, pager, next"
         :total="pageListData.total"
       >
+        <!-- <span>【筛选的条件名】人数：</span> -->
       </el-pagination>
     </div>
     <pagelist
@@ -174,7 +174,9 @@ export default {
         //就业状态
         jyzt: trim(this.$store.getters['dictionary/ggjbxx_jyzt']),
         //学历
-        edu: trim(this.$store.getters['dictionary/recruit_edu'])
+        edu: trim(this.$store.getters['dictionary/recruit_edu']),
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
       },
       pagelistIndex: {},
       //遮罩开关
@@ -184,6 +186,15 @@ export default {
   },
   computed: {},
   methods: {
+    getqx(code) {
+      let qx = trim(this.$store.getters['dictionary/ggjbxx_qx']);
+      for (let i = 0; i < qx.length; i++) {
+        if (code == qx[i].value) {
+          return qx[i].label;
+        }
+      }
+      return '';
+    },
     openRec(e) {
       this.recdata = { ...e };
       this.visible = true;

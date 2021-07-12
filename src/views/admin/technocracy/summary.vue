@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 16:50:44
+ * @LastEditTime: 2021-06-29 15:29:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -46,10 +46,20 @@
       </el-table-column>
       <el-table-column width="200" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" @click="opendio(1, scope)" plain>
+          <el-button
+            v-if="scope.row.realSubmit == '0'"
+            size="mini"
+            @click="opendio(1, scope)"
+            plain
+          >
             <i class="el-icon-edit"></i> 编辑</el-button
           >
-          <el-button size="mini" type="danger" @click="remove(scope)" plain
+          <el-button
+            v-if="scope.row.realSubmit == '0'"
+            size="mini"
+            type="danger"
+            @click="remove(scope)"
+            plain
             ><i class="el-icon-close"></i>删除</el-button
           >
         </template>
@@ -116,7 +126,7 @@ export default {
       currentPage: 1,
       list: [],
       columns: [
-        { type: 'selection' },
+        { type: 'index' },
         { title: '会议议题', prop: 'meetTheme' },
         { title: '会议日期', prop: 'meetTime', slot: 'meetTime' },
         { title: '会议地点', prop: 'meetAddress' },
@@ -189,10 +199,6 @@ export default {
         this.type = 1;
         this.disabled = false;
         this.form = { ...scope.row };
-        //格式化多选
-        this.form.expertJoinDatas = this.form.expertJoinDatas.map(e => {
-          return e.expertId;
-        });
         //格式化时间
         this.form.meetTime = this.formatTime(this.form.meetTime);
       } else if (type == 2) {

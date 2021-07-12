@@ -1,9 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 15:16:44
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-08 09:57:03
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -160,9 +159,45 @@ const getters = {
   recruit_expert_service_content_type: state =>
     state.RECRUIT_EXPERT_SERVICE_CONTENT_TYPE,
   recruit_expert_approval_entry_type: state =>
-    state.RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE
+    state.RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE,
+  recruit_age_type: state => state.RECRUIT_AGE_TYPE,
+  recruit_diagnosis_type: state => state.RECRUIT_DIAGNOSIS_TYPE,
+  recruit_diagnosis_que_type: state => state.RECRUIT_DIAGNOSIS_QUE_TYPE,
+  zyjs_zyzdzt: state => state.ZYJS_ZYZDZT,
+  recruit_surplus_verify_status: state => state.RECRUIT_SURPLUS_VERIFY_STATUS,
+  zyjs_xyjycd: state => state.ZYJS_XYJYCD,
+  recruit_guide_type: state => state.RECRUIT_GUIDE_TYPE,
+  recruit_verify_status: state => state.RECRUIT_VERIFY_STATUS,
+  recruit_release_status: state => state.RECRUIT_RELEASE_STATUS
 };
 const mutations = {
+  set_RECRUIT_RELEASE_STATUS: (state, dictionary) => {
+    state.RECRUIT_RELEASE_STATUS = dictionary;
+  },
+  set_RECRUIT_VERIFY_STATUS: (state, dictionary) => {
+    state.RECRUIT_VERIFY_STATUS = dictionary;
+  },
+  set_RECRUIT_GUIDE_TYPE: (state, dictionary) => {
+    state.RECRUIT_GUIDE_TYPE = dictionary;
+  },
+  set_ZYJS_XYJYCD: (state, dictionary) => {
+    state.ZYJS_XYJYCD = dictionary;
+  },
+  set_RECRUIT_SURPLUS_VERIFY_STATUS: (state, dictionary) => {
+    state.RECRUIT_SURPLUS_VERIFY_STATUS = dictionary;
+  },
+  set_ZYJS_ZYZDZT: (state, dictionary) => {
+    state.ZYJS_ZYZDZT = dictionary;
+  },
+  set_RECRUIT_DIAGNOSIS_QUE_TYPE: (state, dictionary) => {
+    state.RECRUIT_DIAGNOSIS_QUE_TYPE = dictionary;
+  },
+  set_RECRUIT_DIAGNOSIS_TYPE: (state, dictionary) => {
+    state.RECRUIT_DIAGNOSIS_TYPE = dictionary;
+  },
+  set_RECRUIT_AGE_TYPE: (state, dictionary) => {
+    state.RECRUIT_AGE_TYPE = dictionary;
+  },
   set_RECRUIT_EXPERT_PROFESSIONAL_TYPE: (state, dictionary) => {
     state.RECRUIT_EXPERT_PROFESSIONAL_TYPE = dictionary;
   },

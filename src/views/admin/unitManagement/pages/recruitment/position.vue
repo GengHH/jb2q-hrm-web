@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-05-20 17:12:54
+ * @LastEditTime: 2021-07-01 19:21:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\position.vue
@@ -89,7 +89,16 @@ export default {
             rules: [],
             key: 'positionName'
           },
-
+          {
+            type: 'select',
+            label: '职位分类',
+            rules: [],
+            style: { width: '210px' },
+            key: 'positionType',
+            options: trim(
+              this.$store.getters['dictionary/recruit_position_s_type']
+            )
+          },
           {
             type: 'input',
             label: '薪酬',
@@ -131,6 +140,22 @@ export default {
             key: 'recruitNum'
           },
           {
+            type: 'select',
+            label: '学历要求',
+            rules: [],
+            style: { width: '210px' },
+            key: 'eduRequire',
+            options: trim(this.$store.getters['dictionary/recruit_edu'])
+          },
+          {
+            type: 'select',
+            label: '工作区域',
+            rules: [],
+            style: { width: '210px' },
+            key: 'workArea',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          },
+          {
             type: 'input',
             label: '工作地点',
             style: { width: '210px' },
@@ -145,6 +170,170 @@ export default {
             placeholder: '',
             rules: [],
             key: 'releaseTime'
+          },
+          {
+            style: { width: '210px' },
+            type: 'date',
+            label: '发布时间',
+            placeholder: '',
+            rules: [],
+            key: 'releaseTime'
+          },
+          {
+            type: 'select',
+            label: '招聘类型',
+            rules: [],
+            style: { width: '210px' },
+            key: 'recruitType',
+            options: trim(this.$store.getters['dictionary/recruit_type'])
+          },
+          {
+            type: 'select',
+            label: '是否见习职位',
+            rules: [],
+            style: { width: '210px' },
+            key: 'tranBaseSymbol',
+            options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'select',
+            label: '是否属于中介待招',
+            rules: [],
+            style: { width: '210px' },
+            key: 'agencyRecruit',
+            options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'input',
+            label: '委托单位名称',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'entrustCorpName'
+          },
+          {
+            type: 'input',
+            label: '委托单位社会信用码',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'entrustTyshxym'
+          },
+          {
+            type: 'input',
+            label: '职位描述',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'describe'
+          },
+          {
+            style: { width: '210px' },
+            type: 'date',
+            label: '发布截至日期',
+            placeholder: '',
+            rules: [],
+            key: 'endDate'
+          },
+          {
+            type: 'select',
+            label: '审核状态',
+            rules: [],
+            style: { width: '210px' },
+            key: 'statusId',
+            options: trim(
+              this.$store.getters['dictionary/recruit_verify_status']
+            )
+          },
+          {
+            type: 'input',
+            label: '审核人',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'verifyUserId'
+          },
+          {
+            type: 'input',
+            label: '审核时间',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'verifyTime'
+          },
+          {
+            type: 'input',
+            label: '审核意见',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'verifyMemo'
+          },
+          {
+            type: 'select',
+            label: '发布状态',
+            rules: [],
+            style: { width: '210px' },
+            key: 'releaseStatusId',
+            options: trim(
+              this.$store.getters['dictionary/recruit_release_status']
+            )
+          },
+          {
+            type: 'input',
+            label: '发布人',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'releaseUserId'
+          },
+          {
+            type: 'input',
+            label: '发布时间',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'releaseTime'
+          },
+          {
+            type: 'select',
+            label: '是否下架',
+            rules: [],
+            style: { width: '210px' },
+            key: 'offShelf',
+            options: trim(this.$store.getters['dictionary/yesno'])
+          },
+          {
+            type: 'input',
+            label: '下架时间',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'offTime'
+          },
+          {
+            type: 'input',
+            label: '下架原因',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'offReason'
+          },
+          {
+            type: 'input',
+            label: '下架操作人',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'offUserId'
+          },
+          {
+            type: 'input',
+            label: '收到简历数量',
+            style: { width: '210px' },
+            placeholder: '',
+            rules: [],
+            key: 'resumeCount'
           }
         ]
       }
@@ -201,6 +390,7 @@ export default {
     setTimeout(() => {
       console.log(this.type);
       this.data.salary = this.data.salaryMin + '-' + this.data.salaryMax;
+      console.log(this.data);
       this.$refs.form.value = this.data;
     }, 0);
   },

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-30 18:19:39
- * @LastEditTime: 2021-06-03 14:24:05
+ * @LastEditTime: 2021-07-02 18:34:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\recordDetail.vue
@@ -59,14 +59,14 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="结对人员姓名" prop="pid">
+            <el-form-item label="结对人员姓名" prop="pids">
               <el-select
                 v-model="form.pids"
                 filterable
                 remote
                 reserve-keyword
                 style="width:350px"
-                placeholder="请输入关键词"
+                placeholder="请输入身份证号"
                 :remote-method="orgRemoteMethod"
                 :loading="loading"
                 @change="userChange"
@@ -96,10 +96,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="结对人员联系电话">
+            <el-form-item label="结对人员联系电话" prop="contactNumber">
               <el-input
                 style="width:350px"
-                :disabled="true"
                 v-model="form.contactNumber"
                 maxlength="11"
               ></el-input>
@@ -120,7 +119,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item v-if="!disabled" label="结对协议书">
+            <el-form-item
+              v-if="!disabled"
+              label="结对协议书"
+              prop="pairImageBase64"
+            >
               <el-upload
                 class="upload-demo"
                 ref="upload"
@@ -168,7 +171,7 @@
           </el-col>
         </el-row> -->
         <div v-if="!disabled" style="text-align:center">
-          <el-button type="primary" @click="onSubmit">保存</el-button>
+          <el-button type="primary" @click="onSubmit()">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -176,14 +179,14 @@
 </template>
 
 <script>
-import { trim } from '@/utils/index';
+import { trim, isZjhm } from '@/utils/index';
 import {
   record_add,
   record_edit,
   record_queryPsnls,
   synthesize_query
 } from '../api/index';
-import { emphasis_keypoint } from '../../serviceManagement/api/index';
+import { guide_queryPerson } from '../../profession/api/index';
 export default {
   name: 'recordDetail',
   props: ['visible', 'disabled', 'form', 'type'],
@@ -197,7 +200,13 @@ export default {
 
       userList: [],
       rules: {
-        pid: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
+        pairImageBase64: [
+          { required: true, message: '请上传图片', trigger: 'blur' }
+        ],
+        contactNumber: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        pids: [{ required: true, message: '请填写必选项', trigger: 'blur' }],
         expertId: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
@@ -265,26 +274,27 @@ export default {
     orgRemoteMethod(query) {
       if (query !== '') {
         this.loading = true;
+        let q = isZjhm(query);
         let params = {
-          xm: query,
+          zjhm: query,
           pageParam: {
             pageIndex: 0,
             pageSize: 10
           }
         };
 
-        emphasis_keypoint(
+        guide_queryPerson(
           params,
           res => {
             if (res.status == 200) {
               this.loading = false;
-              let pageresult = res.result.data.data;
+              let pageresult = res.result.pageresult.data;
               let list = pageresult.map(e => {
                 return {
                   value: e.zjhm,
                   label: e.xm,
                   pid: e.pid,
-                  contactNumber: e.contactNumber
+                  contactNumber: e.lxdh
                 };
               });
               this.orgOption = list;
@@ -321,8 +331,9 @@ export default {
       console.log(file, fileList);
     },
 
-    onSubmit() {
+    onSubmit(realSubmit) {
       let data = { ...this.form };
+      data.realSubmit = realSubmit;
       this.$refs.form.validate(valid => {
         if (valid) {
           // if (!data.pairImageBase64) {
@@ -412,8 +423,6 @@ export default {
         pid: this.form.pid,
         contactNumber: this.form.contactNumber
       };
-      this.form.name = this.form.expertName;
-      this.form.pids = this.form.xm;
     }
     //获取人员信息
     // record_queryPsnls(

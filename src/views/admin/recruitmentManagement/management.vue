@@ -1,14 +1,14 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 16:32:33
+ * @LastEditTime: 2021-07-09 11:30:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+    <tform ref="tform" :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable
       :columns="columns"
       :list="list"
@@ -51,10 +51,22 @@
           <el-button size="mini" type="primary" @click="look(2, scope)" plain>
             <i class="el-icon-edit"></i> 修改</el-button
           >
-          <el-button size="mini" type="danger" plain>
+          <el-button
+            v-if="scope.row.releaseStatus == '1'"
+            size="mini"
+            type="danger"
+            plain
+            @click="editStatus(scope.row.meetId, 'releaseStatus')"
+          >
             <i class="el-icon-refresh-right"></i> 撤销</el-button
           >
-          <el-button size="mini" type="info" plain>
+          <el-button
+            v-if="scope.row.applyStatus == '1'"
+            size="mini"
+            type="info"
+            plain
+            @click="editStatus(scope.row.meetId, 'applyStatus')"
+          >
             <i class="el-icon-edit"></i> 终止报名</el-button
           >
         </template>
@@ -107,6 +119,7 @@ export default {
   },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       form: {},
       visible: false,
       pageListData: {
@@ -169,6 +182,14 @@ export default {
             style: { width: '210px' },
             rules: [],
             key: 'time'
+          },
+          {
+            type: 'select',
+            label: '所在区',
+            style: { width: '210px' },
+            rules: [],
+            key: 'releaseDistrict',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
         ]
       }
@@ -176,6 +197,24 @@ export default {
   },
   computed: {},
   methods: {
+    editStatus(id, name) {
+      let data = {
+        meetId: id,
+        [name]: 2
+      };
+      schedule_update(
+        data,
+        res => {
+          if (res.status == 200) {
+            this.onsubmit(this.dataList);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     selectClick(e) {
       this.selectList = e.sel;
     },
@@ -200,12 +239,13 @@ export default {
     look(type, scope) {
       this.type = type;
       if (type == '2') {
-        let data = { ...scope.row };
+        let data = { meetId: scope.row.meetId };
         schedule_query_info(
           data,
           res => {
             if (res.status == 200) {
               let pageresult = res.result.data;
+              pageresult.time = [pageresult.startTime, pageresult.endTime];
               this.form = { ...pageresult };
               //1 添加 2 修改)
               this.visible = true;
@@ -237,8 +277,7 @@ export default {
       return '';
     },
     onsubmit(e) {
-      console.log('------------------');
-      let params = { ...e.row };
+      let params = { ...e };
       params.pageParam = {
         pageSize: this.pageListData.pageSize,
         pageIndex: JSON.parse(JSON.stringify(this.pageListData.pageIndex)) - 1
@@ -250,10 +289,8 @@ export default {
           console.log(res);
           let record = res.result.pageresult;
           this.list = record.data;
-          this.pageListData = {
-            total: record.total,
-            pageIndex: Number(record.pageIndex) + 1
-          };
+          this.pageListData.total = record.total;
+          this.pageListData.pageIndex = Number(record.pageIndex) + 1;
         },
         err => {
           console.log(err);
@@ -265,7 +302,18 @@ export default {
       this.onsubmit(this.dataList);
     }
   },
-  created() {}
+  mounted() {
+    this.$refs.tform.value = {
+      releaseDistrict: this.adminId
+    };
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[3].disabled = false;
+    } else {
+      this.formConfig.formItemList[3].disabled = true;
+    }
+  }
 };
 </script>
 

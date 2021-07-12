@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-20 11:07:54
- * @LastEditTime: 2021-06-04 09:45:43
+ * @LastEditTime: 2021-07-02 16:13:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\resultDetails.vue
@@ -21,13 +21,13 @@
       <div v-if="type == '2'">
         <div class="title-style">招聘会信息</div>
         <ttable :columns="columns" :list="list"
-          ><el-table-column slot="meetName" label="招聘会名称" align="center">
+          ><el-table-column slot="corpName" label="单位名称" align="center">
             <template slot-scope="scope">
               <span
-                @click="queryApply(scope)"
+                @click="queryApply(scope.row)"
                 style="color:blue;cursor: pointer;"
               >
-                {{ scope.row.meetName }}</span
+                {{ scope.row.corpName }}</span
               >
             </template>
           </el-table-column>
@@ -60,7 +60,7 @@
             >
               <template slot-scope="scope">
                 <span
-                  @click="queryPosition(scope)"
+                  @click="queryPosition(scope.row)"
                   style="color:blue;cursor: pointer;"
                 >
                   {{ scope.row.positionName }}</span
@@ -188,7 +188,7 @@ export default {
       },
       columns: [
         { title: '序号', type: 'index' },
-        { title: '招聘会名称', prop: 'meetName', slot: 'meetName' },
+        { title: '单位名称', prop: 'corpName', slot: 'corpName' },
         { title: '招聘会类型', prop: 'meetType', slot: 'meetType' },
         { title: '参会联系人', prop: 'applyContactName' },
         { title: '参会联系手机', prop: 'applyContactPhone' },
@@ -435,10 +435,11 @@ export default {
   computed: {},
   methods: {
     queryPosition(e) {
-      let data = { ...e.row };
+      let data = { ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params3.pageIndex)) - 1;
       this.dataList3 = data;
+
       result_wanted(
         data,
         res => {
@@ -456,7 +457,7 @@ export default {
       );
     },
     queryApply(e) {
-      let data = { ...e.row };
+      let data = { ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params2.pageIndex)) - 1;
       this.dataList2 = data;
@@ -486,6 +487,7 @@ export default {
     },
     handleChange3(e) {
       this.params3.pageIndex = e;
+      console.log(this.dataList3);
       this.queryPosition(this.dataList3);
     },
     advancedSearch() {

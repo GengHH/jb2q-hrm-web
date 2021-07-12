@@ -87,6 +87,7 @@ Print.prototype = {
         }
       }
     }
+    console.log(this.dom.outerHTML);
     return this.dom.outerHTML;
   },
 

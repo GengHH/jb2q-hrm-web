@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 10:58:38
- * @LastEditTime: 2021-06-04 10:06:38
+ * @LastEditTime: 2021-06-28 18:17:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\adminManagement.vue
@@ -50,12 +50,7 @@
         label="入团"
         name="0"
       >
-        <ttable
-          :options="{ height: 'auto' }"
-          :tableClass="'tableClass'"
-          :columns="columns0"
-          :list="list0"
-        >
+        <ttable :tableClass="'tableClass'" :columns="columns0" :list="list0">
           <el-table-column slot="statusId" label="专家状态" align="center">
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.status" :key="k">
@@ -103,7 +98,11 @@
         label="续聘"
         name="1"
       >
-        <ttable :options="{ height: 'auto' }" :columns="columns1" :list="list1">
+        <ttable
+          :columns="columns1"
+          :list="list1"
+          @handleSelectionChange="e => (selectData = e)"
+        >
           <el-table-column slot="aaa007" label="复核状态" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.aaa007 == '1'" type="success"
@@ -138,6 +137,60 @@
           layout="total, prev, pager, next"
           :total="params1.total"
         ></el-pagination>
+        <div style="text-align:right">
+          <el-popover placement="bottom" width="332" trigger="click">
+            <div>
+              <span>审核状态</span>
+              <el-select
+                size="mini"
+                v-model="renewObj.verifyResult"
+                placeholder="审核状态"
+              >
+                <el-option label="通过" value="1"></el-option>
+                <el-option label="不通过" value="0"></el-option>
+              </el-select>
+            </div>
+            <div style="margin:5px 0">
+              <el-input
+                style="width:304px"
+                size="mini"
+                type="textarea"
+                :rows="2"
+                placeholder="请输入续聘理由"
+                v-model="renewObj.verifyMemo"
+              >
+              </el-input>
+            </div>
+            <div style="margin:5px 0">
+              <el-date-picker
+                size="mini"
+                style="width:150px"
+                @change="newTime"
+                v-model="renewObj.startDate"
+                type="date"
+                placeholder="开始日期"
+                value-format="yyyyMMdd"
+              >
+              </el-date-picker>
+              <el-date-picker
+                style="width:150px"
+                size="mini"
+                disabled
+                v-model="renewObj.endDate"
+                type="date"
+                placeholder="结束日期"
+                value-format="yyyyMMdd"
+              >
+              </el-date-picker>
+            </div>
+            <el-button size="mini" type="danger" @click="renew()"
+              >确定续聘</el-button
+            >
+            <el-button size="small" slot="reference" type="primary"
+              >续聘</el-button
+            >
+          </el-popover>
+        </div>
       </el-tab-pane>
       <el-tab-pane
         v-if="userType"
@@ -145,7 +198,7 @@
         label="退团"
         name="2"
       >
-        <ttable :options="{ height: 'auto' }" :columns="columns2" :list="list2">
+        <ttable :columns="columns2" :list="list2">
           <el-table-column
             v-if="isAudit"
             slot="aaa009"
@@ -179,7 +232,7 @@
         label="转移"
         name="3"
       >
-        <ttable :options="{ height: 'auto' }" :columns="columns3" :list="list3">
+        <ttable :columns="columns3" :list="list3">
           <el-table-column slot="targetDistrict" label="转入区" align="center">
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.qx" :key="k">
@@ -244,7 +297,8 @@ import {
   joinTeam_query,
   continue_query,
   quit_query,
-  move_query
+  move_query,
+  continue_verifyMore
 } from '../api/index';
 export default {
   name: 'adminManagement',
@@ -255,6 +309,14 @@ export default {
   },
   data() {
     return {
+      renewObj: {
+        verifyResult: '1',
+        startDate: '',
+        endDate: '',
+        verifyMemo: ''
+      },
+      selectData: [],
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       isAudit: true,
       userType: false,
       queryData: {},
@@ -283,6 +345,8 @@ export default {
       list2: [],
       list3: [],
       dicOptions: {
+        yesno: trim(this.$store.getters['dictionary/yesno']),
+
         //专家状态
         status: trim(this.$store.getters['dictionary/recruit_expert_status']),
         //qx
@@ -301,7 +365,7 @@ export default {
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns1: [
-        { title: '序号', type: 'index' },
+        { type: 'selection' },
         { title: '专家编号', prop: 'expertId' },
         { title: '姓名', prop: 'xm' },
         { title: '续聘申请人', prop: 'applyName' },
@@ -379,6 +443,102 @@ export default {
   },
   computed: {},
   methods: {
+    newTime(e) {
+      let y = e.substring(0, 4);
+      let m = e.substring(4, 6);
+      let s = e.substring(6, 8);
+
+      //默认加2年减1天
+      let d = new Date(Number(y) + 2 + '-' + m + '-' + s);
+      d = d.setDate(d.getDate() - 1);
+      d = new Date(d);
+
+      let year = d.getFullYear();
+      let month = d.getMonth() + 1;
+      month = month > 9 ? month : '0' + month;
+      let day = d.getDate();
+      day = day > 9 ? day : '0' + day;
+      let time = year + '' + month + '' + day;
+      this.renewObj.endDate = time;
+    },
+    renew() {
+      if (this.renewObj.verifyResult == '0') {
+        if (!this.renewObj.quitReason) {
+          this.$message({
+            message: '请选择续聘理由',
+            type: 'warning'
+          });
+          return;
+        }
+      } else {
+        if (!this.renewObj.startDate) {
+          this.$message({
+            message: '请选择开始时间',
+            type: 'warning'
+          });
+          return;
+        }
+      }
+
+      if (this.selectData.length) {
+        let data = this.selectData.map(e => {
+          let d = {
+            expertId: e.expertId,
+            renewId: e.renewId,
+            ...this.renewObj
+          };
+          return d;
+        });
+        continue_verifyMore(
+          data,
+          res => {
+            document.body.click();
+            let datas = res.result.data;
+            let err = '';
+            for (let i = 0; i < datas.length; i++) {
+              if (!datas[i].result) {
+                err +=
+                  // '姓名：' +
+                  // datas[i].xm +
+                  // '，编号：' +
+                  // datas[i].expertId +
+                  '。原因：' + datas[i].msg;
+              }
+            }
+            if (err) {
+              this.$message({
+                message: err,
+                type: 'warning'
+              });
+            } else {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                onClose: () => {
+                  this.renewObj = {
+                    verifyResult: '1',
+                    startDate: '',
+                    endDate: '',
+                    verifyMemo: ''
+                  };
+                  this.onsubmit(this.queryData);
+                }
+              });
+            }
+
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.$message({
+          message: '请选择至少一条数据',
+          type: 'warning'
+        });
+      }
+    },
     trigger() {
       let data = { ...this.queryData };
       data.type = this.auditStutas;
@@ -440,6 +600,7 @@ export default {
       data.pageIndex =
         JSON.parse(JSON.stringify(this['params' + index].pageIndex)) - 1;
       data.type = this.auditStutas;
+      // data.districtCode = this.adminId;
       this.queryData = data;
       if (index == '0') {
         joinTeam_query(
@@ -567,13 +728,11 @@ export default {
     }
   },
   mounted() {
-    // let qx = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
-    // if (qx == '00') {
-    //   this.triggerUser(true);
-    // } else {
-    //   this.triggerUser(false);
-    // }
-    this.triggerUser(true);
+    if (this.adminId == '00') {
+      this.triggerUser(true);
+    } else {
+      this.triggerUser(false);
+    }
   },
   created() {}
 };

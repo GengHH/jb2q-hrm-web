@@ -1,81 +1,79 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-06-08 15:04:25
+ * @LastEditTime: 2021-07-01 10:38:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
-    <el-button-group>
-      <el-button
-        @click="auditType('1')"
-        size="mini"
-        :type="auditStutas == '1' ? 'primary' : ''"
-        >待审核</el-button
-      >
-      <el-button
-        @click="auditType('2')"
-        size="mini"
-        :type="auditStutas == '2' ? 'primary' : ''"
-        >通过</el-button
-      >
-      <el-button
-        @click="auditType('3')"
-        size="mini"
-        :type="auditStutas == '3' ? 'primary' : ''"
-        >不通过</el-button
-      >
-    </el-button-group>
-    <ttable :columns="columns" :list="list">
-      <!-- 内容部分-操作 -->
-
-      <el-table-column width="200" slot="aaa010" label="操作" align="center">
+    <tform
+      ref="form"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
+    <ttable
+      @handleSelectionChange="e => (selectData = e)"
+      :columns="columns"
+      :list="list"
+    >
+      <el-table-column slot="positionName" label="热门职业" align="center">
         <template slot-scope="scope">
-          <el-button
-            v-if="auditStutas == '1'"
-            icon="el-icon-folder-checked"
-            size="mini"
-            type="success"
-            @click="look(scope)"
-            plain
-          >
-            审核</el-button
-          >
-          <el-popover placement="bottom" width="400" trigger="click">
-            <el-input
-              type="textarea"
-              :rows="2"
-              placeholder="请输入删除理由"
-              v-model="scope.row.deleteMemo"
-            >
-            </el-input>
-            <el-button size="mini" type="danger" @click="userRemove(scope)"
-              >确定删除</el-button
-            >
-            <el-button size="mini" slot="reference" type="danger" plain
-              >删除</el-button
-            >
-          </el-popover>
+          <template v-for="(v, k) in dicOptions.type">
+            <el-tag :key="k" v-if="v.value == scope.row.positionFType">
+              {{ v.label }}
+            </el-tag>
+          </template>
         </template>
       </el-table-column>
     </ttable>
-    <el-pagination
-      @size-change="handleChange"
-      @current-change="handleChange"
-      :current-page.sync="params.pageIndex"
-      :page-size="params.pageSize"
-      layout="total, prev, pager, next"
-      :total="params.total"
+    <el-dialog
+      :visible="resumeVisible"
+      @close="resumeVisible = false"
+      title="新增热门职业"
+      width="800px"
     >
-    </el-pagination>
-    <hrdetails
-      v-if="visible"
-      :visible="visible"
-      :dataList="dataList"
-      @onclose="onclose"
-    ></hrdetails>
+      <div style="height:500px;overflow: auto">
+        <span>添加热门职业：</span>
+        <el-select
+          :filterable="true"
+          v-model="resumeValue"
+          size="small"
+          @change="recordListClick"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in dicOptions.type"
+            :key="item.value"
+            :label="item.label"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
+        <div style="padding:15px 0">
+          <template v-for="(v, k) in tagList">
+            <el-tag
+              @close="tagList.splice(k, 1)"
+              closable
+              :key="k"
+              style="margin:5px"
+            >
+              {{ v.label }}
+            </el-tag>
+          </template>
+        </div>
+        <div style="text-align:center">
+          <el-button type="primary" v-if="tagList.length" @click="onsubmit"
+            >提交</el-button
+          >
+        </div>
+      </div>
+    </el-dialog>
+    <div style="text-align:right">
+      <el-button size="small" type="primary" @click="resumeVisible = true">
+        <i class="el-icon-plus"></i> 新增热门职业</el-button
+      >
+    </div>
   </div>
 </template>
 
@@ -83,84 +81,51 @@
 import { trim } from '@/utils/index';
 import tform from '../common/t_form';
 import ttable from '../common/t_table';
-import hrdetails from './module/hrdetails';
-import { hr_query, hr_delete } from './api/index';
+import { position_query, position_add } from './api/index';
 
 export default {
   name: 'hotPost',
-  components: { ttable, tform, hrdetails },
+  components: { ttable, tform },
   data() {
     return {
-      auditStutas: 1,
-      visible: false,
-      dataList: [],
-      params: {
-        pageIndex: 1,
-        total: 0
-      },
-      pageSize: 10,
-      columns: [
-        // { type: 'selection' },
-        { title: '序号', type: 'index' },
-        { title: '单位名称', prop: 'corpName' },
-        { title: '社会信用代码', prop: 'tyshxydm' },
-        { title: '联系人', prop: 'contactName' },
-        { title: '联系电话', prop: 'contactPhone' },
-        { title: '其他说明', prop: 'applyMemo' },
-        { title: '操作', slot: 'aaa010' }
-      ],
-      list: [],
+      tagList: [],
+      resumeValue: '',
+      resumeVisible: false,
       formConfig: {
         inline: true,
         size: 'small',
         labelPosition: 'right',
         labelWidth: '100px',
-
-        formItemList: [
-          {
-            type: 'input',
-            label: '单位名称',
-            style: { width: '210px' },
-            placeholder: '请输入账号名',
-            rules: [],
-            key: 'corpName'
-          }
-        ]
+        operation: {
+          title: '查询'
+        },
+        formItemList: []
       },
+      userId: this.$store.state.admin.userInfo.logonUser.userIdKey,
+      columns: [
+        { type: 'index' },
+        { title: '热招职位名称', prop: 'positionName', slot: 'positionName' }
+      ],
+      list: [],
+      selectData: null,
       dicOptions: {
-        //角色类型
-        role: trim(this.$store.getters['dictionary/recruit_user_role'])
+        type: trim(this.$store.getters['dictionary/recruit_position_f_type'])
       }
     };
   },
   computed: {},
   methods: {
-    userRemove(e) {
-      let data = e.row;
-      if (!data.deleteMemo) {
-        this.message('warning', '请填写删除理由');
-        return;
-      }
-      hr_delete(
-        data,
-        res => {
-          if (res.status == 200) {
-            document.body.click();
-            this.message('success', '操作成功');
-            this.advancedSearch(this.dataList);
-          } else {
-            this.message('warning', res.result.data.msg);
+    recordListClick(e) {
+      if (this.tagList.length > 8) {
+        this.message('warning', '最多添加9条热门职业');
+      } else {
+        for (let i = 0; i < this.tagList.length; i++) {
+          if (this.tagList[i].value == e.value) {
+            return;
           }
-          console.log(res);
-        },
-        err => {
-          console.log(err);
         }
-      );
-    },
-    auditType(type) {
-      this.auditStutas = type;
-      this.advancedSearch(this.dataList);
+        this.tagList.push(e);
+      }
     },
     message(type, msg) {
       this.$message({
@@ -170,38 +135,42 @@ export default {
         onClose: () => {}
       });
     },
-    look(e) {
-      this.dataList = { ...e.row };
-      this.visible = true;
-
-      //1查看 2审核
-    },
-    handleChange(e) {
-      this.params.pageIndex = e;
-      this.advancedSearch(this.dataList);
-    },
-    onclose(type) {
-      if (type == '1') {
-        this.advancedSearch(this.dataList);
+    onsubmit() {
+      if (this.tagList.length) {
+        let data = {
+          userId: this.userId,
+          position: this.tagList.map(e => {
+            return e.value;
+          })
+        };
+        position_add(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.message('success', '操作成功');
+              this.resumeVisible = false;
+              this.advancedSearch();
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.message('warning', '请选择热招职位名称');
       }
-      this.visible = false;
     },
     advancedSearch(e) {
-      let data = { ...this.params, ...e };
-      data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex - 1));
-      data.pageSize = this.pageSize;
-      //1待审核 2审核通过 3审核不通过
-      data.verifyStatus = this.auditStutas;
-      this.dataList = data;
-      hr_query(
-        data,
+      position_query(
+        {},
         res => {
           if (res.status == 200) {
             this.message('success', '操作成功');
-            let pageresult = res.result.pageresult;
-            this.list = pageresult.data;
-            this.params.pageIndex = Number(pageresult.pageIndex) + 1;
-            this.params.total = pageresult.total;
+            let data = res.result.data;
+            this.list = data;
           } else {
             this.message('warning', res.result.data.msg);
           }
@@ -212,6 +181,9 @@ export default {
         }
       );
     }
+  },
+  mounted() {
+    this.advancedSearch();
   },
   created() {}
 };

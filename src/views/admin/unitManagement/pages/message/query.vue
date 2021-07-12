@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-12 16:38:40
- * @LastEditTime: 2021-06-03 17:29:38
+ * @LastEditTime: 2021-07-01 19:32:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\message\query.vue
@@ -41,7 +41,7 @@
       </el-pagination>
       <el-tabs v-show="show" v-model="activeName">
         <el-tab-pane label="简历信息" name="first">
-          <resume :form="resume"></resume>
+          <resume v-if="userPid" :userPid="userPid"></resume>
           <div>
             <div class="title-style">状态</div>
             <div>
@@ -210,6 +210,7 @@ export default {
   },
   data() {
     return {
+      userPid: '',
       dicOptions: {
         //反馈类型
         status: trim(this.$store.getters['dictionary/recruit_feedback_status']),
@@ -219,7 +220,6 @@ export default {
       },
       interview: {},
       activeName: 'first',
-      resume: {},
       show: false,
       params: {
         pageIndex: 1,
@@ -240,7 +240,7 @@ export default {
   computed: {},
   methods: {
     look(e) {
-      this.resume = { ...e.row };
+      this.userPid = e.row.pid;
       this.interview = { ...e.row };
       this.show = true;
     },

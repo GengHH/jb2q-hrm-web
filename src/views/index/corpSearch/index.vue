@@ -366,6 +366,7 @@ import BaseSearch from '@/components/common/BaseSearch.vue';
 import PerSearchJob from '@/components/index/IndexSearchJob.vue';
 import JobDetails from '@/views/index/jobDetails';
 import BaseLoadingSvg from '@/components/common/svg/BaseLoadingSvg.vue';
+import BaseCorpBoxShow from '@/components/common/BaseCorpBoxShow.vue';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import { doDeliveryResume, attentionOrFavor } from '@/api/personApi';
 import {
@@ -379,7 +380,8 @@ export default {
     BaseSearch,
     PerSearchJob,
     JobDetails,
-    BaseLoadingSvg
+    BaseLoadingSvg,
+    BaseCorpBoxShow
   },
   data() {
     return {

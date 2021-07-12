@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-02 18:07:34
+ * @LastEditTime: 2021-07-09 14:24:38
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -1064,4 +1064,98 @@ Mock.mock(
     };
   }
 );
+
+//单位查询用工缺失申请信息
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryAllEmploymentLack'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          data: [
+            {
+              contactPhone: '18631735637',
+              lackId: 37,
+              content: 'quis',
+              pageParam: 'anim dolor fugiat do',
+              verifyStatus: '1',
+              eduRequire: 'veniam tempor',
+              positionType: '1001',
+              dockResult: 'dolor laborum quis non',
+              districtCode: '01',
+              salaryMax: 43,
+              borrowPeriod: 'et ut reprehenderit minim',
+              verifyTime: '1987-05-16 16:54:35',
+              tyshxym: '123123123123123123',
+              corpName: '种其委科',
+              recruitNum: 20,
+              verifyUserId: '95',
+              memo: 'veniam cillum culpa cupidatat',
+              cid: '38',
+              workNature: '01',
+              validDate: '92',
+              contactName: '只据体极主边着',
+              salaryMin: 99
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
+//单位查询用工剩余申请信息
+Mock.mock(
+  RegExp(basePath + '/nologin/index/queryAllEmploymentSurplus'),
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        pageresult: {
+          pageSize: 10,
+          pageIndex: 0,
+          total: 1,
+          data: [
+            {
+              cid: '24',
+              contactName: '改县名统',
+              memo: 'laborum nostrud aliquip culpa Ut',
+              salaryMin: 100,
+              validDate: '7',
+              corpName: '特深华原四',
+              positionType: '0101',
+              content: 'eu sed',
+              tyshxym: '123123123123123123',
+              pageParam: 'quis',
+              surplusId: 97,
+              verifyTime: '1981-02-16 23:40:28',
+              eduRequire: '02',
+              verifyUserId: '79',
+              salaryMax: 68,
+              workNature: '02',
+              dockResult: 'Ut occaecat voluptate incididunt dolor',
+              contactPhone: '18112957344',
+              borrowPeriod: 'et quis',
+              districtCode: '13',
+              recruitNum: 33,
+              verifyStatus: '2'
+            }
+          ],
+          size: 1,
+          pageCount: 1
+        }
+      }
+    };
+  }
+);
+
 export default Mock;

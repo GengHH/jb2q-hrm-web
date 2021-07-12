@@ -1,14 +1,18 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-01 19:00:42
+ * @LastEditTime: 2021-07-09 17:00:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="tform"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <ttable :columns="columns" :list="list">
       <!-- 内容部分-操作 -->
       <el-table-column slot="actType" label="活动类型" align="center">
@@ -56,7 +60,7 @@
             <i class="el-icon-search"></i> 查看</el-button
           >
           <el-button
-            v-if="scope.row.userId == userId"
+            v-if="scope.row.release != '1'"
             size="mini"
             type="primary"
             @click="look(1, scope)"
@@ -69,7 +73,7 @@
               <i class="el-icon-chat-line-square"></i> 反馈</el-button
             >
             <el-button
-              v-if="scope.row.release != '1'"
+              v-if="scope.row.release != '1' && scope.row.userId == userId"
               size="mini"
               type="danger"
               @click="remove(scope)"
@@ -116,6 +120,7 @@ export default {
   components: { ttable, tform, managementdetails },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       userId: this.$store.state.admin.userInfo.logonUser.userIdStr,
       visible: false,
       disabled: false,
@@ -143,7 +148,9 @@ export default {
           {
             type: 'select',
             label: '活动类型',
-            rules: [],
+            rules: [
+              { required: true, message: '请选择活动类型', trigger: 'blur' }
+            ],
             key: 'actType',
             style: { width: '190px' },
             options: trim(
@@ -155,7 +162,9 @@ export default {
             label: '活动名称',
             style: { width: '190px' },
             placeholder: '请输入活动名称',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入活动名称', trigger: 'blur' }
+            ],
             key: 'actName'
           },
 
@@ -164,7 +173,9 @@ export default {
             label: '活动开始时间',
             style: { width: '553px' },
             placeholder: '请输入开始时间',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入活动开始时间', trigger: 'blur' }
+            ],
             format: 'yyyy-MM-dd HH:mm:ss',
             key: 'acttime'
           },
@@ -189,7 +200,9 @@ export default {
           {
             type: 'radio',
             label: '是否专家参与',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入是否专家参与', trigger: 'blur' }
+            ],
             style: { width: '190px' },
             key: 'expertJoin',
             options: trim(this.$store.getters['dictionary/yesno'])
@@ -199,7 +212,9 @@ export default {
             label: '活动地点',
             style: { width: '190px' },
             placeholder: '请输入活动地点',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入活动地点', trigger: 'blur' }
+            ],
             key: 'actAddress',
             value: '123'
           },
@@ -208,8 +223,9 @@ export default {
             label: '主要内容',
             style: { width: '554px' },
             placeholder: '请输入主要内容',
-            //rules: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-            rules: [],
+            rules: [
+              { required: true, message: '请输入textarea', trigger: 'blur' }
+            ],
             key: 'content'
           },
           {
@@ -217,7 +233,9 @@ export default {
             label: '报名开始时间',
             style: { width: '553px' },
             placeholder: '请输入开始时间',
-            rules: [],
+            rules: [
+              { required: true, message: '请输入开始时间', trigger: 'blur' }
+            ],
             format: 'yyyy-MM-dd HH:mm:ss',
             key: 'applytime'
           },
@@ -244,7 +262,13 @@ export default {
             label: '最大自主报名人数',
             style: { width: '190px' },
             placeholder: '请输入最大自主报名人数',
-            rules: [],
+            rules: [
+              {
+                required: true,
+                message: '请输入最大自主报名人数',
+                trigger: 'blur'
+              }
+            ],
             key: 'selfApplyMax'
           },
           {
@@ -252,7 +276,9 @@ export default {
             label: '最大推荐报名人数',
             style: { width: '190px' },
             placeholder: '请输入最大推荐报名人数',
-            rules: [],
+            rules: [
+              { required: true, message: '最大推荐报名人数', trigger: 'blur' }
+            ],
             key: 'recApplyMax'
           }
         ]
@@ -264,6 +290,32 @@ export default {
         labelWidth: '100px',
 
         formItemList: [
+          {
+            type: 'input',
+            label: '活动名称',
+            style: { width: '210px' },
+            placeholder: '请输入活动名称',
+            rules: [],
+            key: 'actName'
+          },
+          {
+            type: 'radio',
+            label: '是否专家参与',
+            rules: [],
+            key: 'expertJoin',
+
+            data: [],
+            options: [
+              {
+                value: '1',
+                label: '是'
+              },
+              {
+                value: '0',
+                label: '否'
+              }
+            ]
+          },
           {
             type: 'select',
             label: '活动类型',
@@ -281,13 +333,31 @@ export default {
             format: 'yyyyMMdd',
             key: 'time'
           },
+
           {
-            type: 'input',
-            label: '活动名称',
+            type: 'select',
+            label: '指导区',
             style: { width: '210px' },
-            placeholder: '请输入活动名称',
+            key: 'districtCode',
+            options: this.setQx()
+          },
+          {
+            type: 'radio',
+            label: '是否在报名时间段',
             rules: [],
-            key: 'actName'
+            key: 'inApply',
+
+            data: [],
+            options: [
+              {
+                value: '1',
+                label: '是'
+              },
+              {
+                value: '0',
+                label: '否'
+              }
+            ]
           }
         ]
       },
@@ -299,7 +369,9 @@ export default {
         { title: '活动开始时间', prop: 'actStartTime' },
         { title: '活动结束时间', prop: 'actEndTime' },
         { title: '最大自主报名人数', prop: 'selfApplyMax' },
+        { title: '参与人数', prop: 'participants' },
         { title: '是否发布', prop: 'release', slot: 'release' },
+
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
@@ -308,6 +380,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '' });
+      return qx;
+    },
     onclose(type) {
       if (type == '1') {
         this.advancedSearch(this.dataList);
@@ -406,7 +483,6 @@ export default {
         data.actStartDate = data.time[0];
         data.actEndDate = data.time[1];
       }
-
       this.dataList = data;
       act_query(
         data,
@@ -463,7 +539,20 @@ export default {
       this.visible = true;
     }
   },
-  created() {}
+  mounted() {
+    setTimeout(() => {
+      this.$refs.tform.value = {
+        districtCode: this.adminId
+      };
+    }, 0);
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[4].disabled = false;
+    } else {
+      this.formConfig.formItemList[4].disabled = true;
+    }
+  }
 };
 </script>
 

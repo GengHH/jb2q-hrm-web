@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 15:14:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-08 09:56:27
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\mock\dataDictionary.js
  */
@@ -175,12 +175,6 @@ const dic = {
   RECRUIT_TYPE: [
     { value: '1', label: '自主招聘' },
     { value: '2', label: '代理招聘' }
-  ],
-  //审核状态
-  RECRUIT_SURPLUS_VERIFY_STATUS: [
-    { value: '1', label: '待审核' },
-    { value: '2', label: '审核通过' },
-    { value: '3', label: '驳回' }
   ],
   //审核状态
   RECRUIT_VERIFY_STATUS: [
@@ -805,6 +799,15 @@ const dic = {
     { value: '08', label: '硕士' },
     { value: '09', label: '博士及以上' }
   ],
+  //老学历
+  ZYJS_XYJYCD: [
+    { value: '01', label: '硕士及以上' },
+    { value: '02', label: '本科' },
+    { value: '03', label: '专科' },
+    { value: '04', label: '高中' },
+    { value: '05', label: '三校及以下' },
+    { value: '06', label: '不明' }
+  ],
   //应聘来源
   RECRUIT_APPLYFOR_SOURCE: [
     { value: '01', label: '直接投递' },
@@ -850,7 +853,12 @@ const dic = {
     { value: '3', label: '全天' }
   ],
   //职业指导类型
-  RECRUIT_GUIDE_TYPE: [],
+  RECRUIT_GUIDE_TYPE: [
+    { value: '01', label: '政策咨询' },
+    { value: '02', label: '专门指导' },
+    { value: '03', label: '专家指导' },
+    { value: '04', label: '专项指导' }
+  ],
   //特色活动类型
   RECRUIT_SPECIAL_ACTIVITY_TYPE: [
     { value: '01', label: '讲座' },
@@ -1266,6 +1274,13 @@ const dic = {
     { value: '3	', label: '职场适应、求职障碍等职场心理' },
     { value: '4	', label: '其他求职（职业）困惑问题' }
   ],
+  //指导状态
+  ZYJS_ZYZDZT: [
+    { value: '1	', label: '已预约' },
+    { value: '2	', label: '已取消' },
+    { value: '3	', label: '指导成功' },
+    { value: '4	', label: '失约' }
+  ],
   //专家准入条件
   RECRUIT_EXPERT_APPROVAL_ENTRY_TYPE: [
     {
@@ -1316,6 +1331,66 @@ const dic = {
     { value: '07', label: '职业测评' },
     { value: '08', label: '人力资源管理' },
     { value: '09', label: '其他' }
+  ],
+  //年龄
+  RECRUIT_AGE_TYPE: [
+    { value: '01', label: '16-20' },
+    { value: '02', label: '21-30' },
+    { value: '03', label: '31-35' },
+    { value: '04', label: '36-45' },
+    { value: '05', label: '46-60' }
+  ],
+  //--职业诊断问题 一级
+  RECRUIT_DIAGNOSIS_TYPE: [
+    { value: '01', label: '求职技巧问题' },
+    { value: '02', label: '职业定位问题' },
+    { value: '03', label: '求职观念问题' },
+    { value: '04', label: '职场适应问题' },
+    { value: '05', label: '求职心理问题' },
+    { value: '06', label: '职业能力问题' },
+    { value: '07', label: '生涯发展问题' }
+  ],
+  //二级
+  RECRUIT_DIAGNOSIS_QUE_TYPE: [
+    { value: '0101', label: '求职渠道狭窄', filter: '01' },
+    { value: '0102', label: '求职信息匮乏', filter: '01' },
+    { value: '0103', label: '简历制作差', filter: '01' },
+    { value: '0104', label: '无面试经验', filter: '01' },
+    { value: '0105', label: '面试紧张', filter: '01' },
+    { value: '0106', label: '面试形象不佳', filter: '01' },
+    { value: '0107', label: '面试技巧不足', filter: '01' },
+    { value: '0201', label: '自我认知不全面', filter: '02' },
+    { value: '0202', label: '不了解就业形势', filter: '02' },
+    { value: '0203', label: '职场探索不充分', filter: '02' },
+    { value: '0204', label: '职业定位不合理', filter: '02' },
+    { value: '0301', label: '求全心理', filter: '03' },
+    { value: '0302', label: '寻求安逸', filter: '03' },
+    { value: '0303', label: '行业歧视', filter: '03' },
+    { value: '0304', label: '观念陈旧', filter: '03' },
+    { value: '0305', label: '求职意愿不强', filter: '03' },
+    { value: '0401', label: '人际沟通不佳', filter: '04' },
+    { value: '0402', label: '团队合作困难', filter: '04' },
+    { value: '0403', label: '情绪压力较大', filter: '04' },
+    { value: '0404', label: '低效时间管理', filter: '04' },
+    { value: '0405', label: '冲突解决能力弱', filter: '04' },
+    { value: '0501', label: '自我效能感低', filter: '05' },
+    { value: '0502', label: '挫折心理', filter: '05' },
+    { value: '0503', label: '攀比心理', filter: '05' },
+    { value: '0504', label: '自负心理', filter: '05' },
+    { value: '0505', label: '依赖心理', filter: '05' },
+    { value: '0506', label: '怯懦心理', filter: '05' },
+    { value: '0601', label: '技能单一', filter: '06' },
+    { value: '0602', label: '技能陈旧', filter: '06' },
+    { value: '0603', label: '文化程度较低', filter: '06' },
+    { value: '0701', label: '生涯发展目标不契合', filter: '07' },
+    { value: '0702', label: '职业规划模糊', filter: '07' },
+    { value: '0703', label: '执行力差', filter: '07' },
+    { value: '0704', label: '职业转换跨度大', filter: '07' }
+  ],
+  RECRUIT_SURPLUS_VERIFY_STATUS: [
+    { value: '0', label: '待审核' },
+    { value: '1', label: '审核通过' },
+    { value: '2', label: '驳回' }
   ]
 };
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 18:29:00
+ * @LastEditTime: 2021-06-29 14:54:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -20,15 +20,6 @@
       <!-- </el-input> -->
     </div>
     <ttable :columns="columns" :list="list">
-      <el-table-column slot="actName" label="活动名称" align="center">
-        <template slot-scope="scope">
-          <div v-for="(v, k) in activityList" :key="k">
-            <div v-if="v.actId == scope.row.actName">
-              {{ v.actName }}
-            </div>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="180" slot="aaa009" label="操作" align="center">
         <template slot-scope="scope">
           <el-button
@@ -39,7 +30,12 @@
           >
             <i class="el-icon-search"></i> 查看</el-button
           >
-          <el-button size="mini" @click="opendio(1, scope)" plain>
+          <el-button
+            size="mini"
+            v-if="scope.row.realSubmit == '0'"
+            @click="opendio(1, scope)"
+            plain
+          >
             <i class="el-icon-edit"></i> 编辑</el-button
           >
         </template>
@@ -114,7 +110,7 @@ export default {
         { title: '服务对象姓名', prop: 'xm' },
         { title: '证件号码', prop: 'zjhm' },
         { title: '活动类型', prop: 'actTypems' },
-        { title: '活动名称', prop: 'actName', slot: 'actName' },
+        { title: '活动名称', prop: 'actName' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       activityList: [],
@@ -187,29 +183,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    //获取活动信息
-    act_query(
-      {
-        pageIndex: 0,
-        pageSize: 100,
-        actName: ''
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.data.data;
-          this.activityList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
-        }
-        console.log('-----------------------------');
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
+  mounted() {}
 };
 </script>
 

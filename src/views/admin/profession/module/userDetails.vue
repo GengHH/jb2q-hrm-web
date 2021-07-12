@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:12:37
- * @LastEditTime: 2021-06-07 13:55:08
+ * @LastEditTime: 2021-07-08 18:01:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\userDetails.vue
@@ -106,7 +106,7 @@ export default {
     },
     handleChange(e) {
       console.log(e);
-      this.params.pageIndex = e;
+      this.params.pageIndex = e - 1;
       this.queryList(this.queryData);
     },
     queryList(data) {

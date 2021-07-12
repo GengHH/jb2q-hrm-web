@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-06-08 10:46:36
+ * @LastEditTime: 2021-07-09 10:30:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -19,12 +19,17 @@
     <template v-for="(v, k) in formConfig.formItemList">
       <!-- 树 -->
       <el-form-item
+        :style="v.isQueryStyle ? { position: 'relative' } : ''"
         v-if="v.type == 'tree'"
         :key="k"
         :label="v.label"
         :prop="v.key"
         :rules="v.rules"
       >
+        <div
+          v-if="v.isQueryStyle"
+          :style="{ width: v.style.width || '210px' }"
+        ></div>
         <el-tree
           :style="v.style"
           :data="v.data"
@@ -33,8 +38,24 @@
           :ref="v.key"
           highlight-current
           :props="v.defaultProps"
+          @check="
+            (a, b) => {
+              setTabs(a, b, v);
+            }
+          "
         >
         </el-tree>
+
+        <div :style="{ width: v.style.width || '210px' }" v-if="v.tags">
+          <el-tag
+            class="setTag"
+            size="mini"
+            v-for="(tag, key) in v.tags"
+            :key="key"
+          >
+            {{ tag.labelName }}
+          </el-tag>
+        </div>
       </el-form-item>
       <!-- 最大值和最小值 -->
       <el-form-item
@@ -81,6 +102,27 @@
           :disabled="v.disabled"
         ></el-input>
       </el-form-item>
+      <!-- 数字输入框 -->
+      <el-form-item
+        v-if="v.type == 'number'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-input-number
+          :max="v.max"
+          :min="v.min"
+          :controls="v.controls"
+          v-model="value[v.key]"
+          :placeholder="v.placeholder"
+          :style="v.style"
+          :maxlength="v.maxlength"
+          :minlength="v.minlength"
+          :disabled="v.disabled"
+        ></el-input-number>
+      </el-form-item>
+
       <!-- 选择 -->
       <el-form-item
         v-if="v.type == 'select'"
@@ -141,6 +183,7 @@
           :value-format="v.format"
           :value="v.value"
           type="datetimerange"
+          :picker-options="v.pickerOptions"
           range-separator=""
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -189,7 +232,7 @@
         </el-date-picker>
       </el-form-item>
 
-      <!-- 时间 单时间 -->
+      <!-- 时间 单日期 -->
       <el-form-item
         v-if="v.type == 'date'"
         :key="k"
@@ -204,6 +247,24 @@
           v-model="value[v.key]"
           :placeholder="v.placeholder"
           :style="v.style"
+        ></el-date-picker>
+      </el-form-item>
+      <!-- 时间 单时间 -->
+      <el-form-item
+        v-if="v.type == 'datetime'"
+        :key="k"
+        :label="v.label"
+        :prop="v.key"
+        :rules="v.rules"
+      >
+        <el-date-picker
+          type="datetime"
+          :value-format="v.format"
+          :value="v.value"
+          v-model="value[v.key]"
+          :placeholder="v.placeholder"
+          :style="v.style"
+          :picker-options="v.pickerOptions"
         ></el-date-picker>
       </el-form-item>
       <!-- 开关按钮 -->
@@ -247,21 +308,41 @@
         :prop="v.key"
         :rules="v.rules"
       >
-        <el-radio-group
-          :style="v.style"
-          :value="v.value"
-          :disabled="v.disabled"
-          v-model="value[v.key]"
-        >
-          <el-radio
-            v-for="(item, key) in v.options"
-            :key="key"
-            :label="item.value"
-            :disabled="item.disabled"
+        <template v-if="v.change">
+          <el-radio-group
+            :style="v.style"
+            :value="v.value"
+            :disabled="v.disabled"
+            v-model="value[v.key]"
+            @change="v.change"
           >
-            {{ item.label }}
-          </el-radio>
-        </el-radio-group>
+            <el-radio
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.value"
+              :disabled="item.disabled"
+            >
+              {{ item.label }}
+            </el-radio>
+          </el-radio-group>
+        </template>
+        <template v-else>
+          <el-radio-group
+            :style="v.style"
+            :value="v.value"
+            :disabled="v.disabled"
+            v-model="value[v.key]"
+          >
+            <el-radio
+              v-for="(item, key) in v.options"
+              :key="key"
+              :label="item.value"
+              :disabled="item.disabled"
+            >
+              {{ item.label }}
+            </el-radio>
+          </el-radio-group>
+        </template>
       </el-form-item>
       <!-- 大文本框 -->
       <el-form-item
@@ -338,6 +419,11 @@ export default {
   props: ['formConfig'],
   data() {
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7; //如果没有后面的-8.64e7就是不可以选择今天的
+        }
+      },
       value: {}
       // 数据类型示例
       // formConfig: {
@@ -455,6 +541,18 @@ export default {
   },
   computed: {},
   methods: {
+    setTabs(a, b, v) {
+      v.tags = [];
+      for (let i = 0; i < b.checkedNodes.length; i++) {
+        if (b.checkedNodes[i].labelReal == '1') {
+          v.tags.push({
+            labelId: b.checkedNodes[i].labelId,
+            labelName: b.checkedNodes[i].labelName
+          });
+        }
+      }
+      this.value[v.key] = v.tags;
+    },
     onSubmit() {
       this.$refs.value.validate(valid => {
         if (valid) {
@@ -482,9 +580,9 @@ export default {
         }
       }
     },
-    resetForm(formName) {
+    resetForm() {
       let option = this.formConfig.formItemList;
-      console.log(option);
+      let d = [];
       for (let i = 0; i < option.length; i++) {
         if (option[i].type == 'checkbox') {
           option[i].data = [];
@@ -492,13 +590,41 @@ export default {
         if (option[i].type == 'tree') {
           this.resetTree(option[i].key);
         }
-      }
 
-      this.$refs.value.resetFields();
+        if (option[i].disabled) {
+          d.push(option[i].key);
+        }
+      }
+      for (let i in this.value) {
+        if (typeof this.value[i] == 'object') {
+          if (this.isRepetition(d, i)) {
+            continue;
+          }
+          this.value[i] = [];
+        } else {
+          if (this.isRepetition(d, i)) {
+            continue;
+          }
+          this.value[i] = '';
+        }
+      }
+      //this.$refs.value.resetFields();
+    },
+    isRepetition(arr, str) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] == str) {
+          return true;
+        }
+      }
+      return false;
     }
   },
   created() {}
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.setTag {
+  margin: 4px;
+}
+</style>

@@ -2,7 +2,7 @@
    * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-08 10:13:20
+ * @LastEditTime: 2021-06-09 12:08:05
  * @Description: file content
 -->
 <template>
@@ -201,15 +201,13 @@ export default {
   },
   methods: {
     isAdmin(formName) {
-      console.log(this.$store);
-      console.log(isNoBody(this));
-      if (isNoBody(this)) {
+      if (isNoBody()) {
         this.onSubmit(formName);
       } else {
-        if (isPerson(this)) {
+        if (isPerson()) {
           this.$alert('已有个人登录本系统，请先退出登录');
         }
-        if (isCorporation(this)) {
+        if (isCorporation()) {
           this.$alert('已有单位登录本系统，请先退出登录');
         }
         setTimeout(() => {

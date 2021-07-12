@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-05-28 10:13:22
+ * @LastEditTime: 2021-07-02 16:49:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -93,7 +93,7 @@ export default {
         inline: true,
         size: 'small',
         labelPosition: 'right',
-        labelWidth: '120px',
+        labelWidth: '130px',
         style: {
           width: '700px',
           margin: '0 auto'
@@ -131,27 +131,32 @@ export default {
             options: trim(this.$store.getters['dictionary/recruit_meet_type'])
           },
           {
-            type: 'date',
-            label: '招聘会召开时间',
+            type: 'datetimerange',
+            label: '招聘会开始时间',
             placeholder: '请输入召开时间',
             rules: [
               { required: true, message: '请输入召开时间', trigger: 'blur' }
             ],
+            pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() < Date.now() - 8.64e7; //如果没有后面的-8.64e7就是不可以选择今天的
+              }
+            },
             format: 'yyyy-MM-dd HH:mm:ss',
-            style: { width: '210px' },
-            key: 'startTime'
+            style: { width: '554px' },
+            key: 'time'
           },
-          {
-            type: 'date',
-            label: '招聘会结束时间',
-            placeholder: '请输入结束时间',
-            rules: [
-              { required: true, message: '请输入结束时间', trigger: 'blur' }
-            ],
-            format: 'yyyy-MM-dd HH:mm:ss',
-            style: { width: '210px' },
-            key: 'endTime'
-          },
+          // {
+          //   type: 'date',
+          //   label: '招聘会结束时间',
+          //   placeholder: '请输入结束时间',
+          //   rules: [
+          //     { required: true, message: '请输入结束时间', trigger: 'blur' }
+          //   ],
+          //   format: 'yyyy-MM-dd HH:mm:ss',
+          //   style: { width: '210px' },
+          //   key: 'endTime'
+          // },
           {
             type: 'input',
             label: '主办单位',
@@ -173,10 +178,11 @@ export default {
             key: 'address'
           },
           {
-            type: 'input',
+            type: 'number',
             label: '招聘会展位数量',
             style: { width: '554px' },
             placeholder: '请输入招聘会展位数量',
+            controls: false,
             rules: [
               {
                 required: true,
@@ -209,8 +215,9 @@ export default {
           {
             type: 'input',
             label: '联系电话',
-            style: { width: '210px' },
+            style: { width: '200px' },
             placeholder: '请输入联系电话',
+            maxlength: 11,
             rules: [
               { required: true, message: '请输入联系电话', trigger: 'blur' }
             ],
@@ -222,7 +229,7 @@ export default {
             rules: [
               { required: true, message: '请选择发布状态', trigger: 'blur' }
             ],
-            style: { width: '210px' },
+            style: { width: '200px' },
             key: 'releaseStatus',
             options: [
               {
@@ -242,7 +249,7 @@ export default {
               { required: true, message: '请选择报名状态', trigger: 'blur' }
             ],
             key: 'applyStatus',
-            style: { width: '210px' },
+            style: { width: '200px' },
             options: [
               {
                 value: '1',
@@ -261,19 +268,24 @@ export default {
               { required: true, message: '请选择是否置顶', trigger: 'blur' }
             ],
             key: 'onTop',
-            style: { width: '210px' },
+            style: { width: '200px' },
             options: trim(this.$store.getters['dictionary/yesno'])
           },
           {
-            type: 'date',
+            type: 'datetime',
             label: '截止时间',
             placeholder: '请输入截止时间',
             rules: [
               { required: true, message: '请输入截止时间', trigger: 'blur' }
             ],
             format: 'yyyy-MM-dd HH:mm:ss',
-            style: { width: '210px' },
-            key: 'endApplyTime'
+            style: { width: '200px' },
+            key: 'endApplyTime',
+            pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() < Date.now() - 8.64e7; //如果没有后面的-8.64e7就是不可以选择今天的
+              }
+            }
           },
           {
             type: 'select',
@@ -282,7 +294,7 @@ export default {
               { required: true, message: '请输入报名限制区域', trigger: 'blur' }
             ],
             multiple: true,
-            style: { width: '210px' },
+            style: { width: '200px' },
             key: 'districtCodeList',
             options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
@@ -331,6 +343,10 @@ export default {
           if (!data.propagandaImageBase64) {
             this.$message.error('请上传招聘会宣传图片');
             return;
+          }
+          if (data.time) {
+            data.startTime = data.time[0];
+            data.endTime = data.time[1];
           }
           //1 添加 2 修改
           if (this.type == '1') {

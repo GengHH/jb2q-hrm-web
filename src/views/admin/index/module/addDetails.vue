@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-04-15 18:29:55
+ * @LastEditTime: 2021-06-09 16:40:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -19,7 +19,7 @@
                 remote
                 reserve-keyword
                 style="width:210px;"
-                placeholder="请输入关键词"
+                placeholder="请输入姓名或者账号名"
                 :remote-method="remoteMethod"
                 :loading="loading"
                 @change="expertChange"
@@ -143,11 +143,26 @@ export default {
       this.form.name = e.label;
       this.idList = { ...e };
     },
+    isUserName(query) {
+      let reg = new RegExp('[\\u4E00-\\u9FFF]+', 'g');
+      if (reg.test(query)) {
+        return {
+          name: query,
+          userName: ''
+        };
+      } else {
+        return {
+          name: '',
+          userName: query
+        };
+      }
+    },
     remoteMethod(query) {
       if (query !== '') {
         this.loading = true;
+        let q = this.isUserName(query);
         let data = {
-          name: query,
+          ...q,
           pageIndex: 0,
           pageSize: 10
         };

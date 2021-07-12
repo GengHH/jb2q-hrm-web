@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 17:47:29
- * @LastEditTime: 2021-05-31 18:11:15
+ * @LastEditTime: 2021-07-12 11:18:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\recommend.vue
 -->
 <template>
   <el-dialog width="800px" title="推荐职位" :visible="visible" @close="onclose">
-    <div style="height:650px">
+    <div style="height:650px;">
       <div style="margin:0 10px 0 0">
         <el-form
           size="small"
@@ -16,22 +16,29 @@
           :model="queryForm"
           label-width="100px"
         >
-          <el-form-item label="职位名称">
-            <el-input v-model="queryForm.positionName"></el-input>
-          </el-form-item>
-          <el-form-item label="薪酬">
-            <el-input-number
-              :controls="false"
-              v-model="queryForm.salaryMin"
-              label="薪酬下限"
-            ></el-input-number>
-            -
-            <el-input-number
-              :controls="false"
-              v-model="queryForm.salaryMax"
-              label="薪酬上限"
-            ></el-input-number>
-          </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="职位名称">
+                <el-input v-model="queryForm.positionName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="薪酬">
+                <el-input-number
+                  :controls="false"
+                  v-model="queryForm.salaryMin"
+                  label="薪酬下限"
+                ></el-input-number>
+                -
+                <el-input-number
+                  :controls="false"
+                  v-model="queryForm.salaryMax"
+                  label="薪酬上限"
+                ></el-input-number>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-form-item label="其他选项">
             <el-select
               style="width:150px"
@@ -131,7 +138,7 @@
             </el-row>
           </template>
         </el-table-column>
-        <el-table-column slot="aaa009" label="操作" align="center">
+        <el-table-column width="150" slot="aaa009" label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="opendio(scope)" type="primary">
               <i class="el-icon-edit"></i> 推荐</el-button
@@ -189,7 +196,7 @@ export default {
       params: {
         pageIndex: 0,
         total: 0,
-        pageSize: 5
+        pageSize: 10
       },
       list: [],
       columns: [
@@ -220,7 +227,9 @@ export default {
         data,
         res => {
           if (res.result.data.result) {
-            this.message('success', '推荐成功');
+            this.message('success', '推荐成功', () => {
+              this.advancedSearch();
+            });
           } else {
             this.message('warning', res.result.data.msg);
           }
@@ -244,11 +253,18 @@ export default {
     },
     handleChange(e) {
       this.params.pageIndex = e - 1;
-      this.queryList(this.dataList);
+      let data = {
+        ...this.dataList,
+        ...this.queryForm,
+        pageParam: this.params
+      };
+      this.queryList(data);
     },
     queryList(e) {
       let data = { ...e };
       data.pageParam = this.params;
+      //是否已推荐（0未推荐，1已推荐，不传则全查）
+      data.recommend = '1';
       emphasis_query(
         data,
         res => {

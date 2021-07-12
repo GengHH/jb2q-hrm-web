@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-06-08 10:02:18
+ * @LastEditTime: 2021-07-09 15:32:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -19,7 +19,7 @@
               remote
               size="small"
               reserve-keyword
-              placeholder="请输入关键词"
+              placeholder="请输入身份证号"
               :remote-method="orgRemoteMethod"
               :loading="loading"
               @change="userChange"
@@ -49,6 +49,9 @@
               >
               </el-option>
             </el-select>
+            <el-button size="mini" type="primary" @click="focusLabel"
+              >关注该人员</el-button
+            >
           </div>
 
           <div style="margin-top:10px ">
@@ -76,12 +79,21 @@
               </div>
             </span>
           </div>
+          <!-- 标签 -->
           <div style="margin-top:10px">
             <el-tag
+              style="margin:0 4px"
               size="small"
-              v-for="(v0, k0) in keyPointLableDataList"
-              :key="k0"
-              >{{ v0.pointTypeName }}</el-tag
+              v-for="(v, k) in keyPointLableDataList"
+              :key="k"
+              >{{ v.pointTypeName }}</el-tag
+            >
+            <el-button
+              v-if="hisLabels.length"
+              size="mini"
+              type="info"
+              @click="lookLabel"
+              >查看历史标签</el-button
             >
           </div>
         </div>
@@ -104,30 +116,45 @@
               <el-col :span="18">
                 <el-tree
                   v-if="this.detailsType != '1'"
-                  :accordion="true"
                   :data="userLabel"
                   show-checkbox
                   node-key="labelId"
                   ref="tree"
                   highlight-current
                   :props="defaultProps"
+                  @check="
+                    (a, b) => {
+                      setTabs(a, b);
+                    }
+                  "
                 >
                 </el-tree>
+                <div style="width:100%" v-if="questionData.length">
+                  <el-tag
+                    style="margin:4px"
+                    size="mini"
+                    v-for="(tag, key) in questionData"
+                    :key="key"
+                  >
+                    {{ tag.labelName }}
+                  </el-tag>
+                </div>
                 <div v-if="this.detailsType == '1'">
                   <el-tag
                     size="small"
                     style="margin: 2px;"
                     v-for="item in treeStrList"
-                    :key="item.labelId"
+                    :key="item.pointType"
                     effect="dark"
                   >
-                    {{ item.labelName }}
+                    {{ item.pointTypeName }}
                   </el-tag>
                 </div>
               </el-col>
             </el-row>
 
             <tform ref="form2" :formConfig="formConfig2"></tform>
+
             <el-form
               size="small"
               :model="form"
@@ -216,19 +243,32 @@
               </div>
               <div v-show="show == '3'">
                 <el-button
+                  v-if="isOrderType"
                   style="margin-left:22%"
                   type="primary"
                   size="mini"
                   @click="openServe"
                   >预约</el-button
                 >
+                <el-button
+                  v-if="!isOrderType"
+                  size="small"
+                  style="margin-left:22%"
+                  type="primary"
+                  @click="onsubmitMake"
+                  >再次预约</el-button
+                >
+                <!-- <div v-for="(v, k) in getInfoList" :key="k">
+                  预约日期：{{ v.yyrq }}预约时间段：{{ v.yysjd }}预约地址：{{
+                    v.zddz
+                  }}
+                </div> -->
               </div>
               <div v-show="show == '4'">
                 <el-row>
-                  <el-col :span="12">
+                  <el-col :span="24">
                     <el-form-item label="活动名称" prop="acts">
                       <el-select
-                        :multiple="true"
                         style="width:210px"
                         v-model="form.acts"
                         @change="showActivity"
@@ -238,19 +278,35 @@
                           :key="k"
                           :label="v.label"
                           :value="v"
-                        ></el-option>
+                          >{{ v.label }} - {{ getQx(v.qx) }}</el-option
+                        >
+                      </el-select>
+                      <el-select
+                        style="width:115px"
+                        v-model="form.qx"
+                        placeholder="请选择区"
+                        @change="selectActivity"
+                      >
+                        <el-option
+                          v-for="(v, k) in dicOptions.qx"
+                          :key="k"
+                          :label="v.label"
+                          :value="v.value"
+                          >{{ v.label }}</el-option
+                        >
                       </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24" v-if="actList.length">
+                  <el-col :span="24">
                     <div v-for="(v, k) in actList" :key="k" class="actList">
                       <el-row type="flex">
                         <el-col :span="3"> {{ k + 1 }}.开始时间: </el-col>
-                        <el-col :span="5">
+                        <el-col :span="3">
                           <span style="color:grey">{{
                             v.actStartTime.split(' ')[0]
                           }}</span>
                         </el-col>
+
                         <el-col :span="3">
                           活动地点:
                         </el-col>
@@ -263,21 +319,35 @@
                         <el-col :span="5">
                           <span style="color:grey">{{ v.content }}</span>
                         </el-col>
+                        <el-col :span="2">
+                          <span style="color:#fc6f3d">{{
+                            getQx(v.districtCode)
+                          }}</span>
+                          <span
+                            v-if="detailsType != '1'"
+                            @click="
+                              actList.splice(k, 1);
+                              form.acts = '';
+                            "
+                            class="el-icon-close"
+                          ></span>
+                        </el-col>
                       </el-row>
                     </div>
                   </el-col>
                 </el-row>
               </div>
-              <div v-if="this.detailsType != '1'" style="text-align:center">
-                <el-button
-                  size="small"
-                  style="margin-top:10px"
-                  type="primary"
-                  @click="onsubmit2"
-                  >提交</el-button
-                >
-              </div>
             </el-form>
+            <div v-if="this.detailsType != '1'" style="text-align:center">
+              <el-button
+                v-if="(!isOrderType && show != 3) || isOrderType"
+                size="small"
+                style="margin-top:10px"
+                type="primary"
+                @click="onsubmit2"
+                >提交</el-button
+              >
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -293,6 +363,7 @@
       :visible="servevisible"
       :serveData="serveData"
       @onclose="serveonclose"
+      @getInfo="getInfo"
     ></servedetails>
     <pagelist
       v-if="dialogTableVisible"
@@ -301,22 +372,37 @@
       :evList="evList"
       @evclose="dialogTableVisible = false"
     ></pagelist>
+    <looklabel
+      v-if="visibleLabel"
+      :dataList="formLabel"
+      :visible="visibleLabel"
+      @onclose="visibleLabel = false"
+    ></looklabel>
   </div>
 </template>
 
 <script>
 import tform from '../../common/t_form'; //高级查询
-import { trim } from '@/utils/index';
+import { trim, isZjhm, treeDataformat } from '@/utils/index';
 import { emphasis_keypoint } from '../../serviceManagement/api/index';
 import { synthesize_query } from '../../technocracy/api/index';
 import { act_query } from '../../profession/api/index';
-import { guide_add, serve_record, label_query } from '../api/index';
+import {
+  guide_add,
+  serve_record,
+  label_query,
+  guide_queryPerson,
+  guide_delete_label,
+  guide_focus,
+  order_update
+} from '../api/index';
 import recommend from '../../serviceManagement/pages/recommend';
 import servedetails from './serveDetails';
+import looklabel from './lookLabel';
 import pagelist from '../../serviceManagement/module/pageList';
 export default {
   name: 'addDetails',
-  components: { tform, servedetails, recommend, pagelist },
+  components: { tform, servedetails, recommend, pagelist, looklabel },
   props: ['visible', 'detailsType', 'detailsData', 'activeName'],
   data() {
     let comConfig = {
@@ -332,8 +418,19 @@ export default {
       }
     };
     return {
+      isOrderType: true,
+      getInfoList: [],
+      questionData: [],
+      dicOptions: {
+        //区县
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+      },
+      hisLabels: [],
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
+      userId: this.$store.state.admin.userInfo.logonUser.userIdStr,
       keyPointLableDataList: [],
       actList: [],
+      visibleLabel: false,
       dialogTableVisible: false,
       pagelistIndex: 0,
       evList: {},
@@ -355,6 +452,11 @@ export default {
         children: 'labels',
         label: 'labelName'
       },
+      queDefaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      issue: [],
       userLabel: [],
       recvisible: false,
       isrecord: false,
@@ -432,24 +534,6 @@ export default {
       formConfig2: {
         formItemList: [
           {
-            type: 'radio',
-            label: '是否关注',
-            rules: [],
-            key: 'isAttention',
-            options: [
-              {
-                value: '1',
-                label: '是',
-                disabled: false
-              },
-              {
-                value: '0',
-                label: '否',
-                disabled: false
-              }
-            ]
-          },
-          {
             type: 'date',
             label: '指导时间',
             format: 'yyyyMMdd',
@@ -493,6 +577,20 @@ export default {
             key: 'problem'
           },
           {
+            style: { width: '492px' },
+            type: 'tree',
+            label: '职业问题诊断',
+            data: this.formatTree(),
+            id: 'labelId',
+            tags: [],
+            rules: [],
+            key: 'diagnosis',
+            defaultProps: {
+              children: 'children',
+              label: 'label'
+            }
+          },
+          {
             type: 'radio',
             label: '是否就业',
             rules: [],
@@ -522,7 +620,7 @@ export default {
           },
           {
             type: 'textarea',
-            label: '当时情况',
+            label: '当前情况',
             disabled: true,
             autosize: { minRows: 4, maxRows: 6 },
             style: { width: '492px' },
@@ -554,16 +652,145 @@ export default {
   },
   computed: {},
   methods: {
-    showActivity(e) {
-      if (e.length) {
-        e = e.map(e => {
-          e.value = e.actId;
-          e.label = e.actName;
-          return e;
-        });
+    onsubmitMake() {
+      let data = {
+        ...this.detailsData,
+        zdzt: '3', //3是指导成功
+        userId: this.userId
+      };
+      this.onsubmit2(() => {
+        order_update(
+          data,
+          res => {
+            if (res.status == 200) {
+              this.openServe();
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      });
+    },
+    getInfo(e) {
+      this.getInfoList.push(e);
+    },
+    setTabs(a, b) {
+      this.questionData = [];
+      for (let i = 0; i < b.checkedNodes.length; i++) {
+        if (b.checkedNodes[i].labelReal == '1') {
+          this.questionData.push({
+            labelId: b.checkedNodes[i].labelId,
+            labelName: b.checkedNodes[i].labelName
+          });
+        }
       }
-      this.form.acts = e;
-      this.actList = e;
+    },
+    selectActivity(e) {
+      act_query(
+        {
+          pageIndex: 0,
+          pageSize: 20,
+          actName: '',
+          valid: '1',
+          districtCode: e
+        },
+        res => {
+          if (res.status == 200) {
+            this.activityList = [];
+            this.form.acts = '';
+
+            let data = res.result.data.data;
+            data = data.filter(e => e.release == '1');
+            data = data.map(e => {
+              e.value = e.actId;
+              e.label = e.actName;
+              e.qx = e.districtCode;
+              return e;
+            });
+            this.activityList = data;
+          } else {
+            this.message('warning', res.result.data.msg);
+          }
+          console.log('-----------------------------');
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    lookLabel() {
+      this.formLabel = this.hisLabels;
+      console.log(123);
+      this.visibleLabel = true;
+    },
+    getQx(code) {
+      let data = trim(this.$store.getters['dictionary/ggjbxx_qx']);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].value == code) {
+          return data[i].label;
+        }
+      }
+    },
+    deletaLabel(e, k) {
+      let data = { ...e };
+
+      guide_delete_label(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.keyPointLableDataList.splice(k, 1);
+            this.message('success', '删除成功');
+          } else {
+            this.$refs.form2.value.isAttention = '';
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    focusLabel() {
+      let data = { ...this.form };
+      if (!this.form.pid) {
+        this.$refs.form2.value.isAttention = '';
+        this.message('warning', '请选择人员');
+        return;
+      }
+      guide_focus(
+        data,
+        res => {
+          if (res.result.data.result) {
+            this.message('success', '关注成功', () => {
+              this.keyPointLableDataList.push({
+                pointType: '10',
+                pointTypeName: '特别关注人员'
+              });
+            });
+          } else {
+            this.$refs.form2.value.isAttention = '';
+            this.message('warning', res.result.data.msg);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    showActivity(e) {
+      console.log(e);
+      let list = this.actList;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].actId == e.actId) {
+          return;
+        }
+      }
+      list.push({ ...e });
     },
     liClick(e) {
       if (!this.form.pid) {
@@ -590,15 +817,20 @@ export default {
       };
       console.log(e);
     },
-    serveonclose() {
+    serveonclose(e) {
       this.servevisible = false;
+      if (e == '2') {
+        this.onclose('2');
+      }
     },
     openServe() {
+      console.log(this.detailsData);
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
         return;
       }
-      this.serveData = { ...this.form };
+      this.getInfoList = [];
+      this.serveData = { ...this.form, isOrder: this.detailsData.isOrder };
       this.servevisible = true;
     },
     expertChange(e) {
@@ -614,8 +846,7 @@ export default {
           pageIndex: 0,
           pageSize: 10,
           valid: 1,
-          districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo
-            .areaCode
+          districtCode: this.adminId
         };
         synthesize_query(
           data,
@@ -641,27 +872,29 @@ export default {
     orgRemoteMethod(query) {
       if (query !== '') {
         this.loading = true;
+        let q = isZjhm(query);
         let params = {
-          xm: query,
+          zjhm: query,
           pageParam: {
             pageIndex: 0,
             pageSize: 10
           }
         };
 
-        emphasis_keypoint(
+        guide_queryPerson(
           params,
           res => {
             if (res.status == 200) {
               this.loading = false;
-              let pageresult = res.result.data.data;
+              let pageresult = res.result.pageresult.data;
               let list = pageresult.map(e => {
                 return {
                   value: e.zjhm,
                   label: e.xm,
                   pid: e.pid,
-                  contactNumber: e.contactNumber,
-                  keyPointLableDataList: e.keyPointLableDataList
+                  contactNumber: e.lxdh,
+                  keyPointLableDataList: e.labels ? e.labels : [],
+                  hisLabels: e.hisLabels
                 };
               });
               this.orgOption = list;
@@ -691,12 +924,31 @@ export default {
           problem: ''
         };
       }
+
       console.log(e);
       this.form.zjhm = e.value;
       this.form.pid = e.pid;
       this.form.contactNumber = e.contactNumber;
       this.form.xm = e.label;
-      this.keyPointLableDataList = e.keyPointLableDataList;
+      //历史标签
+      this.hisLabels = e.hisLabels;
+      // 回显标签
+      let userLabel = e.keyPointLableDataList.filter(e => {
+        return Number(e.pointType) < 11;
+      });
+      this.keyPointLableDataList = userLabel;
+      let featureLabel = e.keyPointLableDataList.filter(e => {
+        return Number(e.pointType) > 10;
+      });
+      this.questionData = featureLabel.map(e => {
+        return { labelName: e.pointTypeName };
+      });
+
+      featureLabel = featureLabel.map(e => {
+        return e.pointType;
+      });
+      this.setCheckedKeys(featureLabel, 'tree');
+
       serve_record(
         { pid: e.pid },
         res => {
@@ -736,29 +988,43 @@ export default {
       let e = { ...this.$refs.form.value };
       this.add(e);
     },
-    getCheckedNodes() {
-      return this.$refs.tree.getCheckedNodes();
+    getCheckedNodes(ref) {
+      return this.$refs[ref].getCheckedNodes();
     },
-    getCheckedKeys() {
-      return this.$refs.tree.getCheckedKeys();
+    getCheckedKeys(ref) {
+      return this.$refs[ref].getCheckedKeys();
     },
-    onsubmit2() {
-      let tree = this.getCheckedKeys();
+    setCheckedKeys(key, ref) {
+      this.$refs[ref].setCheckedKeys(key);
+    },
+    onsubmit2(fn) {
+      let tree = this.getCheckedNodes('tree').filter(e => {
+        return e.labelReal == '1';
+      });
       if (!tree.length) {
         this.message('warning', '请选择个人特征');
         return;
       }
       let treeData = tree.map(e => {
         return {
-          labelId: e
+          labelId: e.labelId
         };
       });
-      let e = { ...this.$refs.form2.value, focusLabels: treeData };
-      this.add(e);
-    },
-    add(e) {
-      console.log(e);
+      let e = {
+        ...this.$refs.form2.value,
+        focusLabels: treeData
+      };
+      if (e.diagnosis) {
+        e.diagnosis = e.diagnosis
+          .map(e => {
+            return e.labelId;
+          })
+          .toString();
+      }
 
+      this.add(e, fn);
+    },
+    add(e, fn) {
       if (!this.form.pid) {
         this.message('warning', '请选择人员');
         return;
@@ -769,11 +1035,8 @@ export default {
         //10为特别关注人员
         data.focusLabels.push({ labelId: 10 });
       }
-      if (data.acts) {
-        data.acts = data.acts.map(e => {
-          return { actId: e };
-        });
-      }
+      data.acts = this.actList;
+
       data.guideType = this.activeName;
       if (this.activeName == '02') {
         this.$refs.form2.$refs.value.validate(valid => {
@@ -781,9 +1044,14 @@ export default {
             guide_add(
               data,
               res => {
-                this.message('success', '操作成功', () => {
-                  this.onclose('1');
-                });
+                if (typeof fn == 'function') {
+                  fn();
+                } else {
+                  this.message('success', '操作成功', () => {
+                    this.onclose('1');
+                  });
+                }
+
                 console.log(res);
               },
               err => {
@@ -810,72 +1078,198 @@ export default {
         );
       }
       console.log(data);
+    },
+    formatTree() {
+      let question1 = this.$store.getters[
+        'dictionary/recruit_diagnosis_type'
+      ].map(e => {
+        e.filter = 0;
+
+        e.labelName = e.label;
+        e.labelId = e.value;
+        e.labelReal = '0';
+        return e;
+      });
+      let question2 = this.$store.getters[
+        'dictionary/recruit_diagnosis_que_type'
+      ].map(e => {
+        e.labelName = e.label;
+        e.labelId = e.value;
+        e.labelReal = '1';
+        return e;
+      });
+      let data = [
+        { label: '职业问题诊断', value: 0 },
+        ...question1,
+        ...question2
+      ];
+      return treeDataformat(data, 'value', 'filter', 'children', 0);
+    },
+    showTags(tag) {
+      let question2 = this.$store.getters[
+        'dictionary/recruit_diagnosis_que_type'
+      ];
+      let arr = [];
+      for (let i = 0; i < tag.length; i++) {
+        for (let j = 0; j < question2.length; j++) {
+          if (question2[j].value == tag[i]) {
+            arr.push({
+              labelName: question2[j].label,
+              labelId: question2[j].value
+            });
+          }
+        }
+      }
+      return arr;
+    },
+    orderQuery(obj) {
+      console.log(obj);
+      let params = {
+        zjhm: obj.sfz,
+        pageParam: {
+          pageIndex: 0,
+          pageSize: 1
+        }
+      };
+
+      guide_queryPerson(
+        params,
+        res => {
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult.data;
+            let data = pageresult.map(e => {
+              return {
+                value: e.zjhm,
+                label: e.xm,
+                pid: e.pid,
+                contactNumber: e.lxdh,
+                keyPointLableDataList: e.labels ? e.labels : [],
+                hisLabels: e.hisLabels
+              };
+            });
+            this.userChange(data[0]);
+            this.orgOption = data;
+            this.form.pids = {
+              value: data[0].value,
+              label: data[0].label
+            };
+
+            this.$refs.form2.value.guideTime = obj.yyrq;
+            this.$refs.form2.value.guideAddress = obj.yydz;
+            this.$refs.form2.value.problem = obj.zykhms;
+
+            if (this.detailsData.isOrder) {
+              this.$refs.form2.value = {
+                implementAct: '3'
+              };
+            }
+            console.log(this.$refs.form2.value);
+          }
+          console.log(res);
+        },
+        err => {
+          console.log('错误');
+          console.log(err);
+        }
+      );
     }
   },
   mounted() {
-    // setTimeout(() => {
-    //   if (this.detailsType == '1') {
-    //     this.$refs.tree.setCheckedNodes(this.detailsData.focusLabels);
-    //   }
-    // }, 0);
-
     this.userLabel = this.$store.state.admin.label[1].labels;
+    //是否从预约进入
 
-    setTimeout(() => {
-      if (this.detailsType == '1') {
-        this.form = { ...this.detailsData };
-        //01政策  02专门
-        if (this.activeName == '01') {
-          this.$refs.form.value = { ...this.detailsData };
-        } else if (this.activeName == '02') {
-          this.$refs.form2.value = { ...this.detailsData };
-        }
-
-        this.formConfig.disabled = true;
-        this.formConfig2.disabled = true;
-        this.show = this.detailsData.implementAct;
-        this.disabled = true;
-
-        this.treeStrList = this.form.focusLabels;
-      }
+    if (this.detailsData.isOrder) {
+      this.orderQuery(this.detailsData);
+      this.isOrderType = false;
+      this.show = 3;
       console.log(this.detailsData);
-    }, 0);
+    } else {
+      this.isOrderType = true;
+      this.form.qx = this.adminId;
+      // let labels = this.$store.state.admin.label[1].labels;
+      // let str = JSON.stringify(labels);
+      // str = str.replace(/"labelReal":"0"/g,'"disabled":"true"')
+      // console.log(str);
+      // this.userLabel = JSON.parse(str)
 
-    //获取活动信息
-
-    act_query(
-      {
-        pageIndex: 0,
-        pageSize: 100,
-        actName: '',
-        valid: '1'
-      },
-      res => {
-        if (res.status == 200) {
-          let data = res.result.data.data;
-          data = data.filter(e => e.release == '1');
-          data = data.map(e => {
-            e.value = e.actId;
-            e.label = e.actName;
-            return e;
-          });
-          this.activityList = data;
-        } else {
-          this.message('warning', res.result.data.msg);
+      setTimeout(() => {
+        if (this.detailsType == '1') {
+          this.form = { ...this.detailsData };
+          //01政策  02专门
+          if (this.activeName == '01') {
+            this.$refs.form.value = { ...this.detailsData };
+          } else if (this.activeName == '02') {
+            let tags = this.detailsData.diagnosis.split(',');
+            this.formConfig2.formItemList[4].tags = this.showTags(tags);
+            this.form.acts = '';
+            if (this.detailsData.acts.length) {
+              if (this.detailsType == '1') {
+                this.actList = this.detailsData.acts;
+              }
+            }
+            this.$refs.form2.value = { ...this.detailsData };
+          }
+          this.formConfig.disabled = true;
+          this.formConfig2.disabled = true;
+          this.show = this.detailsData.implementAct;
+          this.disabled = true;
+          if (this.form.labels.length) {
+            let userLabel = this.form.labels.filter(e => {
+              return Number(e.pointType) < 11;
+            });
+            this.keyPointLableDataList = userLabel;
+            let featureLabel = this.form.labels.filter(e => {
+              return Number(e.pointType) > 10;
+            });
+            this.treeStrList = featureLabel;
+          }
         }
-        console.log('-----------------------------');
-        console.log(res);
-      },
-      err => {
-        console.log(err);
+      }, 0);
+
+      //获取活动信息
+
+      if (this.detailsType != '1') {
+        act_query(
+          {
+            pageIndex: 0,
+            pageSize: 10,
+            actName: '',
+            valid: '1',
+            districtCode: this.adminId
+          },
+          res => {
+            if (res.status == 200) {
+              let data = res.result.data.data;
+              data = data.filter(e => e.release == '1');
+              data = data.map(e => {
+                e.value = e.actId;
+                e.label = e.actName;
+                e.qx = e.districtCode;
+                return e;
+              });
+              this.activityList = data;
+            } else {
+              this.message('warning', res.result.data.msg);
+            }
+            console.log('-----------------------------');
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
       }
-    );
+    }
   },
   created() {}
 };
 </script>
 
 <style lang="scss" scoped>
+.el-icon-close {
+  color: red;
+  cursor: pointer;
+}
 .actList {
   .el-row:nth-of-type(odd) {
     margin: 5px 0 5px 0;

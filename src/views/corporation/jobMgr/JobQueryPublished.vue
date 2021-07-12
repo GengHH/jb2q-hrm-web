@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-17 17:13:54
+ * @LastEditTime: 2021-07-09 09:56:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryPublished.vue
 -->
@@ -60,9 +60,9 @@
       >
     </el-tabs>
 
-    <!----------------------->
+    <!---------------------->
     <!-- 不参见面试弹框 -->
-    <!----------------------->
+    <!---------------------->
     <el-dialog title="原因" :visible.sync="dialog2">
       <pl-input
         type="textarea"

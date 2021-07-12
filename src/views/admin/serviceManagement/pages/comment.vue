@@ -1,42 +1,53 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:40
- * @LastEditTime: 2021-04-29 17:02:53
+ * @LastEditTime: 2021-06-30 15:11:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\comment.vue
 -->
 <template>
   <div id="indexBody">
-    <ttable :columns="columns" :list="list">
+    <ttable
+      v-loading="loading"
+      :options="{ height: '560px' }"
+      :columns="columns"
+      :list="list"
+    >
       <!-- 内容部分-操作 -->
       <el-table-column slot="evaluationLevel" label="反馈状态" align="center">
         <template slot-scope="scope">
-          <el-rate :value="scope.row.evaluationLevel - 0"></el-rate>
+          <el-rate disabled :value="scope.row.evaluationLevel - 0"></el-rate>
         </template>
       </el-table-column>
     </ttable>
-    <!-- <el-pagination
+    <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
-      :current-page.sync="currentPage"
-      :page-size="100"
+      :page-size="pageParam.pageSize"
       layout="total, prev, pager, next"
-      :total="1000"
+      :total="pageParam.total"
     >
-    </el-pagination> -->
+    </el-pagination>
   </div>
 </template>
 
 <script>
 import ttable from '../../common/t_table';
+import { job_evaluation } from '../api/index';
 export default {
   name: 'comment',
   components: { ttable },
-  props: ['list'],
+  props: ['userPid'],
   data() {
     return {
-      currentPage: 1,
+      pageParam: {
+        pageIndex: 1,
+        total: 0,
+        pageSize: 10
+      },
+      loading: true,
+      list: [],
       columns: [
         { title: '序号', type: 'index' },
         { title: '单位名称', prop: 'corpName' },
@@ -44,31 +55,39 @@ export default {
         { title: '评价星级', prop: 'evaluationLevel', slot: 'evaluationLevel' },
         { title: '评价内容', prop: 'evaluationContent' },
         { title: '评价时间', prop: 'evaluationTime' }
-        // {
-        //   title: '性别',
-        //   prop: 'sex',
-        //   align: 'center',
-        //   render: (h, params) => {
-        //     let sex = params.row.sex; //params.row.type==获取到的值
-        //     let nowText = '';
-        //     if (sex == '1') {
-        //       nowText = '男';
-        //     } else {
-        //       nowText = '女';
-        //     }
-        //     return h('div', {}, nowText);
-        //   }
-        // }
       ]
     };
   },
   computed: {},
   methods: {
+    query() {
+      let data = { pid: this.userPid, pageParam: this.pageParam };
+      data.pageParam.pageIndex =
+        JSON.parse(JSON.stringify(this.pageParam.pageIndex)) - 1;
+      job_evaluation(
+        data,
+        res => {
+          this.loading = false;
+          if (res.status == 200) {
+            let pageresult = res.result.pageresult;
+            this.list = pageresult.data;
+            this.pageParam.pageIndex = Number(pageresult.pageIndex) + 1;
+            this.pageParam.total = pageresult.total;
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     handleChange(e) {
-      console.log;
+      this.pageParam.pageIndex = e;
+      this.query();
     }
   },
-  created() {}
+  created() {
+    this.query();
+  }
 };
 </script>
 

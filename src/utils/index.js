@@ -2,7 +2,7 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-25 12:20:50
- * @LastEditors: GengHH
+ * @LastEditors: Please set LastEditors
  * @Description: 通用的一些判断或者函数
  * @FilePath: \jb2q-hrm-web\src\utils\index.js
  */
@@ -275,7 +275,42 @@ export function formatTime(date) {
     [hour, minute, second].map(formatNumber).join(':')
   );
 }
-
+/**
+ * 格式化树型数据
+ */
+export function treeDataformat(source, id, parentId, children, topId) {
+  var cloneData = JSON.parse(JSON.stringify(source)); // 对源数据深度克隆
+  return cloneData.filter(father => {
+    // 循环所有项，并添加children属性
+    var branchArr = cloneData.filter(child => father[id] == child[parentId]); // 返回每一项的子级数组
+    branchArr.length > 0 ? (father[children] = branchArr) : ''; //给父级添加一个children属性，并赋值
+    return father[parentId] == topId; // 如果第一层不是parentId=0，请自行修改
+  });
+}
+/**
+ * 判断是否证件号搜索
+ */
+export function isZjhm(str) {
+  console.log(str);
+  if (JSON.stringify(str).length < 14) {
+    if (Number(str) + '' !== NaN + '') {
+      return {
+        xm: '',
+        zjhm: str
+      };
+    } else {
+      return {
+        xm: str,
+        zjhm: ''
+      };
+    }
+  } else {
+    return {
+      xm: '',
+      zjhm: str
+    };
+  }
+}
 /**
  * 判断是否空对象
  */
@@ -341,6 +376,7 @@ export function trim(data) {
  * @param {*} id
  */
 export function niceScroll(dom) {
+  if (!$.prototype.niceScroll) return;
   // if (dom !== '.el-table__body-wrapper') {
   //   return;
   // }
@@ -380,6 +416,7 @@ export function niceScroll(dom) {
  * @param {*} id
  */
 export function niceScrollUpdate(dom) {
+  if (!$.prototype.getNiceScroll) return;
   if (dom) {
     $(dom)
       ?.getNiceScroll()

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-15 15:07:03
- * @LastEditTime: 2021-06-08 14:25:12
+ * @LastEditTime: 2021-06-29 15:56:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\module\managementAdd.vue
@@ -23,14 +23,18 @@
         :model="form"
         label-width="150px"
       >
-        <el-row>
+        <el-row style="height:122px">
           <el-col :span="12">
             <el-form-item label="姓名" prop="xm">
-              <el-input v-model="form.xm"></el-input>
+              <el-input :disabled="isAdminEdit" v-model="form.xm"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="证件照">
+          <el-col style="height:100px" :span="12">
+            <el-form-item
+              style="height:100px"
+              label="证件照"
+              prop="psnlPhotoBase64"
+            >
               <el-upload
                 action=""
                 class="avatar-uploader"
@@ -42,23 +46,14 @@
                 :show-file-list="false"
               >
                 <template v-if="form.psnlPhotoBase64">
-                  <img
-                    :src="'data:image/png;base64,' + form.psnlPhotoBase64"
-                    class="avatar"
-                  />
+                  <img :src="form.psnlPhotoBase64" class="avatar" />
                 </template>
                 <template v-if="!form.psnlPhotoBase64">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </template>
               </el-upload>
-              <div
-                class="userClose"
-                @click="
-                  imageUrl = '';
-                  fileList2 = [];
-                "
-              >
+              <div class="userClose" @click="imgRemove">
                 <i class="el-icon-close"></i>
               </div>
             </el-form-item>
@@ -68,6 +63,7 @@
           <el-col :span="12">
             <el-form-item label="出生年月" prop="birthDate">
               <el-date-picker
+                :disabled="isAdminEdit"
                 v-model="form.birthDate"
                 type="date"
                 style="width:100%"
@@ -76,7 +72,11 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12"> </el-col>
+          <el-col :span="12"
+            ><el-form-item label="联系电话" prop="contactNumber">
+              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -93,7 +93,11 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="性别" prop="sexId">
-              <el-select v-model="form.sexId" style="width:100%">
+              <el-select
+                :disabled="isAdminEdit"
+                v-model="form.sexId"
+                style="width:100%"
+              >
                 <el-option label="男" value="1"></el-option>
                 <el-option label="女" value="2"></el-option>
               </el-select>
@@ -121,13 +125,14 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="毕业学校">
+            <el-form-item label="毕业学校" prop="collegesName">
               <el-input v-model="form.collegesName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="证件号码" prop="zjhm">
               <el-input
+                :disabled="isAdminEdit"
                 v-model="form.zjhm"
                 maxlength="18"
                 @input="userIdEdit"
@@ -137,7 +142,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="专业">
+            <el-form-item label="专业" prop="majorName">
               <el-input v-model="form.majorName"></el-input>
             </el-form-item>
           </el-col>
@@ -156,20 +161,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="职务">
+            <el-form-item label="职务" prop="positionName">
               <el-input v-model="form.positionName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="工作单位">
+            <el-form-item label="工作单位" prop="corpName">
               <el-input v-model="form.corpName"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="联系电话">
-              <el-input v-model="form.contactNumber" maxlength="11"></el-input>
+            <el-form-item label="邮编">
+              <el-input v-model="form.postcode"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -191,11 +196,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮编">
-              <el-input v-model="form.postcode"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -206,7 +206,10 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="个人工作经历及主要业绩（起止年月）">
+            <el-form-item
+              label="个人工作经历及主要业绩（起止年月）"
+              prop="laborInfo"
+            >
               <el-input
                 :autosize="{ minRows: 5, maxRows: 7 }"
                 type="textarea"
@@ -218,7 +221,10 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="曾获荣誉、专业成果及担任社会职务">
+            <el-form-item
+              label="曾获荣誉、专业成果及担任社会职务"
+              prop="majorResult"
+            >
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 5, maxRows: 7 }"
@@ -272,17 +278,17 @@
           </el-col>
           <el-col v-if="form.expertId" :span="12">
             <el-form-item label="聘期开始时间">
-              <el-input v-model="form.startDate"></el-input>
+              <el-input disabled v-model="form.startDate"></el-input>
             </el-form-item>
           </el-col>
           <el-col v-if="form.expertId" :span="12">
             <el-form-item label="聘期结束时间">
-              <el-input v-model="form.endDate"></el-input>
+              <el-input disabled v-model="form.endDate"></el-input>
             </el-form-item>
           </el-col>
           <el-col v-if="form.expertId" :span="12">
             <el-form-item label="专家编号">
-              <el-input v-model="form.expertId"></el-input>
+              <el-input disabled v-model="form.expertId"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -320,7 +326,30 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="申请人所熟悉的行业类型" prop="industryType">
-              <el-checkbox-group v-model="form.industryType">
+              <el-radio-group
+                v-model="form.industryType"
+                @change="indTypeChange"
+              >
+                <el-radio
+                  style="margin:5px 10px"
+                  v-for="(v, k) in dicOptions.industry"
+                  :key="k"
+                  :label="v.value"
+                  name="type"
+                  >{{ v.label }}</el-radio
+                >
+                <el-input
+                  style="margin-left:5px;width:150px"
+                  size="mini"
+                  :disabled="indType"
+                  v-model="form.industryTypeOther"
+                  placeholder="请输入内容"
+                ></el-input>
+              </el-radio-group>
+              <!-- <el-checkbox-group
+               
+                :max="1"
+              >
                 <el-checkbox
                   v-for="(v, k) in dicOptions.industry"
                   :key="k"
@@ -331,12 +360,13 @@
                   }}<el-input
                     style="margin-left:5px"
                     size="mini"
+                    :disabled="indType"
                     v-if="v.value == '14'"
                     v-model="form.industryTypeOther"
                     placeholder="请输入内容"
                   ></el-input
                 ></el-checkbox>
-              </el-checkbox-group>
+              </el-checkbox-group> -->
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -364,7 +394,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="其他说明事项" prop="otherMemo">
+            <el-form-item
+              label="其他说明事项(用于满足第5类条件的专家，区需写出招募原因)"
+              prop="otherMemo"
+            >
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 5, maxRows: 7 }"
@@ -418,18 +451,20 @@
 </template>
 
 <script>
-import { joinTeam_add } from '../api/index';
+import { joinTeam_add, expert_modify } from '../api/index';
 import { trim } from '@/utils/index';
 import { cP, cP15 } from '@/utils/regexp';
 export default {
   name: 'managementAdd',
-  props: ['visible', 'form', 'disabled'],
+  props: ['visible', 'form', 'disabled', 'type'],
   data() {
     return {
+      isAdminEdit: false,
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       fileList: [],
       fileList2: [],
       imageUrl: '',
-
+      indType: true,
       dicOptions: {
         //专家准入条件
         entry: trim(
@@ -461,6 +496,31 @@ export default {
         edu: trim(this.$store.getters['dictionary/recruit_edu'])
       },
       rules: {
+        collegesName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        majorName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        positionName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        corpName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+
+        contactNumber: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        majorResult: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        laborInfo: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        psnlPhotoBase64: [
+          { required: true, message: '请上传照片', trigger: 'blur' }
+        ],
         nationId: [
           { required: true, message: '请填写必选项', trigger: 'blur' }
         ],
@@ -507,6 +567,18 @@ export default {
   },
   computed: {},
   methods: {
+    imgRemove() {
+      this.form.psnlPhotoBase64 = '';
+      this.imageUrl = '';
+      this.fileList2 = [];
+    },
+    indTypeChange(e) {
+      if (e == '14') {
+        this.indType = false;
+      } else {
+        this.indType = true;
+      }
+    },
     userIdEdit(e) {
       console.log(this.$store);
       let arr = this.getBirthday(e);
@@ -569,13 +641,17 @@ export default {
       if (this.beforeAvatarUpload(file)) {
         this.getBase64(file.raw, 'formImageBase64');
       }
+      this.fileList = [];
     },
     //照片base64
     uploadUserChange(file) {
+      console.log(123);
       if (this.beforeAvatarUpload(file)) {
+        console.log(456);
         this.getBase64(file.raw, 'psnlPhotoBase64');
         this.imageUrl = URL.createObjectURL(file.raw);
       }
+      this.fileList2 = [];
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -603,40 +679,72 @@ export default {
           }
           data.psnlPhotoBase64 = data.psnlPhotoBase64.split(',')[1].toString();
 
-          data.formImageBase64 = data.formImageBase64
-            ? data.formImageBase64.split(',')[1].toString()
-            : '';
+          if (data.formImageBase64.split(',')[0] == 'data:image/png;base64,') {
+            data.formImageBase64 = data.formImageBase64
+              .split(',')[1]
+              .toString();
+          }
 
           data.approvalEntry = data.approvalEntry.toString();
           data.serviceContent = data.serviceContent.toString();
+
           data.industryType = data.industryType.toString();
           data.professionalField = data.professionalField.toString();
-          joinTeam_add(
-            data,
+          if (this.type == '1') {
+            expert_modify(
+              data,
 
-            res => {
-              if (res.result.data.result) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1000,
-                  onClose: () => {
-                    this.onclose();
-                  }
-                });
-              } else {
-                this.$message({
-                  message: res.result.data.msg,
-                  type: 'warning',
-                  duration: 1500
-                });
+              res => {
+                if (res.result.data.result) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1000,
+                    onClose: () => {
+                      this.onclose();
+                    }
+                  });
+                } else {
+                  this.$message({
+                    message: res.result.data.msg,
+                    type: 'warning',
+                    duration: 1500
+                  });
+                }
+                console.log(res);
+              },
+              err => {
+                console.log(err);
               }
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
-          );
+            );
+          } else {
+            joinTeam_add(
+              data,
+
+              res => {
+                if (res.result.data.result) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1000,
+                    onClose: () => {
+                      this.onclose();
+                    }
+                  });
+                } else {
+                  this.$message({
+                    message: res.result.data.msg,
+                    type: 'warning',
+                    duration: 1500
+                  });
+                }
+                console.log(res);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+          }
         } else {
           console.log('error submit!!');
           return false;
@@ -648,21 +756,60 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg' || 'image/png' || 'image/jpg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
+      const isLt2M = file.size / 1024 / 1024 < 0.5;
       if (!isJPG) {
-        this.$message.error('招聘会宣传图片只能是 jpeg/jpg/png/ 格式!');
+        this.$message.error('图片只能是 jpeg/jpg/png/ 格式!');
         return false;
       }
       if (!isLt2M) {
-        this.$message.error('招聘会宣传图片大小不能超过 2MB!');
+        this.$message.error('图片大小不能超过 500KB!');
         return false;
       }
       return true;
+    },
+    isAdmin(e) {
+      //   { value: '01', label: '新聘未审核' },
+      // { value: '02', label: '新聘审核通过' },
+      // { value: '03', label: '新聘审核不通过' },
+      // { value: '04', label: '续聘未审核' },
+      // { value: '05', label: '续聘审核通过' },
+      // { value: '06', label: '续聘审核不通过' },
+      // { value: '07', label: '退团未审核' },
+      // { value: '08', label: '退团审核通过' },
+      // { value: '09', label: '退团审核不通过' }
+      let cur = e.currStatus;
+      if (!cur) {
+        return false;
+      }
+      if (this.adminId == '00') {
+        return false;
+      }
+      if (
+        (cur == '01' ||
+          cur == '03' ||
+          cur == '04' ||
+          cur == '06' ||
+          cur == '07' ||
+          cur == '09') &&
+        this.adminId != '00'
+      ) {
+        return false;
+      } else if (
+        (cur == '02' || cur == '05' || cur == '08') &&
+        this.adminId == '00'
+      ) {
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   mounted() {
-    console.log(this.form);
+    console.log(this.type);
+    this.form.industryType = this.form.industryType[0];
+    if (!this.disabled) {
+      this.isAdminEdit = this.isAdmin(this.form);
+    }
   },
   created() {}
 };

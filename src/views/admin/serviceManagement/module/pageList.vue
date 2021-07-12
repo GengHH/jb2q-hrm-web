@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 10:07:05
- * @LastEditTime: 2021-06-07 10:00:37
+ * @LastEditTime: 2021-07-09 16:54:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\module\pageList.vue
@@ -36,59 +36,59 @@
         </el-col>
         <el-col :md="19" :lg="19" :xl="19">
           <div ref="viewScroll" class="pageList" @scroll="scroll($event)">
-            <div class="boxList" ref="b0">
+            <div class="boxList" ref="b0" style="height:303px">
               <div class="boxTiele">
                 <h1>个人基本信息</h1>
               </div>
-              <person :form="person"></person>
+              <person v-if="userPid" :userPid="userPid"></person>
             </div>
-            <div class="boxList" ref="b1">
+            <div class="boxList" ref="b1" style="height:900px;overflow: auto;">
               <div class="boxTiele">
                 <h1>简历信息</h1>
               </div>
-              <resume :form="resume"></resume>
+              <resume v-if="userPid" :userPid="userPid"></resume>
             </div>
-            <div class="boxList" ref="b2">
+            <div class="boxList" ref="b2" style="height:645px">
               <div class="boxTiele">
                 <h1>劳动经历</h1>
               </div>
-              <experience :list="experience"></experience>
+              <experience v-if="userPid" :userPid="userPid"></experience>
             </div>
-            <div class="boxList" ref="b3">
+            <div class="boxList" ref="b3" style="height:645px">
               <div class="boxTiele">
                 <h1>社保缴费记录</h1>
               </div>
-              <socialsecurity :list="socialsecurity"></socialsecurity>
+              <socialsecurity :userPid="userPid"></socialsecurity>
             </div>
-            <div class="boxList" ref="b4">
+            <div class="boxList" ref="b4" style="height:645px">
               <div class="boxTiele">
                 <h1>就业见习记录</h1>
               </div>
-              <getajob :lists="getajob"></getajob>
+              <getajob :userPid="userPid"></getajob>
             </div>
-            <div class="boxList" ref="b5">
+            <div class="boxList" ref="b5" style="height:645px">
               <div class="boxTiele">
                 <h1>简历投递及反馈记录</h1>
               </div>
-              <feedback></feedback>
+              <feedback :userPid="userPid"></feedback>
             </div>
-            <div class="boxList" ref="b6">
+            <div class="boxList" ref="b6" style="height:645px">
               <div class="boxTiele">
                 <h1>职位评论记录</h1>
               </div>
-              <comment :list="comment"></comment>
+              <comment :userPid="userPid"></comment>
             </div>
-            <div class="boxList" ref="b7">
+            <div class="boxList" ref="b7" style="height:645px">
               <div class="boxTiele">
                 <h1>职位收藏记录</h1>
               </div>
-              <collect></collect>
+              <collect :userPid="userPid"></collect>
             </div>
-            <div class="boxList" ref="b8">
+            <div class="boxList" ref="b8" style="height:645px">
               <div class="boxTiele">
                 <h1>就业服务记录</h1>
               </div>
-              <serve></serve>
+              <serve @gotoRuter="gotoRuter" :userPid="userPid"></serve>
             </div>
           </div>
         </el-col>
@@ -124,8 +124,11 @@ export default {
   },
   data() {
     return {
+      timenumber: 0,
+      istime: true,
+      userPid: '',
       loading: false,
-
+      isData: false,
       person: {},
       resume: {},
       experience: [],
@@ -150,8 +153,13 @@ export default {
       ]
     };
   },
+  watch: {},
   computed: {},
   methods: {
+    gotoRuter(path) {
+      this.dialogTableVisible = false;
+      this.$router.push({ path: path });
+    },
     evclose() {
       this.$emit('evclose');
     },
@@ -161,6 +169,7 @@ export default {
       for (let i = 0; i < this.titleList.length; i++) {
         this.arrListHeight.push(this.$refs['b' + i].offsetHeight);
       }
+      console.log(this.arrListHeight);
     },
     skip(e) {
       this.setHright();
@@ -174,7 +183,6 @@ export default {
         height += this.arrListHeight[i];
       }
       console.log(height);
-      console.log(this.arrListHeight);
       this.$refs.viewScroll.scrollTop = height + 1;
     },
     scroll(e) {
@@ -198,6 +206,25 @@ export default {
         }
       }
     },
+    queryHtml() {
+      let time = setInterval(() => {
+        if (this.timenumber > 60) {
+          this.istime = false;
+          this.loading = false;
+          clearInterval(time);
+        }
+        let height = this.$refs.b1.offsetHeight;
+        if (this.istime && height == '889') {
+          this.timenumber++;
+        } else {
+          this.istime = false;
+          clearInterval(time);
+          this.loading = false;
+          this.skip(this.pagelistIndex);
+        }
+      }, 1000);
+      //简历的默认高度
+    },
     onopen() {},
     handleAsync() {
       return new Promise(resolve => {
@@ -211,83 +238,18 @@ export default {
     }
   },
   created() {
-    this.loading = true;
-    let data = { ...this.evList };
-
-    let path = [
-      //个人基本信息
-      {
-        url: '/admin/keypoint/show/psnlInfo',
-        data: data
-      },
-      //简历信息
-      {
-        url: '/admin/keypoint/show/resume',
-        data: data
-      },
-      //劳动经历
-      {
-        url: '/admin/keypoint/show/labor',
-        data: data
-      },
-      //社保缴费记录
-      {
-        url: '/admin/keypoint/show/insur',
-        data: data
-      },
-      //就业见习记录
-      {
-        url: '/common/person/query-jyjxRecordInfo',
-        data: data
-      },
-      //简历投递及反馈记录 --
-      {
-        url: '/admin/keypoint/show/employ',
-        data: data
-      },
-      //职位评价记录
-      {
-        url: '/admin/keypoint/show/evaluation',
-        data: data
-      },
-      //职位收藏记录
-      {
-        url: '/admin/keypoint/show/favor',
-        data: data
-      },
-      //就业服务记录
-      {
-        url: '/admin/keypoint/show/employ',
-        data: data
-      }
-    ];
-    allAction(
-      path,
-      res => {
-        console.log(res);
-        this.person = res[0].data.result.data;
-        this.resume = res[1].data.result.data;
-        this.experience = res[2].data.result.data;
-        this.socialsecurity = res[3].data.result.data
-          ? res[3].data.result.data
-          : [];
-        this.getajob = res[4].data.result.data;
-        this.feedback = res[5].data.result.data;
-        this.comment = res[6].data.result.data;
-        this.collect = res[7].data.result.data;
-        this.serve = res[8].data.result.data;
-
-        this.loading = false;
-        this.handleShow(() => {
-          this.skip(this.pagelistIndex);
-        });
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    //this.loading = true;
+    this.userPid = this.evList.pid;
+    this.isData = true;
+    setTimeout(() => {
+      this.skip(this.pagelistIndex);
+    }, 0);
   },
-  mounted() {}
+  mounted() {
+    // setTimeout(() => {
+    //   this.queryHtml();
+    // }, 0);
+  }
 };
 </script>
 

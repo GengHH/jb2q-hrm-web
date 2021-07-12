@@ -1,13 +1,15 @@
 /*
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:42
- * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 10:55:06
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-02 18:33:39
  * @Description: 管理员模块的全局key信息
  * @FilePath: \jb2q-hrm-web\src\storeAdmin\modules\admin.js
  */
 import { isEmptyObject } from '@/utils/index';
 const state = {
+  //用户标签
+  label: [],
   //用户信息
   userInfo: {},
   //用户token
@@ -35,6 +37,9 @@ const state = {
 };
 
 const mutations = {
+  SET_LABEL: (state, label) => {
+    state.label = label;
+  },
   SET_USERINFO: (state, userInfo) => {
     state.userInfo = userInfo;
   },
@@ -144,7 +149,7 @@ const actions = {
           roleKey: 'SC:R:1_c4ca4238a0b923820dcc509a6f75849b',
           roles: [
             {
-              roleId: '1',
+              roleId: '01',
               roleName: '普通角色'
             }
           ],
@@ -318,6 +323,16 @@ const actions = {
             statusId: '1'
           },
           {
+            dispOrder: 4,
+            menuCode: 'zrzc',
+            menuIcon: 'el-icon-setting',
+            menuId: '0504',
+            menuName: '转入转出',
+            menuUrl: '/unitManagement/audit',
+            parentId: '0500',
+            statusId: '1'
+          },
+          {
             dispOrder: 6,
             menuCode: 'zphgl',
             menuIcon: 'el-icon-setting',
@@ -386,6 +401,66 @@ const actions = {
             menuUrl: '/unitResumeParameterSetting/unitResumeParameterSetting',
             parentId: '',
             statusId: '1'
+          },
+          {
+            dispOrder: 10,
+            menuCode: 'rzgw',
+            menuIcon: 'el-icon-setting',
+            menuId: '1000',
+            menuName: '热招职位',
+            menuUrl: '/hotPost/hotPost',
+            parentId: '',
+            statusId: '1'
+          },
+          {
+            dispOrder: 11,
+            menuCode: 'jzgw',
+            menuIcon: 'el-icon-setting',
+            menuId: '1000',
+            menuName: '急招职位',
+            menuUrl: '/vexedlyPost/vexedlyPost',
+            parentId: '',
+            statusId: '1'
+          },
+          {
+            dispOrder: 11,
+            menuCode: 'zwtsgl',
+            menuIcon: 'el-icon-setting',
+            menuId: '1100',
+            menuName: '职位投诉管理',
+            menuUrl: '/positionComplainManagement/positionComplainManagement',
+            parentId: '',
+            statusId: '1'
+          },
+          {
+            dispOrder: 12,
+            menuCode: 'zgyqtj',
+            menuIcon: 'el-icon-setting',
+            menuId: '1200',
+            menuName: '用工余缺调剂',
+            menuUrl: '/workManagement',
+            parentId: '',
+            statusId: '1'
+          },
+          {
+            dispOrder: 13,
+            menuCode: 'zjkgl',
+            menuIcon: 'el-icon-setting',
+            menuId: '1201',
+            menuName: '用工缺口',
+            menuUrl: '/workManagement/gap',
+            parentId: '1200',
+            statusId: '1'
+          },
+          {
+            dispOrder: 13,
+            menuCode: 'zjkgl',
+            menuIcon: 'el-icon-setting',
+            menuId: '1202',
+            menuName: '用工剩余',
+            menuUrl: '/workManagement/surplus',
+            parentId: '1200',
+            statusId: '1'
           }
         ],
         result: true
@@ -435,6 +510,13 @@ const actions = {
       // commit('SET_TOKEN', '');
       // commit('SET_NAME', '');
       localStorage.setItem('a-vuex', null);
+      resolve();
+    });
+  },
+  //set标签
+  setLabel({ commit }, userList) {
+    return new Promise((resolve, reject) => {
+      commit('SET_LABEL', userList);
       resolve();
     });
   }

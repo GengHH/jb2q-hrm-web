@@ -1,18 +1,17 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-16 14:06:57
- * @LastEditTime: 2021-06-08 14:58:37
+ * @LastEditTime: 2021-06-29 16:07:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\pages\areaAdminManagement.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+    <tform ref="form" :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable
       :columns="columns"
       :list="list"
-      :options="tableoptions"
       @handleSelectionChange="e => (selectData = e)"
     >
       <el-table-column
@@ -54,10 +53,56 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" slot="aaa006" label="聘期" align="center">
+      <el-table-column
+        width="150"
+        slot="approvalEntry"
+        label="专家准入条件"
+        align="center"
+      >
         <template slot-scope="scope">
-          {{ scope.row.startDate ? scope.row.startDate.split(' ')[0] : '' }} -
-          {{ scope.row.endDate ? scope.row.endDate.split(' ')[0] : '' }}
+          <div
+            v-for="(value, key) in setLabel(scope.row.approvalEntry)"
+            :key="key"
+          >
+            <div v-for="(v, k) in dicOptions.entry" :key="k">
+              <el-tag :title="v.label" v-if="v.value == value" type="warning">{{
+                v.label
+              }}</el-tag>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        width="150"
+        slot="serviceContent"
+        label="专家服务内容"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <div
+            v-for="(value, key) in setLabel(scope.row.serviceContent)"
+            :key="key"
+          >
+            <div v-for="(v, k) in dicOptions.content" :key="k">
+              <el-tag :title="v.label" v-if="v.value == value" type="warning">{{
+                v.label
+              }}</el-tag>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        width="150"
+        slot="industryType"
+        label="专家行业类型"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <div v-for="(v, k) in dicOptions.industry" :key="k">
+            <el-tag v-if="v.value == scope.row.industryType" type="warning">{{
+              v.label
+            }}</el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -162,6 +207,7 @@
       v-if="visible"
       :visible="visible"
       :form="form"
+      :type="addtype"
       :disabled="disabled"
       @onclose="onclose"
     ></managementadd>
@@ -197,10 +243,8 @@ export default {
   },
   data() {
     return {
-      tableoptions: {
-        // height: '580px'
-        height: 'auto'
-      },
+      addtype: '',
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       selectData: [],
       advancedQuery: false,
       visible: false,
@@ -215,14 +259,20 @@ export default {
       columns: [
         { type: 'selection' },
         { title: '序号', type: 'index' },
-        { title: '专家编号', prop: 'expertId', width: '120' },
         { title: '姓名', prop: 'xm' },
-        { title: '学历', prop: 'eduId', slot: 'eduId' },
-        { title: '联系电话', prop: 'contactNumber' },
-        { title: '专家状态', prop: 'statusId', slot: 'statusId' },
-        { title: '聘期', prop: 'aaa006', slot: 'aaa006' },
-        { title: '复核状态', prop: 'currStatus', slot: 'currStatus' },
+        { title: '证件号码', prop: 'zjhm', width: '180' },
         { title: '管理区', prop: 'districtCode', slot: 'districtCode' },
+        { title: '学历', prop: 'eduId', slot: 'eduId' },
+        { title: '专家状态', prop: 'statusId', slot: 'statusId' },
+        { title: '入团时间', prop: 'joinDate', width: '150' },
+        { title: '复核状态', prop: 'currStatus', slot: 'currStatus' },
+        { title: '专家准入条件', prop: 'approvalEntry', slot: 'approvalEntry' },
+        {
+          title: '专家服务内容',
+          prop: 'serviceContent',
+          slot: 'serviceContent'
+        },
+        { title: '专家行业类型', prop: 'industryType', slot: 'industryType' },
         { title: '操作', prop: 'aaa009', slot: 'aaa009', width: 400 }
       ],
       dicOptions: {
@@ -281,7 +331,7 @@ export default {
           },
           {
             type: 'select',
-            label: '区县',
+            label: '管理区',
             style: { width: '180px' },
             key: 'districtCode',
             options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
@@ -325,13 +375,12 @@ export default {
             )
           },
           {
-            type: 'select',
-            label: '专家专业领域类型',
-            style: { width: '180px' },
-            key: 'professionalField',
-            options: trim(
-              this.$store.getters['dictionary/recruit_expert_professional_type']
-            )
+            type: 'daterange',
+            label: '入团时间',
+            style: { width: '300px' },
+            format: 'yyyyMMdd',
+            rules: [],
+            key: 'time'
           }
         ]
       },
@@ -380,6 +429,13 @@ export default {
   },
   computed: {},
   methods: {
+    setLabel(str) {
+      if (str) {
+        return str.split(',');
+      } else {
+        return [];
+      }
+    },
     add() {
       this.form = { ...this.initform };
       this.visible = true;
@@ -500,10 +556,13 @@ export default {
       let data = { ...e };
       data.pageSize = this.pageSize;
       data.pageIndex = JSON.parse(JSON.stringify(this.params.pageIndex)) - 1;
-      this.queryData = data;
+      if (data.time) {
+        data.joinDateStart = data.time[0];
+        data.joinDateEnd = data.time[1];
+      }
       //获取当前用户所在区
-      data.districtCode = this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode;
-
+      data.districtCode = data.districtCode || this.adminId;
+      this.queryData = data;
       this.dataList = data;
       synthesize_query(
         data,
@@ -533,16 +592,32 @@ export default {
       if (type == '0') {
         this.disabled = true;
       }
-      this.form.approvalEntry = this.form.approvalEntry.split(',');
-      this.form.serviceContent = this.form.serviceContent.split(',');
-      this.form.industryType = this.form.industryType.split(',');
-      this.form.professionalField = this.form.professionalField.split(',');
+      if (this.form.psnlPhotoBase64) {
+        this.form.psnlPhotoBase64 =
+          'data:image/png;base64,' + this.form.psnlPhotoBase64;
+      }
+      this.addtype = type;
+      this.form.approvalEntry = this.form.approvalEntry
+        ? this.form.approvalEntry.split(',')
+        : [];
+      this.form.serviceContent = this.form.serviceContent
+        ? this.form.serviceContent.split(',')
+        : [];
+      this.form.industryType = this.form.industryType
+        ? this.form.industryType.split(',')
+        : [];
+      this.form.professionalField = this.form.professionalField
+        ? this.form.professionalField.split(',')
+        : [];
       this.visible = true;
     },
     handleChange(e) {
       this.params.pageIndex = e;
       this.onsubmit(this.dataList);
     }
+  },
+  mounted() {
+    console.log(this.$refs);
   },
   created() {
     console.log(this.$store);

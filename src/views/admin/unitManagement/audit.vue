@@ -1,21 +1,25 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-04 10:10:39
+ * @LastEditTime: 2021-07-02 15:08:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\audit.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="tform"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="转出" name="1">
         <ttable :columns="columns" :list="list">
           <el-table-column slot="fromDistrict" label="转出区" align="center">
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.qx" :key="k">
-                <el-tag v-if="v.value == scope.row.fromDistrict">{{
+                <el-tag v-if="v.value == scope.row.inDistrict">{{
                   v.label
                 }}</el-tag>
               </div>
@@ -24,7 +28,16 @@
           <el-table-column slot="inDistrict" label="转入区" align="center">
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.qx" :key="k">
-                <el-tag v-if="v.value == scope.row.inDistrict">{{
+                <el-tag v-if="v.value == scope.row.fromDistrict">{{
+                  v.label
+                }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column slot="verifyType" label="审核类型" align="center">
+            <template slot-scope="scope">
+              <div v-for="(v, k) in dicOptions.verify" :key="k">
+                <el-tag v-if="v.value == scope.row.verifyType">{{
                   v.label
                 }}</el-tag>
               </div>
@@ -86,6 +99,15 @@
             <template slot-scope="scope">
               <div v-for="(v, k) in dicOptions.qx" :key="k">
                 <el-tag v-if="v.value == scope.row.inDistrict">{{
+                  v.label
+                }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column slot="verifyType" label="审核类型" align="center">
+            <template slot-scope="scope">
+              <div v-for="(v, k) in dicOptions.verify" :key="k">
+                <el-tag v-if="v.value == scope.row.verifyType">{{
                   v.label
                 }}</el-tag>
               </div>
@@ -160,7 +182,12 @@ export default {
       },
       dicOptions: {
         qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
-        yesno: trim(this.$store.getters['dictionary/yesno'])
+        yesno: trim(this.$store.getters['dictionary/yesno']),
+        verify: [
+          { value: 1, label: '待审核' },
+          { value: 2, label: '审核通过' },
+          { value: 3, label: '审核不通过' }
+        ]
       },
       formConfig: {
         inline: true,
@@ -176,6 +203,19 @@ export default {
             placeholder: '请输入单位名称',
             rules: [],
             key: 'corpName'
+          },
+          {
+            disabled: false,
+            type: 'select',
+            label: '审核类型',
+            rules: [],
+            style: { width: '210px' },
+            key: 'verifyType',
+            options: [
+              { value: 1, label: '待审核' },
+              { value: 2, label: '审核通过' },
+              { value: 3, label: '审核不通过' }
+            ]
           }
         ]
       },
@@ -184,6 +224,9 @@ export default {
         { title: '单位名称', prop: 'corpName' },
         { title: '转出区', prop: 'fromDistrict', slot: 'fromDistrict' },
         { title: '转入区', prop: 'inDistrict', slot: 'inDistrict' },
+        { title: '审核类型', prop: 'verifyType', slot: 'verifyType' },
+        { title: '原因', prop: 'transferReason' },
+
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
@@ -192,6 +235,8 @@ export default {
         { title: '单位名称', prop: 'corpName' },
         { title: '转出区', prop: 'fromDistrict', slot: 'fromDistrict' },
         { title: '转入区', prop: 'inDistrict', slot: 'inDistrict' },
+        { title: '审核类型', prop: 'verifyType', slot: 'verifyType' },
+        { title: '原因', prop: 'transferReason' },
         { title: '操作', slot: 'aaa010' }
       ],
       list2: []
@@ -298,6 +343,11 @@ export default {
     advancedSearch(e) {
       this.query(this.activeName, e);
     }
+  },
+  mounted() {
+    this.$refs.tform.value = {
+      verifyType: 1
+    };
   },
   created() {}
 };

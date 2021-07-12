@@ -1,20 +1,31 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 16:31:50
+ * @LastEditTime: 2021-07-08 11:10:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="onsubmit"></tform>
+    <tform ref="tform" :formConfig="formConfig" @onsubmit="onsubmit"></tform>
     <ttable :columns="columns" :list="list">
       <el-table-column slot="meetType" label="招聘会类型" align="center">
         <template slot-scope="scope">
           <div v-for="(v, k) in dicOptions.type" :key="k">
             <el-tag v-if="v.value == scope.row.meetType">{{ v.label }}</el-tag>
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column slot="applyResult" label="反馈状态" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="success"
+            v-if="scope.row.applyResult == '0' || scope.row.applyResult == '1'"
+          >
+            已反馈</el-tag
+          >
+          <el-tag v-else> 未反馈</el-tag>
         </template>
       </el-table-column>
       <el-table-column width="180" slot="aaa009" label="操作" align="center">
@@ -62,6 +73,7 @@ export default {
   },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       type: '',
       visible: false,
       dicOptions: {
@@ -79,6 +91,8 @@ export default {
       columns: [
         { title: '序号', type: 'index' },
         { title: '招聘会名称', prop: 'meetName' },
+        { title: '企业名称', prop: 'corpName' },
+        { title: '反馈状态', prop: 'applyResult', slot: 'applyResult' },
         { title: '招聘会类型', prop: 'meetType', slot: 'meetType' },
         { title: '参会联系人', prop: 'applyContactName' },
         { title: '参会联系手机', prop: 'applyContactPhone' },
@@ -107,6 +121,14 @@ export default {
             placeholder: '请输入单位名称',
             rules: [],
             key: 'corpName'
+          },
+          {
+            type: 'select',
+            label: '所在区',
+            style: { width: '210px' },
+            rules: [],
+            key: 'areaId',
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
         ]
       },
@@ -154,7 +176,18 @@ export default {
       this.onsubmit(this.dataList);
     }
   },
-  created() {}
+  mounted() {
+    this.$refs.tform.value = {
+      areaId: this.adminId
+    };
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[2].disabled = false;
+    } else {
+      this.formConfig.formItemList[2].disabled = true;
+    }
+  }
 };
 </script>
 

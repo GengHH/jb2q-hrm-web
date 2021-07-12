@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-03 16:29:25
+ * @LastEditTime: 2021-07-01 19:34:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -47,7 +47,7 @@
       element-loading-background="rgba(0, 0, 0, 0.5)"
       @close="dialogTableVisible = false"
     >
-      <resume :form="resume"></resume>
+      <resume v-if="userPid" :userPid="userPid"></resume>
     </el-dialog>
   </div>
 </template>
@@ -59,10 +59,11 @@ import { query } from './api/index';
 import resume from '../serviceManagement/pages/resume'; //简历信息
 import { allAction } from '@/api/adminApi';
 export default {
-  name: 'index',
+  name: 'JobEvaluationReview',
   components: { ttable, tform, resume },
   data() {
     return {
+      userPid: '',
       resume: {},
       loading: false,
       dialogTableVisible: false,
@@ -185,26 +186,9 @@ export default {
       console.log(e);
     },
     look(e) {
+      this.userPid = e.row.pid;
       this.dialogTableVisible = true;
       this.loading = true;
-      let path = [
-        //简历信息
-        {
-          url: '/admin/keypoint/show/resume?pid=' + e.row.pid
-        }
-      ];
-      allAction(
-        path,
-        res => {
-          console.log(res);
-          this.resume = res[0].data.result.data;
-
-          this.loading = false;
-        },
-        err => {
-          console.log(err);
-        }
-      );
     }
   },
   created() {}

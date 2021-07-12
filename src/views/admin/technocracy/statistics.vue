@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-07 17:37:16
+ * @LastEditTime: 2021-07-09 15:52:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -33,6 +33,23 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="区">
+            <el-select
+              :disabled="adminId == '00' ? false : true"
+              v-model="form.districtCode"
+              placeholder="请选择区"
+            >
+              <el-option
+                v-for="(v, k) in setQx()"
+                :key="k"
+                :label="v.label"
+                :value="v.value"
+                >{{ v.label }}</el-option
+              >
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
       <div style="text-align:center">
         <el-button type="primary" icon="el-icon-search" @click="onSubmit"
@@ -42,7 +59,17 @@
     </el-form>
     <div ref="print">
       <ttable :columns="columns" :list="list">
-        <el-table-column slot="districtCode" label="管理区" align="center">
+        <el-table-column slot="actDate" label="服务时间" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.actDate }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          slot="districtCode"
+          width="80"
+          label="管理区"
+          align="center"
+        >
           <template slot-scope="scope">
             <div v-for="(v, k) in dicOptions.qx" :key="k">
               <el-tag v-if="v.value == scope.row.districtCode">{{
@@ -52,7 +79,14 @@
           </template>
         </el-table-column>
       </ttable>
+      <div
+        style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
+      >
+        支付费用合计：
+        <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}</span>
+      </div>
     </div>
+
     <!-- <el-pagination
       @size-change="handleChange"
       @current-change="handleChange"
@@ -62,12 +96,7 @@
       :total="params.total"
     >
     </el-pagination> -->
-    <div
-      style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
-    >
-      支付费用合计：
-      <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}</span>
-    </div>
+
     <div style="text-align:right;padding:5px 15px;">
       <el-button type="primary" @click="print()">打印</el-button>
     </div>
@@ -76,7 +105,7 @@
 
 <script>
 import ttable from '../common/t_table';
-import { statistics_query } from './api/index';
+import { statistics_query, statistics_dtl } from './api/index';
 import { trim } from '@/utils/index';
 const columnsArr = [
   [
@@ -85,15 +114,15 @@ const columnsArr = [
     { title: '支付费用', prop: 'payTotal', sortable: true }
   ],
   [
-    { title: '序号', type: 'index' },
+    { title: '序号', type: 'index', width: 50 },
     { title: '所属区', prop: 'districtCode', slot: 'districtCode' },
-    { title: '专家姓名', prop: 'expertName' },
-    { title: '身份证号', prop: 'expertZjhm' },
-    { title: '银行账号', prop: 'bankaccount' },
-    { title: '开户银行', prop: 'bankName' },
-    { title: '服务时间', prop: 'actDate' },
-    { title: '服务次数', prop: 'serviceCount' },
-    { title: '支付费用', prop: 'payTotal', sortable: true }
+    { title: '专家姓名', prop: 'expertName', width: 120 },
+    { title: '身份证号', prop: 'expertZjhm', width: 190 },
+    { title: '银行账号', prop: 'bankaccount', width: 170 },
+    { title: '开户银行', prop: 'bankName', width: 100 },
+    { title: '服务时间', prop: 'actDate', slot: 'actDate' },
+    { title: '服务次数', prop: 'serviceCount', width: 50 },
+    { title: '支付费用', prop: 'payTotal', sortable: true, width: 120 }
   ]
 ];
 export default {
@@ -109,6 +138,7 @@ export default {
       return y + '' + (m > 9 ? m : '0' + m);
     };
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       dicOptions: {
         //区县
         qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
@@ -121,7 +151,9 @@ export default {
       mouey: 0,
       form: {
         type: '1',
-        startMonth: getYYYYMM()
+        startMonth: getYYYYMM(),
+        districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo
+          .areaCode
       },
       list: [],
       columns: []
@@ -129,6 +161,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '' });
+      return qx;
+    },
     print() {
       // 打印
       this.$print(this.$refs.print);

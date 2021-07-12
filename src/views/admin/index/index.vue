@@ -1,13 +1,17 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-06-03 16:28:23
+ * @LastEditTime: 2021-07-09 10:11:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
 <template>
   <div id="indexBody">
-    <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform>
+    <tform
+      ref="tform"
+      :formConfig="formConfig"
+      @onsubmit="advancedSearch"
+    ></tform>
     <ttable :columns="columns" :list="list">
       <!-- 内容部分-操作 -->
       <el-table-column slot="statusId" label="是否有效" align="center">
@@ -92,6 +96,8 @@ export default {
   components: { ttable, tform, adddetails, addright },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
+      resumeData: {},
       dataRight: {},
       dataListObj: {},
       visible: false,
@@ -124,6 +130,13 @@ export default {
             rules: [],
             key: 'name'
           }
+          // {
+          //   type: 'select',
+          //   label: '所在区',
+          //   style: { width: '210px' },
+          //   key: 'districtCode',
+          //   options: this.setQx()
+          // }
         ]
       },
       params: {
@@ -148,6 +161,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '' });
+      return qx;
+    },
     addRight(e) {
       this.dataRight = { ...e.row };
       this.visibleRight = true;
@@ -228,7 +246,20 @@ export default {
       this.visible = true;
     }
   },
-  created() {}
+  mounted() {
+    // setTimeout(() => {
+    //   this.$refs.tform.value = {
+    //     districtCode: this.adminId
+    //   };
+    // }, 0);
+  },
+  created() {
+    // if (this.adminId == '00') {
+    //   this.formConfig.formItemList[2].disabled = false;
+    // } else {
+    //   this.formConfig.formItemList[2].disabled = true;
+    // }
+  }
 };
 </script>
 

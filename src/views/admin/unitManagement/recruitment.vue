@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-04 10:18:36
+ * @LastEditTime: 2021-07-02 14:56:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\recruitment.vue
@@ -29,7 +29,7 @@
             <el-date-picker
               v-model="scope.row.time"
               type="date"
-              placeholder="请输入代理有效期"
+              placeholder="请输入代理招聘协议截止日期"
               style="width:100%"
               value-format="yyyyMMdd"
             >
@@ -142,6 +142,7 @@ export default {
   components: { ttable, tform, recruitmentdetail },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       type: '',
       addVisible: false,
       disabled: false,
@@ -215,7 +216,7 @@ export default {
         { title: '序号', type: 'index' },
         { title: '单位名称', prop: 'corpName' },
         { title: '单位状态', prop: 'frozen', slot: 'frozen' },
-        { title: '代理招聘有效期', prop: 'entrustValid' },
+        { title: '代理招聘协议截止日期', prop: 'entrustValid' },
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
@@ -244,8 +245,8 @@ export default {
       agency_edit(
         data,
         res => {
-          if (res.status == 200) {
-            document.body.click();
+          document.body.click();
+          if (res.result.data.result) {
             this.$message({
               message: '操作成功',
               type: 'success',
@@ -253,6 +254,12 @@ export default {
               onClose: () => {
                 this.advancedSearch(this.dataList);
               }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
             });
           }
           console.log(res);
@@ -273,12 +280,25 @@ export default {
         return;
       }
 
-      document.body.click();
       agency_add(
         data,
         res => {
-          if (res.status == 200) {
-            this.addQuery(this.dataList2);
+          document.body.click();
+          if (res.result.data.result) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1000,
+              onClose: () => {
+                this.addQuery(this.dataList2);
+              }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 2000
+            });
           }
           console.log(res);
         },
@@ -388,10 +408,16 @@ export default {
   },
   mounted() {
     this.$refs.tform.value = {
-      districtCode: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode
+      districtCode: this.adminId
     };
   },
-  created() {}
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[2].disabled = false;
+    } else {
+      this.formConfig.formItemList[2].disabled = true;
+    }
+  }
 };
 </script>
 

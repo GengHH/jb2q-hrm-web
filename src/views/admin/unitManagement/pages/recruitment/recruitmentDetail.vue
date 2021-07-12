@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-06-04 10:23:58
+ * @LastEditTime: 2021-07-08 10:11:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -123,6 +123,7 @@
         </el-tab-pane>
         <el-tab-pane style="margin-top:30px" label="简历" name="1">
           <ttable
+            @handleSelectionChange="e => (selectData = e)"
             :options="{ height: '350px' }"
             :columns="columns1"
             :list="list1"
@@ -171,6 +172,40 @@
             layout="total, prev, pager, next"
             :total="params1.total"
           ></el-pagination>
+          <div style="text-align:right">
+            <el-popover placement="bottom" width="400" trigger="click">
+              <el-select
+                v-model="auditAllForm.verifyResult"
+                placeholder="审核意见"
+              >
+                <el-option label="通过" value="1"></el-option>
+                <el-option label="不通过" value="0"></el-option>
+              </el-select>
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="审核意见"
+                v-model="auditAllForm.verifyMemo"
+              >
+              </el-input>
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-s-check"
+                @click="auditAll()"
+                plain
+                >批量审核</el-button
+              >
+              <el-button
+                size="mini"
+                slot="reference"
+                type="primary"
+                icon="el-icon-s-check"
+                plain
+                >批量审核</el-button
+              >
+            </el-popover>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -204,7 +239,11 @@
 </template>
 
 <script>
-import { agency_resume, unit_query_agency } from '../../api/index';
+import {
+  agency_resume,
+  unit_query_agency,
+  agency_verify
+} from '../../api/index';
 import { trim } from '@/utils/index';
 import ttable from '../../../common/t_table';
 import position from './position';
@@ -217,6 +256,8 @@ export default {
   components: { ttable, resume, position, autonomously, accurate },
   data() {
     return {
+      auditAllForm: { verifyResult: '1' },
+      selectData: null,
       type: '',
       resData: [],
       positionData: [],
@@ -250,7 +291,7 @@ export default {
         { title: '操作', prop: 'aaa009', slot: 'aaa009' }
       ],
       columns1: [
-        { title: '序号', type: 'index' },
+        { title: '序号', type: 'selection' },
         { title: '姓名', prop: 'xm' },
         { title: '应聘职位', prop: 'positionName' },
         { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
@@ -266,6 +307,67 @@ export default {
   },
   computed: {},
   methods: {
+    auditAll() {
+      if (this.selectData.length) {
+        if (this.auditAllForm.verifyResult == '0') {
+          if (!this.auditAllForm.verifyMemo) {
+            this.message('warning', '请填写审核意见');
+            return;
+          }
+        }
+        let data = this.selectData.map(e => {
+          return {
+            applyforId: e.applyforId,
+            verifyResult: this.auditAllForm.verifyResult,
+            verifyMemo: this.auditAllForm.verifyMemo
+          };
+        });
+        agency_verify(
+          data,
+          res => {
+            document.body.click();
+            if (res.status == 200) {
+              let datas = res.result.data;
+              let err = '';
+              for (let i = 0; i < datas.length; i++) {
+                if (!datas[i].result) {
+                  err +=
+                    '，编号：' +
+                    datas[i].applyforId +
+                    '。原因：' +
+                    datas[i].msg;
+                }
+              }
+              if (err) {
+                this.$message({
+                  message: err,
+                  type: 'warning',
+                  duration: 2000
+                });
+              } else {
+                this.selectData = [];
+                this.queryResume(this.form);
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1000
+                });
+              }
+
+              console.log(res);
+            }
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+        console.log(data);
+      } else {
+        this.message('warning', '请选择至少一条数据');
+        return;
+      }
+    },
     autonomously(type, e) {
       this.type = type;
       console.log(type);

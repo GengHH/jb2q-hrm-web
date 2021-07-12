@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-23 14:06:58
- * @LastEditTime: 2021-06-24 16:41:39
+ * @LastEditTime: 2021-06-25 17:04:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\index\module\addDetails.vue
@@ -9,15 +9,29 @@
 <template>
   <div id="indexBody">
     <el-dialog width="750px" title="详情" :visible="visible" @close="onclose">
-      <div class="title-style">投诉信息</div>
+      <div class="title-style">信息</div>
       <tform ref="form" :formConfig="formConfig"></tform>
-      <div class="title-style">处理意见</div>
+      <div class="title-style">审核意见</div>
       <el-form
         style="width:650px;margin: 0 auto"
         :model="form"
         label-width="100px"
       >
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="审核意见">
+              <el-select
+                :disabled="type == 0 ? true : false"
+                v-model="form.verifyStatus"
+                style="width:150px"
+              >
+                <el-option label="通过" value="1"></el-option>
+                <el-option label="不通过" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="处理意见">
               <el-input
@@ -30,18 +44,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="处理人">
-              <el-input
-                style="width:210px"
-                disabled
-                v-model="form.handleUserName"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        </el-row> -->
       </el-form>
       <div style="text-align:center">
         <el-button size="small" type="primary" @click="onsubmit">
@@ -55,19 +58,24 @@
 <script>
 import { trim } from '@/utils/index';
 import tform from '../../common/t_form'; //高级查询
-import { user_update } from '../api/index';
+import { lack_approver } from '../api/index';
 export default {
-  name: 'addDetails',
+  name: 'gapDetails',
   components: { tform },
   props: ['visible', 'type', 'dataList'],
   data() {
     return {
+      dicOptions: {
+        //状态
+        status: trim(
+          this.$store.getters['dictionary/recruit_surplus_verify_status']
+        )
+      },
       userIdKey: this.$store.state.admin.userInfo.logonUser.userIdKey,
       userName: this.$store.state.admin.userInfo.logonUser.userName,
       loading: false,
       form: {
-        userName: '',
-        handleResult: ''
+        verifyStatus: '1'
       },
       formConfig: {
         inline: true,
@@ -85,49 +93,59 @@ export default {
             type: 'input',
             label: '单位名称',
             style: { width: '210px' },
-            placeholder: '请输入单位名称',
+            placeholder: '',
             rules: [],
             key: 'corpName'
           },
           {
             type: 'input',
-            label: '职位名称',
+            label: '社会信用代码',
             style: { width: '210px' },
-            placeholder: '请输入职位名称',
+            placeholder: '',
             rules: [],
-            key: 'positionName'
+            key: 'tyshxym'
+          },
+          {
+            type: 'select',
+            label: '职位分类',
+            style: { width: '210px' },
+            rules: [],
+            key: 'positionType',
+            options: trim(
+              this.$store.getters['dictionary/recruit_position_s_type']
+            )
           },
           {
             type: 'input',
-            label: '投诉人',
+            label: '招聘人数',
             style: { width: '210px' },
-            placeholder: '请输入投诉人',
+            placeholder: '',
             rules: [],
-            key: 'xm'
+            key: 'recruitNum'
+          },
+          {
+            type: 'select',
+            label: '工作性质',
+            style: { width: '210px' },
+            rules: [],
+            key: 'workNature',
+            options: trim(this.$store.getters['dictionary/recruit_work_nature'])
           },
           {
             type: 'input',
-            label: '投诉人手机',
+            label: '薪酬',
             style: { width: '210px' },
-            placeholder: '请输入投诉人手机',
+            placeholder: '',
             rules: [],
-            key: 'contactPhone'
+            key: 'salary'
           },
           {
             type: 'input',
-            label: '投诉内容',
+            label: '借用期限',
             style: { width: '210px' },
-            placeholder: '请输入投诉内容',
+            placeholder: '',
             rules: [],
-            key: 'complaintContent'
-          },
-          {
-            type: 'input',
-            label: '投诉时间',
-            style: { width: '210px' },
-            placeholder: '请输入投诉时间',
-            rules: [],
-            key: 'complaintTime'
+            key: 'borrowPeriod'
           }
         ]
       }
@@ -139,9 +157,8 @@ export default {
       this.$emit('onclose', type || 0);
     },
     onsubmit() {
-      let data = { complaintId: this.dataList.complaintId, ...this.form };
-      data.handleUserId = this.userIdKey;
-      user_update(
+      let data = { lackId: this.dataList.lackId, ...this.form };
+      lack_approver(
         data,
         res => {
           if (res.status == 200) {
@@ -167,11 +184,7 @@ export default {
       this.$refs.form.value = { ...this.dataList };
     }, 0);
     //0查看 1处理
-    if (this.type == '1') {
-      this.form = {
-        handleUserName: this.userName
-      };
-    } else {
+    if (this.type != '1') {
       this.form = { ...this.dataList };
     }
   },

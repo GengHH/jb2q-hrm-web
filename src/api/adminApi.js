@@ -1,13 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-03-15 10:31:29
- * @LastEditTime: 2021-06-08 17:51:36
- * @LastEditors: GengHH
+ * @LastEditTime: 2021-06-24 11:05:36
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\api\adminApi.js
  */
 import apiUrlConfig from '../config';
-import { Notification, Loading } from 'element-ui';
+import { trim } from '@/utils/index';
+import { Notification, Loading, Message } from 'element-ui';
 // import { getAction, postAction } from './allActionManage';
 import axios from 'axios';
 import store from '@/store';
@@ -70,10 +71,15 @@ function postAction(url, params, fn, fnErr) {
             duration: 1500,
             type: 'error',
             onClose: () => {
-              //store.dispatch('admin/logout');
-              //window.location.href = '/ggzp-shrs/adminLogin.html';
+              store.dispatch('admin/logout');
+              window.location.href = '/ggzp-shrs/adminLogin.html';
             }
           });
+          return;
+        }
+        if (typeof response.data === 'string') {
+          let error = getHtml(response.data);
+          Message.error(error);
           return;
         }
         fn(response.data);
@@ -147,5 +153,15 @@ function allAction(arr, fn, errFn) {
       errFn(err);
     }
   );
+}
+function getHtml(str) {
+  let data = JSON.stringify(str);
+  let result = data.match(/<td(.*?)<\/td>/g).map(function(val) {
+    return val.replace(/<\/?td>/g, '');
+  });
+  let res = result[1];
+  res = res.split('>')[1];
+  res = res.replace(/[ ]|[r]|[n]|[\\]/g, '');
+  return res;
 }
 export { queryLogin, postAction, getAction, allAction };

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-06-04 18:14:34
+ * @LastEditTime: 2021-07-02 18:34:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -28,7 +28,12 @@
           <el-button size="mini" type="info" @click="opendio(2, scope)" plain>
             <i class="el-icon-search"></i> 查看</el-button
           >
-          <el-button size="mini" type="danger" @click="remove(scope)" plain
+          <el-button
+            v-if="scope.row.realSubmit == '0'"
+            size="mini"
+            type="danger"
+            @click="remove(scope)"
+            plain
             ><i class="el-icon-close"></i>删除</el-button
           >
         </template>
@@ -168,6 +173,8 @@ export default {
       } else if (type == 2) {
         this.disabled = true;
         this.form = { ...scope.row };
+        this.form.name = this.form.expertName;
+        this.form.pids = this.form.xm;
       } else {
         this.type = 3;
         this.disabled = false;

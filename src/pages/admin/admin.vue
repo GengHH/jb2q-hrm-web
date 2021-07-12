@@ -1,15 +1,15 @@
 <!--
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
- * @LastEditors: GengHH
- * @LastEditTime: 2021-06-08 17:43:49
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-28 18:01:58
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\admin\admin.vue
 -->
 <template>
   <div id="app" style="width:100%;height:100%">
     <div style="height:100%">
-      <el-header height="60px" style="padding:0">
+      <el-header height="7%" style="padding:0">
         <div id="indexHeader">
           <el-row>
             <el-col :sm="24" :md="6" :lg="8" :xl="8" class="bg-purple">
@@ -31,10 +31,13 @@
           </el-row>
         </div>
       </el-header>
-      <div style="height:100%">
+      <div style="height:93%">
         <el-aside
           calss="menu-transition"
-          :style="{ width: (isCollapseTemp ? '64' : '300') + 'px' }"
+          :style="{
+            width: (isCollapseTemp ? '64' : '300') + 'px',
+            overflow: 'auto'
+          }"
         >
           <div style="text-align: center;margin-top:5px">
             <el-button
@@ -131,11 +134,13 @@
 /**
  * 管理员系统入口界面
  */
+import { trim } from '@/utils/index';
 import { loginControlle, label_query } from './api/index';
 import apiUrlConfig from '@/config';
 import { niceScroll } from '@/utils';
 import { removeWatermark, setWaterMark } from '@/utils/watermark';
 export default {
+  namespaced: true,
   name: 'app',
   components: {},
   data: () => {
@@ -219,6 +224,20 @@ export default {
       } else {
         this.isCollapse = !this.isCollapse;
       }
+    },
+    goToRouter(menu) {
+      let roleId = this.$store.state.admin.userInfo.logonUser.roles[0].roleId;
+      if (roleId != '01') {
+        if (menu.length) {
+          if (menu[0].childs) {
+            this.$router.push({ path: menu[0].childs[0].path });
+          } else {
+            this.$router.push({ path: menu[0].path });
+          }
+        } else {
+          this.$router.push({ path: '/blank' });
+        }
+      }
     }
   },
   computed: {
@@ -252,10 +271,9 @@ export default {
       parentId: 1
     });
     let datas = this.treeDataformat(dataList, 'menuId', 'parentId', 'childs');
-
     this.menuList = datas[0].childs;
-
-    niceScroll('.el-aside');
+    this.goToRouter(this.menuList);
+    //niceScroll('.el-aside');
     //添加水印
     setWaterMark(
       this.$store.state.admin.userInfo?.logonUser?.userIdStr || '',
@@ -266,7 +284,12 @@ export default {
       {},
       res => {
         if (res.status == 200) {
-          this.$store.state.admin.label = res.result.data;
+          res.result.data[0].labels = res.result.data[0].labels.map(e => {
+            e.value = e.labelId;
+            e.label = e.labelName;
+            return e;
+          });
+          this.$store.dispatch('admin/setLabel', res.result.data);
         }
       },
       err => {

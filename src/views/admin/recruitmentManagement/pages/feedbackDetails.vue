@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-06-01 18:27:30
+ * @LastEditTime: 2021-07-08 10:25:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -112,10 +112,11 @@
             <el-form-item label="入场时间">
               <el-date-picker
                 v-model="form.admisstionTime"
-                type="date"
+                type="datetime"
                 style="width:100%"
                 value-format="yyyyMMddHHmmss"
                 :disabled="disabled"
+                :picker-options="pickerOptions"
               >
               </el-date-picker>
             </el-form-item>
@@ -178,7 +179,13 @@ export default {
   props: ['visible', 'lookList', 'disabled'],
   components: { ttable },
   data() {
+    let othis = this;
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > othis.getTimeNumber(); //如果没有后面的-8.64e7就是不可以选择今天的
+        }
+      },
       feedbackForm: {},
       form: {},
       params: {
@@ -200,11 +207,17 @@ export default {
         { title: '职位描述', prop: 'describe' }
         // { title: '操作', slot: 'aaa010' }
       ],
-      list: []
+      list: [],
+      startTime: ''
     };
   },
   computed: {},
   methods: {
+    getTimeNumber(time) {
+      let d = new Date(this.startTime);
+      let t = d.getTime(d);
+      return t;
+    },
     look() {
       this.visible = true;
     },
@@ -266,6 +279,7 @@ export default {
           let data = res.result.data;
           data.admisstionTime = this.formatTime(data.admisstionTime);
           this.form = { ...data, ...this.lookList };
+          this.startTime = this.form.startTime;
         }
         console.log(res);
       },

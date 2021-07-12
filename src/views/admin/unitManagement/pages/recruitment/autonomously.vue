@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-06-04 10:25:47
+ * @LastEditTime: 2021-07-02 18:34:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\autonomously.vue
@@ -9,34 +9,68 @@
 <template>
   <el-dialog
     title="自主招聘"
-    width="730px"
+    width="80%"
     :visible="resVisible"
     @close="onclose"
     append-to-body
   >
-    <div style="height:500px;overflow: scroll;overflow-x: hidden;">
+    <div style="height:500px;overflow: auto">
       <!-- <tform :formConfig="formConfig" @onsubmit="advancedSearch"></tform> -->
       <div style="margin:0 10px 0 0">
         <el-form
+          :inline="true"
           size="small"
           ref="queryForm"
           :model="queryForm"
-          label-width="100px"
+          label-width="125px"
         >
-          <el-form-item label="薪酬">
-            <el-input-number
-              :controls="false"
-              v-model="queryForm.salaryMin"
-              label="薪酬下限"
-            ></el-input-number>
-            -
-            <el-input-number
-              :controls="false"
-              v-model="queryForm.salaryMax"
-              label="薪酬上限"
-            ></el-input-number>
+          <el-form-item label="技能证书">
+            <el-input
+              style="width:210px"
+              v-model="queryForm.certName"
+              placeholder="技能证书"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="其他选项">
+          <el-form-item label="身份证">
+            <el-input
+              style="width:210px"
+              v-model="queryForm.zjhm"
+              placeholder="身份证号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="职业分类">
+            <el-select
+              style="width:210px"
+              v-model="queryForm.age"
+              placeholder="职业分类"
+              :filterable="true"
+            >
+              <el-option
+                v-for="item in dicOptions.s_type"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="行业分类">
+            <el-select
+              :filterable="true"
+              style="width:150px"
+              v-model="queryForm.age"
+              placeholder="行业分类"
+            >
+              <el-option
+                v-for="item in dicOptions.type"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="工作性质">
             <el-select
               style="width:150px"
               v-model="queryForm.workNature"
@@ -50,6 +84,8 @@
               >
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="工作区域">
             <el-select
               style="width:150px"
               v-model="queryForm.workArea"
@@ -63,6 +99,8 @@
               >
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="学历要求">
             <el-select
               style="width:150px"
               v-model="queryForm.eduLevel"
@@ -76,6 +114,112 @@
               >
               </el-option>
             </el-select>
+            <el-select
+              style="width:150px"
+              v-model="queryForm.languageType"
+              placeholder="语种"
+            >
+              <el-option
+                v-for="item in dicOptions.language"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <el-select
+              style="width:150px"
+              v-model="queryForm.age"
+              placeholder="年龄"
+            >
+              <el-option
+                v-for="item in dicOptions.age"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="语种">
+            <el-select
+              style="width:150px"
+              v-model="queryForm.languageType"
+              placeholder="语种"
+            >
+              <el-option
+                v-for="item in dicOptions.language"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="语种等级">
+            <el-select
+              style="width:150px"
+              v-model="queryForm.languageLevel"
+              placeholder="语种等级"
+            >
+              <el-option
+                v-for="item in dicOptions.language_l"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="年龄">
+            <el-select
+              style="width:150px"
+              v-model="queryForm.age"
+              placeholder="年龄"
+            >
+              <el-option
+                v-for="item in dicOptions.age"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="薪酬">
+            <el-input-number
+              :controls="false"
+              v-model="queryForm.salaryMin"
+              label="薪酬下限"
+            ></el-input-number>
+            -
+            <el-input-number
+              :controls="false"
+              v-model="queryForm.salaryMax"
+              label="薪酬上限"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="简历最近修改时间">
+            <el-date-picker
+              v-model="queryForm.aditTime"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="账号最近登录时间">
+            <el-date-picker
+              v-model="queryForm.accountTime"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
+            </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
@@ -162,12 +306,27 @@
         :total="pageParam.total"
       >
       </el-pagination>
+      <el-dialog
+        :visible="resumeVisible"
+        @close="
+          resumeVisible = false;
+          userPid = '';
+        "
+        title="简历查看"
+        width="800px"
+        append-to-body
+      >
+        <div style="height:500px;overflow: auto">
+          <resume v-if="userPid" :userPid="userPid"></resume>
+        </div>
+      </el-dialog>
     </div>
   </el-dialog>
 </template>
 <script>
 import tform from '../../../common/t_form'; //高级查询
 import ttable from '../../../common/t_table';
+import resume from '../../../serviceManagement/pages/resume'; //简历信息
 import {
   agency_position_verify,
   agency_resume_query,
@@ -177,9 +336,11 @@ import { trim } from '@/utils/index';
 export default {
   name: 'autonomously',
   props: ['resVisible', 'data', 'type'],
-  components: { tform, ttable },
+  components: { tform, ttable, resume },
   data() {
     return {
+      userPid: '',
+      resumeVisible: false,
       dataList: {},
       queryForm: {},
       initQueryForm: {
@@ -202,7 +363,19 @@ export default {
         //工作性质
         workNature: trim(this.$store.getters['dictionary/recruit_work_nature']),
         //区县
-        qx: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        //语种
+        language: trim(this.$store.getters['dictionary/recruit_language_type']),
+        //语种等级
+        language_l: trim(
+          this.$store.getters['dictionary/recruit_language_level']
+        ),
+        //年龄
+        age: trim(this.$store.getters['dictionary/recruit_age_type']),
+        //意向类型为职业分类时
+        s_type: trim(this.$store.getters['dictionary/recruit_position_s_type']),
+        //意向类型为行业分类时
+        type: trim(this.$store.getters['dictionary/recruit_industry_type'])
       },
       columns: [
         { title: '序号', type: 'index' },
@@ -312,7 +485,8 @@ export default {
       return result[1].split('>')[1];
     },
     look(e) {
-      console.log(e);
+      this.userPid = e.row.pid;
+      this.resumeVisible = true;
     },
     handleChange(e) {
       this.pageParam.pageIndex = e;
