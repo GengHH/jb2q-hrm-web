@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-02 17:59:02
+ * @LastEditTime: 2021-07-13 15:53:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\result.vue
@@ -131,7 +131,7 @@ export default {
           },
           {
             type: 'select',
-            label: '所在区',
+            label: '所属区',
             style: { width: '210px' },
             rules: [],
             key: 'areaId',

@@ -221,9 +221,9 @@
                   >中介代招</el-checkbox
                 >
                 <el-checkbox
-                  false-label="0"
-                  true-label="1"
-                  v-model="queryParams.tranBaseSymbol"
+                  false-label="1"
+                  true-label="2"
+                  v-model="queryParams.recruitType"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
                 <!-- <el-checkbox
@@ -407,7 +407,7 @@ export default {
         workArea: '',
         eduRequire: '',
         //recruitNum: '3',
-        tranBaseSymbol: '0',
+        recruitType: '1',
         special: '',
         agencyRecruit: '0',
         salaryMin: '',
@@ -419,7 +419,7 @@ export default {
         corpName: ''
 
         // pid: '1',
-        // tranBaseSymbol: '0',
+        // recruitType: '0',
         // agencyRecruit: '0',
         // workNature: '1 ',
         // ageMax: '35',
@@ -627,7 +627,7 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.tranBaseSymbol = '0';
+      this.queryParams.recruitType = '1';
       this.queryParams.agencyRecruit = '0';
       this.queryParams.industry = [''];
       this.queryParams.positionTypeList = [''];

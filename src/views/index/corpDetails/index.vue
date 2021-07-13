@@ -7,10 +7,23 @@
           <el-col :span="19">
             <el-row>
               <el-col :span="4">
-                <img
+                <!-- <img
                   class="fl ico_rz logos"
                   src="../../../assets/images/logos.png"
                   alt=""
+                /> -->
+                <img
+                  v-if="corpInfo.logo"
+                  class="fl ico_rz logos"
+                  :src="'data:image/jpg;base64,' + corpInfo.logo"
+                  @error="defImg"
+                  alt="未加载"
+                />
+                <img
+                  v-else
+                  class="fl ico_rz logos"
+                  :src="defaultImg"
+                  alt="未加载"
                 />
               </el-col>
               <el-col :span="20">
@@ -23,13 +36,30 @@
                   />
                 </div>
                 <div class="sixteen-opacity mat-15">
-                  <span>上海静安</span>
+                  <span>上海 {{ corpInfo.districtCodeText }}</span>
                   <el-divider direction="vertical"></el-divider>
-                  <span>互联网</span>
+                  <span>{{ corpInfo.industryTypeText }}</span>
                   <el-divider direction="vertical"></el-divider>
-                  <span>合资企业</span>
+                  <span>{{ corpInfo.corpNatureText }}</span>
                   <el-divider direction="vertical"></el-divider>
-                  <span>招聘8人</span>
+                  <span title="设立日期">
+                    {{
+                      corpInfo.establishDate
+                        ? corpInfo.establishDate.substr(0, 4) +
+                          '-' +
+                          corpInfo.establishDate.substr(4, 2) +
+                          '-' +
+                          corpInfo.establishDate.substr(6, 2)
+                        : '未知'
+                    }}</span
+                  >
+                  <el-divider direction="vertical"></el-divider>
+                  <span
+                    >招聘
+                    {{
+                      corpInfo.recruitNum ? corpInfo.recruitNum : '0'
+                    }}人</span
+                  >
                 </div>
               </el-col>
             </el-row>
@@ -61,38 +91,12 @@
         <!--E  职位详情上半部分-->
         <el-row id="jobSearchBox">
           <el-col :span="19" class="middle-box padd-lr bor-r">
-            <!-- <div class="title-border">职位描述</div>
-            <p class="mat-15 little-tit">岗位职责：</p>
-            <p class="little-tit">
-              1、负责公司房产的营销推广，并做好相应的渠道开拓，并维护好渠道及客户关系；
-            </p>
-            <p class="little-tit">
-              2、负责区域市场开拓、巡访责任范围内的区域市场，寻求市场及项目开发机会。
-            </p>
-            <p class="little-tit">3、开发商的约见、接洽、商务谈判</p>
-            <p class="little-tit">
-              4、根据开发商合作意向程度，有重点地选择开发商进行接洽和谈判事宜，争取合作机会。
-            </p>
-            <p class="little-tit">
-              5、巩固已开发项目的同时维护原有项目使工作有延续性。
-            </p>
-            <p class="little-tit">
-              6、根据本区域市场状况及具体个案，确定目标项目进行接洽。
-            </p>
-            <p class="little-tit">任职要求：</p>
-            <p class="little-tit">1.有房产相关经验（有车者优先）</p>
-            <p class="little-tit">
-              2.责任心强，业绩能力突出，致力于从事销售工作；
-            </p>
-            <p class="little-tit">
-              3.具有良好的沟通能力，责任心强，能承受工作压力以及团队合作精神；
-            </p>
-            <p class="little-tit">
-              4.处理突发事件应变能力强，客户管理能力强，执行力强。
-            </p>
-            <p class="little-tit">待遇：</p>
-            <p class="little-tit">底薪5k+业绩提成+满勤+公司福利 做六休一</p>
-            <p class="little-tit">固定团建，弹性工作</p> -->
+            <div class="title-border mat-15">经营范围</div>
+            <div class="little-tit  mat-15">
+              <p class="introduce little-tit">
+                {{ corpInfo.businessRange ? corpInfo.businessRange : '无' }}
+              </p>
+            </div>
             <div class="title-border mat-15">公司介绍</div>
             <div class="little-tit  mat-15">
               <p class="introduce little-tit">
@@ -102,139 +106,70 @@
                 以及房地产相关咨询等专业、完美、全面的不...金仕达科技有限公司是一家专业的房地产服务机构,公司成立以来,在同行和客户中赢得了良好的口碑。
                 经过公司同仁共同努力和社会各界的鼎力支持，我们的规模逐渐壮大。
                 公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易 -->
-                {{ corpInfo.introduce }}
+                {{ corpInfo.introduce ? corpInfo.introduce : '无' }}
               </p>
-              <span class="look-all"
+              <!-- <span class="look-all"
                 >查看全部<i class="el-icon-arrow-down"></i
-              ></span>
+              ></span> -->
             </div>
-            <div class="title-border mat-30">工作地址</div>
+            <div class="title-border mat-30">
+              单位地址：（{{
+                corpInfo.unitResidence ? corpInfo.unitResidence : '无'
+              }}）
+            </div>
             <div class="map-box">
+              <pl-map :pointList="pointList"></pl-map>
+            </div>
+            <!-- <div class="map-box">
               <img src="../../../assets/images/map.png" alt="" />
-            </div>
-            <div class="title-border mat-15">
-              看过该职位的人还看了
-              <span class="fr fourteen-opacity">更多职位 > </span>
-            </div>
-            <el-row>
-              <el-col :span="8">
-                <div class="img-div clearfix">
-                  <img
-                    class="fl"
-                    src="../../../assets/images/img1.png"
-                    alt=""
-                  />
-                  <div class="job-right fl">
-                    <p class="font-sixteen">营销代表</p>
-                    <p class="font-eighteen font-or">8k-10k</p>
-                    <p class="four-opacity">希达软件</p>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="clearfix img-div">
-                  <img
-                    class="fl"
-                    src="../../../assets/images/img2.png"
-                    alt=""
-                  />
-                  <div class="job-right fl">
-                    <p class="font-sixteen">招聘专员</p>
-                    <p class="font-eighteen font-or">6k-8k</p>
-                    <p class="four-opacity">迈恒房地产</p>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="clearfix img-div">
-                  <img
-                    class="fl"
-                    src="../../../assets/images/img3.png"
-                    alt=""
-                  />
-                  <div class="job-right fl">
-                    <p class="font-sixteen">销售代表</p>
-                    <p class="font-eighteen font-or">5k-8k</p>
-                    <p class="four-opacity">金仕达科技</p>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
+            </div> -->
           </el-col>
           <el-col :span="5" class="padd-l ">
-            <p class="sixteen-opacity">职位发布者</p>
-            <div class="header-box clearfix">
-              <img
-                src="../../../assets/images/header.png"
-                class="head-img"
-                alt=""
-              />
-              <div class="fl mat-15 right-div ">
-                <p class="sixteen-opacity">
-                  王琳 <span class="dqzx-span">当前在线</span>
-                </p>
-                <el-button type="primary" class="gray-btn or-br mat-15"
-                  ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-                >
-              </div>
-            </div>
-            <div class="mat-30 clearfix">
-              <img
-                class="fl ico_rz logos"
-                src="../../../assets/images/logos.png"
-                alt=""
-              />
-              <p class="font-sixteen font-or name-p">万达信息股份有限公司</p>
-            </div>
-            <div class="module1">
-              <p class="four-opacity">
-                <img src="../../../assets/images/ico01.png" alt="" /> 互联网
-              </p>
-              <p class="four-opacity">
-                <img src="../../../assets/images/ico02.png" alt="" /> 上市
-              </p>
-              <p class="four-opacity">
-                <img src="../../../assets/images/ico03.png" alt="" />
-                1000-9999人
-              </p>
-              <p class="four-opacity">
-                <img src="../../../assets/images/ico04.png" alt="" />
-                https://www.jinshida.com/
-              </p>
-            </div>
             <div class="module2 mat-30">
               <p class="fourteen-opacity">
-                相似职位 <span class="more fr four-opacity">更多</span>
+                <b style="font-size: 16px;">
+                  看过该公司的人还看过
+                </b>
               </p>
               <div class="module-li">
                 <p class="fourteen-opacity">
-                  U3D游戏客户端主程 <span class="font-or">10-11k</span>
+                  中国某某保险集团
                 </p>
-                <p class="four-opacity">重庆聚心动 · 重庆</p>
+                <p class="four-opacity">
+                  有<span class="font-or">21</span>个待招职位
+                </p>
               </div>
               <div class="module-li">
                 <p class="fourteen-opacity">
-                  U3D游戏客户端主程 <span class="font-or">10-11k</span>
+                  中国某某保险集团
                 </p>
-                <p class="four-opacity">重庆聚心动 · 重庆</p>
+                <p class="four-opacity">
+                  有<span class="font-or">21</span>个待招职位
+                </p>
               </div>
               <div class="module-li">
                 <p class="fourteen-opacity">
-                  U3D游戏客户端主程 <span class="font-or">10-11k</span>
+                  中国某某保险集团
                 </p>
-                <p class="four-opacity">重庆聚心动 · 重庆</p>
+                <p class="four-opacity">
+                  有<span class="font-or">21</span>个待招职位
+                </p>
               </div>
               <div class="module-li">
                 <p class="fourteen-opacity">
-                  U3D游戏客户端主程 <span class="font-or">10-11k</span>
+                  中国某某保险集团
                 </p>
-                <p class="four-opacity">重庆聚心动 · 重庆</p>
+                <p class="four-opacity">
+                  有<span class="font-or">21</span>个待招职位
+                </p>
               </div>
               <div class="module-li">
                 <p class="fourteen-opacity">
-                  U3D游戏客户端主程 <span class="font-or">10-11k</span>
+                  中国某某保险集团
                 </p>
-                <p class="four-opacity">重庆聚心动 · 重庆</p>
+                <p class="four-opacity">
+                  有<span class="font-or">21</span>个待招职位
+                </p>
               </div>
             </div>
           </el-col>
@@ -285,21 +220,24 @@
 <script>
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobDetails.vue';
-import { loadCorpInfo } from '@/api/corporationApi';
+import { getCorpDetail } from '@/api/indexApi';
 import {
   queryCorpPositionList,
   doDeliveryResume,
   attentionOrFavor
 } from '@/api/personApi';
 import { getDicText, niceScrollUpdate } from '@/utils';
+import PlMap from '@/components/common/BaseMap';
 export default {
   name: 'CorpDetails',
   components: {
+    PlMap,
     PerSearchJob,
     JobDetails
   },
   data() {
     return {
+      defaultImg: require('@/assets/images/break-img.svg'),
       cid: '',
       activeName: 'corporation',
       corpInfo: {},
@@ -318,8 +256,9 @@ export default {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       this.cid = this.$route.query.id;
-      //查询单位信息
-      this.loadCorpInfo();
+      //查询单位详细信息
+      this.getCorpDetail();
+      // TODO 查询单位下所有的待招职位
       this.queryJobs();
     }
   },
@@ -332,28 +271,60 @@ export default {
       return this.positions.length
         ? '招聘职位（' + this.positions.length + '）'
         : '招聘职位';
+    },
+    describeList() {
+      return this.corpInfo.describe.split('\n');
+    },
+    pointList() {
+      return this.corpInfo?.unitResidence ? [this.corpInfo.unitResidence] : [];
     }
   },
   methods: {
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
+    },
     jobHandleClick() {},
     /**
-     * 查询单位信息 （使用的是单位模块下的接口）
-     * TODO
+     * 查询单位详细信息
      */
-    async loadCorpInfo() {
-      let queryRes = await loadCorpInfo({ cid: this.cid });
+    async getCorpDetail() {
+      let that = this;
+      let queryRes = await getCorpDetail({ cid: this.cid });
       if (queryRes && queryRes.status === 200) {
-        this.corpInfo = queryRes.result.data;
+        let item = queryRes.result.data;
+        // 转换字典
+        if (item.districtCode) {
+          item.districtCodeText = getDicText(
+            that.$store.getters['dictionary/ggjbxx_qx'],
+            item.districtCode
+          );
+        }
+        if (item.corpNature) {
+          item.corpNatureText = getDicText(
+            that.$store.getters['dictionary/recruit_corp_nature'],
+            item.corpNature
+          );
+        }
+        if (item.industryType) {
+          item.industryTypeText = getDicText(
+            that.$store.getters['dictionary/recruit_industry_type'],
+            item.industryType
+          );
+        }
+
+        this.corpInfo = item;
       } else if (queryRes) {
-        this.$message({
-          showClose: true,
-          message: '查询单位信息失败',
-          type: 'error'
-        });
+        this.$message.error('查询单位信息失败');
       }
     },
     /**
      * 查询职位信息列表
+     * TODO
      */
     async queryJobs() {
       let that = this;
@@ -415,6 +386,10 @@ export default {
         });
       }
     },
+    /**
+     * 显示职位详情
+     * TODO
+     */
     showJobDetial(arg) {
       console.log(arg);
       //显示岗位详细信息
@@ -426,6 +401,7 @@ export default {
       this.positionDetailsId = positionId;
       this.positionDetailsRecId = recId;
     },
+
     async deliveryResume(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
@@ -447,6 +423,7 @@ export default {
         });
       }
     },
+
     async favorJob(arg) {
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';
@@ -507,7 +484,7 @@ export default {
   background-color: $g-white-color;
   .infor-job {
     background: #ffffff;
-    padding: 20px 30px;
+    padding: 20px 0;
   }
   .middle-box {
     margin: 0 auto;
@@ -543,6 +520,9 @@ export default {
       font-size: 14px;
       color: #656565;
       line-height: 30px;
+      p {
+        text-indent: 2em;
+      }
     }
     .look-all {
       font-size: 14px;
@@ -691,7 +671,7 @@ export default {
   }
 
   .padd-lr {
-    padding-left: 30px;
+    // padding-left: 30px;
     padding-right: 30px;
   }
 }

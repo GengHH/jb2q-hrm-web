@@ -362,7 +362,8 @@ export default {
     queryPositions() {
       let params = {
         meetId: this.meetId,
-        positionName: this.input2
+        positionName: this.input2,
+        pid: this.$store.getters['person/pid']
       };
       queryMeetingPositionList(params).then(queryRes => {
         if (queryRes && queryRes.status === 200) {
@@ -422,8 +423,9 @@ export default {
         pid: this.$store.getters['person/pid']
       });
       if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.positions.splice(index, 1);
+        // 标记成已投递
+        // this.positions.splice(index, 1);
+        this.positions[index].applyFor = true;
         this.$message({ type: 'success', message: '简历投递成功' });
       } else {
         this.$message({

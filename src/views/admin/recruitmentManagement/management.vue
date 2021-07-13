@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-09 11:30:54
+ * @LastEditTime: 2021-07-13 18:35:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column
         slot="districtCodeList"
-        label="报名限制区域"
+        label="报名允许区域"
         align="center"
       >
         <template slot-scope="scope">
@@ -185,7 +185,7 @@ export default {
           },
           {
             type: 'select',
-            label: '所在区',
+            label: '所属区',
             style: { width: '210px' },
             rules: [],
             key: 'releaseDistrict',

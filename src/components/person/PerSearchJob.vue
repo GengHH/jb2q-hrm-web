@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-07-12 10:03:13
+ * @LastEditTime: 2021-07-13 18:37:24
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -404,6 +404,8 @@ export default {
         this.$parent.$parent.$parent[this.callBackFuncName](
           this.$parent.$parent.$parent?.queryParams?.positionName
         );
+      } else {
+        this.$emit('changePage');
       }
     },
     handleCurrentChange(currentPage) {
@@ -412,6 +414,8 @@ export default {
         this.$parent.$parent.$parent[this.callBackFuncName](
           this.$parent.$parent.$parent?.queryParams?.positionName
         );
+      } else {
+        this.$emit('changePage');
       }
     },
     handlePrevClick(currentPage) {
@@ -420,6 +424,8 @@ export default {
         this.$parent.$parent.$parent[this.callBackFuncName](
           this.$parent.$parent.$parent?.queryParams?.positionName
         );
+      } else {
+        this.$emit('changePage');
       }
     },
     handleNextClick(currentPage) {
@@ -428,6 +434,8 @@ export default {
         this.$parent.$parent.$parent[this.callBackFuncName](
           this.$parent.$parent.$parent?.queryParams?.positionName
         );
+      } else {
+        this.$emit('changePage');
       }
     },
     selectJob(applyFor, index, positionId, recId) {

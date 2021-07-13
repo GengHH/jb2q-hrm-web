@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-09 10:14:49
+ * @LastEditTime: 2021-07-13 15:53:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -147,7 +147,7 @@ export default {
           },
           {
             type: 'select',
-            label: '所在区',
+            label: '所属区',
             style: { width: '210px' },
             key: 'districtCode',
             options: this.setQx()

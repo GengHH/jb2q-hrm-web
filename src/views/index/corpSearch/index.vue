@@ -506,6 +506,14 @@ export default {
     this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
+    },
     minSalaryChange() {
       if (!this.queryParams.salaryMin) {
         return;

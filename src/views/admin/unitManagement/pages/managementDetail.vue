@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 13:42:18
- * @LastEditTime: 2021-06-03 17:50:59
+ * @LastEditTime: 2021-07-13 18:47:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\managementDetail.vue
@@ -302,9 +302,12 @@ export default {
           //   });
           //   return;
           // }
-          data.logoBase64 = data.logoBase64
-            ? data.logoBase64.split(',')[1].toString()
-            : '';
+          if (data.logoBase64) {
+            if (data.logoBase64.split(',')[0] == 'data:image/png;base64,') {
+              data.logoBase64 = data.logoBase64.split(',')[1].toString();
+            }
+          }
+
           management_edit(
             data,
             res => {

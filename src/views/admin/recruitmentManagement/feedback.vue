@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-08 11:10:16
+ * @LastEditTime: 2021-07-13 15:52:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -124,11 +124,30 @@ export default {
           },
           {
             type: 'select',
-            label: '所在区',
+            label: '所属区',
             style: { width: '210px' },
             rules: [],
             key: 'areaId',
             options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+          },
+          {
+            type: 'radio',
+            label: '是否反馈',
+            key: 'applyResult',
+            options: [
+              {
+                value: '0',
+                label: '未反馈'
+              },
+              {
+                value: '1',
+                label: '已反馈'
+              },
+              {
+                value: '2',
+                label: '全部'
+              }
+            ]
           }
         ]
       },
@@ -137,7 +156,10 @@ export default {
   },
   computed: {},
   methods: {
-    onclose() {
+    onclose(type) {
+      if (type == '1') {
+        this.onsubmit(this.dataList);
+      }
       this.visible = false;
     },
     look(e, type) {
@@ -178,7 +200,8 @@ export default {
   },
   mounted() {
     this.$refs.tform.value = {
-      areaId: this.adminId
+      areaId: this.adminId,
+      applyResult: '0'
     };
   },
   created() {

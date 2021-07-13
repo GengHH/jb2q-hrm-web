@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-07-08 10:25:11
+ * @LastEditTime: 2021-07-13 11:21:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -234,7 +234,7 @@ export default {
               type: 'success',
               duration: 1000,
               onClose: () => {
-                this.onclose();
+                this.onclose('1');
               }
             });
           } else {

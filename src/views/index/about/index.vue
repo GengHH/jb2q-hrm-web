@@ -6,7 +6,7 @@
       <!-- <div id="demo3" class="map-div">
         <img src="../../../assets/img/map.png" alt="未加载" />
       </div> -->
-      <pl-map :pointList="testData"></pl-map>
+      <pl-map :pointList="testData" :defaultZoom="zoom"></pl-map>
       <!--E 地图部分 -->
       <!--S 表格部分 -->
       <div id="demo4">
@@ -58,7 +58,12 @@ export default {
   },
   data() {
     return {
-      testData: ['上海市天山路1800号', '上海市天山路18号'],
+      zoom: 4,
+      testData: [
+        '上海市天山路1800号',
+        '上海市天山路18号',
+        '上海市浦东新区华绣路18号'
+      ],
       visible: false,
       labelPosition: 'right',
       tableData: [
@@ -70,7 +75,7 @@ export default {
         },
         {
           name: '上海市劳动人事争议仲裁委员会',
-          emolument: '普陀区西乡路188号（近新村路）',
+          emolument: '天山路1800号',
           workplace: '200125',
           time: '231111'
         },

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-07-08 16:22:11
+ * @LastEditTime: 2021-07-13 17:07:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -83,7 +83,12 @@
               </el-form-item>
             </el-col>
           </el-row>
-
+          <div style="text-align:right">
+            系统专项指导推荐人数和个人报名活动人数的实际到场人数<span
+              style="color: #fc6f3d;font-size: 22px;"
+              >{{ sum }}</span
+            >人
+          </div>
           <el-form-item style="height:100px" label="现场照片">
             <el-upload
               action=""
@@ -165,6 +170,7 @@ export default {
   components: { tform, userdetails },
   data() {
     return {
+      sum: 0,
       userList: {},
       userVisible: false,
       fileList: [],
@@ -202,9 +208,9 @@ export default {
     isApply(e) {
       console.log(e);
       if (e) {
-        this.form.participants = this.form.participants + 1;
+        this.sum = this.sum + 1;
       } else {
-        this.form.participants = this.form.participants - 1;
+        this.sum = this.sum - 1;
       }
     },
     openUser(type) {
@@ -476,6 +482,9 @@ export default {
         if (this.type == '4' && this.type != '2') {
           this.querySize();
         }
+
+        this.sum =
+          this.proForm.selfApplyAttendCount + this.proForm.systemRecAttendCount;
       } else {
         this.$refs.advancedSearch.value = {};
       }

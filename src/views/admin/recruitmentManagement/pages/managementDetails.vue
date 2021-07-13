@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-07-02 16:49:56
+ * @LastEditTime: 2021-07-13 18:40:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -289,14 +289,14 @@ export default {
           },
           {
             type: 'select',
-            label: '报名限制区域',
+            label: '报名允许区域',
             rules: [
-              { required: true, message: '请输入报名限制区域', trigger: 'blur' }
+              { required: true, message: '请输入报名允许区域', trigger: 'blur' }
             ],
             multiple: true,
             style: { width: '200px' },
             key: 'districtCodeList',
-            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
+            options: this.setQx()
           }
         ]
       }
@@ -304,6 +304,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '0A' });
+      return qx;
+    },
     getBase64(file, name) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -405,12 +410,20 @@ export default {
   },
   mounted() {
     let data = { ...this.lookList };
+    console.log(this.type);
     if (this.type == '2') {
       setTimeout(() => {
         this.$refs.form.value = { ...data };
       }, 0);
       this.lookList.propagandaImageBase64 =
         'data:image/png;base64,' + data.propagandaImageBase64;
+    }
+    if (this.type == '1') {
+      setTimeout(() => {
+        this.$refs.form.value = {
+          districtCodeList: ['0A']
+        };
+      }, 0);
     }
   },
   created() {}

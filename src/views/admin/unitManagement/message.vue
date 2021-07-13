@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-06-03 16:46:36
+ * @LastEditTime: 2021-07-13 15:59:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\message.vue
@@ -60,6 +60,7 @@ export default {
   components: { ttable, tform, messagedetails },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       form: {},
       visible: false,
       params: {
@@ -92,16 +93,16 @@ export default {
             placeholder: '请输入单位名称',
             rules: [],
             key: 'corpName'
+          },
+          {
+            type: 'select',
+            label: '管理所属区',
+            rules: [],
+            disabled: true,
+            key: 'districtCode',
+            style: { width: '210px' },
+            options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
           }
-          // {
-          //   type: 'select',
-          //   label: '管理所属区',
-          //   rules: [],
-          //   disabled: true,
-          //   key: 'districtCode',
-          //   style: { width: '210px' },
-          //   options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
-          // }
         ]
       },
       currentPage: 1,
@@ -159,7 +160,18 @@ export default {
       this.visible = true;
     }
   },
-  created() {}
+  mounted() {
+    this.$refs.form.value = {
+      districtCode: this.adminId
+    };
+  },
+  created() {
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[2].disabled = false;
+    } else {
+      this.formConfig.formItemList[2].disabled = true;
+    }
+  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-07-13 09:49:22
+ * @LastEditTime: 2021-07-13 15:06:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -92,7 +92,9 @@
     </el-pagination>-->
 
     <div style="text-align:right;padding:5px 15px;">
-      <el-button type="primary" @click="visible = true">打印预览</el-button>
+      <el-button v-if="form.type == '2'" type="primary" @click="visible = true"
+        >打印预览</el-button
+      >
     </div>
     <el-dialog
       title="打印预览"
@@ -102,7 +104,7 @@
     >
       <div ref="print">
         <h1 style="text-align:center;margin:25px 0">
-          日常经费支付清单（2021年09月-2021年12月）
+          日常经费支付清单（{{ getMonth() }}）
         </h1>
         <table class="table">
           <thead>
@@ -121,25 +123,31 @@
           <tbody>
             <tr v-for="(item, index) in list" :key="index">
               <td>{{ index + 1 }}</td>
-              <td>{{ item.districtCode }}</td>
+              <td>
+                <template v-for="(v, k) in dicOptions.qx">
+                  <el-tag :key="k" v-if="v.value == item.districtCode">
+                    {{ v.label }}
+                  </el-tag>
+                </template>
+              </td>
               <td>{{ item.expertName }}</td>
               <td>{{ item.expertZjhm }}</td>
               <td>{{ item.bankName }}</td>
               <td>{{ item.bankaccount }}</td>
-              <td>{{ item.actDate }}</td>
+              <td width="150px">{{ item.actDate }}</td>
               <td>{{ item.serviceCount }}</td>
               <td>{{ item.payTotal }}</td>
             </tr>
           </tbody>
         </table>
         <div
-          style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
+          style="text-align:right;padding:5px 15px;border-bottom:1px solid #ebeef5"
         >
           支付费用合计：
           <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}</span>
         </div>
         <div
-          style="display: flex;width: 100%;text-align: center;padding: 30px 15px;font-size: 16px;font-weight: bold;"
+          style="display: flex;width: 100%;text-align: center;padding:60px 15px 30px 15px;font-size: 16px;font-weight: bold;"
         >
           <div style="flex:1">
             __________区分管领导：
@@ -147,8 +155,18 @@
           <div style="flex:1">部分负责人：</div>
           <div style="flex:1">经办人：</div>
         </div>
-        <div>
-          <span>日期：年月日</span>
+        <div
+          style="padding: 30px 15px;font-size: 16px;font-weight: bold;text-align: right;"
+        >
+          <span
+            >日期：
+            <div style="display: inline-block;width:80px"></div>
+            年
+            <div style="display: inline-block;width:50px"></div>
+            月
+            <div style="display: inline-block;width:50px"></div>
+            日</span
+          >
         </div>
       </div>
       <div style="text-align:right;padding:5px 15px;">
@@ -171,11 +189,11 @@ const columnsArr = [
   [
     { title: '序号', type: 'index', width: 50 },
     { title: '所属区', prop: 'districtCode', slot: 'districtCode' },
-    { title: '专家姓名', prop: 'expertName', width: 120 },
-    { title: '身份证号', prop: 'expertZjhm', width: 190 },
-    { title: '开户银行', prop: 'bankName', width: 100 },
-    { title: '银行账号', prop: 'bankaccount', width: 170 },
-    { title: '服务时间', prop: 'actDate', width: 150 },
+    { title: '专家姓名', prop: 'expertName' },
+    { title: '身份证号', prop: 'expertZjhm' },
+    { title: '开户银行', prop: 'bankName' },
+    { title: '银行账号', prop: 'bankaccount' },
+    { title: '服务时间', prop: 'actDate' },
     { title: '服务次数', prop: 'serviceCount', width: 50 },
     { title: '支付费用', prop: 'payTotal', sortable: true, width: 120 }
   ]
@@ -217,6 +235,17 @@ export default {
   },
   computed: {},
   methods: {
+    getMonth() {
+      let data = { ...this.form };
+      if (data.Month) {
+        let start = data.Month[0];
+        start = start.substring(0, 4) + '年' + start.substring(4, 6) + '月';
+        let end = data.Month[1];
+        end = end.substring(0, 4) + '年' + end.substring(4, 6) + '月';
+        return start + '-' + end;
+      }
+      return 'XXXX年XX月-XXXX年XX月';
+    },
     setQx() {
       let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
       qx.unshift({ label: '全部', value: '' });

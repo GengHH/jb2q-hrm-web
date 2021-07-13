@@ -235,9 +235,9 @@
                   >中介代招</el-checkbox
                 >
                 <el-checkbox
-                  false-label="0"
-                  true-label="1"
-                  v-model="queryParams.tranBaseSymbol"
+                  false-label="1"
+                  true-label="2"
+                  v-model="queryParams.recruitType"
                   >就业公共服务机构代理招聘</el-checkbox
                 >
                 <!-- <el-checkbox
@@ -327,6 +327,7 @@
       @favorJob="favorJob(arguments)"
       @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
+      @changePage = "queryJobs"
     ></per-search-job>
     <!-- <BaseLoadingSvg v-else></BaseLoadingSvg> -->
     <div v-else style="text-align:center;margin-top:100px;color:#999;">
@@ -398,7 +399,7 @@ export default {
         workArea: '',
         eduRequire: '',
         //recruitNum: '3',
-        tranBaseSymbol: '0',
+        recruitType: '1',
         special: '',
         agencyRecruit: '0',
         salaryMin: '',
@@ -586,11 +587,12 @@ export default {
       Object.keys(this.queryParams).forEach(
         key => (this.queryParams[key] = '')
       );
-      this.queryParams.tranBaseSymbol = '0';
+      this.queryParams.recruitType = '1';
       this.queryParams.agencyRecruit = '0';
       this.queryParams.industry = [''];
       this.queryParams.positionTypeList = [''];
     },
+
     /**
      * 根据条件查询职位
      */

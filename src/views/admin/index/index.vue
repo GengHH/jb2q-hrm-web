@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-07-09 10:11:13
+ * @LastEditTime: 2021-07-13 15:53:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -132,7 +132,7 @@ export default {
           }
           // {
           //   type: 'select',
-          //   label: '所在区',
+          //   label: '所属区',
           //   style: { width: '210px' },
           //   key: 'districtCode',
           //   options: this.setQx()
