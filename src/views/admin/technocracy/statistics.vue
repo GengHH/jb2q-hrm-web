@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-07-09 15:52:36
+ * @LastEditTime: 2021-07-13 09:49:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -17,8 +17,7 @@
               start-placeholder="开始年月"
               end-placeholder="结束月份"
               value-format="yyyyMM"
-            >
-            </el-date-picker>
+            ></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -57,13 +56,8 @@
         >
       </div>
     </el-form>
-    <div ref="print">
+    <div>
       <ttable :columns="columns" :list="list">
-        <el-table-column slot="actDate" label="服务时间" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.actDate }}
-          </template>
-        </el-table-column>
         <el-table-column
           slot="districtCode"
           width="80"
@@ -72,9 +66,9 @@
         >
           <template slot-scope="scope">
             <div v-for="(v, k) in dicOptions.qx" :key="k">
-              <el-tag v-if="v.value == scope.row.districtCode">{{
-                v.label
-              }}</el-tag>
+              <el-tag v-if="v.value == scope.row.districtCode">
+                {{ v.label }}
+              </el-tag>
             </div>
           </template>
         </el-table-column>
@@ -95,11 +89,72 @@
       layout="total, prev, pager, next"
       :total="params.total"
     >
-    </el-pagination> -->
+    </el-pagination>-->
 
     <div style="text-align:right;padding:5px 15px;">
-      <el-button type="primary" @click="print()">打印</el-button>
+      <el-button type="primary" @click="visible = true">打印预览</el-button>
     </div>
+    <el-dialog
+      title="打印预览"
+      width="1085px"
+      :visible="visible"
+      @close="visible = false"
+    >
+      <div ref="print">
+        <h1 style="text-align:center;margin:25px 0">
+          日常经费支付清单（2021年09月-2021年12月）
+        </h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>管理区</th>
+              <th>专家姓名</th>
+              <th>身份证号</th>
+              <th>开户银行</th>
+              <th>银行账户</th>
+              <th width="144px">服务时间</th>
+              <th>服务次数</th>
+              <th>支付费用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in list" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.districtCode }}</td>
+              <td>{{ item.expertName }}</td>
+              <td>{{ item.expertZjhm }}</td>
+              <td>{{ item.bankName }}</td>
+              <td>{{ item.bankaccount }}</td>
+              <td>{{ item.actDate }}</td>
+              <td>{{ item.serviceCount }}</td>
+              <td>{{ item.payTotal }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          style="text-align:right;padding:5px 15px;border-bottom:1px solid #c0c4cc"
+        >
+          支付费用合计：
+          <span style="color:#fc6f3d;padding:0 15px">{{ mouey }}</span>
+        </div>
+        <div
+          style="display: flex;width: 100%;text-align: center;padding: 30px 15px;font-size: 16px;font-weight: bold;"
+        >
+          <div style="flex:1">
+            __________区分管领导：
+          </div>
+          <div style="flex:1">部分负责人：</div>
+          <div style="flex:1">经办人：</div>
+        </div>
+        <div>
+          <span>日期：年月日</span>
+        </div>
+      </div>
+      <div style="text-align:right;padding:5px 15px;">
+        <el-button type="primary" @click="print()">打印</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -118,9 +173,9 @@ const columnsArr = [
     { title: '所属区', prop: 'districtCode', slot: 'districtCode' },
     { title: '专家姓名', prop: 'expertName', width: 120 },
     { title: '身份证号', prop: 'expertZjhm', width: 190 },
-    { title: '银行账号', prop: 'bankaccount', width: 170 },
     { title: '开户银行', prop: 'bankName', width: 100 },
-    { title: '服务时间', prop: 'actDate', slot: 'actDate' },
+    { title: '银行账号', prop: 'bankaccount', width: 170 },
+    { title: '服务时间', prop: 'actDate', width: 150 },
     { title: '服务次数', prop: 'serviceCount', width: 50 },
     { title: '支付费用', prop: 'payTotal', sortable: true, width: 120 }
   ]
@@ -138,6 +193,7 @@ export default {
       return y + '' + (m > 9 ? m : '0' + m);
     };
     return {
+      visible: false,
       adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       dicOptions: {
         //区县
@@ -268,4 +324,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.table {
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  td {
+    border: 1px solid #ebeef5;
+    padding: 10px 0;
+  }
+  th {
+    padding: 15px 0;
+    border: 1px solid #ebeef5;
+  }
+}
+</style>

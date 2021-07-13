@@ -45,8 +45,8 @@ Print.prototype = {
       '<style>' +
       (this.options.noPrint ? this.options.noPrint : '.no-print') +
       '{display:none !important;}</style>';
-    // 去除height：100%样式，解决分页下，样式混乱问题
-    str += '<style>html,body,div{height: auto!important;}</style>';
+    // 去除height：100%样式，解决分页下，样式混乱问题  去掉页眉页脚
+    str += '<style>html,body,div{height: auto!important;}@page{margin-top: 1mm;margin-bottom: 1mm;}</style>';
     return str;
   },
 
@@ -87,10 +87,9 @@ Print.prototype = {
         }
       }
     }
-    console.log(this.dom.outerHTML);
     return this.dom.outerHTML;
   },
-
+  
   writeIframe: function(content) {
     var w,
       doc,
@@ -114,7 +113,6 @@ Print.prototype = {
       document.body.removeChild(iframe);
     }, 100);
   },
-
   toPrint: function(frameWindow) {
     try {
       setTimeout(function() {

@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
- * @LastEditors: GengHH
- * @LastEditTime: 2021-07-09 14:24:38
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-13 10:36:46
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -925,7 +925,7 @@ Mock.mock(
 
 //人力资源旗舰店默认前九
 Mock.mock(
-  RegExp(basePath + '/nologin/index/queryHRFlagshipStoreInfo'),
+  basePath + '/nologin/index/queryHRFlagshipStoreInfo',
   'post',
   function(options) {
     return {
@@ -961,7 +961,7 @@ Mock.mock(
 );
 //查询所有人力资源旗舰店(分页)
 Mock.mock(
-  RegExp(basePath + '/nologin/index/queryHRFlagshipStoreInfoAll'),
+  basePath + '/nologin/index/queryHRFlagshipStoreInfoAll',
   'post',
   function(options) {
     return {

@@ -12,7 +12,7 @@
       </el-col>
       <el-col :span="12">
         <!-- <b class="fair-title">2020高校毕业生全国网络联合招聘 </b> -->
-        <p class="fair-title">
+        <p class="fair-title long-text">
           <b>{{ fairItem.meetName }}</b>
           <span
             v-if="fairItem.meetType === '1' || fairItem.meetType === '2'"
@@ -79,7 +79,9 @@
             :key="index"
           >
             <div class="corp-box">
-              <h2>{{ item.corpName }}</h2>
+              <h2 class="long-text" :title="item.corpName">
+                {{ item.corpName }}
+              </h2>
               <p>
                 <span class="gray-font"
                   ><i class="el-icon-school"></i>{{ item.cid }}</span
@@ -530,7 +532,8 @@ export default {
     bottom: 0;
     color: #999;
     &:hover {
-      color: #fc7a43;
+      // color: #fc7a43;
+      background-color: #f6f6f6;
     }
   }
   .fair-title {
@@ -634,5 +637,12 @@ export default {
   width: 100%;
   margin: 100px 0;
   text-align: center;
+}
+.long-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  word-break: break-all;
+  overflow: hidden;
 }
 </style>

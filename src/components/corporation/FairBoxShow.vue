@@ -76,7 +76,7 @@
             <el-button
               v-if="
                 !cannotApply &&
-                  !fairInfo.signedup &&
+                  fairInfo.signedup === '0' &&
                   fairInfo.applyStatus !== '2'
               "
               class="release-btn font-size18 mat-15"

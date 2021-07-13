@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-10 10:56:11
- * @LastEditTime: 2021-06-28 11:13:28
+ * @LastEditTime: 2021-07-12 17:44:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\common\t_table.vue
@@ -21,6 +21,8 @@
       ref="mutipleTable"
       style="width:100%;"
       :width="options.width"
+      :header-cell-style="options.headerCellStyle"
+      :cell-style="options.cellStyle"
       @row-click="clickRow"
       @row-dblclick="dblclickRow"
       @row-contextmenu="contextmenu"
@@ -40,8 +42,7 @@
           type="selection"
           :width="column.width ? column.width : 60"
           :align="column.align ? column.align : 'center'"
-        >
-        </el-table-column>
+        ></el-table-column>
         <!--复选框（END）-->
 
         <!--序号（START）-->
@@ -52,8 +53,7 @@
           :label="column.title ? column.title : '序号'"
           :width="column.width ? column.width : 80"
           :align="column.align ? column.align : 'center'"
-        >
-        </el-table-column>
+        ></el-table-column>
         <!--序号（END）-->
 
         <!-- slot 添加自定义配置项 -->
@@ -82,12 +82,7 @@
             </template>
             <!--render函数-->
             <template v-else>
-              <expandDom
-                :column="column"
-                :row="scope.row"
-                :render="column.render"
-                :index="index"
-              ></expandDom>
+              <expandDom :column="column" :row="scope.row" :render="column.render" :index="index"></expandDom>
             </template>
           </template>
         </el-table-column>
@@ -111,7 +106,7 @@ export default {
     }, // 需要展示的列 === prop：列数据对应的属性，label：列名，align：对齐方式，width：列宽
     options: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           //height: '350px', //默认高度-为了表头固定
           stripe: false, // 是否为斑马纹 table
@@ -152,23 +147,23 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       multipleSelection: [] // 多行选中
     };
   },
-  updated() {
+  updated () {
     if (this.resizeScroll) {
       //setTimeout(this.resizeScroll()(), 100);
     }
   },
-  mounted() {
+  mounted () {
     //niceScroll('.el-table__body-wrapper');
   },
   watch: {},
   computed: {},
   methods: {
-    resizeScroll() {
+    resizeScroll () {
       return this._.throttle(() => {
         $('.el-table__body-wrapper')
           ?.getNiceScroll()
@@ -178,7 +173,7 @@ export default {
     /**
      * 列表懒加载，必须先开启懒加载
      * */
-    loadGetData(row, treeNode, resolve) {
+    loadGetData (row, treeNode, resolve) {
       //懒加载事件数据
       let data = {
         row: row,
@@ -190,7 +185,7 @@ export default {
     /**
      * 多行选中
      * */
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       // 多行选中
       this.multipleSelection = val;
       this.$emit('handleSelectionChange', val);
@@ -198,7 +193,7 @@ export default {
     /**
      * 单击行事件
      * */
-    clickRow(row, column, event) {
+    clickRow (row, column, event) {
       let data = {
         row: row,
         column: column,
@@ -209,7 +204,7 @@ export default {
     /**
      * 双击行事件
      * */
-    dblclickRow(row, column, event) {
+    dblclickRow (row, column, event) {
       let data = {
         row: row,
         column: column,
@@ -220,7 +215,7 @@ export default {
     /**
      * 右键行事件-没去掉页面默认的
      * */
-    contextmenu(row, column, event) {
+    contextmenu (row, column, event) {
       let data = {
         row: row,
         column: column,
@@ -231,7 +226,7 @@ export default {
     /**
      * 头部列点击事件
      * */
-    headClick(column, event) {
+    headClick (column, event) {
       let data = {
         column: column,
         event: event
@@ -241,7 +236,7 @@ export default {
     /**
      * 头部列右键点击事件
      * */
-    headcontextmenu(column, event) {
+    headcontextmenu (column, event) {
       let data = {
         column: column,
         event: event
@@ -251,7 +246,7 @@ export default {
     /**
      * 当前行发生改变时的事件
      * */
-    rowChange(currentRow, oldCurrentRow) {
+    rowChange (currentRow, oldCurrentRow) {
       let data = {
         currentRow: currentRow,
         oldCurrentRow: oldCurrentRow
@@ -261,7 +256,7 @@ export default {
     /**
      * 用户手动勾选复选框触发
      * */
-    select(sel, row) {
+    select (sel, row) {
       let data = {
         sel: sel,
         row: row
@@ -271,7 +266,7 @@ export default {
     /**
      * 用户点击全选触发
      * */
-    selectAll(sel) {
+    selectAll (sel) {
       let data = {
         sel: sel
       };
@@ -283,5 +278,10 @@ export default {
 <style lang="scss" scoped>
 #iTable {
   overflow: auto;
+}
+.tableStyle {
+  background-color: #1989fa !important;
+  color: #fff;
+  font-weight: 400;
 }
 </style>

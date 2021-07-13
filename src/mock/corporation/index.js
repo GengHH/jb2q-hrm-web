@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 14:36:09
+ * @LastEditTime: 2021-07-12 17:49:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -703,7 +703,7 @@ Mock.mock(basePath + '/corp/meeting/find/list', 'post', function(options) {
             releaseTime: '2021-04-29 14:06:27',
             endApplyTime: '',
             meetIdList: [],
-            signedup: '1'
+            signedup: '0'
           },
           {
             meetId: '22',
