@@ -107,7 +107,12 @@
         v-model="corpActiveName"
         @tab-click="corpHandleClick"
       >
-        <el-tab-pane label="人力资源旗舰店" name="corpFlagship">
+        <el-tab-pane
+          label="人力资源旗舰店"
+          name="corpFlagship"
+          v-loading="corpFlagshipLoading"
+          element-loading-text="加载中"
+        >
           <BaseInfoGloriette
             :info-list="showQjdList"
             :col-num="4"
@@ -121,13 +126,21 @@
             >查看更多</el-button
           >
         </el-tab-pane>
-        <el-tab-pane label="推荐企业" name="corpRecommended">
+        <el-tab-pane
+          label="推荐企业"
+          name="corpRecommended"
+          v-loading="corpRecommendedLoading"
+          element-loading-text="加载中"
+        >
           <BaseInfoGloriette
             :info-list="showList"
             :col-num="4"
             :template-name="'corp'"
           ></BaseInfoGloriette>
-          <el-button id="corpListMore2" class="more-btn" @click="showMoreCorp('rec')"
+          <el-button
+            id="corpListMore2"
+            class="more-btn"
+            @click="showMoreCorp('rec')"
             >查看更多</el-button
           >
         </el-tab-pane>
@@ -172,6 +185,8 @@ export default {
   data() {
     return {
       path: require('@/assets/logo.png'),
+      corpFlagshipLoading: false,
+      corpRecommendedLoading: false,
       obj: {},
       colRowGutter: 40,
       jobActiveName: 'jobRecommended',
@@ -370,6 +385,12 @@ export default {
      */
     async initPage() {
       //热招
+      this.queryHotPositionInfo();
+      this.querySortUrgRecPositionList();
+      this.queryHRFlagshipStoreInfo();
+    },
+    //热招
+    async queryHotPositionInfo() {
       let hotRes = await queryHotPositionInfo();
       if (hotRes && hotRes.status === 200) {
         hotRes.result.data.forEach(item => {
@@ -405,7 +426,9 @@ export default {
       } else if (hotRes) {
         this.$message.error('获取热招职位信息失败');
       }
-      //急招
+    },
+    //急招
+    async querySortUrgRecPositionList() {
       let urgRes = await querySortUrgRecPositionList();
       if (urgRes && urgRes.status === 200) {
         urgRes.result.data.forEach(item => {
@@ -440,7 +463,10 @@ export default {
       } else if (urgRes) {
         this.$message.error('获取紧急招职位信息失败');
       }
-      //旗舰店
+    },
+    //旗舰店
+    async queryHRFlagshipStoreInfo() {
+      this.corpFlagshipLoading = true;
       let shipRes = await queryHRFlagshipStoreInfo();
       if (shipRes && shipRes.status === 200) {
         shipRes.result.data.forEach(item => {
@@ -462,6 +488,7 @@ export default {
       } else if (shipRes) {
         this.$message.error('获取人力资源旗舰店信息失败');
       }
+      this.corpFlagshipLoading = false;
     }
   },
   created() {
@@ -595,6 +622,9 @@ export default {
   ::v-deep .el-col {
     color: red;
     //height: 100px;
+  }
+  #pane-corpFlagship {
+    min-height: 435px;
   }
 }
 </style>

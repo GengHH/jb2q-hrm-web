@@ -113,14 +113,14 @@ export default {
   width: 100%;
   .infoContent {
     width: 100%;
-    height: 94%;
-    margin: 3% 0;
+    height: 96%;
+    margin: 2% 0;
   }
-  & .el-col:nth-child(2n) > .infoContent {
-    //background-color: #999;
-  }
-  & .el-col:nth-child(2n + 1) > .infoContent {
-    //background-color: #ccc;
-  }
+  //& .el-col:nth-child(2n) > .infoContent {
+  //background-color: #999;
+  //}
+  //& .el-col:nth-child(2n + 1) > .infoContent {
+  //background-color: #ccc;
+  //}
 }
 </style>

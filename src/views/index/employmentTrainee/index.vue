@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 17:56:15
+ * @LastEditTime: 2021-07-13 16:08:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\employmentTrainee\index.vue
 -->
@@ -158,8 +158,8 @@
                       jdZwItem.gwbm
                     }}</span>
                     <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
-                    <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
-                    <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
+                    <span class="gray-font">可招：{{ jdZwItem.zprs }}人</span>
+                    <span class="gray-font">已招：{{ jdZwItem.zgrs }}人</span>
                   </div>
                   <span
                     :id="'span' + jdItem.cid"
@@ -249,8 +249,8 @@
                       {{ jdZwItem.gwbm }}
                     </span>
                     <span class="gray-font">拟招：{{ jdZwItem.gwzs }}人</span>
-                    <span class="gray-font">可招：{{ jdZwItem.zgrs }}人</span>
-                    <span class="gray-font">已招：{{ jdZwItem.zprs }}人</span>
+                    <span class="gray-font">可招：{{ jdZwItem.zprs }}人</span>
+                    <span class="gray-font">已招：{{ jdZwItem.zgrs }}人</span>
                   </div>
                   <span
                     :id="'span' + jdItem.cid"

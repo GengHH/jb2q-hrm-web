@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 16:50:19
+ * @LastEditTime: 2021-07-13 17:41:32
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -970,7 +970,8 @@ Mock.mock(
             offUserId: '',
             editTime: '',
             specialList: [],
-            workStreetList: ['0501', '0502']
+            workStreetList: ['0501', '0502'],
+            applyFor: true
           },
           {
             positionId: 2,
@@ -1016,7 +1017,8 @@ Mock.mock(
             offUserId: '',
             editTime: '',
             specialList: ['01', '03'],
-            workStreetList: ['0501', '0502']
+            workStreetList: ['0501', '0502'],
+            applyFor: false
           }
         ]
       }

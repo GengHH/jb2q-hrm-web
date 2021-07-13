@@ -145,6 +145,14 @@
               </el-col>
               <el-col :span="12">
                 <el-button
+                  v-if="realData.applyFor"
+                  class="release-btn mat-15"
+                  @click="deliveryResume2"
+                >
+                  <i class="el-icon-position"></i>已投递</el-button
+                >
+                <el-button
+                  v-else
                   type="primary"
                   class="release-btn mat-15"
                   @click="
@@ -470,7 +478,11 @@ export default {
   },
   created() {
     //根据url上的参数查询职位信息
-    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+    if (
+      this.$route.query &&
+      Object.keys(this.$route.query).length > 0 &&
+      this.$route.query.positionId
+    ) {
       let positionId = this.$route.query.positionId;
       if (this.$route.path.includes('positionDetails')) {
         this.asPage = true;
@@ -506,6 +518,9 @@ export default {
           console.log(err);
         });
     },
+    deliveryResume2() {
+      this.$alert('已向改职位投递过简历，无法再次投递');
+    },
     favorJob(favor, index, positionId, recId) {
       //收藏或者取消收藏职位
       let str = favor ? '确认取消收藏该职位？' : '确认收藏该职位？';
@@ -526,7 +541,8 @@ export default {
     async queryPositionDetail(positionId) {
       this.loading = true;
       let queryRes = await queryPositionDetail({
-        positionId: positionId
+        positionId: positionId || '',
+        pid: this.$store.getters['person/pid'] || ''
       });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data || {};

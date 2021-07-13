@@ -1,5 +1,5 @@
 <template>
-  <div id="indexBody">
+  <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <el-row :gutter="40" class="fair-box" style="height:240px">
       <el-col :span="12" style="padding: 10px;" class="img-box">
         <img
@@ -21,7 +21,7 @@
           >
           <span v-if="fairItem.meetType === '2'" class="span-line2">线下</span>
         </p>
-        <p class="line30">
+        <p class="line30 orange-font">
           <span class="orange-font"> <i class="el-icon-time"></i></span>
           {{ fairItem.startTime }}
           至
@@ -184,8 +184,7 @@
 <script>
 import PlMap from '@/components/common/BaseMap';
 import PerSearchJob from '@/components/person/PerSearchJob';
-// import JobDetails from '@/views/person/jobDetails.vue';
-import JobDetails from '@/views/index/jobFair/jobDetails.vue';
+import JobDetails from '@/views/index/jobDetails';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import {
   queryMeetingSchedule,
@@ -194,8 +193,9 @@ import {
   queryCorporationPositionInfo,
   doApplyFor
 } from '@/api/personApi';
+import { queryMeetingDetail } from '@/api/indexApi';
 export default {
-  name: 'personApp',
+  name: 'indexFairDetails',
   components: {
     PlMap,
     PerSearchJob,
@@ -203,51 +203,16 @@ export default {
   },
   data() {
     return {
-      meetId: '',
-      fairItem: {},
+      loading: false,
       defaultImg: require('@/assets/images/break-img.svg'),
       activeName: 'corporation',
+      meetId: '',
       input1: '',
       input2: '',
-      qx1: '',
-      qx2: '',
       mapDialog: false,
       pointList: ['长宁区就业促进中心(长宁区武夷路517号)'],
-      totalCount: 0,
-      fairInfo: [
-        {
-          id: '1',
-          isFlipped: false,
-          mainCorpName: '中国是大法官到时sdfsdfsdfsdf代光华a',
-          contactName: '张三',
-          contactPhone: '13333343434',
-          address: '中国是大法官到时代光华a（防守打法胜多负少）',
-          meetType: '1'
-        }
-      ],
-      item: {
-        meetId: '3',
-        meetName: '招聘会名称测试12222',
-        meetIntroduce: '招聘会名称',
-        meetType: '1',
-        startTime: '2021-04-25 00:00:00',
-        endTime: '2021-04-30 00:00:00',
-        address: '天山路1800号',
-        boothCount: '60',
-        traffic: '地铁2，3，4，15号线',
-        mainCorpName: '万达信息',
-        contactName: '令狐冲',
-        contactPhone: '123123122312',
-        propagandaImage: 'MQ==',
-        districtCode: '06,09',
-        onTop: '1',
-        releaseStatus: '1',
-        applyStatus: '1',
-        userId: '-1        ',
-        releaseTime: '2021-04-28 15:13:27',
-        endApplyTime: '',
-        meetIdList: []
-      },
+      fairItem: {},
+      // totalCount: 0,
       dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
       corporations: [],
       positions: [],
@@ -283,9 +248,11 @@ export default {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       this.meetId = this.$route.query.meetId || '';
-      this.queryFairDetail();
-      this.queryCorporations();
-      this.queryPositions();
+      this.queryMeetingDetail();
+      //TODO
+      // this.queryCorporations();
+      //TODO
+      // this.queryPositions();
     }
   },
   updated() {
@@ -303,18 +270,21 @@ export default {
     /**
      *  查询指定的某个招聘会具体信息
      */
-    queryFairDetail() {
+    async queryMeetingDetail() {
       let params = {
         meetId: this.meetId
       };
-      queryMeetingSchedule(params).then(queryRes => {
-        if (queryRes && queryRes.status === 200) {
-          this.fairItem = queryRes.result.data || {};
-        }
-      });
+      let queryRes = await queryMeetingDetail(params);
+      if (queryRes && queryRes.status === 200) {
+        this.fairItem = queryRes.result.data || {};
+      } else if (queryRes) {
+        this.fairItem = {};
+        this.$message.error('获取招聘会详细信息失败');
+      }
     },
     /**
      *  查询所有单位信息
+     *  TODO
      */
     queryCorporations() {
       let params = {
@@ -357,6 +327,7 @@ export default {
     },
     /**
      *  查询所有职位信息
+     *  TODO
      */
     queryPositions() {
       let params = {
@@ -454,8 +425,8 @@ export default {
      * 展示地图
      */
     showMap() {
-      // this.pointList = [];
-      // this.pointList.push(this.fairInfo.address);
+      this.pointList = [];
+      this.pointList.push(this.fairItem.address);
       this.mapDialog = true;
     },
     mapHandleClose() {
@@ -491,11 +462,11 @@ export default {
 
 <style lang="scss" scoped>
 #indexBody {
-  width: 90%;
+  width: 100%;
   min-height: 100%;
   //max-width: 1360px;
   margin: 0 auto;
-  padding-top: 60px;
+  padding: 90px 5% 0;
   background-color: $g-white-color;
   .fair-box {
     //min-height: 300px;
@@ -633,7 +604,8 @@ export default {
 }
 .no-data {
   width: 100%;
-  margin: 100px 0;
+  margin: 160px 0;
   text-align: center;
+  color: #999;
 }
 </style>

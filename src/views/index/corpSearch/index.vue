@@ -307,12 +307,40 @@
       >
         <div class="corp-box">
           <div class="corp-box-container">
-            <h2 class="long-text" @click="showCorpDetails(item.cid)">{{ item.corpName }}</h2>
-            <p>
-              <span class="gray-font"
-                ><i class="el-icon-school"></i>{{ item.cid }}</span
+            <div class="clearfix">
+              <div
+                style="width:100%;float:left;padding-left:90px;min-height:80px;"
               >
-            </p>
+                <h2 class="long-text" @click="showCorpDetails(item.cid)">
+                  {{ item.corpName }}
+                </h2>
+                <p>
+                  <span
+                    class="gray-font"
+                    style="display:inline-block;margin-top:10px;"
+                    ><i class="el-icon-school"></i>{{ item.cid }}</span
+                  >
+                </p>
+              </div>
+              <div style="width:80px;float:left;margin-left:-100%;">
+                <img
+                  v-if="item.logo"
+                  :src="'data:image/jpg;base64,' + item.logo"
+                  @error="defImg"
+                  alt="未加载"
+                  style="width: 80px;height: 80px;"
+                />
+                <img
+                  v-else
+                  :src="defaultImg"
+                  style="width: 80px;height: 80px;"
+                  alt="未加载"
+                />
+              </div>
+              <!-- <div style="clear:both"> -->
+              <!-- 内墙法-清除浮动(此时浮动元素的父类不需要添加class-clearfix) -->
+              <!-- </div> -->
+            </div>
             <div class="corp-info">
               <p class="corp-info-tag gray-font">
                 <span>{{
@@ -388,6 +416,7 @@ export default {
   data() {
     return {
       loading: false,
+      defaultImg: require('@/assets/images/break-img.svg'),
       detailsIndex: null,
       wchatDialog: false,
       positionDetailsRecId: '',
@@ -491,6 +520,14 @@ export default {
     this._.throttle(niceScrollUpdate, 500)();
   },
   methods: {
+    /**
+     * 定义加载不到图片时显示默认图片
+     */
+    defImg(event) {
+      let img = event.target;
+      img.src = this.defaultImg;
+      img.onerror = null; //防止闪图
+    },
     minSalaryChange() {
       if (!this.queryParams.salaryMin) {
         return;
@@ -819,12 +856,12 @@ export default {
   .corp-box {
     width: 100%;
     // min-height: 180px;
-    padding: 10px 30px;
+    padding: 5px 15px;
     border-radius: 5px;
     box-shadow: 0 5px 15px rgba(rgb(61, 61, 61), 0.35);
     margin-bottom: 10px;
     .corp-box-container {
-      margin: 10px 0;
+      //margin: 10px 0;
     }
     &:hover {
       // border: 1px solid #fc7a43;
@@ -837,8 +874,10 @@ export default {
     .corp-info {
       width: 100%;
       font-size: 14px;
-      margin-top: 15px;
       line-height: 24px;
+      & > p {
+        margin-top: 10px;
+      }
     }
     .corp-info-tag {
       span {
