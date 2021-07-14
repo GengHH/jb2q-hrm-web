@@ -337,3 +337,11 @@ body {
 .requiredSymbol {
   color: red;
 }
+
+.long-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  word-break: break-all;
+  overflow: hidden;
+}

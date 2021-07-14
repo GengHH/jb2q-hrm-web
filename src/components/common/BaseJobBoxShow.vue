@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 17:07:01
+ * @LastEditTime: 2021-07-14 14:25:18
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseJobBoxShow.vue
 -->
@@ -20,9 +20,13 @@
         <img v-else :src="defaultImg" alt="未加载" />
       </el-col>
       <el-col :span="18">
-        <div class="module-right ">
-          <p class="font-eighteen">{{ jobBoxInfoObj.positionName }}</p>
-          <p class="corp-name gray-font">{{ jobBoxInfoObj.corpName }}</p>
+        <div class="module-right" style="width: 100%;">
+          <p class="font-eighteen long-text">
+            {{ jobBoxInfoObj.positionName }}
+          </p>
+          <p class="corp-name gray-font long-text">
+            {{ jobBoxInfoObj.corpName }}
+          </p>
           <p class="span-infor">
             <span>{{ jobBoxInfoObj.workAreaText }}</span>
             <el-divider direction="vertical"></el-divider>
