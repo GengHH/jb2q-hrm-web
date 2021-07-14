@@ -304,7 +304,13 @@
     <!-- E 筛选部分 -->
     <!-- 查询结果 -->
     <el-tabs id="jobInfoGloriette" v-model="activeName">
-      <el-tab-pane :label="defaultJobsCount" name="default">
+      <el-tab-pane
+        :label="defaultJobsCount"
+        name="default"
+        style="min-height:200px"
+        v-loading="loading2"
+        element-loading-text="拼命加载中"
+      >
         <per-search-job
           v-if="queryDefaultResult.length"
           ref="searchDefaultJobList"
@@ -317,12 +323,21 @@
           @showJobDetials="showJobDetial(arguments)"
           @callPositionCorp="callPositionCorp(arguments)"
         ></per-search-job>
-        <div v-else style="text-align:center;margin-top:100px;color:#999;">
+        <div
+          v-else-if="!loading"
+          style="text-align:center;padding-top:100px;color:#999;"
+        >
           暂无推荐职位信息
         </div>
         <!-- <BaseLoadingSvg ></BaseLoadingSvg> -->
       </el-tab-pane>
-      <el-tab-pane label="自行检索" name="search">
+      <el-tab-pane
+        label="自行检索"
+        name="search"
+        style="min-height:200px"
+        v-loading="loading2"
+        element-loading-text="拼命加载中"
+      >
         <per-search-job
           v-if="queryResult.length"
           ref="searchJobList"
@@ -335,7 +350,10 @@
           @callPositionCorp="callPositionCorp(arguments)"
         ></per-search-job>
         <!-- <BaseLoadingSvg v-else></BaseLoadingSvg> -->
-        <div v-else style="text-align:center;margin-top:100px;color:#999;">
+        <div
+          v-else-if="!loading2"
+          style="text-align:center;padding-top:100px;color:#999;"
+        >
           暂无职位信息
         </div>
       </el-tab-pane>
@@ -391,6 +409,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      loading2: false,
       activeName: 'default',
       detailsIndex: null,
       detailsDialog: false,
@@ -650,10 +670,11 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
+        this.$set(this, 'queryResult', []);
+        this.loading2 = true;
         this.activeName = 'search';
         params.pid = that.$store.getters['person/pid'];
         let result = await queryJobs(params);
-        console.log('result', result);
         if (
           result.status === 200 &&
           result.result.pageresult &&
@@ -721,12 +742,11 @@ export default {
         } else {
           this.$set(this, 'queryResult', []);
           this.$set(this, 'queryResultTotal', 0);
-          this.$message({
-            type: 'success',
-            message: '未查询到信息'
-          });
+          this.$message.success('未查询到信息');
         }
+        this.loading2 = false;
       } catch (error) {
+        this.loading2 = false;
         console.log(error);
       }
     },
@@ -736,6 +756,8 @@ export default {
     async queryDefaultJobs(val) {
       let that = this;
       try {
+        this.$set(this, 'queryDefaultResult', []);
+        this.loading = true;
         this.activeName = 'default';
         let result = await queryRecommendJobs({
           pid: that.$store.getters['person/pid'],
@@ -744,7 +766,6 @@ export default {
             pageIndex: that.$refs.searchDefaultJobList?.currentPage - 1 || 0
           }
         });
-        console.log('defaultResult', result);
         if (
           result.status === 200 &&
           result.result.pageresult &&
@@ -813,12 +834,10 @@ export default {
           this.activeName = 'search';
           this.$set(this, 'queryDefaultResult', []);
           this.$set(this, 'queryDefaultResultTotal', 0);
-          // this.$message({
-          //   type: 'success',
-          //   message: '未查询到信息'
-          // });
         }
+        this.loading = false;
       } catch (error) {
+        this.loading = false;
         console.log(error);
       }
     },

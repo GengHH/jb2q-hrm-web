@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 10:46:16
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 10:30:19
+ * @LastEditTime: 2021-07-14 10:42:29
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\index\index.js
  */
@@ -118,6 +118,9 @@ if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
 //工资支付方式
 if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
   store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_surplus_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SURPLUS_VERIFY_STATUS');
 }
 /* eslint-disable no-new */
 new Vue({

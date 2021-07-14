@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-13 18:49:03
+ * @LastEditTime: 2021-07-14 13:44:36
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -71,6 +71,13 @@ const queryAllEmploymentLack = params =>
 //用工剩余调剂信息专区
 const queryAllEmploymentSurplus = params =>
   postAction(basePath + '/nologin/index/queryAllEmploymentSurplus', params);
+
+//查询推荐企业（固定个数）
+const getIndexRecCorp = params =>
+  postAction(basePath + '/nologin/index/getIndexRecCorp', params);
+//查询推荐企业列表（更多）
+const getIndexRecCorpList = params =>
+  postAction(basePath + '/nologin/index/getIndexRecCorpList', params);
 
 export {
   queryTable,

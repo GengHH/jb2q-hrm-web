@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-07-13 18:40:43
+ * @LastEditTime: 2021-07-14 09:50:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -52,6 +52,36 @@
               </div>
             </el-form-item>
           </el-col>
+          <el-col :span="12" v-if="adminId == '00'">
+            <el-form-item label="招聘会首页图片">
+              <el-upload
+                action=""
+                class="avatar-uploader"
+                :file-list="fileList"
+                :auto-upload="false"
+                :on-change="indexUserChange"
+                :limit="1"
+                :show-file-list="false"
+              >
+                <template v-if="type == '2'">
+                  <img :src="lookList.propagandaImageBase64" class="avatar" />
+                </template>
+                <template v-if="type == '1'">
+                  <img v-if="indexUrl" :src="indexUrl" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </template>
+              </el-upload>
+              <div
+                class="userClose"
+                @click="
+                  indexUrl = '';
+                  fileList = [];
+                "
+              >
+                <i class="el-icon-close"></i>
+              </div>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div style="text-align:center">
@@ -78,7 +108,10 @@ export default {
   components: { tform, ttable },
   data() {
     return {
+      adminId: this.$store.state.admin.userInfo.logonUser.areaInfo.areaCode,
       imageUrl: '',
+      indexUrl: '',
+      fileList: [],
       fileList2: [],
       form: {},
       dicOptions: {
@@ -339,6 +372,13 @@ export default {
       if (this.beforeAvatarUpload(file)) {
         this.getBase64(file.raw, 'propagandaImageBase64');
         this.imageUrl = URL.createObjectURL(file.raw);
+      }
+    },
+    //首页照片base64
+    indexUserChange(file) {
+      if (this.beforeAvatarUpload(file)) {
+        this.getBase64(file.raw, 'propagandaImageBase64');
+        this.indexUrl = URL.createObjectURL(file.raw);
       }
     },
     advancedSearch() {

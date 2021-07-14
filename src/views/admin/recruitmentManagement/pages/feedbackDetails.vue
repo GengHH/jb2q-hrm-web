@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-07-13 11:21:56
+ * @LastEditTime: 2021-07-14 12:40:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -17,7 +17,7 @@
       style="height:500px;overflow: scroll;overflow-x: hidden;padding: 0 10px 0 0;"
     >
       <div class="title-style">预约报名信息</div>
-      <el-form size="mini" ref="form" :model="form" label-width="150px">
+      <el-form size="mini" :model="form" label-width="150px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="招聘会名称">
@@ -88,17 +88,21 @@
           </template>
         </el-table-column>
       </ttable>
-      <div class="title-style">报名反馈</div>
+      <div class="title-style">
+        报名反馈
+      </div>
       <el-form
+        :rules="rules"
         size="mini"
-        ref="feedbackForm"
-        :model="feedbackForm"
+        ref="form"
+        :model="form"
         label-width="150px"
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="参会回执">
+            <el-form-item label="参会回执" prop="applyResult">
               <el-select
+                @change="userResult"
                 :disabled="disabled"
                 v-model="form.applyResult"
                 style="width:100%"
@@ -108,8 +112,8 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col v-if="lookList.meetType == '2'" :span="12">
-            <el-form-item label="入场时间">
+          <el-col v-if="lookList.meetType == '2' && isUserResult" :span="12">
+            <el-form-item label="入场时间" prop="admisstionTime">
               <el-date-picker
                 v-model="form.admisstionTime"
                 type="datetime"
@@ -123,13 +127,23 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col v-if="lookList.meetType == '2'" :span="12">
-            <el-form-item label="展位号">
+          <el-col v-if="lookList.meetType == '2' && isUserResult" :span="12">
+            <el-form-item label="展位号" prop="boothSeq">
               <el-input :disabled="disabled" v-model="form.boothSeq"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-form-item label="注意事项">
+          <el-col v-if="!isUserResult" :span="24">
+            <el-form-item label="失败原因" prop="reasonsFailure">
+              <el-input
+                type="textarea"
+                :rows="4"
+                :disabled="disabled"
+                v-model="form.reasonsFailure"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="isUserResult" :span="24">
+            <el-form-item label="注意事项" prop="precautions">
               <el-input
                 type="textarea"
                 :rows="4"
@@ -140,9 +154,9 @@
           </el-col>
         </el-row>
 
-        <el-row if="form.meetType == '2'">
+        <el-row v-if="isUserResult">
           <el-col :span="12">
-            <el-form-item label="区或街镇现场联系人">
+            <el-form-item label="区或街镇现场联系人" prop="meetContactName">
               <el-input
                 :disabled="disabled"
                 v-model="form.meetContactName"
@@ -150,7 +164,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="联系电话">
+            <el-form-item label="联系电话" prop="meetContactPhone">
               <el-input
                 :disabled="disabled"
                 v-model="form.meetContactPhone"
@@ -181,12 +195,12 @@ export default {
   data() {
     let othis = this;
     return {
+      isUserResult: true,
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > othis.getTimeNumber(); //如果没有后面的-8.64e7就是不可以选择今天的
         }
       },
-      feedbackForm: {},
       form: {},
       params: {
         pageIndex: 1,
@@ -208,11 +222,42 @@ export default {
         // { title: '操作', slot: 'aaa010' }
       ],
       list: [],
-      startTime: ''
+      startTime: '',
+      rules: {
+        applyResult: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        admisstionTime: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        boothSeq: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        reasonsFailure: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        precautions: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        meetContactPhone: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ],
+        meetContactName: [
+          { required: true, message: '请填写必选项', trigger: 'blur' }
+        ]
+      }
     };
   },
   computed: {},
   methods: {
+    userResult(e) {
+      if (e == '1') {
+        this.isUserResult = true;
+      } else {
+        this.isUserResult = false;
+      }
+      console.log(e);
+    },
     getTimeNumber(time) {
       let d = new Date(this.startTime);
       let t = d.getTime(d);
@@ -225,31 +270,38 @@ export default {
     alteration() {},
     onSubmit() {
       let data = { ...this.form };
-      feedback_update(
-        data,
-        res => {
-          if (res.result.data.result) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1000,
-              onClose: () => {
-                this.onclose('1');
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          feedback_update(
+            data,
+            res => {
+              if (res.result.data.result) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1000,
+                  onClose: () => {
+                    this.onclose('1');
+                  }
+                });
+              } else {
+                this.$message({
+                  message: res.result.data.msg,
+                  type: 'warning',
+                  duration: 2000
+                });
               }
-            });
-          } else {
-            this.$message({
-              message: res.result.data.msg,
-              type: 'warning',
-              duration: 2000
-            });
-          }
-          console.log(res);
-        },
-        err => {
-          console.log(err);
+              console.log(res);
+            },
+            err => {
+              console.log(err);
+            }
+          );
+        } else {
+          console.log('error submit!!');
+          return false;
         }
-      );
+      });
     },
     onclose(type) {
       this.$emit('onclose', type || 0);

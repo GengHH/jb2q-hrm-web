@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-12 17:49:49
+ * @LastEditTime: 2021-07-14 10:03:25
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -840,6 +840,36 @@ Mock.mock(basePath + '/corp/signup/query', 'post', function(options) {
           }
         ]
       })
+    }
+  };
+});
+
+//查询招聘会反馈详情结果
+Mock.mock(basePath + '/corp/signup/enrollment', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        applyId: 1,
+        meetId: 15,
+        cid: '200306100853081',
+        meetName: '上海市浦东电工职业招聘会',
+        meetType: '2',
+        applyContactName: '赵丽颖',
+        applyContactPhone: '13512112112',
+        memo: 'emm',
+        applyTime: '',
+        applyResult: '1',
+        applyMemo: '',
+        admisstionTime: '2021-04-30 00:00:00',
+        boothSeq: 21,
+        precautions: '注意被包围',
+        meetContactName: '林正英',
+        meetContactPhone: '12312312312',
+        feedbackTime: '',
+        corpName: '丽颖传媒有限公司'
+      }
     }
   };
 });

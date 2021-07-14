@@ -12,7 +12,6 @@
                   src="../../../assets/images/logos.png"
                   alt=""
                 /> -->
-
                 <img
                   v-if="corpInfo.logo"
                   class="fl ico_rz logos"
@@ -113,9 +112,9 @@
                 公司拥有一流的销售团队、良好的渠道关系，致力于为客户提供一手房代理、二手房交易 -->
                 {{ corpInfo.introduce }}
               </p>
-              <span class="look-all"
+              <!-- <span class="look-all"
                 >查看全部<i class="el-icon-arrow-down"></i
-              ></span>
+              ></span> -->
             </div>
             <div class="title-border mat-30">
               单位地址：（{{
@@ -125,7 +124,7 @@
             <div class="map-box">
               <pl-map :pointList="pointList"></pl-map>
             </div>
-            <div class="title-border mat-15">
+            <!-- <div class="title-border mat-15">
               看过该职位的人还看了
               <span class="fr fourteen-opacity">更多职位 > </span>
             </div>
@@ -172,7 +171,7 @@
                   </div>
                 </div>
               </el-col>
-            </el-row>
+            </el-row> -->
           </el-col>
           <el-col :span="5" class="padd-l ">
             <div class="module2 mat-30">

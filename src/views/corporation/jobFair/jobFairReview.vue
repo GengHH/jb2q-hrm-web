@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 11:02:51
+ * @LastEditTime: 2021-07-14 10:28:15
  * @Description: 报名审核结果子页面
 -->
 <template>
@@ -82,23 +82,23 @@
         </pl-table>
       </el-tab-pane>
     </el-tabs>
-    <!----------------------->
-    <!-- 报到详情弹框 ----->
-    <!----------------------->
+    <!------------------>
+    <!-- 报到详情弹框 -->
+    <!------------------>
     <el-dialog
       class="info-dialog"
       width="40%"
-      title="招聘会详情"
+      title="招聘会反馈详情"
       :visible.sync="dialog"
       :before-close="handleClose"
     >
       <div>
         <span class="info-dialog-label">招聘会名称：</span
-        >{{ currentRow.meetName }}
+        >{{ currentRow.meetName ? currentRow.meetName : '无' }}
       </div>
       <div>
-        <span class="info-dialog-label">单位名称 ：</span
-        >{{ currentRow.corpName }}
+        <span class="info-dialog-label">单位名称：</span
+        >{{ currentRow.corpName ? currentRow.corpName : '无' }}
       </div>
       <div>
         <span class="info-dialog-label">招聘会类型：</span
@@ -116,35 +116,49 @@
       </div> -->
       <div>
         <span class="info-dialog-label">报名时间：</span
-        >{{ currentRow.applyTime }}
+        >{{ currentRow.applyTime ? currentRow.applyTime : '无' }}
       </div>
       <div>
-        <span class="info-dialog-label">参会联系人：</span
-        >{{ currentRow.applyContactName }}
+        <span class="info-dialog-label">备注：</span
+        >{{ currentRow.memo ? currentRow.memo : '无' }}
       </div>
       <div>
-        <span class="info-dialog-label">参会联系手机：</span
-        >{{ currentRow.applyContactPhone }}
+        <span class="info-dialog-label">区或现场联系人：</span
+        >{{ currentRow.meetContactName ? currentRow.meetContactName : '无' }}
+      </div>
+      <div>
+        <span class="info-dialog-label">区或现场联系电话：</span
+        >{{ currentRow.meetContactPhone ? currentRow.meetContactPhone : '无' }}
       </div>
       <div>
         <span class="info-dialog-label">反馈时间：</span
-        >{{ currentRow.feedbackTime }}
+        >{{ currentRow.feedbackTime ? currentRow.feedbackTime : '无' }}
       </div>
       <div>
         <span class="info-dialog-label">参会回执：</span>
         <span v-if="currentRow.applyResult === '1'" style="color:green"
           >通过</span
         >
-        <span v-if="currentRow.applyResult === '0'" style="color:red"
+        <span v-else-if="currentRow.applyResult === '0'" style="color:red"
           >不通过</span
         >
+        <span v-else>无</span>
+      </div>
+      <div>
+        <span class="info-dialog-label">展位号 ：</span
+        >{{ currentRow.boothSeq ? currentRow.boothSeq : '无' }}
+      </div>
+      <div>
+        <span class="info-dialog-label">入场时间 ：</span
+        >{{ currentRow.admisstionTime ? currentRow.admisstionTime : '无' }}
       </div>
       <div v-if="currentRow.applyResult === '0'">
         <span class="info-dialog-label" style="color:red">不通过原因：</span
-        >{{ currentRow.applyMemo }}
+        >{{ currentRow.applyMemo ? currentRow.applyMemo : '无' }}
       </div>
       <div>
-        <span class="info-dialog-label">备注：</span>{{ currentRow.memo }}
+        <span class="info-dialog-label">注意事项：</span
+        >{{ currentRow.precautions ? currentRow.precautions : '无' }}
       </div>
     </el-dialog>
   </div>
@@ -152,7 +166,7 @@
 
 <script>
 import BaseSearch from '@/components/common/BaseSearch';
-import { queryFairResult } from '@/api/corporationApi';
+import { queryFairResult, queryFairDetailsResult } from '@/api/corporationApi';
 // const STATUS_TAG_MAP = {
 //   1: { text: '待审核', type: 'info' },
 //   2: { text: '审核通过', type: 'success' },
@@ -211,12 +225,13 @@ export default {
           actions: [
             {
               id: 'action1',
-              text: '查看',
+              text: '查看详情',
               attrs: { round: true, size: 'small' },
               icon: 'el-icon-view',
               onClick: ({ row }) => {
                 //console.log(row);
                 this.currentRow = row;
+                this.queryFairDetailsResult();
                 this.dialog = true;
               },
               hidden: ({ row }, item) => {
@@ -241,6 +256,9 @@ export default {
       this.queryResult('1');
       this.queryResult('2');
     },
+    /**
+     *查询招聘会反馈列表
+     */
     queryResult(witchTable) {
       console.log(this.$refs);
       console.log(this.$refs['fairTable' + witchTable]);
@@ -265,6 +283,17 @@ export default {
         }
       });
     },
+    /**
+     * 查看招聘会反馈详情
+     */
+    async queryFairDetailsResult() {
+      let queryRes = await queryFairDetailsResult(this.currentRow.applyId);
+      if (queryRes && queryRes.status === 200) {
+        this.currentRow = queryRes.result.data || {};
+      } else if (queryRes) {
+        this.$message.error('查询详细信息失败');
+      }
+    },
     handleClick(tab, event) {
       // console.log(tab, event);
     },
@@ -273,7 +302,9 @@ export default {
     },
     /**
      *后台分页功能
-     */ handlePageChange1() {
+     */
+
+    handlePageChange1() {
       this.queryResult('1');
     },
     /**

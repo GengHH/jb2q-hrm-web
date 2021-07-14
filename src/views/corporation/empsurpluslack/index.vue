@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-07 14:47:26
+ * @LastEditTime: 2021-07-14 11:06:30
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\empsurpluslack\index.vue
 -->
@@ -320,7 +320,7 @@ export default {
     return {
       path: require('@/assets/logo.png'),
       loading: false,
-      dialogTitle: '用工缺口',
+      dialogTitle: '用工缺失',
       dialogFormVisible: false,
       disabledEditForm: false,
       showEditBtn: false,
@@ -429,10 +429,10 @@ export default {
         ]
       },
       dicData: this.$store.getters['dictionary/yesno'],
+      ztDic: this.$store.getters['dictionary/recruit_surplus_verify_status'],
       zwlbDic: this.$store.getters['dictionary/recruit_position_s_type'],
       // gzxzDic: this.$store.getters['dictionary/recruit_work_nature'],
       xlyqDic: this.$store.getters['dictionary/recruit_work_year'],
-      ztDic: this.$store.getters['dictionary/recruit_surplus_verify_status'],
       lxDic: [
         { label: '用工缺失', value: true },
         { label: '用工剩余', value: false }
@@ -594,7 +594,7 @@ export default {
         // },
         {
           label: '操作',
-          attrs: { width: 240 }, //340
+          attrs: { width: 180 }, //240
           actions: [
             {
               id: 'action1',
@@ -671,7 +671,7 @@ export default {
   },
   methods: {
     btnClick1() {
-      this.dialogTitle = '用工缺口';
+      this.dialogTitle = '用工缺失';
       this.updateInfo = false;
       Object.keys(this.workInfo).forEach(
         key =>
@@ -759,7 +759,8 @@ export default {
         if (queryRes.status === 200 && queryRes.result.pageresult.data) {
           this.tableData = queryRes.result.pageresult.data || [];
           this.tableData.forEach(element => {
-            element.actions = ['action1'];
+            // element.actions = ['action1'];
+            element.actions = [];
             if (element.verifyStatus === '1') {
               element.actions.push('action2');
             }
@@ -781,11 +782,11 @@ export default {
             pageSize: this.$refs.serveTable.pageSize || 10
           }
         });
-        console.log('result', result);
         if (queryRes.status === 200 && queryRes.result.pageresult.data) {
           this.tableData = queryRes.result.pageresult.data || [];
           this.tableData.forEach(element => {
-            element.actions = ['action1'];
+            // element.actions = ['action1'];
+            element.actions = [];
             if (element.verifyStatus === '1') {
               element.actions.push('action2');
             }

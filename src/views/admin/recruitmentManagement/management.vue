@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-13 18:35:47
+ * @LastEditTime: 2021-07-13 19:48:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -197,6 +197,11 @@ export default {
   },
   computed: {},
   methods: {
+    setQx() {
+      let qx = [...trim(this.$store.getters['dictionary/ggjbxx_qx'])];
+      qx.unshift({ label: '全部', value: '0A' });
+      return qx;
+    },
     editStatus(id, name) {
       let data = {
         meetId: id,
@@ -268,7 +273,8 @@ export default {
       this.visible = false;
     },
     getqx(code) {
-      let qx = trim(this.$store.getters['dictionary/ggjbxx_qx']);
+      let qx = this.setQx();
+      console.log(qx);
       for (let i = 0; i < qx.length; i++) {
         if (code == qx[i].value) {
           return qx[i].label;

@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-13 15:52:54
+ * @LastEditTime: 2021-07-14 11:04:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -33,7 +33,13 @@
           <el-button size="mini" type="info" @click="look(scope, 1)" plain>
             <i class="el-icon-search"></i>查看</el-button
           >
-          <el-button size="mini" type="primary" @click="look(scope, 2)" plain>
+          <el-button
+            v-if="scope.row.applyResult == ''"
+            size="mini"
+            type="primary"
+            @click="look(scope, 2)"
+            plain
+          >
             <i class="el-icon-edit"></i>反馈</el-button
           >
         </template>
@@ -205,11 +211,11 @@ export default {
     };
   },
   created() {
-    if (this.adminId == '00') {
-      this.formConfig.formItemList[2].disabled = false;
-    } else {
-      this.formConfig.formItemList[2].disabled = true;
-    }
+    // if (this.adminId == '00') {
+    //   this.formConfig.formItemList[2].disabled = false;
+    // } else {
+    //   this.formConfig.formItemList[2].disabled = true;
+    // }
   }
 };
 </script>

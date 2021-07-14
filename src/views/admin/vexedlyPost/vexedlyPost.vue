@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-06-24 13:45:30
+ * @LastEditTime: 2021-07-14 13:36:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -14,7 +14,7 @@
       @onsubmit="advancedSearch"
     ></tform>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="全部急招职位" name="0">
+      <el-tab-pane label="未标记急招职位" name="0">
         <ttable
           :options="{ height: '350px' }"
           :tableClass="'tableClass'"
@@ -67,7 +67,7 @@
           :total="params0.total"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="本级急招职位" name="1">
+      <el-tab-pane label="已标记急招职位" name="1">
         <ttable :options="{ height: '350px' }" :columns="columns" :list="list1">
           <el-table-column slot="salary" label="薪酬" align="center">
             <template slot-scope="scope">
