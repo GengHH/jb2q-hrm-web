@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-13 17:41:32
+ * @LastEditTime: 2021-07-14 17:36:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\person\index.js
  */
@@ -12,7 +12,9 @@
 import Mock from 'mockjs';
 import config from '../../config/mock.conf';
 import '../commonMock';
-
+Mock.setup({
+  timeout: 1000
+});
 const basePath = config.personBasePath;
 /**
  * 通用的测试通过返回的结果
@@ -696,6 +698,16 @@ Mock.mock(basePath + '/person/info/sendSms', 'post', function(options) {
 Mock.mock(basePath + '/person/info/updatePhoneNum', 'post', function(options) {
   return successData;
 });
+//更新手机号
+Mock.mock(basePath + '/person/info/updatePassword', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: '修改成功！'
+    }
+  };
+});
 
 //个人反馈
 Mock.mock(basePath + '/person/feedback/do-interView', 'post', function(
@@ -1302,48 +1314,87 @@ Mock.mock(
   }
 );
 //查询消息详细信息
-Mock.mock(
-  RegExp(basePath + '/person/notice/queryNoticeDetail'),
-  'post',
-  function(options) {
-    return {
-      status: 200,
-      message: '',
-      result: {
-        data: {
-          'noticeId|+1': '@string("number", 5)',
-          noticeType: '08',
-          receiveId: '200709138518590',
-          receiveType: '1',
-          receiveName: '李珍',
-          content: '11111222a',
-          readsStatus: '0',
-          readTime: '',
-          deleteStatus: '0',
-          deleteTime: '',
-          noticeTypeName: '单位邀约应聘通知'
-        }
+Mock.mock(basePath + '/person/notice/queryNoticeDetail', 'post', function(
+  options
+) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        'noticeId|+1': '@string("number", 5)',
+        noticeType: '08',
+        receiveId: '200709138518590',
+        receiveType: '1',
+        receiveName: '李珍',
+        content: '11111222a',
+        readsStatus: '0',
+        readTime: '',
+        deleteStatus: '0',
+        deleteTime: '',
+        noticeTypeName: '单位邀约应聘通知'
       }
-    };
-  }
-);
+    }
+  };
+});
 
 //批量已读
-Mock.mock(
-  RegExp(basePath + '/person/notice/updateBatchReadNotice'),
-  'post',
-  function(options) {
-    return successData;
-  }
-);
+Mock.mock(basePath + '/person/notice/updateBatchReadNotice', 'post', function(
+  options
+) {
+  return successData;
+});
 //批量删除
-Mock.mock(
-  RegExp(basePath + '/person/notice/deleteBatchNotice'),
-  'post',
-  function(options) {
-    return successData;
-  }
-);
+Mock.mock(basePath + '/person/notice/deleteBatchNotice', 'post', function(
+  options
+) {
+  return successData;
+});
 
 /*********end**********/
+//个人查询单位详细信息
+Mock.mock(basePath + '/person/manage/getCorpDetail', 'post', function(options) {
+  return {
+    status: 200,
+    message: '',
+    result: {
+      data: {
+        cid: '200008010068531',
+        tyshxym: '91310120132716940A',
+        corpName: '上海华欣民福自控设备有限公司',
+        establishDate: '19920530',
+        businessRange:
+          '自动化成套控制系统仪表盘、柜、矿山专用设备、船用配套设备制造、加工、批发、零售，电气设备、电工电器、钢材、纸张、机电产品、机械设备批发、零售，从事货物进出口及技术进出口业务，道路货物运输（除危险化学品）。 【依法须经批准的项目，经相关部门批准后方可开展经营活动】',
+        unitResidence: '淮海西路288弄4号101室',
+        corpNature: '15',
+        industryType: '07',
+        tranBaseSymbol: '1',
+        humanResourceReg: '',
+        keypointCorp: '',
+        specialCorp: '',
+        entrustStatus: '',
+        entrustValid: '',
+        frozen: '0',
+        districtCode: '05',
+        introduce: '一般基地',
+        contactAddress: '淮海西路288弄4号101室',
+        contactPhone: '王先生',
+        specific: '',
+        recruitChargeName: '王先生',
+        recruitChargePhone: '15921900607',
+        recruitStaffName1: '',
+        recruitStaffPhone1: '',
+        recruitStaffName2: '',
+        recruitStaffPhone2: '',
+        logo: [],
+        publicityMovie: '',
+        statusId: '',
+        channelNo: '',
+        corpOuterId: '',
+        followTmp: '1',
+        follow: true
+      }
+    }
+  };
+});
 export default Mock;

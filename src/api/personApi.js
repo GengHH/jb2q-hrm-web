@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-01-07 11:12:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-08 15:34:55
+ * @LastEditTime: 2021-07-14 17:31:55
  * @Description: 个人模块需要调用后台的api
  * @FilePath: \jb2q-hrm-web\src\api\personApi.js
  */
@@ -139,6 +139,9 @@ const sendSms = params => postAction(basePath + '/person/info/sendSms', params);
 //修改手机号
 const updatePhoneNum = params =>
   postAction(basePath + '/person/info/updatePhoneNum', params);
+//修改密码
+const updatePassword = params =>
+  postAction(basePath + '/person/info/updatePassword', params);
 
 /*********招聘会**********/
 // 查询招聘会list
@@ -215,6 +218,9 @@ const deleteBatchNotice = params =>
 
 /*********end**********/
 
+// 获取单位明细信息
+const getCorpDetail = params =>
+  postAction(basePath + '/person/manage/getCorpDetail', params);
 export {
   doSend,
   doLogin,
@@ -249,6 +255,7 @@ export {
   doEvaluateJob,
   queryEvaluateList,
   updatePhoneNum,
+  updatePassword,
   sendSms,
   saveWorkYear,
   saveEduLevel,
@@ -271,5 +278,6 @@ export {
   queryPushMsg,
   queryMsgDetails,
   deleteBatchNotice,
-  updateBatchReadNotice
+  updateBatchReadNotice,
+  getCorpDetail
 };

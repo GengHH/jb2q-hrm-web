@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:36:25
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-13 17:57:10
+ * @LastEditTime: 2021-07-14 16:48:53
  * @Description: 求职记录子页面
  * @FilePath: \jb2q-hrm-web\src\views\person\jobFindFeedback\jobFindRecord.vue
 -->
@@ -428,6 +428,7 @@
       <pl-wchat
         :targetObjId="targetObjId"
         :targetObjName="targetObjName"
+        :sysmData="sysmData"
       ></pl-wchat>
     </el-dialog>
 
@@ -519,6 +520,7 @@ export default {
       },
       targetObjId: '',
       targetObjName: '',
+      sysmData: {},
       onePosition: {},
       pickerOptions: {
         shortcuts: [
@@ -734,12 +736,16 @@ export default {
               icon: 'el-icon-chat-line-round',
               attrs: { round: true, size: 'small' },
               onClick: ({ row }) => {
-                console.log(row);
-                // TODO
                 this.targetObjId = row.cid || '';
                 this.targetObjName = row.corpName || '';
                 this.wchatDialog = true;
                 row.notReadCount = '0';
+                //默认一条系统信息
+                this.sysmData = {
+                  type: 'position',
+                  positionId: row.positionId,
+                  positionName: row.positionName
+                };
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);

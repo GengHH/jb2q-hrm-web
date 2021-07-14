@@ -2491,7 +2491,6 @@ export default {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });
     }
-
     //校验最高学历是否包含教育经历
     this.includeEduExp();
   },

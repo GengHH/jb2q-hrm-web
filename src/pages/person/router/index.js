@@ -123,9 +123,18 @@ let router = new Router({
     {
       path: '/personalCenter',
       name: '个人中心',
-      redirect: '/personalCenter/updatePhoneNum',
+      redirect: '/personalCenter/updatePassword',
       component: () => import('@/views/person/PersonLayout'),
       children: [
+        {
+          path: '/personalCenter/updatePassword',
+          name: '修改密码',
+          components: {
+            personNavMenu: () => import('@/components/person/PerCenterNavMenu'),
+            default: () =>
+              import('@/views/person/personalCenter/updatePassword')
+          }
+        },
         {
           path: '/personalCenter/updatePhoneNum',
           name: '修改手机号',

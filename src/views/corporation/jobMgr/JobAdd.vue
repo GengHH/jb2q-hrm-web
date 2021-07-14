@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-12 17:59:17
+ * @LastEditTime: 2021-07-14 18:14:07
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -747,7 +747,7 @@ export default {
         agencyRecruit: '0',
         entrustTyshxym: '',
         entrustCorpName: '',
-        corpId: '',
+        corpId: this.$store.getters['corporation/cid'],
         positionFType: '',
         positionType: '',
         workNature: '',
@@ -1137,11 +1137,6 @@ export default {
     },
     releasePosition(done) {
       this.isPublic = true;
-      console.log(
-        '%c 🍿 overDateSomeDays(this.jobForm.endDate, 30): ',
-        'font-size:20px;background-color: #E41A6A;color:#fff;',
-        overDateSomeDays(this.jobForm.endDate, 30)
-      );
       if (overDateSomeDays(this.jobForm.endDate, 30)) {
         this.$message.error('发布截止日期不得超过当前日期30天');
       } else {

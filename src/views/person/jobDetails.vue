@@ -257,7 +257,7 @@
           ></span> -->
         </div>
         <div class="title-border mat-30">
-          工作地址：（{{ positionData.workAddress }}）
+          工作地址：（{{ realData.workAddress }}）
         </div>
         <div class="map-box">
           <!-- <img src="../../assets/images/map.png" alt="" /> -->
@@ -303,7 +303,7 @@
       <el-col :span="5" class="padd-l ">
         <p class="sixteen-opacity">职位发布者</p>
         <div class="header-box clearfix">
-          <img src="../../assets/images/corp.jpg" class="head-img" alt="" />
+          <img src="../../assets/images/dw.svg" class="head-img" alt="" />
           <div class="fl mat-15 right-div ">
             <p class="sixteen-opacity">
               <!-- {{ realData.releaseUserId }} -->

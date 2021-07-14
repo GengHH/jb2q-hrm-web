@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-05-12 15:33:43
+ * @LastEditTime: 2021-07-14 16:27:06
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -18,13 +18,15 @@ const state = {
   //证件号码
   zjhm: '',
   //个人标识
-  pid: '123',
+  pid: '',
   //用户名
   name: '',
   //用户头像
   avatar: '',
+  //用户性别 1：男,2:女
+  sex: '1',
   //用户选择城市，默认江苏省
-  city: '江苏省_320000',
+  city: '上海市',
   //用户选择地区
   region: '',
   //高校用户选择城市
@@ -60,6 +62,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name;
+  },
+  SET_SEX: (state, sex) => {
+    state.sex = sex;
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar;
@@ -101,6 +106,7 @@ const getters = {
   first_login: state => state.first_login,
   username: state => state.name,
   pid: state => state.pid,
+  sex: state => state.sex,
   message_count: state => state.message_count
 };
 const actions = {
@@ -144,6 +150,7 @@ const actions = {
         pid: '201906186258910'
       });
       commit('SET_TOKEN', 'login');
+      commit('SET_SEX', '1');
       commit('SET_FIRST_CHECK', true);
       commit('SET_FIRST_LOGIN', false);
       commit('SET_LOGINTYPE', '');
@@ -159,6 +166,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_PERSONINOF', { logonUser: {} });
       commit('SET_TOKEN', '');
+      commit('SET_SEX', '1');
       commit('SET_FIRST_CHECK', false);
       commit('SET_FIRST_LOGIN', true);
       commit('SET_LOGINTYPE', '');
@@ -180,6 +188,7 @@ const actions = {
           //判断是不是首次进入系统
           checkPsnlInit({ pid: res.result.pid })
             .then(checkRes => {
+              //是不是首次进入系统
               if (
                 checkRes.status === 200 &&
                 checkRes.result.data &&
@@ -188,6 +197,14 @@ const actions = {
                 commit('SET_FIRST_LOGIN', false);
               } else {
                 commit('SET_FIRST_LOGIN', true);
+              }
+              //人员性别 1：男， 2：女
+              if (
+                checkRes.status === 200 &&
+                checkRes.result.data &&
+                checkRes.result.data.sexId
+              ) {
+                commit('SET_SEX', sexId);
               }
             })
             .catch(() => {

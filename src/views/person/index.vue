@@ -99,6 +99,7 @@
             label="居住街镇"
             :optionData="dicStreet"
             class="w-select"
+            :disabled="!streetRequired"
           >
           </pl-select>
         </el-form-item>
@@ -154,6 +155,7 @@ export default {
     return {
       dialog: false,
       isFlipped: false,
+      streetRequired: true,
       personInfo: {
         birthDate: '',
         contactPhone: '',
@@ -188,7 +190,7 @@ export default {
           { required: true, message: '请输入详细地址', trigger: 'blur' }
         ]
       },
-      dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
+      // dicQx: this.$store.getters['dictionary/ggjbxx_qx'],
       dicXb: [
         { value: '1', label: '男' },
         { value: '2', label: '女' }
@@ -206,6 +208,17 @@ export default {
     };
   },
   computed: {
+    //重置区县字典表下拉框
+    dicQx() {
+      let _dic = [...this.$store.getters['dictionary/ggjbxx_qx@3']];
+      if (_dic && _dic.length && _dic[_dic.length - 1].value !== '98') {
+        _dic.push({
+          value: '98',
+          label: '外省市'
+        });
+      }
+      return _dic;
+    },
     newBirthDate() {
       // return this.personInfo.birthDate
       //   ? this.personInfo.birthDate
@@ -240,6 +253,24 @@ export default {
     },
     jobFaieList: function() {
       return this.showList ? this.showList.slice(0, 3) : [];
+    }
+  },
+  watch: {
+    /**
+     * 根据区县动态变更街道信息
+     */
+    'personInfo.livingArea': function(val) {
+      //如果是‘外省市’，街道非必填
+      if (val === '98') {
+        this.streetRequired = false;
+        this.rules.livingStreet = [];
+      } else {
+        this.streetRequired = true;
+        this.rules.livingStreet = [
+          { required: true, message: '请输入居住街镇', trigger: 'blur' }
+        ];
+      }
+      this.$refs.personInfo.clearValidate();
     }
   },
   methods: {

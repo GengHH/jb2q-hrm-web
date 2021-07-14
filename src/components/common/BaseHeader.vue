@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-07-08 15:03:19
+ * @LastEditTime: 2021-07-14 18:17:43
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -260,7 +260,7 @@ export default {
     changeMenuStyle() {
       if (
         (isPerson(this) && window.innerWidth < 992) ||
-        (isCorporation(this) && window.innerWidth < 1200)
+        (isCorporation(this) && window.innerWidth < 1300)
       ) {
         this.showIconMenu = true;
       } else {
