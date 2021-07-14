@@ -379,6 +379,12 @@ export default {
                   item.workArea
                 );
               }
+              if (item.districtCode) {
+                item.districtCodeText = getDicText(
+                  that.$store.getters['dictionary/ggjbxx_qx'],
+                  item.districtCode
+                );
+              }
               if (item.eduRequire) {
                 item.eduRequireText = getDicText(
                   this.$store.getters['dictionary/recruit_edu'],
@@ -393,15 +399,29 @@ export default {
               }
               if (item.corpNature) {
                 item.corpNatureText = getDicText(
-                  that.$store.getters['dictionary/recruit_corp_nature'],
+                  this.$store.getters['dictionary/recruit_corp_nature'],
                   item.corpNature
                 );
               }
               if (item.industryType) {
                 item.industryTypeText = getDicText(
-                  that.$store.getters['dictionary/recruit_industry_type'],
+                  this.$store.getters['dictionary/recruit_industry_type'],
                   item.industryType
                 );
+              }
+              if (item.workYearNeed) {
+                item.workYearNeedText = getDicText(
+                  this.$store.getters['dictionary/recruit_work_year'],
+                  item.workYearNeed
+                );
+              }
+              if (item.salaryPayType) {
+                item.salaryPayTypeText =
+                  '元/' +
+                  getDicText(
+                    this.$store.getters['dictionary/recruit_salary_pay_type'],
+                    item.salaryPayType
+                  );
               }
             });
           }

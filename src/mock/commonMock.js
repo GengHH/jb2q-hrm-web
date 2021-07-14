@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-12 13:34:40
+ * @LastEditTime: 2021-07-14 09:32:41
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -15,9 +15,9 @@ import config from '../config/mock.conf';
 
 const basePath = config.commonBasePath;
 
-Mock.setup({
-  timeout: 1000
-});
+// Mock.setup({
+//   timeout: 1000
+// });
 
 const successData = {
   status: 200,

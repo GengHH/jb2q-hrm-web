@@ -95,9 +95,9 @@ const queryMeetingReceiveResume = params =>
 /*********招聘会反馈查询**********/
 const queryFairResult = params =>
   postAction(basePath + '/corp/signup/query', params);
-// 招聘会职位信息
-// const queryJobFairPositionInfo = params =>
-//   postAction(basePath + '/corp/meeting/find/positionInfo', params);
+// 招聘会反馈查询详情
+const queryFairDetailsResult = params =>
+  postAction(basePath + '/corp/signup/enrollment', params);
 // // 报名招聘会
 // const applyJobFair = params =>
 //   postAction(basePath + '/corp/meeting/save', params);
@@ -183,6 +183,7 @@ export {
   queryJobFairPositionInfo,
   applyJobFair,
   queryFairResult,
+  queryFairDetailsResult,
   queryResumeList,
   queryMeetingReceiveResume,
   queryShop,

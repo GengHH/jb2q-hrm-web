@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-13 10:52:25
+ * @LastEditTime: 2021-07-14 11:30:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -78,6 +78,13 @@ const getPositionDetail = params =>
 const getCorpDetail = params =>
   postAction(basePath + '/nologin/index/getCorpDetail', params);
 
+//查询推荐企业（固定个数）
+const getIndexRecCorp = params =>
+  postAction(basePath + '/nologin/index/getIndexRecCorp', params);
+//查询推荐企业列表（更多）
+const getIndexRecCorpList = params =>
+  postAction(basePath + '/nologin/index/getIndexRecCorpList', params);
+
 export {
   queryTable,
   // queryActivies,
@@ -96,5 +103,7 @@ export {
   queryAllEmploymentLack,
   queryAllEmploymentSurplus,
   getPositionDetail,
-  getCorpDetail
+  getCorpDetail,
+  getIndexRecCorp,
+  getIndexRecCorpList
 };

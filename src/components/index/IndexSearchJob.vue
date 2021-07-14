@@ -153,7 +153,11 @@
             v-if="jobItem.recruitType === '2'"
             class="fourteen-opacity jz-font-style"
             ><span class="gray-font">发布机构：</span
-            ><i>{{ jobItem.workAreaText }}就业促进中心</i></span
+            ><i>{{
+              jobItem.districtCodeText
+                ? jobItem.districtCodeText + '就业促进中心'
+                : '未知'
+            }}</i></span
           >
 
           <span

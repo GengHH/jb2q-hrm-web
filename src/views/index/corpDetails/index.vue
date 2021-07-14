@@ -125,7 +125,7 @@
             </div> -->
           </el-col>
           <el-col :span="5" class="padd-l ">
-            <div class="module2 mat-30">
+            <!-- <div class="module2 mat-30">
               <p class="fourteen-opacity">
                 <b style="font-size: 16px;">
                   看过该公司的人还看过
@@ -171,7 +171,7 @@
                   有<span class="font-or">21</span>个待招职位
                 </p>
               </div>
-            </div>
+            </div> -->
           </el-col>
         </el-row>
       </el-tab-pane>
