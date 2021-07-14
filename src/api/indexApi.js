@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 11:30:30
+ * @LastEditTime: 2021-07-14 18:50:54
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -104,6 +104,6 @@ export {
   queryAllEmploymentSurplus,
   getPositionDetail,
   getCorpDetail,
-  getIndexRecCorp,
-  getIndexRecCorpList
+  getIndexRecCorpList,
+  getIndexRecCorp
 };

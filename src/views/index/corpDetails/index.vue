@@ -259,7 +259,7 @@ export default {
       //查询单位详细信息
       this.getCorpDetail();
       // TODO 查询单位下所有的待招职位
-      this.queryJobs();
+      // this.queryJobs();
     }
   },
   updated() {
