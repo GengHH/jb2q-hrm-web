@@ -269,8 +269,8 @@
 <script>
 import PerSearchJob from '@/components/person/PerSearchJob.vue';
 import JobDetails from '@/views/person/jobDetails.vue';
-import { loadCorpInfo } from '@/api/corporationApi';
 import {
+  getCorpDetail,
   queryCorpPositionList,
   doDeliveryResume,
   attentionOrFavor
@@ -306,7 +306,7 @@ export default {
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       this.cid = this.$route.query.id;
       //查询单位信息
-      this.loadCorpInfo();
+      this.getCorpDetail();
       this.queryJobs();
     }
   },
@@ -338,12 +338,14 @@ export default {
     },
     jobHandleClick() {},
     /**
-     * 查询单位信息 （使用的是单位模块下的接口）
-     * TODO
+     * 查询单位详细信息
      */
-    async loadCorpInfo() {
+    async getCorpDetail() {
       let that = this;
-      let queryRes = await loadCorpInfo({ cid: this.cid });
+      let queryRes = await getCorpDetail({
+        pid: this.$store.getters['person/pid'],
+        cid: this.cid
+      });
       if (queryRes && queryRes.status === 200) {
         let item = queryRes.result.data;
         // 转换字典

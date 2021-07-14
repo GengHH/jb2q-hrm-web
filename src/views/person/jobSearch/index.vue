@@ -382,7 +382,11 @@
       :visible.sync="wchatDialog"
       :before-close="wchatHandleClose"
     >
-      <pl-wchat :targetObjId="targetObjId" :sysmData="sysmData"></pl-wchat>
+      <pl-wchat
+        :targetObjId="targetObjId"
+        :targetObjName="targetObjName"
+        :sysmData="sysmData"
+      ></pl-wchat>
     </el-dialog>
   </div>
 </template>
@@ -475,8 +479,9 @@ export default {
       gzxzLists: this.$store.getters['dictionary/recruit_work_nature'],
       jobList: [],
       targetObjId: '',
-      onePosition: {},
-      sysmData: {}
+      targetObjName: '',
+      sysmData: {},
+      onePosition: {}
     };
   },
   computed: {
@@ -959,13 +964,16 @@ export default {
       let corpId = (arg && arg[1]) || '';
       let positionId = (arg && arg[2]) || '';
       let positionName = (arg && arg[3]) || '';
+      let corpName = (arg && arg[4]) || '';
       this.targetObjId = corpId;
-      (this.sysmData = {
+      this.targetObjName = corpName;
+      //默认一条系统信息
+      this.sysmData = {
         type: 'position',
         positionId: positionId,
         positionName: positionName
-      }),
-        (this.wchatDialog = true);
+      };
+      this.wchatDialog = true;
     },
     detailsHandleClose() {
       this.detailsDialog = false;

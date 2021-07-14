@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-07-13 18:38:45
+ * @LastEditTime: 2021-07-14 18:26:19
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\index\IndexSearchJob.vue
@@ -34,8 +34,11 @@
               <i
                 class="bl-bg i-style jz-style"
                 v-if="jobItem.recruitType === '2'"
-                >介</i
-              >
+                ><img
+                  src="../../assets/images/zhijie.png"
+                  alt=""
+                  style="width: 1.5em;display: inline-block;"
+              /></i>
               <i
                 class="bl-bg i-style rl-style"
                 v-if="jobItem.agencyRecruit === '1'"
@@ -388,9 +391,9 @@ export default {
   .jx-style {
     background-color: #8b614d;
   }
-  .jz-style {
-    background-color: #3f51b5;
-  }
+  // .jz-style {
+  //   background-color: #3f51b5;
+  // }
   .rl-style {
     background-color: #03a9f4;
   }

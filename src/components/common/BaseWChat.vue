@@ -3,7 +3,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-24 18:34:55
+ * @LastEditTime: 2021-07-14 18:00:59
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
@@ -50,7 +50,7 @@ export default {
         //   text: { text: '起床不' },
         //   mine: false,
         //   name: '留恋人间不羡仙',
-        //   img: require('@/assets/images/female.png')
+        //   img: require('@/assets/images/woman.svg')
         // },
         // {
         //   date: '2020/04/25 21:19:07',
@@ -59,14 +59,14 @@ export default {
         //   },
         //   mine: false,
         //   name: '只盼流星不盼雨',
-        //   img: require('@/assets/images/female.png')
+        //   img: require('@/assets/images/woman.svg')
         // },
         // {
         //   date: '2020/04/25 21:19:07',
         //   text: { text: 'hahaha' },
         //   mine: false,
         //   name: '只盼流星不盼雨',
-        //   img: require('@/assets/images/female.png')
+        //   img: require('@/assets/images/woman.svg')
         // },
         // {
         //   date: '2020/04/16 21:19:07',
@@ -75,13 +75,13 @@ export default {
         //   },
         //   mine: true,
         //   name: 'JwChat',
-        //   img: require('@/assets/images/female.png')
+        //   img: require('@/assets/images/woman.svg')
         // },
         // {
         //   date: '2021/03/02 13:14:21',
         //   mine: false,
         //   name: '留恋人间不羡仙',
-        //   img: require('@/assets/images/female.png'),
+        //   img: require('@/assets/images/woman.svg'),
         //   text: {
         //     system: {
         //       title: '在接入人工前，智能助手将为您首次应答。',
@@ -112,9 +112,9 @@ export default {
         callback: this.toolEvent
       },
       config: {
-        img: require('@/assets/images/female.png'),
+        img: require('@/assets/images/break-img.svg'),
         name: this.targetObjName, //'JwChat',
-        dept: '最简单、最便捷',
+        // dept: this.targetObjName || '最简单、最便捷',
         callback: this.bindCover,
         historyConfig: {
           show: true,
@@ -135,7 +135,7 @@ export default {
         // list: [
         //   {
         //     id: 'win00',
-        //     img: '..//image/female.png',
+        //     img: '..//image/woman.svg',
         //     name: 'JwChat',
         //     dept: '最简单、最便捷',
         //     readNum: 99
@@ -176,6 +176,7 @@ export default {
   mounted() {
     if (this.targetObjId) {
       console.log('targetObjId', this.targetObjId);
+      console.log('targetObjName', this.targetObjName);
       this.targetId = this.targetObjId;
       this.openSession();
     } else {
@@ -202,8 +203,11 @@ export default {
             date: formatTime(new Date()),
             text: { text: msg },
             mine: true,
-            name: 'JwChat',
-            img: require('@/assets/images/female.png')
+            name: this.$store.getters['person/username'] || '用户',
+            img:
+              this.$store.getters['person/sex'] === '2'
+                ? require('@/assets/images/woman.svg')
+                : require('@/assets/images/man.svg')
           };
           this.taleList.push(msgObj);
         } else if (sendRes) {
@@ -294,10 +298,10 @@ export default {
         //RECRUIT_LOGIN_TYPE
         targetType: ''
       };
-      console.log(this.targetObjId);
+      // console.log(this.targetObjId);
       if (isPerson(this)) {
         //个人发给单位
-        this.config.img = require('@/assets/images/corp.jpg');
+        this.config.img = require('@/assets/images/dw.svg');
         this.sendName = this.$store.getters['person/username'];
         this.createId = queryParams.openId = this.$store.getters['person/pid'];
         queryParams.openType = '1';
@@ -306,6 +310,7 @@ export default {
       } else {
         //单位发给个人
         //TODO头像识别
+        this.config.img = require('@/assets/images/woman.svg');
         this.sendName = this.$store.getters['corporation/username'];
         this.createId = queryParams.openId = this.$store.getters[
           'corporation/cid'
@@ -319,15 +324,17 @@ export default {
         if (queryRes && queryRes.status === 200) {
           this.sessionId = queryRes.result.sessionInfo.sessionId;
           let target = this.coverMsgs(queryRes.result.sessionInfo.msgs || []);
-          console.log(target);
           this.taleList = target;
           //! TODO默认显示推荐的职位信息
           if (this.sysmData && Object.keys(this.sysmData).length > 0) {
             this.taleList.push({
-              date: '2021/03/02 13:14:21',
+              date: formatTime(new Date()),
               mine: true,
-              name: '留恋人间不羡仙',
-              img: require('@/assets/images/female.png'),
+              name: this.$store.getters['person/username'] || '用户',
+              img:
+                this.$store.getters['person/sex'] === '2'
+                  ? require('@/assets/images/woman.svg')
+                  : require('@/assets/images/man.svg'),
               text: {
                 system: {
                   title: '经系统验证，智能识别为您显示目标信息。',
@@ -360,7 +367,15 @@ export default {
           _obj.text = {
             text: msg.content || ''
           };
-          _obj.img = require('@/assets/images/female.png');
+          //TODO 识别每条记录对应的头像
+          if (isPerson()) {
+            _obj.img =
+              this.$store.getters['person/sex'] === '2'
+                ? require('@/assets/images/woman.svg')
+                : require('@/assets/images/man.svg');
+          } else {
+            _obj.img = require('@/assets/images/dw.svg');
+          }
           return _obj;
         });
       }

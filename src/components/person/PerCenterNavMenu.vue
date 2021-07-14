@@ -1,21 +1,29 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-30 11:28:50
- * @LastEditTime: 2021-04-27 14:47:10
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-14 17:09:11
+ * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\person\PerCenterNavMenu.vue
 -->
 <template>
   <el-menu
-    default-active="1"
+    :default-active="$route.path"
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
     :collapse="isCollapse"
   >
+    <router-link to="/personalCenter/updatePassword">
+      <el-menu-item index="/personalCenter/updatePassword">
+        <i class="el-icon-user"></i>
+        <span slot="title">
+          修改密码
+        </span>
+      </el-menu-item>
+    </router-link>
     <router-link to="/personalCenter/updatePhoneNum">
-      <el-menu-item index="1">
+      <el-menu-item index="/personalCenter/updatePhoneNum">
         <i class="el-icon-user"></i>
         <span slot="title">
           修改手机号
@@ -23,7 +31,7 @@
       </el-menu-item>
     </router-link>
     <router-link to="/personalCenter/shieldCorporation">
-      <el-menu-item index="2">
+      <el-menu-item index="/personalCenter/shieldCorporation">
         <i class="el-icon-menu"></i>
         <span slot="title">
           屏蔽特定企业
@@ -31,7 +39,7 @@
       </el-menu-item>
     </router-link>
     <router-link to="/personalCenter/permissionSettings">
-      <el-menu-item index="3">
+      <el-menu-item index="/personalCenter/permissionSettings">
         <i class="el-icon-document"></i>
         <span slot="title">
           权限设置
