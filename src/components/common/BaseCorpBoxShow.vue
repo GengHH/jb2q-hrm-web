@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-02 15:49:03
+ * @LastEditTime: 2021-07-14 14:17:49
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
 -->
@@ -32,8 +32,12 @@
       />
       <img v-else :src="defaultImg" alt="未加载" />
     </div>
-    <p class="font-eighteen mat-15" v-if="corpBoxInfoObj.zl">智联招聘</p>
-    <p class="font-eighteen mat-15" v-else>{{ corpBoxInfoObj.corpName }}</p>
+    <p class="font-eighteen mat-15 long-text" v-if="corpBoxInfoObj.zl">
+      智联招聘
+    </p>
+    <p class="font-eighteen mat-15 long-text" v-else>
+      {{ corpBoxInfoObj.corpName }}
+    </p>
     <p class="span-infor">
       <span>{{ corpBoxInfoObj.corpNatureText }}</span>
       <el-divider direction="vertical"></el-divider>

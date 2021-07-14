@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-07-12 15:30:37
+ * @LastEditTime: 2021-07-14 14:30:38
  * @LastEditors: GengHH
  * @Description: 首页herder
  * @FilePath: \jb2q-hrm-web\src\components\index\HeaderIndex.vue
@@ -25,9 +25,14 @@
     <div id="indexMenuHeader">
       <el-row>
         <el-col :xs="20" :sm="20" :md="6" :lg="8" :xl="8" class="bg-purple">
-          <img src="@/assets/img/logo.png" alt="" />
+          <img src="@/assets/img/logo.png" alt="" @click="goIndex" />
           <!-- <img class="logo2" src="@/assets/img/logo2.png" alt=""> -->
-          <img class="logo3" src="@/assets/img/logo3.png" alt="" />
+          <img
+            class="logo3"
+            src="@/assets/img/logo3.png"
+            alt=""
+            @click="goIndex"
+          />
         </el-col>
         <el-col :xs="4" :sm="4" :md="18" :lg="16" :xl="16" class="bg-purple">
           <!-- 小屏幕下显示的菜单 -->
@@ -206,6 +211,12 @@ export default {
     handleSelect(index) {
       console.log(this.$route.path);
       this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
+    },
+    /**
+     *点击logo回到首页
+     */
+    goIndex() {
+      this.$router.push('/');
     }
   }
 };

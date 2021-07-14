@@ -128,6 +128,7 @@ export default {
   // }
   ::v-deep {
     .el-input-group__prepend {
+      background-color: #fff;
       input {
         text-align: center;
       }

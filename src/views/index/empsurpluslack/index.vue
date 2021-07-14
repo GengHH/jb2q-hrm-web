@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-09 14:27:15
+ * @LastEditTime: 2021-07-14 14:13:15
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\empsurpluslack\index.vue
 -->
@@ -144,7 +144,9 @@
                 未通过
               </div> -->
               <div class="workInfo-box">
-                <h2 @click="showCorpInfo(item.cid)">{{ item.corpName }}</h2>
+                <h2 class="long-text" @click="showCorpInfo(item.cid)">
+                  {{ item.corpName }}
+                </h2>
                 <p>
                   <span class="gray-font"
                     ><i class="el-icon-school"></i>{{ item.tyshxym }}-{{
@@ -225,7 +227,9 @@
               :class="['work-card', { workCardCenter: showList.length === 1 }]"
             >
               <div class="workInfo-box">
-                <h2 @click="showCorpInfo(item.cid)">{{ item.corpName }}</h2>
+                <h2 class="long-text" @click="showCorpInfo(item.cid)">
+                  {{ item.corpName }}
+                </h2>
                 <p>
                   <span class="gray-font"
                     ><i class="el-icon-school"></i>{{ item.tyshxym }}-{{
@@ -643,6 +647,13 @@ export default {
         color: #333;
         cursor: pointer;
       }
+    }
+    .long-text {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+      word-break: break-all;
+      overflow: hidden;
     }
   }
   .gray-font {

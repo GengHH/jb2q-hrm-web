@@ -168,12 +168,12 @@ import BaseCarousel from '@/components/common/BaseCarousel.vue';
 import BaseInfoGloriette from '@/components/common/BaseInfoGloriette.vue';
 import { isPerson, isCorporation, getDicText, niceScrollUpdate } from '@/utils';
 import {
-  queryHRFlagshipStoreInfo,
-  queryHRFlagshipStoreInfoAll,
   queryHotPositionInfo,
   // queryHotPositionInfoAll,
   querySortUrgRecPositionList,
   // queryAllUrgRecPositionList,
+  queryHRFlagshipStoreInfo,
+  // queryHRFlagshipStoreInfoAll,
   getIndexRecCorp
   // getIndexRecCorpList
 } from '@/api/indexApi';
@@ -489,39 +489,37 @@ export default {
         this.$message.error('获取人力资源旗舰店信息失败');
       }
       this.corpFlagshipLoading = false;
+    },
+    //推荐单位
+    async getIndexRecCorp() {
+      // this.corpRecommendedLoading = true;
+      let corpRes = await getIndexRecCorp();
+      if (corpRes && corpRes.status === 200) {
+        corpRes.result.data.forEach(item => {
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              this.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              this.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.showCorpList = corpRes.result.data;
+      } else if (corpRes) {
+        this.$message.error('获取人力资源旗舰店信息失败');
+      }
+      // this.corpRecommendedLoading = false;
     }
-  },
-  //推荐单位
-  async getIndexRecCorp() {
-    // this.corpRecommendedLoading = true;
-    let corpRes = await getIndexRecCorp();
-    if (corpRes && corpRes.status === 200) {
-      corpRes.result.data.forEach(item => {
-        if (item.corpNature) {
-          item.corpNatureText = getDicText(
-            this.$store.getters['dictionary/recruit_corp_nature'],
-            item.corpNature
-          );
-        }
-        if (item.industryType) {
-          item.industryTypeText = getDicText(
-            this.$store.getters['dictionary/recruit_industry_type'],
-            item.industryType
-          );
-        }
-      });
-      this.showCorpList = corpRes.result.data;
-    } else if (corpRes) {
-      this.$message.error('获取人力资源旗舰店信息失败');
-    }
-    // this.corpRecommendedLoading = false;
   },
   created() {
     this.initPage();
   },
   mounted() {
-    //更新滚动条
-    this._.throttle(niceScrollUpdate, 500)();
     if (isPerson(this)) {
       $('#perosnLoginBtn').html('已登录');
     } else {
@@ -532,6 +530,10 @@ export default {
     } else {
       $('#corpLoginBtn').html('去登录');
     }
+  },
+  updated() {
+    // 更新滚动条
+    this._.throttle(niceScrollUpdate, 500)();
   }
 };
 </script>

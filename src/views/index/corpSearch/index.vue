@@ -676,6 +676,77 @@ export default {
         console.log(error);
       }
     },
+    /**
+     * 根据条件查询旗舰店单位
+     */
+    async getIndexRecCorpList(val) {
+      let that = this;
+      let params = this.$refs['queryCorpFrom']?.model
+        ? JSON.parse(JSON.stringify(this.$refs['queryCorpFrom'].model))
+        : this.queryParams;
+      params.positionName = $.trim(val);
+      that.queryParams.positionName = $.trim(val);
+      params.pageParam = {
+        pageSize: that.$refs.page?.pageSize || 10,
+        pageIndex: that.$refs.page?.currentPage - 1 || 0
+      };
+
+      //查询所有旗舰店
+      this.loading = true;
+      let result = await getIndexRecCorpList(params);
+      console.log('result', result);
+      if (
+        result.status === 200 &&
+        result.result.pageresult &&
+        result.result.pageresult.total
+      ) {
+        result.result.pageresult.data.forEach(item => {
+          // 转换字典
+          if (item.workArea) {
+            item.workAreaText = getDicText(
+              that.$store.getters['dictionary/ggjbxx_qx'],
+              item.workArea
+            );
+          }
+          if (item.eduRequire) {
+            item.eduRequireText = getDicText(
+              that.$store.getters['dictionary/recruit_edu'],
+              item.eduRequire
+            );
+          }
+          if (item.workNature) {
+            item.workNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_work_nature'],
+              item.workNature
+            );
+          }
+          if (item.corpNature) {
+            item.corpNatureText = getDicText(
+              that.$store.getters['dictionary/recruit_corp_nature'],
+              item.corpNature
+            );
+          }
+          if (item.industryType) {
+            item.industryTypeText = getDicText(
+              that.$store.getters['dictionary/recruit_industry_type'],
+              item.industryType
+            );
+          }
+        });
+        this.$set(this, 'tableData', result.result.pageresult.data);
+        this.$set(
+          this,
+          'countTotal',
+          Number(result.result.pageresult.total) || 0
+        );
+      } else {
+        this.$set(this, 'tableData', []);
+        this.$set(this, 'countTotal', 0);
+        this.$message.success('未查询到信息');
+      }
+      this.loading = false;
+    },
+
     showMoreRadios(event, radiosIndex) {
       let dom = $('#' + radiosIndex);
       let $this = $(event.target);
