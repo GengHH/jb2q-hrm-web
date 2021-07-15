@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-30 18:13:58
+ * @LastEditTime: 2021-07-15 15:46:55
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\remind\systemMsg.vue
 -->
@@ -155,7 +155,7 @@ export default {
                 this.detailsDialog = true;
                 this.readMsg(row);
                 // TODO查看职位信息
-                //this.queryPositionDetail(row);
+                //this.queryMsgDetails(row);
               },
               hidden: ({ row }, item) => {
                 return !row?.actions?.find(c => c === item.id);
@@ -258,7 +258,7 @@ export default {
     /**
      * 获取职位的详细信息
      */
-    async queryPositionDetail(row) {
+    async queryMsgDetails(row) {
       this.loading = true;
       let queryRes = await queryMsgDetails({
         noticeId: row.noticeId

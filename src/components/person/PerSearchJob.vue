@@ -1,7 +1,7 @@
 <!--
  * @Author: GengHH
  * @Date: 2020-12-21 17:18:03
- * @LastEditTime: 2021-07-14 18:27:09
+ * @LastEditTime: 2021-07-15 13:29:18
  * @LastEditors: GengHH
  * @Description: 个人简历界面-子菜单显示组件
  * @FilePath: \jb2q-hrm-web\src\components\person\PerSearchJob.vue
@@ -9,137 +9,6 @@
 <template>
   <!-- S 信息部分 -->
   <div>
-    <!-- <div class="div-box bg-gray" v-if="jobData.length">
-      <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
-        >全选</el-checkbox
-      >
-      <span class="favorite"
-        ><i class="el-icon-star-off" @click.stop="allStarAction"></i>收藏</span
-      >
-    </div> -->
-    <!-- <div class="div-box padd0">
-      <el-row>
-        <el-col :span="1" class="mat-15">
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
-          ></el-checkbox>
-        </el-col>
-        <el-col :span="10">
-          <div class="infor-module">
-            <p class="name-infor font-or">
-              项目经理 <i class="i-style">介</i> <span>12k-18k</span>
-            </p>
-            <p class="span-infor">
-              <span>上海</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
-              <el-button type="primary" class="gray-btn"
-                ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-              >
-            </p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <p class="time-p sixteen-opacity">
-            万达信息股份有限公司
-            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
-          </p>
-          <p class="span-infor">
-            <span>移动互联网</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>股份</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>10000人以上</span>
-          </p>
-        </el-col>
-        <el-col :span="5">
-          <el-button type="primary" class="release-btn">
-            <i class="el-icon-position"></i>投递</el-button
-          >
-          <el-button type="primary" class="white-btn"
-            ><i class="el-icon-star-off"></i> 收藏</el-button
-          >
-        </el-col>
-      </el-row>
-      <div class="foot-span">
-        <el-col :span="11">
-          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="fourteen-opacity"
-            >发布机构：上海某某职业代理有限公司</span
-          >
-        </el-col>
-        <el-col :span="5">
-          <span class="fourteen-opacity">发布时间：2020-11-06</span>
-        </el-col>
-      </div>
-    </div>
-    <div class="div-box padd0">
-      <el-row>
-        <el-col :span="1" class="mat-15">
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
-          ></el-checkbox>
-        </el-col>
-        <el-col :span="10">
-          <div class="infor-module">
-            <p class="name-infor font-or">
-              项目经理 <i class="bl-bg i-style">见习</i> <span>12k-18k</span>
-            </p>
-            <p class="span-infor">
-              <span>上海</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>本科</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>全职</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>经验1~2年</span>
-              <el-button type="primary" class="gray-btn"
-                ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-              >
-            </p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <p class="time-p sixteen-opacity">
-            万达信息股份有限公司
-            <img class="ico_rz" src="../../assets/images/ico_rz.png" alt="" />
-          </p>
-          <p class="span-infor">
-            <span>移动互联网</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>股份</span>
-            <el-divider direction="vertical"></el-divider>
-            <span>10000人以上</span>
-          </p>
-        </el-col>
-        <el-col :span="5">
-          <el-button type="primary" class="release-btn" @click="selectJob">
-            <i class="el-icon-position"></i>投递</el-button
-          >
-          <el-button type="primary" class="white-btn" @click="favorJob"
-            ><i class="el-icon-star-off"></i> 收藏</el-button
-          >
-        </el-col>
-      </el-row>
-      <div class="foot-span">
-        <el-col :span="19">
-          <span class="fourteen-opacity marl-65">招聘人数 <i>8</i>人</span>
-        </el-col>
-        <el-col :span="5">
-          <span class="fourteen-opacity">发布时间：2020-11-06</span>
-        </el-col>
-      </div>
-    </div> -->
     <!-- for everyone -->
     <div class="div-box padd0" v-for="(jobItem, index) in jobData" :key="index">
       <el-row>
@@ -172,7 +41,7 @@
                 <img
                   src="../../assets/images/zhijie.png"
                   alt=""
-                  style="width: 1.5em;display: inline-block;"
+                  style="width: 1.5em;display: inline-block;position: relative;top: 5px;"
                 />
               </i>
               <i
@@ -576,6 +445,7 @@ export default {
     border-color: #fc6f3d;
     padding: 3px 10px;
     border-radius: 20px;
+    margin-left: 10px;
   }
   .call-btn:hover {
     color: #fff;

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-25 17:49:29
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 13:59:57
+ * @LastEditTime: 2021-07-15 17:06:30
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\index\index.js
  */
@@ -1386,4 +1386,85 @@ Mock.mock(basePath + '/nologin/index/getIndexRecCorpList', 'post', function(
     }
   };
 });
+
+//招聘会下所有的单位信息
+Mock.mock(
+  basePath + '/nologin/meeting/queryMeetingCorporationList',
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: {
+        data: [
+          {
+            cid: '200008010784151',
+            corpName: '万达信息股份有限公司',
+            unitResidence:
+              '上海市桂平路481号20号楼5层                                                      ',
+            corpNature: '15',
+            industryType: '01',
+            districtCode: '05',
+            contactAddress: '联航路',
+            positionCount: 2
+          }
+        ]
+      }
+    };
+  }
+);
+//招聘会下单位的所有职位信息
+Mock.mock(
+  basePath + '/nologin/meeting/queryMeetingPositionList',
+  'post',
+  function(options) {
+    return {
+      status: 200,
+      message: '',
+      result: Mock.mock({
+        'data|1-10': [
+          {
+            positionId: '4',
+            positionCode: '20213000000004',
+            positionName: '中级审计师',
+            recruitType: '1',
+            tranBaseSymbol: '0',
+            agencyRecruit: '0',
+            entrustTyshxym: '',
+            entrustCorpName: '',
+            corpId: '200008010049481',
+            positionType: '10  ',
+            workNature: '01',
+            ageMax: '40',
+            ageMin: '20',
+            workArea: '05',
+            workAddress: '福禄娃路999号',
+            workHour: '005',
+            workYearNeed: '04',
+            eduRequire: '07',
+            salaryMax: '99999',
+            salaryMin: '50000',
+            salaryPayType: '04',
+            recruitNum: '5',
+            special: '',
+            describe:
+              '初级审计师，要厉害的那种。\n有建筑工程项目审计经验的优先。\n熟悉建筑工程法律法规的优先。',
+            onTop: '0',
+            releaseStatusId: '2',
+            releaseUserId: '0001564639',
+            releaseTime: '2021-05-20 18:16:04',
+            corpName: '上海金亚计算机有限公司',
+            favorTmp: '0',
+            applyForTmp: '1',
+            corpNature: '15',
+            industryType: '09',
+            favor: false,
+            applyFor: true
+          }
+        ]
+      })
+    };
+  }
+);
+
 export default Mock;

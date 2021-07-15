@@ -2,6 +2,7 @@
   <div id="indexBody" v-loading="loading" element-loading-text="拼命加载中">
     <div>
       <base-search
+        ref="searchBox"
         placeholder="请输入相关单位名称"
         @clickButton="queryCorps($event)"
       ></base-search>
@@ -498,7 +499,7 @@ export default {
       }, 500)();
     }
   },
-  created() {
+  mounted() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       // this.queryParams.positionType = this.$route.query.type;
@@ -506,18 +507,20 @@ export default {
         //旗舰店
         this.queryParams.positionType = '02';
         this.queryHRFlagshipStoreInfoAll();
+        return;
       } else if (this.$route.query.type === 'rec') {
         this.queryParams.positionType = '01';
         //查询推荐单位
         this.getIndexRecCorpList();
         return;
-      } else {
-        this.queryParams.positionType = '';
       }
-    } else {
-      this.queryParams.positionType = '';
-      this.queryCorps();
+      if (this.$route.query.text) {
+        this.$refs.searchBox.input = this.$route.query.text;
+      }
     }
+
+    this.queryParams.positionType = '';
+    this.queryCorps();
   },
   updated() {
     // 更新滚动条
@@ -874,11 +877,12 @@ export default {
         //旗舰店
         this.queryHRFlagshipStoreInfoAll();
       } else if (this.queryParams.positionType === '01') {
-        //TODO 查询推荐单位
+        //推荐单位
+        this.getIndexRecCorpList();
         return;
       } else {
         //TODO 查询所有单位
-        // this.queryCorps();
+        // this.queryAllCorps();
       }
     },
     /**

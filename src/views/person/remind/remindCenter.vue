@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:36
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-28 16:25:21
+ * @LastEditTime: 2021-07-15 15:46:09
  * @Description: 职位收藏子界面
  * @FilePath: \jb2q-hrm-web\src\views\person\remind\remindCenter.vue
 -->
@@ -280,6 +280,7 @@ export default {
     async queryPositionDetail(row) {
       this.loading = true;
       let queryRes = await queryPositionDetail({
+        pid: this.$store.getters['peroson/pid'] || '',
         positionId: row.positionId
       });
       if (queryRes && queryRes.status === 200) {

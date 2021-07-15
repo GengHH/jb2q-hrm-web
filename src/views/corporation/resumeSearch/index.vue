@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 10:35:59
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-01 14:58:49
+ * @LastEditTime: 2021-07-15 18:10:39
  * @Description: 单位模块的简历搜索
  * @FilePath: \jb2q-hrm-web\src\views\corporation\resumeSearch\index.vue
 -->
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="20">
             <el-checkbox-group
-              v-model="queryParams.industryList"
+              v-model="queryParams.positionTypeList"
               size="medium"
               id="positionsRadios"
               class="radio-list-bar"
@@ -285,7 +285,10 @@
       :before-close="handleClose"
     >
       <div class="operate-resume-header">
-        <el-button size="small" round
+        <el-button
+          size="small"
+          round
+          @click="favorResume([detailsIndex, resumeIdDetailsId, queryFavor])"
           ><i class="el-icon-star-on" v-if="queryFavor">已收藏</i>
           <i class="el-icon-star-off" v-else>收藏</i>
         </el-button>
@@ -582,6 +585,7 @@ export default {
         cid: this.$store.getters['corporation/cid'],
         content: '',
         invitePositionList: [''],
+        positionTypeList: [''],
         industryList: [''],
         workNature: '',
         salaryMax: '',
@@ -711,7 +715,7 @@ export default {
     // }
   },
   watch: {
-    'queryParams.industryList': function(val, oldVal) {
+    'queryParams.positionTypeList': function(val, oldVal) {
       //节流，防止数据短时间多次变动照成样式渲染过多而浪费性能
       this._.throttle(() => {
         //监听选中的选项-修改样式
@@ -846,7 +850,7 @@ export default {
       //this.queryParams.tranBaseSymbol = '0';
       //this.queryParams.agencyRecruit = '0';
       this.queryParams.industryList = [''];
-      // this.queryParams.industryList = [''];
+      this.queryParams.positionTypeList = [''];
       //this.queryParams.workNature = '';
       //this.queryParams.workYearNeed = '';
     },
@@ -1041,6 +1045,7 @@ export default {
       let index = arg[0];
       let resumeId = (arg && arg[1]) || '';
       let orginFavorType = arg[2];
+
       if (!orginFavorType) {
         //收藏简历
         let res = await doFavorResume({
@@ -1055,6 +1060,7 @@ export default {
         } else {
           this.$message({ type: 'error', message: '收藏简历失败' });
         }
+        this.detailsDialog = false;
       } else {
         //取消收藏简历
         let res = await doFavorResume({
@@ -1069,6 +1075,7 @@ export default {
         } else {
           this.$message({ type: 'error', message: '取消收藏简历失败' });
         }
+        this.detailsDialog = false;
       }
     },
     /**
@@ -1094,15 +1101,15 @@ export default {
     positionGroupChange(val) {
       let newVal = val;
       if (newVal && newVal.length && newVal[newVal.length - 1] === '') {
-        this.queryParams.industryList = [''];
+        this.queryParams.positionTypeList = [''];
       } else if (newVal && newVal.length && newVal.length > 10) {
         this.$alert('最多只可选择10种职位');
         newVal.pop();
-        this.queryParams.industryList = newVal;
+        this.queryParams.positionTypeList = newVal;
       } else if (newVal && newVal.length > 1 && newVal.includes('')) {
-        this.queryParams.industryList = newVal.filter(item => item !== '');
+        this.queryParams.positionTypeList = newVal.filter(item => item !== '');
       } else if (!newVal.length) {
-        this.queryParams.industryList = [''];
+        this.queryParams.positionTypeList = [''];
       }
     }
   }

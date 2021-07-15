@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 10:03:25
+ * @LastEditTime: 2021-07-15 15:00:59
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\mock\corporation\index.js
  */
@@ -235,7 +235,13 @@ Mock.mock(basePath + '/corp/position/find', 'post', function(options) {
             workAddress: '上海市普陀区中江路889号804室',
             salaryScope: '20-50(04)',
             'statusId|+1': ['1', '2', '3'],
-            describe: ''
+            describe: '',
+            releaseTime: '2021-07-02 16:21:44',
+            offTime: '',
+            editTime: '',
+            verifyUserId: '123123',
+            verifyTime: '2020-01-01',
+            verifyMemo: 'hahahhahahhah'
           }
         ]
       })

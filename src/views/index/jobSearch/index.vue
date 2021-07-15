@@ -2,6 +2,7 @@
   <div id="indexBody">
     <div>
       <base-search
+        ref="searchBox"
         placeholder="请输入相关职位名称"
         @clickButton="queryJobs($event)"
       ></base-search>
@@ -327,7 +328,7 @@
       @favorJob="favorJob(arguments)"
       @showJobDetials="showJobDetial(arguments)"
       @callPositionCorp="callPositionCorp(arguments)"
-      @changePage = "queryJobs"
+      @changePage="queryJobs"
     ></per-search-job>
     <!-- <BaseLoadingSvg v-else></BaseLoadingSvg> -->
     <div v-else style="text-align:center;margin-top:100px;color:#999;">
@@ -475,7 +476,7 @@ export default {
         : {};
     }
   },
-  created() {
+  mounted() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       // this.queryParams.positionType = this.$route.query.type;
@@ -483,21 +484,23 @@ export default {
         //查询急招职位
         this.queryParams.positionType = '03';
         this.queryAllUrgRecPositionList();
+        return;
       } else if (this.$route.query.type === 'hot') {
         //查询热招职位
         this.queryParams.positionType = '02';
         this.queryHotPositionInfoAll();
+        return;
       } else if (this.$route.query.type === 'rec') {
         this.queryParams.positionType = '01';
         //TODO 查询推荐职位
         return;
-      } else {
-        this.queryParams.positionType = '';
       }
-    } else {
-      this.queryParams.positionType = '';
-      this.queryJobs();
+      if (this.$route.query.text) {
+        this.$refs.searchBox.input = this.$route.query.text;
+      }
     }
+    this.queryParams.positionType = '';
+    this.queryJobs();
   },
   updated() {
     console.log(1234);
@@ -625,6 +628,12 @@ export default {
                 item.workArea
               );
             }
+            if (item.districtCode) {
+              item.districtCodeText = getDicText(
+                that.$store.getters['dictionary/ggjbxx_qx'],
+                item.districtCode
+              );
+            }
             if (item.eduRequire) {
               item.eduRequireText = getDicText(
                 that.$store.getters['dictionary/recruit_edu'],
@@ -648,6 +657,20 @@ export default {
                 that.$store.getters['dictionary/recruit_industry_type'],
                 item.industryType
               );
+            }
+            if (item.workYearNeed) {
+              item.workYearNeedText = getDicText(
+                that.$store.getters['dictionary/recruit_work_year'],
+                item.workYearNeed
+              );
+            }
+            if (item.salaryPayType) {
+              item.salaryPayTypeText =
+                '元/' +
+                getDicText(
+                  that.$store.getters['dictionary/recruit_salary_pay_type'],
+                  item.salaryPayType
+                );
             }
           });
           this.$set(this, 'queryResult', result.result.pageresult.data);
@@ -686,7 +709,6 @@ export default {
       this._.throttle(niceScrollUpdate, 500)();
     },
     showJobDetial(arg) {
-      console.log(arg);
       //显示岗位详细信息
       let index = arg[0];
       let positionId = (arg && arg[1]) || '';

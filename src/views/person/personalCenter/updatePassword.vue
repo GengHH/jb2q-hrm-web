@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-30 11:49:57
- * @LastEditTime: 2021-07-14 17:49:25
+ * @LastEditTime: 2021-07-15 13:15:32
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\person\personalCenter\updatePassword.vue
@@ -17,7 +17,7 @@
         <pl-input v-model="formData.zjhm" label="证件号码"></pl-input>
       </el-form-item>
       <el-form-item required prop="oldPassword">
-        <pl-input v-model="formData.oldPassword" label="就密码"></pl-input>
+        <pl-input v-model="formData.oldPassword" label="旧密码"></pl-input>
       </el-form-item>
       <el-form-item required prop="newPassword">
         <pl-input v-model="formData.newPassword" label="新密码"></pl-input>

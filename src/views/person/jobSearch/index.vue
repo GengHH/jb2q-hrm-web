@@ -308,7 +308,7 @@
         :label="defaultJobsCount"
         name="default"
         style="min-height:200px"
-        v-loading="loading2"
+        v-loading="loading"
         element-loading-text="拼命加载中"
       >
         <per-search-job
@@ -674,7 +674,7 @@ export default {
         pageIndex: that.$refs.searchJobList?.currentPage - 1 || 0
       };
       try {
-        this.$set(this, 'queryResult', []);
+        // this.$set(this, 'queryResult', []);
         this.loading2 = true;
         this.activeName = 'search';
         params.pid = that.$store.getters['person/pid'];
@@ -760,7 +760,7 @@ export default {
     async queryDefaultJobs(val) {
       let that = this;
       try {
-        this.$set(this, 'queryDefaultResult', []);
+        // this.$set(this, 'queryDefaultResult', []);
         this.loading = true;
         this.activeName = 'default';
         let result = await queryRecommendJobs({

@@ -3,23 +3,25 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 18:00:59
+ * @LastEditTime: 2021-07-15 15:41:28
  * @Description: 聊天弹框
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseWChat.vue
 -->
 <template>
-  <JwChat-index
-    class="pl-wchat"
-    :config="config"
-    :showRightBox="false"
-    scrollType="noroll"
-    :taleList="taleList"
-    @enter="bindEnter"
-    @clickTalk="talkEvent"
-    v-model="inputMsg"
-    :toolConfig="tool"
-    :winBarConfig="winBarConfig"
-  />
+  <div v-loading="loading" element-loading-text="拼命加载中">
+    <JwChat-index
+      class="pl-wchat"
+      :config="config"
+      :showRightBox="false"
+      scrollType="noroll"
+      :taleList="taleList"
+      @enter="bindEnter"
+      @clickTalk="talkEvent"
+      v-model="inputMsg"
+      :toolConfig="tool"
+      :winBarConfig="winBarConfig"
+    />
+  </div>
 </template>
 
 <script>
@@ -43,6 +45,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       inputMsg: '',
       taleList: [
         // {
@@ -106,9 +109,9 @@ export default {
       ],
       tool: {
         // 现在只配置了 ["file", "video", "img", "hongbao", "more", "history"]
-        show: ['file', 'history', 'img', ['文件1', '', '图片']], // 二级数组中放自定义名称
+        // show: ['file', 'history', 'img', ['文件1', '', '图片']], // 二级数组中放自定义名称
+        show: [], // 二级数组中放自定义名称
         showEmoji: true, // 是否显示表情图标
-
         callback: this.toolEvent
       },
       config: {
@@ -203,12 +206,16 @@ export default {
             date: formatTime(new Date()),
             text: { text: msg },
             mine: true,
-            name: this.$store.getters['person/username'] || '用户',
-            img:
-              this.$store.getters['person/sex'] === '2'
+            name: isPerson(this)
+              ? this.$store.getters['person/username'] || '用户'
+              : this.$store.getters['corporation/username'] || '用户',
+            img: isPerson(this)
+              ? this.$store.getters['person/sex'] === '2'
                 ? require('@/assets/images/woman.svg')
                 : require('@/assets/images/man.svg')
+              : require('@/assets/images/dw.svg')
           };
+          //即时显示的聊天信息
           this.taleList.push(msgObj);
         } else if (sendRes) {
           this.$message({ type: 'error', message: '发送失败' });
@@ -287,7 +294,7 @@ export default {
     /**
      *查询历史信息
      */
-    openSession() {
+    async openSession() {
       let queryParams = {
         //打开聊天框的对象，个人填pid，单位填cid
         openId: '',
@@ -320,45 +327,47 @@ export default {
         queryParams.targetType = '1';
       }
       //开始查询
-      openSession(queryParams).then(queryRes => {
-        if (queryRes && queryRes.status === 200) {
-          this.sessionId = queryRes.result.sessionInfo.sessionId;
-          let target = this.coverMsgs(queryRes.result.sessionInfo.msgs || []);
-          this.taleList = target;
-          //! TODO默认显示推荐的职位信息
-          if (this.sysmData && Object.keys(this.sysmData).length > 0) {
-            this.taleList.push({
-              date: formatTime(new Date()),
-              mine: true,
-              name: this.$store.getters['person/username'] || '用户',
-              img:
-                this.$store.getters['person/sex'] === '2'
-                  ? require('@/assets/images/woman.svg')
-                  : require('@/assets/images/man.svg'),
-              text: {
-                system: {
-                  title: '经系统验证，智能识别为您显示目标信息。',
-                  subtitle: '相关职位信息:',
-                  content: [
-                    {
-                      id: this.sysmData.positionId || '',
-                      subType: this.sysmData.type || 'position',
-                      text: this.sysmData.positionName || '数据异常'
-                    }
-                  ]
-                }
+      this.loading = true;
+      let queryRes = await openSession(queryParams);
+      if (queryRes && queryRes.status === 200) {
+        this.sessionId = queryRes.result.sessionInfo.sessionId;
+        let target = this.coverMsgs(queryRes.result.sessionInfo.msgs || []);
+        this.taleList = target;
+        //! TODO默认显示推荐的职位信息
+        if (this.sysmData && Object.keys(this.sysmData).length > 0) {
+          this.taleList.push({
+            date: formatTime(new Date()),
+            mine: true,
+            name: this.$store.getters['person/username'] || '用户',
+            img:
+              this.$store.getters['person/sex'] === '2'
+                ? require('@/assets/images/woman.svg')
+                : require('@/assets/images/man.svg'),
+            text: {
+              system: {
+                title: '经系统验证，智能识别为您显示目标信息。',
+                subtitle: '相关职位信息:',
+                content: [
+                  {
+                    id: this.sysmData.positionId || '',
+                    subType: this.sysmData.type || 'position',
+                    text: this.sysmData.positionName || '数据异常'
+                  }
+                ]
               }
-            });
-          }
-        } else if (queryRes) {
-          this.$message({ type: 'error', message: '无法获取历史聊天信息' });
+            }
+          });
         }
-      });
+      } else if (queryRes) {
+        this.$message({ type: 'error', message: '无法获取历史聊天信息' });
+      }
+      this.loading = false;
     },
     /**
      *转换数据（将后台显示的数据转换成需要的数据格式）
      */
     coverMsgs(source) {
+      let that = this;
       if (source && Array.isArray(source)) {
         return source.map(msg => {
           let _obj = { ...msg };
@@ -367,14 +376,25 @@ export default {
           _obj.text = {
             text: msg.content || ''
           };
-          //TODO 识别每条记录对应的头像
-          if (isPerson()) {
-            _obj.img =
-              this.$store.getters['person/sex'] === '2'
-                ? require('@/assets/images/woman.svg')
-                : require('@/assets/images/man.svg');
+          //TODO 识别每条记录对应的头像(需要返回性别)
+          if (_obj.mine) {
+            if (isPerson(that)) {
+              _obj.img =
+                this.$store.getters['person/sex'] === '2'
+                  ? require('@/assets/images/woman.svg')
+                  : require('@/assets/images/man.svg');
+            } else {
+              _obj.img = require('@/assets/images/dw.svg');
+            }
           } else {
-            _obj.img = require('@/assets/images/dw.svg');
+            if (isPerson(that)) {
+              _obj.img = require('@/assets/images/dw.svg');
+            } else {
+              _obj.img =
+                this.$store.getters['person/sex'] === '2'
+                  ? require('@/assets/images/woman.svg')
+                  : require('@/assets/images/man.svg');
+            }
           }
           return _obj;
         });
