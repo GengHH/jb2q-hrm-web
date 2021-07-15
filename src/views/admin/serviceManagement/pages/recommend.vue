@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 17:47:29
- * @LastEditTime: 2021-07-12 11:18:12
+ * @LastEditTime: 2021-07-14 18:37:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\recommend.vue
@@ -264,7 +264,7 @@ export default {
       let data = { ...e };
       data.pageParam = this.params;
       //是否已推荐（0未推荐，1已推荐，不传则全查）
-      data.recommend = '1';
+      data.recommend = '0';
       emphasis_query(
         data,
         res => {

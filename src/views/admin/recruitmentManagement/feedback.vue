@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-14 11:04:27
+ * @LastEditTime: 2021-07-15 10:51:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -211,11 +211,11 @@ export default {
     };
   },
   created() {
-    // if (this.adminId == '00') {
-    //   this.formConfig.formItemList[2].disabled = false;
-    // } else {
-    //   this.formConfig.formItemList[2].disabled = true;
-    // }
+    if (this.adminId == '00') {
+      this.formConfig.formItemList[2].disabled = false;
+    } else {
+      this.formConfig.formItemList[2].disabled = true;
+    }
   }
 };
 </script>

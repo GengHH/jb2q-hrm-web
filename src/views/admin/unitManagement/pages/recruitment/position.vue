@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-07-01 19:21:47
+ * @LastEditTime: 2021-07-15 10:47:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\position.vue
 -->
 <template>
   <el-dialog
-    title="职位审核"
+    :title="data.topTitle || '职位审核'"
     width="730px"
     :visible="resVisible"
     @close="onclose"
@@ -407,6 +407,7 @@ export default {
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  margin-bottom: 15px;
 }
 .title-style::before {
   content: '';

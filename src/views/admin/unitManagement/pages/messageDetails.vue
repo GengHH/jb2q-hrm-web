@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-10 15:35:57
- * @LastEditTime: 2021-07-08 14:34:13
+ * @LastEditTime: 2021-07-15 11:12:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\messagedetails.vue
@@ -240,46 +240,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequire" label="学历要求" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.edu" :key="k">
-                  <div v-if="v.value == scope.row.eduRequire">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              slot="workYearNeed"
-              label="工作年限"
-              align="center"
-            >
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.year" :key="k">
-                  <div v-if="v.value == scope.row.workYearNeed">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column slot="workNature" label="工作性质" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.workNature" :key="k">
-                  <div v-if="v.value == scope.row.workNature">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column slot="workArea" label="工作地点" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.qx" :key="k">
-                  <div v-if="v.value == scope.row.workArea">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
             <el-table-column
               fixed="right"
               slot="aaa010"
@@ -288,6 +248,13 @@
               width="180"
             >
               <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="openPosition(scope)"
+                >
+                  详情</el-button
+                >
                 <el-button
                   size="mini"
                   type="primary"
@@ -358,46 +325,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column slot="eduRequire" label="学历要求" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.edu" :key="k">
-                  <div v-if="v.value == scope.row.eduRequire">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              slot="workYearNeed"
-              label="工作年限"
-              align="center"
-            >
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.year" :key="k">
-                  <div v-if="v.value == scope.row.workYearNeed">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column slot="workNature" label="工作性质" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.workNature" :key="k">
-                  <div v-if="v.value == scope.row.workNature">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column slot="workArea" label="工作地点" align="center">
-              <template slot-scope="scope">
-                <div v-for="(v, k) in dicOptions.qx" :key="k">
-                  <div v-if="v.value == scope.row.workArea">
-                    {{ v.label }}
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
+
             <el-table-column
               fixed="right"
               slot="aaa010"
@@ -406,6 +334,13 @@
               width="180"
             >
               <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="openPosition(scope)"
+                >
+                  详情</el-button
+                >
                 <el-button
                   size="mini"
                   type="primary"
@@ -473,6 +408,13 @@
       :form="formQuery"
       @onclose="oncloseQuery"
     ></querymessage>
+    <position
+      v-if="positionVisible"
+      :data="positionData"
+      :resVisible="positionVisible"
+      :type="0"
+      @onclose="positionVisible = false"
+    ></position>
   </el-dialog>
 </template>
 
@@ -487,12 +429,15 @@ import {
 import ttable from '../../common/t_table';
 import editmessage from './message/edit';
 import querymessage from './message/query';
+import position from './recruitment/position';
 export default {
   name: 'messagedetails',
   props: ['visible', 'form'],
-  components: { ttable, editmessage, querymessage },
+  components: { ttable, editmessage, querymessage, position },
   data() {
     return {
+      positionData: {},
+      positionVisible: false,
       visibleQuery: false,
       formQuery: {},
       visibleEdit: false,
@@ -534,12 +479,6 @@ export default {
         { title: '职位名称', prop: 'positionName', width: 150 },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
         { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
-        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
-        { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
-        { title: '工作性质', prop: 'workNature', slot: 'workNature' },
-        { title: '招聘人数', prop: 'recruitNum' },
-        { title: '工作地点', prop: 'workArea', slot: 'workArea' },
-        { title: '发布时间', prop: 'releaseTime', width: 120 },
         { title: '操作', slot: 'aaa010' }
       ],
       columns2: [
@@ -547,12 +486,6 @@ export default {
         { title: '职位名称', prop: 'positionName' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
         { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
-        { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
-        { title: '工作年限', prop: 'workYearNeed', slot: 'workYearNeed' },
-        { title: '工作性质', prop: 'workNature', slot: 'workNature' },
-        { title: '招聘人数', prop: 'recruitNum' },
-        { title: '工作地点', prop: 'workArea', slot: 'workArea' },
-        { title: '发布时间', prop: 'releaseTime', width: 120 },
         { title: '操作', slot: 'aaa010' }
       ],
       list: [],
@@ -561,6 +494,10 @@ export default {
   },
   computed: {},
   methods: {
+    openPosition(e) {
+      this.positionData = { ...e.row, topTiele: '详情' };
+      this.positionVisible = true;
+    },
     handleChange2(e) {
       this.params2.pageIndex = e;
       this.queryAgency();

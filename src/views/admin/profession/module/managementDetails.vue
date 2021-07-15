@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-08 17:29:14
- * @LastEditTime: 2021-07-13 17:07:16
+ * @LastEditTime: 2021-07-14 18:21:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\profession\module\managementDetails.vue
@@ -229,14 +229,12 @@ export default {
       if (this.type == '4') {
         this.imageUrl = '';
         this.fileList = [];
-        this.form.sceneImageBase64 = '';
       }
     },
     proUrlRemove() {
       if (this.type != '2') {
         this.propagandaUrl = '';
         this.proFileList = [];
-        this.proForm.sceneImageBase64 = '';
       }
     },
     onSubmitForm() {
@@ -329,6 +327,7 @@ export default {
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.form[name] = reader.result;
+        console.log(this.form[name]);
         if (fn) {
           fn();
         }
@@ -361,7 +360,6 @@ export default {
       }
     },
     proUploadUserChange(file) {
-      console.log(1);
       if (this.beforeAvatarUpload(file.raw)) {
         this.proGetBase64(file.raw, 'propagandaImageBase64', () => {
           this.proUrlRemove();
@@ -397,7 +395,7 @@ export default {
       act_modify(
         data,
         res => {
-          if (res.status == 200) {
+          if (res.result.data.result) {
             this.$message({
               message: '操作成功',
               type: 'success',
@@ -405,6 +403,12 @@ export default {
               onClose: () => {
                 this.onclose('1');
               }
+            });
+          } else {
+            this.$message({
+              message: res.result.data.msg,
+              type: 'warning',
+              duration: 1000
             });
           }
           console.log(res);
@@ -455,6 +459,7 @@ export default {
   mounted() {
     console.log(this.type);
     let dataList = { ...this.formConfig.dataList };
+    console.log(dataList);
     setTimeout(() => {
       if (this.type != '3') {
         this.$refs.advancedSearch.value = dataList;

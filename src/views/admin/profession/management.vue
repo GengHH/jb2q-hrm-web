@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-09 17:00:22
+ * @LastEditTime: 2021-07-14 18:06:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -72,8 +72,17 @@
             <el-button @click="look(4, scope)" size="mini" type="info" plain>
               <i class="el-icon-chat-line-square"></i> 反馈</el-button
             >
-            <el-button
+            <!-- <el-button
               v-if="scope.row.release != '1' && scope.row.userId == userId"
+              size="mini"
+              type="danger"
+              @click="remove(scope)"
+              plain
+            >
+              <i class="el-icon-close"></i> 删除</el-button
+            > -->
+            <el-button
+              v-if="scope.row.release != '1'"
               size="mini"
               type="danger"
               @click="remove(scope)"

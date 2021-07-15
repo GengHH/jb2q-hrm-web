@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-28 14:27:10
- * @LastEditTime: 2021-07-14 09:50:25
+ * @LastEditTime: 2021-07-15 10:40:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\managementDetails.vue
@@ -52,7 +52,7 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="12" v-if="adminId == '00'">
+          <!-- <el-col :span="12" v-if="adminId == '00'">
             <el-form-item label="招聘会首页图片">
               <el-upload
                 action=""
@@ -81,7 +81,7 @@
                 <i class="el-icon-close"></i>
               </div>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
       <div style="text-align:center">
@@ -97,6 +97,7 @@
 import { trim } from '@/utils/index';
 import tform from '../../common/t_form';
 import ttable from '../../common/t_table';
+
 import {
   schedule_query_info,
   schedule_update,

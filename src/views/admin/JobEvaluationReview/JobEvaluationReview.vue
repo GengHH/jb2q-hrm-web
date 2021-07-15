@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:46:47
- * @LastEditTime: 2021-07-01 19:34:16
+ * @LastEditTime: 2021-07-14 17:28:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -41,7 +41,6 @@
       width="75%"
       title="查看"
       :visible="dialogTableVisible"
-      v-loading="loading"
       element-loading-text="加载中..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.5)"

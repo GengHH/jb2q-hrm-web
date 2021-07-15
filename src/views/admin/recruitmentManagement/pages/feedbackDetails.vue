@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-07-14 12:40:19
+ * @LastEditTime: 2021-07-15 10:45:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue
@@ -13,9 +13,7 @@
     :visible="visible"
     @close="onclose"
   >
-    <div
-      style="height:500px;overflow: scroll;overflow-x: hidden;padding: 0 10px 0 0;"
-    >
+    <div style="padding: 0 10px 0 0;">
       <div class="title-style">预约报名信息</div>
       <el-form size="mini" :model="form" label-width="150px">
         <el-row>
@@ -73,6 +71,15 @@
             </template>
           </template>
         </el-table-column>
+        <el-table-column slot="recruitType" label="招聘类型" align="center">
+          <template slot-scope="scope">
+            <template v-for="(v, k) in dicOptions.recruit_type">
+              <div :key="k" v-if="v.value == scope.row.recruitType">
+                {{ v.label }}
+              </div>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column slot="salary" label="薪酬" align="center">
           <template slot-scope="scope">
             <div>
@@ -82,7 +89,7 @@
         </el-table-column>
         <el-table-column slot="aaa010" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="look(scope, 1)" plain>
+            <el-button size="mini" type="primary" @click="look(scope)" plain>
               详情</el-button
             >
           </template>
@@ -177,12 +184,20 @@
         <el-button type="primary" @click="onSubmit">提交</el-button>
       </div>
     </div>
+    <position
+      v-if="positionVisible"
+      :data="positionData"
+      :resVisible="positionVisible"
+      :type="0"
+      @onclose="positionVisible = false"
+    ></position>
   </el-dialog>
 </template>
 
 <script>
 import { trim } from '@/utils/index';
 import ttable from '../../common/t_table';
+import position from '../../unitManagement/pages/recruitment/position';
 import {
   feedback_look,
   feedback_info_query,
@@ -191,10 +206,12 @@ import {
 export default {
   name: 'feedbackDetails',
   props: ['visible', 'lookList', 'disabled'],
-  components: { ttable },
+  components: { ttable, position },
   data() {
     let othis = this;
     return {
+      positionData: {},
+      positionVisible: false,
       isUserResult: true,
       pickerOptions: {
         disabledDate(time) {
@@ -211,15 +228,29 @@ export default {
       dicOptions: {
         type: trim(this.$store.getters['dictionary/recruit_meet_type']),
         //学历
-        edu: trim(this.$store.getters['dictionary/recruit_edu'])
+        edu: trim(this.$store.getters['dictionary/recruit_edu']),
+        yesno: trim(this.$store.getters['dictionary/yesno']),
+        recruit_type: trim(this.$store.getters['dictionary/recruit_type']),
+        position_s_type: trim(
+          this.$store.getters['dictionary/recruit_position_s_type']
+        ),
+        nature: trim(this.$store.getters['dictionary/recurit_work_nature']),
+        qx: trim(this.$store.getters['dictionary/ggjbxx_qx']),
+        year: trim(this.$store.getters['dictionary/recurit_work_year']),
+        verify_status: trim(
+          this.$store.getters['dictionary/recruit_verify_status']
+        ),
+        release_status: trim(
+          this.$store.getters['dictionary/recruit_release_status']
+        )
       },
       columns: [
         { title: '序号', type: 'index' },
         { title: '职位名称', prop: 'positionName' },
         { title: '学历要求', prop: 'eduRequire', slot: 'eduRequire' },
         { title: '薪酬', prop: 'salary', slot: 'salary' },
-        { title: '职位描述', prop: 'describe' }
-        // { title: '操作', slot: 'aaa010' }
+        { title: '招聘类型', prop: 'recruitType', slot: 'recruitType' },
+        { title: '操作', slot: 'aaa010' }
       ],
       list: [],
       startTime: '',
@@ -263,8 +294,9 @@ export default {
       let t = d.getTime(d);
       return t;
     },
-    look() {
-      this.visible = true;
+    look(scope) {
+      this.positionData = { ...scope.row, topTiele: '详情' };
+      this.positionVisible = true;
     },
     soldOut(scope) {},
     alteration() {},

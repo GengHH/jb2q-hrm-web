@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-13 15:59:43
+ * @LastEditTime: 2021-07-15 10:53:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\message.vue
@@ -98,7 +98,6 @@ export default {
             type: 'select',
             label: '管理所属区',
             rules: [],
-            disabled: true,
             key: 'districtCode',
             style: { width: '210px' },
             options: trim(this.$store.getters['dictionary/ggjbxx_qx'])
@@ -166,11 +165,11 @@ export default {
     };
   },
   created() {
-    if (this.adminId == '00') {
-      this.formConfig.formItemList[2].disabled = false;
-    } else {
-      this.formConfig.formItemList[2].disabled = true;
-    }
+    // if (this.adminId == '00') {
+    //   this.formConfig.formItemList[2].disabled = false;
+    // } else {
+    //   this.formConfig.formItemList[2].disabled = true;
+    // }
   }
 };
 </script>

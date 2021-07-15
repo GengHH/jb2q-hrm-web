@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-13 19:48:24
+ * @LastEditTime: 2021-07-15 10:24:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\management.vue
@@ -274,7 +274,6 @@ export default {
     },
     getqx(code) {
       let qx = this.setQx();
-      console.log(qx);
       for (let i = 0; i < qx.length; i++) {
         if (code == qx[i].value) {
           return qx[i].label;

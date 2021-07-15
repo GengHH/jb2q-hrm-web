@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-01 15:33:13
- * @LastEditTime: 2021-07-08 10:11:56
+ * @LastEditTime: 2021-07-14 17:24:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitmentDetail.vue
@@ -89,7 +89,7 @@
                   plain
                   >查看</el-button
                 >
-                <el-button
+                <!-- <el-button
                   style="margin-top:5px"
                   v-if="auditStutas != '1'"
                   size="mini"
@@ -98,7 +98,7 @@
                   @click="autonomously('1', scope)"
                   plain
                   >精准推荐</el-button
-                >
+                > -->
                 <el-button
                   style="margin-top:5px"
                   v-if="auditStutas != '1'"
