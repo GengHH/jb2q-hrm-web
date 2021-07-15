@@ -309,7 +309,7 @@
                       '日'
                     : '无'
                 }}-{{
-                  workCarditem.quitDate
+                  workCarditem.quitDate && workCarditem.quitDate !== '至今'
                     ? workCarditem.quitDate.substring(0, 4) +
                       '年' +
                       workCarditem.quitDate.substring(4, 6) +
@@ -1297,7 +1297,7 @@ import {
   deleteSomeResume,
   saveWorkYear
 } from '@/api/personApi';
-import { getDicText, niceScrollUpdate } from '@/utils/index';
+import { isPerson, getDicText, niceScrollUpdate } from '@/utils/index';
 /**
  * 简历信息的基本模板
  */
@@ -2492,7 +2492,9 @@ export default {
       this.$set(this, 'resume', { ...this.$props.resumeData });
     }
     //校验最高学历是否包含教育经历
-    this.includeEduExp();
+    if (isPerson(this)) {
+      this.includeEduExp();
+    }
   },
   watch: {
     /**

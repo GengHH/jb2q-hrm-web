@@ -120,11 +120,28 @@
             <p class="four-opacity mat-15">更新于 {{ realData.releaseTime }}</p>
           </el-col>
           <el-col :span="5" class="padd-l">
-            <p
+            <!-- <p
               v-if="realData.tranBaseSymbol === '0'"
               class="four-opacity mat-50"
             >
-              <!-- 发布机构:{{ realData.corpName }} -->
+              发布机构:{{ realData.corpName }}
+            </p> -->
+            <p v-if="realData.recruitType === '2'" class="four-opacity mat-50">
+              <span class="gray-font">发布机构：</span
+              ><i>{{
+                realData.districtCodeText
+                  ? realData.districtCodeText + '就业促进中心'
+                  : '未知'
+              }}</i>
+            </p>
+            <p
+              v-if="realData.agencyRecruit === '1'"
+              class="four-opacity mat-50"
+            >
+              <span class="gray-font">委托待招单位：</span
+              ><i>{{
+                realData.entrustCorpName ? realData.entrustCorpName : '未知'
+              }}</i>
             </p>
           </el-col>
         </el-row>

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-12 16:38:40
- * @LastEditTime: 2021-07-01 19:32:16
+ * @LastEditTime: 2021-07-15 16:47:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\message\query.vue
@@ -14,7 +14,7 @@
     @close="onclose"
     append-to-body
   >
-    <div style="height:500px;overflow: scroll;overflow-x: hidden;">
+    <div ref="topBox" style="height:500px;overflow: scroll;overflow-x: hidden;">
       <ttable :options="{ loading: loading }" :columns="columns" :list="list">
         <el-table-column
           fixed="right"
@@ -243,6 +243,9 @@ export default {
       this.userPid = e.row.pid;
       this.interview = { ...e.row };
       this.show = true;
+      setTimeout(() => {
+        this.$refs.topBox.scrollTop = '560';
+      }, 0);
     },
     handleChange(e) {
       console.log(e);

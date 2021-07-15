@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 18:14:07
+ * @LastEditTime: 2021-07-15 11:17:23
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobAdd.vue
 -->
@@ -1279,19 +1279,19 @@ export default {
     /**
      *选择查询出来的单位
      */
-    async wtRadioGroupChange(tyshxym, corpname) {
+    async wtRadioGroupChange(tyshxym, corpName) {
       // 委托单位信息
       if (this.wtQueryType === '2') {
         //根据选择单位的统一社会信用码再次判断
         this.wtLoading = true;
         let queryRes = await queryEntrustCorp({
           entrustTyshxym: tyshxym,
-          entrustCorpName: corpname
+          entrustCorpName: corpName
         });
         if (
           queryRes &&
           queryRes.status === 200 &&
-          queryRes.result.data.length === 0
+          queryRes.result.data.length
         ) {
           this.jobForm.entrustTyshxym = tyshxym || '';
           this.jobForm.entrustCorpName = corpName || '';
@@ -1302,10 +1302,12 @@ export default {
         }
         this.wtLoading = false;
       } else {
-        await function(tyshxym, corpName) {
-          this.jobForm.entrustTyshxym = tyshxym || '';
-          this.jobForm.entrustCorpName = corpName || '';
-        };
+        this.jobForm.entrustTyshxym = tyshxym || '';
+        this.jobForm.entrustCorpName = corpName || '';
+        // await function(tyshxym, corpName) {
+        //   this.jobForm.entrustTyshxym = tyshxym || '';
+        //   this.jobForm.entrustCorpName = corpName || '';
+        // };
       }
     },
     /**

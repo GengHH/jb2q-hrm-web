@@ -114,7 +114,7 @@
                 class="ico_rz"
                 style="height: .9em;position: relative;top: 3px;"
               /><i
-                v-if="realData.attention"
+                v-if="realData.follow"
                 class="star-btn el-icon-star-off"
                 @click="attentionCorp"
                 >关注单位</i
@@ -188,12 +188,28 @@
                 > 
               </el-col> -->
             </el-row>
-
-            <p
+            <!-- <p
               v-if="realData.tranBaseSymbol === '0'"
               class="four-opacity mat-50"
             >
               发布机构:{{ realData.corpName }}
+            </p> -->
+            <p v-if="realData.recruitType === '2'" class="four-opacity mat-50">
+              <span class="gray-font">发布机构：</span
+              ><i>{{
+                realData.districtCodeText
+                  ? realData.districtCodeText + '就业促进中心'
+                  : '未知'
+              }}</i>
+            </p>
+            <p
+              v-if="realData.agencyRecruit === '1'"
+              class="four-opacity mat-50"
+            >
+              <span class="gray-font">委托待招单位：</span
+              ><i>{{
+                realData.entrustCorpName ? realData.entrustCorpName : '未知'
+              }}</i>
             </p>
           </el-col>
         </el-row>
@@ -301,7 +317,14 @@
         </el-row>
       </el-col>
       <el-col :span="5" class="padd-l ">
-        <p class="sixteen-opacity">职位发布者</p>
+        <p class="sixteen-opacity">
+          职位发布者<el-button
+            type="primary"
+            class="gray-btn or-br mat-15 orange-font"
+            @click="callPositionCorp(realData.cid || realData.corpId)"
+            ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
+          >
+        </p>
         <div class="header-box clearfix">
           <img src="../../assets/images/dw.svg" class="head-img" alt="" />
           <div class="fl mat-15 right-div ">
@@ -311,22 +334,22 @@
             <p>
               <!-- <span class="dqzx-span">当前在线</span> -->
             </p>
-            <el-button
+            <!-- <el-button
               type="primary"
-              class="gray-btn or-br mat-15"
+              class="gray-btn or-br mat-15 orange-font"
               @click="callPositionCorp(realData.cid || realData.corpId)"
               ><i class="el-icon-chat-dot-round"></i> 立即沟通</el-button
-            >
+            > -->
           </div>
         </div>
-        <div class="mat-30 clearfix">
+        <!-- <div class="mat-30 clearfix" style="border-top: 1px dotted #ccc;padding-top: 20px;">
           <img
             class="fl ico_rz logos"
             src="../../assets/images/logos.png"
             alt=""
           />
           <p class="font-sixteen font-or name-p">{{ realData.corpName }}</p>
-        </div>
+        </div> -->
         <!-- <div class="module1">
           <p class="four-opacity">
             <img src="../../assets/images/ico01.png" alt="" /> 互联网
@@ -532,8 +555,29 @@ export default {
           console.log(err);
         });
     },
-    callPositionCorp(positionId) {
-      this.$emit('callPositionCorp', positionId);
+    /**
+     * 沟通单位
+     */
+    callPositionCorp(cid) {
+      //  console.log(
+      //   '%c 🍔 arg: ',
+      //   'font-size:20px;background-color: #465975;color:#fff;',
+      //   arg
+      // );
+      // let index = arg[0];
+      // let corpId = (arg && arg[1]) || '';
+      // let positionId = (arg && arg[2]) || '';
+      // let positionName = (arg && arg[3]) || '';
+      // let corpName = (arg && arg[4]) || '';
+
+      this.$emit(
+        'callPositionCorp',
+        this.index,
+        cid,
+        this.realData.positionId,
+        this.realData.positionName,
+        this.realData.corpName
+      );
     },
     /**
      * 获取职位的详细信息
@@ -721,26 +765,24 @@ export default {
       this.loading = false;
     },
     /**
-     * TODO(attention) 个人关注or取消关注单位
+     * 个人关注or取消关注单位
      */
     async attentionCorp() {
       this.loading = true;
       let queryRes = await attentionOrFavor('1', {
         id: [this.realData.corpId],
         pid: this.$store.getters['person/pid'],
-        status: this.realData.attention
+        status: this.realData.follow
       });
       if (queryRes && queryRes.status === 200) {
         // this.corpInfo = queryRes.result.data;
         this.$message.success(
-          this.realData.attention ? '关注成功' : '取消关注成功'
+          this.realData.follow ? '关注成功' : '取消关注成功'
         );
-        //TODO更新按钮样式
-        this.realData.attention = !this.realData.attention;
+        //更新按钮样式
+        this.realData.follow = !this.realData.follow;
       } else if (queryRes) {
-        this.$message.error(
-          this.realData.attention ? '关注失败' : '取消关注失败'
-        );
+        this.$message.error(this.realData.follow ? '关注失败' : '取消关注失败');
       }
       this.loading = false;
     }
@@ -894,7 +936,7 @@ export default {
       }
       .job-right {
         display: inline-block;
-        margin-left: 15px;
+        // margin-left: 15px;
         p {
           line-height: 30px;
         }
@@ -918,19 +960,21 @@ export default {
         font-size: 16px;
         color: rgba(0, 0, 0, 0.7);
       }
-      .or-br {
-        border-color: #fc6f3d !important;
-      }
+      // .or-br {
+      //   border-color: #fc6f3d !important;
+      // }
 
-      .gray-btn,
-      .gray-btn:hover {
-        color: #fc6f3d;
-        background-color: transparent;
-        border-color: #d1d1d1;
-        padding: 3px 10px;
-        border-radius: 20px;
-      }
+      // .orange-font {
+      //   color: #fc6f3d;
+      // }
     }
+  }
+  .gray-btn {
+    color: #fc6f3d;
+    background-color: transparent;
+    border-color: #d1d1d1;
+    padding: 3px 10px;
+    border-radius: 20px;
   }
   .logos {
     width: 82px;

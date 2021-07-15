@@ -255,7 +255,7 @@ export default {
   created() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
-      this.cid = this.$route.query.id;
+      this.cid = this.$route.query.id || this.$route.query.cid;
       //查询单位详细信息
       this.getCorpDetail();
       // TODO 查询单位下所有的待招职位

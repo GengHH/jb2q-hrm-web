@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 14:17:49
+ * @LastEditTime: 2021-07-15 13:44:36
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
 -->
@@ -25,8 +25,8 @@
     <!-- <img v-else src="../../assets/images/logos.png" alt="" /> -->
     <div v-else>
       <img
-        v-if="corpBoxInfoObj.propagandaImage"
-        :src="'data:image/jpg;base64,' + corpBoxInfoObj.propagandaImage"
+        v-if="corpBoxInfoObj.logo"
+        :src="'data:image/jpg;base64,' + corpBoxInfoObj.logo"
         @error="defImg"
         alt="未加载"
       />

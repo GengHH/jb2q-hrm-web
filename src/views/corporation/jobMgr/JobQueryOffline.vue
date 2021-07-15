@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-06 14:32:13
+ * @LastEditTime: 2021-07-15 14:54:03
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\corporation\jobMgr\JobQueryOffline.vue
 -->
@@ -54,6 +54,21 @@
           <template #date="{row}">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ row.offTime }}</span>
+          </template>
+          <template #statusId="{row}">
+            <span v-if="row.statusId === '2'" style="color:green">通过</span>
+            <el-popover
+              v-else-if="row.statusId === '3'"
+              trigger="hover"
+              placement="top"
+            >
+              <p><span style="color:red">时间:</span> {{ row.verifyTime }}</p>
+              <p><span style="color:red">原因:</span> {{ row.verifyMemo }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">驳回</el-tag>
+              </div>
+            </el-popover>
+            <span v-else>待审核</span>
           </template>
         </pl-table>
       </el-tab-pane>
@@ -141,8 +156,9 @@ export default {
         {
           label: '审核状态',
           prop: 'statusId',
-          unshow: this.unshowShztColumn,
-          tagMap: STATUS_TAG_MAP
+          slotName: 'statusId',
+          unshow: this.unshowShztColumn
+          // tagMap: STATUS_TAG_MAP
         },
         {
           label: '操作',

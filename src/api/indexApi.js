@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-14 19:00:14
+ * @LastEditTime: 2021-07-15 18:23:19
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\api\indexApi.js
  */
@@ -58,12 +58,18 @@ const queryHRFlagshipStoreInfo = params =>
 const queryHRFlagshipStoreInfoAll = params =>
   postAction(basePath + '/nologin/index/queryHRFlagshipStoreInfoAll', params);
 
-//查询特色活动列表
+//查询招聘会列表
 const queryMeetingList = params =>
   postAction(basePath + '/nologin/meeting/queryMeetingList', params);
-//查询特色活动明细信息
+//查询招聘会明细信息
 const queryMeetingDetail = params =>
   postAction(basePath + '/nologin/meeting/queryMeetingDetail', params);
+//查询招聘会中单位列表
+const queryMeetingCorporationList = params =>
+  postAction(basePath + '/nologin/meeting/queryMeetingCorporationList', params);
+//查询招聘会职位列表
+const queryMeetingPositionList = params =>
+  postAction(basePath + '/nologin/meeting/queryMeetingPositionList', params);
 
 //用工缺失调剂信息专区
 const queryAllEmploymentLack = params =>
@@ -100,6 +106,8 @@ export {
   queryHRFlagshipStoreInfoAll,
   queryMeetingList,
   queryMeetingDetail,
+  queryMeetingCorporationList,
+  queryMeetingPositionList,
   queryAllEmploymentLack,
   queryAllEmploymentSurplus,
   getPositionDetail,

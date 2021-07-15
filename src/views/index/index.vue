@@ -2,7 +2,12 @@
   <div>
     <!-- <router-view></router-view> -->
     <div id="indexBody">
-      <BaseSearch showSelect :selectData="selectData"></BaseSearch>
+      <BaseSearch
+        ref="searchBox"
+        showSelect
+        :selectData="selectData"
+        @clickButton="queryFromIndex(arguments)"
+      ></BaseSearch>
       <!-- <router-view></router-view> -->
       <el-row id="carouselBox" :gutter="20">
         <el-col :sm="24" :md="18" :lg="16" :xl="16">
@@ -305,7 +310,7 @@ export default {
           label: '单位名称',
           value: 'corporation'
         },
-        { label: '职位类型', value: 'position' }
+        { label: '职位名称', value: 'position' }
       ]
     };
   },
@@ -348,11 +353,36 @@ export default {
       // window.location.href =
       //   'http://117.184.226.149/uc/login/login.jsp?type=2&redirect_uri=https://j2testzzjb.rsj.sh.cegn.cn/ggzp-zzjb-shrs/loginController/ywtb-index';
     },
+    /**
+     * 首页查询
+     */
+    queryFromIndex() {
+      let target = this.$refs.searchBox;
+      if (target && !target.selectValue) {
+        this.$alert('请选择查询类型');
+        return;
+      }
+      if (target && target.selectValue === 'corporation') {
+        this.$router.push({
+          path: 'corpSearch',
+          query: {
+            text: $.trim(target.input || '')
+          }
+        });
+      } else {
+        this.$router.push({
+          path: 'jobSearch',
+          query: {
+            text: $.trim(target.input || '')
+          }
+        });
+      }
+    },
     jobHandleClick() {
-      console.log(1);
+      // console.log(1);
     },
     corpHandleClick() {
-      console.log(2);
+      // console.log(2);
     },
     showMore() {
       this.$message('this is more');

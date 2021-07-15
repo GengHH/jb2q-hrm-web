@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-07 13:17:05
  * @LastEditors: GengHH
- * @LastEditTime: 2021-03-19 16:36:02
+ * @LastEditTime: 2021-07-15 16:11:35
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCarousel.vue
 -->
@@ -32,10 +32,11 @@ export default {
       //   { id: '1', path: '/', nvaText: '1' }
       // ],
       carouselList: [
-        { path: require('@/assets/img/carousel1.png') },
-        { path: require('@/assets/img/carousel2.png') },
-        { path: require('@/assets/img/carousel3.png') },
-        { path: require('@/assets/img/carousel4.png') }
+        { path: require('@/assets/img/banner.png') }
+        // { path: require('@/assets/img/carousel1.png') },
+        // { path: require('@/assets/img/carousel2.png') },
+        // { path: require('@/assets/img/carousel3.png') },
+        // { path: require('@/assets/img/carousel4.png') }
       ]
     };
   },

@@ -476,7 +476,7 @@ export default {
         : {};
     }
   },
-  created() {
+  mounted() {
     //根据url上的参数查询职位信息
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       // this.queryParams.positionType = this.$route.query.type;
@@ -492,13 +492,14 @@ export default {
         this.queryParams.positionType = '01';
         //TODO 查询推荐职位
         return;
-      } else {
-        this.queryParams.positionType = '';
       }
-    } else {
-      this.queryParams.positionType = '';
-      this.queryJobs();
+      if (this.$route.query.text) {
+        this.$refs.searchBox.input = this.$route.query.text;
+      }
     }
+
+    this.queryParams.positionType = '';
+    this.queryCorps();
   },
   updated() {
     console.log(1234);
@@ -864,70 +865,21 @@ export default {
         this.queryParams.positionTypeList = [''];
       }
     },
-    perfectResume() {
-      //完善简历
-      this.$router.push('/personInfo');
-    },
-    uploadResume() {
-      //上传简历
-      this.$alert('此功能暂时未开放，请稍候！');
-    },
-    //查询急招职位
-    async queryAllUrgRecPositionList() {
-      let that = this;
-      let result = await queryAllUrgRecPositionList();
-
-      if (
-        result.status === 200 &&
-        result.result.pageresult &&
-        result.result.pageresult.total
-      ) {
-        result.result.pageresult.data.forEach(item => {
-          // 转换字典
-          if (item.workArea) {
-            item.workAreaText = getDicText(
-              that.$store.getters['dictionary/ggjbxx_qx'],
-              item.workArea
-            );
-          }
-          if (item.eduRequire) {
-            item.eduRequireText = getDicText(
-              that.$store.getters['dictionary/recruit_edu'],
-              item.eduRequire
-            );
-          }
-          if (item.workNature) {
-            item.workNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_work_nature'],
-              item.workNature
-            );
-          }
-          if (item.corpNature) {
-            item.corpNatureText = getDicText(
-              that.$store.getters['dictionary/recruit_corp_nature'],
-              item.corpNature
-            );
-          }
-          if (item.industryType) {
-            item.industryTypeText = getDicText(
-              that.$store.getters['dictionary/recruit_industry_type'],
-              item.industryType
-            );
-          }
-        });
-        this.$set(this, 'queryResult', result.result.pageresult.data);
-        this.$set(
-          this,
-          'queryResultTotal',
-          Number(result.result.pageresult.total) || 0
-        );
-      } else if (result) {
-        this.$set(this, 'queryResult', []);
-        this.$set(this, 'queryResultTotal', 0);
-        this.$message({
-          type: 'success',
-          message: '未查询到信息'
-        });
+    /**
+     *查询单位信息列表
+     */
+    queryCorps() {
+      //根据url上的参数查询职位信息
+      if (this.queryParams.positionType === '02') {
+        //旗舰店
+        this.queryHRFlagshipStoreInfoAll();
+      } else if (this.queryParams.positionType === '01') {
+        //推荐单位
+        this.getIndexRecCorpList();
+        return;
+      } else {
+        //TODO 查询所有单位
+        // this.queryAllCorps();
       }
     },
 

@@ -187,13 +187,10 @@ import PerSearchJob from '@/components/person/PerSearchJob';
 import JobDetails from '@/views/index/jobDetails';
 import { getDicText, niceScrollUpdate } from '@/utils';
 import {
-  queryMeetingSchedule,
+  queryMeetingDetail,
   queryMeetingCorporationList,
-  queryMeetingPositionList,
-  queryCorporationPositionInfo,
-  doApplyFor
-} from '@/api/personApi';
-import { queryMeetingDetail } from '@/api/indexApi';
+  queryMeetingPositionList
+} from '@/api/indexApi';
 export default {
   name: 'indexFairDetails',
   components: {
@@ -249,10 +246,8 @@ export default {
     if (this.$route.query && Object.keys(this.$route.query).length > 0) {
       this.meetId = this.$route.query.meetId || '';
       this.queryMeetingDetail();
-      //TODO
-      // this.queryCorporations();
-      //TODO
-      // this.queryPositions();
+      this.queryCorporations();
+      this.queryPositions();
     }
   },
   updated() {
@@ -284,7 +279,6 @@ export default {
     },
     /**
      *  查询所有单位信息
-     *  TODO
      */
     queryCorporations() {
       let params = {
@@ -327,7 +321,6 @@ export default {
     },
     /**
      *  查询所有职位信息
-     *  TODO
      */
     queryPositions() {
       let params = {
@@ -362,13 +355,13 @@ export default {
               }
               if (item.corpNature) {
                 item.corpNatureText = getDicText(
-                  that.$store.getters['dictionary/recruit_corp_nature'],
+                  this.$store.getters['dictionary/recruit_corp_nature'],
                   item.corpNature
                 );
               }
               if (item.industryType) {
                 item.industryTypeText = getDicText(
-                  that.$store.getters['dictionary/recruit_industry_type'],
+                  this.$store.getters['dictionary/recruit_industry_type'],
                   item.industryType
                 );
               }
@@ -379,29 +372,7 @@ export default {
         }
       });
     },
-    /**
-     * 投递简历
-     */
-    async deliveryResume(arg) {
-      let index = arg[0];
-      let positionId = (arg && arg[1]) + '' || '';
-      //投递简历
-      let res = await doApplyFor({
-        meetId: this.meetId,
-        positionId: positionId,
-        pid: this.$store.getters['person/pid']
-      });
-      if (res.status === 200) {
-        // TODO 不显示本条数据
-        this.positions.splice(index, 1);
-        this.$message({ type: 'success', message: '简历投递成功' });
-      } else {
-        this.$message({
-          type: 'error',
-          message: '简历投递失败'
-        });
-      }
-    },
+
     /**
      * 展示职位详情
      */

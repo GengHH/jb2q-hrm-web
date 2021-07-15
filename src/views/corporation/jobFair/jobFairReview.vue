@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-31 17:09:37
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 10:28:15
+ * @LastEditTime: 2021-07-15 18:06:52
  * @Description: 报名审核结果子页面
 -->
 <template>
@@ -144,11 +144,11 @@
         >
         <span v-else>无</span>
       </div>
-      <div>
+      <div v-if="activeName === '2'">
         <span class="info-dialog-label">展位号 ：</span
         >{{ currentRow.boothSeq ? currentRow.boothSeq : '无' }}
       </div>
-      <div>
+      <div v-if="activeName === '2'">
         <span class="info-dialog-label">入场时间 ：</span
         >{{ currentRow.admisstionTime ? currentRow.admisstionTime : '无' }}
       </div>
@@ -287,7 +287,9 @@ export default {
      * 查看招聘会反馈详情
      */
     async queryFairDetailsResult() {
-      let queryRes = await queryFairDetailsResult(this.currentRow.applyId);
+      let queryRes = await queryFairDetailsResult({
+        applyId: this.currentRow.applyId
+      });
       if (queryRes && queryRes.status === 200) {
         this.currentRow = queryRes.result.data || {};
       } else if (queryRes) {

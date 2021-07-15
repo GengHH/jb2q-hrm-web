@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 11:06:30
+ * @LastEditTime: 2021-07-15 16:06:15
  * @Description:
  * @FilePath: \jb2q-hrm-web\src\views\corporation\empsurpluslack\index.vue
 -->
@@ -69,11 +69,11 @@
             <span style="margin-left: 5px">{{ row.verifyTime }}</span>
           </template>
           <template #verifyStatus="{row}">
-            <span v-if="row.verifyStatus === '1'" style="color:green"
+            <span v-if="row.verifyStatus === '2'" style="color:green"
               >通过</span
             >
             <el-popover
-              v-else-if="row.verifyStatus === '0'"
+              v-else-if="row.verifyStatus === '3'"
               trigger="hover"
               placement="top"
             >
@@ -321,6 +321,7 @@ export default {
       path: require('@/assets/logo.png'),
       loading: false,
       dialogTitle: '用工缺失',
+      unshowColumn: false,
       dialogFormVisible: false,
       disabledEditForm: false,
       showEditBtn: false,
@@ -485,11 +486,13 @@ export default {
         {
           label: '招聘人数',
           prop: 'recruitNum',
+          unshow: this.unshowColumn,
           rowSpan: 'all'
         },
         {
           label: '工作性质',
           prop: 'workNature',
+          unshow: this.unshowColumn,
           customerRenderText: ({ row }) => {
             const { workNature } = row;
             const data =
@@ -518,6 +521,7 @@ export default {
         {
           label: '学历要求',
           prop: 'eduRequire',
+          unshow: this.unshowColumn,
           customerRenderText: ({ row }) => {
             const { eduRequire } = row;
             const data = this.$store.getters['dictionary/recruit_edu'] || [];
@@ -531,18 +535,36 @@ export default {
         {
           label: '薪酬上限',
           prop: 'salaryMin',
+          unshow: this.unshowColumn,
           rowSpan: 'all'
         },
         {
           label: '薪酬上限',
           prop: 'salaryMax',
+          unshow: this.unshowColumn,
           rowSpan: 'all'
         },
         {
           label: '借用期限',
           prop: 'borrowPeriod',
+          unshow: this.unshowColumn,
           rowSpan: 'all'
         },
+        {
+          label: '可借用期限',
+          prop: 'lendPeriod',
+          unshow: !this.unshowColumn,
+          attrs: { showOverflowTooltip: true },
+          rowSpan: 'all'
+        },
+        {
+          label: '用工剩余人数',
+          prop: 'surplusNum',
+          unshow: !this.unshowColumn,
+          attrs: { showOverflowTooltip: true },
+          rowSpan: 'all'
+        },
+
         {
           label: '联系人',
           prop: 'contactName',
@@ -558,11 +580,11 @@ export default {
           prop: 'verifyStatus',
           slotName: 'verifyStatus'
         },
-        {
-          label: '审核人',
-          prop: 'verifyUserId',
-          rowSpan: 'all'
-        },
+        // {
+        //   label: '审核人',
+        //   prop: 'verifyUserId',
+        //   rowSpan: 'all'
+        // },
         {
           label: '审核时间',
           prop: 'verifyTime',
@@ -581,16 +603,6 @@ export default {
         //   prop: 'reply',
         //   slotName: 'reply',
         //   unshow: this.unshowCjmsColumn
-        // },
-
-        // {
-        //   label: '地址',
-        //   attrs: { showOverflowTooltip: true },
-        //   customerRenderText: ({ row, $index }) => {
-        //     //console.log($index);
-        //     const { province, city, address } = row;
-        //     return province + city + address;
-        //   }
         // },
         {
           label: '操作',
@@ -667,6 +679,18 @@ export default {
           ]
         }
       ];
+    }
+  },
+  watch: {
+    /**
+     * 根据查询类型，动态显示列
+     */
+    'params.queryType': function(val) {
+      if (val) {
+        this.unshowColumn = false;
+      } else {
+        this.unshowColumn = true;
+      }
     }
   },
   methods: {
