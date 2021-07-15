@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-11-30 11:50:54
- * @LastEditTime: 2021-07-14 10:43:32
+ * @LastEditTime: 2021-07-15 18:26:27
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.js
@@ -45,7 +45,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-  ak: 'GanPoYI5lBCc4rQ1hZbevgLyTE46ghkW'
+  ak: 'Am6FItyRLdBmMmeBHXB6yicG8aWt2VmI'
 });
 //加载jwchat（基于element-ui）
 Vue.use(Chat);

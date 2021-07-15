@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 10:43:52
+ * @LastEditTime: 2021-07-15 18:26:38
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.js
  */
@@ -47,7 +47,7 @@ Vue.use(ElementUI);
 // 使用百度地图插件
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-  ak: 'GanPoYI5lBCc4rQ1hZbevgLyTE46ghkW'
+  ak: 'Am6FItyRLdBmMmeBHXB6yicG8aWt2VmI'
 });
 Vue.prototype._ = _;
 // 安装二次封装组件
