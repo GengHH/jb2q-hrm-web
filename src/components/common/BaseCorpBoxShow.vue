@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-15 13:44:36
+ * @LastEditTime: 2021-07-15 18:44:21
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseCorpBoxShow.vue
 -->
@@ -103,6 +103,9 @@ export default {
     border: 1px solid #fc6f3d;
   }
   img {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
     display: inline-block;
   }
   .mat-15 {

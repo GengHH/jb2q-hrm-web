@@ -42,7 +42,7 @@ Vue.use(ElementUI);
 // 使用百度地图插件
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-  ak: 'GanPoYI5lBCc4rQ1hZbevgLyTE46ghkW'
+  ak: 'Am6FItyRLdBmMmeBHXB6yicG8aWt2VmI'
 });
 // 直接绑定原型来按安装lodash插件
 Vue.prototype._ = _;
