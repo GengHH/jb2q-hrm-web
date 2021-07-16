@@ -2444,21 +2444,9 @@ export default {
     var arr = Object.keys(this.$props.resumeData);
     if (arr.length === 0) {
       //初始化加载个人简历基本信息
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      setTimeout(() => {
-        this.loadPsnlResume();
-      }, 3000);
-=======
       // this.loading = true;
       this.loadPsnlResume();
       this.getPersonInfo();
->>>>>>> Stashed changes
-=======
-      // this.loading = true;
-      this.loadPsnlResume();
-      this.getPersonInfo();
->>>>>>> Stashed changes
     } else {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });

@@ -4,7 +4,7 @@
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-16 18:13:43
+ * @LastEditTime: 2021-07-16 18:22:35
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -34,7 +34,7 @@ const dicMockDataPost = function(req) {
     let objArray = code.split('@');
     let key = code.includes('@')
       ? objArray[0] + '_' + objArray[1]
-      : objArray[0];·
+      : objArray[0];
     return {
       //dicData: dic[code]
       status: 200,

@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-16 18:17:03
+ * @LastEditTime: 2021-07-16 18:24:04
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -357,7 +357,12 @@ const actions = {
               : res.result.data
           );
           //手动增加带有“全市”的字典表GGJBXX_QX_NEW
-          if (dicTpye === 'ggjbxx_qx@3') {
+          console.log(
+            '%c 🍌 dicTpye: ',
+            'font-size:20px;background-color: #3F7CFF;color:#fff;',
+            dicTpye
+          );
+          if (dicTpye === 'GGJBXX_QX@3') {
             let newDic =
               (res.result.data && typeof res.result.data === 'string'
                 ? JSON.parse(res.result.data)
