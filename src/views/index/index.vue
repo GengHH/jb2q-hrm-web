@@ -61,7 +61,7 @@
         v-model="jobActiveName"
         @tab-click="jobHandleClick"
       >
-        <el-tab-pane label="推荐职位" name="jobRecommended">
+        <!-- <el-tab-pane label="推荐职位" name="jobRecommended">
           <BaseInfoGloriette
             :info-list="showList"
             :col-num="3"
@@ -73,7 +73,7 @@
             @click="showMorePosition('rec')"
             >查看更多</el-button
           >
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="热招职位" name="jobHot">
           <BaseInfoGloriette
             :info-list="hotPositionList"
@@ -126,7 +126,7 @@
           <el-button
             id="corpListMore1"
             class="more-btn"
-            v-if="showQjdList && showQjdList.length >= 3"
+            v-if="showQjdList && showQjdList.length >= 9"
             @click="showMoreCorp('flagship')"
             >查看更多</el-button
           >
@@ -145,7 +145,7 @@
           <el-button
             id="corpListMore2"
             class="more-btn"
-            v-if="showCorpList && showCorpList.length >= 3"
+            v-if="showCorpList && showCorpList.length >= 9"
             @click="showMoreCorp('rec')"
             >查看更多</el-button
           >
@@ -153,7 +153,7 @@
       </el-tabs>
 
       <!-- 首页-三大模块信息列表 -->
-      <div style="width:100%;height:60px;"></div>
+      <!-- <div style="width:100%;height:60px;"></div> -->
       <BaseInfoGloriette
         :info-list="jobFaieList"
         :col-num="3"
@@ -197,7 +197,7 @@ export default {
       corpRecommendedLoading: false,
       obj: {},
       colRowGutter: 40,
-      jobActiveName: 'jobRecommended',
+      jobActiveName: 'jobHot',
       corpActiveName: 'corpFlagship',
       showQjdList: [],
       showCorpList: [],
@@ -573,7 +573,7 @@ export default {
   width: 90%;
   min-height: 100%;
   //max-height:1000px;
-  margin: 0 auto 100px;
+  margin: 0 auto 40px;
   padding-top: 90px;
   //background-color: $g-gray1-color;
   .more-btn {

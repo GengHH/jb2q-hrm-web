@@ -3,8 +3,8 @@
 /*
  * @Author: GengHH
  * @Date: 2021-01-05 13:39:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-14 13:44:43
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-07-16 18:13:43
  * @Description: mock拦截公共调用的接口，模拟数据
  * @FilePath: \jb2q-hrm-web\src\mock\commonMock.js
  */
@@ -15,9 +15,9 @@ import config from '../config/mock.conf';
 
 const basePath = config.commonBasePath;
 
-Mock.setup({
-  timeout: 3000
-});
+// Mock.setup({
+//   timeout: 1000
+// });
 
 const successData = {
   status: 200,
@@ -34,7 +34,7 @@ const dicMockDataPost = function(req) {
     let objArray = code.split('@');
     let key = code.includes('@')
       ? objArray[0] + '_' + objArray[1]
-      : objArray[0];
+      : objArray[0];·
     return {
       //dicData: dic[code]
       status: 200,

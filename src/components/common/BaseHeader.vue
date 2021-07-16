@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-03 10:04:12
- * @LastEditTime: 2021-07-14 18:17:43
+ * @LastEditTime: 2021-07-16 16:13:15
  * @LastEditors: GengHH
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseHeader.vue
@@ -29,12 +29,12 @@
               }}</el-dropdown-item>
               <el-dropdown-item divided></el-dropdown-item>
               <template v-for="nvaIndex in navListReverse">
-                <el-dropdown-item
-                  v-if="nvaIndex.path !== '/blank'"
-                  :key="nvaIndex.id"
-                  :icon="nvaIndex.iconName"
-                >
-                  <router-link :to="nvaIndex.path">
+                <router-link :to="nvaIndex.path">
+                  <el-dropdown-item
+                    v-if="nvaIndex.path !== '/blank'"
+                    :key="nvaIndex.id"
+                    :icon="nvaIndex.iconName"
+                  >
                     {{ nvaIndex.nvaText }}
                     <el-badge
                       v-if="nvaIndex.type === 'badge' && messageCount"
@@ -42,8 +42,8 @@
                       :max="maxCount"
                       class="mark"
                     />
-                  </router-link>
-                </el-dropdown-item>
+                  </el-dropdown-item>
+                </router-link>
               </template>
               <!-- 二级子菜单 -->
               <template v-if="userLogInfo.subMenu.length > 0">
@@ -65,7 +65,6 @@
             :default-active="$route.path"
             class="el-menu-demo"
             mode="horizontal"
-            router
             background-color="#fc6f3d"
             text-color="#fff"
             @select="handleSelect"
@@ -174,7 +173,7 @@ export default {
         'resize',
         //监听浏览器窗口大小改变
         //浏览器变化执行动作
-        this._.debounce(this.changeMenuStyle, 500)
+        this._.debounce(this.changeMenuStyle, 300)
       );
     });
   },
@@ -257,21 +256,36 @@ export default {
     }
   },
   methods: {
+    jump(val) {
+      if (val === '/home') {
+        //直接跳转网站首页
+        window.location.href = '/ggzp-shrs/index.html';
+      } else {
+        //跳转相应的路由地址
+        this.$router.push(val);
+      }
+    },
     changeMenuStyle() {
       if (
-        (isPerson(this) && window.innerWidth < 992) ||
+        (isPerson(this) && window.innerWidth < 1140) ||
         (isCorporation(this) && window.innerWidth < 1300)
       ) {
         this.showIconMenu = true;
       } else {
-        this.showIconMenu = false;
+        setTimeout(() => {
+          this.showIconMenu = false;
+        }, 1500);
       }
     },
     goHome() {
       window.location.href = '/ggzp-shrs/index.html';
     },
+    /**
+     * 选择菜单
+     */
     handleSelect(index) {
-      console.log(this.$route.path);
+      this.jump(index);
+      // console.log(this.$route.path);
       this.$store.commit('index/SET_ACTIVE_MENU_INDEX', index);
     }
   }

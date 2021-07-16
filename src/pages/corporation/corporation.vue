@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-16 11:32:31
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-05 13:36:38
+ * @LastEditTime: 2021-07-16 15:51:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\corporation\corporation.vue
 -->
@@ -68,7 +68,8 @@ export default {
           nvaText: '简历搜索'
         },
         { id: '2', path: '/jobMgr', nvaText: '职位管理' },
-        { id: '1', path: '/corpInfo', nvaText: '单位信息维护' }
+        { id: '1', path: '/corpInfo', nvaText: '单位信息维护' },
+        { id: '0', path: '/home', nvaText: '首页' }
       ],
       userLogInfo: {
         id: 'user',

@@ -105,7 +105,7 @@ const err = error => {
 // request interceptor
 service.interceptors.request.use(
   config => {
-    console.log('------------------begin request interceptor----------');
+    // console.log('------------------begin request interceptor----------');
     var token = null;
     let data = sessionStorage.vuex;
     if (data && data != 'null' && data != '' && data.length > 0) {
@@ -142,7 +142,7 @@ service.interceptors.response.use(response => {
         title: '系统提示',
         message: '登录超时，请重新登录',
         //duration: 4500,
-        type: 'error'
+        type: 'warning'
       });
       window.setTimeout(function() {
         window.location.href = '/ggzp-shrs/index.html';

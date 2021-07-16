@@ -221,8 +221,9 @@ let router = new Router({
 setTimeout(() => {
   //全局路由钩子函数（根据用户的权限判断路由的跳转）
   router.beforeEach((to, from, next) => {
-    console.log(from);
-    if (to.path === '/logout') {
+    if (to.path === '/home') {
+      window.location.href = '/ggzp-shrs/index.html';
+    } else if (to.path === '/logout') {
       next();
     } else if (to.path !== '/error' && !store.getters['corporation/token']) {
       next('/error');

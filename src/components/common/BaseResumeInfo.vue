@@ -1527,10 +1527,10 @@ export default {
         option8: this.$store.getters['dictionary/recruit_industry_type']
       },
       resume: {
+        xm: '***'
         // applyForId: '',
         // resumeId: '1',
         // pid: '201906186258910',
-        // xm: '董晓鑫',
         // age: 24,
         // sex: '男',
         // contactPhone: '13122272095',
@@ -1813,18 +1813,18 @@ export default {
         });
     },
     //初始化加载个人基本信息
-    // async getPersonInfo() {
-    //   try {
-    //     let result = await getPersonBaseInfo({
-    //       pid: this.$store.getters['person/pid'] || this.queryPid
-    //     });
-    //     console.log('result', result);
-    //     if (result.status === 200)
-    //       this.$set(this, 'personInfo', result.result.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    async getPersonInfo() {
+      try {
+        let result = await getPersonBaseInfo({
+          pid: this.$store.getters['person/pid'] || this.queryPid
+        });
+        // console.log('result', result);
+        // if (result.status === 200)
+        //   this.$set(this, 'personInfo', result.result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     //初始化加载个人简历信息
     loadPsnlResume() {
       let that = this;
@@ -1836,11 +1836,6 @@ export default {
       // 默认先按照传入的pid查询，再按照登录的人员查询
       this.loading = true;
       if (this.searchByCorp) {
-        console.log(
-          '%c 🍪 new Date(): ',
-          'font-size:20px;background-color: #ED9EC7;color:#fff;',
-          new Date()
-        );
         getPsnlResumeByCorp({
           pid: this.queryPid || this.$store.getters['person/pid'],
           cid: this.$store.getters['corporation/cid'] || ''
@@ -1851,11 +1846,6 @@ export default {
               that.$set(that, 'resume', res.result.data);
             }
             that.loading = false;
-            console.log(
-              '%c 🍪 new Date(): ',
-              'font-size:20px;background-color: #ED9EC7;color:#fff;',
-              new Date()
-            );
           })
           .catch(function(err) {
             that.$message({
@@ -1865,11 +1855,6 @@ export default {
             that.loading = false;
           });
       } else {
-        console.log(
-          '%c 🍪 new Date(): ',
-          'font-size:20px;background-color: #ED9EC7;color:#fff;',
-          new Date()
-        );
         getPsnlResume(
           { pid: this.queryPid || this.$store.getters['person/pid'] } || ''
         )
@@ -1894,30 +1879,6 @@ export default {
           });
       }
     },
-    loadDicData() {
-      // let that = this;
-      // Promise.all([
-      //   getQx(),
-      //   getGzxz(),
-      //   getRecruitEdu(),
-      //   getLanguageType(),
-      //   getLanguageLevel()
-      // ])
-      //   .then(function(results) {
-      //     that.$set(that.dicOptions, 'option1', results[0].dicData);
-      //     that.$set(that.dicOptions, 'option2', results[1].dicData);
-      //     //that.$set(that.dicOptions, 'option3', results[2].dicData);
-      //     that.$set(that.dicOptions, 'option4', results[2].dicData);
-      //     that.$set(that.dicOptions, 'option5', results[3].dicData);
-      //     that.$set(that.dicOptions, 'option6', results[4].dicData);
-      //   })
-      //   .catch(function(err) {
-      //     this.$message({
-      //       message: '缺失字典信息' + err,
-      //       type: 'error'
-      //     });
-      //   });
-    },
     // 保存各个弹出框中的内容
     dialogSubmit(formName) {
       //保存各模块录入的信息
@@ -1926,7 +1887,6 @@ export default {
         this.savePsnlEvaluate();
         return;
       }
-
       this.$refs[formName].validate(valid => {
         if (valid) {
           let params = this.$refs[formName].model;
@@ -2484,9 +2444,21 @@ export default {
     var arr = Object.keys(this.$props.resumeData);
     if (arr.length === 0) {
       //初始化加载个人简历基本信息
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
       setTimeout(() => {
         this.loadPsnlResume();
       }, 3000);
+=======
+      // this.loading = true;
+      this.loadPsnlResume();
+      this.getPersonInfo();
+>>>>>>> Stashed changes
+=======
+      // this.loading = true;
+      this.loadPsnlResume();
+      this.getPersonInfo();
+>>>>>>> Stashed changes
     } else {
       //使用传入的简历信息
       this.$set(this, 'resume', { ...this.$props.resumeData });

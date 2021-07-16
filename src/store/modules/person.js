@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-03-02 16:47:21
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 16:27:06
+ * @LastEditTime: 2021-07-16 13:46:01
  * @Description: 个人模块的全局个人信息
  * @FilePath: \jb2q-hrm-web\src\store\modules\person.js
  */
@@ -204,12 +204,13 @@ const actions = {
                 checkRes.result.data &&
                 checkRes.result.data.sexId
               ) {
-                commit('SET_SEX', sexId);
+                commit('SET_SEX', checkRes.result.data.sexId);
               }
             })
-            .catch(() => {
+            .catch(e => {
               // 检验人员信息失败，显示系统异常界面
               router.push('/error');
+              console.log('校验个人信息失败：' + e);
             })
             .finally(() => {
               //确认初始化校验完毕

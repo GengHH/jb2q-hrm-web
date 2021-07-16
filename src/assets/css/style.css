@@ -344,3 +344,7 @@ body {
   word-break: break-all;
   overflow: hidden;
 }
+
+.el-notification {
+  z-index: 3000 !important;
+}

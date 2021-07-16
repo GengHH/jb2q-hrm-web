@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-12-08 16:31:11
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-14 14:13:15
+ * @LastEditTime: 2021-07-16 10:05:37
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\views\index\empsurpluslack\index.vue
 -->
@@ -89,7 +89,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row class="condition">
+      <!-- <el-row class="condition">
         <el-col
           :sm="4"
           :md="3"
@@ -111,7 +111,7 @@
             <el-radio-button label="3">驳回</el-radio-button>
           </el-radio-group>
         </el-col>
-      </el-row>
+      </el-row> -->
       <!-- 用工申请信息列表 -->
       <div class="corp-row">
         <!-- 用工缺失-展示区 -->

@@ -206,7 +206,7 @@
               v-if="realData.agencyRecruit === '1'"
               class="four-opacity mat-50"
             >
-              <span class="gray-font">委托待招单位：</span
+              <span class="gray-font">委托代招单位：</span
               ><i>{{
                 realData.entrustCorpName ? realData.entrustCorpName : '未知'
               }}</i>

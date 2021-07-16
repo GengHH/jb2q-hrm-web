@@ -1,8 +1,8 @@
 /*
  * @Author: GengHH
  * @Date: 2020-11-05 11:38:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-08 09:57:03
+ * @LastEditors: GengHH
+ * @LastEditTime: 2021-07-16 18:17:03
  * @Description: 全局公用的字典表
  * @FilePath: \jb2q-hrm-web\src\store\modules\dataDictionary.js
  */
@@ -27,8 +27,10 @@ const state = {
   YESNO: [],
   //区县
   GGJBXX_QX: [],
-  //区县
+  //16个区县
   GGJBXX_QX_3: [],
+  //16个区县+"全市"
+  GGJBXX_QX_NEW: [],
   //单位性质
   RECRUIT_CORP_NATURE: [],
   //行业分类
@@ -117,6 +119,7 @@ const getters = {
   yesno: state => state.YESNO,
   ggjbxx_qx: state => state.GGJBXX_QX,
   'ggjbxx_qx@3': state => state.GGJBXX_QX_3,
+  ggjbxx_qx_new: state => state.GGJBXX_QX_NEW,
   recruit_position_f_type: state => state.RECRUIT_POSITION_F_TYPE,
   recruit_position_s_type: state => state.RECRUIT_POSITION_S_TYPE,
   recruit_edu: state => state.RECRUIT_EDU,
@@ -282,6 +285,10 @@ const mutations = {
     state.GGJBXX_QX_3 = dictionary;
   },
 
+  set_GGJBXX_QX_NEW: (state, dictionary) => {
+    state.GGJBXX_QX_NEW = dictionary;
+  },
+
   set_RECRUIT_POSITION_F_TYPE: (state, dictionary) => {
     state.RECRUIT_POSITION_F_TYPE = dictionary;
   },
@@ -337,7 +344,7 @@ const actions = {
   init_Dictionary({ commit }, dicTpye) {
     queryDicData(JSON.parse(JSON.stringify({ code: dicTpye })))
       .then(res => {
-        console.log('获取的字典表', res);
+        // console.log('获取的字典表', res);
         if (res.status == 200) {
           let objArray = dicTpye.split('@');
           let key = dicTpye.includes('@')
@@ -349,6 +356,19 @@ const actions = {
               ? JSON.parse(res.result.data)
               : res.result.data
           );
+          //手动增加带有“全市”的字典表GGJBXX_QX_NEW
+          if (dicTpye === 'ggjbxx_qx@3') {
+            let newDic =
+              (res.result.data && typeof res.result.data === 'string'
+                ? JSON.parse(res.result.data)
+                : res.result.data) || [];
+            let _newDic = [...newDic];
+            _newDic.unshift({
+              value: '0A',
+              label: '全市'
+            });
+            commit('set_GGJBXX_QX_NEW', _newDic);
+          }
         } else {
           console.log('加载数据字典时出错：' + res.message);
         }

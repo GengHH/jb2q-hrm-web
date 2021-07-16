@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2021-04-13 15:25:56
  * @LastEditors: GengHH
- * @LastEditTime: 2021-07-12 13:24:51
+ * @LastEditTime: 2021-07-13 17:24:56
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\components\common\BaseMap.vue
 -->
@@ -49,6 +49,10 @@ export default {
     pointList: {
       type: Array,
       default: () => []
+    },
+    defaultZoom: {
+      type: Number,
+      default: 15
     }
   },
   component: {},
@@ -57,8 +61,9 @@ export default {
       center: { lng: 0, lat: 0 },
       BMap: '',
       map: '',
-      zoom: 15,
-      show: false
+      zoom: 1,
+      show: false,
+      pageCapacity: 1
     };
   },
   methods: {
@@ -66,14 +71,16 @@ export default {
       //初始化定位，以东方明珠为中心点
       this.center.lng = 121.506377;
       this.center.lat = 31.245105;
-      this.zoom = 15;
-
-      console.log(BMap, map);
+      // this.zoom = 5;
+      // console.log(BMap, map);
       this.map = map;
       this.BMap = BMap;
       //根据多个地址显示多个图片
       if (this.pointList.length > 0) {
+        this.pageCapacity = 10;
         this.markByAddress();
+      } else {
+        this.pageCapacity = 1;
       }
     },
     infoWindowClose() {
@@ -92,15 +99,18 @@ export default {
             autoViewport: true,
             selectFirstResult: true
           },
-          pageCapacity: 1
+          pageCapacity: this.pageCapacity
         });
-      local.setSearchCompleteCallback(function(searchResults) {
-        console.log('+++++++');
-        console.log(searchResults);
 
+      /**
+       *查询并标记地点后的回调函数
+       */
+      local.setSearchCompleteCallback(function(searchResults) {
+        // console.log('+++++++');
+        // console.log(searchResults);
         let poi =
           searchResults.Hr.length > 0 ? searchResults.Hr[0] : searchResults.Hr;
-        console.log(poi);
+        // console.log(poi);
 
         let marker = new BMap.Marker(
           new BMap.Point(poi.point.lng, poi.point.lat)
@@ -113,18 +123,26 @@ export default {
         //添加点击事件监听
         marker.addEventListener('click', makerClick);
       });
-      //查询地址的坐标
+
+      /**
+       *查询地址的坐标并标记
+       */
       this.pointList.forEach(element => {
         local.search(element);
         return element;
       });
 
+      /**
+       *标记点点击时触发
+       */
       let makerClick = function() {
         let infoWindow = new BMap.InfoWindow(
           '<p style="font-size:14px;">' + this.getTitle() + '</p>'
         );
         this.openInfoWindow(infoWindow);
       };
+      //标记完地点重新显示缩放等级
+      this.zoom = this.defaultZoom || 15;
     },
     goBack() {
       if (this.pointList && this.pointList.length) {
@@ -134,14 +152,14 @@ export default {
         const point = new this.BMap.Point(this.center.lng, this.center.lat);
         this.map.panTo(point);
       }
-    },
-    _initBaiduMap(val) {
-      console.log(
-        '%c 🍡 callback: ',
-        'font-size:20px;background-color: #B03734;color:#fff;',
-        val
-      );
     }
+    // _initBaiduMap(val) {
+    //   console.log(
+    //     '%c 🍡 callback: ',
+    //     'font-size:20px;background-color: #B03734;color:#fff;',
+    //     val
+    //   );
+    // }
   }
 };
 </script>

@@ -2,7 +2,7 @@
  * @Author: TangQiang
  * @Date: 2020-03-04 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-09 10:59:20
+ * @LastEditTime: 2021-07-16 16:59:18
  * @Description: file content
  */
 // The Vue build version to load with the `import` command
@@ -37,6 +37,72 @@ if (config.mock) {
   require('@/mock/login/index.js');
   //console.log('++++++++++成功引入mock数据+++++++');
 }
+
+//初始化字典表（index）;
+if (isEmpty(store.getters['dictionary/recruit_corp_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_CORP_NATURE');
+}
+//特色活动状态
+if (isEmpty(store.getters['dictionary/recruit_special_activity_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_ACTIVITY_TYPE');
+}
+
+//初始化字典表（person）;
+if (isEmpty(store.getters['dictionary/yesno'])) {
+  store.dispatch('dictionary/init_Dictionary', 'YESNO');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_qx@3'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_QX@3');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_f_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_F_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_position_s_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_POSITION_S_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_edu'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_EDU');
+}
+if (isEmpty(store.getters['dictionary/ggjbxx_street'])) {
+  store.dispatch('dictionary/init_Dictionary', 'GGJBXX_STREET');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_language_level'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_LANGUAGE_LEVEL');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_nature'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_NATURE');
+}
+if (isEmpty(store.getters['dictionary/recruit_industry_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_INDUSTRY_TYPE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_hour'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_HOUR');
+}
+if (isEmpty(store.getters['dictionary/recruit_special_people'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SPECIAL_PEOPLE');
+}
+if (isEmpty(store.getters['dictionary/recruit_work_year'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_WORK_YEAR');
+}
+if (isEmpty(store.getters['dictionary/recruit_applyfor_source'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_APPLYFOR_SOURCE');
+}
+//工资支付方式
+if (isEmpty(store.getters['dictionary/recruit_salary_pay_type'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SALARY_PAY_TYPE');
+}
+
+//初始化字典表（corp）;
+if (isEmpty(store.getters['dictionary/recruit_surplus_verify_status'])) {
+  store.dispatch('dictionary/init_Dictionary', 'RECRUIT_SURPLUS_VERIFY_STATUS');
+}
+
 //判断是不是已经登录了
 /* eslint-disable no-new */
 const vm = new Vue({

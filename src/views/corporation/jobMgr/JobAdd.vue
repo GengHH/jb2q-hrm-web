@@ -248,7 +248,7 @@
           <pl-input
             required
             v-model="jobForm.entrustTyshxym"
-            label="委托待招单位统一社会信用码"
+            label="委托代招单位统一社会信用码"
             disabled
           ></pl-input>
         </el-form-item>

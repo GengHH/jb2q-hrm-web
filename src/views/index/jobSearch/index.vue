@@ -157,7 +157,7 @@
           <el-col :span="20">
             <el-radio-group v-model="queryParams.positionType" size="medium">
               <el-radio-button label="">不限</el-radio-button>
-              <el-radio-button label="01">推荐</el-radio-button>
+              <!-- <el-radio-button label="01">推荐</el-radio-button> -->
               <el-radio-button label="02">热招</el-radio-button>
               <el-radio-button label="03">急招</el-radio-button>
             </el-radio-group>

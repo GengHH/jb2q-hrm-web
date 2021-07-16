@@ -2,7 +2,7 @@
  * @Author: GengHH
  * @Date: 2020-11-30 11:50:54
  * @LastEditors: GengHH
- * @LastEditTime: 2021-06-23 18:05:46
+ * @LastEditTime: 2021-07-16 13:48:50
  * @Description: file content
  * @FilePath: \jb2q-hrm-web\src\pages\person\person.vue
 -->
@@ -60,7 +60,8 @@ export default {
         { id: '4', path: '/jobFindFeedback', nvaText: '求职反馈' },
         { id: '3', path: '/personalCenter', nvaText: '个人中心' },
         { id: '2', path: '/resumeMgr', nvaText: '简历管理' },
-        { id: '1', path: '/', nvaText: '职位搜索' }
+        { id: '1', path: '/jobSearch', nvaText: '职位搜索' },
+        { id: '0', path: '/home', nvaText: '首页' }
       ],
       userLogInfo: {
         id: 'user',
