@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-09 14:18:54
- * @LastEditTime: 2021-07-08 14:39:45
+ * @LastEditTime: 2021-07-16 17:29:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\serviceManagement\page\serve.vue
@@ -91,7 +91,35 @@
           :options="{ height: '560px' }"
           :columns="columns2"
           :list="list2"
-        ></ttable>
+        >
+          <el-table-column
+            slot="feedbackStatus"
+            label="反馈状态"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <template v-for="(v, k) in dicOptions.status">
+                <el-tag :key="k" v-if="v.value == scope.row.feedbackStatus">
+                  {{ v.label }}
+                </el-tag>
+              </template>
+            </template>
+          </el-table-column>
+          <el-table-column slot="hire" label="通知录用时间" align="center">
+            <template slot-scope="scope">
+              <template v-if="scope.row.feedbackStatus == '04'">
+                {{ scope.row.feedbackTime }}
+              </template>
+            </template>
+          </el-table-column>
+          <el-table-column slot="hireNo" label="通知不录用时间" align="center">
+            <template slot-scope="scope">
+              <template v-if="scope.row.feedbackStatus == '05'">
+                {{ scope.row.feedbackTime }}
+              </template>
+            </template>
+          </el-table-column>
+        </ttable>
         <el-pagination
           @size-change="handleChange2"
           @current-change="handleChange2"
@@ -172,7 +200,10 @@ export default {
       dicOptions: {
         type: trim(this.$store.getters['dictionary/recruit_guide_type']),
         yesno: trim(this.$store.getters['dictionary/yesno']),
-        act_type: trim(this.$store.getters['dictionary/recruit_imple_act_type'])
+        act_type: trim(
+          this.$store.getters['dictionary/recruit_imple_act_type']
+        ),
+        status: trim(this.$store.getters['dictionary/recruit_feedback_status'])
       },
       pageParam: {
         pageIndex: 1,
@@ -199,7 +230,11 @@ export default {
         { title: '单位名称', prop: 'corpName' },
         { title: '职位名称', prop: 'positionName' },
         { title: '是否查看推荐的职位', prop: 'viewPosition' },
-        { title: '是否投递简历', prop: 'deliveryResume' }
+        { title: '是否投递简历', prop: 'deliveryResume' },
+        { title: '反馈状态', prop: 'feedbackStatus', slot: 'feedbackStatus' },
+        { title: '通知面试时间', prop: 'noticeInterview' },
+        { title: '通知录用时间', prop: 'hire', slot: 'hire' },
+        { title: '通知不录用时间', prop: 'hireNo', slot: 'hireNo' }
       ],
       columns3: [
         { title: '序号', type: 'index' },

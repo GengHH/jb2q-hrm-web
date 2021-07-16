@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-13 17:33:01
- * @LastEditTime: 2021-07-15 10:45:24
+ * @LastEditTime: 2021-07-15 18:53:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\recruitmentManagement\pages\feedbackDetails.vue

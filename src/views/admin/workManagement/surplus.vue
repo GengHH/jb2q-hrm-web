@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-05 09:55:06
- * @LastEditTime: 2021-06-25 17:30:00
+ * @LastEditTime: 2021-07-16 15:04:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
 -->
@@ -14,7 +14,7 @@
         :key="k"
         size="mini"
         @click="queryState(v.value)"
-        type="primary"
+        :type="statusUser == v.value ? 'primary' : ''"
         >{{ v.label }}</el-button
       >
     </el-button-group>
@@ -134,6 +134,7 @@ export default {
   components: { ttable, tform, surplusdetails },
   data() {
     return {
+      statusUser: '0',
       type: '0',
       dataListObj: {},
       visible: false,
@@ -241,6 +242,7 @@ export default {
       });
     },
     queryState(type) {
+      this.statusUser = type;
       this.state = type;
       this.advancedSearch(this.dataList);
     },

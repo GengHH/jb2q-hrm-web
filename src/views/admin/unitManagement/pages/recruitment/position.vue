@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-14 17:01:28
- * @LastEditTime: 2021-07-15 10:47:15
+ * @LastEditTime: 2021-07-16 15:07:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\unitManagement\pages\recruitment\position.vue
@@ -220,7 +220,7 @@ export default {
             key: 'entrustTyshxym'
           },
           {
-            type: 'input',
+            type: 'textarea',
             label: '职位描述',
             style: { width: '210px' },
             placeholder: '',

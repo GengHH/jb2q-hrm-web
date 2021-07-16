@@ -1,7 +1,7 @@
 <!--
  * @Author: tangqiang
  * @Date: 2021-03-05 13:45:20
- * @LastEditTime: 2021-07-15 10:51:18
+ * @LastEditTime: 2021-07-15 19:57:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \jb2q-hrm-web\src\views\admin\technocracy\feedback.vue
@@ -33,13 +33,7 @@
           <el-button size="mini" type="info" @click="look(scope, 1)" plain>
             <i class="el-icon-search"></i>查看</el-button
           >
-          <el-button
-            v-if="scope.row.applyResult == ''"
-            size="mini"
-            type="primary"
-            @click="look(scope, 2)"
-            plain
-          >
+          <el-button size="mini" type="primary" @click="look(scope, 2)" plain>
             <i class="el-icon-edit"></i>反馈</el-button
           >
         </template>
